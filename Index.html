@@ -1322,6 +1322,10 @@
   </div>
   <button class="start-btn" onclick="startBook()">Start — one step at a time</button>
   <div class="cover-human">I built this because I struggled to stay consistent with coding.</div>
+  <div id="cover-user" style="display:none;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;text-align:center;">
+    Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
+    <span onclick="signOut()" style="color:var(--accent);cursor:pointer;">Sign out</span>
+  </div>
 </div>
 
 <!-- APP -->
@@ -2004,6 +2008,10 @@ async function onUserLoggedIn() {
   } catch(e) {}
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('cover').style.display = 'flex';
+  const coverUser = document.getElementById('cover-user');
+  const coverEmail = document.getElementById('cover-user-email');
+  if (coverUser) coverUser.style.display = 'block';
+  if (coverEmail) coverEmail.textContent = currentUser.email || '';
 }
 
 async function saveToSupabase() {
