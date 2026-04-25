@@ -2100,12 +2100,25 @@ async function saveToSupabase() {
 }
 
 async function signOut() {
+  try {
+    if (currentUser) {
+      await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentUser.access_token}` }
+      });
+    }
+  } catch(e) {}
   currentUser = null;
   localStorage.removeItem('codebook_user');
+  localStorage.removeItem('codebook_v1');
   document.getElementById('user-bar').style.display = 'none';
   document.getElementById('app').style.display = 'none';
   document.getElementById('cover').style.display = 'none';
+  document.getElementById('cover-user').style.display = 'none';
   document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-message').textContent = '';
 }
 
 window.addEventListener('load', async () => {
