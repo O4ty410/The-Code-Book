@@ -1129,6 +1129,148 @@
     color: var(--accent);
   }
 
+  /* AUTH SCREEN */
+  #auth-screen {
+    min-height: 100vh;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 24px;
+    background: var(--bg);
+    text-align: center;
+  }
+
+  .auth-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--accent);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  .auth-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+  }
+
+  .auth-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .auth-tab {
+    flex: 1;
+    padding: 12px 24px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .auth-tab.active {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .auth-input {
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+  }
+
+  .auth-input:focus { border-color: var(--accent); }
+
+  .auth-btn {
+    padding: 16px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: var(--bg);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+  }
+
+  .auth-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .auth-message {
+    font-size: 13px;
+    margin-top: 12px;
+    min-height: 20px;
+    color: var(--text-muted);
+  }
+
+  .auth-message.error { color: var(--floor3); }
+  .auth-message.success { color: var(--success); }
+
+  /* USER BAR IN SIDEBAR */
+  .user-bar {
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .user-email {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 160px;
+  }
+
+  .signout-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .signout-btn:hover { border-color: var(--floor3); color: var(--floor3); }
+
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1136,6 +1278,22 @@
 </style>
 </head>
 <body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-title">The Code Book</div>
+  <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
+  <div class="auth-tabs">
+    <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+  </div>
+  <div class="auth-form">
+    <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
+    <input class="auth-input" id="auth-password" type="password" placeholder="Password">
+    <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
+    <div class="auth-message" id="auth-message"></div>
+  </div>
+</div>
 
 <!-- COVER -->
 <div id="cover">
@@ -1188,6 +1346,10 @@
           <button class="timer-btn" onclick="resetTimer()">↺</button>
         </div>
         </div>
+      </div>
+      <div class="user-bar" id="user-bar" style="display:none;">
+        <span class="user-email" id="user-email">user@email.com</span>
+        <button class="signout-btn" onclick="signOut()">Sign out</button>
       </div>
       <div class="xp-panel" id="xp-panel" style="display:none;flex-direction:column;gap:8px;">
         <div class="xp-row">
@@ -1760,8 +1922,134 @@ function saveState() {
       lastVisit: state.lastVisit,
       xpAwarded: state.xpAwarded
     }));
+    saveToSupabase();
   } catch(e) {}
 }
+
+// --- SUPABASE AUTH SYSTEM ---
+const SUPABASE_URL = 'https://xcvjjqzmetkjqyurxduh.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjdmpqcXptZXRranF5dXJ4ZHVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMjg1MTQsImV4cCI6MjA5MjcwNDUxNH0.8KETwjLadsyhzQGLTXdDsqtAuraqZ3_7-jR5uOdcd_g';
+
+let currentUser = null;
+let authMode = 'login';
+
+function switchTab(mode) {
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach((t, i) => {
+    t.classList.toggle('active', (mode === 'login' && i === 0) || (mode === 'signup' && i === 1));
+  });
+  document.getElementById('auth-submit').textContent = mode === 'login' ? 'Sign In' : 'Create Account';
+  document.getElementById('auth-message').textContent = '';
+}
+
+async function handleAuth() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const msg = document.getElementById('auth-message');
+  const btn = document.getElementById('auth-submit');
+  if (!email || !password) { msg.textContent = 'Please enter your email and password.'; msg.className = 'auth-message error'; return; }
+  btn.disabled = true;
+  btn.textContent = authMode === 'login' ? 'Signing in...' : 'Creating account...';
+  const endpoint = authMode === 'login' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
+  const res = await fetch(`${SUPABASE_URL}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
+    body: JSON.stringify({ email, password })
+  });
+  const data = await res.json();
+  if (data.error || data.error_description) {
+    msg.textContent = data.error_description || data.error || 'Something went wrong.';
+    msg.className = 'auth-message error';
+    btn.disabled = false;
+    btn.textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
+    return;
+  }
+  if (authMode === 'signup' && !data.access_token) {
+    msg.textContent = 'Check your email to confirm your account, then sign in.';
+    msg.className = 'auth-message success';
+    btn.disabled = false;
+    switchTab('login');
+    return;
+  }
+  currentUser = { access_token: data.access_token, id: data.user?.id, email: data.user?.email };
+  localStorage.setItem('codebook_user', JSON.stringify(currentUser));
+  await onUserLoggedIn();
+}
+
+async function onUserLoggedIn() {
+  const userId = currentUser.id;
+  const token = currentUser.access_token;
+  const emailEl = document.getElementById('user-email');
+  const barEl = document.getElementById('user-bar');
+  if (emailEl) emailEl.textContent = currentUser.email || '';
+  if (barEl) barEl.style.display = 'flex';
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/user_progress?id=eq.${userId}`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+    });
+    const rows = await res.json();
+    if (rows && rows.length > 0) {
+      const p = rows[0];
+      state.xp = p.xp || 0;
+      state.streak = p.streak || 0;
+      state.lastVisit = p.last_visit || null;
+      state.currentFloor = p.current_floor || 1;
+      state.currentSection = p.current_section || 0;
+      state.completed = p.completed || {};
+      state.quizAnswered = p.quiz_answered || {};
+      state.xpAwarded = p.xp_awarded || {};
+      state.totalSeconds = p.total_seconds || 0;
+      state.sessionLog = p.session_log || [];
+    }
+  } catch(e) {}
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+}
+
+async function saveToSupabase() {
+  if (!currentUser) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/user_progress`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${currentUser.access_token}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({
+        id: currentUser.id,
+        email: currentUser.email,
+        xp: state.xp, streak: state.streak, last_visit: state.lastVisit,
+        current_floor: state.currentFloor, current_section: state.currentSection,
+        completed: state.completed, quiz_answered: state.quizAnswered,
+        xp_awarded: state.xpAwarded, total_seconds: state.totalSeconds,
+        session_log: state.sessionLog
+      })
+    });
+  } catch(e) {}
+}
+
+async function signOut() {
+  currentUser = null;
+  localStorage.removeItem('codebook_user');
+  document.getElementById('user-bar').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+window.addEventListener('load', async () => {
+  const saved = localStorage.getItem('codebook_user');
+  if (saved) {
+    try {
+      currentUser = JSON.parse(saved);
+      await onUserLoggedIn();
+      return;
+    } catch(e) {}
+  }
+  document.getElementById('auth-screen').style.display = 'flex';
+});
 
 // --- XP + LEVEL + STREAK SYSTEM ---
 
