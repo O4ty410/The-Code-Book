@@ -1053,6 +1053,46 @@
     50% { opacity: 0.2; }
   }
 
+  .cover-human {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+    max-width: 340px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .cover-features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    max-width: 420px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.7s;
+  }
+
+  .cover-feature {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  .cover-feature:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1063,12 +1103,20 @@
 
 <!-- COVER -->
 <div id="cover">
-  <div class="cover-label">Your personal curriculum</div>
+  <div class="cover-label">A calm path into coding</div>
   <div class="cover-title">
     The Code
     <span>Book.</span>
   </div>
-  <div class="cover-subtitle">Seven floors. One destination. Built for the way your mind works.</div>
+  <div class="cover-subtitle">Learn coding without overwhelm. One clear step at a time.<br><br>Built for people who overthink, lose focus, or get stuck in tutorials. This is built differently.</div>
+  <div class="cover-features">
+    <div class="cover-feature">✦ 7 Floors</div>
+    <div class="cover-feature">✦ 35 Sections</div>
+    <div class="cover-feature">✦ Built-in hints</div>
+    <div class="cover-feature">✦ Voice narration</div>
+    <div class="cover-feature">✦ Tracks your progress</div>
+    <div class="cover-feature">✦ Completely free</div>
+  </div>
   <div class="floor-dots">
     <div class="floor-dot active"></div>
     <div class="floor-dot"></div>
@@ -1078,7 +1126,8 @@
     <div class="floor-dot"></div>
     <div class="floor-dot"></div>
   </div>
-  <button class="start-btn" onclick="startBook()">Begin Your Journey</button>
+  <button class="start-btn" onclick="startBook()">Start — one step at a time</button>
+  <div class="cover-human">I built this because I struggled to stay consistent with coding.</div>
 </div>
 
 <!-- APP -->
@@ -1090,7 +1139,7 @@
       <div class="sidebar-header">
         <div>
           <div class="sidebar-title">The Code Book</div>
-          <div class="sidebar-sub">YOUR CURRICULUM</div>
+          <div class="sidebar-sub">A CALM PATH INTO CODING</div>
         </div>
         <div class="focus-timer">
           <div>
@@ -1101,7 +1150,7 @@
           <button class="timer-btn" onclick="resetTimer()">↺</button>
         </div>
       </div>
-      <div class="xp-panel">
+      <div class="xp-panel" id="xp-panel" style="display:none;flex-direction:column;gap:8px;">
         <div class="xp-row">
           <span class="xp-label">LEVEL <span id="current-level">1</span></span>
           <span class="xp-value"><span id="current-xp">0</span> XP</span>
@@ -1743,6 +1792,8 @@ function showLevelUp(level) {
 }
 
 function updateXPPanel() {
+  const panel = document.getElementById('xp-panel');
+  if (panel) panel.style.display = state.xp > 0 ? 'flex' : 'none';
   const cur = getCurrentLevel();
   const next = getNextLevel();
   const xpEl = document.getElementById('current-xp');
@@ -2086,6 +2137,42 @@ function toggleHint(id) {
   if (box) box.classList.toggle('visible');
 }
 
+// --- AUDIO SYSTEM ---
+function playTone(frequency, duration, volume, type = 'sine') {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+    gainNode.gain.setValueAtTime(0, ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+
+function playFiveMinuteWarning() {
+  // Single soft tone
+  playTone(440, 0.6, 0.15);
+}
+
+function playOneMinuteWarning() {
+  // Two quick tones
+  playTone(523, 0.3, 0.2);
+  setTimeout(() => playTone(523, 0.3, 0.2), 400);
+}
+
+function playCompletionSound() {
+  // Three ascending tones — calm and satisfying
+  playTone(523, 0.4, 0.2);
+  setTimeout(() => playTone(659, 0.4, 0.2), 300);
+  setTimeout(() => playTone(784, 0.6, 0.2), 600);
+}
+
 // TIMER
 function toggleTimer() {
   if (state.timerRunning) {
@@ -2102,14 +2189,27 @@ function toggleTimer() {
   } else {
     state.timerRunning = true;
     document.getElementById('timer-btn').textContent = '⏸';
+    playTone(440, 0.3, 0.1); // Soft start tone so user knows audio is active
     state.timerInterval = setInterval(() => {
       state.timerSeconds--;
+
+      // Sound cues
+      if (state.timerSeconds === 300) {
+        playFiveMinuteWarning();
+        document.getElementById('timer-display').style.color = '#c8967e'; // amber
+      }
+      if (state.timerSeconds === 60) {
+        playOneMinuteWarning();
+        document.getElementById('timer-display').style.color = '#c87e9a'; // red
+      }
+
       if (state.timerSeconds <= 0) {
         clearInterval(state.timerInterval);
         state.timerRunning = false;
         state.totalSeconds += 25 * 60;
         state.sessionLog.push({ date: new Date().toLocaleDateString(), seconds: 25 * 60 });
         awardXP(40, null, window.innerWidth - 100, 60);
+        playCompletionSound();
         saveState();
         updateTimeLog();
         state.timerSeconds = 5 * 60;
@@ -2131,7 +2231,6 @@ function resetTimer() {
   document.getElementById('timer-display').style.color = '#c8a96e';
   updateTimerDisplay();
 }
-
 function updateTimerDisplay() {
   const m = Math.floor(state.timerSeconds / 60).toString().padStart(2, '0');
   const s = (state.timerSeconds % 60).toString().padStart(2, '0');
