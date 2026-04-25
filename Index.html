@@ -1288,10 +1288,27 @@
     <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
   </div>
   <div class="auth-form">
+    <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
     <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
-    <input class="auth-input" id="auth-password" type="password" placeholder="Password">
+    <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)">
     <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
     <div class="auth-message" id="auth-message"></div>
+  </div>
+  <div style="margin-top:24px;">
+    <button onclick="showLeaderboard()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">🏆 View Leaderboard</button>
+  </div>
+</div>
+
+<!-- LEADERBOARD OVERLAY -->
+<div id="leaderboard-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
+  <div style="width:100%;max-width:400px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
+      <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--accent);font-style:italic;">Leaderboard</div>
+      <button onclick="hideLeaderboard()" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);background:transparent;border:1px solid var(--border);padding:8px 16px;cursor:pointer;border-radius:4px;">Close</button>
+    </div>
+    <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Loading...</div>
+    </div>
   </div>
 </div>
 
@@ -1353,7 +1370,10 @@
       </div>
       <div class="user-bar" id="user-bar" style="display:none;">
         <span class="user-email" id="user-email">user@email.com</span>
-        <button class="signout-btn" onclick="signOut()">Sign out</button>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button onclick="showLeaderboard()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);background:transparent;border:1px solid var(--border);padding:4px 8px;border-radius:4px;cursor:pointer;">🏆</button>
+          <button class="signout-btn" onclick="signOut()">Sign out</button>
+        </div>
       </div>
       <div class="xp-panel" id="xp-panel" style="display:none;flex-direction:column;gap:8px;">
         <div class="xp-row">
@@ -1944,14 +1964,53 @@ function switchTab(mode) {
   });
   document.getElementById('auth-submit').textContent = mode === 'login' ? 'Sign In' : 'Create Account';
   document.getElementById('auth-message').textContent = '';
+  const usernameField = document.getElementById('auth-username');
+  if (usernameField) usernameField.style.display = mode === 'signup' ? 'block' : 'none';
+}
+
+async function showLeaderboard() {
+  const overlay = document.getElementById('leaderboard-overlay');
+  overlay.style.display = 'flex';
+  const list = document.getElementById('leaderboard-list');
+  list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Loading...</div>';
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/user_progress?select=username,xp,streak&order=xp.desc&limit=20`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const rows = await res.json();
+    if (!rows || rows.length === 0) {
+      list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">No entries yet. Be the first!</div>';
+      return;
+    }
+    const medals = ['🥇', '🥈', '🥉'];
+    list.innerHTML = rows.map((r, i) => `
+      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;">
+        <div style="font-size:20px;width:32px;text-align:center;">${medals[i] || `${i+1}`}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:15px;">${r.username || 'Anonymous'}</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;">🔥 ${r.streak || 0} day streak</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--accent);font-weight:700;">${r.xp || 0} XP</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Could not load leaderboard.</div>';
+  }
+}
+
+function hideLeaderboard() {
+  document.getElementById('leaderboard-overlay').style.display = 'none';
 }
 
 async function handleAuth() {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
+  const usernameEl = document.getElementById('auth-username');
+  const username = usernameEl ? usernameEl.value.trim() : '';
   const msg = document.getElementById('auth-message');
   const btn = document.getElementById('auth-submit');
   if (!email || !password) { msg.textContent = 'Please enter your email and password.'; msg.className = 'auth-message error'; return; }
+  if (authMode === 'signup' && !username) { msg.textContent = 'Please choose a display name.'; msg.className = 'auth-message error'; return; }
   btn.disabled = true;
   btn.textContent = authMode === 'login' ? 'Signing in...' : 'Creating account...';
   const endpoint = authMode === 'login' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
@@ -1975,8 +2034,9 @@ async function handleAuth() {
     switchTab('login');
     return;
   }
-  currentUser = { access_token: data.access_token, id: data.user?.id, email: data.user?.email };
+  currentUser = { access_token: data.access_token, id: data.user?.id, email: data.user?.email, username: username || '' };
   localStorage.setItem('codebook_user', JSON.stringify(currentUser));
+  if (username) state.username = username;
   await onUserLoggedIn();
 }
 
@@ -2028,6 +2088,7 @@ async function saveToSupabase() {
       body: JSON.stringify({
         id: currentUser.id,
         email: currentUser.email,
+        username: currentUser.username || state.username || '',
         xp: state.xp, streak: state.streak, last_visit: state.lastVisit,
         current_floor: state.currentFloor, current_section: state.currentSection,
         completed: state.completed, quiz_answered: state.quizAnswered,
