@@ -2020,8 +2020,8 @@ async function handleAuth() {
     body: JSON.stringify({ email, password })
   });
   const data = await res.json();
-  if (data.error || data.error_description) {
-    msg.textContent = data.error_description || data.error || 'Something went wrong.';
+  if (data.error || data.error_description || !data.access_token) {
+    msg.textContent = data.error_description || data.error || 'Invalid email or password.';
     msg.className = 'auth-message error';
     btn.disabled = false;
     btn.textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
