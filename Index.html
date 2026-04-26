@@ -1462,7 +1462,88 @@
   </div>
 </div>
 
-<!-- COVER -->
+<!-- PASSWORD RESET OVERLAY -->
+<div id="reset-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;">
+  <div style="width:100%;max-width:360px;text-align:center;">
+    <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:8px;">New Password</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:32px;">CHOOSE A STRONG PASSWORD</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <input id="reset-password" class="auth-input" type="password" placeholder="New password (min 6 characters)">
+      <input id="reset-password-confirm" class="auth-input" type="password" placeholder="Confirm new password">
+      <button onclick="submitNewPassword()" class="auth-btn">Update Password</button>
+      <div id="reset-message" class="auth-message"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING OVERLAY -->
+<div id="onboarding" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:8888;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+  <div style="width:100%;max-width:380px;">
+    <div style="font-size:52px;margin-bottom:16px;animation:owlBob 2s ease-in-out infinite;">🦉</div>
+    <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:8px;" id="onboarding-title">Hey. I'm Sage.</div>
+    <div style="font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:32px;" id="onboarding-body">I'm here to make sure this time is different. No rushing. No overwhelm. Just one step at a time.<br><br>Before we start — three quick questions.</div>
+    <div id="onboarding-step-1">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:16px;">WHAT'S YOUR NAME?</div>
+      <input id="onboarding-name" class="auth-input" type="text" placeholder="First name" style="margin-bottom:16px;text-align:center;">
+      <button class="auth-btn" onclick="onboardingNext(1)">Continue</button>
+    </div>
+    <div id="onboarding-step-2" style="display:none;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:16px;">HAVE YOU TRIED CODING BEFORE?</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('experience','never')">No — complete beginner</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('experience','tried')">Yes — but I stopped or got stuck</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('experience','some')">I know a little but want structure</button>
+      </div>
+    </div>
+    <div id="onboarding-step-3" style="display:none;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:16px;">HOW MUCH TIME CAN YOU GIVE EACH DAY?</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('time','15')">15 minutes — just a little</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('time','30')">30 minutes — steady pace</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('time','60')">An hour or more — I'm committed</button>
+      </div>
+    </div>
+    <div id="onboarding-step-4" style="display:none;">
+      <div style="font-size:48px;margin-bottom:16px;">🎉</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--text);margin-bottom:12px;" id="onboarding-welcome"></div>
+      <div style="font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:28px;" id="onboarding-message"></div>
+      <button class="auth-btn" onclick="finishOnboarding()">Let's go →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DAILY CHALLENGE OVERLAY -->
+<div id="daily-challenge" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:8887;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+  <div style="width:100%;max-width:420px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:16px;">⚡ DAILY CHALLENGE</div>
+    <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text);margin-bottom:8px;" id="challenge-title">Today's Challenge</div>
+    <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;" id="challenge-body"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:1px;" id="challenge-question"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;" id="challenge-options"></div>
+    <div id="challenge-result" style="display:none;padding:16px;border-radius:8px;margin-bottom:16px;font-size:14px;line-height:1.7;"></div>
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <button onclick="closeDailyChallenge()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:1px solid var(--border);padding:12px 24px;cursor:pointer;border-radius:4px;">Skip</button>
+    </div>
+  </div>
+</div>
+
+<!-- FLOOR COMPLETE CELEBRATION -->
+<div id="floor-celebration" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:8886;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+  <div style="width:100%;max-width:400px;">
+    <div style="font-size:72px;margin-bottom:24px;animation:pulse 1.5s ease infinite;" id="celebration-icon">🎓</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;">FLOOR COMPLETE</div>
+    <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--text);margin-bottom:8px;" id="celebration-floor"></div>
+    <div style="font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;" id="celebration-message"></div>
+    <div style="background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:20px;margin-bottom:28px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:2px;margin-bottom:8px;">YOUR PROGRESS</div>
+      <div style="font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:var(--accent);" id="celebration-xp"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:2px;">TOTAL XP</div>
+    </div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;" id="celebration-name"></div>
+    <button class="auth-btn" onclick="closeCelebration()" style="margin-bottom:12px;">Continue to next floor →</button>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;" onclick="shareAchievement()">Share this achievement</div>
+  </div>
+</div>
 <div id="cover">
   <div class="cover-label">A calm path into coding</div>
   <div class="cover-title">
@@ -2162,6 +2243,64 @@ function hideLeaderboard() {
   document.getElementById('leaderboard-overlay').style.display = 'none';
 }
 
+function showResetForm(token) {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+  const overlay = document.getElementById('reset-overlay');
+  overlay.style.display = 'flex';
+  overlay.dataset.token = token;
+}
+
+async function submitNewPassword() {
+  const password = document.getElementById('reset-password').value;
+  const confirm = document.getElementById('reset-password-confirm').value;
+  const msg = document.getElementById('reset-message');
+  const token = document.getElementById('reset-overlay').dataset.token;
+
+  if (!password || password.length < 6) {
+    msg.textContent = 'Password must be at least 6 characters.';
+    msg.className = 'auth-message error';
+    return;
+  }
+  if (password !== confirm) {
+    msg.textContent = 'Passwords do not match.';
+    msg.className = 'auth-message error';
+    return;
+  }
+
+  msg.textContent = 'Updating password...';
+  msg.className = 'auth-message';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ password })
+    });
+    const data = await res.json();
+    if (data.error) {
+      msg.textContent = data.error || 'Something went wrong. Try requesting a new reset link.';
+      msg.className = 'auth-message error';
+      return;
+    }
+    msg.textContent = 'Password updated. You can now sign in.';
+    msg.className = 'auth-message success';
+    setTimeout(() => {
+      document.getElementById('reset-overlay').style.display = 'none';
+      document.getElementById('auth-screen').style.display = 'flex';
+      window.history.replaceState(null, '', window.location.pathname);
+    }, 2000);
+  } catch(e) {
+    msg.textContent = 'Something went wrong. Please try again.';
+    msg.className = 'auth-message error';
+  }
+}
+
 function showPrivacy() {
   document.getElementById('privacy-overlay').style.display = 'flex';
 }
@@ -2314,6 +2453,18 @@ async function signOut() {
 }
 
 window.addEventListener('load', async () => {
+
+  // Check for password reset token in URL
+  const hash = window.location.hash;
+  const params = new URLSearchParams(hash.replace('#', '?'));
+  const accessToken = params.get('access_token');
+  const type = params.get('type');
+
+  if (accessToken && type === 'recovery') {
+    showResetForm(accessToken);
+    return;
+  }
+
   const saved = localStorage.getItem('codebook_user');
   if (saved) {
     try {
