@@ -1296,6 +1296,44 @@
     flex: 1;
   }
 
+  /* OWL CHARACTER */
+  .owl-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .owl-avatar {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: rgba(200,169,110,0.1);
+    border: 1px solid rgba(200,169,110,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    animation: owlBob 3s ease-in-out infinite;
+  }
+
+  @keyframes owlBob {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-4px) rotate(3deg); }
+  }
+
+  .owl-bubble {
+    flex: 1;
+  }
+
+  .owl-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -2522,10 +2560,10 @@ function renderFloor(fi, si) {
         <span class="listen-dot"></span>▶ Listen
       </button>
       ${section.hint ? `<div class="hint-box" id="hint-${section.id}">
-        <div class="owl-hint">
-          <div class="owl">🦉</div>
-          <div class="owl-speech">
-            <div class="hint-label">STUCK? HERE'S A SIMPLER WAY TO THINK ABOUT IT</div>
+        <div class="owl-wrap">
+          <div class="owl-avatar">🦉</div>
+          <div class="owl-bubble">
+            <div class="owl-name">SAGE — YOUR GUIDE</div>
             <div class="hint-text">${section.hint.replace(/\n/g, '<br>')}</div>
           </div>
         </div>
