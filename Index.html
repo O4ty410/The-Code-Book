@@ -1362,6 +1362,9 @@
     <button onclick="showLeaderboard()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">🏆 Leaderboard</button>
     <button onclick="showPrivacy()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">Privacy Policy</button>
   </div>
+  <div style="margin-top:16px;">
+    <button onclick="startAsGuest()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;">Try without an account →</button>
+  </div>
 </div>
 
 <!-- LEADERBOARD OVERLAY -->
@@ -2621,13 +2624,284 @@ function startBook() {
   loadState();
   updateStreak();
   document.getElementById('cover').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
   applyTheme();
+
+  // Check if first time user — show onboarding
+  const hasOnboarded = localStorage.getItem('codebook_onboarded');
+  if (!hasOnboarded) {
+    showOnboarding();
+    return;
+  }
+
+  // Check if daily challenge available
+  const lastChallenge = localStorage.getItem('codebook_last_challenge');
+  const today = new Date().toDateString();
+  const challengeDone = localStorage.getItem('codebook_challenge_done_' + today);
+
+  launchApp();
+
+  if (!challengeDone && lastChallenge !== today) {
+    setTimeout(() => showDailyChallenge(), 800);
+  }
+}
+
+function launchApp() {
+  document.getElementById('app').style.display = 'block';
   renderNav();
   renderFloor(state.currentFloor - 1, state.currentSection);
   updateTimeLog();
   updateXPPanel();
 }
+
+// --- ONBOARDING SYSTEM ---
+let onboardingData = { name: '', experience: '', time: '' };
+
+function showOnboarding() {
+  document.getElementById('onboarding').style.display = 'flex';
+}
+
+function onboardingNext(step) {
+  if (step === 1) {
+    const name = document.getElementById('onboarding-name').value.trim();
+    if (!name) return;
+    onboardingData.name = name;
+    state.playerName = name;
+    document.getElementById('onboarding-step-1').style.display = 'none';
+    document.getElementById('onboarding-step-2').style.display = 'block';
+    document.getElementById('onboarding-title').textContent = `Nice to meet you, ${name}.`;
+    document.getElementById('onboarding-body').textContent = 'Let me understand where you\'re starting from.';
+  }
+}
+
+function onboardingSelect(field, value) {
+  onboardingData[field] = value;
+  if (field === 'experience') {
+    document.getElementById('onboarding-step-2').style.display = 'none';
+    document.getElementById('onboarding-step-3').style.display = 'block';
+    document.getElementById('onboarding-title').textContent = 'Almost there.';
+    document.getElementById('onboarding-body').textContent = 'Last question — and then we begin.';
+  } else if (field === 'time') {
+    document.getElementById('onboarding-step-3').style.display = 'none';
+    document.getElementById('onboarding-step-4').style.display = 'block';
+
+    const messages = {
+      never: { title: `You\'re in the right place, ${onboardingData.name}.`, msg: 'Starting from zero is actually an advantage. No bad habits to unlearn. We\'ll build everything from the ground up, one clear step at a time.' },
+      tried: { title: `This time will be different, ${onboardingData.name}.`, msg: 'Whatever stopped you before — the overwhelm, the confusion, the loss of momentum — this was built specifically for that. Sage is here every time you get stuck.' },
+      some: { title: `Good. Let\'s build on that, ${onboardingData.name}.`, msg: 'You\'ve got a foundation. Now we give it structure. Work at your own pace — skip ahead if something\'s easy, slow down when it\'s not.' }
+    };
+
+    const m = messages[onboardingData.experience] || messages.never;
+    document.getElementById('onboarding-welcome').textContent = m.title;
+    document.getElementById('onboarding-message').textContent = m.msg;
+  }
+}
+
+function finishOnboarding() {
+  localStorage.setItem('codebook_onboarded', 'true');
+  localStorage.setItem('codebook_player_name', onboardingData.name);
+  state.playerName = onboardingData.name;
+  document.getElementById('onboarding').style.display = 'none';
+  launchApp();
+}
+
+// --- DAILY CHALLENGE SYSTEM ---
+const DAILY_CHALLENGES = [
+  { title: 'What does HTML stand for?', question: 'Choose the correct answer:', options: ['Hyper Text Markup Language', 'High Text Making Language', 'Hyperlink and Text Markup Language', 'Home Tool Markup Language'], correct: 0, explanation: 'HTML stands for HyperText Markup Language. It is the standard language used to create and structure content on the web.', xp: 20 },
+  { title: 'CSS stands for...', question: 'Choose the correct answer:', options: ['Computer Style Sheets', 'Cascading Style Sheets', 'Creative Style System', 'Colorful Style Sheets'], correct: 1, explanation: 'CSS stands for Cascading Style Sheets. It describes how HTML elements should be displayed on screen.', xp: 20 },
+  { title: 'Which tag creates a heading?', question: 'Which HTML tag creates the largest heading?', options: ['<heading>', '<h6>', '<h1>', '<head>'], correct: 2, explanation: 'The h1 tag creates the largest heading. Headings go from h1 (largest) to h6 (smallest).', xp: 20 },
+  { title: 'What is a variable?', question: 'In coding, a variable is...', options: ['A type of HTML tag', 'A named container that stores a value', 'A CSS property', 'A type of loop'], correct: 1, explanation: 'A variable is a named container that stores a value. You can think of it like a labelled box that holds information your code can use and change.', xp: 20 },
+  { title: 'What does a loop do?', question: 'A loop in code...', options: ['Creates a circular design', 'Connects to the internet', 'Repeats a set of instructions', 'Stores data in a database'], correct: 2, explanation: 'A loop repeats a set of instructions until a condition tells it to stop. Think of it like a washing machine cycle that keeps going until the cycle is complete.', xp: 20 },
+  { title: 'What is a function?', question: 'A function in coding is...', options: ['A type of variable', 'A reusable block of instructions with a name', 'A CSS animation', 'A database query'], correct: 1, explanation: 'A function is a named, reusable block of instructions. You define it once and can call it as many times as you need — like pressing a button on a vending machine.', xp: 20 },
+  { title: 'What does JavaScript do?', question: 'JavaScript is primarily used to...', options: ['Style web pages', 'Create database tables', 'Add behaviour and interactivity to web pages', 'Set up servers'], correct: 2, explanation: 'JavaScript adds behaviour to web pages. HTML provides structure, CSS provides style, and JavaScript makes things happen when users interact with the page.', xp: 20 }
+];
+
+function showDailyChallenge() {
+  const today = new Date().toDateString();
+  const dayIndex = new Date().getDay();
+  const challenge = DAILY_CHALLENGES[dayIndex % DAILY_CHALLENGES.length];
+
+  document.getElementById('challenge-title').textContent = challenge.title;
+  document.getElementById('challenge-body').textContent = `Complete today\'s challenge and earn +${challenge.xp} bonus XP.`;
+  document.getElementById('challenge-question').textContent = challenge.question;
+  document.getElementById('challenge-result').style.display = 'none';
+
+  const optionsEl = document.getElementById('challenge-options');
+  optionsEl.innerHTML = challenge.options.map((opt, i) => `
+    <button onclick="answerChallenge(${i}, ${challenge.correct}, ${challenge.xp}, '${challenge.explanation.replace(/'/g, "\\'")}')"
+      style="padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-dim);font-size:14px;cursor:pointer;text-align:left;transition:all 0.2s ease;">
+      ${opt}
+    </button>
+  `).join('');
+
+  document.getElementById('daily-challenge').style.display = 'flex';
+  localStorage.setItem('codebook_last_challenge', today);
+}
+
+function answerChallenge(chosen, correct, xp, explanation) {
+  const today = new Date().toDateString();
+  const buttons = document.querySelectorAll('#challenge-options button');
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correct) btn.style.borderColor = 'var(--success)';
+    else if (i === chosen && chosen !== correct) btn.style.borderColor = 'var(--floor3)';
+  });
+
+  const resultEl = document.getElementById('challenge-result');
+  resultEl.style.display = 'block';
+
+  if (chosen === correct) {
+    resultEl.style.background = 'rgba(110,200,126,0.08)';
+    resultEl.style.border = '1px solid var(--success)';
+    resultEl.style.color = 'var(--text-dim)';
+    resultEl.innerHTML = `<strong style="color:var(--success)">Correct! +${xp} XP</strong><br><br>${explanation}`;
+    awardXP(xp, `challenge-${today}`, window.innerWidth / 2, 200);
+  } else {
+    resultEl.style.background = 'rgba(200,126,154,0.08)';
+    resultEl.style.border = '1px solid var(--floor3)';
+    resultEl.style.color = 'var(--text-dim)';
+    resultEl.innerHTML = `<strong style="color:var(--floor3)">Not quite.</strong><br><br>${explanation}`;
+  }
+
+  localStorage.setItem('codebook_challenge_done_' + today, 'true');
+
+  setTimeout(() => {
+    const skipBtn = document.querySelector('#daily-challenge .auth-btn') || document.querySelector('#daily-challenge button:last-child');
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'auth-btn';
+    closeBtn.textContent = 'Continue learning →';
+    closeBtn.onclick = closeDailyChallenge;
+    closeBtn.style.marginTop = '8px';
+    document.querySelector('#daily-challenge > div > div:last-child').prepend(closeBtn);
+  }, 500);
+}
+
+function closeDailyChallenge() {
+  document.getElementById('daily-challenge').style.display = 'none';
+}
+
+// --- FLOOR CELEBRATION SYSTEM ---
+const FLOOR_MESSAGES = [
+  { icon: '🎓', message: 'You understand how the internet works, how computers think, and the logic behind all code. That\'s the foundation everything else is built on.' },
+  { icon: '🎨', message: 'You can build real webpages that look good. HTML and CSS are yours now. The visual web is no longer a mystery.' },
+  { icon: '⚡', message: 'JavaScript. You made things move, respond, and think. This is where most people stop. You didn\'t.' },
+  { icon: '🔨', message: 'You built alone. No hand-holding. A real brief, a real product. That\'s the developer mindset.' },
+  { icon: '🌐', message: 'Frontend, backend, databases, APIs, deployment. You are a full stack developer. Let that land.' },
+  { icon: '🎯', message: 'You found your lane and went deep. This is where developers become specialists.' },
+  { icon: '🏆', message: 'Floor 7. Professional grade. You started from nothing and built your way here. That distance is yours forever.' }
+];
+
+function showFloorCelebration(floorIndex) {
+  const floor = FLOORS[floorIndex];
+  const msg = FLOOR_MESSAGES[floorIndex];
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+
+  document.getElementById('celebration-icon').textContent = msg.icon;
+  document.getElementById('celebration-floor').textContent = floor.title;
+  document.getElementById('celebration-message').textContent = msg.message;
+  document.getElementById('celebration-xp').textContent = state.xp;
+  document.getElementById('celebration-name').textContent = name ? `Well done, ${name}.` : 'Well done.';
+  document.getElementById('floor-celebration').style.display = 'flex';
+}
+
+function closeCelebration() {
+  document.getElementById('floor-celebration').style.display = 'none';
+}
+
+function shareAchievement() {
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || 'Someone';
+  const floor = FLOORS[state.currentFloor - 1];
+  const text = `${name} just completed "${floor.title}" on The Code Book with ${state.xp} XP. Learning to code one step at a time. https://the-code-book.netlify.app`;
+  if (navigator.share) {
+    navigator.share({ text });
+  } else {
+    navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard — paste it wherever you want to share.'));
+  }
+}
+
+// --- STREAK PROTECTION ---
+function checkStreakProtection() {
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  const twoDaysAgo = new Date(Date.now() - 172800000).toDateString();
+
+  if (state.lastVisit === twoDaysAgo && state.streak > 0) {
+    // Grace period — one day missed, show recovery option
+    showStreakRecovery();
+  }
+}
+
+function showStreakRecovery() {
+  if (state.streak < 3) return; // Only show for meaningful streaks
+  const banner = document.createElement('div');
+  banner.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--floor3);border-radius:12px;padding:16px 20px;z-index:5000;max-width:320px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.4);`;
+  banner.innerHTML = `
+    <div style="font-size:24px;margin-bottom:8px;">🔥</div>
+    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:14px;margin-bottom:6px;">Streak in danger</div>
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Complete one section today to keep your ${state.streak} day streak alive.</div>
+    <button onclick="this.parentElement.remove()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;padding:10px 20px;background:var(--floor3);border:none;color:white;border-radius:6px;cursor:pointer;">Protect my streak</button>
+  `;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 8000);
+}
+
+// --- PROGRESS NUDGE SYSTEM ---
+function checkProgressNudge(fi, si) {
+  const floor = FLOORS[fi];
+  const halfway = Math.floor(floor.sections.length / 2);
+  if (si === halfway) {
+    showProgressNudge(fi, si);
+  }
+}
+
+function showProgressNudge(fi, si) {
+  const key = `nudge-halfway-${fi}`;
+  if (localStorage.getItem(key)) return;
+  localStorage.setItem(key, 'true');
+
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+  const nudge = document.createElement('div');
+  nudge.style.cssText = `position:fixed;bottom:80px;right:16px;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:16px 20px;z-index:5000;max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeUp 0.4s ease;`;
+  nudge.innerHTML = `
+    <div style="font-size:20px;margin-bottom:8px;">🦉</div>
+    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:13px;margin-bottom:6px;">${name ? `Halfway there, ${name}!` : 'Halfway there!'}</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">You\'re halfway through this floor. The hard part is behind you.</div>
+    <button onclick="this.parentElement.remove()" style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 14px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;">Keep going</button>
+  `;
+  document.body.appendChild(nudge);
+  setTimeout(() => nudge.remove && nudge.remove(), 6000);
+}
+
+// --- GUEST MODE ---
+function startAsGuest() {
+  localStorage.setItem('codebook_guest', 'true');
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+}
+
+function checkGuestSavePrompt() {
+  const isGuest = localStorage.getItem('codebook_guest');
+  const prompted = localStorage.getItem('codebook_guest_prompted');
+  if (isGuest && !prompted && Object.keys(state.completed).length >= 5) {
+    localStorage.setItem('codebook_guest_prompted', 'true');
+    showGuestSavePrompt();
+  }
+}
+
+function showGuestSavePrompt() {
+  const prompt = document.createElement('div');
+  prompt.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;`;
+  prompt.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--accent);border-radius:16px;padding:32px;max-width:340px;text-align:center;">
+      <div style="font-size:40px;margin-bottom:16px;">🦉</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:12px;">Save your progress?</div>
+      <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;">You\'ve completed 5 sections. Create a free account to make sure you never lose your progress.</div>
+      <button onclick="this.closest('div[style*=fixed]').remove();document.getElementById('auth-screen').style.display='flex';switchTab('signup');" style="width:100%;padding:16px;background:var(--accent);border:none;border-radius:8px;color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;">CREATE FREE ACCOUNT</button>
+      <button onclick="this.closest('div[style*=fixed]').remove();" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;">Continue without saving</button>
+    </div>
+  `;
+  document.body.appendChild(prompt);
+}
+
 
 function renderNav() {
   const nav = document.getElementById('floor-nav');
@@ -2798,6 +3072,8 @@ function renderFloor(fi, si) {
   document.getElementById('main-content').scrollTop = 0;
   window.scrollTo(0, 0);
   startSectionTimer(section.id);
+  checkProgressNudge(fi, si);
+  checkStreakProtection();
 }
 
 function answerQuiz(sectionId, chosen, correct) {
@@ -2827,11 +3103,13 @@ function toggleCheck(key, el) {
 function completeSection(sectionId, fi, si) {
   state.completed[sectionId] = true;
   awardXP(25, `complete-${sectionId}`, window.innerWidth / 2, 300);
-  if (isFloorComplete(fi)) {
+  const wasComplete = isFloorComplete(fi);
+  if (wasComplete) {
     awardXP(250, `floor-${fi}`, window.innerWidth / 2, 250);
+    setTimeout(() => showFloorCelebration(fi), 600);
   }
   saveState();
-  // Flash the section content
+  checkGuestSavePrompt();
   const content = document.querySelector('.section-content');
   if (content) {
     content.classList.add('section-complete-flash');
