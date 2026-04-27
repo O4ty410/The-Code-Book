@@ -2432,7 +2432,56 @@ function trackDailySection() {
   const today = new Date().toDateString();
   const todayKey = `daily_sections_${today}`;
   const current = parseInt(localStorage.getItem(todayKey) || '0');
-  localStorage.setItem(todayKey, current + 1);
+  const newCount = current + 1;
+  localStorage.setItem(todayKey, newCount);
+
+  const dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal') || '1');
+  if (newCount === dailyGoal) {
+    setTimeout(() => showSessionComplete(newCount), 1200);
+  }
+}
+
+let sessionXpStart = 0;
+
+function showSessionComplete(sectionsToday) {
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+  const fi = state.currentFloor - 1;
+  const si = state.currentSection;
+  const floor = FLOORS[fi];
+  const nextSi = si + 1;
+  const nextSection = floor?.sections[nextSi];
+  const nextFloor = FLOORS[fi + 1];
+
+  let tomorrowText = '';
+  if (nextSection) tomorrowText = nextSection.title;
+  else if (nextFloor) tomorrowText = `Start of ${nextFloor.title}`;
+  else tomorrowText = 'You\'ve completed the entire curriculum!';
+
+  const greetings = [
+    `That's a session, ${name || 'friend'}.`,
+    `Well done today${name ? ', ' + name : ''}.`,
+    `Another day done${name ? ', ' + name : ''}.`,
+    `Consistent${name ? ', ' + name : ''}. That\'s everything.`
+  ];
+
+  const xpToday = state.xp - (sessionXpStart || 0);
+
+  document.getElementById('session-title').textContent = greetings[Math.floor(Math.random() * greetings.length)];
+  document.getElementById('session-message').textContent = 'Your daily goal is done. Come back tomorrow and keep the momentum going.';
+  document.getElementById('session-xp-earned').textContent = `+${Math.max(0, xpToday)}`;
+  document.getElementById('session-streak').textContent = `${state.streak}🔥`;
+  document.getElementById('session-sections').textContent = sectionsToday;
+  document.getElementById('session-tomorrow').textContent = tomorrowText;
+  document.getElementById('session-complete').style.display = 'flex';
+}
+
+function closeSessionComplete(done) {
+  document.getElementById('session-complete').style.display = 'none';
+  if (done) {
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('cover').style.display = 'flex';
+    populateDashboard();
+  }
 }
 
 function showPrivacy() {
