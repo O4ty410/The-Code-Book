@@ -1334,6 +1334,194 @@
     margin-bottom: 6px;
   }
 
+  /* ELEVATOR TRANSITIONS */
+  .main-content {
+    padding: 0;
+    max-width: 800px;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    position: relative;
+  }
+
+  .floor-panel {
+    width: 100%;
+    will-change: transform, opacity;
+  }
+
+  @keyframes elevatorUp {
+    from { transform: translateY(80px);  opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+  }
+
+  @keyframes elevatorDown {
+    from { transform: translateY(-80px); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+  }
+
+  .elevator-up   { animation: elevatorUp   0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+  .elevator-down { animation: elevatorDown 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+  /* SAGE SPEECH BUBBLE */
+  .sage-bubble {
+    position: fixed;
+    bottom: 80px;
+    right: 16px;
+    max-width: 260px;
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    border-radius: 14px 14px 4px 14px;
+    padding: 14px 16px;
+    z-index: 7000;
+    box-shadow: 0 4px 24px rgba(200,169,110,0.15);
+    animation: sageAppear 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+
+  @keyframes sageAppear {
+    from { opacity: 0; transform: scale(0.85) translateY(10px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0);    }
+  }
+
+  .sage-bubble-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .sage-bubble-icon { font-size: 18px; }
+
+  .sage-bubble-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+
+  .sage-bubble-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.65;
+  }
+
+  .sage-bubble-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  /* XP GOLDEN DUST PARTICLES */
+  .xp-particle {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none;
+    z-index: 9998;
+    animation: dustFly var(--dur, 0.9s) ease-out forwards;
+    opacity: 0.9;
+  }
+
+  @keyframes dustFly {
+    0%   { transform: translate(0,0) scale(1);   opacity: 0.9; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+
+  /* BUILDING MAP */
+  .building-map {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .building-map-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .building-structure {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  .building-floor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .building-floor:last-child { border-bottom: none; }
+  .building-floor:hover { background: var(--surface2); }
+
+  .building-floor.locked { opacity: 0.3; cursor: not-allowed; }
+
+  .building-floor.active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--floor-color, var(--accent));
+    opacity: 0.07;
+  }
+
+  .building-window {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    transition: all 0.4s ease;
+  }
+
+  .building-floor.unlocked .building-window {
+    background: var(--floor-color, var(--accent));
+    border-color: var(--floor-color, var(--accent));
+    box-shadow: 0 0 6px var(--floor-color, var(--accent));
+  }
+
+  .building-floor.active .building-window {
+    box-shadow: 0 0 12px var(--floor-color, var(--accent));
+    animation: windowPulse 2s ease infinite;
+  }
+
+  @keyframes windowPulse {
+    0%, 100% { box-shadow: 0 0 6px  var(--floor-color, var(--accent)); }
+    50%       { box-shadow: 0 0 14px var(--floor-color, var(--accent)); }
+  }
+
+  .building-floor-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .building-floor.unlocked .building-floor-label { color: var(--text-dim); }
+  .building-floor.active   .building-floor-label { color: var(--text); font-weight: 700; }
+
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
@@ -1710,6 +1898,10 @@
         </div>
       </div>
       <div class="floor-nav" id="floor-nav"></div>
+      <div class="building-map">
+        <div class="building-map-label">YOUR BUILDING</div>
+        <div class="building-structure" id="building-map"></div>
+      </div>
       <div style="padding:16px 20px;border-top:1px solid var(--border);margin-top:auto;">
         <button onclick="showPrivacy()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">Privacy Policy</button>
       </div>
@@ -2711,6 +2903,7 @@ function awardXP(amount, key, x, y) {
   saveState();
   updateXPPanel();
   showFloatingXP(`+${earned} XP`, x, y);
+  spawnGoldenDust(x || window.innerWidth / 2, y || 200);
   const newLevel = getCurrentLevel().level;
   if (newLevel > prevLevel) showLevelUp(newLevel);
 }
@@ -2826,10 +3019,10 @@ function startBook() {
 function launchApp() {
   document.getElementById('app').style.display = 'block';
   renderNav();
-  // Go directly to where user left off
   renderFloor(state.currentFloor - 1, state.currentSection);
   updateTimeLog();
   updateXPPanel();
+  resetSageIdleTimer();
 }
 
 // --- ONBOARDING SYSTEM ---
@@ -3121,11 +3314,22 @@ function goToFloor(fi) {
   const isUnlocked = fi === 0 || isFloorComplete(fi - 1);
   if (!isUnlocked) return;
   stopNarration();
+  const prevFloor = state.currentFloor - 1;
   state.currentFloor = fi + 1;
   state.currentSection = 0;
   saveState();
   renderNav();
+  // Elevator direction based on floor movement
+  const direction = fi > prevFloor ? 'up' : 'down';
   renderFloor(fi, 0);
+  const content = document.getElementById('main-content');
+  if (content) {
+    content.style.overflow = 'hidden';
+    content.classList.remove('elevator-up', 'elevator-down');
+    void content.offsetWidth;
+    content.classList.add(direction === 'up' ? 'elevator-up' : 'elevator-down');
+    setTimeout(() => { content.style.overflow = ''; content.classList.remove('elevator-up', 'elevator-down'); }, 500);
+  }
 }
 
 function goToSection(fi, si) {
@@ -3357,7 +3561,137 @@ function stopNarration() {
   currentNarrationId = null;
 }
 
-function toggleHint(id) {
+// ============================================
+// SYSTEM 1 — ELEVATOR TRANSITIONS
+// ============================================
+let lastFloorIndex = 0;
+
+function renderFloorWithElevator(fi, si) {
+  const direction = fi > lastFloorIndex ? 'up' : fi < lastFloorIndex ? 'down' : null;
+  lastFloorIndex = fi;
+  renderFloor(fi, si);
+  if (direction) {
+    const panel = document.querySelector('.floor-panel') || document.getElementById('main-content').firstElementChild;
+    if (panel) {
+      panel.classList.remove('elevator-up', 'elevator-down');
+      void panel.offsetWidth;
+      panel.classList.add(direction === 'up' ? 'elevator-up' : 'elevator-down');
+    }
+  }
+}
+
+// ============================================
+// SYSTEM 2 — SAGE SPEECH BUBBLE
+// ============================================
+let sageBubbleTimeout = null;
+let sageIdleTimeout = null;
+let sageIdleTimer = null;
+
+const SAGE_MOODS = {
+  encourage: { icon: '🦉', color: 'var(--accent)' },
+  tip:       { icon: '🦉', color: 'var(--accent2)' },
+  warn:      { icon: '🦉', color: 'var(--floor3)' },
+  celebrate: { icon: '🦉', color: 'var(--success)' }
+};
+
+const SAGE_IDLE_MESSAGES = [
+  { text: "Every great structure starts with a foundation that refuses to be rushed. Take the time this section needs.", mood: 'encourage' },
+  { text: "The best architects read the blueprint three times before they lift a tool. Read this again.", mood: 'tip' },
+  { text: "Three minutes on one section is not slow. It is precise. Precision is what separates builders from dreamers.", mood: 'encourage' },
+  { text: "If something is unclear, tap the hint. I designed it for exactly this moment.", mood: 'tip' },
+  { text: "A building is only as strong as the floor you are standing on. Do not ascend until this one is solid.", mood: 'warn' },
+  { text: "Stillness before understanding is not wasted time. It is the load-bearing wall of knowledge.", mood: 'encourage' }
+];
+
+function sageMessage(text, mood) {
+  // Remove existing bubble
+  const existing = document.getElementById('sage-bubble');
+  if (existing) existing.remove();
+  if (sageBubbleTimeout) clearTimeout(sageBubbleTimeout);
+
+  const m = SAGE_MOODS[mood] || SAGE_MOODS.encourage;
+  const bubble = document.createElement('div');
+  bubble.className = 'sage-bubble';
+  bubble.id = 'sage-bubble';
+  bubble.innerHTML = `
+    <button class="sage-bubble-close" onclick="this.parentElement.remove()">✕</button>
+    <div class="sage-bubble-header">
+      <span class="sage-bubble-icon">${m.icon}</span>
+      <span class="sage-bubble-name" style="color:${m.color}">SAGE</span>
+    </div>
+    <div class="sage-bubble-text">${text}</div>
+  `;
+  document.body.appendChild(bubble);
+  sageBubbleTimeout = setTimeout(() => bubble.remove && bubble.remove(), 8000);
+}
+
+function resetSageIdleTimer() {
+  if (sageIdleTimer) clearTimeout(sageIdleTimer);
+  sageIdleTimer = setTimeout(() => {
+    const msg = SAGE_IDLE_MESSAGES[Math.floor(Math.random() * SAGE_IDLE_MESSAGES.length)];
+    sageMessage(msg.text, msg.mood);
+  }, 3 * 60 * 1000); // 3 minutes
+}
+
+// Reset idle timer on user activity
+['click', 'scroll', 'keydown', 'touchstart'].forEach(evt => {
+  document.addEventListener(evt, resetSageIdleTimer, { passive: true });
+});
+
+// ============================================
+// SYSTEM 3 — GOLDEN DUST XP PARTICLES
+// ============================================
+function spawnGoldenDust(x, y) {
+  const count = 12;
+  for (let i = 0; i < count; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'xp-particle';
+    const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.8;
+    const dist  = 30 + Math.random() * 50;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist - 20;
+    const dur = 0.6 + Math.random() * 0.5;
+    const size = 3 + Math.random() * 4;
+    particle.style.cssText = `
+      left:${x}px;top:${y}px;
+      width:${size}px;height:${size}px;
+      --tx:${tx}px;--ty:${ty}px;--dur:${dur}s;
+    `;
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), dur * 1000 + 100);
+  }
+}
+
+// ============================================
+// SYSTEM 4 — BUILDING MAP
+// ============================================
+function renderBuildingMap() {
+  const map = document.getElementById('building-map');
+  if (!map) return;
+  const FLOOR_COLORS = ['--floor1','--floor2','--floor3','--floor4','--floor5','--floor6','--floor7'];
+  map.innerHTML = [...FLOORS].reverse().map((f, ri) => {
+    const fi = FLOORS.length - 1 - ri;
+    const isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    const isActive = fi === state.currentFloor - 1;
+    const isComplete = isFloorComplete(fi);
+    const color = `var(${FLOOR_COLORS[fi]})`;
+    const shortName = f.title.split('—')[0].trim().replace('Understanding Before Touching', 'Foundation').replace('Seeing It Come Alive','Visual Build').replace('Building With Training Wheels','Interactivity').replace('Building Alone','Independence').replace('Solving Real Problems','Full Stack').replace('Specialisation','Your Lane').replace('Professional Grade','Arrival');
+    return `<div class="building-floor ${isUnlocked ? 'unlocked' : 'locked'} ${isActive ? 'active' : ''}"
+      style="--floor-color:${color};"
+      onclick="${isUnlocked ? `goToFloor(${fi})` : ''}">
+      <div class="building-window ${isComplete ? 'complete' : ''}" style="${isUnlocked ? `background:${color};border-color:${color};box-shadow:0 0 8px ${color};` : ''}"></div>
+      <div class="building-floor-label">F${fi+1} · ${shortName}</div>
+      ${isActive ? `<div style="margin-left:auto;width:5px;height:5px;border-radius:50%;background:${color};flex-shrink:0;"></div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// Hook building map into renderNav
+const _origRenderNav = renderNav;
+function renderNav() {
+  _origRenderNav();
+  renderBuildingMap();
+}
   const box = document.getElementById(id);
   if (box) box.classList.toggle('visible');
 }
