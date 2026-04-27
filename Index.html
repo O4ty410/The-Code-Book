@@ -1515,7 +1515,37 @@
   </div>
 </div>
 
-<!-- DAILY CHALLENGE OVERLAY -->
+<!-- END OF SESSION SCREEN -->
+<div id="session-complete" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:8885;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+  <div style="width:100%;max-width:380px;">
+    <div style="font-size:52px;margin-bottom:20px;">✅</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--success);margin-bottom:12px;">DAILY GOAL REACHED</div>
+    <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--text);margin-bottom:8px;" id="session-title"></div>
+    <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:28px;" id="session-message"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;justify-content:space-around;">
+      <div style="text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--accent);font-weight:700;" id="session-xp-earned"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;">XP TODAY</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div style="text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--floor3);font-weight:700;" id="session-streak"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;">DAY STREAK</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div style="text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--accent2);font-weight:700;" id="session-sections"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;">SECTIONS</div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:24px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;">TOMORROW</div>
+      <div style="font-size:14px;color:var(--text);font-weight:700;" id="session-tomorrow"></div>
+    </div>
+    <button class="auth-btn" onclick="closeSessionComplete()" style="width:100%;margin-bottom:12px;">Keep going →</button>
+    <button onclick="closeSessionComplete(true)" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;letter-spacing:1px;">That's enough for today</button>
+  </div>
+</div>
 <div id="daily-challenge" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:8887;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
   <div style="width:100%;max-width:420px;">
     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:16px;">⚡ DAILY CHALLENGE</div>
@@ -1548,35 +1578,76 @@
   </div>
 </div>
 <div id="cover">
-  <div class="cover-label">A calm path into coding</div>
-  <div class="cover-title">
-    The Code
-    <span>Book.</span>
+
+  <!-- RETURNING USER DASHBOARD -->
+  <div id="dashboard" style="display:none;width:100%;max-width:420px;text-align:left;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--accent);font-style:italic;">The Code Book</div>
+        <div id="dashboard-greeting" style="font-size:14px;color:var(--text-dim);margin-top:4px;"></div>
+      </div>
+      <div style="text-align:right;">
+        <div id="dashboard-level-label" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent);"></div>
+        <div id="dashboard-xp" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text-muted);margin-top:2px;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;">
+      <div id="dashboard-streak-icon" style="font-size:32px;line-height:1;">🔥</div>
+      <div style="flex:1;">
+        <div id="dashboard-streak-text" style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:15px;"></div>
+        <div id="dashboard-streak-sub" style="font-size:12px;color:var(--text-dim);margin-top:2px;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);">TODAY'S GOAL</div>
+        <div id="dashboard-goal-text" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);"></div>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:6px;overflow:hidden;">
+        <div id="dashboard-goal-bar" style="height:100%;background:var(--accent);border-radius:6px;transition:width 0.6s ease;width:0%;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:24px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;">WHERE YOU LEFT OFF</div>
+      <div id="dashboard-position" style="font-size:15px;color:var(--text);font-weight:700;margin-bottom:4px;"></div>
+      <div id="dashboard-next-preview" style="font-size:12px;color:var(--text-dim);"></div>
+    </div>
+    <button class="start-btn" onclick="startBook()" style="width:100%;margin-bottom:12px;">Continue →</button>
+    <div style="text-align:center;">
+      <span onclick="signOut()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);cursor:pointer;letter-spacing:1px;">Sign out</span>
+    </div>
   </div>
-  <div class="cover-subtitle">Learn coding without overwhelm. One clear step at a time.<br><br>Built for people who overthink, lose focus, or get stuck in tutorials. This is built differently.</div>
-  <div class="cover-features">
-    <div class="cover-feature">✦ 7 Floors</div>
-    <div class="cover-feature">✦ 35 Sections</div>
-    <div class="cover-feature">✦ Built-in hints</div>
-    <div class="cover-feature">✦ Voice narration</div>
-    <div class="cover-feature">✦ Tracks your progress</div>
-    <div class="cover-feature">✦ Completely free</div>
+
+  <!-- NEW USER LANDING -->
+  <div id="new-user-landing">
+    <div class="cover-label">A calm path into coding</div>
+    <div class="cover-title">The Code<span>Book.</span></div>
+    <div class="cover-subtitle">Learn coding without overwhelm. One clear step at a time.<br><br>Built for people who overthink, lose focus, or get stuck in tutorials. This is built differently.</div>
+    <div class="cover-features">
+      <div class="cover-feature">✦ 7 Floors</div>
+      <div class="cover-feature">✦ 35 Sections</div>
+      <div class="cover-feature">✦ Built-in hints</div>
+      <div class="cover-feature">✦ Voice narration</div>
+      <div class="cover-feature">✦ Tracks your progress</div>
+      <div class="cover-feature">✦ Completely free</div>
+    </div>
+    <div class="floor-dots">
+      <div class="floor-dot active"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+    </div>
+    <button class="start-btn" onclick="startBook()">Start — one step at a time</button>
+    <div class="cover-human">I built this because I struggled to stay consistent with coding.</div>
+    <div id="cover-user" style="display:none;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;text-align:center;">
+      Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
+      <span onclick="signOut()" style="color:var(--accent);cursor:pointer;">Sign out</span>
+    </div>
   </div>
-  <div class="floor-dots">
-    <div class="floor-dot active"></div>
-    <div class="floor-dot"></div>
-    <div class="floor-dot"></div>
-    <div class="floor-dot"></div>
-    <div class="floor-dot"></div>
-    <div class="floor-dot"></div>
-    <div class="floor-dot"></div>
-  </div>
-  <button class="start-btn" onclick="startBook()">Start — one step at a time</button>
-  <div class="cover-human">I built this because I struggled to stay consistent with coding.</div>
-  <div id="cover-user" style="display:none;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;text-align:center;">
-    Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
-    <span onclick="signOut()" style="color:var(--accent);cursor:pointer;">Sign out</span>
-  </div>
+
 </div>
 
 <!-- APP -->
@@ -2304,6 +2375,66 @@ async function submitNewPassword() {
   }
 }
 
+function populateDashboard() {
+  const hasStarted = Object.keys(state.completed).length > 0 || state.currentSection > 0 || state.currentFloor > 1;
+  if (!hasStarted) return;
+
+  // Show dashboard, hide new user landing
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('new-user-landing').style.display = 'none';
+
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('dashboard-greeting').textContent = name ? `${greeting}, ${name}.` : `${greeting}.`;
+
+  // Level
+  const cur = getCurrentLevel();
+  const LEVEL_LABELS = ['', 'Curious', 'Beginning', 'Learning', 'Building', 'Developing', 'Coding', 'Fluent'];
+  document.getElementById('dashboard-level-label').textContent = LEVEL_LABELS[cur.level] || `Level ${cur.level}`;
+  document.getElementById('dashboard-xp').textContent = `${state.xp} XP`;
+
+  // Streak
+  const streak = state.streak || 0;
+  const streakIcon = streak >= 30 ? '🔥🔥🔥' : streak >= 14 ? '🔥🔥' : '🔥';
+  document.getElementById('dashboard-streak-icon').textContent = streakIcon;
+  document.getElementById('dashboard-streak-text').textContent = streak === 0 ? 'No streak yet' : `${streak} day streak`;
+  document.getElementById('dashboard-streak-sub').textContent = streak === 0 ? 'Complete a section to start your streak' : streak >= 7 ? 'You\'re on fire. Keep it going.' : 'Come back tomorrow to keep it alive.';
+
+  // Daily goal
+  const today = new Date().toDateString();
+  const todayKey = `daily_sections_${today}`;
+  const todaySections = parseInt(localStorage.getItem(todayKey) || '0');
+  const dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal') || '1');
+  const goalPct = Math.min(100, Math.round((todaySections / dailyGoal) * 100));
+  document.getElementById('dashboard-goal-text').textContent = `${todaySections}/${dailyGoal} sections`;
+  document.getElementById('dashboard-goal-bar').style.width = goalPct + '%';
+
+  // Current position
+  const fi = state.currentFloor - 1;
+  const si = state.currentSection;
+  const floor = FLOORS[fi];
+  const section = floor?.sections[si];
+  document.getElementById('dashboard-position').textContent = section ? section.title : 'All done!';
+
+  // Next section preview
+  const nextSi = si + 1;
+  const nextSection = floor?.sections[nextSi];
+  const nextFloor = FLOORS[fi + 1];
+  let preview = '';
+  if (nextSection) preview = `Up next: ${nextSection.title}`;
+  else if (nextFloor) preview = `Up next: ${nextFloor.title}`;
+  else preview = 'You\'ve completed the entire curriculum.';
+  document.getElementById('dashboard-next-preview').textContent = preview;
+}
+
+function trackDailySection() {
+  const today = new Date().toDateString();
+  const todayKey = `daily_sections_${today}`;
+  const current = parseInt(localStorage.getItem(todayKey) || '0');
+  localStorage.setItem(todayKey, current + 1);
+}
+
 function showPrivacy() {
   document.getElementById('privacy-overlay').style.display = 'flex';
 }
@@ -2406,6 +2537,7 @@ async function onUserLoggedIn() {
   const coverEmail = document.getElementById('cover-user-email');
   if (coverUser) coverUser.style.display = 'block';
   if (coverEmail) coverEmail.textContent = currentUser.email || '';
+  populateDashboard();
 }
 
 async function saveToSupabase() {
@@ -2626,21 +2758,18 @@ function startBook() {
   document.getElementById('cover').style.display = 'none';
   applyTheme();
 
-  // Check if first time user — show onboarding
   const hasOnboarded = localStorage.getItem('codebook_onboarded');
   if (!hasOnboarded) {
     showOnboarding();
     return;
   }
 
-  // Check if daily challenge available
-  const lastChallenge = localStorage.getItem('codebook_last_challenge');
   const today = new Date().toDateString();
   const challengeDone = localStorage.getItem('codebook_challenge_done_' + today);
 
   launchApp();
 
-  if (!challengeDone && lastChallenge !== today) {
+  if (!challengeDone) {
     setTimeout(() => showDailyChallenge(), 800);
   }
 }
@@ -2648,6 +2777,7 @@ function startBook() {
 function launchApp() {
   document.getElementById('app').style.display = 'block';
   renderNav();
+  // Go directly to where user left off
   renderFloor(state.currentFloor - 1, state.currentSection);
   updateTimeLog();
   updateXPPanel();
@@ -3103,6 +3233,7 @@ function toggleCheck(key, el) {
 function completeSection(sectionId, fi, si) {
   state.completed[sectionId] = true;
   awardXP(25, `complete-${sectionId}`, window.innerWidth / 2, 300);
+  trackDailySection();
   const wasComplete = isFloorComplete(fi);
   if (wasComplete) {
     awardXP(250, `floor-${fi}`, window.innerWidth / 2, 250);
