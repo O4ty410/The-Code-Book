@@ -1556,7 +1556,7 @@
 </div>
 
 <!-- LEADERBOARD OVERLAY -->
-<div id="leaderboard-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
+<div id="leaderboard-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9993;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
   <div style="width:100%;max-width:400px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
       <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--accent);font-style:italic;">Leaderboard</div>
@@ -1570,7 +1570,7 @@
 </div>
 
 <!-- PRIVACY POLICY OVERLAY -->
-<div id="privacy-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:9999;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
+<div id="privacy-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9993;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
   <div style="width:100%;max-width:480px;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
       <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--accent);font-style:italic;">Privacy Policy</div>
@@ -1668,7 +1668,7 @@
 </div>
 
 <!-- ONBOARDING OVERLAY -->
-<div id="onboarding" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:8888;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+<div id="onboarding" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9995;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
   <div style="width:100%;max-width:380px;">
     <div style="font-size:52px;margin-bottom:16px;animation:owlBob 2s ease-in-out infinite;">🦉</div>
     <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:8px;" id="onboarding-title">Hey. I'm Sage.</div>
@@ -1704,7 +1704,7 @@
 </div>
 
 <!-- END OF SESSION SCREEN -->
-<div id="session-complete" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:8885;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+<div id="session-complete" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9991;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
   <div style="width:100%;max-width:380px;">
     <div style="font-size:52px;margin-bottom:20px;">✅</div>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--success);margin-bottom:12px;">DAILY GOAL REACHED</div>
@@ -1734,7 +1734,7 @@
     <button onclick="closeSessionComplete(true)" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;letter-spacing:1px;">That's enough for today</button>
   </div>
 </div>
-<div id="daily-challenge" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:8887;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+<div id="daily-challenge" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9990;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;overflow-y:auto;">
   <div style="width:100%;max-width:420px;">
     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:16px;">⚡ DAILY CHALLENGE</div>
     <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text);margin-bottom:8px;" id="challenge-title">Today's Challenge</div>
@@ -1749,7 +1749,7 @@
 </div>
 
 <!-- FLOOR COMPLETE CELEBRATION -->
-<div id="floor-celebration" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:8886;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+<div id="floor-celebration" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9992;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
   <div style="width:100%;max-width:400px;">
     <div style="font-size:72px;margin-bottom:24px;animation:pulse 1.5s ease infinite;" id="celebration-icon">🎓</div>
     <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;">FLOOR COMPLETE</div>
@@ -3053,6 +3053,10 @@ function onboardingSelect(field, value) {
     document.getElementById('onboarding-title').textContent = 'Almost there.';
     document.getElementById('onboarding-body').textContent = 'Last question — and then we begin.';
   } else if (field === 'time') {
+    // Set daily goal based on time selection
+    const goalMap = { '15': 1, '30': 2, '60': 3 };
+    localStorage.setItem('codebook_daily_goal', goalMap[value] || 1);
+
     document.getElementById('onboarding-step-3').style.display = 'none';
     document.getElementById('onboarding-step-4').style.display = 'block';
 
@@ -3100,7 +3104,7 @@ function showDailyChallenge() {
   const optionsEl = document.getElementById('challenge-options');
   optionsEl.innerHTML = challenge.options.map((opt, i) => `
     <button onclick="answerChallenge(${i}, ${challenge.correct}, ${challenge.xp}, '${challenge.explanation.replace(/'/g, "\\'")}')"
-      style="padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text-dim);font-size:14px;cursor:pointer;text-align:left;transition:all 0.2s ease;">
+      style="padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;cursor:pointer;text-align:left;transition:all 0.2s ease;width:100%;">
       ${opt}
     </button>
   `).join('');
