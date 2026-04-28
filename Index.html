@@ -3295,6 +3295,7 @@ function renderNav() {
     </div>`;
   }).join('');
   updateProgress();
+  renderBuildingMap();
 }
 
 function isFloorComplete(fi) {
@@ -3684,13 +3685,6 @@ function renderBuildingMap() {
       ${isActive ? `<div style="margin-left:auto;width:5px;height:5px;border-radius:50%;background:${color};flex-shrink:0;"></div>` : ''}
     </div>`;
   }).join('');
-}
-
-// Hook building map into renderNav
-const _origRenderNav = renderNav;
-function renderNav() {
-  _origRenderNav();
-  renderBuildingMap();
 }
 
 function toggleHint(id) {
