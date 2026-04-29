@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Code Book — Full Vision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --surface: #111;
+  --surface2: #1a1a1a;
+  --border: #222;
+  --accent: #c8a96e;
+  --accent2: #7eb8c8;
+  --text: #e8e8e8;
+  --text-muted: #666;
+  --text-dim: #999;
+  --success: #6ec87e;
+  --danger: #c87e7e;
+  --floor1: #c8a96e;
+  --floor2: #7eb8c8;
+  --floor3: #c87e9a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── HEADER / NAV ─── */
+.top-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: rgba(10,10,10,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.top-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--accent);
+  font-style: italic;
+}
+
+.top-tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.top-tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.top-tab.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(200,169,110,0.08);
+}
+
+.top-tab:hover:not(.active) {
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 7px 14px;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.install-btn:hover { opacity: 0.85; }
+
+.xp-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(200,169,110,0.1);
+  border: 1px solid rgba(200,169,110,0.3);
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+/* ─── MAIN LAYOUT ─── */
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr 300px;
+  min-height: 100vh;
+  padding-top: 56px;
+}
+
+/* ─── LEFT SIDEBAR: BUILDING ─── */
+.building-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+
+.building-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.building-header-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.building-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  color: var(--accent);
+  font-style: italic;
+}
+
+/* VISUAL BUILDING */
+.visual-building {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.vb-roof {
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 30px solid #1e1e1e;
+  border-bottom-color: var(--border);
+  margin-bottom: 0;
+}
+
+.vb-floor {
+  width: 120px;
+  height: 36px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-top: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.vb-floor:first-of-type { border-top: 1px solid var(--border); }
+
+.vb-floor.unlocked { border-color: rgba(200,169,110,0.3); }
+.vb-floor.active { background: rgba(200,169,110,0.1); border-color: var(--accent); }
+.vb-floor.locked { opacity: 0.3; cursor: not-allowed; }
+
+.vb-floor::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--floor-color, var(--accent));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.vb-floor.active::before { opacity: 0.06; }
+
+.vb-windows {
+  display: flex;
+  gap: 4px;
+}
+
+.vb-window {
+  width: 8px;
+  height: 10px;
+  border-radius: 1px;
+  background: var(--border);
+  transition: all 0.4s ease;
+}
+
+.vb-floor.unlocked .vb-window {
+  background: var(--floor-color, var(--accent));
+  box-shadow: 0 0 6px var(--floor-color, var(--accent));
+}
+
+.vb-floor.active .vb-window {
+  animation: windowGlow 2s ease infinite;
+}
+
+@keyframes windowGlow {
+  0%, 100% { box-shadow: 0 0 4px var(--floor-color, var(--accent)); }
+  50% { box-shadow: 0 0 12px var(--floor-color, var(--accent)); }
+}
+
+.vb-floor-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.vb-floor.unlocked .vb-floor-num { color: var(--floor-color, var(--accent)); }
+
+/* STREAK + STATS */
+.sidebar-stats {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+}
+
+.stat-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.xp-bar-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #e8c882);
+  border-radius: 3px;
+  width: 42%;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+}
+
+.xp-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 5px;
+  height: 5px;
+  background: #e8c882;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #e8c882;
+}
+
+/* OFFLINE BADGE */
+.offline-badge {
+  margin: 0 20px 16px;
+  padding: 10px 14px;
+  background: rgba(110,200,126,0.08);
+  border: 1px solid rgba(110,200,126,0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.offline-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 6px var(--success);
+  flex-shrink: 0;
+}
+
+.offline-text {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--success);
+}
+
+/* ─── MAIN CONTENT ─── */
+.main-area {
+  overflow-y: auto;
+  max-height: calc(100vh - 56px);
+}
+
+/* SECTION TABS */
+.section-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.section-tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 14px 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.section-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.section-tab:hover:not(.active) { color: var(--text); }
+
+/* CONTENT PANELS */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* LEARN PANEL */
+.learn-panel {
+  padding: 40px 32px;
+  animation: panelIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(16px) blur(4px); }
+  to { opacity: 1; transform: translateY(0) blur(0); }
+}
+
+.floor-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+
+.section-body {
+  font-size: 16px;
+  line-height: 1.95;
+  color: var(--text-dim);
+  margin-bottom: 28px;
+  max-width: 640px;
+}
+
+.section-body strong { color: var(--text); }
+
+.callout {
+  border-left: 3px solid var(--accent);
+  padding: 20px 24px;
+  background: rgba(200,169,110,0.05);
+  border-radius: 0 10px 10px 0;
+  margin: 28px 0;
+  max-width: 640px;
+}
+
+.callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.callout-text {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-dim);
+}
+
+/* ─── CODE EDITOR ─── */
+.editor-panel {
+  padding: 24px 32px;
+  animation: panelIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+.editor-wrapper {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 760px;
+}
+
+.editor-topbar {
+  background: #0d0d0d;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.editor-dots { display: flex; gap: 6px; }
+.editor-dot { width: 11px; height: 11px; border-radius: 50%; }
+.editor-dot:nth-child(1) { background: #ff5f57; }
+.editor-dot:nth-child(2) { background: #febc2e; }
+.editor-dot:nth-child(3) { background: #28c840; }
+
+.editor-filename {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.editor-actions { display: flex; gap: 8px; }
+
+.run-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 7px 16px;
+  background: var(--success);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.run-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.run-btn:active { transform: translateY(0); }
+
+.reset-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 7px 12px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reset-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+.editor-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.code-pane {
+  background: #0d0d0d;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+
+.line-numbers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px 0 20px 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #444;
+  user-select: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.code-textarea {
+  width: 100%;
+  min-height: 280px;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #cdd6f4;
+  padding: 20px 20px 20px 40px;
+  caret-color: var(--accent);
+  position: relative;
+  z-index: 2;
+  tab-size: 2;
+}
+
+.code-textarea::selection {
+  background: rgba(200,169,110,0.2);
+}
+
+.preview-pane {
+  background: #fff;
+  min-height: 280px;
+  position: relative;
+}
+
+.preview-label {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #999;
+  z-index: 10;
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  border: none;
+  display: block;
+}
+
+/* CONSOLE */
+.console-bar {
+  background: #080808;
+  border-top: 1px solid var(--border);
+  padding: 0;
+}
+
+.console-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #1a1a1a;
+  cursor: pointer;
+}
+
+.console-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+}
+
+.console-output {
+  padding: 12px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  min-height: 60px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.console-line { color: var(--text-dim); }
+.console-line.success { color: var(--success); }
+.console-line.error { color: var(--danger); }
+.console-line.info { color: var(--accent2); }
+
+/* CHALLENGE PANEL */
+.challenge-panel {
+  padding: 32px;
+  animation: panelIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+
+.challenge-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+  max-width: 640px;
+  margin-bottom: 20px;
+}
+
+.challenge-type {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--accent2);
+  margin-bottom: 14px;
+}
+
+.challenge-q {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.challenge-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.challenge-opt {
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-dim);
+  transition: all 0.15s;
+  background: var(--surface2);
+  text-align: left;
+  font-family: 'Lato', sans-serif;
+}
+
+.challenge-opt:hover { border-color: var(--accent); color: var(--text); transform: translateX(4px); }
+.challenge-opt.correct { border-color: var(--success); color: var(--success); background: rgba(110,200,126,0.06); }
+.challenge-opt.wrong { border-color: var(--danger); color: var(--danger); background: rgba(200,126,126,0.06); }
+
+/* DRAG AND DROP */
+.drag-section {
+  margin-top: 24px;
+  max-width: 640px;
+}
+
+.drag-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.drag-zone {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  min-height: 64px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+
+.drag-zone.over { border-color: var(--accent); background: rgba(200,169,110,0.03); }
+
+.drag-chip {
+  padding: 8px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: grab;
+  user-select: none;
+  transition: all 0.15s;
+}
+
+.drag-chip:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(200,169,110,0.15); }
+.drag-chip:active { cursor: grabbing; }
+.drag-chip.placed { opacity: 0.4; pointer-events: none; }
+
+.drop-target {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: rgba(200,169,110,0.03);
+  border: 2px dashed rgba(200,169,110,0.3);
+  border-radius: 10px;
+  min-height: 64px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.drop-placeholder {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.check-answer-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 12px 24px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.check-answer-btn:hover { background: var(--accent); color: var(--bg); }
+
+/* ─── RIGHT SIDEBAR: PROGRESS + SAGE ─── */
+.right-sidebar {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-section {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* SECTION PROGRESS */
+.section-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.progress-item:hover { background: var(--surface2); }
+.progress-item.active { background: rgba(200,169,110,0.08); }
+
+.progress-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.progress-item.done .progress-dot { background: var(--success); border-color: var(--success); color: var(--bg); }
+.progress-item.active .progress-dot { border-color: var(--accent); color: var(--accent); }
+
+.progress-item-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  transition: color 0.2s;
+}
+
+.progress-item.active .progress-item-label { color: var(--text); }
+.progress-item.done .progress-item-label { color: var(--text-dim); text-decoration: line-through; }
+
+/* SAGE CARD */
+.sage-card {
+  background: rgba(200,169,110,0.05);
+  border: 1px solid rgba(200,169,110,0.2);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.sage-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sage-avatar {
+  width: 36px;
+  height: 36px;
+  background: rgba(200,169,110,0.1);
+  border: 1px solid rgba(200,169,110,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  animation: owlBob 3s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes owlBob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-3px) rotate(3deg); }
+}
+
+.sage-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--accent);
+}
+
+.sage-text {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* DAILY GOAL */
+.daily-goal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.goal-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.goal-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.goal-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #e8c882);
+  border-radius: 6px;
+  width: 60%;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ACHIEVEMENTS */
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.achievement {
+  aspect-ratio: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 8px;
+}
+
+.achievement:hover { border-color: var(--accent); transform: translateY(-2px); }
+.achievement.locked { opacity: 0.3; filter: grayscale(1); cursor: not-allowed; }
+.achievement.locked:hover { transform: none; border-color: var(--border); }
+
+.achievement-icon { font-size: 22px; }
+.achievement-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* PWA INSTALL BANNER */
+.pwa-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 2000;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,169,110,0.1);
+  max-width: 420px;
+  animation: bannerSlide 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
+@keyframes bannerSlide {
+  from { transform: translateX(-50%) translateY(80px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+.pwa-icon { font-size: 32px; flex-shrink: 0; }
+
+.pwa-text { flex: 1; }
+
+.pwa-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.pwa-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.pwa-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.pwa-install {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 9px 16px;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pwa-dismiss {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 9px 12px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+/* XP FLOAT */
+.xp-float {
+  position: fixed;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  pointer-events: none;
+  z-index: 9999;
+  animation: floatUp 1.2s ease forwards;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  50% { opacity: 1; transform: translateY(-30px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-70px) scale(0.9); }
+}
+
+/* SECTION COMPLETE GATE */
+.gate-section {
+  margin-top: 40px;
+  padding: 28px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  max-width: 640px;
+}
+
+.gate-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.gate-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.gate-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+.gate-tick {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.gate-check.done .gate-tick {
+  background: var(--success);
+  border-color: var(--success);
+  color: var(--bg);
+}
+
+.gate-check.done { color: var(--text); }
+
+.complete-gate-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  padding: 16px 32px;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.complete-gate-btn.ready {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.complete-gate-btn.ready:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(200,169,110,0.3);
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* FEATURE LABELS */
+.feature-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-right: 6px;
+  margin-bottom: 16px;
+}
+
+.feature-pill.new {
+  border-color: rgba(200,169,110,0.4);
+  color: var(--accent);
+  background: rgba(200,169,110,0.06);
+}
+
+/* ANNOTATION ARROWS */
+.annotation {
+  position: relative;
+  display: inline-block;
+}
+
+.annotation-tip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--bg);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.annotation:hover .annotation-tip { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-logo">The Code Book</div>
+  <div class="top-tabs">
+    <button class="top-tab active" onclick="switchView('learn')">Learn</button>
+    <button class="top-tab" onclick="switchView('build')">Build</button>
+    <button class="top-tab" onclick="switchView('challenge')">Challenge</button>
+  </div>
+  <div class="top-right">
+    <div class="xp-chip">⚡ 340 XP</div>
+    <button class="install-btn" onclick="showPWA()">
+      ⬇ Install App
+    </button>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div class="app-shell">
+
+  <!-- LEFT: BUILDING SIDEBAR -->
+  <div class="building-sidebar">
+    <div class="building-header">
+      <div class="building-header-label">YOUR BUILDING</div>
+      <div class="building-title">The Code Book</div>
+    </div>
+
+    <!-- VISUAL BUILDING -->
+    <div class="visual-building">
+      <div class="vb-roof"></div>
+      <div class="vb-floor locked" style="--floor-color:#e8d5a0">
+        <div class="vb-windows"><div class="vb-window"></div><div class="vb-window"></div><div class="vb-window"></div></div>
+        <div class="vb-floor-num">F7</div>
+      </div>
+      <div class="vb-floor locked" style="--floor-color:#c8967e">
+        <div class="vb-windows"><div class="vb-window"></div><div class="vb-window"></div><div class="vb-window"></div></div>
+        <div class="vb-floor-num">F6</div>
+      </div>
+      <div class="vb-floor locked" style="--floor-color:#7ec8a9">
+        <div class="vb-windows"><div class="vb-window"></div><div class="vb-window"></div><div class="vb-window"></div></div>
+        <div class="vb-floor-num">F5</div>
+      </div>
+      <div class="vb-floor locked" style="--floor-color:#9a7ec8">
+        <div class="vb-windows"><div class="vb-window"></div><div class="vb-window"></div><div class="vb-window"></div></div>
+        <div class="vb-floor-num">F4</div>
+      </div>
+      <div class="vb-floor locked" style="--floor-color:#c87e9a">
+        <div class="vb-windows"><div class="vb-window"></div><div class="vb-window"></div><div class="vb-window"></div></div>
+        <div class="vb-floor-num">F3</div>
+      </div>
+      <div class="vb-floor active unlocked" style="--floor-color:#7eb8c8" onclick="selectFloor(this)">
+        <div class="vb-windows"><div class="vb-window"></div><div class="vb-window"></div><div class="vb-window"></div></div>
+        <div class="vb-floor-num">F2</div>
+      </div>
+      <div class="vb-floor unlocked" style="--floor-color:#c8a96e" onclick="selectFloor(this)">
+        <div class="vb-windows"><div class="vb-window"></div><div class="vb-window"></div><div class="vb-window"></div></div>
+        <div class="vb-floor-num">F1 ✓</div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="sidebar-stats">
+      <div class="stat-row">
+        <span class="stat-label">LEVEL</span>
+        <span class="stat-value">3 — Learning</span>
+      </div>
+      <div class="xp-bar-track"><div class="xp-bar-fill"></div></div>
+      <div class="stat-row">
+        <span class="stat-label">STREAK</span>
+        <span class="stat-value">🔥 7 days</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">FOCUS TIME</span>
+        <span class="stat-value">4h 20m</span>
+      </div>
+    </div>
+
+    <!-- OFFLINE BADGE -->
+    <div class="offline-badge">
+      <div class="offline-dot"></div>
+      <div class="offline-text">AVAILABLE OFFLINE</div>
+    </div>
+  </div>
+
+  <!-- MAIN AREA -->
+  <div class="main-area" id="main-area">
+
+    <!-- SECTION TABS -->
+    <div class="section-tabs">
+      <button class="section-tab active" onclick="switchTab('read', this)">Read</button>
+      <button class="section-tab" onclick="switchTab('code', this)">Code Editor</button>
+      <button class="section-tab" onclick="switchTab('quiz', this)">Quiz</button>
+    </div>
+
+    <!-- READ PANEL -->
+    <div class="panel active" id="panel-read">
+      <div class="learn-panel">
+        <div class="floor-tag">FLOOR 02 — SECTION 2 OF 5</div>
+
+        <span class="feature-pill new">✦ NEW</span>
+        <span class="feature-pill">⬇ WORKS OFFLINE</span>
+        <span class="feature-pill">▶ LISTEN</span>
+
+        <div class="section-title">HTML — The Skeleton of Every Page</div>
+
+        <div class="section-body">
+          Every webpage you've ever visited is built with HTML at its core. HTML gives a page its <strong>structure</strong>. It says: here is a heading. Here is a paragraph. Here is a button.<br><br>
+          Think of it like the frame of a house. Before the walls, before the paint — there's a frame. <strong>HTML is the frame.</strong><br><br>
+          Every HTML element follows the same pattern. An opening tag that names what it is. The content that goes inside it. A closing tag that ends it. That's the entire language in one sentence.
+        </div>
+
+        <div class="callout">
+          <div class="callout-label">THE PATTERN</div>
+          <div class="callout-text">
+            <strong>&lt;h1&gt;</strong>This is a heading<strong>&lt;/h1&gt;</strong><br>
+            Open tag → content → close tag. Every element. Every time.
+          </div>
+        </div>
+
+        <div class="section-body">
+          Switch to the <strong>Code Editor tab</strong> to write your first HTML and see it render live. Then come back and take the <strong>Quiz</strong> to unlock the next section.
+        </div>
+
+        <!-- COMPLETION GATE -->
+        <div class="gate-section">
+          <div class="gate-label">TO COMPLETE THIS SECTION</div>
+          <div class="gate-checks">
+            <div class="gate-check done" id="gate-read">
+              <div class="gate-tick">✓</div>
+              Read the section
+            </div>
+            <div class="gate-check" id="gate-code">
+              <div class="gate-tick"></div>
+              Write code in the editor
+            </div>
+            <div class="gate-check" id="gate-quiz">
+              <div class="gate-tick"></div>
+              Pass the knowledge check
+            </div>
+          </div>
+          <button class="complete-gate-btn" id="complete-btn" onclick="completeSection()">
+            Mark Complete → +25 XP
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CODE EDITOR PANEL -->
+    <div class="panel" id="panel-code">
+      <div class="editor-panel">
+        <div style="margin-bottom:16px;">
+          <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;">Live Code Editor</div>
+          <div style="font-size:14px;color:var(--text-dim);">Write HTML in the left pane. See it render live on the right. Edit and experiment freely.</div>
+        </div>
+
+        <div class="editor-wrapper">
+          <div class="editor-topbar">
+            <div class="editor-dots">
+              <div class="editor-dot"></div>
+              <div class="editor-dot"></div>
+              <div class="editor-dot"></div>
+            </div>
+            <div class="editor-filename">index.html</div>
+            <div class="editor-actions">
+              <button class="reset-btn" onclick="resetCode()">↺ Reset</button>
+              <button class="run-btn" onclick="runCode()">▶ Run</button>
+            </div>
+          </div>
+
+          <div class="editor-body">
+            <div class="code-pane">
+              <div class="line-numbers" id="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+              <textarea class="code-textarea" id="code-editor" spellcheck="false" oninput="updateLines(); autoRun();" onkeydown="handleTab(event)">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;style&gt;
+    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 20px; }
+    h1 { color: #c8a96e; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;I built this.&lt;/h1&gt;
+  &lt;p&gt;Day one. Already making things.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+            </div>
+            <div class="preview-pane">
+              <div class="preview-label">PREVIEW</div>
+              <iframe class="preview-iframe" id="preview-frame"></iframe>
+            </div>
+          </div>
+
+          <div class="console-bar">
+            <div class="console-header">
+              <div class="console-label">CONSOLE</div>
+            </div>
+            <div class="console-output" id="console-output">
+              <div class="console-line info">▸ Editor ready. Click Run or edit to see output.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;max-width:760px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;">CHALLENGES — try these in the editor</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:13px;color:var(--text-dim);">→ Add a <strong style="color:var(--text)">&lt;button&gt;</strong> that says "Click me"</div>
+            <div style="font-size:13px;color:var(--text-dim);">→ Change the heading colour to <strong style="color:var(--text)">#7eb8c8</strong></div>
+            <div style="font-size:13px;color:var(--text-dim);">→ Add a second paragraph below the first</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ PANEL -->
+    <div class="panel" id="panel-quiz">
+      <div class="challenge-panel">
+
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;">Knowledge Check</div>
+        <div style="font-size:14px;color:var(--text-dim);margin-bottom:28px;">Answer correctly to unlock the next section and earn XP.</div>
+
+        <!-- MULTIPLE CHOICE -->
+        <div class="challenge-card">
+          <div class="challenge-type">MULTIPLE CHOICE — QUESTION 1 OF 2</div>
+          <div class="challenge-q">What does an HTML tag actually do?</div>
+          <div class="challenge-options" id="quiz-opts">
+            <button class="challenge-opt" onclick="answerQuiz(this, false)">It makes text bold and colourful</button>
+            <button class="challenge-opt" onclick="answerQuiz(this, true)">It labels what type of content something is</button>
+            <button class="challenge-opt" onclick="answerQuiz(this, false)">It runs code in the browser</button>
+            <button class="challenge-opt" onclick="answerQuiz(this, false)">It connects to a server</button>
+          </div>
+          <div id="quiz-feedback" style="display:none;margin-top:14px;padding:14px;border-radius:8px;font-size:14px;line-height:1.7;"></div>
+        </div>
+
+        <!-- DRAG AND DROP -->
+        <div class="challenge-card">
+          <div class="challenge-type">DRAG & DROP — QUESTION 2 OF 2</div>
+          <div class="challenge-q">Arrange these into the correct HTML structure:</div>
+
+          <div class="drag-label">DRAG FROM HERE</div>
+          <div class="drag-zone" id="chip-pool">
+            <div class="drag-chip" draggable="true" ondragstart="dragStart(event)" id="chip-body">&lt;body&gt;</div>
+            <div class="drag-chip" draggable="true" ondragstart="dragStart(event)" id="chip-html">&lt;html&gt;</div>
+            <div class="drag-chip" draggable="true" ondragstart="dragStart(event)" id="chip-h1">&lt;h1&gt;</div>
+            <div class="drag-chip" draggable="true" ondragstart="dragStart(event)" id="chip-head">&lt;head&gt;</div>
+          </div>
+
+          <div class="drag-label" style="margin-top:16px;">DROP IN ORDER HERE</div>
+          <div class="drop-target" id="drop-zone"
+            ondragover="allowDrop(event)"
+            ondrop="dropChip(event)"
+            ondragleave="dragLeave(event)"
+            ondragenter="dragEnter(event)">
+            <span class="drop-placeholder">Drop tags here in the right order...</span>
+          </div>
+
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+            <button class="check-answer-btn" onclick="checkDrag()">Check Order</button>
+            <button onclick="resetDrag()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;letter-spacing:1px;">↺ Reset</button>
+          </div>
+          <div id="drag-feedback" style="display:none;margin-top:12px;padding:12px;border-radius:8px;font-size:13px;"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar">
+
+    <!-- SECTION PROGRESS -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">FLOOR 2 — SECTIONS</div>
+      <div class="section-progress-list">
+        <div class="progress-item done">
+          <div class="progress-dot">✓</div>
+          <div class="progress-item-label">System Online</div>
+        </div>
+        <div class="progress-item active">
+          <div class="progress-dot">2</div>
+          <div class="progress-item-label">HTML — The Skeleton</div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-dot">3</div>
+          <div class="progress-item-label">CSS — Making It Look Like Something</div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-dot">4</div>
+          <div class="progress-item-label">Your First Webpage</div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-dot">5</div>
+          <div class="progress-item-label">Floor 2 Project</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAGE -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">SAGE</div>
+      <div class="sage-card">
+        <div class="sage-header">
+          <div class="sage-avatar">🦉</div>
+          <div class="sage-name">YOUR GUIDE</div>
+        </div>
+        <div class="sage-text" id="sage-text">
+          HTML is just labels on boxes. The label says what type of thing it is. The content is what's inside. Open, fill, close. That's the whole pattern.
+        </div>
+      </div>
+    </div>
+
+    <!-- DAILY GOAL -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">TODAY'S GOAL</div>
+      <div class="daily-goal">
+        <div class="goal-row">
+          <span style="font-size:13px;color:var(--text-dim);">3 of 5 sections</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);">60%</span>
+        </div>
+        <div class="goal-track"><div class="goal-fill"></div></div>
+        <div style="font-size:12px;color:var(--text-muted);">2 more to hit your daily goal</div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">ACHIEVEMENTS</div>
+      <div class="achievement-grid">
+        <div class="achievement annotation" onclick="showXP(event)">
+          <div class="achievement-icon">🧱</div>
+          <div class="achievement-label">First Floor</div>
+          <div class="annotation-tip">FLOOR 1 COMPLETE</div>
+        </div>
+        <div class="achievement annotation" onclick="showXP(event)">
+          <div class="achievement-icon">🔥</div>
+          <div class="achievement-label">7 Day Streak</div>
+          <div class="annotation-tip">CONSISTENCY</div>
+        </div>
+        <div class="achievement annotation" onclick="showXP(event)">
+          <div class="achievement-icon">⌨️</div>
+          <div class="achievement-label">First Code</div>
+          <div class="annotation-tip">EDITOR USED</div>
+        </div>
+        <div class="achievement locked">
+          <div class="achievement-icon">🏗️</div>
+          <div class="achievement-label">Builder</div>
+        </div>
+        <div class="achievement locked">
+          <div class="achievement-icon">⚡</div>
+          <div class="achievement-label">Speed Run</div>
+        </div>
+        <div class="achievement locked">
+          <div class="achievement-icon">🎓</div>
+          <div class="achievement-label">Graduate</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PWA INSTALL BANNER -->
+<div class="pwa-banner" id="pwa-banner" style="display:none;">
+  <div class="pwa-icon">📲</div>
+  <div class="pwa-text">
+    <div class="pwa-title">Install The Code Book</div>
+    <div class="pwa-sub">Works offline · saves your progress · feels like a native app</div>
+  </div>
+  <div class="pwa-actions">
+    <button class="pwa-install" onclick="installApp()">Install</button>
+    <button class="pwa-dismiss" onclick="dismissPWA()">Later</button>
+  </div>
+</div>
+
+<script>
+// ─── VIEW SWITCHING ───
+function switchView(view) {
+  document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ─── TAB SWITCHING ───
+function switchTab(tab, btn) {
+  document.querySelectorAll('.section-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+
+  if (tab === 'code') {
+    runCode();
+    updateGate('gate-code');
+    setTimeout(() => {
+      setSageText("Write something in the editor. Change the heading. Add a paragraph. Break it and fix it. That's how you learn.");
+    }, 300);
+  }
+
+  if (tab === 'quiz') {
+    setSageText("Take your time. Read each option properly before clicking. The explanation after is as important as the answer.");
+  }
+
+  if (tab === 'read') {
+    setSageText("HTML is just labels on boxes. The label says what type of thing it is. The content is what's inside. Open, fill, close. That's the whole pattern.");
+  }
+}
+
+// ─── CODE EDITOR ───
+const defaultCode = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 20px; }
+    h1 { color: #c8a96e; }
+  </style>
+</head>
+<body>
+  <h1>I built this.</h1>
+  <p>Day one. Already making things.</p>
+</body>
+</html>`;
+
+let autoRunTimer;
+
+function autoRun() {
+  clearTimeout(autoRunTimer);
+  autoRunTimer = setTimeout(runCode, 800);
+}
+
+function runCode() {
+  const code = document.getElementById('code-editor').value;
+  const frame = document.getElementById('preview-frame');
+  const log = document.getElementById('console-output');
+
+  try {
+    frame.srcdoc = code;
+    log.innerHTML = '<div class="console-line success">▸ Rendered successfully</div>';
+
+    // Award gate for writing code
+    if (code !== defaultCode) {
+      updateGate('gate-code');
+    }
+  } catch(e) {
+    log.innerHTML = `<div class="console-line error">▸ Error: ${e.message}</div>`;
+  }
+}
+
+function resetCode() {
+  document.getElementById('code-editor').value = defaultCode;
+  updateLines();
+  runCode();
+}
+
+function updateLines() {
+  const textarea = document.getElementById('code-editor');
+  const lines = textarea.value.split('\n').length;
+  let nums = '';
+  for (let i = 1; i <= Math.max(lines, 10); i++) nums += i + '<br>';
+  document.getElementById('line-numbers').innerHTML = nums;
+}
+
+function handleTab(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const t = e.target;
+    const start = t.selectionStart;
+    const end = t.selectionEnd;
+    t.value = t.value.substring(0, start) + '  ' + t.value.substring(end);
+    t.selectionStart = t.selectionEnd = start + 2;
+  }
+}
+
+// ─── QUIZ ───
+let quizDone = false;
+
+function answerQuiz(btn, correct) {
+  if (quizDone) return;
+  quizDone = true;
+
+  document.querySelectorAll('.challenge-opt').forEach(b => {
+    b.disabled = true;
+    b.style.cursor = 'not-allowed';
+  });
+
+  const feedback = document.getElementById('quiz-feedback');
+  feedback.style.display = 'block';
+
+  if (correct) {
+    btn.classList.add('correct');
+    feedback.style.background = 'rgba(110,200,126,0.08)';
+    feedback.style.border = '1px solid var(--success)';
+    feedback.style.color = 'var(--text-dim)';
+    feedback.innerHTML = '<strong style="color:var(--success)">Correct. +15 XP</strong><br><br>An HTML tag is a label that tells the browser what type of content it\'s looking at. It doesn\'t do the styling — that\'s CSS. It doesn\'t run logic — that\'s JavaScript. It just names what things are.';
+    showXPAt(btn, '+15 XP');
+    setSageText("Correct. Tags are labels. Nothing more. CSS is what makes them look like something. You're building the right mental model.");
+    updateGate('gate-quiz');
+  } else {
+    btn.classList.add('wrong');
+    feedback.style.background = 'rgba(200,126,126,0.08)';
+    feedback.style.border = '1px solid var(--danger)';
+    feedback.style.color = 'var(--text-dim)';
+    feedback.innerHTML = '<strong style="color:var(--danger)">Not quite.</strong><br><br>An HTML tag labels what type of content something is — heading, paragraph, button. Styling comes from CSS. Logic comes from JavaScript. Tags just say what things are.';
+    setSageText("Read the section again — specifically the part about what a tag does vs what CSS does. The distinction is important.");
+  }
+}
+
+// ─── DRAG AND DROP ───
+let draggedId = null;
+let droppedOrder = [];
+
+function dragStart(e) {
+  draggedId = e.target.id;
+  e.dataTransfer.setData('text', e.target.id);
+}
+
+function allowDrop(e) { e.preventDefault(); }
+
+function dragEnter(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('over');
+}
+
+function dragLeave(e) {
+  e.currentTarget.classList.remove('over');
+}
+
+function dropChip(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('over');
+
+  const chip = document.getElementById(draggedId);
+  if (!chip || chip.classList.contains('placed')) return;
+
+  const clone = chip.cloneNode(true);
+  clone.draggable = false;
+  clone.style.opacity = '1';
+  clone.style.cursor = 'default';
+  clone.id = 'placed-' + draggedId;
+
+  const zone = document.getElementById('drop-zone');
+  const placeholder = zone.querySelector('.drop-placeholder');
+  if (placeholder) placeholder.remove();
+
+  zone.appendChild(clone);
+  chip.classList.add('placed');
+  droppedOrder.push(draggedId);
+}
+
+function checkDrag() {
+  const correct = ['chip-html', 'chip-head', 'chip-body', 'chip-h1'];
+  const feedback = document.getElementById('drag-feedback');
+  feedback.style.display = 'block';
+
+  const isCorrect = droppedOrder.length === correct.length &&
+    droppedOrder.every((id, i) => id === correct[i]);
+
+  if (isCorrect) {
+    feedback.style.background = 'rgba(110,200,126,0.08)';
+    feedback.style.border = '1px solid var(--success)';
+    feedback.style.color = 'var(--success)';
+    feedback.textContent = '✓ Correct order. html wraps everything. head holds meta info. body holds content. h1 is inside the body.';
+    showXPAt(document.getElementById('drop-zone'), '+20 XP');
+  } else if (droppedOrder.length < correct.length) {
+    feedback.style.background = 'rgba(200,126,126,0.08)';
+    feedback.style.border = '1px solid var(--danger)';
+    feedback.style.color = 'var(--danger)';
+    feedback.textContent = 'Drag all four tags into the drop zone first.';
+  } else {
+    feedback.style.background = 'rgba(200,126,126,0.08)';
+    feedback.style.border = '1px solid var(--danger)';
+    feedback.style.color = 'var(--danger)';
+    feedback.textContent = 'Not quite — the order matters. Think: the html tag wraps everything else. Then head. Then body. Then content inside body.';
+  }
+}
+
+function resetDrag() {
+  droppedOrder = [];
+  document.getElementById('drag-feedback').style.display = 'none';
+  document.querySelectorAll('.drag-chip').forEach(c => c.classList.remove('placed'));
+  const zone = document.getElementById('drop-zone');
+  zone.innerHTML = '<span class="drop-placeholder">Drop tags here in the right order...</span>';
+}
+
+// ─── GATE SYSTEM ───
+let gateState = { 'gate-read': true, 'gate-code': false, 'gate-quiz': false };
+
+function updateGate(key) {
+  if (gateState[key]) return;
+  gateState[key] = true;
+
+  const el = document.getElementById(key);
+  if (el) {
+    el.classList.add('done');
+    el.querySelector('.gate-tick').textContent = '✓';
+  }
+
+  const allDone = Object.values(gateState).every(v => v);
+  if (allDone) {
+    document.getElementById('complete-btn').classList.add('ready');
+    setSageText("You've read it, you've written it, you've proved it. You're ready to move on.");
+  }
+}
+
+function completeSection() {
+  const btn = document.getElementById('complete-btn');
+  if (!btn.classList.contains('ready')) return;
+
+  btn.textContent = '✓ Section Complete';
+  btn.style.background = 'var(--success)';
+  showXPAt(btn, '+25 XP');
+
+  // Update sidebar progress
+  const activeItem = document.querySelector('.progress-item.active');
+  if (activeItem) {
+    activeItem.classList.remove('active');
+    activeItem.classList.add('done');
+    activeItem.querySelector('.progress-dot').textContent = '✓';
+    const next = activeItem.nextElementSibling;
+    if (next) next.classList.add('active');
+  }
+
+  setSageText("Section 2 done. The skeleton is yours. Next: CSS gives it a face.");
+}
+
+// ─── SAGE ───
+function setSageText(text) {
+  const el = document.getElementById('sage-text');
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.textContent = text;
+    el.style.transition = 'opacity 0.4s ease';
+    el.style.opacity = '1';
+  }, 200);
+}
+
+// ─── XP FLOATS ───
+function showXP(e) {
+  showXPAt(e.currentTarget, '+10 XP');
+}
+
+function showXPAt(el, text) {
+  const rect = el.getBoundingClientRect();
+  const float = document.createElement('div');
+  float.className = 'xp-float';
+  float.textContent = text;
+  float.style.left = (rect.left + rect.width / 2 - 24) + 'px';
+  float.style.top = (rect.top + window.scrollY - 10) + 'px';
+  document.body.appendChild(float);
+  setTimeout(() => float.remove(), 1300);
+}
+
+// ─── FLOOR SELECT ───
+function selectFloor(el) {
+  document.querySelectorAll('.vb-floor').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── PWA BANNER ───
+function showPWA() {
+  document.getElementById('pwa-banner').style.display = 'flex';
+}
+
+function installApp() {
+  const banner = document.getElementById('pwa-banner');
+  banner.innerHTML = '<div class="pwa-icon">✅</div><div class="pwa-text"><div class="pwa-title">Installing...</div><div class="pwa-sub">In a real build this triggers the browser install prompt</div></div>';
+  setTimeout(() => banner.style.display = 'none', 2500);
+}
+
+function dismissPWA() {
+  document.getElementById('pwa-banner').style.display = 'none';
+}
+
+// ─── INIT ───
+window.addEventListener('load', () => {
+  updateLines();
+  runCode();
+  // Show PWA banner after delay
+  setTimeout(showPWA, 2000);
+});
+</script>
+</body>
+</html>
