@@ -2875,25 +2875,40 @@
      RICH DARK THEME — Gold on Black
   ════════════════════════════════════════════════ */
 
+  
   :root {
-    --bg: #080808;
-    --surface: #0f0f0f;
-    --surface2: #161616;
-    --border: #1e1e1e;
-    --accent: #d4aa6a;
-    --accent-bright: #f0c878;
-    --accent2: #7eb8c8;
-    --text: #f0ede6;
-    --text-muted: #555;
-    --text-dim: #888;
-    --success: #6ec87e;
-    --floor1: #d4aa6a;
+    --bg: #05070a;               /* Midnight Void */
+    --surface: #0c111d;          /* Cockpit Panel Blue */
+    --surface2: rgba(30, 41, 59, 0.5); /* Glassmorphism effect */
+    --border: #1e293b;
+    --accent: #7dd3fc;           /* Star-bright Cyan */
+    --accent2: #c084fc;          /* Nebula Purple */
+    --text: #f1f5f9;             /* Crisp White */
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --success: #4ade80;
+    
+    /* Keep your Floor Colors for the Map */
+    --floor1: #c8a96e;
     --floor2: #7eb8c8;
-    --floor3: #c87e9a;
-    --floor4: #9a7ec8;
-    --floor5: #7ec8a9;
-    --floor6: #c8967e;
-    --floor7: #e8d5a0;
+    --floor3: #9c8dc0;
+    --floor4: #c08d8d;
+    --floor5: #8dc0a4;
+    --floor6: #c0b38d;
+    --floor7: #a96ec8;
+  }
+
+  body.light {
+    --bg: #fdfbf7;               /* Warm Parchment */
+    --surface: #ffffff;          /* Clean Page */
+    --surface2: #f4f1ec;         /* Pressed Paper */
+    --border: #d6d0c7;
+    --accent: #1e3a8a;           /* Boutique Navy */
+    --accent2: #9a3412;          /* Burnt Sienna */
+    --text: #111827;             /* Deep Ink */
+    --text-muted: #6b7280;
+    --text-dim: #374151;         /* Readable Charcoal */
+    --success: #166534;
   }
 
   /* Deep atmospheric body */
