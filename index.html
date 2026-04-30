@@ -5482,6 +5482,15 @@ function goToFloor(fi) {
   if (!isUnlocked) return;
   stopNarration();
 
+  
+  
+  state.currentFloor = fi + 1; // Add this here
+  state.currentSection = 0;    // Add this here
+  saveState();                 // Add this here
+  render (); //<---ADD THIS
+  // ... the rest of the sliding code ...
+}
+
   var prevFloor = state.currentFloor - 1;
   var direction = fi > prevFloor ? 'up' : 'down';
   var mainContent = document.getElementById('main-content');
