@@ -3570,6 +3570,40 @@
     color: var(--bg) !important;
     font-weight: 700 !important;
     border-radius: 8px !important;
+
+    /* --- MOVING COSMIC OVERLAY --- */
+  body.dark-theme::before {
+    content: "";
+    position: fixed;
+    top: -50%; left: -50%; 
+    width: 200%; height: 200%;
+    background-image: 
+      radial-gradient(1px 1px at 25% 35%, #fff, rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 50% 70%, #fff, rgba(0,0,0,0)),
+      radial-gradient(1px 1px at 75% 20%, #fff, rgba(0,0,0,0)),
+      radial-gradient(2px 2px at 15% 85%, rgba(125, 211, 252, 0.4), rgba(0,0,0,0));
+    background-size: 400px 400px;
+    opacity: 0.2;
+    z-index: -1;
+    pointer-events: none;
+    animation: drift 120s linear infinite;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0, 0); }
+    to { transform: translate(100px, 100px); }
+  }
+
+  body.dark-theme {
+    background: #05070a;
+    background-image: radial-gradient(circle at center, #0c111d 0%, #05070a 100%);
+    animation: pulseGlow 15s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulseGlow {
+    0% { background-color: #05070a; }
+    100% { background-color: #0c1525; }
+  }
   }
 </style>
 </head>
