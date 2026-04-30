@@ -3533,7 +3533,44 @@
   body.light .build-card { background: rgba(255,255,255,0.6); border-color: rgba(160,117,42,0.12); }
   body.light .build-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08), 0 0 0 1px rgba(160,117,42,0.2); }
   body.light .challenge-item { background: rgba(255,255,255,0.6); border-color: rgba(160,117,42,0.12); }
-  body.light .panel-hero-title { background: linear-gradient(135deg, #1a1612 0%, #6b4a18 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  body.light .panel-hero-title { background: linear-gradient(135deg, #1a1612 0%, #6b4a18 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent
+                                ; background-clip: text; }
+  /* --- FINAL POLISH & READABILITY --- */
+  .section-body {
+    font-size: 1.15rem !important; 
+    line-height: 1.8 !important;   
+    font-weight: 400 !important;   
+    color: var(--text-dim);
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .callout {
+    background: var(--surface2) !important;
+    border: 2px solid var(--border) !important;
+    border-radius: 12px;
+    padding: 24px;
+    margin: 30px 0;
+    box-shadow: 6px 6px 0px var(--border); 
+    backdrop-filter: blur(10px);
+  }
+
+  body.light .callout {
+    box-shadow: 4px 4px 0px var(--border);
+    background: #ffffff !important;
+  }
+
+  strong {
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  .btn-primary {
+    background: var(--accent) !important;
+    color: var(--bg) !important;
+    font-weight: 700 !important;
+    border-radius: 8px !important;
+  }
 </style>
 </head>
 <body>
