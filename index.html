@@ -5464,7 +5464,7 @@ function renderNav() {
 
 function isFloorComplete(fi) {
   if (fi < 0) return true;
-  return FLOORS[fi].sections.every(s => state.completed[s.id]);
+  return FLOORS[fi].sections.some(s => state.completed[s.id]);
 }
 
 function updateProgress() {
