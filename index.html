@@ -3573,22 +3573,27 @@
 
     }
 
-  /* --- UNIVERSAL MOVING COSMIC BACKGROUND --- */
+/* --- UNIVERSAL MOVING COSMIC BACKGROUND --- */
   body::before {
-    content: "";
-    position: fixed;
-    top: -50%; left: -50%; 
-    width: 200%; height: 200%;
+    content: "" !important;
+    position: fixed !important;
+    top: -50% !important; 
+    left: -50% !important; 
+    width: 200% !important; 
+    height: 200% !important;
     background-image: 
-      radial-gradient(1px 1px at 25% 35%, #fff, rgba(0,0,0,0)),
-      radial-gradient(1.5px 1.5px at 50% 70%, #fff, rgba(0,0,0,0)),
-      radial-gradient(1px 1px at 75% 20%, #fff, rgba(0,0,0,0)),
-      radial-gradient(2px 2px at 15% 85%, rgba(125, 211, 252, 0.4), rgba(0,0,0,0));
-    background-size: 400px 400px;
-    opacity: 0.8; 
-    z-index: -1;
-    pointer-events: none;
-    animation: drift 60s linear infinite; 
+      radial-gradient(4px 4px at 25% 35%, #ffffff, transparent),
+      radial-gradient(6px 6px at 50% 70%, #ffffff, transparent),
+      radial-gradient(4px 4px at 75% 20%, #ffffff, transparent),
+      radial-gradient(8px 8px at 15% 85%, #7dd3fc, transparent) !important;
+    background-size: 400px 400px !important;
+    opacity: 1 !important; 
+    z-index: 9999 !important; 
+    pointer-events: none !important;
+    animation: drift 20s linear infinite !important;
+    display: block !important;
+  }
+  } 
   }
 
   @keyframes drift {
