@@ -337,7 +337,7 @@
  /* MAIN CONTENT */
   .main-content {
     padding: 0;
-    flex-grow: 1;      /* Fill the gap next to the sidebar */
+    flex-grow: 0;      /* Fill the gap next to the sidebar */
     margin: 0 auto;    /* Keep the content centered like a book page */
     max-width: 800px; 
     min-width: 0;
