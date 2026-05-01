@@ -178,7 +178,11 @@
   #app { display: none; }
 
   .app-layout {
-  display: flex;         /* Changes from rigid grid to fluid flex */
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Changes from rigid grid to fluid flex */
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;    /* Prevents horizontal scrolling */
