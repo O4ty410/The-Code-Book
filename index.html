@@ -188,9 +188,11 @@
   #app { display: none; }
 
   .app-layout {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    min-height: 100vh;
+  display: flex;         /* Changes from rigid grid to fluid flex */
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;    /* Prevents horizontal scrolling */
+}
   }
 
   /* SIDEBAR */
@@ -203,6 +205,9 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    flex-shrink: 0; /* <--- ADD
+    THIS LINE HERE to stop it from squishing */
+  }
   }
 
   .sidebar-header {
@@ -335,13 +340,16 @@
   .section-link.done { color: var(--success); }
   .section-link.done::before { content: '✓ '; }
 
-  /* MAIN CONTENT */
+ /* MAIN CONTENT */
   .main-content {
     padding: 0;
-    max-width: 800px;
+    flex-grow: 1;      /* Fill the gap next to the sidebar */
+    margin: 0 auto;    /* Keep the content centered like a book page */
+    max-width: 800px; 
     min-width: 0;
     overflow-x: hidden;
   }
+  
 
   .floor-hero {
     padding: 40px 32px 32px;
