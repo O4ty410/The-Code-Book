@@ -3123,7 +3123,6 @@ function startFloorBoss() {
   );
 }
 console.log("JS is running");
-
 document.body.innerHTML = "<h1>TEST</h1>";
 startFloorBoss();
 
