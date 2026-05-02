@@ -1615,9 +1615,11 @@ if (!section) {
     (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
     (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
     '</div>';
-
+const fi = state.currentFloor - 1;
+const si = state.currentSection;
+  
   // READ
-  var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
+   var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
     '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
     '<div class="floor-title">' + floor.title + '<br><em>' + floor.subtitle + '</em></div>' +
     '<div class="floor-meta">' +
