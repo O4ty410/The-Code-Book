@@ -2116,8 +2116,10 @@ return { code: "", filename: "", challenges: [] };
   
 }
   
+var sectionGateState = {}; // ✅ ADD HERE
 
-  function loadSection(fi,si) {
+function loadSection(f1, s1) {
+ 
   var floor = FLOORS[fi];
   var section = floor.sections[si];
   var isFirst = si === 0;
