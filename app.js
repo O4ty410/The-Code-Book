@@ -3129,4 +3129,6 @@ function startFloorBoss() {
     'boss-floor' + fi + '-' + today
   );
 }
+console.log("JS is running");
+startFloorBoss();
 
