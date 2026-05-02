@@ -381,7 +381,7 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
   }
 ];
 
-
+var sectionGateState = {}; // ADD HERE
 let state = {
   currentFloor: 1,
   currentSection: "1-1",
@@ -1580,8 +1580,6 @@ console.error("Invalid section.code:", section);
 return { code: "", filename: "", challenges: [] };
   
 }
-  
-var sectionGateState = {}; // ✅ ADD HERE
 
 function loadSection(f1, s1) {
  
