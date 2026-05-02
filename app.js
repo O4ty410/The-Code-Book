@@ -1759,9 +1759,7 @@ const si = state.currentSection;
   : 'Next →')
     '</button></div>';
 
-  // F2 interactive override
-  if (section.interactive === 'f2-variable') { 
-    document.getElementById('main-content').innerHTML = tabs +
+    
       '<div class="section-panel active" id="spanel-read-' + section.id + '">' +
       '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
       '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
