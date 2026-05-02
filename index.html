@@ -1567,19 +1567,31 @@ function updateTimeLog() {
   el.innerHTML = `<span>${total} total</span><span>${sessions} session${sessions !== 1 ? 's' : ''}</span>`;
 }
 
-function startBook() {
-  loadState();
-  updateStreak();
-  document.getElementById('cover').style.display = 'none';
-  applyTheme();
+
 
   const hasOnboarded = localStorage.getItem('codebook_onboarded');
   if (!hasOnboarded) {
     showOnboarding();
     return;
+    
+  }
+  const today = new
+    Date().toDateString();
+
+function startBook() {
+
+  if (!currentUser) {
+    alert('Please sign in first');
+    return;
   }
 
-  const today = new Date().toDateString();
+  loadState();
+  updateStreak();
+  document.getElementById('cover').style.display = 'none';
+  applyTheme();
+}
+   
+} Date().toDateString();
   const challengeDone = localStorage.getItem('codebook_challenge_done_' + today);
 
   launchApp();
