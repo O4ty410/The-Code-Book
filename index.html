@@ -1594,10 +1594,8 @@ function startBook() {
 
 
   
-  
-
-   
-} Date().toDateString();
+ const today = new  
+ Date().toDateString();
   const challengeDone = localStorage.getItem('codebook_challenge_done_' + today);
 
   launchApp();
@@ -1605,7 +1603,7 @@ function startBook() {
   if (!challengeDone) {
     setTimeout(() => showDailyChallenge(), 800);
   }
-}
+
 
 function launchApp() {
   // Snapshot XP at session start so the end-of-session screen shows
