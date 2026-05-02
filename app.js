@@ -1747,7 +1747,7 @@ const si = state.currentSection;
 
   // NAV
   var nav = '<div class="section-nav">' +
-    '<button class="nav-btn" onclick="prevSection(' + fi + ',' + si + ')"' + (isFirst ? ' disabled' : '') + '>&#8592; Previous</button>' +
+    '<button class="nav-btn" onclick="prevSection(' + fi + ',' + si + ')"' + ((fi === 0 && si === 0) ? ' disabled' : '')  + '>&#8592; Previous</button>' +
     '<button class="nav-btn primary" onclick="nextSection(' + fi + ',' + si + ')">' +
     (isLast ? (fi < FLOORS.length - 1 ? 'Next Floor &#8594;' : 'Complete') : 'Next &#8594;') +
     '</button></div>';
