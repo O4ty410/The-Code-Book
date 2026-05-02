@@ -1787,7 +1787,17 @@ const si = state.currentSection;
     checkStreakProtection();
     return;
   }
-
+  
+if (!isLoggedIn && !isGuest) {
+  document.getElementById('main-content').innerHTML = `
+    <div style="padding:40px;text-align:center;">
+      <h2>Welcome to The Code Book</h2>
+      <p>Please sign in or start a free trial</p>
+      <button onclick="startGuest()">Try Free Trial</button>
+    </div>
+  `;
+  return;
+}
   document.getElementById('main-content').innerHTML = tabs +
     '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
     (showEditor ? '<div class="section-panel" id="spanel-code-' + section.id + '">' + c + '</div>' : '') +
