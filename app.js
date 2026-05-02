@@ -1749,7 +1749,9 @@ const si = state.currentSection;
   var nav = '<div class="section-nav">' +
     '<button class="nav-btn" onclick="prevSection(' + fi + ',' + si + ')"' + ((fi === 0 && si === 0) ? ' disabled' : '')  + '>&#8592; Previous</button>' +
     '<button class="nav-btn primary" onclick="nextSection(' + fi + ',' + si + ')">' +
-    (isLast ? (fi < FLOORS.length - 1 ? 'Next Floor &#8594;' : 'Complete') : 'Next &#8594;') +
+  ((fi === FLOORS.length - 1 && si === floor.sections.length - 1)
+  ? (fi < FLOORS.length - 1 ? 'Next Floor →' : 'Complete')
+  : 'Next →')
     '</button></div>';
 
   // F2 interactive override
