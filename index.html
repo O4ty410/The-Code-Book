@@ -2120,10 +2120,10 @@ var sectionGateState = {}; // ✅ ADD HERE
 
 function loadSection(f1, s1) {
  
-  var floor = FLOORS[fi];
-  var section = floor.sections[si];
-  var isFirst = si === 0;
-  var isLast = si === floor.sections.length - 1;
+  var floor = FLOORS[f1];
+  var section = floor.sections[s1];
+  var isFirst = s1 === 0;
+  var isLast = s1 === floor.sections.length - 1;
   var isDone = state.completed[section.id];
   console.log("SECTION:", section);
   var editorDef = getEditorDefaults(section);
