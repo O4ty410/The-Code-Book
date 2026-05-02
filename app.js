@@ -1,5 +1,4 @@
-
-var sageIdleTimer;
+let sageIdleTimer = null;
 console.log("TOP OF FILE");
 
 const FLOORS = [
@@ -2417,7 +2416,7 @@ function renderFloorWithElevator(fi, si) {
 // ============================================
 let sageBubbleTimeout = null;
 let sageIdleTimeout = null;
-let sageIdleTimer = null;
+
 
 const SAGE_MOODS = {
   encourage: { icon: '🦉', color: 'var(--accent)' },
