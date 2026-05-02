@@ -2214,8 +2214,6 @@ function patchRenderNav() {
       }
     };
   }
-}
-
 
 function answerQuiz(sectionId, chosen, correct) {
   state.quizAnswered[sectionId] = chosen;
