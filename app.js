@@ -1,7 +1,12 @@
+let isLoggedIn = false;
+let isGuest = false;
+let currentFloor = 1;
+
 let sageIdleTimer = null;
 console.log("TOP OF FILE");
 
 const FLOORS = [
+  
   {
     id: 1,
     title: "Understanding Before Touching",
