@@ -1079,7 +1079,8 @@ function launchApp() {
 
   // Render content
   renderNav();
- renderFloor(state.currentFloor - 1, parseInt(state.currentSection));
+ renderFloor(state.currentFloor - 1,
+             state.currentSection)
   updateTimeLog();
   updateXPPanel();
   resetSageIdleTimer();
