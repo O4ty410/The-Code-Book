@@ -1584,13 +1584,17 @@ var sectionGateState = {}; // ✅ ADD HERE
 
 function loadSection(f1, s1) {
  
-var index = parseInt(s1);
 
 var floor = FLOORS[f1];
-var section = floor.sections[index];
 
-var isFirst = index === 0;
-var isLast = index === floor.sections.length - 1;
+var section = floor.sections.find(s => s.id === s1);
+
+if (!section) {
+  console.error("Section not found:", s1);
+  return;
+}
+
+
   var isDone = state.completed[section.id];
   console.log("SECTION:", section);
   var editorDef = getEditorDefaults(section);
