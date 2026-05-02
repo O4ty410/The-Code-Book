@@ -2081,23 +2081,39 @@ var editorDefaults = {
 
 function getEditorDefaults(section) {
 
-  // ✅ ADD THIS
-  if (!section) {
-    console.error("section is undefined");
+    if (!section) {
+        console.error("section is undefined");
+        return { code: "", filename: "", challenges: [] };
+    }
+
+    if (section.code && section.code.lang) {
+        var lang = section.code.lang.toLowerCase().trim();
+
+if (lang.includes("html")) lang = "html";
+else if (lang.includes("css")) lang = "css";
+else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
+      
+        var code = editorDefaults[lang];
+
+        if (!code) {
+            console.error("No editorDefaults for lang:", lang);
+            return { code: "// unknown language", filename: "file.txt" };
+        }
+    }
+        var filenameMap = {
+            html: "index.html",
+            css: "style.css",
+            js: "script.js"
+        };
+
+        return {
+            code: code,
+            filename: filenameMap[lang] || "file.txt"
+        };
+    }
+
+    console.error("Invalid section.code:", section);
     return { code: "", filename: "", challenges: [] };
-  }
-
-  if (section.code) {
-    var lang = section.code.lang.toLowerCase();
-
-    if (lang.indexOf('css') !== -1)
-      return { code: editorDefaults.css, filename: 'style.css' };
-
-    if (lang.indexOf('javascript') !== -1 || lang.indexOf('js') !== -1)
-      return { code: editorDefaults.js, filename: 'script.js' };
-  }
-
-  return { code: editorDefaults.html, filename: 'index.html' };
 }
   function loadSection(fi,si) {
   var floor = FLOORS[fi];
