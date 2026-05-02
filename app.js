@@ -1079,6 +1079,7 @@ function launchApp() {
 
   // Render content
   renderNav();
+  console.log("currentSection =", state.currentSection);
  renderFloor(state.currentFloor - 1,
              state.currentSection)
   updateTimeLog();
