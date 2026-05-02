@@ -2080,17 +2080,26 @@ var editorDefaults = {
 };
 
 function getEditorDefaults(section) {
+
+  // ✅ ADD THIS
+  if (!section) {
+    console.error("section is undefined");
+    return { code: "", filename: "", challenges: [] };
+  }
+
   if (section.code) {
     var lang = section.code.lang.toLowerCase();
-    if (lang.indexOf('css') !== -1) return { code: editorDefaults.css, filename: 'style.css', challenges: ['Change the h1 colour', 'Add a border to .card', 'Change the font-size of h1'] };
-    if (lang.indexOf('javascript') !== -1 || lang.indexOf('js') !== -1) return { code: editorDefaults.js, filename: 'script.js', challenges: ['Make the button change the text to your name', 'Add a click counter', 'Change the button colour on click'] };
+
+    if (lang.indexOf('css') !== -1)
+      return { code: editorDefaults.css, filename: 'style.css' };
+
+    if (lang.indexOf('javascript') !== -1 || lang.indexOf('js') !== -1)
+      return { code: editorDefaults.js, filename: 'script.js' };
   }
-  return { code: editorDefaults.html, filename: 'index.html', challenges: ['Change the heading text to your name', 'Add a new paragraph below', 'Make the background a different colour'] };
+
+  return { code: editorDefaults.html, filename: 'index.html' };
 }
 
-var sectionGateState = {};
-
-function renderFloor(fi, si) {
   var floor = FLOORS[fi];
   var section = floor.sections[si];
   var isFirst = si === 0;
