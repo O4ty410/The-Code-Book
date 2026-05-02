@@ -1702,7 +1702,7 @@ const si = state.currentSection;
     '<div class="editor-console" id="console-' + section.id + '">' +
     '<div class="editor-console-line">&#9658; Click Run or edit to preview</div></div></div>' +
     '<div class="editor-challenges"><div class="editor-challenge-label">TRY THESE</div>';
-  editorDef.challenges.forEach(function(ch) {
+  ((editorDef && editorDef.challenges) || []).forEach(function(ch) {
     c += '<div class="editor-challenge-item">&rarr; ' + ch + '</div>';
   });
   c += '</div></div>';
@@ -1716,7 +1716,7 @@ const si = state.currentSection;
     var qz = section.quiz;
     q += '<div class="quiz-block"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
       '<div class="quiz-question">' + qz.question + '</div><div class="quiz-options">';
-    qz.options.forEach(function(opt, oi) {
+    ((qz && qz.options) || []).forEach(function(opt, oi) {
       var cls = '';
       if (answered !== undefined) {
         if (oi === qz.correct) cls = 'correct';
