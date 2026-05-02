@@ -2099,7 +2099,7 @@ function getEditorDefaults(section) {
 
   return { code: editorDefaults.html, filename: 'index.html' };
 }
-
+  function loadSection(fi,si) {
   var floor = FLOORS[fi];
   var section = floor.sections[si];
   var isFirst = si === 0;
