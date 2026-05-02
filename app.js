@@ -1,5 +1,4 @@
-document.body.innerHTML = "<h1>TEST</h1>";
-throw new Error("STOP HERE");
+
 
 console.log("TOP OF FILE");
 
