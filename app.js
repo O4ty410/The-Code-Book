@@ -64,9 +64,8 @@ This means that the order you write things in <strong>matters enormously</strong
       {
         id: "1-3",
         title: "The Logic Behind All Code",
-        body:  "Every programming language in the world — no matter how different they look — is based on: <strong>1. Conditions</strong> — If this is true, do this. Otherwise, do that. <strong>2. Loops</strong> — Do this thing repeatedly until something changes. <strong>3. Functions</strong> — A named set of instructions you can use again and again.",
+        body: "Every programming language in the world — no matter how different they look — is based on: <strong>1. Conditions</strong> — If this is true, do this. Otherwise, do that. <strong>2. Loops</strong> — Do this thing repeatedly until something changes. <strong>3. Functions</strong> — A named set of instructions you can use again and again. That's it. Every app, every game, every website you've ever used is built on combinations of those three ideas.",
 
-That's it. Every app, every game, every website you've ever used is built on combinations of those three ideas.`,
         callout: {
           type: "default",
           label: "Real World Example",
