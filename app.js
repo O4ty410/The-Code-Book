@@ -1790,12 +1790,32 @@ const si = state.currentSection;
   
 if (!isLoggedIn && !isGuest) {
   document.getElementById('main-content').innerHTML = `
-    <div style="padding:40px;text-align:center;">
-      <h2>Welcome to The Code Book</h2>
-      <p>Please sign in or start a free trial</p>
-      <button onclick="startGuest()">Try Free Trial</button>
-    </div>
-  `;
+  <div style="
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    height:70vh;
+    font-family:sans-serif;
+    text-align:center;
+  ">
+    <h1 style="font-size:32px;margin-bottom:10px;">The Code Book</h1>
+    <p style="opacity:0.7;margin-bottom:20px;">
+      Learn coding step by step. Start your free trial.
+    </p>
+    <button onclick="startGuest()" style="
+      padding:12px 24px;
+      border:none;
+      border-radius:8px;
+      background:#4CAF50;
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+    ">
+      Try Free Trial
+    </button>
+  </div>
+`;
   return;
 }
   document.getElementById('main-content').innerHTML = tabs +
