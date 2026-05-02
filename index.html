@@ -2113,9 +2113,10 @@ else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
     
 console.error("Invalid section.code:", section);
 return { code: "", filename: "", challenges: [] };
-}
   
 }
+  
+
   function loadSection(fi,si) {
   var floor = FLOORS[fi];
   var section = floor.sections[si];
