@@ -1587,8 +1587,11 @@ function loadSection(f1, s1) {
  
 
 var floor = FLOORS[f1];
-
-var section = floor.sections.find(s => s.id === s1);
+console.log("Looking for:", s1);
+console.log("Available:", floor.sections.map(s => s.id));  
+var section = floor.sections.find(
+  s => String(s.id).trim() === String(s1).trim()
+);
 
 if (!section) {
   console.error("Section not found:", s1);
