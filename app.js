@@ -384,7 +384,7 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
 
 let state = {
   currentFloor: 1,
-  currentSection: "1.1",
+  currentSection: "1-1",
   completed: {},
   quizAnswered: {},
   totalSeconds: 0,
