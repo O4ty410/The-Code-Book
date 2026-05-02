@@ -1813,8 +1813,7 @@ if (!isLoggedIn && !isGuest) {
       Try Free Trial
     </button>
   </div>
-`;
-  return;
+';
 }
   document.getElementById('main-content').innerHTML = tabs +
     '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
