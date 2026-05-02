@@ -1,3 +1,6 @@
+document.body.innerHTML = "<h1>TEST</h1>";
+throw new Error("STOP HERE");
+
 console.log("TOP OF FILE");
 
 const FLOORS = [
@@ -3122,7 +3125,5 @@ function startFloorBoss() {
     'boss-floor' + fi + '-' + today
   );
 }
-console.log("JS is running");
-document.body.innerHTML = "<h1>TEST</h1>";
 startFloorBoss();
 
