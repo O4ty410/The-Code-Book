@@ -1,4 +1,4 @@
-
+console.log("TOP OF FILE");
 
 const FLOORS = [
   {
@@ -14,11 +14,9 @@ const FLOORS = [
       {
         id: "1-1",
         title: "How the Internet Actually Works",
-        body: `Before you write a single line of code, you need to understand the world your code lives in. The internet isn't magic — it's a system, and like any system, once you understand how it works, you can start to control it.
+       body: "Before you write a single line of code, you need to think of it like this. When you type a web address, that entire process happens in milliseconds, every single time you visit a site.",
 
-<strong>Think of it like this.</strong> When you type a web address into your browser, your computer sends a message — like posting a letter — to another computer somewhere in the world called a <strong>server</strong>. That server receives your request, finds the right files, and sends them back. Your browser then reads those files and paints what you see on screen.
-
-That entire process happens in milliseconds, every single time you visit a website.`,
+        
         callout: {
           type: "default",
           label: "The Key Idea",
@@ -66,11 +64,7 @@ This means that the order you write things in <strong>matters enormously</strong
       {
         id: "1-3",
         title: "The Logic Behind All Code",
-        body: `Every programming language in the world — no matter how different they look — is built on the same three ideas. Learn these three things and you understand the skeleton of all code everywhere.
-
-<strong>1. Conditions</strong> — If this is true, do this. Otherwise, do that.
-<strong>2. Loops</strong> — Do this thing repeatedly until something changes.
-<strong>3. Functions</strong> — A named set of instructions you can use again and again.
+        body:  "Every programming language in the world — no matter how different they look — is based on: <strong>1. Conditions</strong> — If this is true, do this. Otherwise, do that. <strong>2. Loops</strong> — Do this thing repeatedly until something changes. <strong>3. Functions</strong> — A named set of instructions you can use again and again.",
 
 That's it. Every app, every game, every website you've ever used is built on combinations of those three ideas.`,
         callout: {
