@@ -2523,7 +2523,6 @@ function spawnGoldenDust(x, y) {
   "left:" + x + "px; top:" + y + "px;" +
   "width:" + size + "px; height:" + size + "px;";
      
-    `;
     document.body.appendChild(particle);
     setTimeout(() => particle.remove(), dur * 1000 + 100);
   }
