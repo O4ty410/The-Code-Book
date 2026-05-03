@@ -2540,15 +2540,23 @@ function renderBuildingMap() {
     const isUnlocked = fi === 0 || isFloorComplete(fi - 1);
     const isActive = fi === state.currentFloor - 1;
     const isComplete = isFloorComplete(fi);
-    const color = `var(${FLOOR_COLORS[fi]})`;
+    const color = 'var(${FLOOR_COLORS[fi]})';
     const shortName = f.title.split('—')[0].trim().replace('Understanding Before Touching', 'Foundation').replace('Seeing It Come Alive','Visual Build').replace('Building With Training Wheels','Interactivity').replace('Building Alone','Independence').replace('Solving Real Problems','Full Stack').replace('Specialisation','Your Lane').replace('Professional Grade','Arrival');
-    return `<div class="building-floor ${isUnlocked ? 'unlocked' : 'locked'} ${isActive ? 'active' : ''}"
-      style="--floor-color:${color};"
-      onclick="${isUnlocked ? `goToFloor(${fi})` : ''}">
-      <div class="building-window ${isComplete ? 'complete' : ''}" style="${isUnlocked ? `background:${color};border-color:${color};box-shadow:0 0 8px ${color};` : ''}"></div>
-      <div class="building-floor-label">F${fi+1} · ${shortName}</div>
-      ${isActive ? `<div style="margin-left:auto;width:5px;height:5px;border-radius:50%;background:${color};flex-shrink:0;"></div>` : ''}
-    </div>`;
+ return `
+<div class="building-floor ${isUnlocked ? 'unlocked' : 'locked'} ${isActive ? 'active' : ''}"
+     style="--floor-color:${color};"
+     onclick="${isUnlocked ? `goToFloor(${fi})` : ''}">
+     
+  <div class="building-window ${isComplete ? 'complete' : ''}"></div>
+  
+  <div class="building-floor-label">
+    F${fi + 1} - ${shortName}
+  </div>
+
+  ${isActive ? `<div style="margin-left:auto;width:5px;height:5px;"></div>` : ''}
+
+</div>
+;`
   }).join('');
 }
 
