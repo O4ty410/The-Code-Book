@@ -2317,7 +2317,7 @@ function getReadableText(sectionId) {
 }
 
 function toggleNarration(sectionId) {
-  const btn = document.getElementById(`listen-btn-${sectionId}`);
+  const btn = document.getElementById("listen-btn-${sectionId}");
   if (currentNarrationId === sectionId && window.speechSynthesis.speaking) {
     window.speechSynthesis.cancel();
     currentNarrationId = null;
