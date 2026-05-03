@@ -2548,25 +2548,8 @@ map.innerHTML = [...FLOORS].reverse().map((f, ri) => {
 
   const shortName = f.title.split('-')[0].trim();
 
-  return `
-    <div 
-      class="building-floor ${isUnlocked ? 'unlocked' : 'locked'}"
-      style="--floor-color:${color};"
-      onclick="${isUnlocked ? `goToFloor(${fi})` : ''}"
-    >
-      <div class="building-window ${isComplete ? 'complete' : ''}"></div>
-
-      <div class="building-floor-label">
-        F${fi + 1} - ${shortName}
-      </div>
-
-      ${
-        isActive
-          ? `<div style="margin-left:auto;width:5px;height:100%;background:white;"></div>`
-          : ''
-      }
-    </div>
-  `;
+ return `<div>test</div>`;
+  
 }).join('');
 }
 
