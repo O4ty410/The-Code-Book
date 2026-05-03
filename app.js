@@ -2534,30 +2534,40 @@ function spawnGoldenDust(x, y) {
 function renderBuildingMap() {
   const map = document.getElementById('building-map');
   if (!map) return;
-  const FLOOR_COLORS = ['--floor1','--floor2','--floor3','--floor4','--floor5','--floor6','--floor7'];
-  map.innerHTML = [...FLOORS].reverse().map((f, ri) => {
-    const fi = FLOORS.length - 1 - ri;
-    const isUnlocked = fi === 0 || isFloorComplete(fi - 1);
-    const isActive = fi === state.currentFloor - 1;
-    const isComplete = isFloorComplete(fi);
-    const color = 'var(${FLOOR_COLORS[fi]})';
-    const shortName = f.title.split('—')[0].trim().replace('Understanding Before Touching', 'Foundation').replace('Seeing It Come Alive','Visual Build').replace('Building With Training Wheels','Interactivity').replace('Building Alone','Independence').replace('Solving Real Problems','Full Stack').replace('Specialisation','Your Lane').replace('Professional Grade','Arrival');
- return `
-<div class="building-floor ${isUnlocked ? 'unlocked' : 'locked'} ${isActive ? 'active' : ''}"
-     style="--floor-color:${color};"
-     onclick="${isUnlocked ? `goToFloor(${fi})` : ''}">
-     
-  <div class="building-window ${isComplete ? 'complete' : ''}"></div>
-  
-  <div class="building-floor-label">
-    F${fi + 1} - ${shortName}
-  </div>
+ const FLOOR_COLORS = ['--floor1', '--floor2', '--floor3'];
 
-  ${isActive ? `<div style="margin-left:auto;width:5px;height:5px;"></div>` : ''}
+map.innerHTML = [...FLOORS].reverse().map((f, ri) => {
+  const fi = FLOORS.length - 1 - ri;
 
-</div>
-;`
-  }).join('');
+  const isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+  const isActive = fi === state.currentFloor - 1;
+  const isComplete = isFloorComplete(fi);
+
+  // ✅ FIXED (backticks)
+  const color = `var(${FLOOR_COLORS[fi]})`;
+
+  const shortName = f.title.split('-')[0].trim();
+
+  return `
+    <div 
+      class="building-floor ${isUnlocked ? 'unlocked' : 'locked'}"
+      style="--floor-color:${color};"
+      onclick="${isUnlocked ? `goToFloor(${fi})` : ''}"
+    >
+      <div class="building-window ${isComplete ? 'complete' : ''}"></div>
+
+      <div class="building-floor-label">
+        F${fi + 1} - ${shortName}
+      </div>
+
+      ${
+        isActive
+          ? `<div style="margin-left:auto;width:5px;height:100%;background:white;"></div>`
+          : ''
+      }
+    </div>
+  `;
+}).join('');
 }
 
 function toggleHint(id) {
