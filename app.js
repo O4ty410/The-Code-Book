@@ -2481,14 +2481,14 @@ function sageMessage(text, mood) {
   const bubble = document.createElement('div');
   bubble.className = 'sage-bubble';
   bubble.id = 'sage-bubble';
-  bubble.innerHTML = `
-    <button class="sage-bubble-close" onclick="this.parentElement.remove()">✕</button>
-    <div class="sage-bubble-header">
-      <span class="sage-bubble-icon">${m.icon}</span>
-      <span class="sage-bubble-name" style="color:${m.color}">SAGE</span>
-    </div>
-    <div class="sage-bubble-text">${text}</div>
-  `;
+ bubble.innerHTML = `
+<button class="sage-bubble-close" onclick="this.parentElement.remove()">×</button>
+<div class="sage-bubble-header">
+  <span class="sage-bubble-icon">${m.icon}</span>
+  <span class="sage-bubble-name" style="color:${m.color}">SAGE</span>
+</div>
+<div class="sage-bubble-text">${text}</div>
+`;
   document.body.appendChild(bubble);
   sageBubbleTimeout = setTimeout(() => bubble.remove && bubble.remove(), 8000);
 }
