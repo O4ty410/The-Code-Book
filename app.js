@@ -2544,7 +2544,7 @@ map.innerHTML = [...FLOORS].reverse().map((f, ri) => {
   const isComplete = isFloorComplete(fi);
 
   // ✅ FIXED (backticks)
-  const color = `var(${FLOOR_COLORS[fi]})`;
+  const color = `(${FLOOR_COLORS[fi]})`;
 
   const shortName = f.title.split('-')[0].trim();
 
