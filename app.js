@@ -2218,7 +2218,7 @@ function patchRenderNav() {
 function answerQuiz(sectionId, chosen, correct) {
   state.quizAnswered[sectionId] = chosen;
   if (chosen === correct) {
-    awardXP(15, `quiz-${sectionId}`, window.innerWidth / 2, 300);
+    awardXP(15,"quiz-${sectionId}" , window.innerWidth / 2, 300);
   }
   const fi = state.currentFloor - 1;
   const si = state.currentSection;
