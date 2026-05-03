@@ -2519,10 +2519,10 @@ function spawnGoldenDust(x, y) {
     const ty = Math.sin(angle) * dist - 20;
     const dur = 0.6 + Math.random() * 0.5;
     const size = 3 + Math.random() * 4;
-    particle.style.cssText = `
-      left:${x}px;top:${y}px;
-      width:${size}px;height:${size}px;
-      --tx:${tx}px;--ty:${ty}px;--dur:${dur}s;
+    particle.style.cssText =
+  "left:" + x + "px; top:" + y + "px;" +
+  "width:" + size + "px; height:" + size + "px;";
+     
     `;
     document.body.appendChild(particle);
     setTimeout(() => particle.remove(), dur * 1000 + 100);
