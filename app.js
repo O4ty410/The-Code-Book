@@ -423,7 +423,7 @@ function loadState() {
       state.xpAwarded = s.xpAwarded || {};
       state.checklistDone = s.checklistDone || {};
     }
-  } catch(e) {}
+  }  catch(e) {}
 }
 
 function saveState() {
