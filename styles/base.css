@@ -334,14 +334,18 @@
   .section-link.done { color: var(--success); }
   .section-link.done::before { content: '✓ '; }
 
- /* MAIN CONTENT */
+  /* FIX: Merged two conflicting .main-content declarations into one.
+     flex-grow:1 fills the remaining space next to the sidebar.
+     Removed margin:0 auto which was fighting the flex layout.
+     overflow-y:auto allows scrolling within the content area. */
   .main-content {
     padding: 0;
-    flex-grow: 1;      /* Fill the gap next to the sidebar */
-    margin: 0 auto;    /* Keep the content centered like a book page */
-    max-width: 800px; 
+    flex: 1;
     min-width: 0;
+    max-width: 860px;
     overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
   }
   
 
@@ -857,12 +861,15 @@
   }
 
   /* MOBILE */
+  /* FIX: Updated mobile breakpoint — was referencing grid-template-columns
+     but app-layout is flex. Now stacks sidebar above content on mobile. */
   @media (max-width: 768px) {
-    .app-layout { grid-template-columns: 1fr; }
-    .sidebar { position: relative; height: auto; }
+    .app-layout { flex-direction: column; }
+    .sidebar { position: relative; height: auto; width: 100%; }
     .floor-hero, .section-content, .section-nav { padding: 24px 16px; }
     .floor-hero::before { display: none; }
     .focus-timer { top: auto; bottom: 16px; right: 16px; }
+    .main-content { max-width: 100%; }
   }
 
   /* HINT */
@@ -1336,15 +1343,7 @@
     margin-bottom: 6px;
   }
 
-  /* ELEVATOR TRANSITIONS */
-  .main-content {
-    padding: 0;
-    max-width: 800px;
-    min-width: 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    position: relative;
-  }
+  /* ELEVATOR TRANSITIONS — .main-content styles are consolidated above */
 
   .floor-panel {
     width: 100%;
@@ -3792,7 +3791,6 @@
     animation: drift 20s linear infinite !important;
     display: block !important;
   }
-  } 
   
   /* --- PREMIUM LIGHT MODE BACKGROUND --- */
 
@@ -3813,7 +3811,6 @@
     display: block !important;
     /* This makes the particles float subtly */
     animation: drift 80s linear infinite !important;
-  }
   }
 
   @keyframes drift {
