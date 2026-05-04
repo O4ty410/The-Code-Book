@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#c8a96e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="The Code Book">
+<meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
+<title>The Code Book</title>
+  <link rel="stylesheet" href="base.css">
+
+  
+</head>
+<body>
+
+  <div id="floor-nav"></div>
+  <div id="timer-display">25:00</div>
+  <div id="timer-btn"></div>
+  <div id="user-bar"></div>
+  <div id="user-email"></div>
+  <div id="theme-toggle">🌙</div>
+  <div id="xp-panel"></div>
+  <div id="current-xp">0</div>
+  <div id="current-level">1</div>
+  <div id="level-fill" style="width:0%"></div>
+  <div id="xp-to-next"></div>
+  <div id="streak-count">0</div>
+  <div id="time-log">0m total</div>
+  <div id="progress-fill" style="width:0%"></div>
+  <div id="progress-pct">0%</div>
+  <div id="sage-bubble"></div>
+  <div id="building-map"></div>
+  <div id="panel-learn"></div>
+
+<!-- COMPAT SHIMS: original JS looks for these IDs -->
+<div style="display:none!important;visibility:hidden;position:absolute;pointer-events:none" aria-hidden="true">
+
+</div>
+
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-title">The Code Book</div>
+  <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
+  <div class="auth-tabs">
+    <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+  </div>
+  <div class="auth-form">
+    <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
+    <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
+    <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)">
+    <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
+    <div id="forgot-link" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;cursor:pointer;text-decoration:underline;margin-top:4px;" onclick="handleForgotPassword()">Forgot your password?</div>
+    <div class="auth-message" id="auth-message"></div>
+  </div>
+  <div style="margin-top:24px;display:flex;gap:16px;justify-content:center;">
+    <button onclick="showLeaderboard()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">🏆 Leaderboard</button>
+    <button onclick="showPrivacy()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">Privacy Policy</button>
+  </div>
+  <div style="margin-top:16px;">
+    <button 
+  onclick="alert('Please sign in or click Try without account')" 
+  style="font-family:'IBM Plex Mono', monospace;">
+  Start — One Step At A Time
+</button>
+
+<!-- LEADERBOARD OVERLAY -->
+<div id="leaderboard-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9993;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
+  <div style="width:100%;max-width:400px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--accent);font-style:italic;">Leaderboard</div>
+      <button onclick="hideLeaderboard()" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);background:transparent;border:1px solid var(--border);padding:8px 16px;cursor:pointer;border-radius:4px;">Close</button>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);letter-spacing:2px;margin-bottom:24px;">TOP LEARNERS — ALL TIME</div>
+    <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY OVERLAY -->
+<div id="privacy-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9993;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
+  <div style="width:100%;max-width:480px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
+      <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--accent);font-style:italic;">Privacy Policy</div>
+      <button onclick="hidePrivacy()" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text-muted);background:transparent;border:1px solid var(--border);padding:8px 16px;cursor:pointer;border-radius:4px;">Close</button>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:24px;">LAST UPDATED: APRIL 2025</div>
+
+    <div style="display:flex;flex-direction:column;gap:24px;font-family:'Lato',sans-serif;font-size:15px;line-height:1.8;color:var(--text-dim);">
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">Who we are</div>
+        <div>The Code Book is a free interactive coding curriculum built and maintained by an independent developer based in the United Kingdom. We are committed to handling your data with the same care and respect we would want for our own.</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">What data we collect</div>
+        <div>When you create an account we collect your email address and the display name you choose. We also store your learning progress — completed sections, XP, streak, and focus time. We do not collect your real name, phone number, location, or any payment information.</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">Why we collect it</div>
+        <div>Your email is used solely to create and secure your account and to send password reset emails if you request one. Your progress data is stored so your learning journey is saved across devices. We do not use your data for advertising or marketing of any kind.</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">What is public</div>
+        <div>Your display name, XP score and streak count appear on the public leaderboard. Your email address is never visible to other users or shown publicly anywhere on the platform.</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">Who we share data with</div>
+        <div>We do not sell, share or rent your personal data to any third party. Your data is stored securely using Supabase, a trusted infrastructure provider compliant with SOC 2 Type II. You can read Supabase's privacy policy at supabase.com/privacy.</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">Security measures we have implemented</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;">
+          <div style="padding:12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px;">Password Encryption</div>
+            <div>Your password is never stored in plain text. It is immediately hashed using bcrypt — an industry standard one-way encryption algorithm. This means nobody, including us, can ever see or recover your password.</div>
+          </div>
+          <div style="padding:12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px;">Encrypted Connections</div>
+            <div>All data transmitted between your browser and our servers uses HTTPS — the same encryption standard used by banks and major financial institutions. Your credentials and progress data are always encrypted in transit.</div>
+          </div>
+          <div style="padding:12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px;">Row Level Security</div>
+            <div>We have implemented database-level Row Level Security policies. This means that even if someone gained access to the database directly, they could only ever see their own data — never another user's records. Each user's data is locked to their unique account ID.</div>
+          </div>
+          <div style="padding:12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px;">Session Security</div>
+            <div>When you sign out, your session token is invalidated server-side immediately. This means your account cannot be accessed from the same device after signing out, even if someone gained access to your browser.</div>
+          </div>
+          <div style="padding:12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px;">Rate Limiting</div>
+            <div>We limit sign-in attempts to 4 per 5 minutes per IP address. This prevents automated attacks where someone attempts thousands of password combinations rapidly. After the limit is reached, further attempts are temporarily blocked.</div>
+          </div>
+          <div style="padding:12px;background:var(--surface);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;">
+            <div style="font-weight:700;color:var(--text);font-size:14px;margin-bottom:4px;">Leaderboard Privacy</div>
+            <div>The public leaderboard is served from a restricted database view that only exposes display names, XP scores and streak counts. It is technically impossible for the leaderboard to reveal email addresses or any other private information.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">Your rights under UK GDPR</div>
+        <div>You have the right to access your data, correct it, or request that it be deleted entirely. You can also object to how we process your data or request that we restrict processing. To exercise any of these rights contact us directly through the app and we will respond within 30 days.</div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--text);margin-bottom:8px;">Deleting your account</div>
+        <div>If you would like your account and all associated data permanently removed, contact us and we will delete everything within 7 days and confirm when it is done.</div>
+      </div>
+
+      <div style="padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-muted);">
+        This policy applies to all users of The Code Book. For users in the UK and European Union we comply with the UK GDPR and the Data Protection Act 2018. This policy was last reviewed in April 2025.
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD RESET OVERLAY -->
+<div id="reset-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9999;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;">
+  <div style="width:100%;max-width:360px;text-align:center;">
+    <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:8px;">New Password</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:32px;">CHOOSE A STRONG PASSWORD</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <input id="reset-password" class="auth-input" type="password" placeholder="New password (min 6 characters)">
+      <input id="reset-password-confirm" class="auth-input" type="password" placeholder="Confirm new password">
+      <button onclick="submitNewPassword()" class="auth-btn">Update Password</button>
+      <div id="reset-message" class="auth-message"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING OVERLAY -->
+<div id="onboarding" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:9995;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+  <div style="width:100%;max-width:380px;">
+    <div style="font-size:52px;margin-bottom:16px;animation:owlBob 2s ease-in-out infinite;">🦉</div>
+    <div style="font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:8px;" id="onboarding-title">Hey. I'm Sage.</div>
+    <div style="font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:32px;" id="onboarding-body">I'm here to make sure this time is different. No rushing. No overwhelm. Just one step at a time.<br><br>Before we start — three quick questions.</div>
+    <div id="onboarding-step-1">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:16px;">WHAT'S YOUR NAME?</div>
+      <input id="onboarding-name" class="auth-input" type="text" placeholder="First name" style="margin-bottom:16px;text-align:center;">
+      <button class="auth-btn" onclick="onboardingNext(1)">Continue</button>
+    </div>
+    <div id="onboarding-step-2" style="display:none;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:16px;">HAVE YOU TRIED CODING BEFORE?</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('experience','never')">No — complete beginner</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('experience','tried')">Yes — but I stopped or got stuck</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('experience','some')">I know a little but want structure</button>
+      </div>
+    </div>
+    <div id="onboarding-step-3" style="display:none;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);margin-bottom:16px;">HOW MUCH TIME CAN YOU GIVE EACH DAY?</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('time','15')">15 minutes — just a little</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('time','30')">30 minutes — steady pace</button>
+        <button class="auth-btn" style="background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="onboardingSelect('time','60')">An hour or more — I'm committed</button>
+      </div>
+    </div>
+    <div id="onboarding-step-4" style="display:none;">
+      <div style="font-size:48px;margin-bottom:16px;">🎉</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--text);margin-bottom:12px;" id="onboarding-welcome"></div>
+      <div style="font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:28px;" id="onboarding-message"></div>
+      <button class="auth-btn" onclick="finishOnboarding()">Let's go →</button>
+    </div>
+  </div>
+</div>
+
+<!-- END OF SESSION SCREEN -->
+<div id="session-complete" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9991;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+  <div style="width:100%;max-width:380px;">
+    <div style="font-size:52px;margin-bottom:20px;">✅</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--success);margin-bottom:12px;">DAILY GOAL REACHED</div>
+    <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:var(--text);margin-bottom:8px;" id="session-title"></div>
+    <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:28px;" id="session-message"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;justify-content:space-around;">
+      <div style="text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--accent);font-weight:700;" id="session-xp-earned"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;">XP TODAY</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div style="text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--floor3);font-weight:700;" id="session-streak"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;">DAY STREAK</div>
+      </div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div style="text-align:center;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--accent2);font-weight:700;" id="session-sections"></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;margin-top:4px;">SECTIONS</div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:24px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;">TOMORROW</div>
+      <div style="font-size:14px;color:var(--text);font-weight:700;" id="session-tomorrow"></div>
+    </div>
+    <button class="auth-btn" onclick="closeSessionComplete()" style="width:100%;margin-bottom:12px;">Keep going →</button>
+    <button onclick="closeSessionComplete(true)" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;letter-spacing:1px;">That's enough for today</button>
+  </div>
+</div>
+<div id="daily-challenge" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9990;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;overflow-y:auto;">
+  <div style="width:100%;max-width:420px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:16px;">⚡ DAILY CHALLENGE</div>
+    <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--text);margin-bottom:8px;" id="challenge-title">Today's Challenge</div>
+    <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;" id="challenge-body"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:20px;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:1px;" id="challenge-question"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;" id="challenge-options"></div>
+    <div id="challenge-result" style="display:none;padding:16px;border-radius:8px;margin-bottom:16px;font-size:14px;line-height:1.7;"></div>
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <button onclick="closeDailyChallenge()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:1px solid var(--border);padding:12px 24px;cursor:pointer;border-radius:4px;">Skip</button>
+    </div>
+  </div>
+</div>
+
+<!-- FLOOR COMPLETE CELEBRATION -->
+<div id="floor-celebration" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9992;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;">
+  <div style="width:100%;max-width:400px;">
+    <div style="font-size:72px;margin-bottom:24px;animation:pulse 1.5s ease infinite;" id="celebration-icon">🎓</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--accent);margin-bottom:12px;">FLOOR COMPLETE</div>
+    <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:var(--text);margin-bottom:8px;" id="celebration-floor"></div>
+    <div style="font-size:15px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;" id="celebration-message"></div>
+    <div style="background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:20px;margin-bottom:28px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:2px;margin-bottom:8px;">YOUR PROGRESS</div>
+      <div style="font-family:'Playfair Display',serif;font-size:40px;font-weight:900;color:var(--accent);" id="celebration-xp"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:2px;">TOTAL XP</div>
+    </div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:24px;" id="celebration-name"></div>
+    <button class="auth-btn" onclick="closeCelebration()" style="margin-bottom:12px;">Continue to next floor →</button>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);cursor:pointer;text-decoration:underline;" onclick="shareAchievement()">Share this achievement</div>
+  </div>
+</div>
+<div id="cover">
+
+  <!-- RETURNING USER DASHBOARD -->
+  <div id="dashboard" style="display:none;width:100%;max-width:420px;text-align:left;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--accent);font-style:italic;">The Code Book</div>
+        <div id="dashboard-greeting" style="font-size:14px;color:var(--text-dim);margin-top:4px;"></div>
+      </div>
+      <div style="text-align:right;">
+        <div id="dashboard-level-label" style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent);"></div>
+        <div id="dashboard-xp" style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text-muted);margin-top:2px;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:16px;">
+      <div id="dashboard-streak-icon" style="font-size:32px;line-height:1;">🔥</div>
+      <div style="flex:1;">
+        <div id="dashboard-streak-text" style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:15px;"></div>
+        <div id="dashboard-streak-sub" style="font-size:12px;color:var(--text-dim);margin-top:2px;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);">TODAY'S GOAL</div>
+        <div id="dashboard-goal-text" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent);"></div>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:6px;overflow:hidden;">
+        <div id="dashboard-goal-bar" style="height:100%;background:var(--accent);border-radius:6px;transition:width 0.6s ease;width:0%;"></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:24px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-muted);margin-bottom:8px;">WHERE YOU LEFT OFF</div>
+      <div id="dashboard-position" style="font-size:15px;color:var(--text);font-weight:700;margin-bottom:4px;"></div>
+      <div id="dashboard-next-preview" style="font-size:12px;color:var(--text-dim);"></div>
+    </div>
+    <button class="start-btn" onclick="startBook()" style="width:100%;margin-bottom:12px;">Continue →</button>
+    <div style="text-align:center;">
+      <span onclick="signOut()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);cursor:pointer;letter-spacing:1px;">Sign out</span>
+    </div>
+  </div>
+
+  <!-- NEW USER LANDING -->
+  <div id="new-user-landing">
+    <div class="cover-label">A calm path into coding</div>
+    <div class="cover-title">The Code<span>Book.</span></div>
+    <div class="cover-subtitle">Learn coding without overwhelm. One clear step at a time.<br><br>Built for people who overthink, lose focus, or get stuck in tutorials. This is built differently.</div>
+    <div class="cover-features">
+      <div class="cover-feature">✦ 7 Floors</div>
+      <div class="cover-feature">✦ 35 Sections</div>
+      <div class="cover-feature">✦ Built-in hints</div>
+      <div class="cover-feature">✦ Voice narration</div>
+      <div class="cover-feature">✦ Tracks your progress</div>
+      <div class="cover-feature">✦ Completely free</div>
+    </div>
+    <div class="floor-dots">
+      <div class="floor-dot active"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+      <div class="floor-dot"></div>
+    </div>
+    <button class="start-btn" onclick="startBook()">Start — one step at a time</button>
+    <div class="cover-human">I built this because I struggled to stay consistent with coding.</div>
+    <div id="cover-user" style="display:none;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:1px;text-align:center;">
+      Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
+      <span onclick="signOut()" style="color:var(--accent);cursor:pointer;">Sign out</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+    <div class="top-logo">The Code Book</div>
+  </div>
+  <div class="top-nav-tabs">
+    <button class="top-nav-tab active" id="tnav-learn" onclick="switchTopNav('learn',this)">Learn</button>
+    <button class="top-nav-tab" id="tnav-build" onclick="switchTopNav('build',this)">Build</button>
+    <button class="top-nav-tab" id="tnav-challenge" onclick="switchTopNav('challenge',this)">Challenge</button>
+    <button class="top-nav-tab" id="tnav-map" onclick="switchTopNav('map',this)">Map</button>
+  </div>
+  <div class="top-right">
+    <button id="theme-toggle-real" onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;font-size:18px;padding:4px 8px;border-radius:6px;transition:background 0.2s;" title="Toggle theme">🌙</button>
+    <div class="top-xp-chip" id="top-xp-chip">⚡ 0 XP</div>
+    <div class="top-streak-chip" id="top-streak-chip">🔥 0</div>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- THREE COLUMN GRID -->
+<div class="app-grid" style="display:none">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="left-sidebar" id="left-sidebar">
+
+    <!-- VISUAL BUILDING -->
+    <div class="visual-building-wrap">
+      <div class="vb-label">YOUR BUILDING</div>
+      <div class="vb-building" id="vb-building">
+        <div class="vb-roof"></div>
+        <!-- floors injected by JS -->
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="left-stats">
+      <div class="stat-row">
+        <span class="stat-label">LEVEL</span>
+        <span class="stat-val" id="ls-level">1</span>
+      </div>
+      <div class="level-bar-track">
+        <div class="level-bar-fill" id="ls-xp-bar" style="width:0%"></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">STREAK</span>
+        <span class="stat-val" id="ls-streak">🔥 0 days</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">OVERALL</span>
+        <span class="stat-val" id="ls-progress">0%</span>
+      </div>
+    </div>
+
+    <!-- FLOOR / SECTION NAV -->
+    <div class="left-floor-nav" id="left-floor-nav">
+      <!-- injected by renderLeftNav() -->
+    </div>
+
+    <!-- OFFLINE BADGE -->
+    <div class="sidebar-offline">
+      <div class="sidebar-offline-dot"></div>
+      AVAILABLE OFFLINE
+    </div>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-col" id="main-col">
+    <div id="main-content">
+      <!-- section content injected here -->
+    </div>
+
+  <!-- BUILD PANEL -->
+  <div class="top-panel" id="panel-build"></div>
+
+  <!-- CHALLENGE PANEL -->
+  <div class="top-panel" id="panel-challenge"></div>
+
+  <!-- MAP PANEL -->
+  <div class="top-panel" id="panel-map"></div>
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar" id="right-sidebar">
+
+    <!-- SECTION PROGRESS -->
+    <div class="right-section">
+      <div class="right-section-label" id="rs-floor-label">FLOOR 1 — SECTIONS</div>
+      <div class="sec-progress-list" id="rs-section-list">
+        <!-- injected by renderRightNav() -->
+      </div>
+    </div>
+
+    <!-- SAGE -->
+    <div class="right-section">
+      <div class="right-section-label">SAGE</div>
+      <div class="sage-card">
+        <div class="sage-card-header">
+          <div class="sage-avatar-sm">🦉</div>
+          <div class="sage-card-name">YOUR GUIDE</div>
+        </div>
+        <div id="sage-sidebar-text">
+          Every expert was once a beginner who refused to quit.
+        </div>
+      </div>
+    </div>
+
+    <!-- DAILY GOAL -->
+    <div class="right-section">
+      <div class="right-section-label">TODAY'S GOAL</div>
+      <div>
+        <div class="daily-goal-row">
+          <span style="font-size:12px;color:var(--text-dim)" id="rs-goal-text">0 of 5 sections</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--accent)" id="rs-goal-pct">0%</span>
+        </div>
+        <div class="daily-goal-track">
+          <div class="daily-goal-fill" id="rs-goal-bar" style="width:0%"></div>
+        </div>
+        <div class="daily-goal-sub" id="rs-goal-sub">Complete sections to hit your daily goal</div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="right-section">
+      <div class="right-section-label">ACHIEVEMENTS</div>
+      <div class="achievement-grid" id="rs-achievements">
+        <div class="ach-item" title="Complete Floor 1">
+          <div class="ach-icon">🧱</div>
+          <div class="ach-label">First Floor</div>
+        </div>
+        <div class="ach-item ach-locked" title="7 day streak">
+          <div class="ach-icon">🔥</div>
+          <div class="ach-label">On Fire</div>
+        </div>
+        <div class="ach-item ach-locked" title="Use the code editor">
+          <div class="ach-icon">⌨️</div>
+          <div class="ach-label">First Code</div>
+        </div>
+        <div class="ach-item ach-locked" title="Complete Floor 2">
+          <div class="ach-icon">🏗️</div>
+          <div class="ach-label">Builder</div>
+        </div>
+        <div class="ach-item ach-locked" title="Complete all floors">
+          <div class="ach-icon">🎓</div>
+          <div class="ach-label">Graduate</div>
+        </div>
+        <div class="ach-item ach-locked" title="30 day streak">
+          <div class="ach-icon">⚡</div>
+          <div class="ach-label">Unstoppable</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MOBILE BOTTOM BAR -->
+<div class="mobile-bottom-bar" id="mobile-bottom-bar">
+  <button class="mob-nav-btn active" id="mob-learn" onclick="switchTopNav('learn',this);setMobActive(this)">
+    📖<span>Learn</span>
+  </button>
+  <button class="mob-nav-btn" id="mob-build" onclick="switchTopNav('build',this);setMobActive(this)">
+    🔨<span>Build</span>
+  </button>
+  <button class="mob-nav-btn" id="mob-challenge" onclick="switchTopNav('challenge',this);setMobActive(this)">
+    ⚡<span>Challenge</span>
+  </button>
+  <button class="mob-nav-btn" id="mob-map" onclick="switchTopNav('map',this);setMobActive(this)">
+    🗺️<span>Map</span>
+  </button>
+</div>
+
+</div>
+<!-- END APP -->
+
+<script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+  
