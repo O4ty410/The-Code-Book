@@ -184,8 +184,6 @@
     overflow-x: hidden;
     align-items: flex-start;
   }
-
-  /* SIDEBAR */
   .sidebar {
     background: var(--surface);
     border-right: 1px solid var(--border);
