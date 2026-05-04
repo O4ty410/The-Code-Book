@@ -470,8 +470,8 @@ async function showLeaderboard() {
   const list = document.getElementById('leaderboard-list');
   list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Loading...</div>';
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard?select=username,xp,streak&order=xp.desc&limit=20`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    const res = await fetch('' + (SUPABASE_URL) + '/rest/v1/leaderboard?select=username,xp,streak&order=xp.desc&limit=20', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (SUPABASE_KEY) + '' }
     });
     const rows = await res.json();
     if (!rows || rows.length === 0) {
@@ -481,7 +481,7 @@ async function showLeaderboard() {
     const medals = ['🥇', '🥈', '🥉'];
     list.innerHTML = rows.map((r, i) => `
       <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid ${i === 0 ? '#c8a96e' : i === 1 ? '#aaaaaa' : i === 2 ? '#cd7f32' : 'var(--border)'};border-radius:10px;${i === 0 ? 'box-shadow:0 0 20px rgba(200,169,110,0.15);' : ''}">
-        <div style="font-size:${i < 3 ? '24px' : '14px'};width:36px;text-align:center;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">${medals[i] || `${i+1}`}</div>
+        <div style="font-size:${i < 3 ? '24px' : '14px'};width:36px;text-align:center;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">${medals[i] || '' + (i+1) + ''}</div>
         <div style="flex:1;">
           <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:15px;">${r.username || 'Anonymous'}</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
@@ -533,12 +533,12 @@ async function submitNewPassword() {
   msg.className = 'auth-message';
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    const res = await fetch('' + (SUPABASE_URL) + '/auth/v1/user', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${token}`
+        'Authorization': 'Bearer ' + (token) + ''
       },
       body: JSON.stringify({ password })
     });
@@ -578,28 +578,28 @@ function populateDashboard() {
   const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-  document.getElementById('dashboard-greeting').textContent = name ? `${greeting}, ${name}.` : `${greeting}.`;
+  document.getElementById('dashboard-greeting').textContent = name ? '' + (greeting) + ', ' + (name) + '.' : '' + (greeting) + '.';
 
   // Level
   const cur = getCurrentLevel();
   const LEVEL_LABELS = ['', 'Curious', 'Beginning', 'Learning', 'Building', 'Developing', 'Coding', 'Fluent'];
-  document.getElementById('dashboard-level-label').textContent = LEVEL_LABELS[cur.level] || `Level ${cur.level}`;
-  document.getElementById('dashboard-xp').textContent = `${state.xp} XP`;
+  document.getElementById('dashboard-level-label').textContent = LEVEL_LABELS[cur.level] || 'Level ' + (cur.level) + '';
+  document.getElementById('dashboard-xp').textContent = '' + (state.xp) + ' XP';
 
   // Streak
   const streak = state.streak || 0;
   const streakIcon = streak >= 30 ? '🔥🔥🔥' : streak >= 14 ? '🔥🔥' : '🔥';
   document.getElementById('dashboard-streak-icon').textContent = streakIcon;
-  document.getElementById('dashboard-streak-text').textContent = streak === 0 ? 'No streak yet' : `${streak} day streak`;
+  document.getElementById('dashboard-streak-text').textContent = streak === 0 ? 'No streak yet' : '' + (streak) + ' day streak';
   document.getElementById('dashboard-streak-sub').textContent = streak === 0 ? 'Complete a section to start your streak' : streak >= 7 ? 'You\'re on fire. Keep it going.' : 'Come back tomorrow to keep it alive.';
 
   // Daily goal
   const today = new Date().toDateString();
-  const todayKey = `daily_sections_${today}`;
+  const todayKey = 'daily_sections_' + (today) + '';
   const todaySections = parseInt(localStorage.getItem(todayKey) || '0');
   const dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal') || '1');
   const goalPct = Math.min(100, Math.round((todaySections / dailyGoal) * 100));
-  document.getElementById('dashboard-goal-text').textContent = `${todaySections}/${dailyGoal} sections`;
+  document.getElementById('dashboard-goal-text').textContent = '' + (todaySections) + '/' + (dailyGoal) + ' sections';
   document.getElementById('dashboard-goal-bar').style.width = goalPct + '%';
 
   // Current position
@@ -614,15 +614,15 @@ function populateDashboard() {
   const nextSection = floor?.sections[nextSi];
   const nextFloor = FLOORS[fi + 1];
   let preview = '';
-  if (nextSection) preview = `Up next: ${nextSection.title}`;
-  else if (nextFloor) preview = `Up next: ${nextFloor.title}`;
+  if (nextSection) preview = 'Up next: ' + (nextSection.title) + '';
+  else if (nextFloor) preview = 'Up next: ' + (nextFloor.title) + '';
   else preview = 'You\'ve completed the entire curriculum.';
   document.getElementById('dashboard-next-preview').textContent = preview;
 }
 
 function trackDailySection() {
   const today = new Date().toDateString();
-  const todayKey = `daily_sections_${today}`;
+  const todayKey = 'daily_sections_' + (today) + '';
   const current = parseInt(localStorage.getItem(todayKey) || '0');
   const newCount = current + 1;
   localStorage.setItem(todayKey, newCount);
@@ -646,22 +646,22 @@ function showSessionComplete(sectionsToday) {
 
   let tomorrowText = '';
   if (nextSection) tomorrowText = nextSection.title;
-  else if (nextFloor) tomorrowText = `Start of ${nextFloor.title}`;
+  else if (nextFloor) tomorrowText = 'Start of ' + (nextFloor.title) + '';
   else tomorrowText = 'You\'ve completed the entire curriculum!';
 
   const greetings = [
-    `That's a session, ${name || 'friend'}.`,
-    `Well done today${name ? ', ' + name : ''}.`,
-    `Another day done${name ? ', ' + name : ''}.`,
-    `Consistent${name ? ', ' + name : ''}. That\'s everything.`
+    "That's a session, " + (name || "friend") + ".",
+    "Well done today" + (name ? ", " + name : "") + ".",
+    "Another day done" + (name ? ", " + name : "") + ".",
+    "Consistent" + (name ? ", " + name : "") + ". That's everything."
   ];
 
   const xpToday = state.xp - (sessionXpStart || 0);
 
   document.getElementById('session-title').textContent = greetings[Math.floor(Math.random() * greetings.length)];
   document.getElementById('session-message').textContent = 'Your daily goal is done. Come back tomorrow and keep the momentum going.';
-  document.getElementById('session-xp-earned').textContent = `+${Math.max(0, xpToday)}`;
-  document.getElementById('session-streak').textContent = `${state.streak}🔥`;
+  document.getElementById('session-xp-earned').textContent = '+' + (Math.max(0, xpToday)) + '';
+  document.getElementById('session-streak').textContent = '' + (state.streak) + '🔥';
   document.getElementById('session-sections').textContent = sectionsToday;
   document.getElementById('session-tomorrow').textContent = tomorrowText;
   document.getElementById('session-complete').style.display = 'flex';
@@ -695,7 +695,7 @@ async function handleForgotPassword() {
   msg.textContent = 'Sending reset email...';
   msg.className = 'auth-message';
   try {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/recover`, {
+    const res = await fetch('' + (SUPABASE_URL) + '/auth/v1/recover', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
       body: JSON.stringify({ email })
@@ -729,7 +729,7 @@ async function handleAuth() {
   let res, data;
   try {
     const endpoint = authMode === 'login' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
-    res = await fetch(`${SUPABASE_URL}${endpoint}`, {
+    res = await fetch('' + (SUPABASE_URL) + (endpoint) + '', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
       body: JSON.stringify({ email, password })
@@ -780,8 +780,8 @@ async function onUserLoggedIn() {
   if (btn) btn.disabled = true;
 
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/user_progress?id=eq.${userId}`, {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+    const res = await fetch('' + (SUPABASE_URL) + '/rest/v1/user_progress?id=eq.' + (userId) + '', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (token) + '' }
     });
     const rows = await res.json();
     if (rows && rows.length > 0) {
@@ -810,11 +810,11 @@ async function onUserLoggedIn() {
 async function saveToSupabase() {
   if (!currentUser) return;
   try {
-    await fetch(`${SUPABASE_URL}/rest/v1/user_progress`, {
+    await fetch('' + (SUPABASE_URL) + '/rest/v1/user_progress', {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${currentUser.access_token}`,
+        'Authorization': 'Bearer ' + (currentUser.access_token) + '',
         'Content-Type': 'application/json',
         'Prefer': 'resolution=merge-duplicates'
       },
@@ -835,9 +835,9 @@ async function saveToSupabase() {
 async function signOut() {
   try {
     if (currentUser) {
-      await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+      await fetch('' + (SUPABASE_URL) + '/auth/v1/logout', {
         method: 'POST',
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${currentUser.access_token}` }
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (currentUser.access_token) + '' }
       });
     }
   } catch(e) {}
@@ -882,8 +882,8 @@ window.addEventListener('load', async () => {
     try {
       const user = JSON.parse(saved);
       // Verify the token is still valid
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${user.access_token}` }
+      const res = await fetch('' + (SUPABASE_URL) + '/auth/v1/user', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (user.access_token) + '' }
       });
       const data = await res.json();
       if (data.id) {
@@ -938,7 +938,7 @@ function awardXP(amount, key, x, y) {
   if (key) state.xpAwarded[key] = true;
   saveState();
   updateXPPanel();
-  showFloatingXP(`+${earned} XP`, x, y);
+  showFloatingXP('+' + (earned) + ' XP', x, y);
   spawnGoldenDust(x || window.innerWidth / 2, y || 200);
   const newLevel = getCurrentLevel().level;
   if (newLevel > prevLevel) showLevelUp(newLevel);
@@ -1013,7 +1013,7 @@ function updateStreak() {
 function startSectionTimer(sectionId) {
   state.sectionStartTime = Date.now();
   setTimeout(() => {
-    const key = `read-${sectionId}`;
+    const key = 'read-' + (sectionId) + '';
     if (!state.xpAwarded[key]) {
       awardXP(10, key, window.innerWidth - 100, 100);
     }
@@ -1023,8 +1023,8 @@ function startSectionTimer(sectionId) {
 function formatTime(secs) {
   const h = Math.floor(secs / 3600);
   const m = Math.floor((secs % 3600) / 60);
-  if (h > 0) return `${h}h ${m}m`;
-  return `${m}m`;
+  if (h > 0) return '' + (h) + 'h ' + (m) + 'm';
+  return '' + (m) + 'm';
 }
 
 function updateTimeLog() {
@@ -1032,7 +1032,7 @@ function updateTimeLog() {
   if (!el) return;
   const total = formatTime(state.totalSeconds);
   const sessions = state.sessionLog.length;
-  el.innerHTML = `<span>${total} total</span><span>${sessions} session${sessions !== 1 ? 's' : ''}</span>`;
+  el.innerHTML = '<span>' + (total) + ' total</span><span>' + (sessions) + ' session' + (sessions !== 1 ? 's' : '') + '</span>';
 }
   function checkOnboarding() {
   const hasOnboarded = localStorage.getItem('codebook_onboarded');
@@ -1111,7 +1111,7 @@ function onboardingNext(step) {
     state.playerName = name;
     document.getElementById('onboarding-step-1').style.display = 'none';
     document.getElementById('onboarding-step-2').style.display = 'block';
-    document.getElementById('onboarding-title').textContent = `Nice to meet you, ${name}.`;
+    document.getElementById('onboarding-title').textContent = 'Nice to meet you, ' + (name) + '.';
     document.getElementById('onboarding-body').textContent = 'Let me understand where you\'re starting from.';
   }
 }
@@ -1132,9 +1132,9 @@ function onboardingSelect(field, value) {
     document.getElementById('onboarding-step-4').style.display = 'block';
 
     const messages = {
-      never: { title: `You\'re in the right place, ${onboardingData.name}.`, msg: 'Starting from zero is actually an advantage. No bad habits to unlearn. We\'ll build everything from the ground up, one clear step at a time.' },
-      tried: { title: `This time will be different, ${onboardingData.name}.`, msg: 'Whatever stopped you before — the overwhelm, the confusion, the loss of momentum — this was built specifically for that. Sage is here every time you get stuck.' },
-      some: { title: `Good. Let\'s build on that, ${onboardingData.name}.`, msg: 'You\'ve got a foundation. Now we give it structure. Work at your own pace — skip ahead if something\'s easy, slow down when it\'s not.' }
+      never: { title: 'You\'re in the right place, ' + (onboardingData.name) + '.', msg: 'Starting from zero is actually an advantage. No bad habits to unlearn. We\'ll build everything from the ground up, one clear step at a time.' },
+      tried: { title: 'This time will be different, ' + (onboardingData.name) + '.', msg: 'Whatever stopped you before — the overwhelm, the confusion, the loss of momentum — this was built specifically for that. Sage is here every time you get stuck.' },
+      some: { title: 'Good. Let\'s build on that, ' + (onboardingData.name) + '.', msg: 'You\'ve got a foundation. Now we give it structure. Work at your own pace — skip ahead if something\'s easy, slow down when it\'s not.' }
     };
 
     const m = messages[onboardingData.experience] || messages.never;
@@ -1324,7 +1324,7 @@ function showFloorCelebration(floorIndex) {
   document.getElementById('celebration-floor').textContent = floor.title;
   document.getElementById('celebration-message').textContent = msg.message;
   document.getElementById('celebration-xp').textContent = state.xp;
-  document.getElementById('celebration-name').textContent = name ? `Well done, ${name}.` : 'Well done.';
+  document.getElementById('celebration-name').textContent = name ? 'Well done, ' + (name) + '.' : 'Well done.';
   document.getElementById('floor-celebration').style.display = 'flex';
 }
 
@@ -1335,7 +1335,7 @@ function closeCelebration() {
 function shareAchievement() {
   const name = state.playerName || localStorage.getItem('codebook_player_name') || 'Someone';
   const floor = FLOORS[state.currentFloor - 1];
-  const text = `${name} just completed "${floor.title}" on The Code Book with ${state.xp} XP. Learning to code one step at a time. https://the-code-book.netlify.app`;
+  const text = '' + (name) + ' just completed "' + (floor.title) + '" on The Code Book with ' + (state.xp) + ' XP. Learning to code one step at a time. https://the-code-book.netlify.app';
   if (navigator.share) {
     navigator.share({ text });
   } else {
@@ -1379,7 +1379,7 @@ function checkProgressNudge(fi, si) {
 }
 
 function showProgressNudge(fi, si) {
-  const key = `nudge-halfway-${fi}`;
+  const key = 'nudge-halfway-' + (fi) + '';
   if (localStorage.getItem(key)) return;
   localStorage.setItem(key, 'true');
 
@@ -1388,7 +1388,7 @@ function showProgressNudge(fi, si) {
   nudge.style.cssText = `position:fixed;bottom:80px;right:16px;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:16px 20px;z-index:5000;max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeUp 0.4s ease;`;
   nudge.innerHTML = `
     <div style="font-size:20px;margin-bottom:8px;">🦉</div>
-    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:13px;margin-bottom:6px;">${name ? `Halfway there, ${name}!` : 'Halfway there!'}</div>
+    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:13px;margin-bottom:6px;">${name ? 'Halfway there, ' + (name) + '!' : 'Halfway there!'}</div>
     <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">You\'re halfway through this floor. The hard part is behind you.</div>
     <button onclick="this.parentElement.remove()" style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 14px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;">Keep going</button>
   `;
@@ -1445,14 +1445,14 @@ function renderNav() {
     const sections = isActive ? f.sections.map((s, si) => {
       const isDone = state.completed[s.id];
       const isActiveSec = si === state.currentSection;
-      return `<span class="section-link ${isDone ? 'done' : ''} ${isActiveSec ? 'active' : ''}" onclick="goToSection(${fi}, ${si})">${s.title}</span>`;
+      return '<span class="section-link ' + (isDone ? 'done' : '') + ' ' + (isActiveSec ? 'active' : '') + '" onclick="goToSection(' + (fi) + ', ' + (si) + ')">' + (s.title) + '</span>';
     }).join('') : '';
     return `<div class="floor-nav-item ${isUnlocked ? 'unlocked' : ''} ${isActive ? 'active' : ''} ${isComplete ? 'completed' : ''}" onclick="goToFloor(${fi})">
       <div class="floor-nav-header">
         <div class="floor-num" style="color: ${f.color}">${isComplete ? '✓' : fi + 1}</div>
         <div class="floor-nav-label">${f.title}</div>
       </div>
-      ${isActive ? `<div class="floor-sections">${sections}</div>` : ''}
+      ${isActive ? '<div class="floor-sections">' + (sections) + '</div>' : ''}
     </div>`;
   }).join('');
   updateProgress();
@@ -1749,65 +1749,18 @@ const si = state.currentSection;
     '<button class="nav-btn" onclick="prevSection(' + fi + ',' + si + ')"' + ((fi === 0 && si === 0) ? ' disabled' : '')  + '>&#8592; Previous</button>' +
     '<button class="nav-btn primary" onclick="nextSection(' + fi + ',' + si + ')">' +
   ((fi === FLOORS.length - 1 && si === floor.sections.length - 1)
-  ? (fi < FLOORS.length - 1 ? 'Next Floor →' : 'Complete')
-  : 'Next →')
+  ? (fi < FLOORS.length - 1 ? 'Next Floor \u2192' : 'Complete')
+  : 'Next \u2192') +
     '</button></div>';
 
-    
-      '<div class="section-panel active" id="spanel-read-' + section.id + '">' +
-      '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
-      '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
-      '<div class="floor-title">' + floor.title + '<br><em>' + floor.subtitle + '</em></div></div>' +
-      '<div class="section-content"><div class="section-number">Section ' + (si+1) + ' of ' + floor.sections.length + '</div>' +
-      '<div class="section-title-row"><div class="section-title">' + section.title + '</div></div>' +
-      '<div class="section-body">' + section.body.replace(/\n/g, '<br><br>') + '</div></div></div>' +
-      '<div class="section-panel" id="spanel-quiz-' + section.id + '">' +
-      '<div style="padding:24px 32px;"><div class="control-panel">' +
-      '<div class="status-screen" id="f2-status-screen"><div class="status-dot"></div><div class="status-text">STATUS: FLOOR OFFLINE</div></div>' +
-      '<div class="code-line"><span class="code-keyword">let</span>&nbsp;<span class="code-varname">currentFloor</span>&nbsp;<span class="code-equals">=</span>&nbsp;<span class="code-blank" id="f2-blank">?</span><span style="color:#cdd6f4">;</span></div>' +
-      '<div class="pellet-row">' +
-      '<button class="data-pellet" onclick="f2SelectValue(1)">1</button>' +
-      '<button class="data-pellet" onclick="f2SelectValue(2)">2</button>' +
-      '<button class="data-pellet" onclick="f2SelectValue(\'Lobby\')">\"Lobby\"</button>' +
-      '</div><div class="panel-hint" id="f2-hint">Variables must be accurate. We are on Floor 2.</div>' +
-      '<button class="ascend-btn" id="f2-ascend" onclick="f2Ascend()">&#9650; Ascend to Floor 3</button>' +
-      '</div></div></div>' + g + nav;
-    document.getElementById('main-content').scrollTop = 0;
-    window.scrollTo(0, 0);
-    startSectionTimer(section.id);
-    checkProgressNudge(fi, si);
-    checkStreakProtection();
-    return;
-  }
-  
 if (!isLoggedIn && !isGuest) {
-  document.getElementById('main-content').innerHTML = `
-  <div style="
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    height:70vh;
-    font-family:sans-serif;
-    text-align:center;
-  ">
-    <h1 style="font-size:32px;margin-bottom:10px;">The Code Book</h1>
-    <p style="opacity:0.7;margin-bottom:20px;">
-      Learn coding step by step. Start your free trial.
-    </p>
-    <button onclick="startGuest()" style="
-      padding:12px 24px;
-      border:none;
-      border-radius:8px;
-      background:#4CAF50;
-      color:white;
-      font-size:16px;
-      cursor:pointer;
-    ">
-      Try Free Trial
-    </button>
-  </div>
-';
+  document.getElementById('main-content').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:70vh;font-family:sans-serif;text-align:center;">' +
+    '<h1 style="font-size:32px;margin-bottom:10px;">The Code Book</h1>' +
+    '<p style="opacity:0.7;margin-bottom:20px;">Learn coding step by step. Start your free trial.</p>' +
+    '<button onclick="startGuest()" style="padding:12px 24px;border:none;border-radius:8px;background:#4CAF50;color:white;font-size:16px;cursor:pointer;">Try Free Trial</button>' +
+    '</div>';
+  return;
 }
   document.getElementById('main-content').innerHTML = tabs +
     '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
@@ -2208,11 +2161,12 @@ function patchRenderNav() {
       }
     };
   }
+}
 
 function answerQuiz(sectionId, chosen, correct) {
   state.quizAnswered[sectionId] = chosen;
   if (chosen === correct) {
-    awardXP(15,"quiz-${sectionId}" , window.innerWidth / 2, 300);
+    awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
   }
   const fi = state.currentFloor - 1;
   const si = state.currentSection;
@@ -2311,7 +2265,7 @@ function getReadableText(sectionId) {
 }
 
 function toggleNarration(sectionId) {
-  const btn = document.getElementById(`listen-btn-${sectionId}`);
+  const btn = document.getElementById('listen-btn-' + sectionId);
   if (currentNarrationId === sectionId && window.speechSynthesis.speaking) {
     window.speechSynthesis.cancel();
     currentNarrationId = null;
@@ -2526,25 +2480,25 @@ function spawnGoldenDust(x, y) {
 // SYSTEM 4 — BUILDING MAP
 // ============================================
 function renderBuildingMap() {
-  const map = document.getElementById('building-map');
+  var map = document.getElementById('building-map');
   if (!map) return;
- const FLOOR_COLORS = ['--floor1', '--floor2', '--floor3'];
-
-map.innerHTML = [...FLOORS].reverse().map((f, ri) => {
-  const fi = FLOORS.length - 1 - ri;
-
-  const isUnlocked = fi === 0 || isFloorComplete(fi - 1);
-  const isActive = fi === state.currentFloor - 1;
-  const isComplete = isFloorComplete(fi);
-
-  // ✅ FIXED (backticks)
-  const color = `(${FLOOR_COLORS[fi]})`;
-
-  const shortName = f.title.split('-')[0].trim();
-
- return `<div>test</div>`;
-  
-}).join('');
+  var FLOOR_COLORS_BM = ['--floor1', '--floor2', '--floor3', '--floor4', '--floor5', '--floor6', '--floor7'];
+  map.innerHTML = FLOORS.slice().reverse().map(function(f, ri) {
+    var fi = FLOORS.length - 1 - ri;
+    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isActive = fi === state.currentFloor - 1;
+    var isComplete = isFloorComplete(fi);
+    var color = 'var(' + (FLOOR_COLORS_BM[fi] || '--floor1') + ')';
+    var shortName = f.title.split('-')[0].trim();
+    return '<div class="building-floor ' +
+      (isActive ? 'active ' : '') +
+      (isUnlocked ? 'unlocked' : 'locked') + '"' +
+      ' style="--floor-color:' + color + '"' +
+      (isUnlocked ? ' onclick="goToFloor(' + fi + ')"' : '') + '>' +
+      '<div class="building-window"></div>' +
+      '<div class="building-floor-label">F' + (fi+1) + ' — ' + shortName + (isComplete ? ' ✓' : '') + '</div>' +
+      '</div>';
+  }).join('');
 }
 
 function toggleHint(id) {
@@ -2671,7 +2625,7 @@ function resetTimer() {
 function updateTimerDisplay() {
   const m = Math.floor(state.timerSeconds / 60).toString().padStart(2, '0');
   const s = (state.timerSeconds % 60).toString().padStart(2, '0');
-  document.getElementById('timer-display').textContent = `${m}:${s}`;
+  document.getElementById('timer-display').textContent = '' + (m) + ':' + (s) + '';
 }
 
 // ─── PWA MANIFEST ───
@@ -3157,6 +3111,3 @@ function startFloorBoss() {
     'boss-floor' + fi + '-' + today
   );
 }
-startFloorBoss();
-const test = `hello`;
-console.log(test);
