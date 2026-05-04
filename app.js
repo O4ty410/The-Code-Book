@@ -1586,14 +1586,24 @@ return { code: "", filename: "", challenges: [] };
 }
 
 function loadSection(f1, s1) {
- 
 
 var floor = FLOORS[f1];
-console.log("Looking for:", s1);
-console.log("Available:", floor.sections.map(s => s.id));  
-var section = floor.sections.find(
-  s => String(s.id).trim() === String(s1).trim()
-);
+if (!floor) { console.error("Floor not found:", f1); return; }
+
+// s1 can be a numeric index or a section id string
+var section;
+if (typeof s1 === 'number' || (typeof s1 === 'string' && !isNaN(s1))) {
+  section = floor.sections[parseInt(s1)];
+} else {
+  section = floor.sections.find(function(s) {
+    return String(s.id).trim() === String(s1).trim();
+  });
+}
+
+if (!section) {
+  // fallback to first section
+  section = floor.sections[0];
+}
 
 if (!section) {
   console.error("Section not found:", s1);
