@@ -1056,20 +1056,14 @@ function startBook() {
   loadState();
   updateStreak();
   document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
   applyTheme();
-}
-
-
-
-  
-  const challengeDone = localStorage.getItem('codebook_challenge_done_' + today);
-
   launchApp();
-
+  const challengeDone = localStorage.getItem('codebook_challenge_done_' + today);
   if (!challengeDone) {
     setTimeout(() => showDailyChallenge(), 800);
   }
-
+}
 
 function launchApp() {
   // Snapshot XP at session start so the end-of-session screen shows
@@ -1559,17 +1553,17 @@ function getEditorDefaults(section) {
     if (section.code && section.code.lang) {
         var lang = section.code.lang.toLowerCase().trim();
 
-        if (lang.includes("html")) lang = "html";
-        else if (lang.includes("css")) lang = "css";
-        else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
-
+if (lang.includes("html")) lang = "html";
+else if (lang.includes("css")) lang = "css";
+else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
+      
         var code = editorDefaults[lang];
 
         if (!code) {
             console.error("No editorDefaults for lang:", lang);
             return { code: "// unknown language", filename: "file.txt" };
         }
-
+    }
         var filenameMap = {
             html: "index.html",
             css: "style.css",
@@ -1580,11 +1574,10 @@ function getEditorDefaults(section) {
             code: code,
             filename: filenameMap[lang] || "file.txt"
         };
-    }
-
-    console.error("Invalid section.code:", section);
-    return { code: "", filename: "", challenges: [] };
-
+    
+console.error("Invalid section.code:", section);
+return { code: "", filename: "", challenges: [] };
+  
 }
 
 function loadSection(f1, s1) {
@@ -1757,10 +1750,10 @@ const si = state.currentSection;
     '<button class="nav-btn primary" onclick="nextSection(' + fi + ',' + si + ')">' +
   ((fi === FLOORS.length - 1 && si === floor.sections.length - 1)
   ? (fi < FLOORS.length - 1 ? 'Next Floor →' : 'Complete')
-  : 'Next →') +
+  : 'Next →')
     '</button></div>';
 
-  document.getElementById('main-content').innerHTML = tabs +
+    
       '<div class="section-panel active" id="spanel-read-' + section.id + '">' +
       '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
       '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
@@ -1785,6 +1778,7 @@ const si = state.currentSection;
     checkProgressNudge(fi, si);
     checkStreakProtection();
     return;
+  }
   
 if (!isLoggedIn && !isGuest) {
   document.getElementById('main-content').innerHTML = `
@@ -1813,8 +1807,7 @@ if (!isLoggedIn && !isGuest) {
       Try Free Trial
     </button>
   </div>
-`;
-  return;
+';
 }
   document.getElementById('main-content').innerHTML = tabs +
     '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
@@ -2215,7 +2208,6 @@ function patchRenderNav() {
       }
     };
   }
-}
 
 function answerQuiz(sectionId, chosen, correct) {
   state.quizAnswered[sectionId] = chosen;
