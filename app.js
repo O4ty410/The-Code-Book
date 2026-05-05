@@ -2832,7 +2832,7 @@ function renderChallengePanel() {
     var isDone = ch.done;
 html += '<div class="challenge-item"></div>';
   panel.innerHTML = html;
-}
+});
 
 // ── RECALL QUIZ ─────────────────────────────────────────────────────────
 // Picks a random question the user has NOT seen today, avoiding repetition.
