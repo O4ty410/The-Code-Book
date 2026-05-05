@@ -672,12 +672,22 @@ async function handleForgotPassword() {
   msg.className = 'auth-message error';
 }
 
+function continueAsGuest() {
+  loadState();
+  updateStreak();
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+  const coverUser = document.getElementById('cover-user');
+  if (coverUser) coverUser.style.display = 'none';
+  populateDashboard();
+}
+
 async function handleAuth() {
-  console.log("Auth clicked");
+  continueAsGuest();
 }
 
 async function onUserLoggedIn() {
-  console.log("onUserLoggedIn called");
+  continueAsGuest();
 }
 
 async function saveToSupabase() {
@@ -721,7 +731,7 @@ window.addEventListener('load', async () => {
     return;
   }
 
-  document.getElementById('auth-screen').style.display = 'flex';
+  continueAsGuest();
 });
 
 // --- XP + LEVEL + STREAK SYSTEM ---
