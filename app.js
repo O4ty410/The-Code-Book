@@ -1,8 +1,3 @@
-window.onload = () => {
-  document.getElementById('cover').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-};
-
 let isLoggedIn = false;
 let isGuest = false;
 let currentFloor = 1;
@@ -446,12 +441,10 @@ function saveState() {
       xpAwarded: state.xpAwarded,
       checklistDone: state.checklistDone || {}
     }));
-    saveToSupabase();
   } catch(e) {}
 }
 
-const SUPABASE_URL = 'https://xcvjjqzmetkjqyurxduh.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjdmpqcXptZXRranF5dXJ4ZHVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMjg1MTQsImV4cCI6MjA5MjcwNDUxNH0.8KETwjLadsyhzQGLTXdDsqtAuraqZ3_7-jR5uOdcd_g';
+
 
 let currentUser = null;
 let authMode = 'login';
@@ -473,12 +466,9 @@ async function showLeaderboard() {
   const overlay = document.getElementById('leaderboard-overlay');
   overlay.style.display = 'flex';
   const list = document.getElementById('leaderboard-list');
-  list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Loading...</div>';
+  list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Leaderboard unavailable.</div>';
   try {
-    const res = await fetch('' + (SUPABASE_URL) + '/rest/v1/leaderboard?select=username,xp,streak&order=xp.desc&limit=20', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (SUPABASE_KEY) + '' }
-    });
-    const rows = await res.json();
+    const rows = null;
     if (!rows || rows.length === 0) {
       list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">No entries yet. Be the first!</div>';
       return;
@@ -538,28 +528,9 @@ async function submitNewPassword() {
   msg.className = 'auth-message';
 
   try {
-    const res = await fetch('' + (SUPABASE_URL) + '/auth/v1/user', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + (token) + ''
-      },
-      body: JSON.stringify({ password })
-    });
-    const data = await res.json();
-    if (data.error) {
-      msg.textContent = data.error || 'Something went wrong. Try requesting a new reset link.';
-      msg.className = 'auth-message error';
-      return;
-    }
-    msg.textContent = 'Password updated. You can now sign in.';
-    msg.className = 'auth-message success';
-    setTimeout(() => {
-      document.getElementById('reset-overlay').style.display = 'none';
-      document.getElementById('auth-screen').style.display = 'flex';
-      window.history.replaceState(null, '', window.location.pathname);
-    }, 2000);
+    console.log("submitNewPassword clicked");
+    msg.textContent = 'Password reset is not available.';
+    msg.className = 'auth-message error';
   } catch(e) {
     msg.textContent = 'Something went wrong. Please try again.';
     msg.className = 'auth-message error';
@@ -697,155 +668,23 @@ async function handleForgotPassword() {
     msg.className = 'auth-message error';
     return;
   }
-  msg.textContent = 'Sending reset email...';
-  msg.className = 'auth-message';
-  try {
-    const res = await fetch('' + (SUPABASE_URL) + '/auth/v1/recover', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
-      body: JSON.stringify({ email })
-    });
-    msg.textContent = 'Password reset email sent. Check your inbox.';
-    msg.className = 'auth-message success';
-  } catch(e) {
-    msg.textContent = 'Something went wrong. Try again.';
-    msg.className = 'auth-message error';
-  }
+  msg.textContent = 'Password reset is not available.';
+  msg.className = 'auth-message error';
 }
 
 async function handleAuth() {
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value;
-  const usernameEl = document.getElementById('auth-username');
-  const username = usernameEl ? usernameEl.value.trim() : '';
-  const msg = document.getElementById('auth-message');
-  const btn = document.getElementById('auth-submit');
-
-  // Validation
-  if (!email || !password) { msg.textContent = 'Please enter your email and password.'; msg.className = 'auth-message error'; return; }
-  if (authMode === 'signup' && !username) { msg.textContent = 'Please choose a display name.'; msg.className = 'auth-message error'; return; }
-  if (password.length < 6) { msg.textContent = 'Password must be at least 6 characters.'; msg.className = 'auth-message error'; return; }
-
-  btn.disabled = true;
-  btn.textContent = authMode === 'login' ? 'Signing in...' : 'Creating account...';
-  msg.textContent = '';
-  msg.className = 'auth-message';
-
-  let res, data;
-  try {
-    const endpoint = authMode === 'login' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
-    res = await fetch('' + (SUPABASE_URL) + (endpoint) + '', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
-      body: JSON.stringify({ email, password })
-    });
-    data = await res.json();
-  } catch(e) {
-    msg.textContent = 'No connection. Check your internet and try again.';
-    msg.className = 'auth-message error';
-    btn.disabled = false;
-    btn.textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
-    return;
-  }
-
-  // Signup: email confirmation required
-  if (authMode === 'signup' && data.user && !data.access_token) {
-    msg.textContent = 'Check your email to confirm your account, then sign in.';
-    msg.className = 'auth-message success';
-    btn.disabled = false;
-    btn.textContent = 'Create Account';
-    switchTab('login');
-    return;
-  }
-  if (data.error || data.error_description || !data.access_token) {
-    msg.textContent = data.error_description || data.error || 'Invalid email or password.';
-    msg.className = 'auth-message error';
-    btn.disabled = false;
-    btn.textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
-    return;
-  }
-  currentUser = { access_token: data.access_token, id: data.user?.id, email: data.user?.email, username: username || '' };
-  localStorage.setItem('codebook_user', JSON.stringify(currentUser));
-  if (username) state.username = username;
-  await onUserLoggedIn();
+  console.log("Auth clicked");
 }
 
 async function onUserLoggedIn() {
-  const userId = currentUser.id;
-  const token = currentUser.access_token;
-  const emailEl = document.getElementById('user-email');
-  const barEl = document.getElementById('user-bar');
-  if (emailEl) emailEl.textContent = currentUser.email || '';
-  if (barEl) barEl.style.display = 'flex';
-
-  // Show loading state while fetching progress
-  const msg = document.getElementById('auth-message');
-  const btn = document.getElementById('auth-submit');
-  if (msg) { msg.textContent = 'Loading your progress...'; msg.className = 'auth-message'; }
-  if (btn) btn.disabled = true;
-
-  try {
-    const res = await fetch('' + (SUPABASE_URL) + '/rest/v1/user_progress?id=eq.' + (userId) + '', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (token) + '' }
-    });
-    const rows = await res.json();
-    if (rows && rows.length > 0) {
-      const p = rows[0];
-      state.xp = p.xp || 0;
-      state.streak = p.streak || 0;
-      state.lastVisit = p.last_visit || null;
-      state.currentFloor = p.current_floor || 1;
-      state.currentSection = p.current_section || 0;
-      state.completed = p.completed || {};
-      state.quizAnswered = p.quiz_answered || {};
-      state.xpAwarded = p.xp_awarded || {};
-      state.totalSeconds = p.total_seconds || 0;
-      state.sessionLog = p.session_log || [];
-    }
-  } catch(e) {}
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('cover').style.display = 'flex';
-  const coverUser = document.getElementById('cover-user');
-  const coverEmail = document.getElementById('cover-user-email');
-  if (coverUser) coverUser.style.display = 'block';
-  if (coverEmail) coverEmail.textContent = currentUser.email || '';
-  populateDashboard();
+  console.log("onUserLoggedIn called");
 }
 
 async function saveToSupabase() {
-  if (!currentUser) return;
-  try {
-    await fetch('' + (SUPABASE_URL) + '/rest/v1/user_progress', {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + (currentUser.access_token) + '',
-        'Content-Type': 'application/json',
-        'Prefer': 'resolution=merge-duplicates'
-      },
-      body: JSON.stringify({
-        id: currentUser.id,
-        email: currentUser.email,
-        username: currentUser.username || state.username || '',
-        xp: state.xp, streak: state.streak, last_visit: state.lastVisit,
-        current_floor: state.currentFloor, current_section: state.currentSection,
-        completed: state.completed, quiz_answered: state.quizAnswered,
-        xp_awarded: state.xpAwarded, total_seconds: state.totalSeconds,
-        session_log: state.sessionLog
-      })
-    });
-  } catch(e) {}
+  console.log("saveToSupabase called");
 }
 
 async function signOut() {
-  try {
-    if (currentUser) {
-      await fetch('' + (SUPABASE_URL) + '/auth/v1/logout', {
-        method: 'POST',
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (currentUser.access_token) + '' }
-      });
-    }
-  } catch(e) {}
   currentUser = null;
   localStorage.removeItem('codebook_user');
   localStorage.removeItem('codebook_v1');
@@ -882,23 +721,6 @@ window.addEventListener('load', async () => {
     return;
   }
 
-  const saved = localStorage.getItem('codebook_user');
-  if (saved) {
-    try {
-      const user = JSON.parse(saved);
-      // Verify the token is still valid
-      const res = await fetch('' + (SUPABASE_URL) + '/auth/v1/user', {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (user.access_token) + '' }
-      });
-      const data = await res.json();
-      if (data.id) {
-        currentUser = { access_token: user.access_token, id: data.id, email: data.email, username: user.username || '' };
-        await onUserLoggedIn();
-        return;
-      }
-    } catch(e) {}
-    localStorage.removeItem('codebook_user');
-  }
   document.getElementById('auth-screen').style.display = 'flex';
 });
 
@@ -1591,24 +1413,14 @@ return { code: "", filename: "", challenges: [] };
 }
 
 function loadSection(f1, s1) {
+ 
 
 var floor = FLOORS[f1];
-if (!floor) { console.error("Floor not found:", f1); return; }
-
-// s1 can be a numeric index or a section id string
-var section;
-if (typeof s1 === 'number' || (typeof s1 === 'string' && !isNaN(s1))) {
-  section = floor.sections[parseInt(s1)];
-} else {
-  section = floor.sections.find(function(s) {
-    return String(s.id).trim() === String(s1).trim();
-  });
-}
-
-if (!section) {
-  // fallback to first section
-  section = floor.sections[0];
-}
+console.log("Looking for:", s1);
+console.log("Available:", floor.sections.map(s => s.id));  
+var section = floor.sections.find(
+  s => String(s.id).trim() === String(s1).trim()
+);
 
 if (!section) {
   console.error("Section not found:", s1);
