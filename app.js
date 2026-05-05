@@ -2925,19 +2925,10 @@ function startFloorBoss() {
     'boss-floor' + fi + '-' + today
   );
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-  const loginBtn = document.querySelector('button');
-
+function handleAuth() {
   const authScreen = document.getElementById('auth-screen');
-  const dashboard = document.getElementById('dashboard');
+  const dashboard = document.getElementById('panel-learn'); // your main app
 
-  if (loginBtn) {
-    loginBtn.addEventListener('click', function () {
-      if (authScreen) authScreen.style.display = 'none';
-      if (dashboard) dashboard.style.display = 'block';
-    });
-  }
-});
-
-});
+  if (authScreen) authScreen.style.display = 'none';
+  if (dashboard) dashboard.style.display = 'block';
+}
