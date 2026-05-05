@@ -505,36 +505,8 @@ function showResetForm(token) {
   const overlay = document.getElementById('reset-overlay');
   overlay.style.display = 'flex';
   overlay.dataset.token = token;
-}
-
-async function submitNewPassword() {
-  const password = document.getElementById('reset-password').value;
-  const confirm = document.getElementById('reset-password-confirm').value;
-  const msg = document.getElementById('reset-message');
-  const token = document.getElementById('reset-overlay').dataset.token;
-
-  if (!password || password.length < 6) {
-    msg.textContent = 'Password must be at least 6 characters.';
-    msg.className = 'auth-message error';
-    return;
-  }
-  if (password !== confirm) {
-    msg.textContent = 'Passwords do not match.';
-    msg.className = 'auth-message error';
-    return;
-  }
-
-  msg.textContent = 'Updating password...';
-  msg.className = 'auth-message';
-
-  try {
-    console.log("submitNewPassword clicked");
-    msg.textContent = 'Password reset is not available.';
-    msg.className = 'auth-message error';
-  } catch(e) {
-    msg.textContent = 'Something went wrong. Please try again.';
-    msg.className = 'auth-message error';
-  }
+function submitNewPassword() {
+  console.log("Password reset disabled (no backend)");
 }
 
 function populateDashboard() {
