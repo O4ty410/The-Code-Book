@@ -8,13 +8,12 @@
 <meta name="apple-mobile-web-app-title" content="The Code Book">
 <meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
 <title>The Code Book</title>
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="base__2_.css">
 
   
 </head>
 <body>
 
-<div style="display:none!important" aria-hidden="true">
   <div id="floor-nav"></div>
   <div id="timer-display">25:00</div>
   <div id="timer-btn"></div>
@@ -33,6 +32,10 @@
   <div id="sage-bubble"></div>
   <div id="building-map"></div>
   <div id="panel-learn"></div>
+
+<!-- COMPAT SHIMS: original JS looks for these IDs -->
+<div style="display:none!important;visibility:hidden;position:absolute;pointer-events:none" aria-hidden="true">
+
 </div>
 
 
@@ -41,8 +44,8 @@
   <div class="auth-title">The Code Book</div>
   <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
   <div class="auth-tabs">
-    <button class="auth-tab active">Sign In</button>
-<button class="auth-tab">Sign Up</button>
+    <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
   </div>
   <div class="auth-form">
     <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
@@ -57,11 +60,11 @@
     <button onclick="showPrivacy()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;text-decoration:underline;">Privacy Policy</button>
   </div>
   <div style="margin-top:16px;">
-    <button 
-  onclick="alert('Please sign in or click Try without account')" 
-  style="font-family:'IBM Plex Mono', monospace;">
-  Start — One Step At A Time
-</button>
+    <button onclick="continueAsGuest()" style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:2px;padding:16px 36px;background:var(--accent);color:var(--bg);border:none;cursor:pointer;border-radius:8px;text-transform:uppercase;">Continue as Guest</button>
+  </div>
+
+</div>
+<!-- END AUTH SCREEN -->
 
 <!-- LEADERBOARD OVERLAY -->
 <div id="leaderboard-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9993;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
@@ -310,7 +313,7 @@
     </div>
     <button class="start-btn" onclick="startBook()" style="width:100%;margin-bottom:12px;">Continue →</button>
     <div style="text-align:center;">
-      <span onclick="signOut()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);cursor:pointer;letter-spacing:1px;">Sign out</span>
+      <span onclick="signOut()" style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted);cursor:pointer;letter-spacing:1px;">Start over</span>
     </div>
   </div>
 
