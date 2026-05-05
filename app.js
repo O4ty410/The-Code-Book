@@ -1,3 +1,8 @@
+window.onload = () => {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+};
+
 let isLoggedIn = false;
 let isGuest = false;
 let currentFloor = 1;
