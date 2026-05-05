@@ -2925,3 +2925,19 @@ function startFloorBoss() {
     'boss-floor' + fi + '-' + today
   );
 }
+// TEMP LOGIN (no backend)
+document.addEventListener('DOMContentLoaded', function () {
+  const loginBtn = document.getElementById('login-btn');
+  const authScreen = document.getElementById('auth-screen');
+  const dashboard = document.getElementById('dashboard');
+
+  if (loginBtn) {
+    loginBtn.addEventListener('click', function () {
+      // Hide login
+      if (authScreen) authScreen.style.display = 'none';
+
+      // Show dashboard
+      if (dashboard) dashboard.style.display = 'block';
+    });
+  }
+});
