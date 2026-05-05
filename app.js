@@ -2918,7 +2918,7 @@ function startFloorBoss() {
   var idx = (daysSinceEpoch + fi + 4) % DAILY_CHALLENGES.length;
   var challenge = DAILY_CHALLENGES[idx];
   var today = new Date().toDateString();
-  _openChallengeModal(
+  openChallengeModal(
     challenge,
     'Floor ' + state.currentFloor + ' Boss',
     'Prove you mastered this floor. +' + challenge.xp + ' bonus XP.',
