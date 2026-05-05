@@ -2830,19 +2830,7 @@ function renderChallengePanel() {
   challenges.forEach(function(ch) {
     var isLocked = ch.locked;
     var isDone = ch.done;
-    html += '<div class="challenge-item' + (isLocked ? ' ch-locked' : '') + (isDone ? ' ch-done' : '') + '"' +
-      (!isLocked ? ' onclick="' + ch.action + '"' : '') + '>' +
-      '<div class="ch-icon">' + ch.icon + '</div>' +
-      '<div class="ch-body">' +
-      '<div class="ch-tag">' + ch.type + (isDone ? ' — DONE TODAY' : isLocked ? ' — LOCKED' : '') + '</div>' +
-      '<div class="ch-title">' + ch.title + '</div>' +
-      '<div class="ch-desc">' + ch.desc + '</div>' +
-      '</div>' +
-      '<div class="ch-xp">' + (isDone ? '✓' : ch.xp) + '</div>' +
-      '</div>';
-  });
-
-  html += '</div>';
+html += '<div class="challenge-item"></div>';
   panel.innerHTML = html;
 }
 
