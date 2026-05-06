@@ -8,14 +8,12 @@
 <meta name="apple-mobile-web-app-title" content="The Code Book">
 <meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
 <title>The Code Book</title>
-  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="base.css">
 
   
 </head>
 <body>
 
-<!-- LEGACY COMPAT SHIMS: JS updates these IDs but they must not be visible -->
-<div style="display:none!important;position:absolute;pointer-events:none" aria-hidden="true">
   <div id="floor-nav"></div>
   <div id="timer-display">25:00</div>
   <div id="timer-btn"></div>
@@ -34,6 +32,10 @@
   <div id="sage-bubble"></div>
   <div id="building-map"></div>
   <div id="panel-learn"></div>
+
+<!-- COMPAT SHIMS: original JS looks for these IDs -->
+<div style="display:none!important;visibility:hidden;position:absolute;pointer-events:none" aria-hidden="true">
+
 </div>
 
 
@@ -63,7 +65,6 @@
   style="font-family:'IBM Plex Mono', monospace;">
   Start — One Step At A Time
 </button>
-  </div>
 
 <!-- LEADERBOARD OVERLAY -->
 <div id="leaderboard-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,10,10,0.98);z-index:9993;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 24px;overflow-y:auto;">
@@ -347,6 +348,7 @@
   </div>
 
 </div>
+<!-- END AUTH SCREEN -->
 
 <!-- APP -->
 <div id="app" style="display:none">
@@ -374,7 +376,7 @@
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
 <!-- THREE COLUMN GRID -->
-<div class="app-grid" style="display:none">
+<div class="app-grid">
 
   <!-- LEFT SIDEBAR -->
   <div class="left-sidebar" id="left-sidebar">
