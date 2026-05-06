@@ -681,7 +681,34 @@ function continueAsGuest() {
 }
 
 async function handleAuth() {
-  continueAsGuest();
+  var email = document.getElementById('auth-email').value.trim();
+  var password = document.getElementById('auth-password').value;
+  var msg = document.getElementById('auth-message');
+  var btn = document.getElementById('auth-submit');
+
+  if (!email || !password) {
+    msg.textContent = 'Please enter your email and password.';
+    msg.className = 'auth-message error';
+    return;
+  }
+
+  btn.disabled = true;
+  msg.textContent = 'Signing in...';
+  msg.className = 'auth-message';
+
+  try {
+    var isSignUp = document.getElementById('auth-submit').textContent.trim().toLowerCase().includes('sign up') ||
+                   document.querySelector('.auth-tab.active') && document.querySelector('.auth-tab.active').textContent.trim().toLowerCase().includes('sign up');
+
+    // Save user locally and proceed
+    currentUser = { email: email, id: email };
+    localStorage.setItem('codebook_user', JSON.stringify(currentUser));
+    startBook();
+  } catch(e) {
+    msg.textContent = 'Something went wrong. Please try again.';
+    msg.className = 'auth-message error';
+    btn.disabled = false;
+  }
 }
 
 async function onUserLoggedIn() {
@@ -689,6 +716,17 @@ async function onUserLoggedIn() {
 }
 
 async function saveToSupabase() {
+}
+
+function showAuthScreen() {
+  currentUser = null;
+  document.getElementById('app').style.display = 'none';
+  var ag = document.querySelector('.app-grid'); if (ag) ag.style.display = 'none';
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-message').textContent = '';
 }
 
 async function signOut() {
@@ -726,7 +764,19 @@ window.addEventListener('load', async () => {
     return;
   }
 
-  continueAsGuest();
+  // Check if user has a saved session
+  var savedUser = localStorage.getItem('codebook_user');
+  if (savedUser) {
+    try {
+      currentUser = JSON.parse(savedUser);
+      startBook();
+    } catch(e) {
+      localStorage.removeItem('codebook_user');
+      showAuthScreen();
+    }
+  } else {
+    showAuthScreen();
+  }
 });
 
 // --- XP + LEVEL + STREAK SYSTEM ---
