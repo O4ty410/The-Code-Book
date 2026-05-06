@@ -3,7 +3,6 @@ let isGuest = false;
 let currentFloor = 1;
 
 let sageIdleTimer = null;
-console.log("TOP OF FILE");
 
 const FLOORS = [
   
@@ -389,7 +388,7 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
 var sectionGateState = {}; // ADD HERE
 let state = {
   currentFloor: 1,
-  currentSection: "1-1",
+  currentSection: 0,
   completed: {},
   quizAnswered: {},
   totalSeconds: 0,
@@ -412,7 +411,7 @@ function loadState() {
     if (saved) {
       const s = JSON.parse(saved);
       state.currentFloor = s.currentFloor || 1;
-      state.currentSection = s.currentSection || 0;
+      state.currentSection = parseInt(s.currentSection) || 0;
       state.completed = s.completed || {};
       state.quizAnswered = s.quizAnswered || {};
       state.totalSeconds = s.totalSeconds || 0;
@@ -505,8 +504,35 @@ function showResetForm(token) {
   const overlay = document.getElementById('reset-overlay');
   overlay.style.display = 'flex';
   overlay.dataset.token = token;
-function submitNewPassword() {
-  console.log("Password reset disabled (no backend)");
+}
+
+async function submitNewPassword() {
+  const password = document.getElementById('reset-password').value;
+  const confirm = document.getElementById('reset-password-confirm').value;
+  const msg = document.getElementById('reset-message');
+  const token = document.getElementById('reset-overlay').dataset.token;
+
+  if (!password || password.length < 6) {
+    msg.textContent = 'Password must be at least 6 characters.';
+    msg.className = 'auth-message error';
+    return;
+  }
+  if (password !== confirm) {
+    msg.textContent = 'Passwords do not match.';
+    msg.className = 'auth-message error';
+    return;
+  }
+
+  msg.textContent = 'Updating password...';
+  msg.className = 'auth-message';
+
+  try {
+    msg.textContent = 'Password reset is not available.';
+    msg.className = 'auth-message error';
+  } catch(e) {
+    msg.textContent = 'Something went wrong. Please try again.';
+    msg.className = 'auth-message error';
+  }
 }
 
 function populateDashboard() {
@@ -663,7 +689,6 @@ async function onUserLoggedIn() {
 }
 
 async function saveToSupabase() {
-  console.log("saveToSupabase called");
 }
 
 async function signOut() {
@@ -683,10 +708,8 @@ async function signOut() {
 
 // ─── GLOBAL ERROR HANDLER ────────────────────────────────────────────────────
 window.addEventListener('error', function(e) {
-  console.error('App error:', e.message, 'at', e.filename, ':', e.lineno);
 });
 window.addEventListener('unhandledrejection', function(e) {
-  console.error('Unhandled promise rejection:', e.reason);
 });
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -893,7 +916,6 @@ function launchApp() {
 
   // Render content
   renderNav();
-  console.log("currentSection =", state.currentSection);
   renderFloor(state.currentFloor - 1, state.currentSection);
   updateTimeLog();
   updateXPPanel();
@@ -1360,7 +1382,6 @@ var editorDefaults = {
 function getEditorDefaults(section) {
 
     if (!section) {
-        console.error("section is undefined");
         return { code: "", filename: "", challenges: [] };
     }
 
@@ -1374,7 +1395,6 @@ else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
         var code = editorDefaults[lang];
 
         if (!code) {
-            console.error("No editorDefaults for lang:", lang);
             return { code: "// unknown language", filename: "file.txt" };
         }
     }
@@ -1389,29 +1409,21 @@ else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
             filename: filenameMap[lang] || "file.txt"
         };
     
-console.error("Invalid section.code:", section);
 return { code: "", filename: "", challenges: [] };
   
 }
 
 function loadSection(f1, s1) {
- 
 
 var floor = FLOORS[f1];
-console.log("Looking for:", s1);
-console.log("Available:", floor.sections.map(s => s.id));  
-var section = floor.sections.find(
-  s => String(s.id).trim() === String(s1).trim()
-);
+if (!floor) { return; }
 
-if (!section) {
-  console.error("Section not found:", s1);
-  return;
-}
-
+var si = parseInt(s1) || 0;
+var section = floor.sections[si];
+if (!section) section = floor.sections[0];
+if (!section) { return; }
 
   var isDone = state.completed[section.id];
-  console.log("SECTION:", section);
   var editorDef = getEditorDefaults(section);
 
   if (!sectionGateState[section.id]) {
@@ -1428,8 +1440,8 @@ if (!section) {
     (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
     (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
     '</div>';
-const fi = state.currentFloor - 1;
-const si = state.currentSection;
+var fi = state.currentFloor - 1;
+var si = state.currentSection;
   
   // READ
    var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
@@ -2830,9 +2842,21 @@ function renderChallengePanel() {
   challenges.forEach(function(ch) {
     var isLocked = ch.locked;
     var isDone = ch.done;
-html += '<div class="challenge-item"></div>';
+    html += '<div class="challenge-item' + (isLocked ? ' ch-locked' : '') + (isDone ? ' ch-done' : '') + '"' +
+      (!isLocked ? ' onclick="' + ch.action + '"' : '') + '>' +
+      '<div class="ch-icon">' + ch.icon + '</div>' +
+      '<div class="ch-body">' +
+      '<div class="ch-tag">' + ch.type + (isDone ? ' — DONE TODAY' : isLocked ? ' — LOCKED' : '') + '</div>' +
+      '<div class="ch-title">' + ch.title + '</div>' +
+      '<div class="ch-desc">' + ch.desc + '</div>' +
+      '</div>' +
+      '<div class="ch-xp">' + (isDone ? '✓' : ch.xp) + '</div>' +
+      '</div>';
+  });
+
+  html += '</div>';
   panel.innerHTML = html;
-});
+}
 
 // ── RECALL QUIZ ─────────────────────────────────────────────────────────
 // Picks a random question the user has NOT seen today, avoiding repetition.
@@ -2906,17 +2930,10 @@ function startFloorBoss() {
   var idx = (daysSinceEpoch + fi + 4) % DAILY_CHALLENGES.length;
   var challenge = DAILY_CHALLENGES[idx];
   var today = new Date().toDateString();
-  openChallengeModal(
+  _openChallengeModal(
     challenge,
     'Floor ' + state.currentFloor + ' Boss',
     'Prove you mastered this floor. +' + challenge.xp + ' bonus XP.',
     'boss-floor' + fi + '-' + today
   );
-}
-function handleAuth() {
-  const authScreen = document.getElementById('auth-screen');
-  const dashboard = document.getElementById('panel-learn'); // your main app
-
-  if (authScreen) authScreen.style.display = 'none';
-  if (dashboard) dashboard.style.display = 'block';
 }
