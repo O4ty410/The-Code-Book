@@ -935,6 +935,7 @@ function startBook() {
     return;
   }
 
+  isLoggedIn = true;
   loadState();
   updateStreak();
   document.getElementById('cover').style.display = 'none';
