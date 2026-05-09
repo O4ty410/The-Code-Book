@@ -466,11 +466,11 @@ function togglePasswordVisibility(inputId, btn) {
   if (!input) return;
   if (input.type === 'password') {
     input.type = 'text';
-    btn.textContent = '\u{1F648}'; // 🙈
+    btn.textContent = '\uD83D\uDE48'; // \uD83D\uDE48
     btn.title = 'Hide password';
   } else {
     input.type = 'password';
-    btn.textContent = '\u{1F441}'; // 👁
+    btn.textContent = '\uD83D\uDC41'; // \uD83D\uDC41
     btn.title = 'Show password';
   }
 }
@@ -1054,4 +1054,4 @@ const DAILY_CHALLENGES = [
   // Floor 5 \u2014 Full Stack
   { title: 'Frontend vs Backend', question: 'Which of these tasks belongs to the backend?', options: ['Styling a button with CSS', 'Animating a dropdown menu', 'Securely processing a payment', 'Choosing a font family'], correct: 2, explanation: 'The backend handles tasks that must be done securely and away from the user\'s browser \u2014 things like processing payments, validating credentials, querying a database, or running sensitive business logic. The frontend is everything the user sees directly.', xp: 20 },
   { title: 'What is SQL?', question: 'SQL is primarily used to...', options: ['Style web pages', 'Build mobile apps', 'Query and manage relational databases', 'Write server-side JavaScript'], correct: 2, explanation: 'SQL (Structured Query Language) is the language for communicating with relational databases. It lets you create tables, insert data, retrieve specific records, update values, and delete data. Every major web application uses SQL or a similar query language.', xp: 20 },
-  { title: 'HTTP methods', question: 'In a REST API, a POST request is used to...', options: ['Retrieve data', 'Create new data', 'Delete existing data', 'Update all records'], correct: 1, explanation: 'REST APIs use HTTP methods to indicate the type of action: GET retrieves data, POST creates new data, PUT/PATCH updates existing data, DELETE removes data. These map directly to the CRUD operations (Create, Read, Update, Delete) of a database.', xp: 20
+  { title: 'HTTP methods', question: 'In a REST API, a POST request is used to...', options: ['Retrieve data', 'Create new data', 'Delete existing data', 'Update all records'], correct: 1, explanation: 'REST APIs use HTTP methods to indicate the type of action: GET retrieves data, POST creates new data, PUT/PATCH updates existing data, DELETE removes data. These map directly to the CRUD operations (Create, Read, Update, Delet
