@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Lato:wght@300;400;700&display=swap');
+
+/* ============================================================
+   VARIABLES & THEMING
+   All CSS custom properties live here — dark mode (default)
+   and light mode overrides.
+   ============================================================ */
+
+/* --- Dark theme (default) --- */
+:root {
+  --bg: #05070a;
+  --surface: #0c111d;
+  --surface2: rgba(30, 41, 59, 0.5);
+  --border: #1e293b;
+  --accent: #7dd3fc;
+  --accent2: #c084fc;
+  --text: #f1f5f9;
+  --text-muted: #64748b;
+  --text-dim: #94a3b8;
+  --success: #4ade80;
+  --floor1: #c8a96e;
+  --floor2: #7eb8c8;
+  --floor3: #9c8dc0;
+  --floor4: #c08d8d;
+  --floor5: #8dc0a4;
+  --floor6: #c0b38d;
+  --floor7: #a96ec8;
+}
+
+/* --- Light theme overrides --- */
+body.light {
+  --bg: #fdfbf7;
+  --surface: #ffffff;
+  --surface2: #f4f1ec;
+  --border: #d6d0c7;
+  --accent: #1e3a8a;
+  --accent2: #9a3412;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --text-dim: #374151;
+  --success: #166534;
+  /* Floor colours darkened for legibility on light backgrounds */
+  --floor1: #8a6a30;
+  --floor2: #2e6e82;
+  --floor3: #4e3d80;
+  --floor4: #7a3a3a;
+  --floor5: #2e6e50;
+  --floor6: #7a6030;
+  --floor7: #6a2e8a;
+}
