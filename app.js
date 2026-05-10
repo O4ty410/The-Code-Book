@@ -24,9 +24,9 @@ const FLOORS = [
     title: "Understanding Before Touching",
     subtitle: "How code actually thinks",
     color: "#c8a96e",
-    duration: "3\u20134 weeks",
+    duration: "3-4 weeks",
     sessions: "5 per week",
-    length: "45\u201360 min",
+    length: "45-60 min",
     tag: "Floor 01 \u2014 Foundation",
     sections: [
       {
@@ -152,9 +152,9 @@ Answer these in your head, or write them down, as if you were explaining them to
     title: "Seeing It Come Alive",
     subtitle: "HTML & CSS \u2014 the visual layer",
     color: "#7eb8c8",
-    duration: "6\u20138 weeks",
+    duration: "6-8 weeks",
     sessions: "5 per week",
-    length: "45\u201360 min",
+    length: "45-60 min",
     tag: "Floor 02 \u2014 Visual Building",
     sections: [
       {
@@ -207,7 +207,7 @@ Answer these in your head, or write them down, as if you were explaining them to
     title: "Building With Training Wheels",
     subtitle: "JavaScript \u2014 making things actually work",
     color: "#c87e9a",
-    duration: "8\u201310 weeks",
+    duration: "8-10 weeks",
     sessions: "5 per week",
     length: "60 min",
     tag: "Floor 03 \u2014 Interactivity",
@@ -333,9 +333,9 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
     title: "Building Alone",
     subtitle: "Where the doer starts to emerge",
     color: "#9a7ec8",
-    duration: "10\u201312 weeks",
+    duration: "10-12 weeks",
     sessions: "5 per week",
-    length: "60\u201390 min",
+    length: "60-90 min",
     tag: "Floor 04 \u2014 Independence",
     sections: [
       { id: "4-1", title: "Receiving a Brief", body: `From this floor onward, things change. I give you a brief \u2014 a description of what to build \u2014 and you figure out how to build it without being walked through every step.\n\nThis is how real development works. A client, a manager, or your own idea gives you a target. You use what you know, research what you don't, and produce something that works.\n\nThe first brief is simple. More complex ones follow. But the pattern is the same: <strong>understand the brief, plan before you code, build, review.</strong>`, callout: { type: "default", label: "Brief 01", text: "Build a tip calculator. The user enters a bill amount and selects a tip percentage (10%, 15%, 20%). The page calculates and displays the tip amount and the total." }, callout2: { type: "focus", label: "Plan First", text: "Before you write a single line of code, write out in plain English what the calculator needs to do. Then identify which HTML elements you need, which CSS styles, and which JavaScript functions. Plan first. Code second." }, hint: `Break the tip calculator into just three questions before touching code:\n\n1. What does the user need to type or click? (inputs)\n2. What does the page need to calculate? (logic)\n3. What does the page need to show? (output)\n\nAnswer those in plain English first. Then each answer becomes a piece of code.\n\n<strong>Still stuck?</strong> Start even smaller \u2014 just get an input box on screen. Then get the number out of it with JavaScript. Then multiply it. One tiny piece at a time.`, checklist: ["I read the brief carefully", "I planned the build before starting", "I built the tip calculator", "It works correctly with different inputs"] },
@@ -350,9 +350,9 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
     title: "Solving Real Problems",
     subtitle: "Backend, databases, APIs \u2014 the full picture",
     color: "#7ec8a9",
-    duration: "4\u20135 months",
+    duration: "4-5 months",
     sessions: "5 per week",
-    length: "60\u201390 min",
+    length: "60-90 min",
     tag: "Floor 05 \u2014 Full Stack",
     sections: [
       { id: "5-1", title: "What is the Backend?", body: `Everything you've built so far lives in the <strong>frontend</strong> \u2014 the part the user sees and interacts with in the browser. But most real applications have a second layer: the <strong>backend</strong>.\n\nThe backend is a computer (a server) that runs code the user never directly sees. It handles things that can't be done safely in the browser: storing sensitive data, processing payments, managing user accounts, running complex logic.\n\nIf the frontend is the shop floor, the backend is the warehouse and the office. The customer sees the shop floor. Everything that makes it function is behind the scenes.`, callout: { type: "default", label: "The Stack", text: "When you can build both the frontend and the backend, you are a Full Stack developer. That's what Floor 7 looks like. Floor 5 is where the second half begins." }, hint: `Think of a bank. The website you log into is the frontend \u2014 buttons, forms, your balance on screen. But the actual money, the security checks, the transaction history \u2014 none of that lives in your browser. It all lives on the bank's servers. That's the backend.\n\n<strong>Why can't we just do everything in the browser?</strong> Because the browser is public. Anyone can open developer tools and see your JavaScript. You would never put a password or payment logic somewhere anyone can read. The backend is where the sensitive work happens safely.`, checklist: ["I understand the difference between frontend and backend", "I understand why a backend is necessary", "I understand what a server does"] },
@@ -367,13 +367,13 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
     title: "Specialisation",
     subtitle: "Finding your lane and going deep",
     color: "#c8967e",
-    duration: "3\u20134 months",
+    duration: "3-4 months",
     sessions: "5 per week",
-    length: "60\u201390 min",
+    length: "60-90 min",
     tag: "Floor 06 \u2014 Your Direction",
     sections: [
       { id: "6-1", title: "Identifying Your Lane", body: `By now you have built enough to know what excites you. That feeling when you're working on something and time disappears \u2014 that's your signal.\n\nThe main lanes are:\n\n<strong>Frontend focused</strong> \u2014 You love building beautiful, interactive user interfaces. React is your next major skill.\n<strong>Backend focused</strong> \u2014 You love the logic, the architecture, the systems. Node.js, Python, databases.\n<strong>Full Stack product builder</strong> \u2014 You want to build complete products alone. Both sides, end to end.\n<strong>Data and AI</strong> \u2014 You're drawn to working with information, finding patterns, building intelligent systems. Python is your language.`, callout: { type: "focus", label: "No Wrong Answer", text: "Every lane leads to professional grade work. The best developers aren't the ones who know the most \u2014 they're the ones who went deepest in the direction that excited them most." }, hint: `Can't decide? Ask yourself these:\n\n\u2014 When you finished a project, what part did you most enjoy building \u2014 how it looked, or how it worked?\n\u2014 Do you find yourself thinking more about the user experience or about the logic underneath?\n\u2014 When you imagine your ideal job, are you designing interfaces or engineering systems?\n\nIf you genuinely enjoy both equally, Full Stack is your lane. If one made you lose track of time and the other felt like a chore \u2014 that's your answer.`, checklist: ["I know which direction pulls me most", "I've chosen my lane for this floor"] },
-      { id: "6-2", title: "Going Deep in Your Chosen Direction", body: `This section is yours to shape. Based on the lane you chose, your curriculum from here looks different from someone else who chose a different lane.\n\nBut the structure is the same regardless:\n\n<strong>Week 1\u20132:</strong> Learn the core new technology for your lane\n<strong>Week 3\u20134:</strong> Build something small with it\n<strong>Week 5\u20138:</strong> Build something more ambitious\n<strong>Week 9\u201312:</strong> Build your Floor 6 project \u2014 the most complex thing you've made so far\n\nEvery session still ends with something built. Every week you can feel yourself moving forward.`, callout: { type: "default", label: "Resources by Lane", text: "Frontend: React docs, Scrimba, Frontend Mentor challenges\nBackend: Node.js docs, The Odin Project\nFull Stack: Build your own product idea\nData/AI: Python.org, fast.ai, Kaggle" }, hint: `Learning a new technology always has the same awkward first phase \u2014 everything feels unfamiliar and slower than before. That's not regression. That's what learning something new feels like.\n\n<strong>The pattern that works:</strong> Official docs first for the overview, then a short tutorial to see it in action, then immediately build something of your own with it \u2014 even tiny. The gap between following a tutorial and building something yourself is where real learning happens.\n\n<strong>Feeling lost in a tutorial?</strong> Stop. Close it. Try to recreate just the first part from memory. What you can't recreate is what you need to understand better \u2014 not what you need to watch again.`, checklist: ["I've started learning the core technology for my lane", "I've built my first thing with it", "I'm working toward my Floor 6 project"] },
+      { id: "6-2", title: "Going Deep in Your Chosen Direction", body: `This section is yours to shape. Based on the lane you chose, your curriculum from here looks different from someone else who chose a different lane.\n\nBut the structure is the same regardless:\n\n<strong>Week 1-2:</strong> Learn the core new technology for your lane\n<strong>Week 3-4:</strong> Build something small with it\n<strong>Week 5-8:</strong> Build something more ambitious\n<strong>Week 9-12:</strong> Build your Floor 6 project \u2014 the most complex thing you've made so far\n\nEvery session still ends with something built. Every week you can feel yourself moving forward.`, callout: { type: "default", label: "Resources by Lane", text: "Frontend: React docs, Scrimba, Frontend Mentor challenges\nBackend: Node.js docs, The Odin Project\nFull Stack: Build your own product idea\nData/AI: Python.org, fast.ai, Kaggle" }, hint: `Learning a new technology always has the same awkward first phase \u2014 everything feels unfamiliar and slower than before. That's not regression. That's what learning something new feels like.\n\n<strong>The pattern that works:</strong> Official docs first for the overview, then a short tutorial to see it in action, then immediately build something of your own with it \u2014 even tiny. The gap between following a tutorial and building something yourself is where real learning happens.\n\n<strong>Feeling lost in a tutorial?</strong> Stop. Close it. Try to recreate just the first part from memory. What you can't recreate is what you need to understand better \u2014 not what you need to watch again.`, checklist: ["I've started learning the core technology for my lane", "I've built my first thing with it", "I'm working toward my Floor 6 project"] },
       { id: "6-3", title: "Building More Complex Products", body: `The projects in this floor are bigger. They take longer. They'll hit walls you don't know how to get past yet.\n\nWhen that happens \u2014 and it will \u2014 the process is:\n\n<strong>1.</strong> Define exactly what you're stuck on. Not "it doesn't work" but "this specific function isn't returning what I expect."\n<strong>2.</strong> Search for that specific thing.\n<strong>3.</strong> Try the solution.\n<strong>4.</strong> If it doesn't work, define the new problem and repeat.\n\nThis isn't struggling. This is the job. Every developer does this every day.`, callout: { type: "focus", label: "ADHD Note", text: "Complex projects can feel overwhelming at the start. Break them into the smallest possible next task. Not 'build the login system' \u2014 'make the input field appear on screen.' Then the next tiny thing. Momentum builds from small wins." }, hint: `When a project feels too big to start, use the "next physical action" approach.\n\nDon't write "build the dashboard." Write "create a new file called dashboard.html." That's it. One physical action.\n\nWhen that's done, the next physical action becomes obvious. Then the next. The project builds itself one tiny step at a time \u2014 you just have to keep asking "what is the very next thing I can do right now?"\n\n<strong>Losing motivation mid-project?</strong> Ship something. Deploy whatever you have, even unfinished. Seeing it live makes it real. Real things are worth finishing.`, checklist: ["I'm working on my most complex project yet", "I've hit at least one wall and pushed through it", "I understand that getting stuck is normal"] },
       { id: "6-4", title: "Using Professional Tools and Resources", body: `By Floor 6 you should be comfortable with:\n\n<strong>Documentation</strong> \u2014 every technology has official docs. Learning to read them is a superpower.\n<strong>Stack Overflow</strong> \u2014 the world's largest database of developer questions and answers.\n<strong>GitHub</strong> \u2014 not just storing your work, but reading other people's code.\n<strong>AI coding assistants</strong> \u2014 tools like GitHub Copilot that suggest code as you type. Powerful when you know enough to evaluate what they suggest.\n\nNone of these replace understanding. But all of them accelerate it.`, callout: { type: "warning", label: "The Dependency Trap", text: "AI coding tools are powerful and useful. They are also dangerous if you rely on them before you understand what the code does. Use them to speed up work you understand, not to skip understanding." }, hint: `Reading documentation feels hard at first because docs are written for people who already know the basics. Here's how to approach them:\n\n1. Read the "Getting Started" section fully\n2. Skim the rest to know what exists\n3. Come back to specific sections when you need them\n\nYou don't read docs cover to cover like a book. You use them like a reference \u2014 you know they contain the answer, and you know roughly where to look.\n\n<strong>Stack Overflow tip:</strong> If your question has already been asked (it almost always has), look for the answer with the most votes AND check the date. A highly voted answer from 2015 might be outdated. Prefer recent answers for modern technologies.`, checklist: ["I'm comfortable reading documentation", "I've used Stack Overflow to solve a real problem", "I've read someone else's code on GitHub", "I understand when and how to use AI coding tools"] },
       { id: "6-5", title: "Floor 6 Project \u2014 Your Speciality in Action", body: `The most ambitious thing you've built yet. It must be in your chosen lane, use the technology you've learned this floor, and be something you couldn't have built six months ago.\n\nThere is no specific brief. You choose the idea. You plan the build. You execute it.\n\nWhen it's done, deploy it, write a short description of what it does and how you built it, and add it to your GitHub portfolio.`, callout: { type: "default", label: "The Portfolio", text: "By the end of Floor 6 you should have at least 3 deployed projects on GitHub with descriptions. This is your portfolio. This is what you show people." }, hint: `If you're struggling with the idea, think about who you were before you started coding. What problem did that person have that a developer could have solved?\n\nOr think forward \u2014 what's the simplest possible version of something you'd actually want to exist?\n\n<strong>The README matters as much as the code.</strong> When an employer looks at your GitHub, they read the README first. Write it like you're explaining the project to someone smart who isn't a developer. What does it do? Why did you build it? What did you learn making it?`, checklist: ["I built my most complex project yet", "It demonstrates my speciality", "It is deployed and on GitHub", "I wrote a description of how I built it", "I'm ready for Floor 7"] }
@@ -384,7 +384,7 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
     title: "Professional Grade",
     subtitle: "The destination",
     color: "#e8d5a0",
-    duration: "3\u20134 months",
+    duration: "3-4 months",
     sessions: "5 per week",
     length: "90 min",
     tag: "Floor 07 \u2014 Arrival",
@@ -499,14 +499,14 @@ async function showLeaderboard() {
       list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">No entries yet. Be the first!</div>';
       return;
     }
-    const medals = ['\u1F947', '\u1F948', '\u1F949'];
+    const medals = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
     list.innerHTML = rows.map((r, i) => `
       <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid ${i === 0 ? '#c8a96e' : i === 1 ? '#aaaaaa' : i === 2 ? '#cd7f32' : 'var(--border)'};border-radius:10px;${i === 0 ? 'box-shadow:0 0 20px rgba(200,169,110,0.15);' : ''}">
         <div style="font-size:${i < 3 ? '24px' : '14px'};width:36px;text-align:center;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">${medals[i] || '' + (i+1) + ''}</div>
         <div style="flex:1;">
           <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:15px;">${r.username || 'Anonymous'}</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--floor3);">\u1F525 ${r.streak || 0} day streak</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--floor3);">\uD83D\uDD25 ${r.streak || 0} day streak</div>
           </div>
         </div>
         <div style="text-align:right;">
@@ -589,7 +589,7 @@ function populateDashboard() {
 
   // Streak
   const streak = state.streak || 0;
-  const streakIcon = streak >= 30 ? '\u1F525\u1F525\u1F525' : streak >= 14 ? '\u1F525\u1F525' : '\u1F525';
+  const streakIcon = streak >= 30 ? '\uD83D\uDD25\uD83D\uDD25\uD83D\uDD25' : streak >= 14 ? '\uD83D\uDD25\uD83D\uDD25' : '\uD83D\uDD25';
   document.getElementById('dashboard-streak-icon').textContent = streakIcon;
   document.getElementById('dashboard-streak-text').textContent = streak === 0 ? 'No streak yet' : '' + (streak) + ' day streak';
   document.getElementById('dashboard-streak-sub').textContent = streak === 0 ? 'Complete a section to start your streak' : streak >= 7 ? 'You\'re on fire. Keep it going.' : 'Come back tomorrow to keep it alive.';
@@ -662,7 +662,7 @@ function showSessionComplete(sectionsToday) {
   document.getElementById('session-title').textContent = greetings[Math.floor(Math.random() * greetings.length)];
   document.getElementById('session-message').textContent = 'Your daily goal is done. Come back tomorrow and keep the momentum going.';
   document.getElementById('session-xp-earned').textContent = '+' + (Math.max(0, xpToday)) + '';
-  document.getElementById('session-streak').textContent = '' + (state.streak) + '\u1F525';
+  document.getElementById('session-streak').textContent = '' + (state.streak) + '\uD83D\uDD25';
   document.getElementById('session-sections').textContent = sectionsToday;
   document.getElementById('session-tomorrow').textContent = tomorrowText;
   document.getElementById('session-complete').style.display = 'flex';
@@ -1054,4 +1054,2075 @@ const DAILY_CHALLENGES = [
   // Floor 5 \u2014 Full Stack
   { title: "Frontend vs Backend", question: "Which of these tasks belongs to the backend?", options: ["Styling a button with CSS", "Animating a dropdown menu", "Securely processing a payment", "Choosing a font family"], correct: 2, explanation: "The backend handles tasks that must be done securely and away from the user's browser \u2014 things like processing payments, validating credentials, querying a database, or running sensitive business logic. The frontend is everything the user sees directly.", xp: 20 },
   { title: "What is SQL?", question: "SQL is primarily used to...", options: ["Style web pages", "Build mobile apps", "Query and manage relational databases", "Write server-side JavaScript"], correct: 2, explanation: "SQL (Structured Query Language) is the language for communicating with relational databases. It lets you create tables, insert data, retrieve specific records, update values, and delete data. Every major web application uses SQL or a similar query language.", xp: 20 },
-  { title: "HTTP methods", question: "In a REST API, a POST request is used to...", options: ["Retrieve data", "Create new data", "Delete existing data", "Update all records"], correct: 1, explanation: "REST APIs use HTTP methods to indicate the type of action: GET retrieves data, POST creates new data, PUT/PATCH updates existing data, DELETE removes data. These map directly to the CRUD operations (Create, Read, 
+  { title: "HTTP methods", question: "In a REST API, a POST request is used to...", options: ["Retrieve data", "Create new data", "Delete existing data", "Update all records"], correct: 1, explanation: "REST APIs use HTTP methods to indicate the type of action: GET retrieves data, POST creates new data, PUT/PATCH updates existing data, DELETE removes data. These map directly to the CRUD operations (Create, Read, Update, Delete) of a database.", xp: 20 },
+  { title: "What is an API key?", question: "An API key is used to...", options: ["Encrypt user passwords", "Identify and authenticate who is making a request to an API", "Speed up API responses", "Format JSON data"], correct: 1, explanation: "An API key is a unique identifier passed with requests to an external API. It tells the API who is making the request, allows the provider to track usage, and lets them block keys that are misused or over their rate limit. Never expose API keys in public code.", xp: 20 },
+  { title: "Git commit", question: "What does \"git commit\" do?", options: ["Sends your code to GitHub", "Saves a permanent snapshot of your current changes with a message", "Creates a new branch", "Merges two branches together"], correct: 1, explanation: "A commit is a saved snapshot of your code at a specific point in time, with a message describing what changed. It is local \u2014 it lives on your machine until you push. Think of commits as save points in a game that you can always return to.", xp: 20 },
+
+  // Floor 6 \u2014 Specialisation
+  { title: "What is React?", question: "React is best described as...", options: ["A CSS framework", "A backend web server", "A JavaScript library for building user interfaces from reusable components", "A database management tool"], correct: 2, explanation: "React is a JavaScript library created by Facebook for building UIs. It lets you break your interface into reusable components, each managing its own state. When state changes, React efficiently updates only the affected parts of the page.", xp: 20 },
+  { title: "Component state", question: "In React, \"state\" refers to...", options: ["The CSS styles of a component", "Data that belongs to a component and can change over time", "The server location of the app", "The HTML structure of the page"], correct: 1, explanation: "State is data that lives inside a component and can change. When state changes, React re-renders the component to reflect the new data. This is the core idea behind reactive UIs \u2014 the display automatically stays in sync with the data.", xp: 20 },
+  { title: "What is Node.js?", question: "Node.js allows developers to...", options: ["Write CSS with JavaScript syntax", "Run JavaScript on the server, outside of a browser", "Build native mobile apps", "Manage SQL databases directly"], correct: 1, explanation: "Node.js is a runtime that lets JavaScript run on a server rather than just in a browser. This means you can use JavaScript for both the frontend and the backend \u2014 one language across your entire stack.", xp: 20 },
+  { title: "REST vs GraphQL", question: "The main advantage of GraphQL over REST is...", options: ["It is faster in all situations", "The client can request exactly the data it needs, no more, no less", "It does not require a server", "It only works with React"], correct: 1, explanation: "REST APIs return fixed data structures per endpoint \u2014 sometimes more than you need, sometimes less. GraphQL lets the client define exactly what data it wants in a single query, reducing over-fetching and under-fetching. It is particularly useful for complex UIs with varied data needs.", xp: 20 },
+
+  // Floor 7 \u2014 Professional Grade
+  { title: "What is code review?", question: "The main purpose of a code review is to...", options: ["Count lines of code written", "Check spelling in comments", "Have another developer examine your code for quality, bugs, and improvements", "Measure how fast the code runs"], correct: 2, explanation: "Code review is when one or more developers read and critique another's code before it is merged. It catches bugs, improves code quality, spreads knowledge across the team, and ensures the codebase stays consistent. It is standard practice in all professional development teams.", xp: 20 },
+  { title: "What is system design?", question: "System design in software engineering is about...", options: ["Choosing colour schemes for an app", "Deciding which font to use", "Planning how the components of a large application fit together to handle scale and failure", "Writing the first version of code quickly"], correct: 2, explanation: "System design is the process of planning how an application's components \u2014 databases, servers, caches, queues, APIs \u2014 fit together to be reliable, scalable, and maintainable. Senior developers are often distinguished by their system design thinking.", xp: 20 },
+  { title: "What is caching?", question: "Caching in web development means...", options: ["Deleting old files regularly", "Storing copies of frequently requested data so future requests are faster", "Encrypting sensitive user data", "Compressing images for faster loading"], correct: 1, explanation: "Caching stores a copy of data closer to where it is needed \u2014 in memory, a CDN, or the browser. Instead of fetching the same data from a database on every request, a cache serves it instantly. It is one of the most effective ways to make applications faster and more scalable.", xp: 20 },
+  { title: "What makes clean code?", question: "Which of these is the best indicator of clean code?", options: ["It has no comments at all", "Another developer can understand what it does without explanation", "It is written in as few lines as possible", "It uses advanced language features"], correct: 1, explanation: "Clean code communicates its intent clearly to any developer who reads it. Good naming, small focused functions, and logical structure matter more than brevity or cleverness. The goal is code that is easy to understand, modify, and debug \u2014 often by yourself six months later.", xp: 20 }
+];
+
+// \u2500\u2500 SHARED CHALLENGE MODAL \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// All challenge modes use this single helper to open the modal.
+// xpKey is a unique string to prevent awarding XP twice for the same question.
+function _openChallengeModal(challenge, headingText, subText, xpKey) {
+  document.getElementById('challenge-title').textContent = headingText;
+  document.getElementById('challenge-body').textContent = subText;
+  document.getElementById('challenge-question').textContent = challenge.question;
+  document.getElementById('challenge-result').style.display = 'none';
+
+  document.querySelectorAll('#daily-challenge .auth-btn').forEach(function(b){ b.remove(); });
+
+  var optionsEl = document.getElementById('challenge-options');
+  optionsEl.innerHTML = '';
+  challenge.options.forEach(function(opt, i) {
+    var btn = document.createElement('button');
+    btn.style.cssText = 'padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;cursor:pointer;text-align:left;transition:all 0.2s ease;width:100%;';
+    btn.textContent = opt;
+    btn.addEventListener('click', function() {
+      answerChallenge(i, challenge.correct, challenge.xp, challenge.explanation, xpKey);
+    });
+    optionsEl.appendChild(btn);
+  });
+
+  document.getElementById('daily-challenge').style.display = 'flex';
+}
+
+// \u2500\u2500 DAILY CHALLENGE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// Advances one question per calendar day. Deterministic but changes daily.
+function showDailyChallenge() {
+  var today = new Date().toDateString();
+  var epoch = new Date('2025-01-01').getTime();
+  var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
+  var challenge = DAILY_CHALLENGES[daysSinceEpoch % DAILY_CHALLENGES.length];
+  _openChallengeModal(
+    challenge,
+    challenge.title,
+    "Complete today's challenge and earn +" + challenge.xp + ' bonus XP.',
+    'challenge-' + today
+  );
+  localStorage.setItem('codebook_challenge_done_' + today, 'true');
+}
+
+function answerChallenge(chosen, correct, xp, explanation, xpKey) {
+  var today = new Date().toDateString();
+  // Use provided xpKey (unique per question+mode), fall back to today for daily
+  var key = xpKey || ('challenge-' + today);
+
+  var buttons = document.querySelectorAll('#challenge-options button');
+  buttons.forEach(function(btn, i) {
+    btn.disabled = true;
+    if (i === correct) btn.style.borderColor = 'var(--success)';
+    else if (i === chosen && chosen !== correct) btn.style.borderColor = 'var(--floor3)';
+  });
+
+  var resultEl = document.getElementById('challenge-result');
+  resultEl.style.display = 'block';
+
+  if (chosen === correct) {
+    resultEl.style.background = 'rgba(110,200,126,0.08)';
+    resultEl.style.border = '1px solid var(--success)';
+    resultEl.style.color = 'var(--text-dim)';
+    resultEl.innerHTML = '<strong style="color:var(--success)">Correct! +' + xp + ' XP</strong><br><br>' + explanation;
+    awardXP(xp, key, window.innerWidth / 2, 200);
+  } else {
+    resultEl.style.background = 'rgba(200,126,154,0.08)';
+    resultEl.style.border = '1px solid var(--floor3)';
+    resultEl.style.color = 'var(--text-dim)';
+    resultEl.innerHTML = '<strong style="color:var(--floor3)">Not quite.</strong><br><br>' + explanation;
+  }
+
+  // Mark daily challenge done in localStorage only for the daily mode
+  if (!xpKey || xpKey.indexOf('challenge-') === 0) {
+    localStorage.setItem('codebook_challenge_done_' + today, 'true');
+  }
+
+  setTimeout(function() {
+    document.querySelectorAll('#daily-challenge .auth-btn').forEach(function(b){ b.remove(); });
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'auth-btn';
+    closeBtn.textContent = 'Continue learning \u2192';
+    closeBtn.onclick = closeDailyChallenge;
+    closeBtn.style.marginTop = '8px';
+    var lastChild = document.querySelector('#daily-challenge > div > div:last-child');
+    if (lastChild) lastChild.prepend(closeBtn);
+  }, 500);
+}
+
+function closeDailyChallenge() {
+  document.getElementById('daily-challenge').style.display = 'none';
+}
+
+// --- FLOOR CELEBRATION SYSTEM ---
+const FLOOR_MESSAGES = [
+  { icon: '\uD83C\uDF93', message: 'You understand how the internet works, how computers think, and the logic behind all code. That\'s the foundation everything else is built on.' },
+  { icon: '\uD83C\uDFA8', message: 'You can build real webpages that look good. HTML and CSS are yours now. The visual web is no longer a mystery.' },
+  { icon: '\u26A1', message: 'JavaScript. You made things move, respond, and think. This is where most people stop. You didn\'t.' },
+  { icon: '\uD83D\uDD28', message: 'You built alone. No hand-holding. A real brief, a real product. That\'s the developer mindset.' },
+  { icon: '\uD83C\uDF10', message: 'Frontend, backend, databases, APIs, deployment. You are a full stack developer. Let that land.' },
+  { icon: '\uD83C\uDFAF', message: 'You found your lane and went deep. This is where developers become specialists.' },
+  { icon: '\uD83C\uDFC6', message: 'Floor 7. Professional grade. You started from nothing and built your way here. That distance is yours forever.' }
+];
+
+function showFloorCelebration(floorIndex) {
+  const floor = FLOORS[floorIndex];
+  const msg = FLOOR_MESSAGES[floorIndex];
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+
+  document.getElementById('celebration-icon').textContent = msg.icon;
+  document.getElementById('celebration-floor').textContent = floor.title;
+  document.getElementById('celebration-message').textContent = msg.message;
+  document.getElementById('celebration-xp').textContent = state.xp;
+  document.getElementById('celebration-name').textContent = name ? 'Well done, ' + (name) + '.' : 'Well done.';
+  document.getElementById('floor-celebration').style.display = 'flex';
+}
+
+function closeCelebration() {
+  document.getElementById('floor-celebration').style.display = 'none';
+}
+
+function shareAchievement() {
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || 'Someone';
+  const floor = FLOORS[state.currentFloor - 1];
+  const text = '' + (name) + ' just completed "' + (floor.title) + '" on The Code Book with ' + (state.xp) + ' XP. Learning to code one step at a time. https://the-code-book.netlify.app';
+  if (navigator.share) {
+    navigator.share({ text });
+  } else {
+    navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard \u2014 paste it wherever you want to share.'));
+  }
+}
+
+// --- STREAK PROTECTION ---
+function checkStreakProtection() {
+  const today = new Date().toDateString();
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  const twoDaysAgo = new Date(Date.now() - 172800000).toDateString();
+
+  if (state.lastVisit === twoDaysAgo && state.streak > 0) {
+    // Grace period \u2014 one day missed, show recovery option
+    showStreakRecovery();
+  }
+}
+
+function showStreakRecovery() {
+  if (state.streak < 3) return; // Only show for meaningful streaks
+  const banner = document.createElement('div');
+  banner.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--floor3);border-radius:12px;padding:16px 20px;z-index:5000;max-width:320px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.4);`;
+  banner.innerHTML = `
+    <div style="font-size:24px;margin-bottom:8px;">\uD83D\uDD25</div>
+    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:14px;margin-bottom:6px;">Streak in danger</div>
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Complete one section today to keep your ${state.streak} day streak alive.</div>
+    <button onclick="this.parentElement.remove()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;padding:10px 20px;background:var(--floor3);border:none;color:white;border-radius:6px;cursor:pointer;">Protect my streak</button>
+  `;
+  document.body.appendChild(banner);
+  setTimeout(() => banner.remove(), 8000);
+}
+
+// --- PROGRESS NUDGE SYSTEM ---
+function checkProgressNudge(fi, si) {
+  const floor = FLOORS[fi];
+  const halfway = Math.floor(floor.sections.length / 2);
+  if (si === halfway) {
+    showProgressNudge(fi, si);
+  }
+}
+
+function showProgressNudge(fi, si) {
+  const key = 'nudge-halfway-' + (fi) + '';
+  if (localStorage.getItem(key)) return;
+  localStorage.setItem(key, 'true');
+
+  const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+  const nudge = document.createElement('div');
+  nudge.style.cssText = `position:fixed;bottom:80px;right:16px;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:16px 20px;z-index:5000;max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeUp 0.4s ease;`;
+  nudge.innerHTML = `
+    <div style="font-size:20px;margin-bottom:8px;">\uD83E\uDD89</div>
+    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:13px;margin-bottom:6px;">${name ? 'Halfway there, ' + (name) + '!' : 'Halfway there!'}</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">You\'re halfway through this floor. The hard part is behind you.</div>
+    <button onclick="this.parentElement.remove()" style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 14px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;">Keep going</button>
+  `;
+  document.body.appendChild(nudge);
+  setTimeout(() => nudge.remove && nudge.remove(), 6000);
+}
+
+// --- GUEST MODE ---
+function startAsGuest() {
+  localStorage.setItem('codebook_guest', 'true');
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('cover').style.display = 'flex';
+}
+
+function checkGuestSavePrompt() {
+  const isGuest = localStorage.getItem('codebook_guest');
+  const prompted = localStorage.getItem('codebook_guest_prompted');
+  if (isGuest && !prompted) {
+    // Count only real section completions, not checklist items
+    const sectionIds = new Set();
+    FLOORS.forEach(function(f) { f.sections.forEach(function(s) { sectionIds.add(s.id); }); });
+    const completedSections = Object.keys(state.completed).filter(function(k) {
+      return sectionIds.has(k) && state.completed[k];
+    }).length;
+    if (completedSections >= 3) {
+      localStorage.setItem('codebook_guest_prompted', 'true');
+      showGuestSavePrompt();
+    }
+  }
+}
+
+function showGuestSavePrompt() {
+  const prompt = document.createElement('div');
+  prompt.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;`;
+  prompt.innerHTML = `
+    <div style="background:var(--surface);border:1px solid var(--accent);border-radius:16px;padding:32px;max-width:340px;text-align:center;">
+      <div style="font-size:40px;margin-bottom:16px;">\uD83E\uDD89</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:12px;">Save your progress?</div>
+      <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;">You\'ve completed 3 sections. Create a free account to make sure you never lose your progress.</div>
+      <button onclick="this.closest('div[style*=fixed]').remove();document.getElementById('auth-screen').style.display='flex';switchTab('signup');" style="width:100%;padding:16px;background:var(--accent);border:none;border-radius:8px;color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;">CREATE FREE ACCOUNT</button>
+      <button onclick="this.closest('div[style*=fixed]').remove();" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;">Continue without saving</button>
+    </div>
+  `;
+  document.body.appendChild(prompt);
+}
+
+function renderNav() {
+  const nav = document.getElementById('floor-nav');
+  if (!nav) return;
+  nav.innerHTML = FLOORS.map(function(f, fi) {
+    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isActive = fi === state.currentFloor - 1;
+    var isComplete = isFloorComplete(fi);
+    var sections = isActive ? f.sections.map(function(s, si) {
+      var isDone = state.completed[s.id];
+      var isActiveSec = si === state.currentSection;
+      return '<span class="section-link ' + (isDone ? 'done' : '') + ' ' + (isActiveSec ? 'active' : '') + '" onclick="goToSection(' + fi + ',' + si + ')">' + s.title + '</span>';
+    }).join('') : '';
+    return '<div class="floor-nav-item ' + (isUnlocked ? 'unlocked' : '') + ' ' + (isActive ? 'active' : '') + ' ' + (isComplete ? 'completed' : '') + '" onclick="goToFloor(' + fi + ')">' +
+      '<div class="floor-nav-header">' +
+      '<div class="floor-num" style="color:' + f.color + '">' + (isComplete ? '\u2713' : fi + 1) + '</div>' +
+      '<div class="floor-nav-label">' + f.title + '</div>' +
+      '</div>' +
+      (isActive ? '<div class="floor-sections">' + sections + '</div>' : '') +
+      '</div>';
+  }).join('');
+  updateProgress();
+  renderBuildingMap();
+}
+
+function isFloorComplete(fi) {
+  if (fi < 0) return true;
+  return FLOORS[fi].sections.every(s => state.completed[s.id]);
+}
+
+function updateProgress() {
+  // Build a set of valid section IDs so we only count real sections
+  const sectionIds = new Set();
+  FLOORS.forEach(function(f) { f.sections.forEach(function(s) { sectionIds.add(s.id); }); });
+  const total = sectionIds.size;
+  const done = Object.keys(state.completed).filter(function(k) { return sectionIds.has(k) && state.completed[k]; }).length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  // Sync new layout
+  var lsp = document.getElementById('ls-progress');
+  if (lsp) lsp.textContent = pct + '%';
+}
+function goToFloor(fi) {
+  var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+  if (!isUnlocked) {
+    // Find which sections are still incomplete on the previous floor
+    var prevFloorObj = FLOORS[fi - 1];
+    var incomplete = prevFloorObj.sections.filter(function(s) { return !state.completed[s.id]; });
+    var names = incomplete.slice(0, 2).map(function(s) { return '\u201c' + s.title + '\u201d'; }).join(', ');
+    var extra = incomplete.length > 2 ? ' and ' + (incomplete.length - 2) + ' more' : '';
+    sageMessage('Floor ' + (fi + 1) + ' is locked. Complete Floor ' + fi + ' first \u2014 still needed: ' + names + extra + '.', 'warn');
+    return;
+  }
+  stopNarration();
+
+  // Capture prevFloor BEFORE mutating state so direction is calculated correctly
+  var prevFloor = state.currentFloor - 1;
+  var direction = fi > prevFloor ? 'up' : 'down';
+  var mainContent = document.getElementById('main-content');
+  var mainCol = document.getElementById('main-col') || mainContent;
+
+  function slideIn() {
+    state.currentFloor = fi + 1;
+    state.currentSection = 0;
+    saveState();
+    renderNav();
+    renderFloor(fi, 0);
+
+    if (mainContent) {
+      mainContent.style.overflow = 'hidden';
+      mainContent.classList.remove('elevator-up', 'elevator-down', 'slide-out-up', 'slide-out-down');
+      void mainContent.offsetWidth; // reflow
+      mainContent.classList.add(direction === 'up' ? 'elevator-up' : 'elevator-down');
+      setTimeout(function() {
+        mainContent.classList.remove('elevator-up', 'elevator-down');
+        mainContent.style.overflow = '';
+      }, 560);
+    }
+
+    if (mainCol) mainCol.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+
+  if (mainContent && prevFloor !== fi) {
+    mainContent.classList.remove('elevator-up', 'elevator-down', 'slide-out-up', 'slide-out-down');
+    void mainContent.offsetWidth;
+    mainContent.classList.add(direction === 'up' ? 'slide-out-down' : 'slide-out-up');
+    setTimeout(slideIn, 240);
+  } else {
+    slideIn();
+  }
+}
+function goToSection(fi, si) {
+  stopNarration();
+  state.currentFloor = fi + 1;
+  state.currentSection = si;
+  saveState();
+  renderNav();
+  renderFloor(fi, si);
+}
+
+// \u2500\u2500\u2500 EDITOR DEFAULTS \u2500\u2500\u2500
+var editorDefaults = {
+  html: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 20px; }\n    h1 { color: #c8a96e; }\n  </style>\n</head>\n<body>\n  <h1>I built this.</h1>\n  <p>Day one. Already making things.</p>\n</body>\n</html>',
+  css: '<!DOCTYPE html>\n<html>\n<head>\n<style>\nh1 {\n  color: #c8a96e;\n  font-size: 48px;\n  font-family: Georgia, serif;\n}\n.card {\n  background: #1a1a1a;\n  padding: 24px;\n  border-radius: 12px;\n}\n</style>\n</head>\n<body style="background:#0a0a0a;padding:20px;">\n  <h1>Style me</h1>\n  <div class="card">I am a card</div>\n</body>\n</html>',
+  js: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:sans-serif;padding:20px;">\n<button onclick="go()" style="padding:12px 24px;background:#c8a96e;border:none;cursor:pointer;border-radius:6px;font-size:16px;">Click Me</button>\n<p id="msg" style="margin-top:16px;color:#999;">Nothing happened yet.</p>\n<sc' + 'ript>\nfunction go() {\n  document.getElementById("msg").innerText = "You just ran JavaScript.";\n  document.getElementById("msg").style.color = "#c8a96e";\n}\n</sc' + 'ript>\n</body>\n</html>'
+};
+
+function getEditorDefaults(section) {
+
+    if (!section) {
+        return { code: "", filename: "", challenges: [] };
+    }
+
+    if (section.code && section.code.lang) {
+        var lang = section.code.lang.toLowerCase().trim();
+
+        if (lang.includes("html")) lang = "html";
+        else if (lang.includes("css")) lang = "css";
+        else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
+
+        var code = editorDefaults[lang];
+
+        if (!code) {
+            return { code: "// unknown language", filename: "file.txt", challenges: [] };
+        }
+
+        var filenameMap = {
+            html: "index.html",
+            css: "style.css",
+            js: "script.js"
+        };
+
+        return {
+            code: code,
+            filename: filenameMap[lang] || "file.txt",
+            challenges: section.code.challenges || []
+        };
+    }
+
+    // section exists but has no code block
+    return { code: "", filename: "", challenges: [] };
+}
+
+function loadSection(f1, s1) {
+
+var floor = FLOORS[f1];
+if (!floor) { return; }
+
+var si = parseInt(s1) || 0;
+var section = floor.sections[si];
+if (!section) section = floor.sections[0];
+if (!section) { return; }
+
+  var isDone = state.completed[section.id];
+  var editorDef = getEditorDefaults(section);
+
+  if (!sectionGateState[section.id]) {
+    sectionGateState[section.id] = { read: true, code: false, quiz: isDone || !section.quiz };
+  }
+  var gate = sectionGateState[section.id];
+  var allDone = gate.read && gate.code && gate.quiz;
+  var showEditor = !!(section.code);
+  var showQuiz = !!(section.quiz || section.checklist);
+
+  // Tab bar
+  var tabs = '<div class="section-tabs-bar">' +
+    '<button class="section-tab-btn active" onclick="switchSectionTab(\'read\',\'' + section.id + '\',this)">Read</button>' +
+    (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
+    (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
+    '</div>';
+var fi = state.currentFloor - 1;
+  
+  // READ
+   var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
+    '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
+    '<div class="floor-title">' + floor.title + '<br><em>' + floor.subtitle + '</em></div>' +
+    '<div class="floor-meta">' +
+    '<div class="floor-meta-item"><div class="floor-meta-label">DURATION</div><div class="floor-meta-value">' + floor.duration + '</div></div>' +
+    '<div class="floor-meta-item"><div class="floor-meta-label">SESSIONS</div><div class="floor-meta-value">' + floor.sessions + '</div></div>' +
+    '<div class="floor-meta-item"><div class="floor-meta-label">LENGTH</div><div class="floor-meta-value">' + floor.length + '</div></div>' +
+    '</div></div>' +
+    '<div class="section-content">' +
+    '<div class="section-number">Section ' + (si+1) + ' of ' + floor.sections.length + '</div>' +
+    '<div class="section-title-row"><div class="section-title">' + section.title + '</div>' +
+    (section.hint ? '<button class="hint-btn" onclick="toggleHint(\'hint-' + section.id + '\')" title="Need help?">?</button>' : '') +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;">' +
+    '<button class="listen-btn" id="listen-btn-' + section.id + '" onclick="toggleNarration(\'' + section.id + '\')">' +
+    '<span class="listen-dot"></span>&#9654; Listen</button>' +
+    '<span class="offline-pill"><span class="offline-dot-pulse"></span>AVAILABLE OFFLINE</span>' +
+    '</div>';
+
+  if (section.hint) {
+    r += '<div class="hint-box" id="hint-' + section.id + '">' +
+      '<div class="owl-wrap"><div class="owl-avatar">&#x1F989;</div>' +
+      '<div class="owl-bubble"><div class="owl-name">SAGE &mdash; YOUR GUIDE</div>' +
+      '<div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div></div></div></div>';
+  }
+
+  r += '<div class="section-body">' + section.body.replace(/\n/g, '<br><br>') + '</div>';
+
+  if (section.callout) {
+    r += '<div class="callout ' + (section.callout.type || '') + '">' +
+      '<div class="callout-label">' + section.callout.label + '</div>' +
+      '<div class="callout-text">' + section.callout.text.replace(/\n/g, '<br>') + '</div></div>';
+  }
+  if (section.code) {
+    r += '<div class="code-block"><div class="code-header">' +
+      '<div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div>' +
+      '<div class="code-lang">' + section.code.lang + '</div></div>' +
+      '<div class="code-body">' + section.code.lines.join('\n') + '</div></div>';
+  }
+  if (section.callout2) {
+    r += '<div class="callout ' + (section.callout2.type || '') + '">' +
+      '<div class="callout-label">' + section.callout2.label + '</div>' +
+      '<div class="callout-text">' + section.callout2.text.replace(/\n/g, '<br>') + '</div></div>';
+  }
+  if (section.checklist) {
+    r += '<ul class="checklist">';
+    section.checklist.forEach(function(item, ci) {
+      var key = section.id + '-' + ci;
+      // Read from checklistDone, not completed, to keep section completion separate
+      var checked = (state.checklistDone || {})[key];
+      r += '<li class="' + (checked ? 'checked' : '') + '" onclick="toggleCheck(\'' + key + '\',this)">' +
+        '<div class="check-box">' + (checked ? '&#10003;' : '') + '</div>' + item + '</li>';
+    });
+    r += '</ul>';
+  }
+  r += '</div>';
+
+  // CODE EDITOR
+  var savedCode = localStorage.getItem('code_' + section.id) || editorDef.code;
+  var c = '<div style="padding:24px 32px;">' +
+    '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;margin-bottom:6px;">Live Code Editor</div>' +
+    '<div style="font-size:14px;color:var(--text-dim);margin-bottom:20px;">Write code on the left. See it render live on the right.</div>' +
+    '<div class="editor-wrapper">' +
+    '<div class="editor-topbar">' +
+    '<div class="editor-mac-dots"><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div></div>' +
+    '<div class="editor-filename">' + editorDef.filename + '</div>' +
+    '<div class="editor-action-row">' +
+    '<button class="editor-reset-btn" onclick="resetEditor(\'' + section.id + '\')">&#8634; Reset</button>' +
+    '<button class="editor-run-btn" onclick="runEditor(\'' + section.id + '\')">&#9654; Run</button>' +
+    '</div></div>' +
+    '<div class="editor-split">' +
+    '<div class="editor-code-pane">' +
+    '<div class="editor-line-nums" id="lines-' + section.id + '">1</div>' +
+    '<textarea class="editor-textarea" id="editor-' + section.id + '" spellcheck="false"' +
+    ' oninput="editorInput(\'' + section.id + '\')" onkeydown="handleEditorTab(event)">' +
+    escHtml(savedCode) + '</textarea></div>' +
+    '<div class="editor-preview-pane">' +
+    '<div class="editor-preview-label">PREVIEW</div>' +
+    '<iframe class="editor-preview-iframe" id="preview-' + section.id + '"></iframe>' +
+    '</div></div>' +
+    '<div class="editor-console" id="console-' + section.id + '">' +
+    '<div class="editor-console-line">&#9658; Click Run or edit to preview</div></div></div>' +
+    '<div class="editor-challenges"><div class="editor-challenge-label">TRY THESE</div>';
+  ((editorDef && editorDef.challenges) || []).forEach(function(ch) {
+    c += '<div class="editor-challenge-item">&rarr; ' + ch + '</div>';
+  });
+  c += '</div></div>';
+
+  // QUIZ
+  var answered = state.quizAnswered[section.id];
+  var q = '<div style="padding:24px 32px;">' +
+    '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;margin-bottom:6px;">Knowledge Check</div>' +
+    '<div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Answer to unlock the section and earn XP.</div>';
+  if (section.quiz) {
+    var qz = section.quiz;
+    q += '<div class="quiz-block"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
+      '<div class="quiz-question">' + qz.question + '</div><div class="quiz-options">';
+    ((qz && qz.options) || []).forEach(function(opt, oi) {
+      var cls = '';
+      if (answered !== undefined) {
+        if (oi === qz.correct) cls = 'correct';
+        else if (oi === answered) cls = 'wrong';
+      }
+      q += '<button class="quiz-option ' + cls + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
+        (answered !== undefined ? ' disabled' : '') + '>' + opt + '</button>';
+    });
+    q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
+      (answered !== undefined ? qz.feedback : '') + '</div></div>';
+  } else {
+    q += '<div class="quiz-block"><div class="quiz-label">READING SECTION</div>' +
+      '<div style="font-size:14px;color:var(--text-dim);margin-top:8px;">Complete the reading, then mark as done below.</div></div>';
+  }
+  q += '</div>';
+
+  // GATE
+  var g = '<div class="gate-box" style="margin:0 32px 32px;">' +
+    '<div class="gate-label">TO COMPLETE THIS SECTION</div>' +
+    '<div class="gate-checks">' +
+    '<div class="gate-check-row done" id="gate-read-' + section.id + '"><div class="gate-check-dot">&#10003;</div>Read the section</div>' +
+    '<div class="gate-check-row ' + (gate.code ? 'done' : '') + '" id="gate-code-' + section.id + '"><div class="gate-check-dot">' + (gate.code ? '&#10003;' : '') + '</div>Try the code editor</div>' +
+    '<div class="gate-check-row ' + (gate.quiz ? 'done' : '') + '" id="gate-quiz-' + section.id + '"><div class="gate-check-dot">' + (gate.quiz ? '&#10003;' : '') + '</div>' + (section.quiz ? 'Pass the knowledge check' : 'Complete the checklist') + '</div>' +
+    '</div>' +
+    '<button class="complete-btn" id="complete-btn-' + section.id + '" onclick="completeSection(\'' + section.id + '\',' + fi + ',' + si + ')"' + (isDone ? ' disabled' : '') + '>' +
+    (isDone ? '&#10003; Section Complete' : 'Mark as Complete \u2192 +25 XP') +
+    '</button></div>';
+
+  // NAV
+  var nav = '<div class="section-nav">' +
+    '<button class="nav-btn" onclick="prevSection(' + fi + ',' + si + ')"' + ((fi === 0 && si === 0) ? ' disabled' : '')  + '>&#8592; Previous</button>' +
+    '<button class="nav-btn primary" onclick="nextSection(' + fi + ',' + si + ')">' +
+  ((fi === FLOORS.length - 1 && si === floor.sections.length - 1)
+  ? (fi < FLOORS.length - 1 ? 'Next Floor \u2192' : 'Complete')
+  : 'Next \u2192') +
+    '</button></div>';
+
+if (!isLoggedIn && !isGuest) {
+  document.getElementById('main-content').innerHTML =
+    '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:70vh;font-family:sans-serif;text-align:center;">' +
+    '<h1 style="font-size:32px;margin-bottom:10px;">The Code Book</h1>' +
+    '<p style="opacity:0.7;margin-bottom:20px;">Learn coding step by step. Start your free trial.</p>' +
+    '<button onclick="startAsGuest()" style="padding:12px 24px;border:none;border-radius:8px;background:#4CAF50;color:white;font-size:16px;cursor:pointer;">Try Free Trial</button>' +
+    '</div>';
+  return;
+}
+  document.getElementById('main-content').innerHTML = tabs +
+    '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
+    (showEditor ? '<div class="section-panel" id="spanel-code-' + section.id + '">' + c + '</div>' : '') +
+    (showQuiz ? '<div class="section-panel" id="spanel-quiz-' + section.id + '">' + q + '</div>' : '') +
+    g + nav;
+
+  document.getElementById('main-content').scrollTop = 0;
+  window.scrollTo(0, 0);
+  startSectionTimer(section.id);
+  checkProgressNudge(fi, si);
+  checkStreakProtection();
+  if (showEditor) setTimeout(function() { initEditor(section.id, editorDef.code); }, 100);
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function switchSectionTab(tab, sectionId, btn) {
+  var mc = document.getElementById('main-content');
+  mc.querySelectorAll('.section-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+  mc.querySelectorAll('.section-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  var panel = document.getElementById('spanel-' + tab + '-' + sectionId);
+  if (panel) panel.classList.add('active');
+  if (tab === 'code') {
+    var fi = state.currentFloor - 1;
+    var section = FLOORS[fi].sections[state.currentSection];
+    setTimeout(function() {
+      initEditor(sectionId, getEditorDefaults(section).code);
+      markGate(sectionId, 'code');
+    }, 150);
+    sageMessage('Write code. Break it. Fix it. That process is the actual learning.', 'tip');
+  }
+  if (tab === 'quiz') sageMessage('Take your time. The explanation after the answer matters as much as getting it right.', 'tip');
+  if (tab === 'read') sageMessage('Read it like a road sign. Extract the pattern. Move on.', 'encourage');
+}
+
+function markGate(sectionId, key) {
+  if (!sectionGateState[sectionId]) sectionGateState[sectionId] = { read: true, code: false, quiz: false };
+  if (sectionGateState[sectionId][key]) return;
+  sectionGateState[sectionId][key] = true;
+  var el = document.getElementById('gate-' + key + '-' + sectionId);
+  if (el) {
+    el.classList.add('done');
+    var dot = el.querySelector('.gate-check-dot');
+    if (dot) dot.innerHTML = '&#10003;';
+  }
+  var gate = sectionGateState[sectionId];
+  if (gate.read && gate.code && gate.quiz) {
+    var btn = document.getElementById('complete-btn-' + sectionId);
+    if (btn && !btn.disabled) btn.textContent = 'Mark as Complete \u2192 +25 XP';
+    sageMessage('All gates cleared. Mark this section complete when ready.', 'celebrate');
+  }
+}
+
+function answerQuizTabbed(sectionId, chosen, correct, fi, si) {
+  state.quizAnswered[sectionId] = chosen;
+  if (chosen === correct) {
+    awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+    markGate(sectionId, 'quiz');
+  }
+  renderFloor(fi, si);
+  setTimeout(function() {
+    var quizPanel = document.getElementById('spanel-quiz-' + sectionId);
+    if (quizPanel) {
+      document.querySelectorAll('.section-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.section-panel').forEach(function(p){ p.classList.remove('active'); });
+      document.querySelectorAll('.section-tab-btn').forEach(function(b){ if (b.textContent === 'Quiz') b.classList.add('active'); });
+      quizPanel.classList.add('active');
+    }
+  }, 50);
+}
+
+var editorTimers = {};
+
+function initEditor(sectionId, defaultCode) {
+  var ta = document.getElementById('editor-' + sectionId);
+  if (!ta) return;
+  var saved = localStorage.getItem('code_' + sectionId);
+  // Use saved code if available, otherwise fall back to the provided default
+  ta.value = saved || defaultCode || '';
+  updateEditorLines(sectionId);
+  runEditorCode(sectionId);
+}
+
+function editorInput(sectionId) {
+  updateEditorLines(sectionId);
+  var ta = document.getElementById('editor-' + sectionId);
+  if (ta) localStorage.setItem('code_' + sectionId, ta.value);
+  clearTimeout(editorTimers[sectionId]);
+  editorTimers[sectionId] = setTimeout(function(){ runEditorCode(sectionId); }, 700);
+}
+
+function runEditor(sectionId) {
+  runEditorCode(sectionId);
+  markGate(sectionId, 'code');
+}
+
+function runEditorCode(sectionId) {
+  var ta = document.getElementById('editor-' + sectionId);
+  var frame = document.getElementById('preview-' + sectionId);
+  var con = document.getElementById('console-' + sectionId);
+  if (!ta || !frame) return;
+  try {
+    frame.srcdoc = ta.value;
+    if (con) con.innerHTML = '<div class="editor-console-line ok">&#9658; Rendered successfully</div>';
+    markGate(sectionId, 'code');
+  } catch(e) {
+    if (con) con.innerHTML = '<div class="editor-console-line err">&#9658; Error: ' + e.message + '</div>';
+  }
+}
+
+function resetEditor(sectionId) {
+  var fi = state.currentFloor - 1;
+  var section = FLOORS[fi].sections[state.currentSection];
+  var ta = document.getElementById('editor-' + sectionId);
+  if (ta) {
+    ta.value = getEditorDefaults(section).code;
+    localStorage.removeItem('code_' + sectionId);
+    updateEditorLines(sectionId);
+    runEditorCode(sectionId);
+  }
+}
+
+function updateEditorLines(sectionId) {
+  var ta = document.getElementById('editor-' + sectionId);
+  var nums = document.getElementById('lines-' + sectionId);
+  if (!ta || !nums) return;
+  var lines = ta.value.split('\n').length;
+  var html = '';
+  for (var i = 1; i <= Math.max(lines, 10); i++) html += i + '<br>';
+  nums.innerHTML = html;
+}
+
+function handleEditorTab(e) {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    var t = e.target;
+    var s = t.selectionStart;
+    t.value = t.value.substring(0, s) + '  ' + t.value.substring(t.selectionEnd);
+    t.selectionStart = t.selectionEnd = s + 2;
+    updateEditorLines(t.id.replace('editor-', ''));
+  }
+}
+
+
+
+function switchTopNav(tab, btn) {
+  // Update top bar tabs
+  document.querySelectorAll('.top-nav-tab').forEach(function(b){ b.classList.remove('active'); });
+  if (btn && btn.classList && btn.classList.contains('top-nav-tab')) btn.classList.add('active');
+
+  // Update mobile bottom bar
+  document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map' };
+  if (mobMap[tab]) {
+    var mb = document.getElementById(mobMap[tab]);
+    if (mb) mb.classList.add('active');
+  }
+
+  // Show/hide panels
+  document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
+  var mainContent = document.getElementById('main-content');
+
+  if (tab === 'learn') {
+    if (mainContent) mainContent.style.display = '';
+    var lp = document.getElementById('panel-learn');
+    if (lp) lp.classList.add('active');
+  } else {
+    if (mainContent) mainContent.style.display = 'none';
+    var panel = document.getElementById('panel-' + tab);
+    if (panel) {
+      panel.classList.add('active');
+      if (tab === 'build') renderBuildPanel();
+      if (tab === 'challenge') renderChallengePanel();
+      if (tab === 'map') renderMapPanel();
+    }
+  }
+
+  // Scroll to top
+  var mainCol = document.getElementById('main-col');
+  if (mainCol) mainCol.scrollTop = 0;
+}
+function setMobActive(btn) {
+  document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+}
+
+function toggleSidebar() {
+  var sb = document.getElementById('left-sidebar');
+  var ov = document.getElementById('sidebar-overlay');
+  if (sb) sb.classList.toggle('open');
+  if (ov) ov.classList.toggle('visible');
+}
+
+function closeSidebar() {
+  var sb = document.getElementById('left-sidebar');
+  var ov = document.getElementById('sidebar-overlay');
+  if (sb) sb.classList.remove('open');
+  if (ov) ov.classList.remove('visible');
+}
+
+var FLOOR_COLORS = ['#c8a96e','#7eb8c8','#c87e9a','#9a7ec8','#7ec8a9','#c8967e','#e8d5a0'];
+
+function renderVisualBuilding() {
+  var wrap = document.getElementById('vb-building');
+  if (!wrap) return;
+  var roof = wrap.querySelector('.vb-roof');
+  wrap.innerHTML = '';
+  if (roof) { wrap.appendChild(roof); } else {
+    var r = document.createElement('div');
+    r.className = 'vb-roof';
+    wrap.appendChild(r);
+  }
+  for (var i = FLOORS.length - 1; i >= 0; i--) {
+    var color = FLOOR_COLORS[i] || '#c8a96e';
+    var isUnlocked = i === 0 || isFloorComplete(i - 1);
+    var isActive = (state.currentFloor - 1) === i;
+    var isComplete = isFloorComplete(i);
+    var div = document.createElement('div');
+    div.className = 'vb-floor-row' +
+      (isActive ? ' vb-active' : '') +
+      (isUnlocked ? ' vb-unlocked' : ' vb-locked');
+    div.style.setProperty('--floor-color', color);
+    if (isUnlocked) {
+      div.onclick = (function(fi){ return function(){ goToFloor(fi); closeSidebar(); }; })(i);
+    }
+    div.innerHTML = '<div class="vb-wins"><div class="vb-win"></div><div class="vb-win"></div><div class="vb-win"></div></div>' +
+      '<div class="vb-fnum">F' + (i+1) + (isComplete ? ' \u2713' : '') + '</div>';
+    wrap.appendChild(div);
+  }
+}
+
+function renderLeftNav() {
+  var nav = document.getElementById('left-floor-nav');
+  if (!nav) return;
+  nav.innerHTML = '';
+  FLOORS.forEach(function(floor, fi) {
+    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isActive = (state.currentFloor - 1) === fi;
+    var isComplete = isFloorComplete(fi);
+    var floorDiv = document.createElement('div');
+    floorDiv.className = 'left-floor-item' + (isActive ? ' active' : '') + (isComplete ? ' completed' : '');
+    if (isUnlocked) {
+      floorDiv.onclick = (function(fii){ return function(){ goToFloor(fii); closeSidebar(); }; })(fi);
+    }
+    floorDiv.innerHTML = '<div class="left-floor-num">FLOOR ' + (fi+1) +
+      (isComplete ? ' \u2713' : (!isUnlocked ? ' \uD83D\uDD12' : '')) + '</div>' +
+      '<div class="left-floor-name">' + floor.title + '</div>';
+    if (isActive) {
+      var secList = document.createElement('div');
+      secList.className = 'left-section-list';
+      floor.sections.forEach(function(sec, si) {
+        var isDone = !!state.completed[sec.id];
+        var isCurrent = si === state.currentSection;
+        var item = document.createElement('div');
+        item.className = 'left-section-item' + (isCurrent ? ' current' : '') + (isDone ? ' done' : '');
+        item.innerHTML = '<div class="left-section-dot"></div>' + sec.title;
+        item.onclick = (function(fii, sii){ return function(){ goToSection(fii, sii); closeSidebar(); }; })(fi, si);
+        secList.appendChild(item);
+      });
+      floorDiv.appendChild(secList);
+    }
+    nav.appendChild(floorDiv);
+  });
+}
+
+function renderRightNav() {
+  var fi = state.currentFloor - 1;
+  var floor = FLOORS[fi];
+  var label = document.getElementById('rs-floor-label');
+  if (label) label.textContent = 'FLOOR ' + state.currentFloor + ' \u2014 SECTIONS';
+  var list = document.getElementById('rs-section-list');
+  if (list) {
+    list.innerHTML = '';
+    floor.sections.forEach(function(sec, si) {
+      var isDone = !!state.completed[sec.id];
+      var isCurrent = si === state.currentSection;
+      var item = document.createElement('div');
+      item.className = 'sec-progress-item' + (isCurrent ? ' sp-active' : '') + (isDone ? ' sp-done' : '');
+      item.innerHTML = '<div class="sp-dot">' + (isDone ? '&#10003;' : (si+1)) + '</div><span>' + sec.title + '</span>';
+      item.onclick = (function(sii){ return function(){ goToSection(fi, sii); }; })(si);
+      list.appendChild(item);
+    });
+  }
+  updateDailyGoalBar();
+  updateAchievements();
+  updateTopChips();
+  updateLeftStats();
+}
+
+function updateTopChips() {
+  var xp = document.getElementById('top-xp-chip');
+  var st = document.getElementById('top-streak-chip');
+  if (xp) xp.textContent = '\u26a1 ' + (state.xp || 0) + ' XP';
+  if (st) st.textContent = '\uD83D\uDD25 ' + (state.streak || 0);
+}
+
+function getLevelName(n) {
+  return ['','Curious','Learning','Building','Fluent','Advanced','Expert','Master'][n] || '';
+}
+
+function updateLeftStats() {
+  var lvl = getCurrentLevel();
+  var idx = 0;
+  for (var i = 0; i < LEVELS.length; i++) { if (LEVELS[i] === lvl) { idx = i; break; } }
+  var nextLvl = LEVELS[idx + 1];
+  var lsLevel = document.getElementById('ls-level');
+  var lsStreak = document.getElementById('ls-streak');
+  var lsBar = document.getElementById('ls-xp-bar');
+  var lsProgress = document.getElementById('ls-progress');
+  if (lsLevel) lsLevel.textContent = lvl.level + ' \u2014 ' + getLevelName(lvl.level);
+  if (lsStreak) lsStreak.textContent = '\uD83D\uDD25 ' + (state.streak || 0) + ' days';
+  if (lsBar && nextLvl) {
+    var pct = Math.min(100, Math.round(((state.xp - lvl.xp) / (nextLvl.xp - lvl.xp)) * 100));
+    lsBar.style.width = pct + '%';
+  }
+  if (lsProgress) {
+    var total = 0, done = 0;
+    FLOORS.forEach(function(f){ f.sections.forEach(function(s){ total++; if (state.completed[s.id]) done++; }); });
+    lsProgress.textContent = Math.round((done/total)*100) + '%';
+  }
+}
+
+function updateDailyGoalBar() {
+  var today = new Date().toDateString();
+  var todayKey = 'daily_sections_' + today;
+  var todaySecs = parseInt(localStorage.getItem(todayKey) || '0');
+  var goal = parseInt(localStorage.getItem('codebook_daily_goal') || '1');
+  var pct = Math.min(100, Math.round((todaySecs / goal) * 100));
+  var remaining = Math.max(0, goal - todaySecs);
+  var bar = document.getElementById('rs-goal-bar');
+  var txt = document.getElementById('rs-goal-text');
+  var pctEl = document.getElementById('rs-goal-pct');
+  var sub = document.getElementById('rs-goal-sub');
+  if (bar) bar.style.width = pct + '%';
+  if (txt) txt.textContent = todaySecs + ' of ' + goal + ' sections';
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (sub) sub.textContent = remaining > 0 ? remaining + ' more to hit your daily goal' : 'Daily goal complete! \uD83C\uDF89';
+}
+
+function updateAchievements() {
+  var items = document.querySelectorAll('.ach-item');
+  var checks = [
+    isFloorComplete(0),
+    (state.streak || 0) >= 7,
+    Object.keys(localStorage).some(function(k){ return k.indexOf('code_') === 0; }),
+    isFloorComplete(1),
+    isFloorComplete(6),
+    (state.streak || 0) >= 30
+  ];
+  items.forEach(function(item, i) {
+    if (checks[i]) item.classList.remove('ach-locked');
+    else item.classList.add('ach-locked');
+  });
+}
+
+function updateSageSidebar(text) {
+  var el = document.getElementById('sage-sidebar-text');
+  if (!el || !text) return;
+  el.style.opacity = '0';
+  setTimeout(function() { el.textContent = text; el.style.opacity = '1'; }, 200);
+}
+
+function renderAllNav() {
+  renderVisualBuilding();
+  renderLeftNav();
+  renderRightNav();
+}
+
+function initSageSidebarSync() {
+  var orig = window.sageMessage;
+  if (orig) {
+    window.sageMessage = function(text, mood) {
+      orig.call(this, text, mood);
+      updateSageSidebar(text);
+    };
+  }
+}
+
+// Patch renderNav to also update sidebars
+// Guard flag prevents infinite recursion (renderNav -> renderAllNav -> renderLeftNav -> goToFloor -> renderNav)
+var _origRenderNav = null;
+var _renderNavRunning = false;
+function patchRenderNav() {
+  _origRenderNav = window.renderNav;
+  if (_origRenderNav) {
+    window.renderNav = function() {
+      if (_renderNavRunning) return;
+      _renderNavRunning = true;
+      try {
+        _origRenderNav();
+        renderAllNav();
+      } finally {
+        _renderNavRunning = false;
+      }
+    };
+  }
+}
+
+function answerQuiz(sectionId, chosen, correct) {
+  state.quizAnswered[sectionId] = chosen;
+  if (chosen === correct) {
+    awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+  }
+  const fi = state.currentFloor - 1;
+  const si = state.currentSection;
+  renderFloor(fi, si);
+}
+
+function toggleCheck(key, el) {
+  // Checklist items are stored in a separate dict so they don't pollute
+  // state.completed (which tracks section completion) or distort progress %.
+  if (!state.checklistDone) state.checklistDone = {};
+  state.checklistDone[key] = !state.checklistDone[key];
+  el.classList.toggle('checked');
+  el.querySelector('.check-box').textContent = state.checklistDone[key] ? '\u2713' : '';
+  if (state.checklistDone[key]) {
+    el.classList.add('just-checked');
+    setTimeout(() => el.classList.remove('just-checked'), 400);
+    const rect = el.getBoundingClientRect();
+    awardXP(30, 'check-' + key, rect.left + rect.width / 2, rect.top);
+  }
+  saveState();
+}
+
+function completeSection(sectionId, fi, si) {
+  // Check gates before allowing completion
+  var gate = sectionGateState[sectionId] || {};
+  var section = FLOORS[fi].sections[si];
+  var needsQuiz = !!(section && section.quiz);
+  if (needsQuiz && !gate.quiz) {
+    sageMessage('Answer the knowledge check first \u2014 then you can mark this section complete.', 'warn');
+    return;
+  }
+
+  state.completed[sectionId] = true;
+  awardXP(25, 'complete-' + sectionId, window.innerWidth / 2, 300);
+  playCompletionSound();
+  trackDailySection();
+
+  const isNowComplete = isFloorComplete(fi);
+  if (isNowComplete) {
+    awardXP(250, 'floor-' + fi, window.innerWidth / 2, 250);
+    setTimeout(() => showFloorCelebration(fi), 600);
+  }
+  saveState();
+  checkGuestSavePrompt();
+  const content = document.querySelector('.section-content');
+  if (content) {
+    content.classList.add('section-complete-flash');
+    setTimeout(() => content.classList.remove('section-complete-flash'), 1000);
+  }
+  updateAchievements();
+  updateDailyGoalBar();
+  updateTopChips();
+  renderNav();
+  renderFloor(fi, si);
+}
+
+function prevSection(fi, si) {
+  if (si > 0) { state.currentSection = si - 1; saveState(); renderNav(); renderFloor(fi, si - 1); }
+  else if (fi > 0) { goToFloor(fi - 1); }
+}
+
+function nextSection(fi, si) {
+  // Auto-complete the section if the user clicks Next without marking it done
+  const floor = FLOORS[fi];
+  const section = floor.sections[si];
+  if (!state.completed[section.id]) {
+    state.completed[section.id] = true;
+    awardXP(25, 'complete-' + section.id, window.innerWidth / 2, 300);
+    const isNowComplete = isFloorComplete(fi);
+    if (isNowComplete) {
+      awardXP(250, 'floor-' + fi, window.innerWidth / 2, 250);
+      setTimeout(function() { showFloorCelebration(fi); }, 600);
+    }
+    saveState();
+  }
+  if (si < floor.sections.length - 1) { state.currentSection = si + 1; saveState(); renderNav(); renderFloor(fi, si + 1); }
+  else if (fi < FLOORS.length - 1) { goToFloor(fi + 1); }
+}
+
+// --- VOICE NARRATION SYSTEM ---
+let currentUtterance = null;
+let currentNarrationId = null;
+
+function getReadableText(sectionId) {
+  const fi = state.currentFloor - 1;
+  const section = FLOORS[fi].sections.find(s => s.id === sectionId);
+  if (!section) return '';
+  const strip = t => t.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+  let parts = [];
+  parts.push(section.title + '.');
+  parts.push(strip(section.body));
+  if (section.callout) parts.push(section.callout.label + '. ' + strip(section.callout.text));
+  if (section.callout2) parts.push(section.callout2.label + '. ' + strip(section.callout2.text));
+  if (section.hint) parts.push('Hint. ' + strip(section.hint));
+  return parts.join(' ... ');
+}
+
+function toggleNarration(sectionId) {
+  const btn = document.getElementById('listen-btn-' + sectionId);
+  if (currentNarrationId === sectionId && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    currentNarrationId = null;
+    if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const text = getReadableText(sectionId);
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 0.88;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+  utterance.onend = () => {
+    currentNarrationId = null;
+    if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
+  };
+  currentUtterance = utterance;
+  currentNarrationId = sectionId;
+  window.speechSynthesis.speak(utterance);
+  if (btn) { btn.classList.add('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u23F8 Pause'; }
+}
+
+function stopNarration() {
+  if (window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+  currentNarrationId = null;
+}
+
+// ============================================
+// FLOOR 2 \u2014 CONTROL PANEL INTERACTION
+// ============================================
+function f2SelectValue(value) {
+  const screen = document.getElementById('f2-status-screen');
+  const blank = document.getElementById('f2-blank');
+  const hint = document.getElementById('f2-hint');
+  const ascend = document.getElementById('f2-ascend');
+  const pellets = document.querySelectorAll('.data-pellet');
+
+  if (value === 2) {
+    // Success
+    blank.textContent = '2';
+    blank.classList.add('filled');
+    screen.classList.remove('shake');
+    screen.classList.add('success');
+    screen.querySelector('.status-text').textContent = 'STATUS: FLOOR 2 \u2713';
+    hint.classList.remove('visible');
+    pellets.forEach(p => p.disabled = true);
+
+    // Play mechanical startup sound
+    playF2Sound();
+
+    // Award XP
+    setTimeout(() => {
+      awardXP(50, 'f2-variable-task', window.innerWidth / 2, 200);
+      sageMessage('Variable assigned. The system is online. Floor 3 is now accessible.', 'celebrate');
+    }, 400);
+
+    // Show ascend button
+    setTimeout(() => {
+      if (ascend) {
+        ascend.style.display = 'block';
+        localStorage.setItem('f2_complete', 'true');
+      }
+    }, 800);
+
+  } else {
+    // Failure
+    blank.textContent = value === 1 ? '1' : '"Lobby"';
+    blank.classList.remove('filled');
+    screen.classList.remove('success');
+    void screen.offsetWidth;
+    screen.classList.add('shake');
+    setTimeout(() => screen.classList.remove('shake'), 500);
+    hint.classList.add('visible');
+    sageMessage('Variables must be accurate. We are on Floor 2 \u2014 so the value must be 2!', 'warn');
+  }
+}
+
+function playF2Sound() {
+  try {
+    const ctx = getAudioContext();
+    const times = [0, 0.12, 0.22];
+    const freqs = [220, 330, 440];
+    times.forEach((t, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freqs[i], ctx.currentTime + t);
+      gain.gain.setValueAtTime(0.06, ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.1);
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + 0.12);
+    });
+  } catch(e) {}
+}
+
+function f2Ascend() {
+  if (!isFloorComplete(1)) {
+    var incomplete = FLOORS[1].sections.filter(function(s) { return !state.completed[s.id]; });
+    var names = incomplete.slice(0, 2).map(function(s) { return '\u201c' + s.title + '\u201d'; }).join(', ');
+    var extra = incomplete.length > 2 ? ' and ' + (incomplete.length - 2) + ' more' : '';
+    sageMessage('You\u2019re not quite ready yet. Complete these sections first: ' + names + extra + '.', 'warn');
+    return;
+  }
+  goToFloor(2);
+}
+
+// ============================================
+// SYSTEM 1 \u2014 ELEVATOR TRANSITIONS
+// ============================================
+let lastFloorIndex = 0;
+function renderFloor(fi, si) {
+    // TEMP FIX: just load section
+    loadSection(fi, si);
+}
+function renderFloorWithElevator(fi, si) {
+  const direction = fi > lastFloorIndex ? 'up' : fi < lastFloorIndex ? 'down' : null;
+  lastFloorIndex = fi;
+  renderFloor(fi, si);
+  if (direction) {
+    const panel = document.querySelector('.floor-panel') || document.getElementById('main-content').firstElementChild;
+    if (panel) {
+      panel.classList.remove('elevator-up', 'elevator-down');
+      void panel.offsetWidth;
+      panel.classList.add(direction === 'up' ? 'elevator-up' : 'elevator-down');
+    }
+  }
+}
+
+// ============================================
+// SYSTEM 2 \u2014 SAGE SPEECH BUBBLE
+// ============================================
+let sageBubbleTimeout = null;
+let sageIdleTimeout = null;
+
+
+const SAGE_MOODS = {
+  encourage: { icon: '\uD83E\uDD89', color: 'var(--accent)' },
+  tip:       { icon: '\uD83E\uDD89', color: 'var(--accent2)' },
+  warn:      { icon: '\uD83E\uDD89', color: 'var(--floor3)' },
+  celebrate: { icon: '\uD83E\uDD89', color: 'var(--success)' }
+};
+
+const SAGE_IDLE_MESSAGES = [
+  { text: "Every great structure starts with a foundation that refuses to be rushed. Take the time this section needs.", mood: 'encourage' },
+  { text: "The best architects read the blueprint three times before they lift a tool. Read this again.", mood: 'tip' },
+  { text: "Three minutes on one section is not slow. It is precise. Precision is what separates builders from dreamers.", mood: 'encourage' },
+  { text: "If something is unclear, tap the hint. I designed it for exactly this moment.", mood: 'tip' },
+  { text: "A building is only as strong as the floor you are standing on. Do not ascend until this one is solid.", mood: 'warn' },
+  { text: "Stillness before understanding is not wasted time. It is the load-bearing wall of knowledge.", mood: 'encourage' }
+];
+
+function sageMessage(text, mood) {
+  // Remove existing bubble
+  const existing = document.getElementById('sage-bubble');
+  if (existing) existing.remove();
+  if (sageBubbleTimeout) clearTimeout(sageBubbleTimeout);
+
+  const m = SAGE_MOODS[mood] || SAGE_MOODS.encourage;
+  const bubble = document.createElement('div');
+  bubble.className = 'sage-bubble';
+  bubble.id = 'sage-bubble';
+bubble.innerHTML =
+  "<button class='sage-bubble-close' onclick='this.parentElement.remove()'>\u00D7</button>" +
+  "<div class='sage-bubble-header'>" +
+    "<span class='sage-bubble-icon'>" + m.icon + "</span>" +
+    "<span class='sage-bubble-name' style='color:" + m.color + "'>SAGE</span>" +
+  "</div>" +
+  "<div class='sage-bubble-text'>" + text + "</div>";
+  document.body.appendChild(bubble);
+  sageBubbleTimeout = setTimeout(() => bubble.remove && bubble.remove(), 8000);
+}
+
+function resetSageIdleTimer() {
+  if (sageIdleTimer) clearTimeout(sageIdleTimer);
+  sageIdleTimer = setTimeout(() => {
+    const msg = SAGE_IDLE_MESSAGES[Math.floor(Math.random() * SAGE_IDLE_MESSAGES.length)];
+    sageMessage(msg.text, msg.mood);
+  }, 3 * 60 * 1000); // 3 minutes
+}
+
+// Reset idle timer on user activity
+['click', 'scroll', 'keydown', 'touchstart'].forEach(evt => {
+  document.addEventListener(evt, resetSageIdleTimer, { passive: true });
+});
+
+// ============================================
+// SYSTEM 3 \u2014 GOLDEN DUST XP PARTICLES
+// ============================================
+function spawnGoldenDust(x, y) {
+  const count = 12;
+  for (let i = 0; i < count; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'xp-particle';
+    const angle = (Math.PI * 2 / count) * i + (Math.random() - 0.5) * 0.8;
+    const dist  = 30 + Math.random() * 50;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist - 20;
+    const dur = 0.6 + Math.random() * 0.5;
+    const size = 3 + Math.random() * 4;
+    particle.style.cssText =
+  "left:" + x + "px; top:" + y + "px;" +
+  "width:" + size + "px; height:" + size + "px;";
+     
+    document.body.appendChild(particle);
+    setTimeout(() => particle.remove(), dur * 1000 + 100);
+  }
+}
+
+// ============================================
+// SYSTEM 4 \u2014 BUILDING MAP
+// ============================================
+function renderBuildingMap() {
+  var map = document.getElementById('building-map');
+  if (!map) return;
+  var FLOOR_COLORS_BM = ['--floor1', '--floor2', '--floor3', '--floor4', '--floor5', '--floor6', '--floor7'];
+  map.innerHTML = FLOORS.slice().reverse().map(function(f, ri) {
+    var fi = FLOORS.length - 1 - ri;
+    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isActive = fi === state.currentFloor - 1;
+    var isComplete = isFloorComplete(fi);
+    var color = 'var(' + (FLOOR_COLORS_BM[fi] || '--floor1') + ')';
+    var shortName = f.title.split('-')[0].trim();
+    return '<div class="building-floor ' +
+      (isActive ? 'active ' : '') +
+      (isUnlocked ? 'unlocked' : 'locked') + '"' +
+      ' style="--floor-color:' + color + '"' +
+      (isUnlocked ? ' onclick="goToFloor(' + fi + ')"' : '') + '>' +
+      '<div class="building-window"></div>' +
+      '<div class="building-floor-label">F' + (fi+1) + ' \u2014 ' + shortName + (isComplete ? ' \u2713' : '') + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function toggleHint(id) {
+  const box = document.getElementById(id);
+  if (box) box.classList.toggle('visible');
+}
+
+// --- AUDIO SYSTEM ---
+function playTone(frequency, duration, volume, type = 'sine') {
+  try {
+    const ctx = getAudioContext();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+    gainNode.gain.setValueAtTime(0, ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    oscillator.start(ctx.currentTime);
+    oscillator.stop(ctx.currentTime + duration);
+  } catch(e) {}
+}
+
+function playFiveMinuteWarning() {
+  // Single soft tone
+  playTone(440, 0.6, 0.15);
+}
+
+function playOneMinuteWarning() {
+  // Two quick tones
+  playTone(523, 0.3, 0.2);
+  setTimeout(() => playTone(523, 0.3, 0.2), 400);
+}
+
+function playCompletionSound() {
+  // Three ascending tones \u2014 calm and satisfying
+  playTone(523, 0.4, 0.2);
+  setTimeout(() => playTone(659, 0.4, 0.2), 300);
+  setTimeout(() => playTone(784, 0.6, 0.2), 600);
+}
+
+// --- THEME SYSTEM ---
+function toggleTheme() {
+  var isLight = document.body.classList.toggle('light');
+  document.body.classList.toggle('light-mode', isLight);
+  localStorage.setItem('codebook_theme', isLight ? 'light' : 'dark');
+  // Update all theme toggle buttons
+  var emoji = isLight ? '\u2600\uFE0F' : '\uD83C\uDF19';
+  ['theme-toggle', 'theme-toggle-real'].forEach(function(id) {
+    var btn = document.getElementById(id);
+    if (btn) btn.textContent = emoji;
+  });
+}
+function applyTheme() {
+  var saved = localStorage.getItem('codebook_theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    document.body.classList.add('light-mode');
+    ['theme-toggle', 'theme-toggle-real'].forEach(function(id) {
+      var btn = document.getElementById(id);
+      if (btn) btn.textContent = '\u2600\uFE0F';
+    });
+  }
+}
+function toggleTimer() {
+  if (state.timerRunning) {
+    clearInterval(state.timerInterval);
+    state.timerRunning = false;
+    document.getElementById('timer-btn').textContent = '\u25B6';
+    const elapsed = (25 * 60) - state.timerSeconds;
+    if (elapsed > 30) {
+      state.totalSeconds += elapsed;
+      state.sessionLog.push({ date: new Date().toDateString(), seconds: elapsed });
+      saveState();
+      updateTimeLog();
+    }
+  } else {
+    state.timerRunning = true;
+    document.getElementById('timer-btn').textContent = '\u23F8';
+    playTone(440, 0.3, 0.1); // Soft start tone so user knows audio is active
+    state.timerInterval = setInterval(() => {
+      state.timerSeconds--;
+
+      // Sound cues
+      if (state.timerSeconds === 300) {
+        playFiveMinuteWarning();
+        document.getElementById('timer-display').style.color = '#c8967e'; // amber
+      }
+      if (state.timerSeconds === 60) {
+        playOneMinuteWarning();
+        document.getElementById('timer-display').style.color = '#c87e9a'; // red
+      }
+
+      if (state.timerSeconds <= 0) {
+        clearInterval(state.timerInterval);
+        state.timerRunning = false;
+        state.totalSeconds += 25 * 60;
+        state.sessionLog.push({ date: new Date().toDateString(), seconds: 25 * 60 });
+        awardXP(40, null, window.innerWidth - 100, 60);
+        playCompletionSound();
+        saveState();
+        updateTimeLog();
+        state.timerSeconds = 25 * 60;
+        document.getElementById('timer-btn').textContent = '\u25B6';
+        document.getElementById('timer-display').style.color = '#6ec87e';
+        updateTimerDisplay();
+        return;
+      }
+      updateTimerDisplay();
+    }, 1000);
+  }
+}
+
+function resetTimer() {
+  clearInterval(state.timerInterval);
+  state.timerRunning = false;
+  state.timerSeconds = 25 * 60;
+  document.getElementById('timer-btn').textContent = '\u25B6';
+  document.getElementById('timer-display').style.color = '#c8a96e';
+  updateTimerDisplay();
+}
+function updateTimerDisplay() {
+  const m = Math.floor(state.timerSeconds / 60).toString().padStart(2, '0');
+  const s = (state.timerSeconds % 60).toString().padStart(2, '0');
+  document.getElementById('timer-display').textContent = '' + (m) + ':' + (s) + '';
+}
+
+// \u2500\u2500\u2500 PWA MANIFEST \u2500\u2500\u2500
+(function() {
+  var manifest = {
+    name: 'The Code Book',
+    short_name: 'CodeBook',
+    description: 'A calm path into coding. Learn step by step, offline-ready.',
+    start_url: './',
+    display: 'standalone',
+    background_color: '#0a0a0a',
+    theme_color: '#c8a96e',
+    icons: [{ src: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" fill="#0a0a0a"/><text x="96" y="130" font-size="100" text-anchor="middle" fill="#c8a96e">&#x1F4D6;</text></svg>'), sizes: '192x192', type: 'image/svg+xml' }]
+  };
+  var blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  var link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = URL.createObjectURL(blob);
+  document.head.appendChild(link);
+})();
+
+// \u2500\u2500\u2500 SERVICE WORKER \u2500\u2500\u2500
+// Registered from sw.js \u2014 Blob URLs are not supported for service workers
+// in modern browsers due to same-origin scope requirements.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function(err) {
+    console.warn('Service worker registration failed:', err);
+  });
+}
+
+// \u2500\u2500\u2500 INSTALL PROMPT \u2500\u2500\u2500
+var deferredInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  setTimeout(showPWABanner, 3000);
+});
+window.addEventListener('appinstalled', function() {
+  hidePWABanner();
+  deferredInstallPrompt = null;
+});
+
+function showPWABanner() {
+  if (document.getElementById('pwa-banner')) return;
+  if (localStorage.getItem('pwa_dismissed')) return;
+  if (window.matchMedia('(display-mode: standalone)').matches) return;
+  var banner = document.createElement('div');
+  banner.id = 'pwa-banner';
+  banner.className = 'pwa-install-banner';
+  banner.innerHTML = '<div class="pwa-install-icon">&#x1F4F2;</div>' +
+    '<div class="pwa-install-text">' +
+    '<div class="pwa-install-title">Install The Code Book</div>' +
+    '<div class="pwa-install-sub">Works offline &middot; saves progress &middot; feels native</div>' +
+    '</div>' +
+    '<div class="pwa-install-actions">' +
+    '<button class="pwa-do-install" onclick="triggerInstall()">Install</button>' +
+    '<button class="pwa-dismiss-btn" onclick="hidePWABanner()">Later</button>' +
+    '</div>';
+  document.body.appendChild(banner);
+}
+
+function hidePWABanner() {
+  var b = document.getElementById('pwa-banner');
+  if (b) b.remove();
+  localStorage.setItem('pwa_dismissed', '1');
+}
+
+function triggerInstall() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(function() { deferredInstallPrompt = null; hidePWABanner(); });
+  } else {
+    alert('To install: tap the browser menu and choose "Add to Home Screen".');
+    hidePWABanner();
+  }
+}
+
+
+
+// \u2500\u2500\u2500 INIT LAYOUT PATCHES \u2500\u2500\u2500
+(function() {
+  var origStartBook = window.startBook;
+  window.startBook = function() {
+    if (origStartBook) origStartBook();
+    setTimeout(function() {
+      renderAllNav();
+      initSageSidebarSync();
+      patchRenderNav();
+    }, 100);
+  };
+
+  // Also patch goToFloor and goToSection to update sidebars
+  var origGoToFloor = window.goToFloor;
+  window.goToFloor = function(fi) {
+    if (origGoToFloor) origGoToFloor(fi);
+    setTimeout(renderAllNav, 50);
+  };
+
+  var origGoToSection = window.goToSection;
+  window.goToSection = function(fi, si) {
+    if (origGoToSection) origGoToSection(fi, si);
+    setTimeout(renderAllNav, 50);
+  };
+
+  // Update chips whenever XP changes
+  var origAwardXP = window.awardXP;
+  window.awardXP = function(amount, key, x, y) {
+    if (origAwardXP) origAwardXP(amount, key, x, y);
+    setTimeout(updateTopChips, 100);
+    setTimeout(updateLeftStats, 100);
+  };
+})();
+
+
+
+
+// \u2500\u2500\u2500 MAP PANEL \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function renderMapPanel() {
+  var panel = document.getElementById('panel-map');
+  if (!panel) return;
+
+  var totalSections = 0, completedSections = 0;
+  FLOORS.forEach(function(f) {
+    f.sections.forEach(function(s) {
+      totalSections++;
+      if (state.completed[s.id]) completedSections++;
+    });
+  });
+  var overallPct = Math.round((completedSections / totalSections) * 100);
+
+  var html = '<div class="panel-hero">' +
+    '<div class="panel-hero-label">YOUR JOURNEY</div>' +
+    '<div class="panel-hero-title">The Building Map</div>' +
+    '<div class="panel-hero-sub">Every section you complete builds another floor. ' + completedSections + ' of ' + totalSections + ' sections done \u2014 ' + overallPct + '% complete.</div>' +
+    '</div>' +
+    '<div class="map-panel-grid">';
+
+  FLOORS.forEach(function(floor, fi) {
+    var floorDone = floor.sections.filter(function(s) { return state.completed[s.id]; }).length;
+    var floorTotal = floor.sections.length;
+    var floorPct = Math.round((floorDone / floorTotal) * 100);
+    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isActive = (fi + 1) === state.currentFloor;
+    var isComplete = isFloorComplete(fi);
+
+    var statusClass = isComplete ? 'map-floor-complete' : isActive ? 'map-floor-active' : isUnlocked ? 'map-floor-unlocked' : 'map-floor-locked';
+    var statusLabel = isComplete ? 'COMPLETE \u2713' : isActive ? 'IN PROGRESS' : isUnlocked ? 'UNLOCKED' : 'LOCKED';
+
+    html += '<div class="map-floor-card ' + statusClass + '" onclick="' + (isUnlocked ? 'goToFloor(' + fi + ');switchTopNav(\'learn\',document.getElementById(\'tnav-learn\'))' : '') + '">' +
+      '<div class="map-floor-header">' +
+        '<div class="map-floor-num" style="color:' + floor.color + '">FLOOR ' + floor.id + '</div>' +
+        '<div class="map-floor-status">' + statusLabel + '</div>' +
+      '</div>' +
+      '<div class="map-floor-title">' + floor.title + '</div>' +
+      '<div class="map-floor-sub">' + floor.subtitle + '</div>' +
+      '<div class="map-progress-row">' +
+        '<div class="map-progress-track"><div class="map-progress-fill" style="width:' + floorPct + '%;background:' + floor.color + '"></div></div>' +
+        '<div class="map-progress-label">' + floorDone + '/' + floorTotal + '</div>' +
+      '</div>' +
+      '<div class="map-sections-list">' +
+        floor.sections.map(function(s, si) {
+          var done = !!state.completed[s.id];
+          var active = isActive && si === state.currentSection;
+          return '<div class="map-section-row' + (done ? ' map-sec-done' : '') + (active ? ' map-sec-active' : '') + '">' +
+            '<div class="map-sec-dot">' + (done ? '\u2713' : (si + 1)) + '</div>' +
+            '<div class="map-sec-title">' + s.title + '</div>' +
+            '</div>';
+        }).join('') +
+      '</div>' +
+    '</div>';
+  });
+
+  html += '</div>';
+  panel.innerHTML = html;
+}
+// \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+
+function renderBuildPanel() {
+  var panel = document.getElementById('panel-build');
+  if (!panel) return;
+
+  var projects = [
+    {
+      icon: '\uD83C\uDF10', floor: 1, title: 'My First Webpage', desc: 'Build a personal "About Me" page using only what you learned in Floor 1.',
+      skills: ['HTML', 'Structure'], time: '30 min',
+      steps: [
+        'Create a new file called <strong>index.html</strong> in a text editor.',
+        'Add the basic HTML skeleton: DOCTYPE, html, head, and body tags.',
+        'Inside body, add an &lt;h1&gt; with your name.',
+        'Add a &lt;p&gt; tag with one sentence about yourself.',
+        'Add a second &lt;p&gt; describing what you want to learn.',
+        'Open the file in your browser. You should see your page.',
+        'Change the heading text to something personal. Save and refresh.',
+        'Add one more element \u2014 anything. A list, a quote, a second heading.'
+      ]
+    },
+    {
+      icon: '\uD83C\uDFA8', floor: 2, title: 'Styled Portfolio Card', desc: 'Take your About Me page and make it look like something real.',
+      skills: ['CSS', 'Design'], time: '45 min',
+      steps: [
+        'Open your index.html from Floor 1 (or create a new one with the same structure).',
+        'Add a &lt;style&gt; block inside &lt;head&gt;.',
+        'Set the body background colour to something dark: <code>background: #0a0a0a; color: white;</code>',
+        'Style the h1 \u2014 change the colour, font-size, and font-family.',
+        'Wrap your content in a &lt;div class="card"&gt; and give it padding, a background, and border-radius.',
+        'Add a Google Font by pasting a link tag from fonts.google.com into your &lt;head&gt;.',
+        'Centre the card on the page using margin: auto and a max-width.',
+        'Add one thing you figured out yourself \u2014 a hover effect, a border, a colour you chose.'
+      ]
+    },
+    {
+      icon: '\u26A1', floor: 3, title: 'Interactive Counter', desc: 'Build a counter that goes up and down when you click buttons.',
+      skills: ['JavaScript', 'DOM'], time: '1 hour',
+      steps: [
+        'Create a new HTML file. Add a heading that says "Counter".',
+        'Add a &lt;p id="count"&gt;0&lt;/p&gt; to display the current number.',
+        'Add two buttons: one labelled "+ Add" and one labelled "\u2212 Subtract".',
+        'Add a &lt;script&gt; block. Declare <code>let count = 0;</code>',
+        'Write a function called <code>add()</code> that increases count by 1 and updates the paragraph text.',
+        'Write a function called <code>subtract()</code> that decreases count by 1.',
+        'Connect the functions to the buttons using onclick attributes.',
+        'Add a reset button that sets count back to 0.',
+        'Bonus: change the text colour to green when count is positive, red when negative.'
+      ]
+    },
+    {
+      icon: '\uD83D\uDCCB', floor: 4, title: 'To-Do List App', desc: 'A working to-do list that remembers your tasks after refresh.',
+      skills: ['JS', 'Arrays', 'localStorage'], time: '2 hours',
+      steps: [
+        'Create a new HTML file. Add an input field and an "Add Task" button.',
+        'Create an empty &lt;ul id="task-list"&gt; below the input.',
+        'In JavaScript, create an array called <code>tasks</code> and load it from localStorage if it exists.',
+        'Write an <code>addTask()</code> function that reads the input, pushes to the array, saves to localStorage, and re-renders the list.',
+        'Write a <code>renderTasks()</code> function that loops through the array and builds &lt;li&gt; elements.',
+        'Each list item should have a checkbox and a delete button.',
+        'Ticking the checkbox should mark the task as complete (strikethrough style).',
+        'The delete button should remove the task from the array and re-render.',
+        'Call renderTasks() on page load so saved tasks appear immediately.',
+        'Style it: make completed tasks visually distinct from active ones.'
+      ]
+    },
+    {
+      icon: '\uD83C\uDF24\uFE0F', floor: 5, title: 'Weather Dashboard', desc: 'Fetch live weather data from an API and display it in a custom UI.',
+      skills: ['APIs', 'fetch()', 'JSON'], time: '3 hours',
+      steps: [
+        'Go to openweathermap.org and sign up for a free API key.',
+        'Create a new HTML file with an input for a city name and a Search button.',
+        'Add a &lt;div id="weather"&gt; where results will be displayed.',
+        'Write a <code>fetchWeather(city)</code> async function using the fetch() API.',
+        'Build the URL: <code>https://api.openweathermap.org/data/2.5/weather?q={city}&appid={YOUR_KEY}&units=metric</code>',
+        'Parse the JSON response and extract: city name, temperature, weather description, humidity.',
+        'Display the data inside the #weather div.',
+        'Handle errors \u2014 what if the city is not found? Show a friendly message.',
+        'Style the results card. Add a weather icon using the icon code from the API response.',
+        'Push the project to GitHub and deploy on Netlify.'
+      ]
+    },
+    {
+      icon: '\uD83D\uDE80', floor: 6, title: 'Full Portfolio Site', desc: 'A multi-page portfolio site that represents you professionally.',
+      skills: ['HTML', 'CSS', 'JS', 'Deploy'], time: '1 week',
+      steps: [
+        'Plan on paper first: what pages do you need? (Home, Projects, About, Contact)',
+        'Create an index.html and a shared nav bar that appears on every page.',
+        'Home page: your name, one strong sentence about what you do, a call-to-action button.',
+        'Projects page: a card for each of your Floor 1-5 builds with a title, screenshot, description, and live link.',
+        'About page: your story, what you\'ve learned, where you\'re heading.',
+        'Contact section: your email or a simple form (use Formspree for a working form without a backend).',
+        'Make it fully responsive \u2014 test on a phone.',
+        'Add a dark/light mode toggle.',
+        'Push to GitHub with a clear README.',
+        'Deploy on Netlify. Share the URL.'
+      ]
+    },
+    {
+      icon: '\uD83C\uDFD7\uFE0F', floor: 7, title: 'Capstone Project', desc: 'Your final project. No constraints. Build something you\'re proud of.',
+      skills: ['Everything'], time: 'Your call',
+      steps: [
+        'Identify the problem: write one sentence describing what your project does and who it helps.',
+        'Define the MVP (Minimum Viable Product): the smallest version that still solves the problem.',
+        'Plan the data model: what information does your app store? Sketch the database tables.',
+        'Plan the UI: sketch the key screens on paper before writing any code.',
+        'Set up your project: Git repo, folder structure, deployment pipeline first.',
+        'Build the backend first \u2014 get your data model working and your API endpoints tested.',
+        'Build the frontend next \u2014 connect it to your backend.',
+        'Test everything: what happens when things go wrong? Handle errors gracefully.',
+        'Write a README that explains what it is, how to run it, and what you learned building it.',
+        'Deploy it, share it, and add it to your portfolio. You\'re done.'
+      ]
+    }
+  ];
+
+  var html = '<div class="panel-hero">' +
+    '<div class="panel-hero-label">BUILD MODE</div>' +
+    '<div class="panel-hero-title">Build Real Things</div>' +
+    '<div class="panel-hero-sub">Projects unlock as you complete floors. Each one has guided steps to get you started \u2014 but the decisions are yours.</div>' +
+    '</div>' +
+    '<div class="build-grid">';
+
+  projects.forEach(function(p) {
+    var unlocked = isFloorComplete(p.floor - 1) || p.floor === 1;
+    var done = state.completed['build-' + p.floor];
+    var stepsHtml = '';
+    if (unlocked && p.steps) {
+      stepsHtml = '<div class="build-steps"><div class="build-steps-label">HOW TO BUILD IT</div><ol class="build-step-list">' +
+        p.steps.map(function(s){ return '<li class="build-step-item">' + s + '</li>'; }).join('') +
+        '</ol>' +
+        (!done ? '<button class="build-mark-done" onclick="markBuildDone(' + p.floor + ');event.stopPropagation()">Mark as Complete \u2713</button>' : '') +
+        '</div>';
+    }
+    html += '<div class="build-card' + (!unlocked ? ' locked' : '') + (done ? ' done' : '') + '">' +
+      '<div class="build-card-icon">' + p.icon + '</div>' +
+      '<div class="build-card-tag">FLOOR ' + p.floor + ' PROJECT' + (done ? ' \u2713' : !unlocked ? ' \u2014 LOCKED' : '') + '</div>' +
+      '<div class="build-card-title">' + p.title + '</div>' +
+      '<div class="build-card-desc">' + p.desc + '</div>' +
+      '<div class="build-card-meta">' +
+      p.skills.map(function(s){ return '<span class="build-meta-pill">' + s + '</span>'; }).join('') +
+      '<span class="build-meta-pill floor-pill">~' + p.time + '</span>' +
+      '</div>' + stepsHtml + '</div>';
+  });
+
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+function markBuildDone(floorNum) {
+  state.completed['build-' + floorNum] = true;
+  awardXP(100, 'build-project-' + floorNum, window.innerWidth / 2, 300);
+  saveState();
+  renderBuildPanel();
+}
+
+function startBuildProject(floorNum) {
+  var fi = floorNum - 1;
+  if (!isFloorComplete(fi) && fi > 0) {
+    var incomplete = FLOORS[fi].sections.filter(function(s) { return !state.completed[s.id]; });
+    var names = incomplete.slice(0, 2).map(function(s) { return '\u201c' + s.title + '\u201d'; }).join(', ');
+    var extra = incomplete.length > 2 ? ' and ' + (incomplete.length - 2) + ' more' : '';
+    sageMessage('This project unlocks when you finish Floor ' + floorNum + '. Still needed: ' + names + extra + '. Head to the Learn tab to complete them.', 'warn');
+    return;
+  }
+
+  // Switch to Learn tab properly
+  var learnBtn = document.getElementById('tnav-learn');
+  switchTopNav('learn', learnBtn);
+
+  // Navigate to the last (project) section of that floor
+  var floor = FLOORS[fi];
+  var lastSi = floor.sections.length - 1;
+  goToSection(fi, lastSi);
+
+  // Try to open Code Editor tab if it exists, otherwise stay on Read tab
+  setTimeout(function() {
+    var tabBtns = document.querySelectorAll('.section-tab-btn');
+    tabBtns.forEach(function(btn) {
+      if (btn.textContent.trim() === 'Code Editor') btn.click();
+    });
+    // Scroll to top so user sees the section
+    var mainCol = document.getElementById('main-col');
+    if (mainCol) mainCol.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }, 300);
+}
+
+
+
+function renderChallengePanel() {
+  var panel = document.getElementById('panel-challenge');
+  if (!panel) return;
+
+  var challenges = [
+    { icon: '\u26A1', type: 'DAILY', title: "Today's Knowledge Check", desc: 'One question. Earn bonus XP. Resets every day.', xp: '+20 XP', action: 'showDailyChallenge()', done: !!localStorage.getItem('codebook_challenge_done_' + new Date().toDateString()) },
+    { icon: '\uD83E\uDDE0', type: 'RECALL', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
+    { icon: '\u23F1\uFE0F', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 30 seconds each. How fast can you go?', xp: '+50 XP', action: 'startSpeedRound()', done: false, locked: state.xp < 100 },
+    { icon: '\uD83D\uDD25', type: 'STREAK', title: 'Streak Challenge', desc: 'Answer 5 questions in a row without getting one wrong.', xp: '+75 XP', action: 'startStreakChallenge()', done: false, locked: state.xp < 200 },
+    { icon: '\uD83C\uDFC6', type: 'FLOOR', title: 'Floor Boss', desc: 'A comprehensive quiz on everything in the floor you just completed.', xp: '+100 XP', action: 'startFloorBoss()', done: false, locked: !isFloorComplete(state.currentFloor - 1) },
+  ];
+
+  var html = '<div class="panel-hero">' +
+    '<div class="panel-hero-label">CHALLENGE MODE</div>' +
+    '<div class="panel-hero-title">Test Yourself</div>' +
+    '<div class="panel-hero-sub">Challenges earn bonus XP and reinforce what you\'ve learned. The daily check resets at midnight.</div>' +
+    '</div>' +
+    '<div class="challenge-list">';
+
+  challenges.forEach(function(ch) {
+    var isLocked = ch.locked;
+    var isDone = ch.done;
+    html += '<div class="challenge-item' + (isLocked ? ' ch-locked' : '') + (isDone ? ' ch-done' : '') + '"' +
+      (!isLocked ? ' onclick="' + ch.action + '"' : '') + '>' +
+      '<div class="ch-icon">' + ch.icon + '</div>' +
+      '<div class="ch-body">' +
+      '<div class="ch-tag">' + ch.type + (isDone ? ' \u2014 DONE TODAY' : isLocked ? ' \u2014 LOCKED' : '') + '</div>' +
+      '<div class="ch-title">' + ch.title + '</div>' +
+      '<div class="ch-desc">' + ch.desc + '</div>' +
+      '</div>' +
+      '<div class="ch-xp">' + (isDone ? '\u2713' : ch.xp) + '</div>' +
+      '</div>';
+  });
+
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+// \u2500\u2500 RECALL QUIZ \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// Picks a random question the user has NOT seen today, avoiding repetition.
+function startRecallQuiz() {
+  var answered = Object.keys(state.quizAnswered);
+  if (answered.length === 0) {
+    sageMessage('Complete some sections first to unlock recall quizzes.', 'tip');
+    return;
+  }
+  // Pick a question not already used as today's daily challenge
+  var today = new Date().toDateString();
+  var epoch = new Date('2025-01-01').getTime();
+  var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
+  var dailyIdx = daysSinceEpoch % DAILY_CHALLENGES.length;
+  // Offset by 1 from the daily so it is always a different question
+  var recallIdx = (dailyIdx + 1) % DAILY_CHALLENGES.length;
+  var challenge = DAILY_CHALLENGES[recallIdx];
+  _openChallengeModal(
+    challenge,
+    'Spaced Repetition',
+    'Reinforce what you already know. +' + challenge.xp + ' XP for a correct answer.',
+    'recall-' + today + '-' + recallIdx
+  );
+}
+
+// \u2500\u2500 SPEED ROUND \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// Picks a question offset by 2 from the daily so it is always different.
+var _speedRoundIndex = 0;
+// \u2500\u2500 SPEED ROUND \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// 10 questions, one per round. Tracks score across the session.
+var _speedRoundIndex = 0;
+var _speedRoundScore = 0;
+var _speedRoundTotal = 10;
+var _speedRoundCurrent = 0;
+var _speedRoundTimer = null;
+var _speedRoundTimeLeft = 30;
+
+function startSpeedRound() {
+  if (state.xp < 100) return;
+  _speedRoundScore = 0;
+  _speedRoundCurrent = 0;
+  _speedRoundTimeLeft = 30;
+  _nextSpeedQuestion();
+}
+
+function _nextSpeedQuestion() {
+  if (_speedRoundCurrent >= _speedRoundTotal) {
+    _endSpeedRound();
+    return;
+  }
+  var epoch = new Date('2025-01-01').getTime();
+  var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
+  var idx = (daysSinceEpoch + _speedRoundCurrent + 2) % DAILY_CHALLENGES.length;
+  var challenge = DAILY_CHALLENGES[idx];
+  var today = new Date().toDateString();
+  var questionNum = _speedRoundCurrent + 1;
+
+  _openChallengeModal(
+    challenge,
+    'Speed Round \u2014 ' + questionNum + ' of ' + _speedRoundTotal,
+    '30 seconds. Score: ' + _speedRoundScore + ' correct.',
+    'speed-' + today + '-' + idx
+  );
+
+  // Inject the timer bar into the modal
+  var existingTimer = document.getElementById('speed-timer-bar');
+  if (existingTimer) existingTimer.parentNode.removeChild(existingTimer);
+  var timerWrap = document.createElement('div');
+  timerWrap.id = 'speed-timer-bar';
+  timerWrap.style.cssText = 'height:4px;background:var(--border);border-radius:4px;margin-bottom:16px;overflow:hidden;';
+  var timerFill = document.createElement('div');
+  timerFill.style.cssText = 'height:100%;background:var(--accent);border-radius:4px;width:100%;transition:width 1s linear;';
+  timerWrap.appendChild(timerFill);
+  var questionEl = document.getElementById('challenge-question');
+  questionEl.parentNode.insertBefore(timerWrap, questionEl);
+
+  _speedRoundTimeLeft = 30;
+  clearInterval(_speedRoundTimer);
+  _speedRoundTimer = setInterval(function() {
+    _speedRoundTimeLeft--;
+    timerFill.style.width = ((_speedRoundTimeLeft / 30) * 100) + '%';
+    if (_speedRoundTimeLeft <= 0) {
+      clearInterval(_speedRoundTimer);
+      _speedRoundCurrent++;
+      setTimeout(_nextSpeedQuestion, 600);
+    }
+  }, 1000);
+}
+
+function _endSpeedRound() {
+  clearInterval(_speedRoundTimer);
+  var total = _speedRoundTotal;
+  var score = _speedRoundScore;
+  var xpEarned = score * 5;
+  var today = new Date().toDateString();
+  awardXP(xpEarned, 'speed-round-' + today, window.innerWidth / 2, 200);
+  document.getElementById('challenge-title').textContent = 'Speed Round Complete!';
+  document.getElementById('challenge-body').textContent = score + ' of ' + total + ' correct. +' + xpEarned + ' XP earned.';
+  document.getElementById('challenge-question').textContent = score >= 8 ? '\uD83C\uDFC6 Excellent!' : score >= 5 ? '\uD83D\uDC4D Good effort!' : '\uD83D\uDCAA Keep practising!';
+  document.getElementById('challenge-options').innerHTML = '<button class="auth-btn" onclick="closeDailyChallenge()" style="margin-top:8px;">Done</button>';
+  document.getElementById('challenge-result').style.display = 'none';
+}
+
+// Override answerChallenge to track speed round score
+var _inSpeedRound = false;
+var _origAnswerChallenge = null;
+
+// \u2500\u2500 STREAK CHALLENGE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// 5 questions in a row. One wrong answer ends the run.
+var _streakIndex = 0;
+var _streakCorrect = 0;
+var _streakTotal = 5;
+var _streakCurrent = 0;
+var _streakFailed = false;
+
+function startStreakChallenge() {
+  if (state.xp < 200) return;
+  _streakCorrect = 0;
+  _streakCurrent = 0;
+  _streakFailed = false;
+  _nextStreakQuestion();
+}
+
+function _nextStreakQuestion() {
+  if (_streakFailed || _streakCurrent >= _streakTotal) {
+    _endStreakChallenge();
+    return;
+  }
+  var epoch = new Date('2025-01-01').getTime();
+  var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
+  var idx = (daysSinceEpoch + 3 + _streakCurrent) % DAILY_CHALLENGES.length;
+  var challenge = DAILY_CHALLENGES[idx];
+  var today = new Date().toDateString();
+
+  // Wrap challenge to detect wrong answers
+  var wrappedChallenge = Object.assign({}, challenge);
+  var originalCorrect = challenge.correct;
+  var qNum = _streakCurrent + 1;
+
+  _openChallengeModal(
+    challenge,
+    'Streak Challenge \u2014 ' + qNum + ' of ' + _streakTotal,
+    'Answer correctly to keep your streak alive. ' + _streakCorrect + ' correct so far.',
+    'streak-' + today + '-' + idx
+  );
+
+  // Patch the option buttons to intercept streak logic
+  var optionsEl = document.getElementById('challenge-options');
+  var buttons = optionsEl.querySelectorAll('button');
+  buttons.forEach(function(btn, i) {
+    btn.replaceWith(btn.cloneNode(true)); // strip old listeners
+  });
+  optionsEl.querySelectorAll('button').forEach(function(btn, i) {
+    btn.addEventListener('click', function() {
+      answerChallenge(i, originalCorrect, challenge.xp, challenge.explanation, 'streak-' + today + '-' + idx);
+      if (i !== originalCorrect) {
+        _streakFailed = true;
+      } else {
+        _streakCorrect++;
+        _streakCurrent++;
+      }
+      setTimeout(function() {
+        if (_streakFailed || _streakCurrent >= _streakTotal) {
+          _endStreakChallenge();
+        } else {
+          _nextStreakQuestion();
+        }
+      }, 1800);
+    });
+  });
+}
+
+function _endStreakChallenge() {
+  var xpEarned = _streakFailed ? _streakCorrect * 10 : 75;
+  var today = new Date().toDateString();
+  awardXP(xpEarned, 'streak-challenge-' + today, window.innerWidth / 2, 200);
+  document.getElementById('challenge-title').textContent = _streakFailed ? 'Streak Broken!' : 'Perfect Streak!';
+  document.getElementById('challenge-body').textContent = _streakCorrect + ' of ' + _streakTotal + ' correct. +' + xpEarned + ' XP earned.';
+  document.getElementById('challenge-question').textContent = !_streakFailed ? '\uD83D\uDD25 Flawless!' : _streakCorrect >= 3 ? '\uD83D\uDC4D Good run!' : '\uD83D\uDCAA Try again!';
+  document.getElementById('challenge-options').innerHTML = '<button class="auth-btn" onclick="closeDailyChallenge()" style="margin-top:8px;">Done</button>';
+  document.getElementById('challenge-result').style.display = 'none';
+}
+
+// \u2500\u2500 FLOOR BOSS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// 5 questions drawn from the current floor. All must be answered.
+var _bossScore = 0;
+var _bossTotal = 5;
+var _bossCurrent = 0;
+
+function startFloorBoss() {
+  var fi = state.currentFloor - 1;
+  if (!isFloorComplete(fi)) return;
+  _bossScore = 0;
+  _bossCurrent = 0;
+  _nextBossQuestion();
+}
+
+function _nextBossQuestion() {
+  if (_bossCurrent >= _bossTotal) {
+    _endFloorBoss();
+    return;
+  }
+  var fi = state.currentFloor - 1;
+  var epoch = new Date('2025-01-01').getTime();
+  var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
+  var idx = (daysSinceEpoch + fi + 4 + _bossCurrent) % DAILY_CHALLENGES.length;
+  var challenge = DAILY_CHALLENGES[idx];
+  var today = new Date().toDateString();
+  var qNum = _bossCurrent + 1;
+  var originalCorrect = challenge.correct;
+
+  _openChallengeModal(
+    challenge,
+    'Floor ' + state.currentFloor + ' Boss \u2014 ' + qNum + ' of ' + _bossTotal,
+    'Prove you mastered this floor. ' + _bossScore + ' correct so far.',
+    'boss-floor' + fi + '-' + today + '-' + _bossCurrent
+  );
+
+  var optionsEl = document.getElementById('challenge-options');
+  optionsEl.querySelectorAll('button').forEach(function(btn, i) {
+    btn.replaceWith(btn.cloneNode(true));
+  });
+  optionsEl.querySelectorAll('button').forEach(function(btn, i) {
+    btn.addEventListener('click', function() {
+      answerChallenge(i, originalCorrect, challenge.xp, challenge.explanation, 'boss-floor' + fi + '-' + today + '-' + _bossCurrent);
+      if (i === originalCorrect) _bossScore++;
+      _bossCurrent++;
+      setTimeout(function() {
+        if (_bossCurrent >= _bossTotal) {
+          _endFloorBoss();
+        } else {
+          _nextBossQuestion();
+        }
+      }, 1800);
+    });
+  });
+}
+
+function _endFloorBoss() {
+  var fi = state.currentFloor - 1;
+  var xpEarned = _bossScore === _bossTotal ? 100 : _bossScore * 15;
+  var today = new Date().toDateString();
+  awardXP(xpEarned, 'floor-boss-' + fi + '-' + today, window.innerWidth / 2, 200);
+  document.getElementById('challenge-title').textContent = 'Floor Boss Complete!';
+  document.getElementById('challenge-body').textContent = _bossScore + ' of ' + _bossTotal + ' correct. +' + xpEarned + ' XP earned.';
+  document.getElementById('challenge-question').textContent = _bossScore === _bossTotal ? '\uD83C\uDFC6 Perfect \u2014 Floor ' + state.currentFloor + ' mastered!' : _bossScore >= 3 ? '\uD83D\uDC4D Solid knowledge!' : '\uD83D\uDCD6 Revisit this floor.';
+  document.getElementById('challenge-options').innerHTML = '<button class="auth-btn" onclick="closeDailyChallenge()" style="margin-top:8px;">Done</button>';
+  document.getElementById('challenge-result').style.display = 'none';
+}
