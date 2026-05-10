@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#c8a96e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="The Code Book">
+<meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
+<title>The Code Book</title>
+  <link rel="stylesheet" href="variables.css">
+  <link rel="stylesheet" href="animations.css">
+  <link rel="stylesheet" href="layout.css">
+  <link rel="stylesheet" href="cover.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="panels.css">
+  <link rel="stylesheet" href="overlays.css">
+
+  
+</head>
+<body>
+
+  <div id="floor-nav" class="compat-hidden"></div>
+  <div id="timer-display" class="compat-hidden">25:00</div>
+  <div id="timer-btn" class="compat-hidden"></div>
+  <div id="user-bar" class="compat-hidden"></div>
+  <div id="user-email" class="compat-hidden"></div>
+  <div id="theme-toggle" class="compat-hidden"></div>
+  <div id="xp-panel" class="compat-hidden"></div>
+  <div id="current-xp" class="compat-hidden">0</div>
+  <div id="current-level" class="compat-hidden">1</div>
+  <div id="level-fill" class="compat-hidden" style="width:0%"></div>
+  <div id="xp-to-next" class="compat-hidden"></div>
+  <div id="streak-count" class="compat-hidden">0</div>
+  <div id="time-log" class="compat-hidden">0m total</div>
+  <div id="progress-fill" style="width:0%"></div>
+  <div id="progress-pct">0%</div>
+  <div id="sage-bubble"></div>
+  <div id="building-map"></div>
+  <div id="panel-learn"></div>
+
+<!-- COMPAT SHIMS: original JS looks for these IDs -->
+<div class="compat-hidden" aria-hidden="true"></div>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-title">The Code Book</div>
+  <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
+  <div class="auth-tabs">
+    <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+  </div>
+  <div class="auth-form">
+    <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
+    <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
+    <div style="position:relative;">
+      <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)" style="padding-right:48px;width:100%;">
+      <button type="button" onclick="togglePasswordVisibility('auth-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
+    </div>
+    <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
+    <div id="forgot-link" class="forgot-link" onclick="handleForgotPassword()">Forgot your password?</div>
+    <div class="auth-message" id="auth-message"></div>
+  </div>
+  <div class="auth-actions-row">
+    <button onclick="showLeaderboard()" class="auth-link-btn">🏆 Leaderboard</button>
+    <button onclick="showPrivacy()" class="auth-link-btn">Privacy Policy</button>
+  </div>
+  <div class="auth-start-wrap">
+    <button onclick="showGuestNamePrompt()" class="auth-link-btn">Continue as Guest</button>
+  </div>
+</div><!-- end #auth-screen -->
+
+
+<!-- GUEST NAME OVERLAY -->
+<div id="guest-name-overlay" class="overlay-base" style="display:none;">
+  <div class="overlay-inner-sm" style="text-align:center;">
+    <div class="onboarding-owl">&#128100;</div>
+    <div class="onboarding-title">What should we call you?</div>
+    <div class="onboarding-body">No account needed. You can explore Floors 1 and 2 as a guest.</div>
+    <input class="auth-input" id="guest-name-input" type="text" placeholder="Enter your name" maxlength="30" style="text-align:center;margin-bottom:16px;">
+    <button class="auth-btn" onclick="confirmGuestName()">Start Exploring</button>
+    <div style="margin-top:12px;">
+      <button onclick="hideGuestNamePrompt()" class="auth-link-btn">&#8592; Back to Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUEST LOCK POPUP -->
+<div id="guest-lock-overlay" class="overlay-base" style="display:none;">
+  <div class="overlay-inner-md" style="text-align:center;">
+    <div style="font-size:48px;margin-bottom:16px;">&#128274;</div>
+    <div class="onboarding-title">Floor Locked</div>
+    <div class="onboarding-body">Floors 3 and above are available to registered users. Create a free account to unlock everything and save your progress.</div>
+    <button class="auth-btn" onclick="hideGuestLockPopup();document.getElementById('auth-screen').style.display='flex';">Create Free Account</button>
+    <div style="margin-top:12px;">
+      <button onclick="hideGuestLockPopup()" class="auth-link-btn">Keep exploring as guest</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERBOARD OVERLAY -->
+<div id="leaderboard-overlay" class="overlay-base scrollable" style="z-index:9993;">
+  <div class="overlay-inner-md">
+    <div class="overlay-header">
+      <div class="overlay-title-serif overlay-title-lg">Leaderboard</div>
+      <button onclick="hideLeaderboard()" class="overlay-close-btn">Close</button>
+    </div>
+    <div class="overlay-mono-label">TOP LEARNERS — ALL TIME</div>
+    <div id="leaderboard-list" class="leaderboard-list">
+      <div class="leaderboard-loading">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY OVERLAY -->
+<div id="privacy-overlay" class="overlay-base scrollable" style="z-index:9993;">
+  <div class="overlay-inner-xl">
+    <div class="overlay-header overlay-header-spaced">
+      <div class="overlay-title-serif overlay-title-md">Privacy Policy</div>
+      <button onclick="hidePrivacy()" class="overlay-close-btn">Close</button>
+    </div>
+    <div class="overlay-mono-label">LAST UPDATED: APRIL 2025</div>
+    <div class="privacy-body">
+      <div>
+        <div class="privacy-section-title">Who we are</div>
+        <div>The Code Book is a free interactive coding curriculum built and maintained by an independent developer based in the United Kingdom. We are committed to handling your data with the same care and respect we would want for our own.</div>
+      </div>
+      <div>
+        <div class="privacy-section-title">What data we collect</div>
+        <div>When you create an account we collect your email address and the display name you choose. We also store your learning progress — completed sections, XP, streak, and focus time. We do not collect your real name, phone number, location, or any payment information.</div>
+      </div>
+      <div>
+        <div class="privacy-section-title">Why we collect it</div>
+        <div>Your email is used solely to create and secure your account and to send password reset emails if you request one. Your progress data is stored so your learning journey is saved across devices. We do not use your data for advertising or marketing of any kind.</div>
+      </div>
+      <div>
+        <div class="privacy-section-title">What is public</div>
+        <div>Your display name, XP score and streak count appear on the public leaderboard. Your email address is never visible to other users or shown publicly anywhere on the platform.</div>
+      </div>
+      <div>
+        <div class="privacy-section-title">Who we share data with</div>
+        <div>We do not sell, share or rent your personal data to any third party. Your data is stored securely using Supabase, a trusted infrastructure provider compliant with SOC 2 Type II. You can read Supabase's privacy policy at supabase.com/privacy.</div>
+      </div>
+      <div>
+        <div class="privacy-section-title">Security measures we have implemented</div>
+        <div class="privacy-security-list">
+          <div class="privacy-security-item">
+            <div class="privacy-security-item-title">Password Encryption</div>
+            <div>Your password is never stored in plain text. It is immediately hashed using bcrypt — an industry standard one-way encryption algorithm. This means nobody, including us, can ever see or recover your password.</div>
+          </div>
+          <div class="privacy-security-item">
+            <div class="privacy-security-item-title">Encrypted Connections</div>
+            <div>All data transmitted between your browser and our servers uses HTTPS — the same encryption standard used by banks and major financial institutions. Your credentials and progress data are always encrypted in transit.</div>
+          </div>
+          <div class="privacy-security-item">
+            <div class="privacy-security-item-title">Row Level Security</div>
+            <div>We have implemented database-level Row Level Security policies. This means that even if someone gained access to the database directly, they could only ever see their own data — never another user's records. Each user's data is locked to their unique account ID.</div>
+          </div>
+          <div class="privacy-security-item">
+            <div class="privacy-security-item-title">Session Security</div>
+            <div>When you sign out, your session token is invalidated server-side immediately. This means your account cannot be accessed from the same device after signing out, even if someone gained access to your browser.</div>
+          </div>
+          <div class="privacy-security-item">
+            <div class="privacy-security-item-title">Rate Limiting</div>
+            <div>We limit sign-in attempts to 4 per 5 minutes per IP address. This prevents automated attacks where someone attempts thousands of password combinations rapidly. After the limit is reached, further attempts are temporarily blocked.</div>
+          </div>
+          <div class="privacy-security-item">
+            <div class="privacy-security-item-title">Leaderboard Privacy</div>
+            <div>The public leaderboard is served from a restricted database view that only exposes display names, XP scores and streak counts. It is technically impossible for the leaderboard to reveal email addresses or any other private information.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="privacy-section-title">Your rights under UK GDPR</div>
+        <div>You have the right to access your data, correct it, or request that it be deleted entirely. You can also object to how we process your data or request that we restrict processing. To exercise any of these rights contact us directly through the app and we will respond within 30 days.</div>
+      </div>
+      <div>
+        <div class="privacy-section-title">Deleting your account</div>
+        <div>If you would like your account and all associated data permanently removed, contact us and we will delete everything within 7 days and confirm when it is done.</div>
+      </div>
+      <div class="privacy-contact-box">
+        This policy applies to all users of The Code Book. For users in the UK and European Union we comply with the UK GDPR and the Data Protection Act 2018. This policy was last reviewed in April 2025.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD RESET OVERLAY -->
+<div id="reset-overlay" class="overlay-base" style="z-index:9999;background:var(--bg);">
+  <div class="reset-inner">
+    <div class="reset-title">New Password</div>
+    <div class="reset-sub">CHOOSE A STRONG PASSWORD</div>
+    <div class="reset-form">
+      <div style="position:relative;">
+        <input id="reset-password" class="auth-input" type="password" placeholder="New password (min 6 characters)" style="padding-right:48px;width:100%;">
+        <button type="button" onclick="togglePasswordVisibility('reset-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
+      </div>
+      <div style="position:relative;">
+        <input id="reset-password-confirm" class="auth-input" type="password" placeholder="Confirm new password" style="padding-right:48px;width:100%;">
+        <button type="button" onclick="togglePasswordVisibility('reset-password-confirm', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
+      </div>
+      <button onclick="submitNewPassword()" class="auth-btn">Update Password</button>
+      <div id="reset-message" class="auth-message"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING OVERLAY -->
+<div id="onboarding" class="overlay-base" style="z-index:9995;background:var(--bg);">
+  <div class="overlay-inner-lg">
+    <div class="onboarding-owl">🦉</div>
+    <div class="onboarding-title" id="onboarding-title">Hey. I'm Sage.</div>
+    <div class="onboarding-body" id="onboarding-body">I'm here to make sure this time is different. No rushing. No overwhelm. Just one step at a time.<br><br>Before we start — three quick questions.</div>
+    <div id="onboarding-step-1">
+      <div class="onboarding-label">WHAT'S YOUR NAME?</div>
+      <input id="onboarding-name" class="auth-input onboarding-name-input" type="text" placeholder="First name">
+      <button class="auth-btn" onclick="onboardingNext(1)">Continue</button>
+    </div>
+    <div id="onboarding-step-2" style="display:none;">
+      <div class="onboarding-label">HAVE YOU TRIED CODING BEFORE?</div>
+      <div class="onboarding-options">
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('experience','never')">No — complete beginner</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('experience','tried')">Yes — but I stopped or got stuck</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('experience','some')">I know a little but want structure</button>
+      </div>
+    </div>
+    <div id="onboarding-step-3" style="display:none;">
+      <div class="onboarding-label">HOW MUCH TIME CAN YOU GIVE EACH DAY?</div>
+      <div class="onboarding-options">
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('time','15')">15 minutes — just a little</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('time','30')">30 minutes — steady pace</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('time','60')">An hour or more — I'm committed</button>
+      </div>
+    </div>
+    <div id="onboarding-step-4" style="display:none;">
+      <div class="onboarding-complete-icon">🎉</div>
+      <div class="onboarding-welcome-title" id="onboarding-welcome"></div>
+      <div class="onboarding-welcome-msg" id="onboarding-message"></div>
+      <button class="auth-btn" onclick="finishOnboarding()">Let's go →</button>
+    </div>
+  </div>
+</div>
+
+<!-- END OF SESSION SCREEN -->
+<div id="session-complete" class="overlay-base" style="z-index:9991;">
+  <div class="overlay-inner-lg">
+    <div class="session-complete-icon">✅</div>
+    <div class="session-complete-label">DAILY GOAL REACHED</div>
+    <div class="session-complete-title" id="session-title"></div>
+    <div class="session-complete-msg" id="session-message"></div>
+    <div class="session-stats-box">
+      <div class="session-stat">
+        <div class="session-stat-value" id="session-xp-earned"></div>
+        <div class="session-stat-label">XP TODAY</div>
+      </div>
+      <div class="session-divider"></div>
+      <div class="session-stat">
+        <div class="session-stat-value streak" id="session-streak"></div>
+        <div class="session-stat-label">DAY STREAK</div>
+      </div>
+      <div class="session-divider"></div>
+      <div class="session-stat">
+        <div class="session-stat-value sections" id="session-sections"></div>
+        <div class="session-stat-label">SECTIONS</div>
+      </div>
+    </div>
+    <div class="session-tomorrow-box">
+      <div class="session-tomorrow-label">TOMORROW</div>
+      <div class="session-tomorrow-title" id="session-tomorrow"></div>
+    </div>
+    <button class="auth-btn dashboard-continue-btn" onclick="closeSessionComplete()">Keep going →</button>
+    <button class="session-done-btn" onclick="closeSessionComplete(true)">That's enough for today</button>
+  </div>
+</div>
+
+<!-- DAILY CHALLENGE OVERLAY -->
+<div id="daily-challenge" class="overlay-base scrollable" style="z-index:9990;">
+  <div class="overlay-inner-lg">
+    <div class="challenge-label">⚡ DAILY CHALLENGE</div>
+    <div class="challenge-title" id="challenge-title">Today's Challenge</div>
+    <div class="challenge-body" id="challenge-body"></div>
+    <div class="challenge-question-box" id="challenge-question"></div>
+    <div class="challenge-options" id="challenge-options"></div>
+    <div id="challenge-result" class="challenge-result"></div>
+    <div class="challenge-actions">
+      <button onclick="closeDailyChallenge()" class="challenge-skip-btn">Skip</button>
+    </div>
+  </div>
+</div>
+
+<!-- FLOOR COMPLETE CELEBRATION -->
+<div id="floor-celebration" class="overlay-base" style="z-index:9992;">
+  <div class="overlay-inner-md">
+    <div class="celebration-icon" id="celebration-icon">🎓</div>
+    <div class="celebration-label">FLOOR COMPLETE</div>
+    <div class="celebration-floor" id="celebration-floor"></div>
+    <div class="celebration-message" id="celebration-message"></div>
+    <div class="celebration-progress-box">
+      <div class="celebration-progress-label">YOUR PROGRESS</div>
+      <div class="celebration-xp" id="celebration-xp"></div>
+      <div class="celebration-xp-label">TOTAL XP</div>
+    </div>
+    <div class="celebration-name" id="celebration-name"></div>
+    <button class="auth-btn" onclick="closeCelebration()" style="margin-bottom:12px;">Continue to next floor →</button>
+    <div class="celebration-share-btn" onclick="shareAchievement()">Share this achievement</div>
+  </div>
+</div>
+<div id="cover">
+
+  <!-- RETURNING USER DASHBOARD -->
+  <div id="dashboard" style="display:none;width:100%;max-width:420px;text-align:left;">
+    <div class="dashboard-header">
+      <div>
+        <div class="dashboard-title">The Code Book</div>
+        <div id="dashboard-greeting" class="dashboard-greeting"></div>
+      </div>
+      <div>
+        <div id="dashboard-level-label" class="dashboard-level-label"></div>
+        <div id="dashboard-xp" class="dashboard-xp"></div>
+      </div>
+    </div>
+    <div class="dashboard-card dashboard-streak-row">
+      <div id="dashboard-streak-icon" class="dashboard-streak-icon">🔥</div>
+      <div style="flex:1;">
+        <div id="dashboard-streak-text" class="dashboard-streak-text"></div>
+        <div id="dashboard-streak-sub" class="dashboard-streak-sub"></div>
+      </div>
+    </div>
+    <div class="dashboard-card">
+      <div class="dashboard-goal-header">
+        <div class="dashboard-goal-label">TODAY'S GOAL</div>
+        <div id="dashboard-goal-text" class="top-xp-chip"></div>
+      </div>
+      <div class="dashboard-goal-track">
+        <div id="dashboard-goal-bar" style="height:100%;background:var(--accent);border-radius:6px;transition:width 0.6s ease;width:0%;"></div>
+      </div>
+    </div>
+    <div class="dashboard-card" style="margin-bottom:24px;">
+      <div class="dashboard-goal-label" style="margin-bottom:8px;">WHERE YOU LEFT OFF</div>
+      <div id="dashboard-position" class="dashboard-position"></div>
+      <div id="dashboard-next-preview" class="dashboard-next-preview"></div>
+    </div>
+    <button class="start-btn dashboard-continue-btn" onclick="startBook()">Continue →</button>
+    <div class="dashboard-signout-wrap">
+      <span onclick="signOut()" class="dashboard-signout">Sign out</span>
+    </div>
+  </div>
+
+  <!-- NEW USER LANDING -->
+  <div id="new-user-landing" class="landing-screen">
+    <div class="landing-begin-wrap">
+      <div class="landing-begin-title">The Code <span>Book.</span></div>
+      <div class="landing-begin-sub">A calm path into coding</div>
+      <button class="landing-begin-btn" onclick="showAuthFromLanding()">Begin</button>
+    </div>
+    <div id="cover-user" class="cover-user-badge">
+      Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
+      <span onclick="signOut()" class="cover-signout-link">Sign out</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+    <div class="top-logo">The Code Book</div>
+  </div>
+  <div class="top-nav-tabs">
+    <button class="top-nav-tab active" id="tnav-learn" onclick="switchTopNav('learn',this)">Learn</button>
+    <button class="top-nav-tab" id="tnav-build" onclick="switchTopNav('build',this)">Build</button>
+    <button class="top-nav-tab" id="tnav-challenge" onclick="switchTopNav('challenge',this)">Challenge</button>
+    <button class="top-nav-tab" id="tnav-map" onclick="switchTopNav('map',this)">Map</button>
+  </div>
+  <div class="top-right">
+    <button id="theme-toggle-real" onclick="toggleTheme()" class="theme-toggle-real" title="Toggle theme">🌙</button>
+    <div class="top-xp-chip" id="top-xp-chip">⚡ 0 XP</div>
+    <div class="top-streak-chip" id="top-streak-chip">🔥 0</div>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<!-- THREE COLUMN GRID -->
+<div class="app-grid">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="left-sidebar" id="left-sidebar">
+
+    <!-- VISUAL BUILDING -->
+    <div class="visual-building-wrap">
+      <div class="vb-label">YOUR BUILDING</div>
+      <div class="vb-building" id="vb-building">
+        <div class="vb-roof"></div>
+        <!-- floors injected by JS -->
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="left-stats">
+      <div class="stat-row">
+        <span class="stat-label">LEVEL</span>
+        <span class="stat-val" id="ls-level">1</span>
+      </div>
+      <div class="level-bar-track">
+        <div class="level-bar-fill" id="ls-xp-bar" style="width:0%"></div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">STREAK</span>
+        <span class="stat-val" id="ls-streak">🔥 0 days</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">OVERALL</span>
+        <span class="stat-val" id="ls-progress">0%</span>
+      </div>
+    </div>
+
+    <!-- FLOOR / SECTION NAV -->
+    <div class="left-floor-nav" id="left-floor-nav">
+      <!-- injected by renderLeftNav() -->
+    </div>
+
+    <!-- OFFLINE BADGE -->
+    <div class="sidebar-offline">
+      <div class="sidebar-offline-dot"></div>
+      AVAILABLE OFFLINE
+    </div>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-col" id="main-col">
+    <div id="main-content">
+      <!-- section content injected here -->
+    </div>
+
+  <!-- BUILD PANEL -->
+  <div class="top-panel" id="panel-build"></div>
+
+  <!-- CHALLENGE PANEL -->
+  <div class="top-panel" id="panel-challenge"></div>
+
+  <!-- MAP PANEL -->
+  <div class="top-panel" id="panel-map"></div>
+
+  </div>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar" id="right-sidebar">
+
+    <!-- SECTION PROGRESS -->
+    <div class="right-section">
+      <div class="right-section-label" id="rs-floor-label">FLOOR 1 — SECTIONS</div>
+      <div class="sec-progress-list" id="rs-section-list">
+        <!-- injected by renderRightNav() -->
+      </div>
+    </div>
+
+    <!-- SAGE -->
+    <div class="right-section">
+      <div class="right-section-label">SAGE</div>
+      <div class="sage-card">
+        <div class="sage-card-header">
+          <div class="sage-avatar-sm">🦉</div>
+          <div class="sage-card-name">YOUR GUIDE</div>
+        </div>
+        <div id="sage-sidebar-text">
+          Every expert was once a beginner who refused to quit.
+        </div>
+      </div>
+    </div>
+
+    <!-- DAILY GOAL -->
+    <div class="right-section">
+      <div class="right-section-label">TODAY'S GOAL</div>
+      <div>
+        <div class="daily-goal-row">
+          <span class="daily-goal-sub" id="rs-goal-text">0 of 5 sections</span>
+          <span class="top-xp-chip" id="rs-goal-pct">0%</span>
+        </div>
+        <div class="daily-goal-track">
+          <div class="daily-goal-fill" id="rs-goal-bar" style="width:0%"></div>
+        </div>
+        <div class="daily-goal-sub" id="rs-goal-sub">Complete sections to hit your daily goal</div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="right-section">
+      <div class="right-section-label">ACHIEVEMENTS</div>
+      <div class="achievement-grid" id="rs-achievements">
+        <div class="ach-item" title="Complete Floor 1">
+          <div class="ach-icon">🧱</div>
+          <div class="ach-label">First Floor</div>
+        </div>
+        <div class="ach-item ach-locked" title="7 day streak">
+          <div class="ach-icon">🔥</div>
+          <div class="ach-label">On Fire</div>
+        </div>
+        <div class="ach-item ach-locked" title="Use the code editor">
+          <div class="ach-icon">⌨️</div>
+          <div class="ach-label">First Code</div>
+        </div>
+        <div class="ach-item ach-locked" title="Complete Floor 2">
+          <div class="ach-icon">🏗️</div>
+          <div class="ach-label">Builder</div>
+        </div>
+        <div class="ach-item ach-locked" title="Complete all floors">
+          <div class="ach-icon">🎓</div>
+          <div class="ach-label">Graduate</div>
+        </div>
+        <div class="ach-item ach-locked" title="30 day streak">
+          <div class="ach-icon">⚡</div>
+          <div class="ach-label">Unstoppable</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MOBILE BOTTOM BAR -->
+<div class="mobile-bottom-bar" id="mobile-bottom-bar">
+  <button class="mob-nav-btn active" id="mob-learn" onclick="switchTopNav('learn',this);setMobActive(this)">
+    📖<span>Learn</span>
+  </button>
+  <button class="mob-nav-btn" id="mob-build" onclick="switchTopNav('build',this);setMobActive(this)">
+    🔨<span>Build</span>
+  </button>
+  <button class="mob-nav-btn" id="mob-challenge" onclick="switchTopNav('challenge',this);setMobActive(this)">
+    ⚡<span>Challenge</span>
+  </button>
+  <button class="mob-nav-btn" id="mob-map" onclick="switchTopNav('map',this);setMobActive(this)">
+    🗺️<span>Map</span>
+  </button>
+</div>
+
+</div>
+<!-- END APP -->
+
+<script src="app.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+  
