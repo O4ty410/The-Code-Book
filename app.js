@@ -487,7 +487,7 @@ function showAuthFromLanding() {
 document.getElementById('new-user-landing').style.display = 'none';
 document.getElementById('auth-screen').style.display = 'flex';
 document.body.style.overflow = 'hidden';
-
+}
 function switchTab(mode) {
   authMode = mode;
   document.querySelectorAll('.auth-tab').forEach((t, i) => {
