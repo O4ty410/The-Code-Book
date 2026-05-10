@@ -1,0 +1,510 @@
+/* ============================================================
+   LAYOUT
+   Reset, body, app shell, top bar, sidebars, main content,
+   scrollbar, and all responsive breakpoints.
+   Depends on: variables.css, animations.css
+   ============================================================ */
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background:
+    /* Top-left code glow */
+    radial-gradient(ellipse 60% 50% at 0% 0%, rgba(0,180,220,0.12) 0%, transparent 60%),
+    /* Bottom circuit board glow */
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(0,200,255,0.15) 0%, transparent 60%),
+    /* Right side code glow */
+    radial-gradient(ellipse 50% 60% at 100% 30%, rgba(0,150,200,0.10) 0%, transparent 60%),
+    /* Fully solid deep navy base — no transparency */
+    #070d1a;
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body.light {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 0%, rgba(160,117,42,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 100%, rgba(126,184,200,0.05) 0%, transparent 50%),
+    #f7f3ed;
+  background-attachment: fixed;
+}
+
+/* ============================================================
+   BACKGROUND LAYERS
+   Recreates the code-snippet + circuit-board aesthetic
+   using pure CSS — no image files needed.
+   ============================================================ */
+
+/* Code snippets layer — faint text pattern top-left and top-right */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    /* Scattered dot particles */
+    radial-gradient(1px 1px at 10% 15%, rgba(0,220,255,0.6), transparent),
+    radial-gradient(1px 1px at 25% 8%,  rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 42% 22%, rgba(0,220,255,0.4), transparent),
+    radial-gradient(1px 1px at 58% 6%,  rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 71% 18%, rgba(0,220,255,0.5), transparent),
+    radial-gradient(1px 1px at 85% 11%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 93% 28%, rgba(0,220,255,0.4), transparent),
+    radial-gradient(2px 2px at 5%  45%, rgba(0,220,255,0.3), transparent),
+    radial-gradient(1px 1px at 18% 52%, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 78% 42%, rgba(0,220,255,0.35), transparent),
+    radial-gradient(1px 1px at 90% 55%, rgba(255,255,255,0.3), transparent);
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Circuit board glow layer at the bottom */
+body::after {
+  content: "";
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 35%;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 100%, rgba(0,200,255,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 80% 100%, rgba(0,180,220,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 50% 100%, rgba(0,220,255,0.10) 0%, transparent 100%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body.light::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(3px 3px at 20% 30%, rgba(0,102,204,0.12), transparent),
+    radial-gradient(4px 4px at 50% 70%, rgba(0,102,204,0.1), transparent),
+    radial-gradient(2px 2px at 80% 40%, rgba(0,102,204,0.12), transparent),
+    linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+  z-index: -2;
+  display: block;
+}
+
+body.light::after { display: none; }
+
+strong {
+  color: var(--accent2);
+  font-weight: 700;
+}
+
+/* ============================================================
+   THEME TOGGLE
+   ============================================================ */
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ============================================================
+   SCREEN VISIBILITY
+   ============================================================ */
+
+#cover  { display: none; }
+#app    { display: none; }
+
+#auth-screen.hidden { display: none !important; }
+#cover.active       { display: flex !important; }
+#app.active         { display: block !important; }
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+
+#app {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr 280px;
+  min-height: calc(100vh - 52px);
+  padding-top: 52px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  align-items: flex-start;
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  background: rgba(6,6,6,1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+  box-shadow:
+    0 1px 0 rgba(212,170,106,0.12),
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 8px 32px rgba(0,0,0,0.5);
+}
+
+body.light .top-bar {
+  background: rgba(247,243,237,0.8);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow:
+    0 1px 0 rgba(160,117,42,0.15),
+    0 8px 32px rgba(0,0,0,0.08);
+}
+
+.top-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--accent);
+}
+
+body.light .top-logo {
+  background: linear-gradient(135deg, #6b4a18 0%, #a0752a 50%, #c8952e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.top-nav-tabs {
+  display: flex;
+  gap: 2px;
+}
+
+.top-nav-tab {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 6px 14px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.top-nav-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-xp-chip,
+.top-streak-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.hamburger-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* ============================================================
+   LEFT SIDEBAR
+   ============================================================ */
+
+.left-sidebar {
+  background: rgba(8,8,8,1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-right: none;
+  box-shadow:
+    inset -1px 0 0 rgba(212,170,106,0.06),
+    1px 0 40px rgba(0,0,0,0.6);
+  position: sticky;
+  top: 52px;
+  height: calc(100vh - 52px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+body.light .left-sidebar {
+  background: rgba(253,251,247,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: inset -1px 0 0 rgba(160,117,42,0.1);
+}
+
+/* ============================================================
+   RIGHT SIDEBAR
+   ============================================================ */
+
+.right-sidebar {
+  background: rgba(8,8,8,1);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-left: none;
+  box-shadow:
+    inset 1px 0 0 rgba(212,170,106,0.06),
+    -1px 0 40px rgba(0,0,0,0.6);
+  position: sticky;
+  top: 52px;
+  height: calc(100vh - 52px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+body.light .right-sidebar {
+  background: rgba(245,243,238,0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ============================================================
+   SIDEBAR — SHARED LEGACY (two-col layout)
+   ============================================================ */
+
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 260px;
+  min-width: 220px;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--accent);
+  font-style: italic;
+}
+
+.sidebar-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 140;
+  top: 52px;
+}
+
+.sidebar-overlay.visible { display: block; }
+
+.sidebar-offline {
+  padding: 12px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+}
+
+.sidebar-offline-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+/* ============================================================
+   MAIN CONTENT AREA
+   ============================================================ */
+
+.main-content {
+  padding: 0;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 860px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+  min-height: 100vh;
+}
+
+.main-col {
+  overflow-y: auto;
+  max-height: calc(100vh - 52px);
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ============================================================
+   BTN PRIMARY UTILITY
+   ============================================================ */
+
+.btn-primary {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+}
+
+/* ============================================================
+   RESPONSIVE — TABLET (≤1100px)
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .app-grid {
+    grid-template-columns: 240px 1fr;
+  }
+  .right-sidebar { display: none; }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (≤900px)
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .left-sidebar {
+    position: fixed;
+    left: -260px;
+    top: 52px;
+    height: calc(100vh - 52px);
+    width: 240px;
+    z-index: 150;
+    transition: left 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+  }
+
+  .left-sidebar.open { left: 0; }
+
+  .right-sidebar { display: none; }
+
+  .main-col { max-height: calc(100vh - 52px - 52px); }
+
+  .mobile-bottom-bar { display: flex !important; }
+
+  .top-logo { font-size: 15px; }
+  .top-nav-tabs { gap: 1px; }
+  .top-nav-tab { font-size: 9px; padding: 5px 8px; letter-spacing: 1px; }
+  .top-xp-chip, .top-streak-chip { display: none; }
+
+  .hamburger-btn { display: flex; align-items: center; }
+
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 140;
+    top: 52px;
+  }
+
+  .sidebar-overlay.visible { display: block; }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE (≤600px)
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .top-nav-tabs { display: none; }
+  .app-layout { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .main-content { max-width: 100%; }
+  .main-col { max-height: none; }
+}
