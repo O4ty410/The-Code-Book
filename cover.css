@@ -145,3 +145,50 @@
   .cover-title { font-size: clamp(40px, 14vw, 80px); }
   .start-btn   { padding: 16px 32px; font-size: 11px; }
 }
+
+/*LANDING SCREEN
+
+.landing-screen {
+display: flex;
+flex-direction: column;
+align-items: center ;
+justify-content: center;
+text-align: center;
+min-height: 100vh;
+padding: 40px 20px;
+}
+
+.landing-begin-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(52px, 10vw, 110px);
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.landing-begin-title span {
+  color: var(--accent);
+  font-style: italic;
+  font-size: 13px
+  letter-spacing: 4px;
+  color: var (--muted);
+  text-transform: uppercase;
+  margin-bottom: 60px;
+}
+ . landing-begin-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  padding: 18px 48px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+  .landing-begin-btn:hover {
+  background: var(--text);
+  transform: translateY(-2px);
+}

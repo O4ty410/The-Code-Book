@@ -1,3 +1,5 @@
+
+console.log("JS is working");
 let isLoggedIn = false;
 let isGuest = false;
 let currentFloor = 1;
