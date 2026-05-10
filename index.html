@@ -20,19 +20,19 @@
 </head>
 <body>
 
-  <div id="floor-nav"></div>
-  <div id="timer-display">25:00</div>
-  <div id="timer-btn"></div>
-  <div id="user-bar"></div>
-  <div id="user-email"></div>
-  <div id="theme-toggle">🌙</div>
-  <div id="xp-panel"></div>
-  <div id="current-xp">0</div>
-  <div id="current-level">1</div>
-  <div id="level-fill" style="width:0%"></div>
-  <div id="xp-to-next"></div>
-  <div id="streak-count">0</div>
-  <div id="time-log">0m total</div>
+  <div id="floor-nav" class="compat-hidden"></div>
+  <div id="timer-display" class="compat-hidden">25:00</div>
+  <div id="timer-btn" class="compat-hidden"></div>
+  <div id="user-bar" class="compat-hidden"></div>
+  <div id="user-email" class="compat-hidden"></div>
+  <div id="theme-toggle" class="compat-hidden"></div>
+  <div id="xp-panel" class="compat-hidden"></div>
+  <div id="current-xp" class="compat-hidden">0</div>
+  <div id="current-level" class="compat-hidden">1</div>
+  <div id="level-fill" class="compat-hidden" style="width:0%"></div>
+  <div id="xp-to-next" class="compat-hidden"></div>
+  <div id="streak-count" class="compat-hidden">0</div>
+  <div id="time-log" class="compat-hidden">0m total</div>
   <div id="progress-fill" style="width:0%"></div>
   <div id="progress-pct">0%</div>
   <div id="sage-bubble"></div>
@@ -43,7 +43,7 @@
 <div class="compat-hidden" aria-hidden="true"></div>
 
 <!-- AUTH SCREEN -->
-<div id="auth-screen">
+<div id="auth-screen" style="display:none;">
   <div class="auth-title">The Code Book</div>
   <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
   <div class="auth-tabs">
@@ -66,11 +66,37 @@
     <button onclick="showPrivacy()" class="auth-link-btn">Privacy Policy</button>
   </div>
   <div class="auth-start-wrap">
-    <button onclick="alert('Please sign in or click Try without account')" class="auth-start-btn">
-      Start — One Step At A Time
-    </button>
+    <button onclick="showGuestNamePrompt()" class="auth-link-btn">Continue as Guest</button>
   </div>
 </div><!-- end #auth-screen -->
+
+
+<!-- GUEST NAME OVERLAY -->
+<div id="guest-name-overlay" class="overlay-base" style="display:none;">
+  <div class="overlay-inner-sm" style="text-align:center;">
+    <div class="onboarding-owl">&#128100;</div>
+    <div class="onboarding-title">What should we call you?</div>
+    <div class="onboarding-body">No account needed. You can explore Floors 1 and 2 as a guest.</div>
+    <input class="auth-input" id="guest-name-input" type="text" placeholder="Enter your name" maxlength="30" style="text-align:center;margin-bottom:16px;">
+    <button class="auth-btn" onclick="confirmGuestName()">Start Exploring</button>
+    <div style="margin-top:12px;">
+      <button onclick="hideGuestNamePrompt()" class="auth-link-btn">&#8592; Back to Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUEST LOCK POPUP -->
+<div id="guest-lock-overlay" class="overlay-base" style="display:none;">
+  <div class="overlay-inner-md" style="text-align:center;">
+    <div style="font-size:48px;margin-bottom:16px;">&#128274;</div>
+    <div class="onboarding-title">Floor Locked</div>
+    <div class="onboarding-body">Floors 3 and above are available to registered users. Create a free account to unlock everything and save your progress.</div>
+    <button class="auth-btn" onclick="hideGuestLockPopup();document.getElementById('auth-screen').style.display='flex';">Create Free Account</button>
+    <div style="margin-top:12px;">
+      <button onclick="hideGuestLockPopup()" class="auth-link-btn">Keep exploring as guest</button>
+    </div>
+  </div>
+</div>
 
 <!-- LEADERBOARD OVERLAY -->
 <div id="leaderboard-overlay" class="overlay-base scrollable" style="z-index:9993;">
@@ -199,11 +225,12 @@
       </div>
     </div>
     <div id="onboarding-step-3" style="display:none;">
-      <div class="onboarding-label">HOW MUCH TIME CAN YOU GIVE EACH DAY?</div>
+      <div class="onboarding-label">WHAT DO YOU HOPE TO GET OUT OF THIS?</div>
       <div class="onboarding-options">
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('time','15')">15 minutes — just a little</button>
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('time','30')">30 minutes — steady pace</button>
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('time','60')">An hour or more — I'm committed</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','job')">Get a job in tech</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','project')">Build my own project or idea</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','understand')">Just understand how it all works</button>
+        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','unsure')">I'm not sure yet</button>
       </div>
     </div>
     <div id="onboarding-step-4" style="display:none;">
@@ -321,29 +348,12 @@
   </div>
 
   <!-- NEW USER LANDING -->
-  <div id="new-user-landing">
-    <div class="cover-label">A calm path into coding</div>
-    <div class="cover-title">The Code<span>Book.</span></div>
-    <div class="cover-subtitle">Learn coding without overwhelm. One clear step at a time.<br><br>Built for people who overthink, lose focus, or get stuck in tutorials. This is built differently.</div>
-    <div class="cover-features">
-      <div class="cover-feature">✦ 7 Floors</div>
-      <div class="cover-feature">✦ 35 Sections</div>
-      <div class="cover-feature">✦ Built-in hints</div>
-      <div class="cover-feature">✦ Voice narration</div>
-      <div class="cover-feature">✦ Tracks your progress</div>
-      <div class="cover-feature">✦ Completely free</div>
+  <div id="new-user-landing" class="landing-screen">
+    <div class="landing-begin-wrap">
+      <div class="landing-begin-title">The Code <span>Book.</span></div>
+      <div class="landing-begin-sub">A calm path into coding</div>
+      <button class="landing-begin-btn" onclick="showAuthFromLanding()">Begin</button>
     </div>
-    <div class="floor-dots">
-      <div class="floor-dot active"></div>
-      <div class="floor-dot"></div>
-      <div class="floor-dot"></div>
-      <div class="floor-dot"></div>
-      <div class="floor-dot"></div>
-      <div class="floor-dot"></div>
-      <div class="floor-dot"></div>
-    </div>
-    <button class="start-btn" onclick="startBook()">Start — one step at a time</button>
-    <div class="cover-human">I built this because I struggled to stay consistent with coding.</div>
     <div id="cover-user" class="cover-user-badge">
       Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
       <span onclick="signOut()" class="cover-signout-link">Sign out</span>

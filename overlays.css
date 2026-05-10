@@ -689,3 +689,39 @@
   position: absolute;
   pointer-events: none;
 }
+
+/* ============================================================
+   GUEST LOCKED FLOOR NAV ITEM
+   ============================================================ */
+
+.floor-nav-item.guest-locked {
+  opacity: 0.45;
+  cursor: pointer;
+}
+
+.floor-nav-item.guest-locked .floor-nav-label {
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   AUTH SCREEN BACKGROUND
+   ============================================================ */
+
+#auth-screen {
+  position: fixed;
+  inset: 0;
+  background: #0a0a0a;
+  z-index: 100;
+}
+
+/* ============================================================
+   APP BACKGROUND — prevents landing image bleeding through
+   ============================================================ */
+
+#app {
+  position: relative;
+  background: var(--bg, #0a0a0a);
+  min-height: 100vh;
+  z-index: 10;
+}
