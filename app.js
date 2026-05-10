@@ -483,20 +483,10 @@ function showAuthFromLanding() {
     return sectionIds.has(k) && state.completed[k];
   }).length;
   const hasStarted = completedCount > 0 || state.currentSection > 0 || state.currentFloor > 1 || state.xp > 0;
-
-  if (hasStarted) {
-    // Returning user \u2014 go straight into the app
-    document.getElementById('new-user-landing').style.display = 'none';
-    document.body.style.overflow = '';
-    startBook();
-    return;
-  }
-
-  // New user \u2014 show auth screen
-  document.getElementById('new-user-landing').style.display = 'none';
-  document.getElementById('auth-screen').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
+// New user — show auth screen
+document.getElementById('new-user-landing').style.display = 'none';
+document.getElementById('auth-screen').style.display = 'flex';
+document.body.style.overflow = 'hidden';
 
 function switchTab(mode) {
   authMode = mode;
