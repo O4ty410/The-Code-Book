@@ -484,6 +484,7 @@ function showAuthFromLanding() {
   }).length;
   const hasStarted = completedCount > 0 || state.currentSection > 0 || state.currentFloor > 1 || state.xp > 0;
   if (hasStarted) {
+    // Returning user — go straight into the app
     loadState();
     updateStreak();
     document.getElementById('new-user-landing').style.display = 'none';
@@ -492,6 +493,7 @@ function showAuthFromLanding() {
     applyTheme();
     launchApp();
   } else {
+    // New user — show onboarding or auth
     document.getElementById('new-user-landing').style.display = 'none';
     const hasOnboarded = localStorage.getItem('codebook_onboarded');
     if (!hasOnboarded) {
