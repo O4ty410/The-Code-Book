@@ -596,7 +596,7 @@ function populateDashboard() {
     landing.style.flexDirection = 'column';
     landing.style.alignItems = 'center';
     landing.style.justifyContent = 'flex-end';
-    landing.style.paddingBottom = '120px';
+    landing.style.paddingBottom = '380px';
     landing.style.background = 'transparent';
   }
   var cover = document.getElementById('cover');
