@@ -577,12 +577,9 @@ async function submitNewPassword() {
 }
 
 function populateDashboard() {
-  // Always show landing screen first for everyone
-  // BEGIN button handles routing: returning users go straight in, new users see auth
+  document.body.style.cssText = "margin:0;padding:0;width:100vw;height:100vh;overflow:hidden;background:url('./background.png') center center / cover no-repeat;background-color:#0a0a0a;";
   var landing = document.getElementById('new-user-landing');
-  if (landing) landing.style.display = 'flex';
-  var cover = document.getElementById('cover');
-  if (cover) cover.style.display = 'none';
+  if (landing) landing.style.display = 'none';
 }
 
 function trackDailySection() {
