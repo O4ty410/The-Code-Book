@@ -577,9 +577,30 @@ async function submitNewPassword() {
 }
 
 function populateDashboard() {
-  document.body.style.cssText = "margin:0;padding:0;width:100vw;height:100vh;overflow:hidden;background:url('./background.png') center center / cover no-repeat;background-color:#0a0a0a;";
+  // Put background image directly on body \u2014 most reliable approach
+  document.body.style.backgroundImage = "url('./background.png')";
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center center';
+  document.body.style.backgroundRepeat = 'no-repeat';
+  document.body.style.backgroundAttachment = 'fixed';
+  // Show the BEGIN button overlay
   var landing = document.getElementById('new-user-landing');
-  if (landing) landing.style.display = 'none';
+  if (landing) {
+    landing.style.display = 'flex';
+    landing.style.position = 'fixed';
+    landing.style.top = '0';
+    landing.style.left = '0';
+    landing.style.width = '100vw';
+    landing.style.height = '100vh';
+    landing.style.zIndex = '99999';
+    landing.style.flexDirection = 'column';
+    landing.style.alignItems = 'center';
+    landing.style.justifyContent = 'flex-end';
+    landing.style.paddingBottom = '120px';
+    landing.style.background = 'transparent';
+  }
+  var cover = document.getElementById('cover');
+  if (cover) cover.style.display = 'none';
 }
 
 function trackDailySection() {
@@ -731,7 +752,14 @@ window.addEventListener('load', async () => {
     return;
   }
 
+  // Show background first
   populateDashboard();
+
+  // Then check onboarding \u2014 only shows overlay if needed
+  const hasOnboarded = localStorage.getItem('codebook_onboarded');
+  if (!hasOnboarded) {
+    showOnboarding();
+  }
 });
 
 // --- XP + LEVEL + STREAK SYSTEM ---
