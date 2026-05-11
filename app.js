@@ -1027,7 +1027,7 @@ function finishOnboarding() {
   if (localStorage.getItem('codebook_guest')) {
     startAsGuest();
   } else {
-    launchApp();
+    populateDashboard();
   }
 }
 
