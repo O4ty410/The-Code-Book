@@ -765,12 +765,14 @@ window.addEventListener('load', async () => {
 
 const LEVELS = [
   { level: 1, xp: 0 },
-  { level: 2, xp: 100 },
-  { level: 3, xp: 250 },
-  { level: 4, xp: 450 },
-  { level: 5, xp: 700 },
-  { level: 6, xp: 1000 },
-  { level: 7, xp: 1400 }
+  { level: 2, xp: 200 },
+  { level: 3, xp: 500 },
+  { level: 4, xp: 900 },
+  { level: 5, xp: 1500 },
+  { level: 6, xp: 2300 },
+  { level: 7, xp: 3400 },
+  { level: 8, xp: 4700 },
+  { level: 9, xp: 6000 }
 ];
 
 function getStreakMultiplier() {
@@ -791,6 +793,16 @@ function getCurrentLevel() {
 function getNextLevel() {
   const cur = getCurrentLevel();
   return LEVELS.find(l => l.level === cur.level + 1) || null;
+}
+
+function getSectionXP(fi) {
+  var byFloor = [25, 35, 50, 65, 80, 100, 125];
+  return byFloor[fi] !== undefined ? byFloor[fi] : 25;
+}
+
+function getFloorXP(fi) {
+  var byFloor = [150, 200, 300, 400, 500, 600, 750];
+  return byFloor[fi] !== undefined ? byFloor[fi] : 250;
 }
 
 function awardXP(amount, key, x, y) {
@@ -1511,6 +1523,30 @@ function getEditorDefaults(section) {
     return { code: "", filename: "", challenges: [] };
 }
 
+function renderSectionStrip(fi, si) {
+  var floor = FLOORS[fi];
+  if (!floor) return '';
+  var color = floor.color || '#c8a96e';
+  var html = '<div class="section-strip">';
+  floor.sections.forEach(function(sec, i) {
+    var isDone = !!state.completed[sec.id];
+    var isCurrent = i === si;
+    var cls = 'section-strip-item' +
+      (isCurrent ? ' ss-active' : '') +
+      (isDone && !isCurrent ? ' ss-done' : '');
+    var style = isCurrent
+      ? ' style="color:' + color + ';border-color:' + color + '"'
+      : '';
+    html += '<div class="' + cls + '"' + style +
+      ' onclick="goToSection(' + fi + ',' + i + ')">' +
+      (isDone && !isCurrent ? '✓ ' : '') +
+      (i + 1) + '. ' + sec.title +
+      '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
 function loadSection(f1, s1) {
 
 var floor = FLOORS[f1];
@@ -1664,7 +1700,7 @@ var fi = state.currentFloor - 1;
     '<div class="gate-check-row ' + (gate.quiz ? 'done' : '') + '" id="gate-quiz-' + section.id + '"><div class="gate-check-dot">' + (gate.quiz ? '&#10003;' : '') + '</div>' + (section.quiz ? 'Pass the knowledge check' : 'Complete the checklist') + '</div>' +
     '</div>' +
     '<button class="complete-btn" id="complete-btn-' + section.id + '" onclick="completeSection(\'' + section.id + '\',' + fi + ',' + si + ')"' + (isDone ? ' disabled' : '') + '>' +
-    (isDone ? '&#10003; Section Complete' : 'Mark as Complete \u2192 +25 XP') +
+    (isDone ? '&#10003; Section Complete' : 'Mark as Complete \u2192 +' + getSectionXP(fi) + ' XP') +
     '</button></div>';
 
   // NAV
@@ -1682,7 +1718,7 @@ if (!isLoggedIn && !isGuest) {
   document.body.style.overflow = 'hidden';
   return;
 }
-  document.getElementById('main-content').innerHTML = tabs +
+  document.getElementById('main-content').innerHTML = renderSectionStrip(fi, si) + tabs +
     '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
     (showEditor ? '<div class="section-panel" id="spanel-code-' + section.id + '">' + c + '</div>' : '') +
     (showQuiz ? '<div class="section-panel" id="spanel-quiz-' + section.id + '">' + q + '</div>' : '') +
@@ -1733,7 +1769,7 @@ function markGate(sectionId, key) {
   var gate = sectionGateState[sectionId];
   if (gate.read && gate.code && gate.quiz) {
     var btn = document.getElementById('complete-btn-' + sectionId);
-    if (btn && !btn.disabled) btn.textContent = 'Mark as Complete \u2192 +25 XP';
+    if (btn && !btn.disabled) btn.textContent = 'Mark as Complete \u2192 +' + getSectionXP(state.currentFloor - 1) + ' XP';
     sageMessage('All gates cleared. Mark this section complete when ready.', 'celebrate');
   }
 }
@@ -2324,17 +2360,18 @@ function completeSection(sectionId, fi, si) {
   }
 
   state.completed[sectionId] = true;
-  awardXP(25, 'complete-' + sectionId, window.innerWidth / 2, 300);
+  var secXP = getSectionXP(fi);
+  awardXP(secXP, 'complete-' + sectionId, window.innerWidth / 2, 300);
   playCompletionSound();
   trackDailySection();
 
   // Log to activity feed
   var secName = FLOORS[fi] && FLOORS[fi].sections[si] ? FLOORS[fi].sections[si].title : sectionId;
-  logActivity('section', 'Completed: ' + secName, 25);
+  logActivity('section', 'Completed: ' + secName, secXP);
 
   const isNowComplete = isFloorComplete(fi);
   if (isNowComplete) {
-    awardXP(250, 'floor-' + fi, window.innerWidth / 2, 250);
+    awardXP(getFloorXP(fi), 'floor-' + fi, window.innerWidth / 2, 250);
     setTimeout(() => showFloorCelebration(fi), 600);
   }
   saveState();
@@ -2357,18 +2394,26 @@ function prevSection(fi, si) {
 }
 
 function nextSection(fi, si) {
-  // Auto-complete the section if the user clicks Next without marking it done
-  const floor = FLOORS[fi];
-  const section = floor.sections[si];
+  var floor = FLOORS[fi];
+  var section = floor.sections[si];
+  var gate = sectionGateState[section.id] || {};
+  var hasQuiz = !!(section && section.quiz);
+
   if (!state.completed[section.id]) {
-    state.completed[section.id] = true;
-    awardXP(25, 'complete-' + section.id, window.innerWidth / 2, 300);
-    const isNowComplete = isFloorComplete(fi);
-    if (isNowComplete) {
-      awardXP(250, 'floor-' + fi, window.innerWidth / 2, 250);
-      setTimeout(function() { showFloorCelebration(fi); }, 600);
+    if (hasQuiz && !gate.quiz) {
+      // Quiz exists but not answered — navigate without awarding XP
+      sageMessage('You skipped the quiz — no XP awarded for this section. You can come back to it anytime.', 'warn');
+    } else {
+      // No quiz (reading/checklist section) — auto-complete as before
+      state.completed[section.id] = true;
+      awardXP(getSectionXP(fi), 'complete-' + section.id, window.innerWidth / 2, 300);
+      var isNowComplete = isFloorComplete(fi);
+      if (isNowComplete) {
+        awardXP(getFloorXP(fi), 'floor-' + fi, window.innerWidth / 2, 250);
+        setTimeout(function() { showFloorCelebration(fi); }, 600);
+      }
+      saveState();
     }
-    saveState();
   }
   if (si < floor.sections.length - 1) { state.currentSection = si + 1; saveState(); renderNav(); renderFloor(fi, si + 1); }
   else if (fi < FLOORS.length - 1) { goToFloor(fi + 1); }

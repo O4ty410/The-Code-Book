@@ -452,6 +452,8 @@ body.light .right-sidebar {
     grid-template-rows: auto;
   }
 
+  .top-nav-tabs { display: none; }
+
   .left-sidebar {
     position: fixed;
     left: -260px;
