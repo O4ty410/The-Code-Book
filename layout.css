@@ -130,8 +130,9 @@ strong {
    SCREEN VISIBILITY
    ============================================================ */
 
-#cover  { display: none; }
-#app    { display: none; }
+#cover     { display: none; }
+#app       { display: none; }
+#floor-nav { display: none !important; visibility: hidden; pointer-events: none; }
 
 #auth-screen.hidden { display: none !important; }
 #cover.active       { display: flex !important; }
