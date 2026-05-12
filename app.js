@@ -1039,7 +1039,8 @@ function finishOnboarding() {
   if (localStorage.getItem('codebook_guest')) {
     startAsGuest();
   } else {
-    populateDashboard();
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
   }
 }
 
