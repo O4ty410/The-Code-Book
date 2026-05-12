@@ -3,7 +3,7 @@
    Network first for HTML, cache first for assets
    ============================================================ */
 
-var CACHE = 'codebook-v4';
+var CACHE = 'codebook-v5';
 
 self.addEventListener('install', function(e) {
   self.skipWaiting();
