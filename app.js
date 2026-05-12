@@ -32,9 +32,9 @@ const FLOORS = [
       {
         id: "1-1",
         title: "How the Internet Actually Works",
-       body: "Before you write a single line of code, you need to think of it like this. When you type a web address, that entire process happens in milliseconds, every single time you visit a site.",
+        body: `Before you write a single line of code, you need to understand what the internet actually is.\n\nEvery time you type a web address and press Enter, a precise sequence unfolds in under a second. Your browser sends a <strong>request</strong> \u2014 a message that says "give me this page." That request travels across the internet to a <strong>server</strong> \u2014 another computer, somewhere in the world, that is always on and waiting. The server finds the right files and sends them back. Your browser reads those files and draws the page you see.\n\nEvery webpage is made of three types of files working together:\n\n<strong>HTML</strong> \u2014 the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> \u2014 the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> \u2014 the behaviour. What happens when you click, type, or scroll.\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nThat is what a web developer does.`,
 
-        
+
         callout: {
           type: "default",
           label: "The Key Idea",
@@ -45,22 +45,26 @@ const FLOORS = [
           label: "For Your Brain",
           text: "Don't try to memorise this. Just let the idea sit. You're building a mental picture, not a fact sheet. The detail comes later through doing."
         },
-        hint: `Imagine the internet like a postal service. You are the sender. The website is the recipient. Your browser writes the letter (the request), sends it to the right address (the server), and the server writes back with everything needed to paint the page on your screen.\n\n<strong>Still fuzzy?</strong> Try this \u2014 next time you visit a website, think: "somewhere in the world, a computer just received my request and sent me back a bunch of files." That's literally all that happened.`,
+        hint: `The request-response cycle is how the entire web works. Browser asks. Server answers.\n\n<strong>Try this right now:</strong> Open any website. Right-click anywhere on the page and choose "View Page Source." What you see \u2014 all of it \u2014 is what the server sent back to your browser. Every site you've ever visited sent files that looked like that.\n\n<strong>Still fuzzy?</strong> Think of it like ordering food. You place an order (request). The kitchen prepares it (server processes). The waiter brings it to your table (response). Your browser is the waiter. You're the one eating.`,
         quiz: {
           question: "When you visit a website, what is your browser actually doing?",
           options: ["Creating the website from scratch", "Requesting and displaying files from another computer", "Downloading the entire internet", "Connecting directly to the website owner"],
           correct: 1,
           feedback: "Correct. Your browser sends a request to a server \u2014 another computer \u2014 which sends back files. Your browser reads those files and displays them. That's it. That's the web."
+        },
+        match: {
+          prompt: "Every webpage is built from three types of files. Match each to what it does:",
+          pairs: [
+            { term: "HTML", def: "The structure \u2014 headings, paragraphs, buttons" },
+            { term: "CSS", def: "The visual style \u2014 colours, fonts, layout" },
+            { term: "JavaScript", def: "The behaviour \u2014 what happens when you interact" }
+          ]
         }
       },
       {
         id: "1-2",
         title: "How a Computer Reads Instructions",
-        body: `Computers are extraordinarily fast. But they are not smart. They do <strong>exactly</strong> what you tell them \u2014 nothing more, nothing less. This is both the challenge and the power of coding.
-
-A computer reads code <strong>line by line, top to bottom</strong>. It doesn't skip ahead. It doesn't assume. It reads instruction 1, executes it, then reads instruction 2. This is called <strong>sequential execution</strong>.
-
-This means that the order you write things in <strong>matters enormously</strong>. A recipe that says "eat the cake" before "bake the cake" is going to cause problems. Code works the same way.`,
+        body: `Computers are extraordinarily fast. But they are not smart. They do <strong>exactly</strong> what you tell them \u2014 nothing more, nothing less.\n\nA computer reads code <strong>line by line, top to bottom</strong>. It doesn't skip ahead. It doesn't assume. It reads instruction 1, executes it, then reads instruction 2. This is called <strong>sequential execution</strong> and it is the foundation of everything.\n\nThe order you write things in <strong>matters enormously</strong>. A recipe that says "serve the cake" before "bake the cake" produces nothing edible. Code works the same way. Ask a computer to display a result before it has calculated the result \u2014 and it has nothing to show.\n\nThis is one of the most common beginner mistakes. And now you already understand why it happens.\n\nProfessional developers spend a lot of time thinking about order. Not just what to do \u2014 but when.`,
         callout: {
           type: "default",
           label: "The Logical Thinker in You",
@@ -77,32 +81,56 @@ This means that the order you write things in <strong>matters enormously</strong
           options: ["It works fine, computers are smart enough to reorder", "It displays nothing or an error, because the result doesn't exist yet", "It calculates first anyway", "It asks you what to do"],
           correct: 1,
           feedback: "The computer tries to display the result before it's been calculated \u2014 so there's nothing to show. Order is everything. This is one of the most common beginner mistakes, and now you already understand why it happens."
+        },
+        code: {
+          lang: "JavaScript",
+          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.7;">\n<h2 style="color:#c8a96e;margin-top:0;">Order Matters</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // Step 1: Set a price\n  var price = 40;\n  out += \'<p>1. Price set to: \u00a3\' + price + \'</p>\';\n\n  // Step 2: Calculate a 10% discount\n  var discount = price * 0.10;\n  out += \'<p>2. Discount calculated: \u00a3\' + discount.toFixed(2) + \'</p>\';\n\n  // Step 3: Apply it\n  var finalPrice = price - discount;\n  out += \'<p style="color:#c8a96e;font-size:18px;margin-top:16px;">You pay: \u00a3\' + finalPrice.toFixed(2) + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
+          challenges: [
+            "Move Step 3 above Step 2 \u2014 what breaks and why?",
+            "Change the price from 40 to 120",
+            "Change the discount from 10% to 25%"
+          ]
         }
       },
       {
         id: "1-3",
         title: "The Logic Behind All Code",
-        body: "Every programming language in the world \u2014 no matter how different they look \u2014 is based on: <strong>1. Conditions</strong> \u2014 If this is true, do this. Otherwise, do that. <strong>2. Loops</strong> \u2014 Do this thing repeatedly until something changes. <strong>3. Functions</strong> \u2014 A named set of instructions you can use again and again. That's it. Every app, every game, every website you've ever used is built on combinations of those three ideas.",
+        body: `Every program ever written \u2014 from a calculator app to a social network \u2014 is built from exactly three ideas.\n\n<strong>Conditions</strong> decide which path to take. If the user is logged in, show the dashboard. If not, show the login page. Every decision in code is a condition. There are no exceptions.\n\n<strong>Loops</strong> repeat instructions until something changes. Check every item in a shopping cart and add up the total. Send a notification to every user in a list. Any time something needs to happen "for each item" or "until a condition is met" \u2014 that is a loop.\n\n<strong>Functions</strong> are named, reusable blocks of instructions. Instead of writing the same ten lines every time you need to validate a form, you write it once, give it a name, and call that name whenever you need it. Functions are how professional code stays manageable as it scales.\n\nThere is nothing in any programming language \u2014 not one thing \u2014 that is not built on some combination of these three ideas. When you are writing complex software in two years, you will still be thinking in conditions, loops and functions.`,
 
         callout: {
           type: "default",
-          label: "Real World Example",
-          text: "A traffic light is a loop (keeps cycling) with conditions (if it's been red for 60 seconds, turn green) and functions (a reusable set of steps for each colour change). You already understand code logic. You just haven't written it yet."
+          label: "The Professional Lens",
+          text: `When a developer reads someone else's code for the first time, this is what they look for: where are the conditions, where are the loops, where are the functions. Everything else is just detail. Master these three and you can read any codebase.`
         },
-        hint: `A <strong>condition</strong> is a fork in the road \u2014 if it's raining, take an umbrella, otherwise don't.\nA <strong>loop</strong> is like brushing your teeth \u2014 you repeat the same motion until the job is done.\nA <strong>function</strong> is like a vending machine \u2014 you press a button (call the function) and it always does the same thing.\n\n<strong>Still fuzzy?</strong> Look around the room and find one real-world example of each. A thermostat is a condition. A washing machine cycle is a loop. A light switch is a function.`,
+        hint: `A <strong>condition</strong> is a fork in the road. The road splits. You go one way or the other based on what's true.\nA <strong>loop</strong> is a roundabout. You go around until you're told to exit.\nA <strong>function</strong> is a shortcut. You name a journey once. Then you can take it anytime just by saying its name.\n\n<strong>Try this:</strong> Pick any app on your phone. Describe one condition it uses, one loop it uses, and one repeated action that is probably a function. You will find all three in under a minute.`,
         quiz: {
           question: "Which of the three core concepts means: 'Do this over and over until something stops you'?",
           options: ["A condition", "A function", "A loop", "A variable"],
           correct: 2,
           feedback: "A loop repeats instructions until a condition tells it to stop. A condition decides which path to take. A function is a reusable block of instructions. These three are the building blocks of everything."
+        },
+        code: {
+          lang: "JavaScript",
+          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.8;">\n<h2 style="color:#c8a96e;margin-top:0;">All Three Building Blocks</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // CONDITION\n  var isLoggedIn = true;\n  if (isLoggedIn) {\n    out += \'<p style="color:#7eb8c8;">&#x2713; Condition: logged in &rarr; showing dashboard</p>\';\n  } else {\n    out += \'<p style="color:#7eb8c8;">&#x2717; Condition: not logged in &rarr; redirecting to login</p>\';\n  }\n\n  // LOOP\n  for (var i = 1; i <= 3; i++) {\n    out += \'<p style="color:#a8d5a2;">Loop iteration \' + i + \' of 3</p>\';\n  }\n\n  // FUNCTION\n  function greet(name) {\n    return \'Welcome, \' + name + \'. You are ready to build.\';\n  }\n  out += \'<p style="color:#c8a96e;margin-top:8px;">\' + greet(\'Developer\') + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
+          challenges: [
+            "Change isLoggedIn to false — watch the condition take the other path",
+            "Change the loop to run 10 times instead of 3",
+            "Pass your own name to the greet() function"
+          ]
+        },
+        match: {
+          prompt: "Match each concept to what it does:",
+          pairs: [
+            { term: "Condition", def: "Decides which path the code takes" },
+            { term: "Loop", def: "Repeats instructions until something changes" },
+            { term: "Function", def: "A named, reusable block of instructions" }
+          ]
         }
       },
       {
         id: "1-4",
         title: "Your First Look at Real Code",
-        body: `You're not going to write code yet. You're going to <strong>read</strong> it. This is important \u2014 before you write a language, you learn to read it. Same principle.
-
-Look at the code below. Don't panic. Don't try to memorise it. Just try to read it like a sentence and see if you can guess what it does before reading the explanation.`,
+        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Before you speak a language fluently, you learn to recognise it. Same principle applies here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\nLook at the example below. Do not panic. Do not try to memorise it. Just try to read it like a sentence \u2014 guess what each line does before you read the explanation. That act of guessing is already how developers think.`,
         code: {
           lang: "HTML",
           lines: [
@@ -111,6 +139,13 @@ Look at the code below. Don't panic. Don't try to memorise it. Just try to read 
             '<span class="code-tag">&lt;h1&gt;</span>Hello, World<span class="code-tag">&lt;/h1&gt;</span>',
             '<span class="code-tag">&lt;p&gt;</span>This is my first piece of code.<span class="code-tag">&lt;/p&gt;</span>',
             '<span class="code-tag">&lt;button&gt;</span>Click Me<span class="code-tag">&lt;/button&gt;</span>'
+          ],
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; }\n    h1 { color: #c8a96e; }\n    button {\n      background: #c8a96e; border: none; color: #0a0a0a;\n      padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;\n    }\n  </style>\n</head>\n<body>\n  <!-- This is a comment. The browser ignores it. -->\n  <h1>Hello, World</h1>\n  <p>This is my first piece of code.</p>\n  <button>Click Me</button>\n</body>\n</html>',
+          challenges: [
+            "Change 'Hello, World' to your own name",
+            "Add a second paragraph below the first",
+            "Change the button text to 'I built this'",
+            "Add a second heading using <h2>"
           ]
         },
         callout: {
@@ -120,30 +155,48 @@ Look at the code below. Don't panic. Don't try to memorise it. Just try to read 
         },
         callout2: {
           type: "focus",
-          label: "Visual Learner Note",
-          text: "In the next floor, everything you read here becomes something you can actually <strong>see on screen</strong>. The visual reward is coming. For now just let the pattern land."
+          label: "What You're Actually Learning",
+          text: `The three lines below represent three of the most-used elements in all of web development. Every professional developer has written h1, p and button hundreds of times. By the end of this course, so will you.`
         },
         hint: `Don't read the code like a sentence. Read it like signs on a road.\n\nThe tag name tells you what type of thing it is. &lt;h1&gt; = big heading. &lt;p&gt; = paragraph. &lt;button&gt; = button. The words between the opening and closing tag are what actually appears on screen.\n\n<strong>Still fuzzy?</strong> Think of tags like labels on boxes. The label tells you what's inside. The content is the thing inside the box. Open the box (opening tag), here's what's inside (content), close the box (closing tag).`,
+        quiz: {
+          question: "Looking at the code above — what does the <h1> tag tell the browser?",
+          options: [
+            "To make the text bold and underlined",
+            "That this content is a large heading",
+            "To link to another page",
+            "To ignore this line — it is a comment"
+          ],
+          correct: 1,
+          feedback: "h1 means 'heading level 1' — the largest, most important heading on the page. Tags are labels. They tell the browser what type of content is inside them. Open tag, content, close tag. That is the entire pattern of HTML."
+        },
       },
       {
         id: "1-5",
         title: "Floor 1 Check \u2014 Explain It Back",
-        body: `This is the most important section of Floor 1. Not because it's the hardest \u2014 but because explaining something back is how you prove to yourself that it has actually landed.
-
-Answer these in your head, or write them down, as if you were explaining them to a friend who knows nothing about coding.
-
-<strong>The questions:</strong>`,
+        body: `You have covered the four ideas that underpin everything in web development.\n\nHow the internet works. How computers read instructions. The three building blocks of all code. And your first look at HTML.\n\nThis is not a small thing. Most people who try to learn to code never properly understand these foundations \u2014 they rush to write syntax before they understand what it is or why it works. You have not done that.\n\nBefore you move to Floor 2, do one final check. Not for us \u2014 for you. Answer the question below in your head before selecting an option. If you can explain it clearly, you are ready. If something feels shaky, go back to that one section. Not the whole floor \u2014 just that section.`,
         callout: {
           type: "default",
-          label: "Your Floor 1 Check",
-          text: "1. What happens when you type a web address into your browser?\n\n2. Why does the order of code instructions matter?\n\n3. What are the three building blocks of all code?\n\n4. What does an HTML tag do?"
+          label: "The Foundation",
+          text: `What you have learned on Floor 1 is not beginner knowledge that you will forget when things get advanced. It is the foundation every professional developer still thinks from. The concepts scale with you.`
         },
         callout2: {
           type: "focus",
-          label: "Honest Assessment",
-          text: "If you can answer all four in plain English without looking back \u2014 you're ready for Floor 2. If one or two feel shaky \u2014 go back to that section, not the whole floor. One weak brick, not a broken building."
+          label: "Floor 2 Preview",
+          text: `Floor 2 is where it becomes real. You will write actual HTML and CSS and see the results on screen immediately. Everything you understood here becomes something you can build.`
         },
-        hint: `If you can't answer one of the four questions, that's not failure \u2014 that's information. It tells you exactly which section to go back to.\n\n<strong>Tip:</strong> Don't go back to the beginning. Go back to the one section that felt unclear and just read that part again. One weak spot doesn't mean you don't understand the rest.`,
+        hint: `If you cannot answer the question below without guessing \u2014 that is useful information, not failure. It tells you exactly which section to return to. One weak brick does not mean a broken building. It means one brick to fix.`,
+        quiz: {
+          question: "A developer builds a system that: checks whether a user has paid (condition), processes each item in their order one by one (loop), and uses the same discount calculation in three different places (function). Which statement is true?",
+          options: [
+            "This system uses all three core building blocks of programming",
+            "Loops and functions are the same thing \u2014 both repeat code",
+            "Conditions are not needed here \u2014 loops can make decisions",
+            "You would need a fourth concept to build this"
+          ],
+          correct: 0,
+          feedback: "Exactly right. One condition, one loop, one function \u2014 and you have described a real piece of professional software. Every system, no matter how complex, is built from combinations of these three things. You now have the lens every developer uses."
+        },
       }
     ]
   },
@@ -398,7 +451,47 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
   }
 ];
 
-var sectionGateState = {}; // ADD HERE
+var sectionGateState = {};
+var matchSelected = {};
+
+function matchClick(mid, side, idx) {
+  if (side === 'left') {
+    var el = document.getElementById('match-l-' + mid + '-' + idx);
+    if (!el || el.classList.contains('correct')) return;
+    document.querySelectorAll('#' + mid + ' .match-left-item').forEach(function(e) {
+      if (!e.classList.contains('correct')) e.classList.remove('selected');
+    });
+    matchSelected[mid] = (matchSelected[mid] === idx) ? null : idx;
+    if (matchSelected[mid] !== null) el.classList.add('selected');
+  } else {
+    var leftIdx = matchSelected[mid];
+    if (leftIdx === null || leftIdx === undefined) return;
+    var rightEl = document.getElementById('match-r-' + mid + '-' + idx);
+    if (!rightEl || rightEl.classList.contains('correct')) return;
+    var pairIdx = parseInt(rightEl.getAttribute('data-pair'));
+    if (pairIdx === leftIdx) {
+      var leftEl = document.getElementById('match-l-' + mid + '-' + leftIdx);
+      if (leftEl) { leftEl.classList.remove('selected'); leftEl.classList.add('correct'); }
+      rightEl.classList.add('correct');
+      matchSelected[mid] = null;
+      var remaining = document.querySelectorAll('#' + mid + ' .match-left-item:not(.correct)');
+      if (remaining.length === 0) {
+        var done = document.getElementById('match-done-' + mid);
+        if (done) done.style.display = 'block';
+        awardXP(15, 'match-' + mid, window.innerWidth / 2, 300);
+      }
+    } else {
+      rightEl.classList.add('wrong');
+      setTimeout(function() {
+        rightEl.classList.remove('wrong');
+        document.querySelectorAll('#' + mid + ' .match-left-item').forEach(function(e) {
+          if (!e.classList.contains('correct')) e.classList.remove('selected');
+        });
+        matchSelected[mid] = null;
+      }, 600);
+    }
+  }
+}
 let state = {
   currentFloor: 1,
   currentSection: 0,
@@ -1506,7 +1599,7 @@ function getEditorDefaults(section) {
         else if (lang.includes("css")) lang = "css";
         else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
 
-        var code = editorDefaults[lang];
+        var code = section.code.starter || editorDefaults[lang];
 
         if (!code) {
             return { code: "// unknown language", filename: "file.txt", challenges: [] };
@@ -1627,6 +1720,27 @@ var fi = state.currentFloor - 1;
       '<div class="callout-label">' + section.callout2.label + '</div>' +
       '<div class="callout-text">' + section.callout2.text.replace(/\n/g, '<br>') + '</div></div>';
   }
+  if (section.match) {
+    var mt = section.match;
+    var mid = 'match-' + section.id;
+    var scrambled = mt.pairs.map(function(_, i) { return (i + 1) % mt.pairs.length; });
+    r += '<div class="match-activity" id="' + mid + '">' +
+      '<div class="match-label">QUICK MATCH</div>' +
+      '<div class="match-prompt">' + mt.prompt + '</div>' +
+      '<div class="match-cols">' +
+      '<div class="match-col">';
+    mt.pairs.forEach(function(pair, i) {
+      r += '<div class="match-item match-left-item" id="match-l-' + mid + '-' + i + '" onclick="matchClick(\'' + mid + '\',\'left\',' + i + ')">' + pair.term + '</div>';
+    });
+    r += '</div><div class="match-col">';
+    scrambled.forEach(function(pairIdx, displayIdx) {
+      r += '<div class="match-item match-right-item" id="match-r-' + mid + '-' + displayIdx + '" data-pair="' + pairIdx + '" onclick="matchClick(\'' + mid + '\',\'right\',' + displayIdx + ')">' + mt.pairs[pairIdx].def + '</div>';
+    });
+    r += '</div></div>' +
+      '<div class="match-complete" id="match-done-' + mid + '" style="display:none">&#10003; All matched correctly. +15 XP</div>' +
+      '</div>';
+  }
+
   if (section.checklist) {
     r += '<ul class="checklist">';
     section.checklist.forEach(function(item, ci) {
