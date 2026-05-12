@@ -593,12 +593,6 @@ async function submitNewPassword() {
 }
 
 function populateDashboard() {
-  // Put background image directly on body \u2014 most reliable approach
-  document.body.style.backgroundImage = "url('./background.png')";
-  document.body.style.backgroundSize = 'cover';
-  document.body.style.backgroundPosition = 'center center';
-  document.body.style.backgroundRepeat = 'no-repeat';
-  document.body.style.backgroundAttachment = 'fixed';
   // Show the BEGIN button overlay
   var landing = document.getElementById('new-user-landing');
   if (landing) {
@@ -936,7 +930,8 @@ function launchApp() {
   sessionXpStart = state.xp;
 
   // Hide the landing screen and cover
-  document.body.style.backgroundImage = 'none';
+  var landing = document.getElementById('new-user-landing');
+  if (landing) landing.style.display = 'none';
 
   var cover = document.getElementById('cover');
   if (cover) cover.style.display = 'none';
