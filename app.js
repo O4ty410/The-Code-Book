@@ -936,8 +936,7 @@ function launchApp() {
   sessionXpStart = state.xp;
 
   // Hide the landing screen and cover
-  var landing = document.getElementById('new-user-landing');
-  if (landing) landing.style.display = 'none';
+
   var cover = document.getElementById('cover');
   if (cover) cover.style.display = 'none';
 
