@@ -1709,7 +1709,7 @@ var fi = state.currentFloor - 1;
       '<div class="callout-label">' + section.callout.label + '</div>' +
       '<div class="callout-text">' + section.callout.text.replace(/\n/g, '<br>') + '</div></div>';
   }
-  if (section.code) {
+  if (section.code && section.code.lines) {
     r += '<div class="code-block"><div class="code-header">' +
       '<div class="code-dots"><div class="code-dot"></div><div class="code-dot"></div><div class="code-dot"></div></div>' +
       '<div class="code-lang">' + section.code.lang + '</div></div>' +
@@ -2348,7 +2348,7 @@ function renderFloor1(si) {
       return '<div class="f1-section-card f1-section-active">' +
         '<div class="f1-section-meta">SECTION ' + (i + 1) + ' OF ' + totalSecs + '</div>' +
         '<div class="f1-section-title">' + s.title + '</div>' +
-        '<div class="f1-section-desc">' + (s.body ? s.body.substring(0, 80) + '...' : '') + '</div>' +
+        '<div class="f1-section-desc">' + (s.body ? s.body.replace(/<[^>]+>/g, '').substring(0, 80) + '...' : '') + '</div>' +
         '<div class="f1-section-actions">' +
         '<button class="f1-continue-btn" onclick="loadSection(0,' + i + ')">Continue &#8594;</button>' +
         '</div>' +
