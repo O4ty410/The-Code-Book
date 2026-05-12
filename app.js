@@ -1922,34 +1922,38 @@ function renderLeftNav() {
   var nav = document.getElementById('left-floor-nav');
   if (!nav) return;
   nav.innerHTML = '';
-  FLOORS.forEach(function(floor, fi) {
-    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
-    var isActive = (state.currentFloor - 1) === fi;
-    var isComplete = isFloorComplete(fi);
-    var floorDiv = document.createElement('div');
-    floorDiv.className = 'left-floor-item' + (isActive ? ' active' : '') + (isComplete ? ' completed' : '');
-    if (isUnlocked) {
-      floorDiv.onclick = (function(fii){ return function(){ goToFloor(fii); closeSidebar(); }; })(fi);
-    }
-    floorDiv.innerHTML = '<div class="left-floor-num">FLOOR ' + (fi+1) +
-      (isComplete ? ' \u2713' : (!isUnlocked ? ' \uD83D\uDD12' : '')) + '</div>' +
-      '<div class="left-floor-name">' + floor.title + '</div>';
-    if (isActive) {
-      var secList = document.createElement('div');
-      secList.className = 'left-section-list';
-      floor.sections.forEach(function(sec, si) {
-        var isDone = !!state.completed[sec.id];
-        var isCurrent = si === state.currentSection;
-        var item = document.createElement('div');
-        item.className = 'left-section-item' + (isCurrent ? ' current' : '') + (isDone ? ' done' : '');
-        item.innerHTML = '<div class="left-section-dot"></div>' + sec.title;
-        item.onclick = (function(fii, sii){ return function(){ goToSection(fii, sii); closeSidebar(); }; })(fi, si);
-        secList.appendChild(item);
-      });
-      floorDiv.appendChild(secList);
-    }
-    nav.appendChild(floorDiv);
+
+  var fi = state.currentFloor - 1;
+  var floor = FLOORS[fi];
+  if (!floor) return;
+  var floorColor = floor.color || '#c8a96e';
+  var floorNum = (fi + 1 < 10 ? '0' : '') + (fi + 1);
+
+  // Set floor colour as a CSS variable so section items can use it
+  nav.style.setProperty('--floor-color', floorColor);
+
+  // Floor identity header
+  var identity = document.createElement('div');
+  identity.className = 'left-floor-identity';
+  identity.innerHTML =
+    '<div class="left-floor-id-tag" style="color:' + floorColor + '">FLOOR ' + floorNum + '</div>' +
+    '<div class="left-floor-id-name">' + floor.title + '</div>' +
+    '<div class="left-floor-id-divider" style="background:' + floorColor + '"></div>';
+  nav.appendChild(identity);
+
+  // Sections for current floor
+  var secList = document.createElement('div');
+  secList.className = 'left-section-list';
+  floor.sections.forEach(function(sec, si) {
+    var isDone = !!state.completed[sec.id];
+    var isCurrent = si === state.currentSection;
+    var item = document.createElement('div');
+    item.className = 'left-section-item' + (isCurrent ? ' current' : '') + (isDone ? ' done' : '');
+    item.innerHTML = '<div class="left-section-dot"></div>' + sec.title;
+    item.onclick = (function(fii, sii){ return function(){ goToSection(fii, sii); closeSidebar(); }; })(fi, si);
+    secList.appendChild(item);
   });
+  nav.appendChild(secList);
 }
 
 function renderRightNav() {
