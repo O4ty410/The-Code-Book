@@ -2553,6 +2553,10 @@ function f2Ascend() {
 // ============================================
 let lastFloorIndex = 0;
 function renderFloor(fi, si) {
+  // Propagate floor colour so all CSS hover states can use var(--floor-color)
+  var mainCol = document.getElementById('main-col');
+  if (mainCol) mainCol.style.setProperty('--floor-color', FLOORS[fi] ? FLOORS[fi].color : '#c8a96e');
+
   if (fi === 0) {
     // Hide old right sidebar \u2014 Floor 1 has its own built-in sidebar
     var rs = document.getElementById('right-sidebar');
