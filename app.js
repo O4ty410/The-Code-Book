@@ -2792,11 +2792,6 @@ function updateTimerDisplay() {
 // \u2500\u2500\u2500 SERVICE WORKER \u2500\u2500\u2500
 // Registered from sw.js \u2014 Blob URLs are not supported for service workers
 // in modern browsers due to same-origin scope requirements.
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function(err) {
-    console.warn('Service worker registration failed:', err);
-  });
-}
 
 // \u2500\u2500\u2500 INSTALL PROMPT \u2500\u2500\u2500
 var deferredInstallPrompt = null;
