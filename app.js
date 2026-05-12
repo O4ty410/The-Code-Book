@@ -1302,18 +1302,23 @@ function hideGuestNamePrompt() {
 
 function confirmGuestName() {
   var name = document.getElementById('guest-name-input').value.trim();
-  if (!name) { name = 'Guest'; }
+  if (!name) { name = onboardingData.name || 'Guest'; }
   localStorage.setItem('codebook_guest_name', name);
-
-  // Pre-fill onboarding with their name and skip step 1
+  localStorage.setItem('codebook_guest', 'true');
   onboardingData.name = name;
   state.playerName = name;
 
   document.getElementById('guest-name-overlay').style.display = 'none';
   document.getElementById('auth-screen').style.display = 'none';
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = '';
 
-  // Skip straight to experience question (step 2)
+  // Already onboarded — go straight into the app
+  if (localStorage.getItem('codebook_onboarded')) {
+    startAsGuest();
+    return;
+  }
+
+  // First-time guest — collect experience/goal before starting
   document.getElementById('onboarding-step-1').style.display = 'none';
   document.getElementById('onboarding-step-2').style.display = 'block';
   document.getElementById('onboarding-title').textContent = 'Welcome, ' + name + '.';
