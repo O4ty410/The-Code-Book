@@ -51,6 +51,14 @@ const FLOORS = [
           options: ["Creating the website from scratch", "Requesting and displaying files from another computer", "Downloading the entire internet", "Connecting directly to the website owner"],
           correct: 1,
           feedback: "Correct. Your browser sends a request to a server \u2014 another computer \u2014 which sends back files. Your browser reads those files and displays them. That's it. That's the web."
+        },
+        match: {
+          prompt: "Every webpage is built from three types of files. Match each to what it does:",
+          pairs: [
+            { term: "HTML", def: "The structure \u2014 headings, paragraphs, buttons" },
+            { term: "CSS", def: "The visual style \u2014 colours, fonts, layout" },
+            { term: "JavaScript", def: "The behaviour \u2014 what happens when you interact" }
+          ]
         }
       },
       {
@@ -73,6 +81,15 @@ const FLOORS = [
           options: ["It works fine, computers are smart enough to reorder", "It displays nothing or an error, because the result doesn't exist yet", "It calculates first anyway", "It asks you what to do"],
           correct: 1,
           feedback: "The computer tries to display the result before it's been calculated \u2014 so there's nothing to show. Order is everything. This is one of the most common beginner mistakes, and now you already understand why it happens."
+        },
+        code: {
+          lang: "JavaScript",
+          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.7;">\n<h2 style="color:#c8a96e;margin-top:0;">Order Matters</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // Step 1: Set a price\n  var price = 40;\n  out += \'<p>1. Price set to: \u00a3\' + price + \'</p>\';\n\n  // Step 2: Calculate a 10% discount\n  var discount = price * 0.10;\n  out += \'<p>2. Discount calculated: \u00a3\' + discount.toFixed(2) + \'</p>\';\n\n  // Step 3: Apply it\n  var finalPrice = price - discount;\n  out += \'<p style="color:#c8a96e;font-size:18px;margin-top:16px;">You pay: \u00a3\' + finalPrice.toFixed(2) + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
+          challenges: [
+            "Move Step 3 above Step 2 \u2014 what breaks and why?",
+            "Change the price from 40 to 120",
+            "Change the discount from 10% to 25%"
+          ]
         }
       },
       {
@@ -91,6 +108,23 @@ const FLOORS = [
           options: ["A condition", "A function", "A loop", "A variable"],
           correct: 2,
           feedback: "A loop repeats instructions until a condition tells it to stop. A condition decides which path to take. A function is a reusable block of instructions. These three are the building blocks of everything."
+        },
+        code: {
+          lang: "JavaScript",
+          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.8;">\n<h2 style="color:#c8a96e;margin-top:0;">All Three Building Blocks</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // CONDITION\n  var isLoggedIn = true;\n  if (isLoggedIn) {\n    out += \'<p style="color:#7eb8c8;">&#x2713; Condition: logged in &rarr; showing dashboard</p>\';\n  } else {\n    out += \'<p style="color:#7eb8c8;">&#x2717; Condition: not logged in &rarr; redirecting to login</p>\';\n  }\n\n  // LOOP\n  for (var i = 1; i <= 3; i++) {\n    out += \'<p style="color:#a8d5a2;">Loop iteration \' + i + \' of 3</p>\';\n  }\n\n  // FUNCTION\n  function greet(name) {\n    return \'Welcome, \' + name + \'. You are ready to build.\';\n  }\n  out += \'<p style="color:#c8a96e;margin-top:8px;">\' + greet(\'Developer\') + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
+          challenges: [
+            "Change isLoggedIn to false — watch the condition take the other path",
+            "Change the loop to run 10 times instead of 3",
+            "Pass your own name to the greet() function"
+          ]
+        },
+        match: {
+          prompt: "Match each concept to what it does:",
+          pairs: [
+            { term: "Condition", def: "Decides which path the code takes" },
+            { term: "Loop", def: "Repeats instructions until something changes" },
+            { term: "Function", def: "A named, reusable block of instructions" }
+          ]
         }
       },
       {
@@ -105,6 +139,13 @@ const FLOORS = [
             '<span class="code-tag">&lt;h1&gt;</span>Hello, World<span class="code-tag">&lt;/h1&gt;</span>',
             '<span class="code-tag">&lt;p&gt;</span>This is my first piece of code.<span class="code-tag">&lt;/p&gt;</span>',
             '<span class="code-tag">&lt;button&gt;</span>Click Me<span class="code-tag">&lt;/button&gt;</span>'
+          ],
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; }\n    h1 { color: #c8a96e; }\n    button {\n      background: #c8a96e; border: none; color: #0a0a0a;\n      padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px;\n    }\n  </style>\n</head>\n<body>\n  <!-- This is a comment. The browser ignores it. -->\n  <h1>Hello, World</h1>\n  <p>This is my first piece of code.</p>\n  <button>Click Me</button>\n</body>\n</html>',
+          challenges: [
+            "Change 'Hello, World' to your own name",
+            "Add a second paragraph below the first",
+            "Change the button text to 'I built this'",
+            "Add a second heading using <h2>"
           ]
         },
         callout: {
@@ -410,7 +451,47 @@ This will feel like a lot. Break it into pieces. One question first. Then add th
   }
 ];
 
-var sectionGateState = {}; // ADD HERE
+var sectionGateState = {};
+var matchSelected = {};
+
+function matchClick(mid, side, idx) {
+  if (side === 'left') {
+    var el = document.getElementById('match-l-' + mid + '-' + idx);
+    if (!el || el.classList.contains('correct')) return;
+    document.querySelectorAll('#' + mid + ' .match-left-item').forEach(function(e) {
+      if (!e.classList.contains('correct')) e.classList.remove('selected');
+    });
+    matchSelected[mid] = (matchSelected[mid] === idx) ? null : idx;
+    if (matchSelected[mid] !== null) el.classList.add('selected');
+  } else {
+    var leftIdx = matchSelected[mid];
+    if (leftIdx === null || leftIdx === undefined) return;
+    var rightEl = document.getElementById('match-r-' + mid + '-' + idx);
+    if (!rightEl || rightEl.classList.contains('correct')) return;
+    var pairIdx = parseInt(rightEl.getAttribute('data-pair'));
+    if (pairIdx === leftIdx) {
+      var leftEl = document.getElementById('match-l-' + mid + '-' + leftIdx);
+      if (leftEl) { leftEl.classList.remove('selected'); leftEl.classList.add('correct'); }
+      rightEl.classList.add('correct');
+      matchSelected[mid] = null;
+      var remaining = document.querySelectorAll('#' + mid + ' .match-left-item:not(.correct)');
+      if (remaining.length === 0) {
+        var done = document.getElementById('match-done-' + mid);
+        if (done) done.style.display = 'block';
+        awardXP(15, 'match-' + mid, window.innerWidth / 2, 300);
+      }
+    } else {
+      rightEl.classList.add('wrong');
+      setTimeout(function() {
+        rightEl.classList.remove('wrong');
+        document.querySelectorAll('#' + mid + ' .match-left-item').forEach(function(e) {
+          if (!e.classList.contains('correct')) e.classList.remove('selected');
+        });
+        matchSelected[mid] = null;
+      }, 600);
+    }
+  }
+}
 let state = {
   currentFloor: 1,
   currentSection: 0,
@@ -1518,7 +1599,7 @@ function getEditorDefaults(section) {
         else if (lang.includes("css")) lang = "css";
         else if (lang.includes("js") || lang.includes("javascript")) lang = "js";
 
-        var code = editorDefaults[lang];
+        var code = section.code.starter || editorDefaults[lang];
 
         if (!code) {
             return { code: "// unknown language", filename: "file.txt", challenges: [] };
@@ -1639,6 +1720,27 @@ var fi = state.currentFloor - 1;
       '<div class="callout-label">' + section.callout2.label + '</div>' +
       '<div class="callout-text">' + section.callout2.text.replace(/\n/g, '<br>') + '</div></div>';
   }
+  if (section.match) {
+    var mt = section.match;
+    var mid = 'match-' + section.id;
+    var scrambled = mt.pairs.map(function(_, i) { return (i + 1) % mt.pairs.length; });
+    r += '<div class="match-activity" id="' + mid + '">' +
+      '<div class="match-label">QUICK MATCH</div>' +
+      '<div class="match-prompt">' + mt.prompt + '</div>' +
+      '<div class="match-cols">' +
+      '<div class="match-col">';
+    mt.pairs.forEach(function(pair, i) {
+      r += '<div class="match-item match-left-item" id="match-l-' + mid + '-' + i + '" onclick="matchClick(\'' + mid + '\',\'left\',' + i + ')">' + pair.term + '</div>';
+    });
+    r += '</div><div class="match-col">';
+    scrambled.forEach(function(pairIdx, displayIdx) {
+      r += '<div class="match-item match-right-item" id="match-r-' + mid + '-' + displayIdx + '" data-pair="' + pairIdx + '" onclick="matchClick(\'' + mid + '\',\'right\',' + displayIdx + ')">' + mt.pairs[pairIdx].def + '</div>';
+    });
+    r += '</div></div>' +
+      '<div class="match-complete" id="match-done-' + mid + '" style="display:none">&#10003; All matched correctly. +15 XP</div>' +
+      '</div>';
+  }
+
   if (section.checklist) {
     r += '<ul class="checklist">';
     section.checklist.forEach(function(item, ci) {
