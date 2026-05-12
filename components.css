@@ -617,12 +617,62 @@
    SECTION TABS
    ============================================================ */
 
+/* ============================================================
+   SECTION PROGRESS STRIP
+   Always-visible bar at top of content — jump to any section
+   ============================================================ */
+
+.section-strip {
+  display: flex;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 11;
+  scrollbar-width: none;
+}
+
+.section-strip::-webkit-scrollbar { display: none; }
+
+.section-strip-item {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 5px 11px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  color: var(--text-muted);
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.section-strip-item:hover {
+  color: var(--text-dim);
+  border-color: var(--text-muted);
+}
+
+.section-strip-item.ss-done {
+  background: rgba(255,255,255,0.03);
+}
+
+.section-strip-item.ss-active {
+  font-weight: 500;
+}
+
 .section-tabs-bar {
   display: flex;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
   position: sticky;
-  top: 0;
+  top: 37px;
   z-index: 10;
 }
 
