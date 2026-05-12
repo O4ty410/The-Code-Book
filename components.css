@@ -1607,7 +1607,8 @@ body.light .quiz-option {
 
 /* ============================================================
    FLOOR 1 — UNDERSTANDING BEFORE TOUCHING
-   Full bespoke layout matching the design reference.
+   Identity: warm, calm, library-like — candlelight in a library at night.
+   Primary accent: #c8a96e  |  BG tint: #0a0d14  |  Surface: #1a1510
    ============================================================ */
 
 /* Layout grid */
@@ -1636,8 +1637,8 @@ body.light .quiz-option {
   display: flex;
   gap: 28px;
   align-items: center;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(26,21,16,0.8);
+  border: 1px solid rgba(200,169,110,0.12);
   border-radius: 16px;
   padding: 32px;
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
@@ -1651,7 +1652,7 @@ body.light .quiz-option {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   letter-spacing: 3px;
-  color: var(--accent);
+  color: #c8a96e;
   margin-bottom: 12px;
 }
 
@@ -1662,6 +1663,8 @@ body.light .quiz-option {
   color: var(--text);
   line-height: 1.15;
   margin-bottom: 12px;
+  opacity: 0;
+  animation: f1TitleIn 0.6s ease-out forwards;
 }
 
 .f1-floor-desc {
@@ -1689,7 +1692,12 @@ body.light .quiz-option {
 .f1-stat-icon {
   font-size: 16px;
   opacity: 0.7;
+  animation: f1Float 3s ease-in-out infinite;
 }
+
+.f1-stat:nth-child(2) .f1-stat-icon { animation-delay: 0.75s; }
+.f1-stat:nth-child(3) .f1-stat-icon { animation-delay: 1.5s; }
+.f1-stat:nth-child(4) .f1-stat-icon { animation-delay: 2.25s; }
 
 .f1-stat-label {
   font-family: 'IBM Plex Mono', monospace;
@@ -1717,19 +1725,19 @@ body.light .quiz-option {
   letter-spacing: 2px;
   text-transform: uppercase;
   padding: 14px 32px;
-  background: linear-gradient(135deg, var(--accent), #38bdf8);
-  color: #040c18;
+  background: linear-gradient(135deg, #c8a96e, #e8c070);
+  color: #080808;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 700;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 20px rgba(125,211,252,0.3);
+  box-shadow: 0 4px 20px rgba(200,169,110,0.3);
 }
 
 .f1-start-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(125,211,252,0.4);
+  box-shadow: 0 8px 28px rgba(200,169,110,0.45);
 }
 
 .f1-preview-btn {
@@ -1747,8 +1755,8 @@ body.light .quiz-option {
 }
 
 .f1-preview-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: #c8a96e;
+  color: #c8a96e;
 }
 
 /* ── CSS ORB ILLUSTRATION ── */
@@ -1765,14 +1773,14 @@ body.light .quiz-option {
 .f1-orb-outer {
   width: 150px;
   height: 150px;
-  background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15));
-  border: 1px solid rgba(139,92,246,0.3);
+  background: linear-gradient(135deg, rgba(200,169,110,0.15), rgba(180,130,60,0.10));
+  border: 1px solid rgba(200,169,110,0.3);
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow:
-    0 0 40px rgba(139,92,246,0.15),
+    0 0 40px rgba(200,169,110,0.15),
     inset 0 1px 0 rgba(255,255,255,0.1);
   position: relative;
   overflow: hidden;
@@ -1785,7 +1793,7 @@ body.light .quiz-option {
   left: -30%;
   width: 80%;
   height: 80%;
-  background: rgba(139,92,246,0.08);
+  background: rgba(200,169,110,0.08);
   border-radius: 50%;
   filter: blur(20px);
 }
@@ -1793,15 +1801,16 @@ body.light .quiz-option {
 .f1-orb-inner {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  background: linear-gradient(135deg, #c8a96e, #e8c878, #b8905a);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow:
-    0 0 30px rgba(139,92,246,0.5),
-    0 0 60px rgba(59,130,246,0.3);
+    0 0 30px rgba(200,169,110,0.5),
+    0 0 60px rgba(180,140,80,0.3);
   position: relative;
+  animation: f1OrbBreathe 4s ease-in-out infinite;
 }
 
 .f1-orb-core {
@@ -1819,7 +1828,7 @@ body.light .quiz-option {
   transform: translateX(-50%);
   width: 120px;
   height: 12px;
-  background: rgba(139,92,246,0.2);
+  background: rgba(200,169,110,0.2);
   border-radius: 50%;
   filter: blur(8px);
 }
@@ -1869,15 +1878,17 @@ body.light .quiz-option {
 
 .f1-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), #38bdf8);
+  background: #c8a96e;
   border-radius: 6px;
   transition: width 0.6s ease;
+  transform-origin: left;
+  animation: f1ProgressIn 1s ease-out forwards;
 }
 
 .f1-progress-pct {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
-  color: var(--accent);
+  color: #c8a96e;
   white-space: nowrap;
 }
 
@@ -1904,12 +1915,28 @@ body.light .quiz-option {
   background: rgba(255,255,255,0.02);
   transition: all 0.2s ease;
   position: relative;
+  overflow: hidden;
 }
 
 .f1-section-active {
-  border-color: rgba(125,211,252,0.25);
-  background: rgba(125,211,252,0.04);
+  border-color: rgba(200,169,110,0.25);
+  background: rgba(200,169,110,0.04);
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.f1-section-active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(200,169,110,0.07) 50%,
+    transparent 80%
+  );
+  opacity: 0;
+  animation: f1CardGlow 5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .f1-section-locked {
@@ -1952,15 +1979,15 @@ body.light .quiz-option {
   letter-spacing: 1px;
   padding: 10px 20px;
   background: transparent;
-  border: 1px solid var(--accent);
-  color: var(--accent);
+  border: 1px solid #c8a96e;
+  color: #c8a96e;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .f1-continue-btn:hover {
-  background: var(--accent);
+  background: #c8a96e;
   color: var(--bg);
 }
 
@@ -1975,19 +2002,19 @@ body.light .quiz-option {
 
 /* ── RIGHT SIDEBAR ── */
 .f1-sidebar {
-  border-left: 1px solid rgba(255,255,255,0.06);
+  border-left: 1px solid rgba(200,169,110,0.08);
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   overflow-y: auto;
   max-height: calc(100vh - 52px);
-  background: rgba(0,0,0,0.2);
+  background: rgba(10,13,20,0.5);
 }
 
 .f1-sidebar-card {
   background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid rgba(200,169,110,0.1);
   border-radius: 12px;
   padding: 14px 16px;
 }
@@ -2016,7 +2043,7 @@ body.light .quiz-option {
 .f1-sec-row:hover { background: rgba(255,255,255,0.04); }
 
 .f1-sec-active {
-  background: rgba(125,211,252,0.06);
+  background: rgba(200,169,110,0.06);
   color: var(--text);
 }
 
@@ -2036,7 +2063,7 @@ body.light .quiz-option {
 }
 
 .f1-sec-active .f1-sec-num {
-  background: var(--accent);
+  background: #c8a96e;
   color: var(--bg);
 }
 
@@ -2051,7 +2078,7 @@ body.light .quiz-option {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--accent);
+  background: #c8a96e;
   flex-shrink: 0;
 }
 
@@ -2074,7 +2101,7 @@ body.light .quiz-option {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 9px;
   letter-spacing: 2px;
-  color: var(--accent);
+  color: #c8a96e;
 }
 
 .f1-sage-quote {
@@ -2140,7 +2167,7 @@ body.light .quiz-option {
 .f1-activity-xp {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
-  color: var(--accent);
+  color: #c8a96e;
   white-space: nowrap;
 }
 
@@ -2161,8 +2188,8 @@ body.light .quiz-option {
 
 /* Motivational card */
 .f1-motive-card {
-  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
-  border-color: rgba(139,92,246,0.2);
+  background: linear-gradient(135deg, rgba(200,169,110,0.10), rgba(180,130,60,0.05));
+  border-color: rgba(200,169,110,0.2);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2184,7 +2211,7 @@ body.light .quiz-option {
   }
   .f1-sidebar {
     border-left: none;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(200,169,110,0.08);
     max-height: none;
   }
   .f1-orb-wrap {
@@ -2207,4 +2234,36 @@ body.light .quiz-option {
   .f1-stats-row { justify-content: center; }
   .f1-hero-btns { justify-content: center; }
   .f1-progress-wrap { flex-wrap: wrap; gap: 8px; }
+}
+
+/* ── FLOOR 1 ANIMATIONS ── */
+
+/* Orb: slow amber breathing glow over 4 s */
+@keyframes f1OrbBreathe {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.06); }
+}
+
+/* Active section card: candlelight shimmer on the surface */
+@keyframes f1CardGlow {
+  0%, 100% { opacity: 0; }
+  50%       { opacity: 1; }
+}
+
+/* Progress bar: slide in from left on load */
+@keyframes f1ProgressIn {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Floor title: gentle fade-up on load */
+@keyframes f1TitleIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stats icons: subtle float up and down */
+@keyframes f1Float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-3px); }
 }
