@@ -913,7 +913,7 @@ function updateTimeLog() {
   }
 }
 
-checkOnboarding();
+
 
 const today = new Date().toDateString();
 
