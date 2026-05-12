@@ -1955,7 +1955,7 @@ function renderVisualBuilding() {
       div.onclick = (function(fi){ return function(){ goToFloor(fi); closeSidebar(); }; })(i);
     }
     div.innerHTML = '<div class="vb-wins"><div class="vb-win"></div><div class="vb-win"></div><div class="vb-win"></div></div>' +
-      '<div class="vb-fnum">F' + (i+1) + (isComplete ? ' \u2713' : '') + '</div>';
+      (isComplete ? '<div class="vb-fnum">\u2713</div>' : '');
     wrap.appendChild(div);
   }
 }
