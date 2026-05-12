@@ -213,8 +213,7 @@ body.light .top-logo {
 }
 
 .top-nav-tabs {
-  display: flex;
-  gap: 2px;
+  display: none;
 }
 
 .top-nav-tab {
