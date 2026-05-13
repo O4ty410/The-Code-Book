@@ -3721,8 +3721,7 @@ function showAvatarPicker() {
   el.innerHTML =
     '<div class="avatar-picker-inner">' +
     '<button class="avatar-picker-close" onclick="hideAvatarPicker()">&#x2715;</button>' +
-    '<div class="avatar-picker-title">Choose Your Archetype</div>' +
-    '<div class="avatar-picker-sub">Select a character to represent you</div>' +
+    '<div class="avatar-picker-title">Choose a character.</div>' +
     '<div class="avatar-cards">' + cardsHtml + '</div>' +
     '</div>';
   el.addEventListener('click', function(e) { if (e.target === el) hideAvatarPicker(); });
