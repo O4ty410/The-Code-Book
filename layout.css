@@ -133,6 +133,7 @@ strong {
 #cover     { display: none; }
 #app       { display: none; }
 #floor-nav { display: none !important; visibility: hidden; pointer-events: none; }
+#building-map { display: none !important; }
 
 #auth-screen.hidden { display: none !important; }
 #cover.active       { display: flex !important; }
