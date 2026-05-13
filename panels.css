@@ -588,3 +588,238 @@ body.light .premium-card-tooltip {
 @media (max-width: 600px) {
   .premium-grid { grid-template-columns: 1fr; padding: 0 16px 32px; }
 }
+
+/* ============================================================
+   PREMIUM PANEL — SPACE THEME
+   All selectors scoped to #panel-premium so nothing bleeds
+   into the rest of the app.
+   ============================================================ */
+
+#panel-premium {
+  position: relative;
+  background-color: #04060f;
+  background-image:
+    /* Nebula glows */
+    radial-gradient(ellipse 70% 45% at -8% 12%, rgba(139,92,246,0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 55% at 108% 30%, rgba(59,130,246,0.17) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 35% at 50% 105%, rgba(6,182,212,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 35% at 25% 70%, rgba(109,40,217,0.10) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 25% at 80% 65%, rgba(30,64,175,0.09) 0%, transparent 50%),
+    /* Stars — scattered across the panel */
+    radial-gradient(1.5px 1.5px at  4%  2%, rgba(255,255,255,0.90), transparent),
+    radial-gradient(1px   1px   at 13%  6%, rgba(200,220,255,0.70), transparent),
+    radial-gradient(1px   1px   at 22%  1%, rgba(255,255,255,0.55), transparent),
+    radial-gradient(2px   2px   at 31% 10%, rgba(220,235,255,0.50), transparent),
+    radial-gradient(1px   1px   at 43%  3%, rgba(255,255,255,0.65), transparent),
+    radial-gradient(1.5px 1.5px at 53%  8%, rgba(180,200,255,0.60), transparent),
+    radial-gradient(1px   1px   at 64%  4%, rgba(255,255,255,0.75), transparent),
+    radial-gradient(1px   1px   at 72% 13%, rgba(200,220,255,0.55), transparent),
+    radial-gradient(2px   2px   at 79%  0%, rgba(255,255,255,0.45), transparent),
+    radial-gradient(1px   1px   at 86%  7%, rgba(180,200,255,0.65), transparent),
+    radial-gradient(1.5px 1.5px at 93%  5%, rgba(255,255,255,0.55), transparent),
+    radial-gradient(1px   1px   at 97% 11%, rgba(200,220,255,0.70), transparent),
+    radial-gradient(1px   1px   at  7% 19%, rgba(255,255,255,0.40), transparent),
+    radial-gradient(1px   1px   at 17% 24%, rgba(180,200,255,0.45), transparent),
+    radial-gradient(2px   2px   at 29% 20%, rgba(255,255,255,0.30), transparent),
+    radial-gradient(1px   1px   at 46% 17%, rgba(200,220,255,0.50), transparent),
+    radial-gradient(1px   1px   at 59% 22%, rgba(255,255,255,0.55), transparent),
+    radial-gradient(1px   1px   at 68% 18%, rgba(180,200,255,0.40), transparent),
+    radial-gradient(1.5px 1.5px at 75% 26%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px   1px   at 89% 21%, rgba(200,220,255,0.50), transparent),
+    radial-gradient(1px   1px   at  2% 30%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px   1px   at 11% 36%, rgba(180,200,255,0.40), transparent),
+    radial-gradient(2px   2px   at 38% 33%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1px   1px   at 55% 28%, rgba(200,220,255,0.40), transparent),
+    radial-gradient(1px   1px   at 82% 37%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px   1px   at 95% 31%, rgba(180,200,255,0.45), transparent),
+    radial-gradient(1px   1px   at  9% 45%, rgba(255,255,255,0.30), transparent),
+    radial-gradient(1.5px 1.5px at 24% 51%, rgba(200,220,255,0.35), transparent),
+    radial-gradient(1px   1px   at 42% 47%, rgba(255,255,255,0.40), transparent),
+    radial-gradient(1px   1px   at 61% 53%, rgba(180,200,255,0.35), transparent),
+    radial-gradient(2px   2px   at 76% 44%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1px   1px   at 91% 49%, rgba(200,220,255,0.45), transparent),
+    radial-gradient(1px   1px   at 16% 63%, rgba(255,255,255,0.30), transparent),
+    radial-gradient(1px   1px   at 35% 68%, rgba(180,200,255,0.25), transparent),
+    radial-gradient(1.5px 1.5px at 57% 60%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px   1px   at 73% 72%, rgba(200,220,255,0.30), transparent),
+    radial-gradient(1px   1px   at 88% 65%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1px   1px   at  5% 78%, rgba(180,200,255,0.30), transparent),
+    radial-gradient(2px   2px   at 28% 83%, rgba(255,255,255,0.20), transparent),
+    radial-gradient(1px   1px   at 50% 77%, rgba(200,220,255,0.30), transparent),
+    radial-gradient(1px   1px   at 67% 85%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1.5px 1.5px at 84% 80%, rgba(180,200,255,0.35), transparent),
+    radial-gradient(1px   1px   at 96% 88%, rgba(255,255,255,0.20), transparent);
+}
+
+/* ---- Hero ---- */
+
+#panel-premium .panel-hero {
+  background:
+    radial-gradient(ellipse 90% 120% at 50% -30%, rgba(139,92,246,0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at  5% 60%, rgba(59,130,246,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 45% at 95% 55%, rgba(6,182,212,0.10) 0%, transparent 50%),
+    transparent;
+  border-bottom: 1px solid rgba(139,92,246,0.22);
+}
+
+#panel-premium .panel-hero-label {
+  color: #a78bfa;
+  letter-spacing: 5px;
+}
+
+#panel-premium .panel-hero-title {
+  background: linear-gradient(135deg, #ede9fe 0%, #a78bfa 35%, #60a5fa 65%, #67e8f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 24px rgba(139,92,246,0.35));
+}
+
+#panel-premium .panel-hero-sub {
+  color: rgba(199,210,240,0.65);
+}
+
+/* Crown glyph above the title */
+#panel-premium .panel-hero > div:first-child {
+  filter: drop-shadow(0 0 18px rgba(167,139,250,0.7)) drop-shadow(0 0 6px rgba(96,165,250,0.5));
+}
+
+/* "Join Premium" CTA — cosmic gradient replacing the default gold */
+#panel-premium .build-mark-done[disabled] {
+  background: linear-gradient(135deg, rgba(124,58,237,0.35) 0%, rgba(79,70,229,0.30) 50%, rgba(14,165,233,0.25) 100%) !important;
+  border: 1px solid rgba(139,92,246,0.4) !important;
+  color: rgba(199,210,240,0.55) !important;
+  box-shadow: 0 0 20px rgba(124,58,237,0.15), 0 4px 16px rgba(0,0,0,0.5) !important;
+}
+
+/* "Notify me" link */
+#panel-premium button[onclick="showPremiumNotify()"] {
+  color: #a78bfa !important;
+}
+
+/* ---- Feature cards ---- */
+
+#panel-premium .premium-feature-card {
+  background: rgba(10, 6, 26, 0.65);
+  border: 1px solid rgba(109,40,217,0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+#panel-premium .premium-feature-card:hover {
+  border-color: rgba(139,92,246,0.55);
+  box-shadow:
+    0 0 22px rgba(109,40,217,0.22),
+    0 0 6px rgba(96,165,250,0.12),
+    0 10px 32px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  transform: translateY(-3px);
+}
+
+#panel-premium .premium-card-lock {
+  color: #a78bfa;
+  text-shadow: 0 0 8px rgba(167,139,250,0.6);
+}
+
+#panel-premium .premium-card-icon {
+  filter: drop-shadow(0 0 8px rgba(139,92,246,0.45));
+}
+
+#panel-premium .premium-card-name {
+  color: #ede9fe;
+}
+
+#panel-premium .premium-card-desc {
+  color: rgba(180,190,225,0.62);
+}
+
+/* ---- Tooltip ---- */
+
+#panel-premium .premium-card-tooltip {
+  background: rgba(6, 3, 16, 0.97);
+  border-top: 1px solid rgba(109,40,217,0.28);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+#panel-premium .premium-tooltip-full {
+  color: rgba(199,210,240,0.82);
+}
+
+#panel-premium .premium-tooltip-problem {
+  color: rgba(167,139,250,0.72);
+  border-left: 2px solid rgba(139,92,246,0.45);
+  padding-left: 8px;
+  margin-left: 0;
+  font-style: italic;
+}
+
+#panel-premium .premium-tooltip-badge {
+  color: #60a5fa;
+  letter-spacing: 3px;
+  text-shadow: 0 0 8px rgba(96,165,250,0.5);
+}
+
+/* ---- Light mode: revert to standard premium look ---- */
+
+body.light #panel-premium {
+  background-color: #f7f3ed;
+  background-image: none;
+}
+
+body.light #panel-premium .panel-hero {
+  background: radial-gradient(ellipse 60% 80% at 10% 50%, rgba(160,117,42,0.06) 0%, transparent 60%), var(--surface);
+  border-bottom-color: var(--border);
+}
+
+body.light #panel-premium .panel-hero-label { color: var(--accent); }
+
+body.light #panel-premium .panel-hero-title {
+  background: linear-gradient(135deg, #1a1612 0%, #6b4a18 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: none;
+}
+
+body.light #panel-premium .panel-hero-sub { color: var(--text-dim); }
+
+body.light #panel-premium .panel-hero > div:first-child { filter: none; }
+
+body.light #panel-premium .build-mark-done[disabled] {
+  background: rgba(212,170,106,0.08) !important;
+  border-color: rgba(212,170,106,0.25) !important;
+  color: rgba(160,117,42,0.55) !important;
+  box-shadow: none !important;
+}
+
+body.light #panel-premium button[onclick="showPremiumNotify()"] { color: var(--accent) !important; }
+
+body.light #panel-premium .premium-feature-card {
+  background: rgba(255,255,255,0.6);
+  border-color: rgba(160,117,42,0.15);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.light #panel-premium .premium-feature-card:hover {
+  border-color: rgba(160,117,42,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  transform: none;
+}
+
+body.light #panel-premium .premium-card-lock { color: var(--accent); text-shadow: none; }
+body.light #panel-premium .premium-card-icon { filter: none; }
+body.light #panel-premium .premium-card-name { color: var(--text); }
+body.light #panel-premium .premium-card-desc { color: var(--text-muted); }
+
+body.light #panel-premium .premium-card-tooltip {
+  background: rgba(247,243,237,0.97);
+  border-top-color: rgba(160,117,42,0.2);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.light #panel-premium .premium-tooltip-full { color: var(--text-muted); }
+body.light #panel-premium .premium-tooltip-problem { color: var(--text-muted); border-left-color: rgba(160,117,42,0.3); }
+body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-shadow: none; }
