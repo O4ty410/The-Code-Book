@@ -1838,7 +1838,7 @@ if (!isLoggedIn && !isGuest) {
   document.body.style.overflow = 'hidden';
   return;
 }
-  document.getElementById('main-content').innerHTML = renderSectionStrip(fi, si) + tabs +
+  document.getElementById('main-content').innerHTML = tabs +
     '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
     (showEditor ? '<div class="section-panel" id="spanel-code-' + section.id + '">' + c + '</div>' : '') +
     (showQuiz ? '<div class="section-panel" id="spanel-quiz-' + section.id + '">' + q + '</div>' : '') +
@@ -2353,21 +2353,24 @@ function renderFloor1(si) {
   var sectionCardsHtml = floor.sections.map(function(s, i) {
     var done = state.completed[s.id];
     var active = i === si;
+    var num = i < 9 ? '0' + (i + 1) : '' + (i + 1);
+    var badge = done && !active
+      ? '<span class="f1-card-badge f1-card-badge-done">&#10003; Complete</span>'
+      : active
+      ? '<span class="f1-card-badge f1-card-badge-active">Active</span>'
+      : '<span class="f1-card-badge f1-card-badge-locked">Locked</span>';
+    var cardClass = 'f1-section-card ' + (active ? 'f1-section-active' : done ? 'f1-section-done' : 'f1-section-locked');
+    var clickFn = active ? 'loadSection(0,' + i + ')' : 'renderFloor1(' + i + ')';
+    var inner = '<div class="f1-card-header">' +
+      '<div class="f1-card-num">' + num + '</div>' +
+      badge +
+      '</div>' +
+      '<div class="f1-section-title">' + s.title + '</div>';
     if (active) {
-      return '<div class="f1-section-card f1-section-active">' +
-        '<div class="f1-section-meta">SECTION ' + (i + 1) + ' OF ' + totalSecs + '</div>' +
-        '<div class="f1-section-title">' + s.title + '</div>' +
-        '<div class="f1-section-desc">' + (s.body ? s.body.replace(/<[^>]+>/g, '').substring(0, 80) + '...' : '') + '</div>' +
-        '<div class="f1-section-actions">' +
-        '<button class="f1-continue-btn" onclick="loadSection(0,' + i + ')">Continue &#8594;</button>' +
-        '</div>' +
-        '</div>';
+      inner += '<div class="f1-section-desc">' + (s.body ? s.body.replace(/<[^>]+>/g, '').substring(0, 90) + '...' : '') + '</div>' +
+        '<div class="f1-section-actions"><button class="f1-continue-btn" onclick="event.stopPropagation();loadSection(0,' + i + ')">Continue &#8594;</button></div>';
     }
-    return '<div class="f1-section-card f1-section-locked" onclick="renderFloor1(' + i + ')">' +
-      '<div class="f1-section-meta">SECTION ' + (i + 1) + ' OF ' + totalSecs + '</div>' +
-      '<div class="f1-section-title">' + s.title + '</div>' +
-      (done ? '' : '<div class="f1-lock-icon">&#128274;</div>') +
-      '</div>';
+    return '<div class="' + cardClass + '" onclick="' + clickFn + '">' + inner + '</div>';
   }).join('');
 
   // CSS orb illustration
