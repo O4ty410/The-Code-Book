@@ -92,6 +92,45 @@
   to   { opacity: 0; transform: translateY(30px); }
 }
 
+/* ---- Premium space glow animations ---- */
+
+@keyframes cosmicPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 18px rgba(167,139,250,0.70)) drop-shadow(0 0 6px rgba(96,165,250,0.50));
+  }
+  50% {
+    filter: drop-shadow(0 0 40px rgba(167,139,250,1.00)) drop-shadow(0 0 18px rgba(96,165,250,0.85)) drop-shadow(0 0 64px rgba(139,92,246,0.55));
+  }
+}
+
+@keyframes nebulaBreath {
+  0%, 100% { opacity: 1;    transform: scale(1)    translate(  0px,   0px); }
+  33%       { opacity: 0.65; transform: scale(1.12) translate( 24px, -14px); }
+  66%       { opacity: 0.80; transform: scale(0.94) translate(-18px,  18px); }
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(  0px); filter: drop-shadow(0 0  8px rgba(139,92,246,0.45)); }
+  50%       { transform: translateY(-6px); filter: drop-shadow(0 0 18px rgba(139,92,246,0.80)); }
+}
+
+@keyframes titleShimmer {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
+@keyframes premiumButtonPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(124,58,237,0.15), 0 4px 16px rgba(0,0,0,0.50);
+    border-color: rgba(139,92,246,0.40);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(124,58,237,0.45), 0 0 100px rgba(59,130,246,0.18), 0 4px 16px rgba(0,0,0,0.50);
+    border-color: rgba(139,92,246,0.75);
+  }
+}
+
 /* --- Animation utility classes --- */
 .just-checked          { animation: checkTick 0.4s ease; }
 .elevator-up           { animation: elevator-up   0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
