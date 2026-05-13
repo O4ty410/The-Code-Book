@@ -3647,6 +3647,14 @@ var PROF_THEMES = [
     glow: 'rgba(200,169,110,0.30)', border: 'rgba(200,169,110,0.50)', bg: 'rgba(200,160,80,0.10)' },
 ];
 
+var AVATARS = [
+  { id: 'initiate',  name: 'Initiate',  sub: 'The beginning of all things',   icon: '◈', color: '#60a5fa', glow: 'rgba(59,130,246,0.45)',  border: 'rgba(96,165,250,0.60)',  grad: 'linear-gradient(135deg,#60a5fa,#1d4ed8)' },
+  { id: 'builder',   name: 'Builder',   sub: 'Craft with patience and fire',   icon: '⬡', color: '#fb923c', glow: 'rgba(249,115,22,0.45)',  border: 'rgba(251,146,60,0.60)',  grad: 'linear-gradient(135deg,#fb923c,#c2410c)' },
+  { id: 'archivist', name: 'Archivist', sub: 'Knowledge is the true power',    icon: '⟡', color: '#c084fc', glow: 'rgba(168,85,247,0.45)',  border: 'rgba(192,132,252,0.60)', grad: 'linear-gradient(135deg,#c084fc,#7e22ce)' },
+  { id: 'runner',    name: 'Runner',    sub: 'Speed and clarity in motion',    icon: '◐', color: '#34d399', glow: 'rgba(16,185,129,0.45)',  border: 'rgba(52,211,153,0.60)',  grad: 'linear-gradient(135deg,#34d399,#047857)' },
+  { id: 'ascended',  name: 'Ascended',  sub: 'Mastery beyond all boundaries', icon: '✦', color: '#fbbf24', glow: 'rgba(234,179,8,0.45)',   border: 'rgba(251,191,36,0.60)',  grad: 'linear-gradient(135deg,#fbbf24,#92400e)' },
+];
+
 function getProfTheme() {
   return localStorage.getItem('codebook_prof_theme') || 'cosmic-blue';
 }
@@ -3679,6 +3687,54 @@ function switchProfTheme(id) {
   localStorage.setItem('codebook_prof_theme', id);
   applyProfThemeToBody(id);
   renderProfilePanel();
+}
+
+function getSelectedAvatar() {
+  return localStorage.getItem('codebook_avatar') || null;
+}
+
+function selectAvatar(id) {
+  localStorage.setItem('codebook_avatar', id);
+  hideAvatarPicker();
+  renderProfilePanel();
+}
+
+function showAvatarPicker() {
+  var existing = document.getElementById('avatar-picker');
+  if (existing) existing.remove();
+
+  var selectedId = getSelectedAvatar();
+  var cardsHtml = AVATARS.map(function(av) {
+    var isSelected = av.id === selectedId;
+    return '<div class="avatar-card' + (isSelected ? ' selected' : '') + '"' +
+      ' onclick="selectAvatar(\'' + av.id + '\')"' +
+      ' style="--av-color:' + av.color + ';--av-glow:' + av.glow + ';--av-border:' + av.border + '">' +
+      '<div class="avatar-card-icon">' + av.icon + '</div>' +
+      '<div class="avatar-card-name">' + av.name + '</div>' +
+      '<div class="avatar-card-sub">' + av.sub + '</div>' +
+      '</div>';
+  }).join('');
+
+  var el = document.createElement('div');
+  el.id = 'avatar-picker';
+  el.className = 'avatar-picker';
+  el.innerHTML =
+    '<div class="avatar-picker-inner">' +
+    '<button class="avatar-picker-close" onclick="hideAvatarPicker()">&#x2715;</button>' +
+    '<div class="avatar-picker-title">Choose Your Archetype</div>' +
+    '<div class="avatar-picker-sub">Select a character to represent you</div>' +
+    '<div class="avatar-cards">' + cardsHtml + '</div>' +
+    '</div>';
+  el.addEventListener('click', function(e) { if (e.target === el) hideAvatarPicker(); });
+  document.body.appendChild(el);
+  requestAnimationFrame(function() { el.classList.add('open'); });
+}
+
+function hideAvatarPicker() {
+  var picker = document.getElementById('avatar-picker');
+  if (!picker) return;
+  picker.classList.remove('open');
+  setTimeout(function() { if (picker.parentNode) picker.parentNode.removeChild(picker); }, 300);
 }
 
 function renderProfilePanel() {
@@ -3779,12 +3835,26 @@ function renderProfilePanel() {
     }).join('') +
     '</div>';
 
+  var selectedAv = AVATARS.find(function(a) { return a.id === getSelectedAvatar(); }) || null;
+  var avatarInner = selectedAv
+    ? '<span style="font-size:32px;line-height:1;color:' + selectedAv.color + ';filter:drop-shadow(0 0 8px ' + selectedAv.glow + ')">' + selectedAv.icon + '</span>'
+    : initials;
+  var avatarStyle = selectedAv
+    ? ' style="background:' + selectedAv.grad + ';box-shadow:0 0 0 3px ' + selectedAv.border + ',0 4px 16px rgba(0,0,0,0.4)"'
+    : '';
+  var heroStyle = selectedAv
+    ? ' style="box-shadow:0 0 0 1px ' + selectedAv.border + ',0 8px 32px ' + selectedAv.glow + '"'
+    : '';
+
   panel.innerHTML =
     '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
 
     // Header
-    '<div class="prof-hero">' +
-    '<div class="prof-avatar">' + initials + '</div>' +
+    '<div class="prof-hero"' + heroStyle + '>' +
+    '<div class="prof-avatar-wrap">' +
+    '<div class="prof-avatar"' + avatarStyle + '>' + avatarInner + '</div>' +
+    '<button class="prof-avatar-plus" onclick="showAvatarPicker()" title="Choose archetype">+</button>' +
+    '</div>' +
     '<div class="prof-hero-info">' +
     '<div class="prof-name">' + name + '</div>' +
     '<div class="prof-level-name">Level ' + cur.level + ' &mdash; ' + levelName + '</div>' +
