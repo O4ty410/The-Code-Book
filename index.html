@@ -8,13 +8,13 @@
 <meta name="apple-mobile-web-app-title" content="The Code Book">
 <meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
 <title>The Code Book</title>
-  <link rel="stylesheet" href="variables.css?v=20260513e">
-  <link rel="stylesheet" href="animations.css?v=20260513e">
-  <link rel="stylesheet" href="layout.css?v=20260513e">
-  <link rel="stylesheet" href="cover.css?v=20260513e">
-  <link rel="stylesheet" href="components.css?v=20260513e">
-  <link rel="stylesheet" href="panels.css?v=20260513e">
-  <link rel="stylesheet" href="overlays.css?v=20260513e">
+  <link rel="stylesheet" href="variables.css?v=20260513f">
+  <link rel="stylesheet" href="animations.css?v=20260513f">
+  <link rel="stylesheet" href="layout.css?v=20260513f">
+  <link rel="stylesheet" href="cover.css?v=20260513f">
+  <link rel="stylesheet" href="components.css?v=20260513f">
+  <link rel="stylesheet" href="panels.css?v=20260513f">
+  <link rel="stylesheet" href="overlays.css?v=20260513f">
 
   
 </head>
@@ -378,6 +378,7 @@
     <button class="top-nav-tab" id="tnav-challenge" onclick="switchTopNav('challenge',this)">Challenge</button>
     <button class="top-nav-tab" id="tnav-map" onclick="switchTopNav('map',this)">Map</button>
     <button class="top-nav-tab" id="tnav-tools" onclick="switchTopNav('tools',this)">⚙ Tools</button>
+    <button class="top-nav-tab" id="tnav-premium" onclick="switchTopNav('premium',this)">♛ Premium</button>
   </div>
   <div class="top-right">
     <button id="theme-toggle-real" onclick="toggleTheme()" class="theme-toggle-real" title="Toggle theme">🌙</button>
@@ -453,6 +454,9 @@
 
   <!-- TOOLS PANEL -->
   <div class="top-panel" id="panel-tools"></div>
+
+  <!-- PREMIUM PANEL -->
+  <div class="top-panel" id="panel-premium"></div>
 
   </div>
 
@@ -548,12 +552,15 @@
   <button class="mob-nav-btn" id="mob-tools" onclick="switchTopNav('tools',this);setMobActive(this)">
     ⚙<span>Tools</span>
   </button>
+  <button class="mob-nav-btn" id="mob-premium" onclick="switchTopNav('premium',this);setMobActive(this)" style="color:var(--accent);">
+    ♛<span>Premium</span>
+  </button>
 </div>
 
 </div>
 <!-- END APP -->
 
-<script src="app.js?v=20260513e"></script>
+<script src="app.js?v=20260513f"></script>
 </body>
 </html>
 
