@@ -83,7 +83,7 @@
 }
 
 .panel-hero-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: clamp(28px, 4vw, 44px);
   font-weight: 900;
   background: linear-gradient(135deg, #f0ede6 0%, #d4aa6a 60%, #b8906a 100%);
@@ -157,7 +157,7 @@ body.light .build-card:hover {
 }
 
 .build-card-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 20px;
   font-weight: 700;
   color: var(--text);
@@ -323,7 +323,7 @@ body.light .challenge-item {
 .map-floor-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .map-floor-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 2px; font-weight: 700; }
 .map-floor-status { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--text-muted); }
-.map-floor-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.map-floor-title { font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
 .map-floor-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
 
 .map-progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
@@ -538,7 +538,7 @@ body.light .premium-feature-card {
 .premium-card-icon { font-size: 28px; margin-bottom: 12px; }
 
 .premium-card-name {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 16px;
   font-weight: 700;
   color: var(--text);

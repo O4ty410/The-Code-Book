@@ -54,10 +54,9 @@
 }
 
 .overlay-title-serif {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   color: var(--accent);
-  font-style: italic;
 }
 
 .overlay-title-lg  { font-size: 28px; }
@@ -102,7 +101,7 @@
 }
 
 .auth-link-btn {
-  font-family: 'DM Sans', 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -123,7 +122,7 @@
 }
 
 .forgot-link {
-  font-family: 'DM Sans', 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-dim);
@@ -143,7 +142,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 15px;
   line-height: 1.8;
   color: var(--text-dim);
@@ -196,11 +195,10 @@
 }
 
 .reset-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 28px;
   font-weight: 900;
   color: var(--accent);
-  font-style: italic;
   margin-bottom: 8px;
 }
 
@@ -229,11 +227,10 @@
 }
 
 .onboarding-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 26px;
   font-weight: 900;
   color: var(--accent);
-  font-style: italic;
   margin-bottom: 8px;
 }
 
@@ -272,7 +269,7 @@
 }
 
 .onboarding-welcome-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 22px;
   font-weight: 900;
   color: var(--text);
@@ -304,7 +301,7 @@
 }
 
 .session-complete-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 28px;
   font-weight: 900;
   color: var(--text);
@@ -398,7 +395,7 @@
 }
 
 .challenge-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 24px;
   font-weight: 900;
   color: var(--text);
@@ -477,7 +474,7 @@
 }
 
 .celebration-floor {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 36px;
   font-weight: 900;
   color: var(--text);
@@ -508,7 +505,7 @@
 }
 
 .celebration-xp {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 40px;
   font-weight: 900;
   color: var(--accent);
@@ -547,11 +544,10 @@
 }
 
 .dashboard-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 22px;
   font-weight: 900;
   color: var(--accent);
-  font-style: italic;
 }
 
 .dashboard-greeting {
@@ -593,7 +589,7 @@
 .dashboard-streak-icon { font-size: 32px; line-height: 1; }
 
 .dashboard-streak-text {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
   color: var(--text);
   font-size: 15px;
