@@ -2014,8 +2014,7 @@ function switchTopNav(tab, btn) {
 
   if (tab === 'learn') {
     if (mainContent) mainContent.style.display = '';
-    var lp = document.getElementById('panel-learn');
-    if (lp) lp.classList.add('active');
+    renderLearnHub();
   } else {
     if (mainContent) mainContent.style.display = 'none';
     var panel = document.getElementById('panel-' + tab);
@@ -2308,6 +2307,71 @@ function timeAgo(ts) {
 }
 
 // \u2500\u2500 FLOOR 1 LAYOUT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function renderLearnHub() {
+  // Reset to standard two-col layout
+  var rs = document.getElementById('right-sidebar');
+  if (rs) rs.style.display = 'none';
+  var grid = document.querySelector('.app-grid');
+  if (grid) grid.style.gridTemplateColumns = '240px 1fr';
+
+  var html = '<div class="lh-layout">' +
+    '<div class="lh-header">' +
+    '<div class="lh-header-label">YOUR LEARNING PATH</div>' +
+    '<div class="lh-header-title">Seven Floors.<br>One Goal.</div>' +
+    '<div class="lh-header-sub">Work through each floor in order. Each one builds directly on the last.</div>' +
+    '</div>' +
+    '<div class="lh-floors">';
+
+  FLOORS.forEach(function(floor, fi) {
+    var isComplete = isFloorComplete(fi);
+    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var doneSecs = floor.sections.filter(function(s) { return state.completed[s.id]; }).length;
+    var totalSecs = floor.sections.length;
+    var pct = totalSecs > 0 ? Math.round((doneSecs / totalSecs) * 100) : 0;
+    var num = fi < 9 ? '0' + (fi + 1) : '' + (fi + 1);
+    var color = floor.color || '#c8a96e';
+
+    var badge, badgeClass;
+    if (isComplete) {
+      badge = '&#10003; Complete'; badgeClass = 'lh-badge-complete';
+    } else if (isUnlocked && doneSecs > 0) {
+      badge = 'In Progress'; badgeClass = 'lh-badge-active';
+    } else if (isUnlocked) {
+      badge = 'Start'; badgeClass = 'lh-badge-open';
+    } else {
+      badge = 'Locked'; badgeClass = 'lh-badge-locked';
+    }
+
+    var cardClass = 'lh-floor-card' +
+      (isComplete ? ' lh-complete' : (isUnlocked && doneSecs > 0 ? ' lh-in-progress' : '')) +
+      (isUnlocked ? '' : ' lh-locked');
+
+    var onClick = isUnlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
+
+    html += '<div class="' + cardClass + '"' + onClick + ' style="--lh-color:' + color + '">' +
+      '<div class="lh-floor-num">' + num + '</div>' +
+      '<div class="lh-floor-body">' +
+      '<div class="lh-floor-title">' + floor.title + '</div>' +
+      '<div class="lh-floor-sub">' + floor.subtitle + '</div>' +
+      (isUnlocked
+        ? '<div class="lh-floor-progress">' +
+          '<div class="lh-progress-track"><div class="lh-progress-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+          '<span class="lh-progress-text">' + doneSecs + ' / ' + totalSecs + ' sections</span>' +
+          '</div>'
+        : '<div class="lh-floor-locked-hint">Complete Floor ' + fi + ' to unlock</div>') +
+      '</div>' +
+      '<div class="lh-floor-right">' +
+      '<span class="lh-badge ' + badgeClass + '">' + badge + '</span>' +
+      '</div>' +
+      '</div>';
+  });
+
+  html += '</div></div>';
+
+  var mc = document.getElementById('main-content');
+  if (mc) { mc.style.display = ''; mc.innerHTML = html; }
+}
+
 function renderFloor1(si) {
   var floor = FLOORS[0];
   var fi = 0;
