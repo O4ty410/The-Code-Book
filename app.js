@@ -3298,6 +3298,186 @@ function startBuildProject(floorNum) {
 
 
 
+function renderToolsPanel() {
+  var panel = document.getElementById('panel-tools');
+  if (!panel) return;
+
+  var tools = [
+    {
+      id: 'vscode',
+      icon: '🖥️',
+      name: 'VS Code',
+      desc: 'The code editor used by most professional developers worldwide.',
+      difficulty: 'Beginner',
+      category: 'Editor',
+      steps: [
+        'Go to <strong>code.visualstudio.com</strong> and click Download for your operating system.',
+        'Run the installer and follow the prompts. Accept all defaults.',
+        'Open VS Code. You will see the Welcome tab.',
+        'Press <strong>Ctrl+`</strong> (or Cmd+` on Mac) to open the built-in terminal.',
+        'Click the Extensions icon on the left sidebar (looks like four squares).',
+        'Search for <strong>Prettier</strong> and install it — this auto-formats your code.',
+        'Search for <strong>Live Server</strong> and install it — this lets you preview HTML files live in the browser.',
+        'Create a new file with <strong>Ctrl+N</strong>, save it as <strong>index.html</strong>, and type an exclamation mark then press Tab. VS Code will generate a full HTML skeleton.'
+      ]
+    },
+    {
+      id: 'git',
+      icon: '🌿',
+      name: 'Git',
+      desc: 'Version control that tracks every change you make to your code.',
+      difficulty: 'Beginner',
+      category: 'Version Control',
+      steps: [
+        'Go to <strong>git-scm.com</strong> and download Git for your operating system.',
+        'Run the installer. When asked about the default editor, choose VS Code if listed.',
+        'Open a terminal (or VS Code\'s built-in terminal) and run: <code>git --version</code>. You should see a version number.',
+        'Set your name: <code>git config --global user.name "Your Name"</code>',
+        'Set your email: <code>git config --global user.email "you@example.com"</code>',
+        'Navigate to a project folder and run <code>git init</code> to start tracking it.',
+        'Run <code>git add .</code> to stage all files, then <code>git commit -m "first commit"</code> to save a snapshot.',
+        'Run <code>git log</code> to see your commit history. You have version control.'
+      ]
+    },
+    {
+      id: 'github',
+      icon: '🐙',
+      name: 'GitHub',
+      desc: 'Cloud hosting for your Git repositories — and where developers share work.',
+      difficulty: 'Beginner',
+      category: 'Version Control',
+      steps: [
+        'Go to <strong>github.com</strong> and create a free account.',
+        'Verify your email address when prompted.',
+        'Click the <strong>+</strong> button at the top right and choose "New repository".',
+        'Give it a name (e.g. <strong>my-first-project</strong>), leave it public, and click Create.',
+        'GitHub will show you setup commands. Copy the ones under "push an existing repository".',
+        'In your terminal, paste and run those commands. Your code is now on GitHub.',
+        'Refresh the GitHub page — you should see your files.',
+        'Click on a file to view it. Click the pencil icon to edit it directly in the browser.'
+      ]
+    },
+    {
+      id: 'devtools',
+      icon: '🔍',
+      name: 'Chrome DevTools',
+      desc: 'Built into your browser — inspect, debug, and tweak any webpage in real time.',
+      difficulty: 'Beginner',
+      category: 'Debugging',
+      steps: [
+        'Open Google Chrome and go to any webpage.',
+        'Press <strong>F12</strong> (or Cmd+Option+I on Mac) to open DevTools.',
+        'Click the <strong>Elements</strong> tab to see the HTML structure of the page.',
+        'Hover over elements in the panel — the corresponding part of the page highlights.',
+        'Double-click any text in the Elements panel to edit it live. Changes disappear on refresh.',
+        'Click the <strong>Console</strong> tab. Type <code>document.title</code> and press Enter — it returns the page title.',
+        'Click the <strong>Sources</strong> tab to see the page\'s CSS and JavaScript files.',
+        'Click the device icon (top-left of DevTools) to preview the page on a mobile screen size.'
+      ]
+    },
+    {
+      id: 'nodejs',
+      icon: '⬡',
+      name: 'Node.js',
+      desc: 'Runs JavaScript outside the browser — powers servers, build tools, and npm.',
+      difficulty: 'Intermediate',
+      category: 'Runtime',
+      steps: [
+        'Go to <strong>nodejs.org</strong> and download the LTS (Long Term Support) version.',
+        'Run the installer and accept all defaults. It will also install npm.',
+        'Open a terminal and run <code>node --version</code> — you should see a version number.',
+        'Run <code>npm --version</code> to confirm npm is also installed.',
+        'Create a file called <strong>hello.js</strong> and write: <code>console.log("Hello from Node");</code>',
+        'In the terminal, navigate to that file and run: <code>node hello.js</code>',
+        'You should see the message printed. Node ran your JavaScript without a browser.',
+        'You now have access to the npm ecosystem — millions of open source packages.'
+      ]
+    },
+    {
+      id: 'netlify',
+      icon: '🚀',
+      name: 'Netlify',
+      desc: 'Deploy your HTML/CSS/JS projects live on the internet for free in under a minute.',
+      difficulty: 'Intermediate',
+      category: 'Deployment',
+      steps: [
+        'Go to <strong>netlify.com</strong> and sign up for a free account (you can use GitHub to log in).',
+        'Click <strong>Add new site</strong> → <strong>Deploy manually</strong>.',
+        'Drag and drop your project folder onto the upload area.',
+        'Netlify gives you a random URL immediately — your site is live.',
+        'Click <strong>Site settings</strong> → <strong>Change site name</strong> to set a custom subdomain.',
+        'For auto-deploys: go to <strong>Add new site</strong> → <strong>Import from GitHub</strong> and connect your repo.',
+        'Every time you push to GitHub, Netlify automatically rebuilds and redeploys your site.',
+        'Check the <strong>Deploys</strong> tab to see the build log and confirm each deploy succeeded.'
+      ]
+    },
+    {
+      id: 'figma',
+      icon: '🎨',
+      name: 'Figma',
+      desc: 'Design and prototype interfaces in the browser before writing a single line of code.',
+      difficulty: 'Intermediate',
+      category: 'Design',
+      steps: [
+        'Go to <strong>figma.com</strong> and create a free account.',
+        'Click <strong>New design file</strong> to open the canvas.',
+        'Press <strong>F</strong> to create a frame (your screen size). Choose Desktop (1440×1024) from the right panel.',
+        'Press <strong>R</strong> to draw a rectangle. Set its colour, size, and corner radius in the right panel.',
+        'Press <strong>T</strong> to add text. Click anywhere on the canvas and start typing.',
+        'Use the Components panel to create reusable elements — design a button once, use it everywhere.',
+        'Click the Play button (top right) to enter Prototype mode and preview your design.',
+        'Share your file via the Share button and copy the link — anyone with the link can view it in the browser.'
+      ]
+    }
+  ];
+
+  var html = '<div class="panel-hero">' +
+    '<div class="panel-hero-label">DEVELOPER TOOLS</div>' +
+    '<div class="panel-hero-title">Set Up Your Toolkit</div>' +
+    '<div class="panel-hero-sub">Every professional developer uses these tools. Work through them one at a time — each one makes the next easier.</div>' +
+    '</div>' +
+    '<div class="build-grid">';
+
+  tools.forEach(function(t) {
+    var stepsId = 'tool-steps-' + t.id;
+    var diffClass = t.difficulty === 'Beginner' ? 'tool-badge-beginner' : 'tool-badge-intermediate';
+    var stepsHtml = '<div class="build-steps" id="' + stepsId + '" style="display:none;">' +
+      '<div class="build-steps-label">STEP-BY-STEP GUIDE</div>' +
+      '<ol class="build-step-list">' +
+      t.steps.map(function(s) { return '<li class="build-step-item">' + s + '</li>'; }).join('') +
+      '</ol>' +
+      '<button class="build-mark-done" onclick="markToolSetUp(\'' + t.id + '\');event.stopPropagation()" style="margin-top:16px;">Mark as Set Up ✓</button>' +
+      '</div>';
+
+    html += '<div class="build-card" id="tool-card-' + t.id + '" onclick="toggleToolSteps(\'' + stepsId + '\',this)">' +
+      '<div class="build-card-icon">' + t.icon + '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">' +
+      '<div class="build-card-tag" style="margin-bottom:0;">' + t.category.toUpperCase() + '</div>' +
+      '<span class="build-meta-pill ' + diffClass + '">' + t.difficulty + '</span>' +
+      '</div>' +
+      '<div class="build-card-title">' + t.name + '</div>' +
+      '<div class="build-card-desc">' + t.desc + '</div>' +
+      stepsHtml +
+      '</div>';
+  });
+
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+function toggleToolSteps(stepsId, card) {
+  var el = document.getElementById(stepsId);
+  if (!el) return;
+  var isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (card) card.classList.toggle('tool-expanded', !isOpen);
+}
+
+function markToolSetUp(toolId) {
+  var card = document.getElementById('tool-card-' + toolId);
+  if (card) card.classList.add('done');
+}
+
 function renderChallengePanel() {
   var panel = document.getElementById('panel-challenge');
   if (!panel) return;

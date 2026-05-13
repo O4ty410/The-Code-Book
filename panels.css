@@ -233,6 +233,9 @@ body.light .build-card:hover {
 
 .build-mark-done:hover { opacity: 0.85; }
 
+.tool-badge-beginner  { border-color: rgba(72,187,120,0.4);  color: var(--success, #48bb78); }
+.tool-badge-intermediate { border-color: rgba(200,169,110,0.4); color: var(--accent); }
+
 /* ============================================================
    CHALLENGE PANEL
    ============================================================ */
