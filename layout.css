@@ -150,7 +150,14 @@ body.premium-mode .hamburger-btn { visibility: hidden; }
 
 body.premium-mode .app-grid {
   grid-template-columns: 1fr;
-  transition: grid-template-columns 0.25s ease;
+}
+
+/* Force main-col to span every defined column so it always fills
+   the full grid width even if grid-template-columns hasn't updated */
+body.premium-mode #main-col {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 100%;
 }
 
 /* ============================================================
