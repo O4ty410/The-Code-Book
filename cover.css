@@ -41,7 +41,7 @@
 }
 
 .cover-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: clamp(52px, 10vw, 110px);
   font-weight: 900;
   line-height: 0.9;
@@ -54,11 +54,10 @@
 .cover-title span {
   display: block;
   color: var(--accent);
-  font-style: italic;
 }
 
 .cover-subtitle {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 300;
   font-size: 16px;
   color: var(--text-dim);

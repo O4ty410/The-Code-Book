@@ -23,7 +23,7 @@ body {
     #070d1a;
   background-attachment: fixed;
   color: var(--text);
-  font-family: 'DM Sans', 'Lato', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 400;
   min-height: 100vh;
   overflow-x: clip;
@@ -313,9 +313,9 @@ body.light .top-bar {
 }
 
 .top-logo {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 18px;
-  font-style: italic;
+  letter-spacing: 2px;
   color: var(--accent);
 }
 
@@ -460,10 +460,10 @@ body.light .right-sidebar {
 }
 
 .sidebar-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 20px;
+  letter-spacing: 1px;
   color: var(--accent);
-  font-style: italic;
 }
 
 .sidebar-sub {
