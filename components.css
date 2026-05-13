@@ -3010,6 +3010,35 @@ body.light .lh-badge-locked { background: rgba(0,0,0,0.03); border-color: rgba(0
 
 .prof-hero-info { display: flex; flex-direction: column; gap: 4px; }
 
+.prof-hero-swatches {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.prof-hswatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--sw-dot);
+  border: 2px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.prof-hswatch:hover {
+  transform: scale(1.28);
+  box-shadow: 0 0 10px var(--sw-glow);
+}
+
+.prof-hswatch.active {
+  border-color: var(--sw-border);
+  box-shadow: 0 0 14px var(--sw-glow), 0 0 4px var(--sw-glow);
+  transform: scale(1.18);
+}
+
 .prof-name {
   font-family: 'Playfair Display', serif;
   font-size: 22px;

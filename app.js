@@ -686,6 +686,9 @@ async function submitNewPassword() {
 }
 
 function populateDashboard() {
+  // Apply saved profile colour theme to body on startup
+  applyProfThemeToBody(getProfTheme());
+
   // Show the BEGIN button overlay
   var landing = document.getElementById('new-user-landing');
   if (landing) {
@@ -3646,8 +3649,14 @@ function getProfTheme() {
   return localStorage.getItem('codebook_prof_theme') || 'cosmic-blue';
 }
 
+function applyProfThemeToBody(id) {
+  document.body.className = document.body.className.replace(/\bprof-theme-\S+/g, '').trim();
+  document.body.classList.add('prof-theme-' + id);
+}
+
 function switchProfTheme(id) {
   localStorage.setItem('codebook_prof_theme', id);
+  applyProfThemeToBody(id);
   renderProfilePanel();
 }
 
@@ -3738,20 +3747,16 @@ function renderProfilePanel() {
       '</div>';
   }).join('');
 
-  var themePickerHtml = '<div class="prof-section prof-theme-section">' +
-    '<div class="prof-section-title">Appearance</div>' +
-    '<div class="prof-theme-swatches">' +
+  var heroSwatchesHtml = '<div class="prof-hero-swatches">' +
     PROF_THEMES.map(function(t) {
       var isActive = t.id === currentTheme;
-      return '<button class="prof-theme-swatch' + (isActive ? ' active' : '') + '"' +
+      return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '"' +
+        ' title="' + t.name + ' — ' + t.mood + '"' +
         ' onclick="switchProfTheme(\'' + t.id + '\')"' +
-        ' style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + ';--sw-bg:' + t.bg + '">' +
-        '<div class="prof-swatch-orb"></div>' +
-        '<div class="prof-swatch-name">' + t.name + '</div>' +
-        '<div class="prof-swatch-mood">' + t.mood + '</div>' +
+        ' style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '">' +
         '</button>';
     }).join('') +
-    '</div></div>';
+    '</div>';
 
   panel.innerHTML =
     '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
@@ -3762,6 +3767,7 @@ function renderProfilePanel() {
     '<div class="prof-hero-info">' +
     '<div class="prof-name">' + name + '</div>' +
     '<div class="prof-level-name">Level ' + cur.level + ' &mdash; ' + levelName + '</div>' +
+    heroSwatchesHtml +
     '</div>' +
     '</div>' +
 
@@ -3801,9 +3807,6 @@ function renderProfilePanel() {
     '<div class="prof-section-title">Floor Progress</div>' +
     '<div class="prof-floors">' + floorRows + '</div>' +
     '</div>' +
-
-    // Theme picker
-    themePickerHtml +
 
     '</div>';
 }
