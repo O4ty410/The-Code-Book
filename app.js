@@ -3398,7 +3398,7 @@ function renderToolsPanel() {
       icon: '🚀',
       name: 'Netlify',
       desc: 'Deploy your HTML/CSS/JS projects live on the internet for free in under a minute.',
-      difficulty: 'Intermediate',
+      difficulty: 'Beginner',
       category: 'Deployment',
       steps: [
         'Go to <strong>netlify.com</strong> and sign up for a free account (you can use GitHub to log in).',
@@ -3445,6 +3445,24 @@ function renderToolsPanel() {
         'Change the method to <strong>POST</strong>, click the <strong>Body</strong> tab, select <strong>raw</strong> and <strong>JSON</strong>, then enter: <code>{"title":"test","body":"hello"}</code>',
         'Click Send again. The server responds with the data you sent plus an assigned ID.',
         'Use <strong>Collections</strong> (left sidebar) to group and save related requests — one collection per project or API you are testing.'
+      ]
+    },
+    {
+      id: 'davinci',
+      icon: '🎬',
+      name: 'DaVinci Resolve',
+      desc: 'Professional video editor — free and industry-standard. Use it to create portfolio walkthrough videos.',
+      difficulty: 'Intermediate',
+      category: 'Portfolio Video',
+      steps: [
+        'Go to <strong>blackmagicdesign.com/products/davinciresolve</strong> and download the free version.',
+        'Run the installer. When it finishes, open DaVinci Resolve.',
+        'On the Project Manager screen, click <strong>New Project</strong>, give it a name, and click Create.',
+        'In the <strong>Cut</strong> or <strong>Edit</strong> page (tabs at the bottom), click the import icon and drag in your screen recording or footage.',
+        'Drag your clip from the Media Pool onto the timeline at the bottom of the screen.',
+        'Use the blade tool (<strong>B</strong>) to cut sections. Select unwanted clips and press Delete to remove them.',
+        'To add a title: go to <strong>Titles</strong> in the Effects panel, drag a title style onto the timeline above your clip, and double-click to edit the text.',
+        'When finished, click the <strong>Deliver</strong> tab (rocket icon at the bottom), choose YouTube as your preset, set a filename and export location, then click <strong>Add to Render Queue</strong> → <strong>Render All</strong>.'
       ]
     }
   ];
