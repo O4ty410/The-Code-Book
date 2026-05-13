@@ -2332,7 +2332,7 @@ function renderLearnHub() {
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
   var grid = document.querySelector('.app-grid');
-  if (grid) grid.style.gridTemplateColumns = '240px 1fr';
+  if (grid) grid.style.gridTemplateColumns = '1fr';
 
   var html = '<div class="lh-layout">' +
     '<div class="lh-header">' +
@@ -2778,7 +2778,7 @@ function renderFloor(fi, si) {
     if (rs) rs.style.display = 'none';
     // Remove right sidebar column from grid
     var grid = document.querySelector('.app-grid');
-    if (grid) grid.style.gridTemplateColumns = '240px 1fr';
+    if (grid) grid.style.gridTemplateColumns = '1fr';
     renderFloor1(si);
     return;
   }
