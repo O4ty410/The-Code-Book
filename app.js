@@ -3841,15 +3841,12 @@ function renderProfilePanel() {
   var avatarStyle = selectedAv
     ? ' style="background:' + selectedAv.grad + ';box-shadow:0 0 0 3px ' + selectedAv.border + ',0 4px 16px rgba(0,0,0,0.4)"'
     : '';
-  var heroStyle = selectedAv
-    ? ' style="box-shadow:0 0 0 1px ' + selectedAv.border + ',0 8px 32px ' + selectedAv.glow + '"'
-    : '';
 
   panel.innerHTML =
     '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
 
     // Header
-    '<div class="prof-hero"' + heroStyle + '>' +
+    '<div class="prof-hero">' +
     '<div class="prof-avatar-wrap">' +
     '<div class="prof-avatar"' + avatarStyle + '>' + avatarInner + '</div>' +
     '<button class="prof-avatar-plus" onclick="showAvatarPicker()" title="Choose archetype">+</button>' +
