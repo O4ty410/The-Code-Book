@@ -8,13 +8,13 @@
 <meta name="apple-mobile-web-app-title" content="The Code Book">
 <meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
 <title>The Code Book</title>
-  <link rel="stylesheet" href="variables.css?v=20260513r">
-  <link rel="stylesheet" href="animations.css?v=20260513r">
-  <link rel="stylesheet" href="layout.css?v=20260513r">
-  <link rel="stylesheet" href="cover.css?v=20260513r">
-  <link rel="stylesheet" href="components.css?v=20260513r">
-  <link rel="stylesheet" href="panels.css?v=20260513r">
-  <link rel="stylesheet" href="overlays.css?v=20260513r">
+  <link rel="stylesheet" href="variables.css?v=20260513s">
+  <link rel="stylesheet" href="animations.css?v=20260513s">
+  <link rel="stylesheet" href="layout.css?v=20260513s">
+  <link rel="stylesheet" href="cover.css?v=20260513s">
+  <link rel="stylesheet" href="components.css?v=20260513s">
+  <link rel="stylesheet" href="panels.css?v=20260513s">
+  <link rel="stylesheet" href="overlays.css?v=20260513s">
 
   
 </head>
@@ -396,6 +396,7 @@
     <button class="top-nav-tab active" id="tnav-learn" onclick="switchTopNav('learn',this)">Learn</button>
     <button class="top-nav-tab" id="tnav-tools" onclick="switchTopNav('tools',this)">⚙ Tools</button>
     <button class="top-nav-tab" id="tnav-premium" onclick="switchTopNav('premium',this)">♛ Premium</button>
+    <button class="top-nav-tab" id="tnav-profile" onclick="switchTopNav('profile',this)">👤 Profile</button>
   </div>
   <div class="top-right">
     <button id="theme-toggle-real" onclick="toggleTheme()" class="theme-toggle-real" title="Toggle theme">🌙</button>
@@ -474,6 +475,9 @@
 
   <!-- PREMIUM PANEL -->
   <div class="top-panel" id="panel-premium"></div>
+
+  <!-- PROFILE PANEL -->
+  <div class="top-panel" id="panel-profile"></div>
 
   </div>
 
@@ -572,12 +576,15 @@
   <button class="mob-nav-btn" id="mob-premium" onclick="switchTopNav('premium',this);setMobActive(this)" style="color:var(--accent);">
     ♛<span>Premium</span>
   </button>
+  <button class="mob-nav-btn" id="mob-profile" onclick="switchTopNav('profile',this);setMobActive(this)">
+    👤<span>Profile</span>
+  </button>
 </div>
 
 </div>
 <!-- END APP -->
 
-<script src="app.js?v=20260513r"></script>
+<script src="app.js?v=20260513s"></script>
 </body>
 </html>
 

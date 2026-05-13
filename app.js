@@ -1995,7 +1995,7 @@ function switchTopNav(tab, btn) {
 
   // Update mobile bottom bar
   document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
-  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools', premium: 'mob-premium' };
+  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools', premium: 'mob-premium', profile: 'mob-profile' };
   if (mobMap[tab]) {
     var mb = document.getElementById(mobMap[tab]);
     if (mb) mb.classList.add('active');
@@ -2025,6 +2025,7 @@ function switchTopNav(tab, btn) {
       if (tab === 'map') renderMapPanel();
       if (tab === 'tools') renderToolsPanel();
       if (tab === 'premium') renderPremiumPanel();
+      if (tab === 'profile') renderProfilePanel();
     }
   }
 
@@ -3612,6 +3613,146 @@ function markToolSetUp(toolId, xp) {
     btn.style.cursor = 'default';
     btn.onclick = null;
   }
+}
+
+var LEVEL_NAMES = ['', 'Curious', 'Learning', 'Builder', 'Coder', 'Developer', 'Engineer', 'Architect', 'Senior', 'Principal'];
+
+function renderProfilePanel() {
+  var panel = document.getElementById('panel-profile');
+  if (!panel) return;
+
+  var name = state.playerName || localStorage.getItem('codebook_player_name') || 'Learner';
+  var initials = name.split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().substring(0, 2) || '?';
+  var cur = getCurrentLevel();
+  var next = getNextLevel();
+  var levelName = LEVEL_NAMES[cur.level] || 'Level ' + cur.level;
+  var nextName = next ? (LEVEL_NAMES[next.level] || 'Level ' + next.level) : 'Max';
+  var xpIntoLevel = state.xp - cur.xp;
+  var xpForNextLevel = next ? (next.xp - cur.xp) : 1;
+  var levelPct = next ? Math.min(100, Math.round((xpIntoLevel / xpForNextLevel) * 100)) : 100;
+
+  // Totals
+  var totalSecs = 0;
+  FLOORS.forEach(function(f) { totalSecs += f.sections.length; });
+  var doneSecs = Object.keys(state.completed).filter(function(k){
+    return state.completed[k] && FLOORS.some(function(f){ return f.sections.some(function(s){ return s.id === k; }); });
+  }).length;
+  var floorsComplete = FLOORS.filter(function(f, fi){ return isFloorComplete(fi); }).length;
+  var totalMinutes = Math.round((state.totalSeconds || 0) / 60);
+
+  // 28-day activity grid (4 weeks)
+  var actLog = getActivityLog();
+  var actMap = {};
+  actLog.forEach(function(a) {
+    var d = new Date(a.time); d.setHours(0,0,0,0);
+    actMap[d.toDateString()] = (actMap[d.toDateString()] || 0) + 1;
+  });
+  var today = new Date(); today.setHours(0,0,0,0);
+  var calDays = [];
+  for (var i = 27; i >= 0; i--) {
+    var d = new Date(today); d.setDate(d.getDate() - i);
+    calDays.push({ label: d.toDateString(), count: actMap[d.toDateString()] || 0, isToday: i === 0 });
+  }
+
+  // Achievements
+  var ACHIEVEMENTS = [
+    { id: 'first_section', icon: '🎯', label: 'First Step',    desc: 'Complete your first section',  check: function(){ return doneSecs >= 1; } },
+    { id: 'five_sections', icon: '📚', label: 'On A Roll',     desc: 'Complete 5 sections',           check: function(){ return doneSecs >= 5; } },
+    { id: 'floor_1_done',  icon: '🏗️', label: 'Foundation',    desc: 'Complete Floor 1',              check: function(){ return isFloorComplete(0); } },
+    { id: 'floor_any',     icon: '🏆', label: 'Floor Cleared', desc: 'Complete any floor',            check: function(){ return floorsComplete >= 1; } },
+    { id: 'streak_3',      icon: '🔥', label: 'On Fire',       desc: '3-day streak',                  check: function(){ return state.streak >= 3; } },
+    { id: 'streak_7',      icon: '💪', label: 'Dedicated',     desc: '7-day streak',                  check: function(){ return state.streak >= 7; } },
+    { id: 'xp_100',        icon: '⭐', label: 'XP Hunter',     desc: 'Earn 100 XP',                  check: function(){ return state.xp >= 100; } },
+    { id: 'xp_500',        icon: '🌟', label: 'XP Master',     desc: 'Earn 500 XP',                  check: function(){ return state.xp >= 500; } },
+    { id: 'all_floors',    icon: '🎓', label: 'Graduate',      desc: 'Complete all 7 floors',         check: function(){ return floorsComplete === 7; } },
+  ];
+
+  // Floor progress rows
+  var floorRows = FLOORS.map(function(f, fi) {
+    var done = f.sections.filter(function(s){ return state.completed[s.id]; }).length;
+    var total = f.sections.length;
+    var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var color = f.color || '#c8a96e';
+    var status = isFloorComplete(fi) ? 'Complete' : (done > 0 ? 'In Progress' : (isUnlocked ? 'Not Started' : 'Locked'));
+    return '<div class="prof-floor-row">' +
+      '<div class="prof-floor-num" style="color:' + color + '">F' + (fi + 1) + '</div>' +
+      '<div class="prof-floor-info">' +
+      '<div class="prof-floor-name">' + f.title + '</div>' +
+      '<div class="prof-floor-bar-wrap">' +
+      '<div class="prof-floor-track"><div class="prof-floor-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+      '<span class="prof-floor-stat">' + done + '/' + total + '</span>' +
+      '</div></div>' +
+      '<div class="prof-floor-status prof-status-' + (isFloorComplete(fi) ? 'done' : (done > 0 ? 'active' : 'locked')) + '">' + status + '</div>' +
+      '</div>';
+  }).join('');
+
+  var calHtml = '<div class="prof-cal-grid">' +
+    calDays.map(function(day) {
+      var intensity = day.count === 0 ? 'empty' : day.count >= 3 ? 'high' : day.count >= 2 ? 'mid' : 'low';
+      return '<div class="prof-cal-day prof-cal-' + intensity + (day.isToday ? ' prof-cal-today' : '') + '" title="' + day.label + '"></div>';
+    }).join('') +
+    '</div>';
+
+  var achieveHtml = ACHIEVEMENTS.map(function(a) {
+    var earned = a.check();
+    return '<div class="prof-badge' + (earned ? ' prof-badge-earned' : '') + '">' +
+      '<div class="prof-badge-icon">' + a.icon + '</div>' +
+      '<div class="prof-badge-label">' + a.label + '</div>' +
+      '<div class="prof-badge-desc">' + a.desc + '</div>' +
+      '</div>';
+  }).join('');
+
+  panel.innerHTML =
+    '<div class="prof-layout">' +
+
+    // Header
+    '<div class="prof-hero">' +
+    '<div class="prof-avatar">' + initials + '</div>' +
+    '<div class="prof-hero-info">' +
+    '<div class="prof-name">' + name + '</div>' +
+    '<div class="prof-level-name">Level ' + cur.level + ' &mdash; ' + levelName + '</div>' +
+    '</div>' +
+    '</div>' +
+
+    // Stats row
+    '<div class="prof-stats-row">' +
+    '<div class="prof-stat-card"><div class="prof-stat-val">' + state.xp + '</div><div class="prof-stat-lbl">Total XP</div></div>' +
+    '<div class="prof-stat-card"><div class="prof-stat-val">' + state.streak + '</div><div class="prof-stat-lbl">Day Streak</div></div>' +
+    '<div class="prof-stat-card"><div class="prof-stat-val">' + floorsComplete + '</div><div class="prof-stat-lbl">Floors Done</div></div>' +
+    '<div class="prof-stat-card"><div class="prof-stat-val">' + doneSecs + '</div><div class="prof-stat-lbl">Sections Done</div></div>' +
+    '</div>' +
+
+    // Level progress
+    '<div class="prof-section">' +
+    '<div class="prof-section-title">Level Progress</div>' +
+    '<div class="prof-level-bar-wrap">' +
+    '<span class="prof-level-tag">' + levelName + '</span>' +
+    '<div class="prof-level-track"><div class="prof-level-fill" style="width:' + levelPct + '%"></div></div>' +
+    '<span class="prof-level-tag">' + nextName + '</span>' +
+    '</div>' +
+    '<div class="prof-level-sub">' + state.xp + ' XP' + (next ? ' &mdash; ' + (next.xp - state.xp) + ' XP to ' + nextName : ' &mdash; Max level reached') + '</div>' +
+    '</div>' +
+
+    // Activity calendar
+    '<div class="prof-section">' +
+    '<div class="prof-section-title">Last 28 Days</div>' +
+    calHtml +
+    '</div>' +
+
+    // Achievements
+    '<div class="prof-section">' +
+    '<div class="prof-section-title">Achievements</div>' +
+    '<div class="prof-badges">' + achieveHtml + '</div>' +
+    '</div>' +
+
+    // Floor progress
+    '<div class="prof-section">' +
+    '<div class="prof-section-title">Floor Progress</div>' +
+    '<div class="prof-floors">' + floorRows + '</div>' +
+    '</div>' +
+
+    '</div>';
 }
 
 function renderPremiumPanel() {

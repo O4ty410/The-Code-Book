@@ -2763,3 +2763,365 @@ body.light .lh-progress-track { background: rgba(0,0,0,0.08); }
   .lh-floor-num { font-size: 26px; width: 40px; }
   .lh-progress-track { width: 100px; }
 }
+
+/* ============================================================
+   PROFILE PANEL
+   ============================================================ */
+
+.prof-layout {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 32px 24px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: sectionFadeIn 0.4s ease;
+}
+
+/* Hero header */
+.prof-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(200,169,110,0.10) 0%, rgba(212,170,106,0.05) 100%);
+  border: 1px solid rgba(200,169,110,0.18);
+  border-radius: 16px;
+}
+
+.prof-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c8a96e 0%, #e8c878 60%, #a07830 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0a0a0a;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(200,169,110,0.20), 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.prof-hero-info { display: flex; flex-direction: column; gap: 4px; }
+
+.prof-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.prof-level-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+/* Stats row */
+.prof-stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.prof-stat-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s ease;
+}
+
+.prof-stat-card:hover { background: rgba(200,169,110,0.06); }
+
+.prof-stat-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.prof-stat-lbl {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Section wrapper */
+.prof-section {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.prof-section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Level progress bar */
+.prof-level-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.prof-level-tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.prof-level-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.prof-level-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c8a96e, #e8c878);
+  border-radius: 4px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+
+.prof-level-sub {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* 28-day activity calendar */
+.prof-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.prof-cal-day {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  transition: transform 0.15s ease;
+}
+
+.prof-cal-day:hover { transform: scale(1.3); }
+
+.prof-cal-empty { background: rgba(255,255,255,0.05); }
+.prof-cal-low   { background: rgba(200,169,110,0.25); }
+.prof-cal-mid   { background: rgba(200,169,110,0.55); }
+.prof-cal-high  { background: rgba(200,169,110,0.90); }
+
+.prof-cal-today {
+  outline: 2px solid rgba(200,169,110,0.70);
+  outline-offset: 1px;
+}
+
+/* Achievements grid */
+.prof-badges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.prof-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 10px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  opacity: 0.38;
+  filter: grayscale(0.8);
+  transition: all 0.2s ease;
+}
+
+.prof-badge-earned {
+  opacity: 1;
+  filter: none;
+  background: rgba(200,169,110,0.06);
+  border-color: rgba(200,169,110,0.22);
+}
+
+.prof-badge-icon { font-size: 24px; }
+
+.prof-badge-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--text);
+  text-align: center;
+}
+
+.prof-badge-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Floor progress list */
+.prof-floors { display: flex; flex-direction: column; gap: 12px; }
+
+.prof-floor-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.prof-floor-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.prof-floor-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.prof-floor-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.prof-floor-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prof-floor-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.prof-floor-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.prof-floor-stat {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.prof-floor-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.prof-status-done {
+  background: rgba(72,187,120,0.12);
+  border: 1px solid rgba(72,187,120,0.28);
+  color: #48bb78;
+}
+
+.prof-status-active {
+  background: rgba(200,169,110,0.12);
+  border: 1px solid rgba(200,169,110,0.28);
+  color: #c8a96e;
+}
+
+.prof-status-locked {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: var(--text-muted);
+}
+
+/* Light mode overrides */
+body.light .prof-hero {
+  background: linear-gradient(135deg, rgba(160,117,42,0.08) 0%, rgba(200,169,110,0.04) 100%);
+  border-color: rgba(160,117,42,0.15);
+}
+
+body.light .prof-stat-card {
+  background: rgba(0,0,0,0.02);
+  border-color: rgba(0,0,0,0.08);
+}
+
+body.light .prof-stat-card:hover { background: rgba(160,117,42,0.05); }
+
+body.light .prof-section {
+  background: rgba(0,0,0,0.02);
+  border-color: rgba(0,0,0,0.08);
+}
+
+body.light .prof-section-title { border-bottom-color: rgba(0,0,0,0.06); }
+
+body.light .prof-level-track,
+body.light .prof-floor-track { background: rgba(0,0,0,0.08); }
+
+body.light .prof-cal-empty { background: rgba(0,0,0,0.06); }
+
+body.light .prof-badge {
+  background: rgba(0,0,0,0.02);
+  border-color: rgba(0,0,0,0.06);
+}
+
+body.light .prof-badge-earned {
+  background: rgba(160,117,42,0.06);
+  border-color: rgba(160,117,42,0.18);
+}
+
+@media (max-width: 700px) {
+  .prof-layout { padding: 20px 16px 40px; }
+  .prof-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .prof-badges { grid-template-columns: repeat(2, 1fr); }
+  .prof-hero { padding: 18px 18px; gap: 14px; }
+  .prof-avatar { width: 56px; height: 56px; font-size: 20px; }
+  .prof-name { font-size: 18px; }
+}
+
+@media (max-width: 460px) {
+  .prof-stats-row { grid-template-columns: repeat(2, 1fr); }
+  .prof-badges { grid-template-columns: repeat(2, 1fr); }
+  .prof-floor-status { display: none; }
+}
