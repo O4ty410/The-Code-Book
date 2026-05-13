@@ -8,13 +8,13 @@
 <meta name="apple-mobile-web-app-title" content="The Code Book">
 <meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
 <title>The Code Book</title>
-  <link rel="stylesheet" href="variables.css?v=20260513y">
-  <link rel="stylesheet" href="animations.css?v=20260513y">
-  <link rel="stylesheet" href="layout.css?v=20260513y">
-  <link rel="stylesheet" href="cover.css?v=20260513y">
-  <link rel="stylesheet" href="components.css?v=20260513y">
-  <link rel="stylesheet" href="panels.css?v=20260513y">
-  <link rel="stylesheet" href="overlays.css?v=20260513y">
+  <link rel="stylesheet" href="variables.css?v=20260513z">
+  <link rel="stylesheet" href="animations.css?v=20260513z">
+  <link rel="stylesheet" href="layout.css?v=20260513z">
+  <link rel="stylesheet" href="cover.css?v=20260513z">
+  <link rel="stylesheet" href="components.css?v=20260513z">
+  <link rel="stylesheet" href="panels.css?v=20260513z">
+  <link rel="stylesheet" href="overlays.css?v=20260513z">
 
   
 </head>
@@ -53,27 +53,29 @@
   </div>
   <div class="auth-title">The Code Book</div>
   <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
-  <div class="auth-tabs">
-    <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
-    <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
-  </div>
-  <div class="auth-form">
-    <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
-    <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
-    <div style="position:relative;">
-      <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)" style="padding-right:48px;width:100%;">
-      <button type="button" onclick="togglePasswordVisibility('auth-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
     </div>
-    <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
-    <div id="forgot-link" class="forgot-link" onclick="handleForgotPassword()">Forgot your password?</div>
-    <div class="auth-message" id="auth-message"></div>
-  </div>
-  <div class="auth-actions-row">
-    <button onclick="showLeaderboard()" class="auth-link-btn">🏆 Leaderboard</button>
-    <button onclick="showPrivacy()" class="auth-link-btn">Privacy Policy</button>
-  </div>
-  <div class="auth-start-wrap">
-    <button onclick="showGuestNamePrompt()" class="auth-link-btn">Continue as Guest</button>
+    <div class="auth-form">
+      <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
+      <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
+      <div style="position:relative;">
+        <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)" style="padding-right:48px;width:100%;">
+        <button type="button" onclick="togglePasswordVisibility('auth-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
+      </div>
+      <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
+      <div id="forgot-link" class="forgot-link" onclick="handleForgotPassword()">Forgot your password?</div>
+      <div class="auth-message" id="auth-message"></div>
+    </div>
+    <div class="auth-actions-row">
+      <button onclick="showLeaderboard()" class="auth-link-btn">🏆 Leaderboard</button>
+      <button onclick="showPrivacy()" class="auth-link-btn">Privacy Policy</button>
+    </div>
+    <div class="auth-start-wrap">
+      <button onclick="showGuestNamePrompt()" class="auth-link-btn">Continue as Guest</button>
+    </div>
   </div>
 </div><!-- end #auth-screen -->
 
@@ -591,7 +593,7 @@
 </div>
 <!-- END APP -->
 
-<script src="app.js?v=20260513y"></script>
+<script src="app.js?v=20260513z"></script>
 </body>
 </html>
 

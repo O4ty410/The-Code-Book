@@ -102,15 +102,19 @@
 }
 
 .auth-link-btn {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--text-muted);
+  font-family: 'DM Sans', 'Lato', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
   background: transparent;
   border: none;
   cursor: pointer;
   text-decoration: underline;
+  transition: color 0.2s ease;
 }
+
+.auth-link-btn:hover { color: var(--text); }
 
 .auth-start-wrap { margin-top: 16px; }
 
@@ -119,14 +123,17 @@
 }
 
 .forgot-link {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  color: var(--text-muted);
-  letter-spacing: 1px;
+  font-family: 'DM Sans', 'Lato', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
   cursor: pointer;
   text-decoration: underline;
   margin-top: 4px;
+  transition: color 0.2s ease;
 }
+
+.forgot-link:hover { color: var(--accent); }
 
 /* ============================================================
    PRIVACY POLICY OVERLAY
