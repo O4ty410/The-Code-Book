@@ -3547,14 +3547,54 @@ function renderPremiumPanel() {
   var alreadyNotified = !!localStorage.getItem('codebook_premium_notify');
 
   var features = [
-    { icon: '🔑', name: 'All 7 Floors Unlocked', desc: 'Every floor available from day one — no waiting, no gates.' },
-    { icon: '🧑‍💻', name: 'Mentorship Sessions', desc: 'Live 1-on-1 calls with an experienced developer, booked on your schedule.' },
-    { icon: '📋', name: 'Code Reviews', desc: 'Submit any project and get written, line-by-line feedback within 48 hours.' },
-    { icon: '📜', name: 'Completion Certificate', desc: 'A verifiable certificate issued when you finish all seven floors.' },
-    { icon: '💬', name: 'Private Community', desc: 'Access to a members-only space for questions, accountability, and feedback.' },
-    { icon: '🎯', name: 'Career Coaching', desc: 'CV review, portfolio feedback, and mock interview prep included.' },
-    { icon: '⚡', name: 'Priority Support', desc: 'Any question answered by a human within 24 hours, guaranteed.' },
-    { icon: '📦', name: 'Resource Packs', desc: 'Cheat sheets, starter templates, and reference guides for every floor.' }
+    {
+      icon: '🔑', name: 'All 7 Floors Unlocked',
+      desc: 'Every floor available from day one — no waiting, no gates.',
+      fullDesc: 'Free users access Floors 1 and 2. Premium unlocks all seven immediately so you move at your own pace without hitting walls. No floor is hidden from you on day one.',
+      problem: 'Solves: hitting a paywall mid-momentum.'
+    },
+    {
+      icon: '🧑‍💻', name: 'Mentorship Sessions',
+      desc: 'Live 1-on-1 calls with an experienced developer, booked on your schedule.',
+      fullDesc: 'Book a 45-minute video call with a working developer whenever you need a second opinion. Bring a project, a problem, or just questions — we\'ll talk through it. Included every month.',
+      problem: 'Solves: learning alone with no one to ask.'
+    },
+    {
+      icon: '📋', name: 'Code Reviews',
+      desc: 'Submit any project and get written, line-by-line feedback within 48 hours.',
+      fullDesc: 'Submit any project you\'ve built and receive written feedback within 48 hours. Comments are specific and actionable — not generic. Real code, real notes, real improvement.',
+      problem: 'Solves: never knowing if your code is actually good.'
+    },
+    {
+      icon: '📜', name: 'Completion Certificate',
+      desc: 'A verifiable certificate issued when you finish all seven floors.',
+      fullDesc: 'Finishing all seven floors earns you a certificate with a unique verification link. Share it on your CV or LinkedIn. Employers can confirm it is genuine with one click.',
+      problem: 'Solves: having no credential to show for your effort.'
+    },
+    {
+      icon: '💬', name: 'Private Community',
+      desc: 'Access to a members-only space for questions, accountability, and feedback.',
+      fullDesc: 'A members-only space where premium learners share progress, ask questions, and give each other feedback. No noise — just people doing the same work as you.',
+      problem: 'Solves: learning in isolation with no peers to compare notes with.'
+    },
+    {
+      icon: '🎯', name: 'Career Coaching',
+      desc: 'CV review, portfolio feedback, and mock interview prep included.',
+      fullDesc: 'One session focused entirely on your job search: CV review, portfolio critique, and a mock technical interview. Practical, specific, and honest.',
+      problem: 'Solves: not knowing if you\'re actually ready to apply.'
+    },
+    {
+      icon: '⚡', name: 'Priority Support',
+      desc: 'Any question answered by a human within 24 hours, guaranteed.',
+      fullDesc: 'Post any question — about the curriculum, your code, or your career — and a human responds within 24 hours. Not a bot. Not a forum. A person.',
+      problem: 'Solves: getting stuck with nowhere to turn.'
+    },
+    {
+      icon: '📦', name: 'Resource Packs',
+      desc: 'Cheat sheets, starter templates, and reference guides for every floor.',
+      fullDesc: 'Floor-by-floor cheat sheets, reusable HTML/CSS/JS starter templates, and quick-reference cards for every major concept. Download them, keep them, use them forever.',
+      problem: 'Solves: rebuilding from scratch every time you start something new.'
+    }
   ];
 
   var html = '<div class="panel-hero" style="text-align:center;padding:60px 32px 40px;">' +
@@ -3573,11 +3613,16 @@ function renderPremiumPanel() {
     '<div class="premium-grid">';
 
   features.forEach(function(f) {
-    html += '<div class="premium-feature-card">' +
+    html += '<div class="premium-feature-card" onclick="togglePremiumTooltip(this)">' +
       '<div class="premium-card-lock">♛</div>' +
       '<div class="premium-card-icon">' + f.icon + '</div>' +
       '<div class="premium-card-name">' + f.name + '</div>' +
       '<div class="premium-card-desc">' + f.desc + '</div>' +
+      '<div class="premium-card-tooltip">' +
+      '<div class="premium-tooltip-full">' + f.fullDesc + '</div>' +
+      '<div class="premium-tooltip-problem">' + f.problem + '</div>' +
+      '<div class="premium-tooltip-badge">♛ Available with Premium</div>' +
+      '</div>' +
       '</div>';
   });
 
@@ -3609,6 +3654,14 @@ function submitPremiumNotify() {
   if (form) form.style.display = 'none';
   if (confirm) confirm.style.display = 'block';
   renderPremiumPanel();
+}
+
+function togglePremiumTooltip(card) {
+  var isOpen = card.classList.contains('tooltip-open');
+  document.querySelectorAll('.premium-feature-card.tooltip-open').forEach(function(c) {
+    c.classList.remove('tooltip-open');
+  });
+  if (!isOpen) card.classList.add('tooltip-open');
 }
 
 function renderChallengePanel() {
