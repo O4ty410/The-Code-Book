@@ -38,6 +38,67 @@ body.light {
 }
 
 /* ============================================================
+   PROFILE COLOUR THEMES
+   Override --accent and body background glow per chosen theme.
+   Placed before body.light so light-mode always wins.
+   ============================================================ */
+
+body.prof-theme-cosmic-blue {
+  --accent: #00c8ff;
+  --accent2: #0088dd;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%,    rgba(0,120,255,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(0,180,255,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 100% 30%,  rgba(0,100,220,0.14) 0%, transparent 60%),
+    #060d1a;
+  background-attachment: fixed;
+}
+
+body.prof-theme-aurora-teal {
+  --accent: #00e5b0;
+  --accent2: #00a880;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%,    rgba(0,180,140,0.17) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(0,210,160,0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 100% 30%,  rgba(0,160,120,0.14) 0%, transparent 60%),
+    #040f0c;
+  background-attachment: fixed;
+}
+
+body.prof-theme-royal-violet {
+  --accent: #a855f7;
+  --accent2: #c084fc;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%,    rgba(110,50,220,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(130,70,240,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 100% 30%,  rgba(90,30,200,0.15) 0%, transparent 60%),
+    #09050f;
+  background-attachment: fixed;
+}
+
+body.prof-theme-ember-crimson {
+  --accent: #ff5555;
+  --accent2: #ff8c42;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%,    rgba(220,50,40,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(240,70,40,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 100% 30%,  rgba(200,40,20,0.15) 0%, transparent 60%),
+    #100404;
+  background-attachment: fixed;
+}
+
+body.prof-theme-obsidian-gold {
+  --accent: #c8a96e;
+  --accent2: #e8c878;
+  background:
+    radial-gradient(ellipse 60% 50% at 0% 0%,    rgba(180,140,50,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 40% at 50% 100%, rgba(200,160,60,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 100% 30%,  rgba(160,120,40,0.13) 0%, transparent 60%),
+    #0a0805;
+  background-attachment: fixed;
+}
+
+/* ============================================================
    BACKGROUND LAYERS
    Recreates the code-snippet + circuit-board aesthetic
    using pure CSS — no image files needed.
