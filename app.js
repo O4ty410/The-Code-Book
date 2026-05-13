@@ -1995,7 +1995,7 @@ function switchTopNav(tab, btn) {
 
   // Update mobile bottom bar
   document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
-  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map' };
+  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools' };
   if (mobMap[tab]) {
     var mb = document.getElementById(mobMap[tab]);
     if (mb) mb.classList.add('active');
@@ -2017,6 +2017,7 @@ function switchTopNav(tab, btn) {
       if (tab === 'build') renderBuildPanel();
       if (tab === 'challenge') renderChallengePanel();
       if (tab === 'map') renderMapPanel();
+      if (tab === 'tools') renderToolsPanel();
     }
   }
 

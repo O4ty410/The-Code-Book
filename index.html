@@ -8,13 +8,13 @@
 <meta name="apple-mobile-web-app-title" content="The Code Book">
 <meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
 <title>The Code Book</title>
-  <link rel="stylesheet" href="variables.css?v=20260512d">
-  <link rel="stylesheet" href="animations.css?v=20260512d">
-  <link rel="stylesheet" href="layout.css?v=20260512d">
-  <link rel="stylesheet" href="cover.css?v=20260512d">
-  <link rel="stylesheet" href="components.css?v=20260512d">
-  <link rel="stylesheet" href="panels.css?v=20260512d">
-  <link rel="stylesheet" href="overlays.css?v=20260512d">
+  <link rel="stylesheet" href="variables.css?v=20260513">
+  <link rel="stylesheet" href="animations.css?v=20260513">
+  <link rel="stylesheet" href="layout.css?v=20260513">
+  <link rel="stylesheet" href="cover.css?v=20260513">
+  <link rel="stylesheet" href="components.css?v=20260513">
+  <link rel="stylesheet" href="panels.css?v=20260513">
+  <link rel="stylesheet" href="overlays.css?v=20260513">
 
   
 </head>
@@ -377,6 +377,7 @@
     <button class="top-nav-tab" id="tnav-build" onclick="switchTopNav('build',this)">Build</button>
     <button class="top-nav-tab" id="tnav-challenge" onclick="switchTopNav('challenge',this)">Challenge</button>
     <button class="top-nav-tab" id="tnav-map" onclick="switchTopNav('map',this)">Map</button>
+    <button class="top-nav-tab" id="tnav-tools" onclick="switchTopNav('tools',this)">⚙ Tools</button>
   </div>
   <div class="top-right">
     <button id="theme-toggle-real" onclick="toggleTheme()" class="theme-toggle-real" title="Toggle theme">🌙</button>
@@ -449,6 +450,9 @@
 
   <!-- MAP PANEL -->
   <div class="top-panel" id="panel-map"></div>
+
+  <!-- TOOLS PANEL -->
+  <div class="top-panel" id="panel-tools"></div>
 
   </div>
 
@@ -541,12 +545,15 @@
   <button class="mob-nav-btn" id="mob-map" onclick="switchTopNav('map',this);setMobActive(this)">
     🗺️<span>Map</span>
   </button>
+  <button class="mob-nav-btn" id="mob-tools" onclick="switchTopNav('tools',this);setMobActive(this)">
+    ⚙<span>Tools</span>
+  </button>
 </div>
 
 </div>
 <!-- END APP -->
 
-<script src="app.js?v=20260512d"></script>
+<script src="app.js?v=20260513"></script>
 </body>
 </html>
 
