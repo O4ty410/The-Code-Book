@@ -3588,8 +3588,7 @@ body.light .prof-theme-swatch:hover { background: rgba(0,0,0,0.04); }
 }
 
 .avatar-card.selected {
-  background: rgba(255,255,255,0.06);
-  border-color: var(--av-border);
+  background: rgba(255,255,255,0.03);
 }
 
 .avatar-card-icon {
