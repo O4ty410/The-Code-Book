@@ -3363,7 +3363,7 @@ function renderToolsPanel() {
       name: 'Chrome DevTools',
       desc: 'Built into your browser — inspect, debug, and tweak any webpage in real time.',
       difficulty: 'Beginner',
-      category: 'Debugging',
+      category: 'Browser',
       steps: [
         'Open Google Chrome and go to any webpage.',
         'Press <strong>F12</strong> (or Cmd+Option+I on Mac) to open DevTools.',
@@ -3416,7 +3416,7 @@ function renderToolsPanel() {
       icon: '🎨',
       name: 'Figma',
       desc: 'Design and prototype interfaces in the browser before writing a single line of code.',
-      difficulty: 'Intermediate',
+      difficulty: 'Beginner',
       category: 'Design',
       steps: [
         'Go to <strong>figma.com</strong> and create a free account.',
@@ -3427,6 +3427,24 @@ function renderToolsPanel() {
         'Use the Components panel to create reusable elements — design a button once, use it everywhere.',
         'Click the Play button (top right) to enter Prototype mode and preview your design.',
         'Share your file via the Share button and copy the link — anyone with the link can view it in the browser.'
+      ]
+    },
+    {
+      id: 'postman',
+      icon: '📮',
+      name: 'Postman',
+      desc: 'Test and explore APIs without writing any code — essential for backend and full-stack work.',
+      difficulty: 'Intermediate',
+      category: 'API Testing',
+      steps: [
+        'Go to <strong>postman.com</strong> and download the free desktop app, or use the web version.',
+        'Create a free account and sign in.',
+        'Click <strong>New</strong> → <strong>HTTP Request</strong> to open a blank request tab.',
+        'Set the method to <strong>GET</strong> and enter this URL: <code>https://jsonplaceholder.typicode.com/posts/1</code>',
+        'Click <strong>Send</strong>. You will see a JSON response appear in the panel below — this is real API data.',
+        'Change the method to <strong>POST</strong>, click the <strong>Body</strong> tab, select <strong>raw</strong> and <strong>JSON</strong>, then enter: <code>{"title":"test","body":"hello"}</code>',
+        'Click Send again. The server responds with the data you sent plus an assigned ID.',
+        'Use <strong>Collections</strong> (left sidebar) to group and save related requests — one collection per project or API you are testing.'
       ]
     }
   ];
