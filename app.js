@@ -3594,6 +3594,48 @@ function renderPremiumPanel() {
       desc: 'Cheat sheets, starter templates, and reference guides for every floor.',
       fullDesc: 'Floor-by-floor cheat sheets, reusable HTML/CSS/JS starter templates, and quick-reference cards for every major concept. Download them, keep them, use them forever.',
       problem: 'Solves: rebuilding from scratch every time you start something new.'
+    },
+    {
+      icon: '🧭', name: 'Adaptive Paths',
+      desc: 'Personalized learning paths that adjust based on performance.',
+      fullDesc: 'Dynamically adjusts what you learn next based on your strengths, weaknesses, and completed tools. Keeps you in an optimal challenge zone and removes wasted time.',
+      problem: 'Solves: following a fixed path that doesn\'t match where you actually are.'
+    },
+    {
+      icon: '🎧', name: 'Deep Work Mode',
+      desc: 'Distraction-free learning sessions with focus tracking.',
+      fullDesc: 'Locks the interface into a clean, minimal mode, tracks uninterrupted focus time, and rewards longer deep work sessions with bonus XP.',
+      problem: 'Solves: short, scattered sessions that never build momentum.'
+    },
+    {
+      icon: '🏗️', name: 'Project Builder',
+      desc: 'Guided real-world projects to apply your skills.',
+      fullDesc: 'Step-by-step project workflows that turn your knowledge into portfolio-ready work. Includes milestones, checkpoints, and completion validation.',
+      problem: 'Solves: knowing the theory but not knowing how to build something real.'
+    },
+    {
+      icon: '📊', name: 'Skill Benchmarking',
+      desc: 'Compare your progress against real-world standards.',
+      fullDesc: 'Shows how your current skill level compares to industry expectations. Highlights gaps and suggests what to improve next.',
+      problem: 'Solves: not knowing if you\'re actually job-ready.'
+    },
+    {
+      icon: '🤖', name: 'AI Code Review',
+      desc: 'Instant feedback on your code and projects.',
+      fullDesc: 'Analyzes your work and gives actionable feedback on structure, readability, and best practices — like having a senior developer review your code.',
+      problem: 'Solves: submitting work with no idea if it\'s any good.'
+    },
+    {
+      icon: '⚡', name: 'Momentum Boost',
+      desc: 'Temporary XP boosts for consistent progress.',
+      fullDesc: 'Rewards streaks and consistent activity with short-term XP multipliers, encouraging daily engagement and habit building.',
+      problem: 'Solves: losing motivation between sessions.'
+    },
+    {
+      icon: '💼', name: 'Opportunity Board',
+      desc: 'Unlock real opportunities as you progress.',
+      fullDesc: 'Access curated internships, freelance gigs, and job leads once you reach certain milestones, turning learning into real-world outcomes.',
+      problem: 'Solves: finishing the curriculum with no idea what to do next.'
     }
   ];
 
