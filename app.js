@@ -688,6 +688,8 @@ async function submitNewPassword() {
 function populateDashboard() {
   // Apply saved profile colour theme to body on startup
   applyProfThemeToBody(getProfTheme());
+  // Apply saved cover screen theme (independent from app theme)
+  applyCoverTheme(getCoverTheme());
 
   // Show the BEGIN button overlay
   var landing = document.getElementById('new-user-landing');
@@ -3647,6 +3649,25 @@ var PROF_THEMES = [
 
 function getProfTheme() {
   return localStorage.getItem('codebook_prof_theme') || 'cosmic-blue';
+}
+
+function getCoverTheme() {
+  return localStorage.getItem('codebook_cover_theme') || 'cosmic-blue';
+}
+
+function applyCoverTheme(id) {
+  var screen = document.getElementById('auth-screen');
+  if (!screen) return;
+  screen.className = screen.className.replace(/\bauth-theme-\S+/g, '').trim();
+  screen.classList.add('auth-theme-' + id);
+  document.querySelectorAll('.cover-orb').forEach(function(orb) {
+    orb.classList.toggle('active', orb.getAttribute('data-theme') === id);
+  });
+}
+
+function switchCoverTheme(id) {
+  localStorage.setItem('codebook_cover_theme', id);
+  applyCoverTheme(id);
 }
 
 function applyProfThemeToBody(id) {
