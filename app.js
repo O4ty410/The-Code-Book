@@ -3881,12 +3881,6 @@ function renderProfilePanel() {
     '<div class="prof-level-sub">' + state.xp + ' XP' + (next ? ' &mdash; ' + (next.xp - state.xp) + ' XP to ' + nextName : ' &mdash; Max level reached') + '</div>' +
     '</div>' +
 
-    // Activity calendar
-    '<div class="prof-section">' +
-    '<div class="prof-section-title">Last 28 Days</div>' +
-    calHtml +
-    '</div>' +
-
     // Achievements
     '<div class="prof-section">' +
     '<div class="prof-section-title">Achievements</div>' +
