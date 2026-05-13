@@ -120,11 +120,11 @@ body.prof-theme-obsidian-gold .right-sidebar  { background: rgba(160,120,40,0.18
 body.prof-theme-obsidian-gold .top-bar        { background: rgba(140,100,30,0.22); }
 
 /* main-col tint only when profile tab is open */
-body.profile-mode.prof-theme-cosmic-blue   #main-col { background: rgba(3,7,20,0.72); }
-body.profile-mode.prof-theme-aurora-teal   #main-col { background: rgba(3,13,10,0.72); }
-body.profile-mode.prof-theme-royal-violet  #main-col { background: rgba(9,4,18,0.72); }
-body.profile-mode.prof-theme-ember-crimson #main-col { background: rgba(18,4,4,0.72); }
-body.profile-mode.prof-theme-obsidian-gold #main-col { background: rgba(14,10,4,0.72); }
+body.profile-mode.prof-theme-cosmic-blue   #main-col { background: rgba(3,7,20,0.50); }
+body.profile-mode.prof-theme-aurora-teal   #main-col { background: rgba(3,13,10,0.50); }
+body.profile-mode.prof-theme-royal-violet  #main-col { background: rgba(9,4,18,0.50); }
+body.profile-mode.prof-theme-ember-crimson #main-col { background: rgba(18,4,4,0.50); }
+body.profile-mode.prof-theme-obsidian-gold #main-col { background: rgba(14,10,4,0.50); }
 
 /* Other modes override main-col */
 body.learn-mode   #main-col { background: none; }
