@@ -2008,6 +2008,13 @@ function switchTopNav(tab, btn) {
     document.body.classList.remove('premium-mode');
   }
 
+  // Learn space mode — deep space background on main col
+  if (tab === 'learn') {
+    document.body.classList.add('learn-mode');
+  } else {
+    document.body.classList.remove('learn-mode');
+  }
+
   // Show/hide panels
   document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
   var mainContent = document.getElementById('main-content');
