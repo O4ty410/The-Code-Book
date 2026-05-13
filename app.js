@@ -3310,6 +3310,7 @@ function renderToolsPanel() {
       desc: 'The code editor used by most professional developers worldwide.',
       difficulty: 'Beginner',
       category: 'Editor',
+      xp: 25,
       steps: [
         'Go to <strong>code.visualstudio.com</strong> and click Download for your operating system.',
         'Run the installer and follow the prompts. Accept all defaults.',
@@ -3328,6 +3329,7 @@ function renderToolsPanel() {
       desc: 'Version control that tracks every change you make to your code.',
       difficulty: 'Beginner',
       category: 'Version Control',
+      xp: 25,
       steps: [
         'Go to <strong>git-scm.com</strong> and download Git for your operating system.',
         'Run the installer. When asked about the default editor, choose VS Code if listed.',
@@ -3346,6 +3348,7 @@ function renderToolsPanel() {
       desc: 'Cloud hosting for your Git repositories — and where developers share work.',
       difficulty: 'Beginner',
       category: 'Version Control',
+      xp: 25,
       steps: [
         'Go to <strong>github.com</strong> and create a free account.',
         'Verify your email address when prompted.',
@@ -3364,6 +3367,7 @@ function renderToolsPanel() {
       desc: 'Built into your browser — inspect, debug, and tweak any webpage in real time.',
       difficulty: 'Beginner',
       category: 'Browser',
+      xp: 25,
       steps: [
         'Open Google Chrome and go to any webpage.',
         'Press <strong>F12</strong> (or Cmd+Option+I on Mac) to open DevTools.',
@@ -3382,6 +3386,7 @@ function renderToolsPanel() {
       desc: 'Runs JavaScript outside the browser — powers servers, build tools, and npm.',
       difficulty: 'Intermediate',
       category: 'Runtime',
+      xp: 50,
       steps: [
         'Go to <strong>nodejs.org</strong> and download the LTS (Long Term Support) version.',
         'Run the installer and accept all defaults. It will also install npm.',
@@ -3400,6 +3405,7 @@ function renderToolsPanel() {
       desc: 'Deploy your HTML/CSS/JS projects live on the internet for free in under a minute.',
       difficulty: 'Beginner',
       category: 'Deployment',
+      xp: 25,
       steps: [
         'Go to <strong>netlify.com</strong> and sign up for a free account (you can use GitHub to log in).',
         'Click <strong>Add new site</strong> → <strong>Deploy manually</strong>.',
@@ -3418,6 +3424,7 @@ function renderToolsPanel() {
       desc: 'Design and prototype interfaces in the browser before writing a single line of code.',
       difficulty: 'Beginner',
       category: 'Design',
+      xp: 25,
       steps: [
         'Go to <strong>figma.com</strong> and create a free account.',
         'Click <strong>New design file</strong> to open the canvas.',
@@ -3436,6 +3443,7 @@ function renderToolsPanel() {
       desc: 'Test and explore APIs without writing any code — essential for backend and full-stack work.',
       difficulty: 'Intermediate',
       category: 'API Testing',
+      xp: 50,
       steps: [
         'Go to <strong>postman.com</strong> and download the free desktop app, or use the web version.',
         'Create a free account and sign in.',
@@ -3454,6 +3462,7 @@ function renderToolsPanel() {
       desc: 'Professional video editor — free and industry-standard. Use it to create portfolio walkthrough videos.',
       difficulty: 'Intermediate',
       category: 'Portfolio Video',
+      xp: 50,
       steps: [
         'Go to <strong>blackmagicdesign.com/products/davinciresolve</strong> and download the free version.',
         'Run the installer. When it finishes, open DaVinci Resolve.',
@@ -3476,16 +3485,19 @@ function renderToolsPanel() {
 
   tools.forEach(function(t) {
     var stepsId = 'tool-steps-' + t.id;
+    var isDone = !!state.completed['tool-' + t.id];
     var diffClass = t.difficulty === 'Beginner' ? 'tool-badge-beginner' : 'tool-badge-intermediate';
+    var btnHtml = isDone
+      ? '<button class="build-mark-done" disabled style="margin-top:16px;opacity:0.5;cursor:default;">Set Up ✓</button>'
+      : '<button class="build-mark-done" id="tool-btn-' + t.id + '" onclick="markToolSetUp(\'' + t.id + '\',' + t.xp + ');event.stopPropagation()" style="margin-top:16px;">Mark as Set Up ✓</button>';
     var stepsHtml = '<div class="build-steps" id="' + stepsId + '" style="display:none;">' +
       '<div class="build-steps-label">STEP-BY-STEP GUIDE</div>' +
       '<ol class="build-step-list">' +
       t.steps.map(function(s) { return '<li class="build-step-item">' + s + '</li>'; }).join('') +
-      '</ol>' +
-      '<button class="build-mark-done" onclick="markToolSetUp(\'' + t.id + '\');event.stopPropagation()" style="margin-top:16px;">Mark as Set Up ✓</button>' +
+      '</ol>' + btnHtml +
       '</div>';
 
-    html += '<div class="build-card" id="tool-card-' + t.id + '" onclick="toggleToolSteps(\'' + stepsId + '\',this)">' +
+    html += '<div class="build-card' + (isDone ? ' done' : '') + '" id="tool-card-' + t.id + '" onclick="toggleToolSteps(\'' + stepsId + '\',this)">' +
       '<div class="build-card-icon">' + t.icon + '</div>' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">' +
       '<div class="build-card-tag" style="margin-bottom:0;">' + t.category.toUpperCase() + '</div>' +
@@ -3509,9 +3521,22 @@ function toggleToolSteps(stepsId, card) {
   if (card) card.classList.toggle('tool-expanded', !isOpen);
 }
 
-function markToolSetUp(toolId) {
+function markToolSetUp(toolId, xp) {
+  var stateKey = 'tool-' + toolId;
+  if (state.completed[stateKey]) return;
+  state.completed[stateKey] = true;
+  saveState();
+  awardXP(xp || 25, stateKey, window.innerWidth / 2, 300);
   var card = document.getElementById('tool-card-' + toolId);
   if (card) card.classList.add('done');
+  var btn = document.getElementById('tool-btn-' + toolId);
+  if (btn) {
+    btn.textContent = 'Set Up ✓';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'default';
+    btn.onclick = null;
+  }
 }
 
 function renderChallengePanel() {
