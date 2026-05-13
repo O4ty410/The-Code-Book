@@ -233,6 +233,9 @@ body.light .build-card:hover {
 
 .build-mark-done:hover { opacity: 0.85; }
 
+.tool-badge-beginner  { border-color: rgba(72,187,120,0.4);  color: var(--success, #48bb78); }
+.tool-badge-intermediate { border-color: rgba(200,169,110,0.4); color: var(--accent); }
+
 /* ============================================================
    CHALLENGE PANEL
    ============================================================ */
@@ -476,3 +479,112 @@ body.light .challenge-item {
 }
 
 .f2-hint.visible { display: block; }
+
+/* ============================================================
+   PREMIUM PANEL
+   ============================================================ */
+
+.premium-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 0 32px 40px;
+}
+
+.premium-feature-card {
+  position: relative;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(212,170,106,0.15);
+  border-radius: 14px;
+  padding: 24px 20px 20px;
+  overflow: hidden;
+  cursor: not-allowed;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premium-feature-card button,
+.premium-feature-card a { pointer-events: none; cursor: not-allowed; }
+
+.premium-feature-card:hover {
+  border-color: rgba(212,170,106,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+body.light .premium-feature-card {
+  background: rgba(255,255,255,0.6);
+  border-color: rgba(160,117,42,0.15);
+}
+
+.premium-card-lock {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 14px;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+.premium-card-icon { font-size: 28px; margin-bottom: 12px; }
+
+.premium-card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.premium-card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.premium-card-tooltip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(12,12,18,0.97);
+  border-top: 1px solid rgba(212,170,106,0.2);
+  padding: 16px 18px;
+  transform: translateY(100%);
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+body.light .premium-card-tooltip {
+  background: rgba(247,243,237,0.97);
+  border-top-color: rgba(160,117,42,0.2);
+}
+
+.premium-feature-card:hover .premium-card-tooltip,
+.premium-feature-card.tooltip-open .premium-card-tooltip {
+  transform: translateY(0);
+}
+
+.premium-tooltip-full {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.premium-tooltip-problem {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.premium-tooltip-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .premium-grid { grid-template-columns: 1fr; padding: 0 16px 32px; }
+}

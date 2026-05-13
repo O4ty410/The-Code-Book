@@ -1995,7 +1995,7 @@ function switchTopNav(tab, btn) {
 
   // Update mobile bottom bar
   document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
-  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map' };
+  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools', premium: 'mob-premium' };
   if (mobMap[tab]) {
     var mb = document.getElementById(mobMap[tab]);
     if (mb) mb.classList.add('active');
@@ -2017,6 +2017,8 @@ function switchTopNav(tab, btn) {
       if (tab === 'build') renderBuildPanel();
       if (tab === 'challenge') renderChallengePanel();
       if (tab === 'map') renderMapPanel();
+      if (tab === 'tools') renderToolsPanel();
+      if (tab === 'premium') renderPremiumPanel();
     }
   }
 
@@ -3296,6 +3298,413 @@ function startBuildProject(floorNum) {
 }
 
 
+
+function renderToolsPanel() {
+  var panel = document.getElementById('panel-tools');
+  if (!panel) return;
+
+  var tools = [
+    {
+      id: 'vscode',
+      icon: '🖥️',
+      name: 'VS Code',
+      desc: 'The code editor used by most professional developers worldwide.',
+      difficulty: 'Beginner',
+      category: 'Editor',
+      xp: 25,
+      steps: [
+        'Go to <strong>code.visualstudio.com</strong> and click Download for your operating system.',
+        'Run the installer and follow the prompts. Accept all defaults.',
+        'Open VS Code. You will see the Welcome tab.',
+        'Press <strong>Ctrl+`</strong> (or Cmd+` on Mac) to open the built-in terminal.',
+        'Click the Extensions icon on the left sidebar (looks like four squares).',
+        'Search for <strong>Prettier</strong> and install it — this auto-formats your code.',
+        'Search for <strong>Live Server</strong> and install it — this lets you preview HTML files live in the browser.',
+        'Create a new file with <strong>Ctrl+N</strong>, save it as <strong>index.html</strong>, and type an exclamation mark then press Tab. VS Code will generate a full HTML skeleton.'
+      ]
+    },
+    {
+      id: 'git',
+      icon: '🌿',
+      name: 'Git',
+      desc: 'Version control that tracks every change you make to your code.',
+      difficulty: 'Beginner',
+      category: 'Version Control',
+      xp: 25,
+      steps: [
+        'Go to <strong>git-scm.com</strong> and download Git for your operating system.',
+        'Run the installer. When asked about the default editor, choose VS Code if listed.',
+        'Open a terminal (or VS Code\'s built-in terminal) and run: <code>git --version</code>. You should see a version number.',
+        'Set your name: <code>git config --global user.name "Your Name"</code>',
+        'Set your email: <code>git config --global user.email "you@example.com"</code>',
+        'Navigate to a project folder and run <code>git init</code> to start tracking it.',
+        'Run <code>git add .</code> to stage all files, then <code>git commit -m "first commit"</code> to save a snapshot.',
+        'Run <code>git log</code> to see your commit history. You have version control.'
+      ]
+    },
+    {
+      id: 'github',
+      icon: '🐙',
+      name: 'GitHub',
+      desc: 'Cloud hosting for your Git repositories — and where developers share work.',
+      difficulty: 'Beginner',
+      category: 'Version Control',
+      xp: 25,
+      steps: [
+        'Go to <strong>github.com</strong> and create a free account.',
+        'Verify your email address when prompted.',
+        'Click the <strong>+</strong> button at the top right and choose "New repository".',
+        'Give it a name (e.g. <strong>my-first-project</strong>), leave it public, and click Create.',
+        'GitHub will show you setup commands. Copy the ones under "push an existing repository".',
+        'In your terminal, paste and run those commands. Your code is now on GitHub.',
+        'Refresh the GitHub page — you should see your files.',
+        'Click on a file to view it. Click the pencil icon to edit it directly in the browser.'
+      ]
+    },
+    {
+      id: 'devtools',
+      icon: '🔍',
+      name: 'Chrome DevTools',
+      desc: 'Built into your browser — inspect, debug, and tweak any webpage in real time.',
+      difficulty: 'Beginner',
+      category: 'Browser',
+      xp: 25,
+      steps: [
+        'Open Google Chrome and go to any webpage.',
+        'Press <strong>F12</strong> (or Cmd+Option+I on Mac) to open DevTools.',
+        'Click the <strong>Elements</strong> tab to see the HTML structure of the page.',
+        'Hover over elements in the panel — the corresponding part of the page highlights.',
+        'Double-click any text in the Elements panel to edit it live. Changes disappear on refresh.',
+        'Click the <strong>Console</strong> tab. Type <code>document.title</code> and press Enter — it returns the page title.',
+        'Click the <strong>Sources</strong> tab to see the page\'s CSS and JavaScript files.',
+        'Click the device icon (top-left of DevTools) to preview the page on a mobile screen size.'
+      ]
+    },
+    {
+      id: 'nodejs',
+      icon: '⬡',
+      name: 'Node.js',
+      desc: 'Runs JavaScript outside the browser — powers servers, build tools, and npm.',
+      difficulty: 'Intermediate',
+      category: 'Runtime',
+      xp: 50,
+      steps: [
+        'Go to <strong>nodejs.org</strong> and download the LTS (Long Term Support) version.',
+        'Run the installer and accept all defaults. It will also install npm.',
+        'Open a terminal and run <code>node --version</code> — you should see a version number.',
+        'Run <code>npm --version</code> to confirm npm is also installed.',
+        'Create a file called <strong>hello.js</strong> and write: <code>console.log("Hello from Node");</code>',
+        'In the terminal, navigate to that file and run: <code>node hello.js</code>',
+        'You should see the message printed. Node ran your JavaScript without a browser.',
+        'You now have access to the npm ecosystem — millions of open source packages.'
+      ]
+    },
+    {
+      id: 'netlify',
+      icon: '🚀',
+      name: 'Netlify',
+      desc: 'Deploy your HTML/CSS/JS projects live on the internet for free in under a minute.',
+      difficulty: 'Beginner',
+      category: 'Deployment',
+      xp: 25,
+      steps: [
+        'Go to <strong>netlify.com</strong> and sign up for a free account (you can use GitHub to log in).',
+        'Click <strong>Add new site</strong> → <strong>Deploy manually</strong>.',
+        'Drag and drop your project folder onto the upload area.',
+        'Netlify gives you a random URL immediately — your site is live.',
+        'Click <strong>Site settings</strong> → <strong>Change site name</strong> to set a custom subdomain.',
+        'For auto-deploys: go to <strong>Add new site</strong> → <strong>Import from GitHub</strong> and connect your repo.',
+        'Every time you push to GitHub, Netlify automatically rebuilds and redeploys your site.',
+        'Check the <strong>Deploys</strong> tab to see the build log and confirm each deploy succeeded.'
+      ]
+    },
+    {
+      id: 'figma',
+      icon: '🎨',
+      name: 'Figma',
+      desc: 'Design and prototype interfaces in the browser before writing a single line of code.',
+      difficulty: 'Beginner',
+      category: 'Design',
+      xp: 25,
+      steps: [
+        'Go to <strong>figma.com</strong> and create a free account.',
+        'Click <strong>New design file</strong> to open the canvas.',
+        'Press <strong>F</strong> to create a frame (your screen size). Choose Desktop (1440×1024) from the right panel.',
+        'Press <strong>R</strong> to draw a rectangle. Set its colour, size, and corner radius in the right panel.',
+        'Press <strong>T</strong> to add text. Click anywhere on the canvas and start typing.',
+        'Use the Components panel to create reusable elements — design a button once, use it everywhere.',
+        'Click the Play button (top right) to enter Prototype mode and preview your design.',
+        'Share your file via the Share button and copy the link — anyone with the link can view it in the browser.'
+      ]
+    },
+    {
+      id: 'postman',
+      icon: '📮',
+      name: 'Postman',
+      desc: 'Test and explore APIs without writing any code — essential for backend and full-stack work.',
+      difficulty: 'Intermediate',
+      category: 'API Testing',
+      xp: 50,
+      steps: [
+        'Go to <strong>postman.com</strong> and download the free desktop app, or use the web version.',
+        'Create a free account and sign in.',
+        'Click <strong>New</strong> → <strong>HTTP Request</strong> to open a blank request tab.',
+        'Set the method to <strong>GET</strong> and enter this URL: <code>https://jsonplaceholder.typicode.com/posts/1</code>',
+        'Click <strong>Send</strong>. You will see a JSON response appear in the panel below — this is real API data.',
+        'Change the method to <strong>POST</strong>, click the <strong>Body</strong> tab, select <strong>raw</strong> and <strong>JSON</strong>, then enter: <code>{"title":"test","body":"hello"}</code>',
+        'Click Send again. The server responds with the data you sent plus an assigned ID.',
+        'Use <strong>Collections</strong> (left sidebar) to group and save related requests — one collection per project or API you are testing.'
+      ]
+    },
+    {
+      id: 'davinci',
+      icon: '🎬',
+      name: 'DaVinci Resolve',
+      desc: 'Professional video editor — free and industry-standard. Use it to create portfolio walkthrough videos.',
+      difficulty: 'Intermediate',
+      category: 'Portfolio Video',
+      xp: 50,
+      steps: [
+        'Go to <strong>blackmagicdesign.com/products/davinciresolve</strong> and download the free version.',
+        'Run the installer. When it finishes, open DaVinci Resolve.',
+        'On the Project Manager screen, click <strong>New Project</strong>, give it a name, and click Create.',
+        'In the <strong>Cut</strong> or <strong>Edit</strong> page (tabs at the bottom), click the import icon and drag in your screen recording or footage.',
+        'Drag your clip from the Media Pool onto the timeline at the bottom of the screen.',
+        'Use the blade tool (<strong>B</strong>) to cut sections. Select unwanted clips and press Delete to remove them.',
+        'To add a title: go to <strong>Titles</strong> in the Effects panel, drag a title style onto the timeline above your clip, and double-click to edit the text.',
+        'When finished, click the <strong>Deliver</strong> tab (rocket icon at the bottom), choose YouTube as your preset, set a filename and export location, then click <strong>Add to Render Queue</strong> → <strong>Render All</strong>.'
+      ]
+    }
+  ];
+
+  var html = '<div class="panel-hero">' +
+    '<div class="panel-hero-label">DEVELOPER TOOLS</div>' +
+    '<div class="panel-hero-title">Set Up Your Toolkit</div>' +
+    '<div class="panel-hero-sub">Every professional developer uses these tools. Work through them one at a time — each one makes the next easier.</div>' +
+    '</div>' +
+    '<div class="build-grid">';
+
+  tools.forEach(function(t) {
+    var stepsId = 'tool-steps-' + t.id;
+    var isDone = !!state.completed['tool-' + t.id];
+    var diffClass = t.difficulty === 'Beginner' ? 'tool-badge-beginner' : 'tool-badge-intermediate';
+    var btnHtml = isDone
+      ? '<button class="build-mark-done" disabled style="margin-top:16px;opacity:0.5;cursor:default;">Set Up ✓</button>'
+      : '<button class="build-mark-done" id="tool-btn-' + t.id + '" onclick="markToolSetUp(\'' + t.id + '\',' + t.xp + ');event.stopPropagation()" style="margin-top:16px;">Mark as Set Up ✓</button>';
+    var stepsHtml = '<div class="build-steps" id="' + stepsId + '" style="display:none;">' +
+      '<div class="build-steps-label">STEP-BY-STEP GUIDE</div>' +
+      '<ol class="build-step-list">' +
+      t.steps.map(function(s) { return '<li class="build-step-item">' + s + '</li>'; }).join('') +
+      '</ol>' + btnHtml +
+      '</div>';
+
+    html += '<div class="build-card' + (isDone ? ' done' : '') + '" id="tool-card-' + t.id + '" onclick="toggleToolSteps(\'' + stepsId + '\',this)">' +
+      '<div class="build-card-icon">' + t.icon + '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">' +
+      '<div class="build-card-tag" style="margin-bottom:0;">' + t.category.toUpperCase() + '</div>' +
+      '<span class="build-meta-pill ' + diffClass + '">' + t.difficulty + '</span>' +
+      '</div>' +
+      '<div class="build-card-title">' + t.name + '</div>' +
+      '<div class="build-card-desc">' + t.desc + '</div>' +
+      stepsHtml +
+      '</div>';
+  });
+
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+function toggleToolSteps(stepsId, card) {
+  var el = document.getElementById(stepsId);
+  if (!el) return;
+  var isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (card) card.classList.toggle('tool-expanded', !isOpen);
+}
+
+function markToolSetUp(toolId, xp) {
+  var stateKey = 'tool-' + toolId;
+  if (state.completed[stateKey]) return;
+  state.completed[stateKey] = true;
+  saveState();
+  awardXP(xp || 25, stateKey, window.innerWidth / 2, 300);
+  var card = document.getElementById('tool-card-' + toolId);
+  if (card) card.classList.add('done');
+  var btn = document.getElementById('tool-btn-' + toolId);
+  if (btn) {
+    btn.textContent = 'Set Up ✓';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'default';
+    btn.onclick = null;
+  }
+}
+
+function renderPremiumPanel() {
+  var panel = document.getElementById('panel-premium');
+  if (!panel) return;
+
+  var alreadyNotified = !!localStorage.getItem('codebook_premium_notify');
+
+  var features = [
+    {
+      icon: '🔑', name: 'All 7 Floors Unlocked',
+      desc: 'Every floor available from day one — no waiting, no gates.',
+      fullDesc: 'Free users access Floors 1 and 2. Premium unlocks all seven immediately so you move at your own pace without hitting walls. No floor is hidden from you on day one.',
+      problem: 'Solves: hitting a paywall mid-momentum.'
+    },
+    {
+      icon: '🧑‍💻', name: 'Mentorship Sessions',
+      desc: 'Live 1-on-1 calls with an experienced developer, booked on your schedule.',
+      fullDesc: 'Book a 45-minute video call with a working developer whenever you need a second opinion. Bring a project, a problem, or just questions — we\'ll talk through it. Included every month.',
+      problem: 'Solves: learning alone with no one to ask.'
+    },
+    {
+      icon: '📋', name: 'Code Reviews',
+      desc: 'Submit any project and get written, line-by-line feedback within 48 hours.',
+      fullDesc: 'Submit any project you\'ve built and receive written feedback within 48 hours. Comments are specific and actionable — not generic. Real code, real notes, real improvement.',
+      problem: 'Solves: never knowing if your code is actually good.'
+    },
+    {
+      icon: '📜', name: 'Completion Certificate',
+      desc: 'A verifiable certificate issued when you finish all seven floors.',
+      fullDesc: 'Finishing all seven floors earns you a certificate with a unique verification link. Share it on your CV or LinkedIn. Employers can confirm it is genuine with one click.',
+      problem: 'Solves: having no credential to show for your effort.'
+    },
+    {
+      icon: '💬', name: 'Private Community',
+      desc: 'Access to a members-only space for questions, accountability, and feedback.',
+      fullDesc: 'A members-only space where premium learners share progress, ask questions, and give each other feedback. No noise — just people doing the same work as you.',
+      problem: 'Solves: learning in isolation with no peers to compare notes with.'
+    },
+    {
+      icon: '🎯', name: 'Career Coaching',
+      desc: 'CV review, portfolio feedback, and mock interview prep included.',
+      fullDesc: 'One session focused entirely on your job search: CV review, portfolio critique, and a mock technical interview. Practical, specific, and honest.',
+      problem: 'Solves: not knowing if you\'re actually ready to apply.'
+    },
+    {
+      icon: '⚡', name: 'Priority Support',
+      desc: 'Any question answered by a human within 24 hours, guaranteed.',
+      fullDesc: 'Post any question — about the curriculum, your code, or your career — and a human responds within 24 hours. Not a bot. Not a forum. A person.',
+      problem: 'Solves: getting stuck with nowhere to turn.'
+    },
+    {
+      icon: '📦', name: 'Resource Packs',
+      desc: 'Cheat sheets, starter templates, and reference guides for every floor.',
+      fullDesc: 'Floor-by-floor cheat sheets, reusable HTML/CSS/JS starter templates, and quick-reference cards for every major concept. Download them, keep them, use them forever.',
+      problem: 'Solves: rebuilding from scratch every time you start something new.'
+    },
+    {
+      icon: '🧭', name: 'Adaptive Paths',
+      desc: 'Personalized learning paths that adjust based on performance.',
+      fullDesc: 'Dynamically adjusts what you learn next based on your strengths, weaknesses, and completed tools. Keeps you in an optimal challenge zone and removes wasted time.',
+      problem: 'Solves: following a fixed path that doesn\'t match where you actually are.'
+    },
+    {
+      icon: '🎧', name: 'Deep Work Mode',
+      desc: 'Distraction-free learning sessions with focus tracking.',
+      fullDesc: 'Locks the interface into a clean, minimal mode, tracks uninterrupted focus time, and rewards longer deep work sessions with bonus XP.',
+      problem: 'Solves: short, scattered sessions that never build momentum.'
+    },
+    {
+      icon: '🏗️', name: 'Project Builder',
+      desc: 'Guided real-world projects to apply your skills.',
+      fullDesc: 'Step-by-step project workflows that turn your knowledge into portfolio-ready work. Includes milestones, checkpoints, and completion validation.',
+      problem: 'Solves: knowing the theory but not knowing how to build something real.'
+    },
+    {
+      icon: '📊', name: 'Skill Benchmarking',
+      desc: 'Compare your progress against real-world standards.',
+      fullDesc: 'Shows how your current skill level compares to industry expectations. Highlights gaps and suggests what to improve next.',
+      problem: 'Solves: not knowing if you\'re actually job-ready.'
+    },
+    {
+      icon: '🤖', name: 'AI Code Review',
+      desc: 'Instant feedback on your code and projects.',
+      fullDesc: 'Analyzes your work and gives actionable feedback on structure, readability, and best practices — like having a senior developer review your code.',
+      problem: 'Solves: submitting work with no idea if it\'s any good.'
+    },
+    {
+      icon: '⚡', name: 'Momentum Boost',
+      desc: 'Temporary XP boosts for consistent progress.',
+      fullDesc: 'Rewards streaks and consistent activity with short-term XP multipliers, encouraging daily engagement and habit building.',
+      problem: 'Solves: losing motivation between sessions.'
+    },
+    {
+      icon: '💼', name: 'Opportunity Board',
+      desc: 'Unlock real opportunities as you progress.',
+      fullDesc: 'Access curated internships, freelance gigs, and job leads once you reach certain milestones, turning learning into real-world outcomes.',
+      problem: 'Solves: finishing the curriculum with no idea what to do next.'
+    }
+  ];
+
+  var html = '<div class="panel-hero" style="text-align:center;padding:60px 32px 40px;">' +
+    '<div style="font-size:48px;margin-bottom:20px;">♛</div>' +
+    '<div class="panel-hero-label">PREMIUM</div>' +
+    '<div class="panel-hero-title">Unlock The Full Book</div>' +
+    '<div class="panel-hero-sub" style="max-width:480px;margin:0 auto 32px;">Everything in the free tier, plus the tools that turn learning into a career.</div>' +
+    '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;">' +
+    '<button class="build-mark-done" disabled style="opacity:0.4;cursor:not-allowed;font-size:14px;padding:14px 32px;letter-spacing:1px;">Join Premium — Coming Soon</button>' +
+    (alreadyNotified
+      ? '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:var(--success,#48bb78);letter-spacing:1px;">✓ You\'re on the notify list</div>'
+      : '<button onclick="showPremiumNotify()" style="background:none;border:none;color:var(--accent);font-family:\'IBM Plex Mono\',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;text-decoration:underline;text-underline-offset:4px;">Notify me when it\'s ready</button>'
+    ) +
+    '</div>' +
+    '</div>' +
+    '<div class="premium-grid">';
+
+  features.forEach(function(f) {
+    html += '<div class="premium-feature-card" onclick="togglePremiumTooltip(this)">' +
+      '<div class="premium-card-lock">♛</div>' +
+      '<div class="premium-card-icon">' + f.icon + '</div>' +
+      '<div class="premium-card-name">' + f.name + '</div>' +
+      '<div class="premium-card-desc">' + f.desc + '</div>' +
+      '<div class="premium-card-tooltip">' +
+      '<div class="premium-tooltip-full">' + f.fullDesc + '</div>' +
+      '<div class="premium-tooltip-problem">' + f.problem + '</div>' +
+      '<div class="premium-tooltip-badge">♛ Available with Premium</div>' +
+      '</div>' +
+      '</div>';
+  });
+
+  html += '</div>';
+
+  panel.innerHTML = html;
+}
+
+function showPremiumNotify() {
+  var overlay = document.getElementById('premium-notify-overlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function hidePremiumNotify() {
+  var overlay = document.getElementById('premium-notify-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function submitPremiumNotify() {
+  var input = document.getElementById('premium-notify-email');
+  var email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    if (input) { input.style.borderColor = '#e53e3e'; input.focus(); }
+    return;
+  }
+  localStorage.setItem('codebook_premium_notify', email);
+  var form = document.getElementById('premium-notify-form');
+  var confirm = document.getElementById('premium-notify-confirm');
+  if (form) form.style.display = 'none';
+  if (confirm) confirm.style.display = 'block';
+  renderPremiumPanel();
+}
+
+function togglePremiumTooltip(card) {
+  var isOpen = card.classList.contains('tooltip-open');
+  document.querySelectorAll('.premium-feature-card.tooltip-open').forEach(function(c) {
+    c.classList.remove('tooltip-open');
+  });
+  if (!isOpen) card.classList.add('tooltip-open');
+}
 
 function renderChallengePanel() {
   var panel = document.getElementById('panel-challenge');

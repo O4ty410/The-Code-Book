@@ -235,6 +235,8 @@ body.light .top-logo {
   border-bottom-color: var(--accent);
 }
 
+#tnav-premium { color: var(--accent); }
+
 .top-right {
   display: flex;
   align-items: center;
