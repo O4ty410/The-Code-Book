@@ -3546,6 +3546,17 @@ function renderPremiumPanel() {
 
   var alreadyNotified = !!localStorage.getItem('codebook_premium_notify');
 
+  var features = [
+    { icon: '🔑', name: 'All 7 Floors Unlocked', desc: 'Every floor available from day one — no waiting, no gates.' },
+    { icon: '🧑‍💻', name: 'Mentorship Sessions', desc: 'Live 1-on-1 calls with an experienced developer, booked on your schedule.' },
+    { icon: '📋', name: 'Code Reviews', desc: 'Submit any project and get written, line-by-line feedback within 48 hours.' },
+    { icon: '📜', name: 'Completion Certificate', desc: 'A verifiable certificate issued when you finish all seven floors.' },
+    { icon: '💬', name: 'Private Community', desc: 'Access to a members-only space for questions, accountability, and feedback.' },
+    { icon: '🎯', name: 'Career Coaching', desc: 'CV review, portfolio feedback, and mock interview prep included.' },
+    { icon: '⚡', name: 'Priority Support', desc: 'Any question answered by a human within 24 hours, guaranteed.' },
+    { icon: '📦', name: 'Resource Packs', desc: 'Cheat sheets, starter templates, and reference guides for every floor.' }
+  ];
+
   var html = '<div class="panel-hero" style="text-align:center;padding:60px 32px 40px;">' +
     '<div style="font-size:48px;margin-bottom:20px;">♛</div>' +
     '<div class="panel-hero-label">PREMIUM</div>' +
@@ -3558,7 +3569,19 @@ function renderPremiumPanel() {
       : '<button onclick="showPremiumNotify()" style="background:none;border:none;color:var(--accent);font-family:\'IBM Plex Mono\',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;text-decoration:underline;text-underline-offset:4px;">Notify me when it\'s ready</button>'
     ) +
     '</div>' +
-    '</div>';
+    '</div>' +
+    '<div class="premium-grid">';
+
+  features.forEach(function(f) {
+    html += '<div class="premium-feature-card">' +
+      '<div class="premium-card-lock">♛</div>' +
+      '<div class="premium-card-icon">' + f.icon + '</div>' +
+      '<div class="premium-card-name">' + f.name + '</div>' +
+      '<div class="premium-card-desc">' + f.desc + '</div>' +
+      '</div>';
+  });
+
+  html += '</div>';
 
   panel.innerHTML = html;
 }
