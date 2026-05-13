@@ -3624,10 +3624,38 @@ function markToolSetUp(toolId, xp) {
 
 var LEVEL_NAMES = ['', 'Curious', 'Learning', 'Builder', 'Coder', 'Developer', 'Engineer', 'Architect', 'Senior', 'Principal'];
 
+var PROF_THEMES = [
+  { id: 'cosmic-blue',   name: 'Cosmic Blue',   mood: 'Calm / beginner',
+    dot: 'linear-gradient(135deg,#00c8ff,#0055cc)',
+    glow: 'rgba(0,180,255,0.30)', border: 'rgba(0,180,255,0.50)', bg: 'rgba(0,160,255,0.10)' },
+  { id: 'aurora-teal',   name: 'Aurora Teal',   mood: 'Focused / productive',
+    dot: 'linear-gradient(135deg,#00e5b0,#007a60)',
+    glow: 'rgba(0,220,160,0.30)', border: 'rgba(0,210,150,0.50)', bg: 'rgba(0,200,130,0.10)' },
+  { id: 'royal-violet',  name: 'Royal Violet',  mood: 'Creative / advanced',
+    dot: 'linear-gradient(135deg,#a855f7,#5b21b6)',
+    glow: 'rgba(168,85,247,0.30)', border: 'rgba(160,80,240,0.50)', bg: 'rgba(150,70,230,0.10)' },
+  { id: 'ember-crimson', name: 'Ember Crimson', mood: 'Intense / energetic',
+    dot: 'linear-gradient(135deg,#ff5555,#cc2200)',
+    glow: 'rgba(255,80,80,0.30)', border: 'rgba(255,70,70,0.50)', bg: 'rgba(255,60,60,0.10)' },
+  { id: 'obsidian-gold', name: 'Obsidian Gold', mood: 'Premium / mastery',
+    dot: 'linear-gradient(135deg,#e8c878,#9a7030)',
+    glow: 'rgba(200,169,110,0.30)', border: 'rgba(200,169,110,0.50)', bg: 'rgba(200,160,80,0.10)' },
+];
+
+function getProfTheme() {
+  return localStorage.getItem('codebook_prof_theme') || 'cosmic-blue';
+}
+
+function switchProfTheme(id) {
+  localStorage.setItem('codebook_prof_theme', id);
+  renderProfilePanel();
+}
+
 function renderProfilePanel() {
   var panel = document.getElementById('panel-profile');
   if (!panel) return;
 
+  var currentTheme = getProfTheme();
   var name = state.playerName || localStorage.getItem('codebook_player_name') || 'Learner';
   var initials = name.split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().substring(0, 2) || '?';
   var cur = getCurrentLevel();
@@ -3710,8 +3738,23 @@ function renderProfilePanel() {
       '</div>';
   }).join('');
 
+  var themePickerHtml = '<div class="prof-section prof-theme-section">' +
+    '<div class="prof-section-title">Appearance</div>' +
+    '<div class="prof-theme-swatches">' +
+    PROF_THEMES.map(function(t) {
+      var isActive = t.id === currentTheme;
+      return '<button class="prof-theme-swatch' + (isActive ? ' active' : '') + '"' +
+        ' onclick="switchProfTheme(\'' + t.id + '\')"' +
+        ' style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + ';--sw-bg:' + t.bg + '">' +
+        '<div class="prof-swatch-orb"></div>' +
+        '<div class="prof-swatch-name">' + t.name + '</div>' +
+        '<div class="prof-swatch-mood">' + t.mood + '</div>' +
+        '</button>';
+    }).join('') +
+    '</div></div>';
+
   panel.innerHTML =
-    '<div class="prof-layout">' +
+    '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
 
     // Header
     '<div class="prof-hero">' +
@@ -3758,6 +3801,9 @@ function renderProfilePanel() {
     '<div class="prof-section-title">Floor Progress</div>' +
     '<div class="prof-floors">' + floorRows + '</div>' +
     '</div>' +
+
+    // Theme picker
+    themePickerHtml +
 
     '</div>';
 }
