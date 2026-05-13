@@ -786,15 +786,8 @@ body.premium-mode #panel-premium .panel-hero-sub {
 }
 
 #panel-premium .premium-card-icon {
-  animation: iconFloat 3.8s ease-in-out infinite;
+  animation: none;
 }
-
-/* Stagger the float so cards don't all bounce in sync */
-#panel-premium .premium-feature-card:nth-child(2n)   .premium-card-icon { animation-delay: 0.5s; }
-#panel-premium .premium-feature-card:nth-child(3n)   .premium-card-icon { animation-delay: 1.1s; }
-#panel-premium .premium-feature-card:nth-child(4n)   .premium-card-icon { animation-delay: 1.7s; }
-#panel-premium .premium-feature-card:nth-child(5n)   .premium-card-icon { animation-delay: 0.9s; }
-#panel-premium .premium-feature-card:nth-child(7n)   .premium-card-icon { animation-delay: 2.3s; }
 
 #panel-premium .premium-card-name {
   color: #ede9fe;
