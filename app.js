@@ -3540,6 +3540,54 @@ function markToolSetUp(toolId, xp) {
   }
 }
 
+function renderPremiumPanel() {
+  var panel = document.getElementById('panel-premium');
+  if (!panel) return;
+
+  var alreadyNotified = !!localStorage.getItem('codebook_premium_notify');
+
+  var html = '<div class="panel-hero" style="text-align:center;padding:60px 32px 40px;">' +
+    '<div style="font-size:48px;margin-bottom:20px;">♛</div>' +
+    '<div class="panel-hero-label">PREMIUM</div>' +
+    '<div class="panel-hero-title">Unlock The Full Book</div>' +
+    '<div class="panel-hero-sub" style="max-width:480px;margin:0 auto 32px;">Everything in the free tier, plus the tools that turn learning into a career.</div>' +
+    '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;">' +
+    '<button class="build-mark-done" disabled style="opacity:0.4;cursor:not-allowed;font-size:14px;padding:14px 32px;letter-spacing:1px;">Join Premium — Coming Soon</button>' +
+    (alreadyNotified
+      ? '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:var(--success,#48bb78);letter-spacing:1px;">✓ You\'re on the notify list</div>'
+      : '<button onclick="showPremiumNotify()" style="background:none;border:none;color:var(--accent);font-family:\'IBM Plex Mono\',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;text-decoration:underline;text-underline-offset:4px;">Notify me when it\'s ready</button>'
+    ) +
+    '</div>' +
+    '</div>';
+
+  panel.innerHTML = html;
+}
+
+function showPremiumNotify() {
+  var overlay = document.getElementById('premium-notify-overlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function hidePremiumNotify() {
+  var overlay = document.getElementById('premium-notify-overlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function submitPremiumNotify() {
+  var input = document.getElementById('premium-notify-email');
+  var email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    if (input) { input.style.borderColor = '#e53e3e'; input.focus(); }
+    return;
+  }
+  localStorage.setItem('codebook_premium_notify', email);
+  var form = document.getElementById('premium-notify-form');
+  var confirm = document.getElementById('premium-notify-confirm');
+  if (form) form.style.display = 'none';
+  if (confirm) confirm.style.display = 'block';
+  renderPremiumPanel();
+}
+
 function renderChallengePanel() {
   var panel = document.getElementById('panel-challenge');
   if (!panel) return;

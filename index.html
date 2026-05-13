@@ -8,13 +8,13 @@
 <meta name="apple-mobile-web-app-title" content="The Code Book">
 <meta name="description" content="A calm path into coding. Learn step by step, offline-ready.">
 <title>The Code Book</title>
-  <link rel="stylesheet" href="variables.css?v=20260513f">
-  <link rel="stylesheet" href="animations.css?v=20260513f">
-  <link rel="stylesheet" href="layout.css?v=20260513f">
-  <link rel="stylesheet" href="cover.css?v=20260513f">
-  <link rel="stylesheet" href="components.css?v=20260513f">
-  <link rel="stylesheet" href="panels.css?v=20260513f">
-  <link rel="stylesheet" href="overlays.css?v=20260513f">
+  <link rel="stylesheet" href="variables.css?v=20260513g">
+  <link rel="stylesheet" href="animations.css?v=20260513g">
+  <link rel="stylesheet" href="layout.css?v=20260513g">
+  <link rel="stylesheet" href="cover.css?v=20260513g">
+  <link rel="stylesheet" href="components.css?v=20260513g">
+  <link rel="stylesheet" href="panels.css?v=20260513g">
+  <link rel="stylesheet" href="overlays.css?v=20260513g">
 
   
 </head>
@@ -363,6 +363,26 @@
   </div>
 </div>
 
+<!-- PREMIUM NOTIFY OVERLAY -->
+<div id="premium-notify-overlay" class="overlay-base" style="display:none;z-index:9994;">
+  <div class="overlay-inner-sm" style="text-align:center;">
+    <div class="overlay-header" style="justify-content:flex-end;margin-bottom:20px;">
+      <button onclick="hidePremiumNotify()" class="overlay-close-btn">✕ Close</button>
+    </div>
+    <div class="overlay-title-serif overlay-title-md" style="margin-bottom:8px;">Stay in the Loop</div>
+    <div style="font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.6;">We'll send you one email when Premium launches. No spam, ever.</div>
+    <div id="premium-notify-form">
+      <input class="auth-input" id="premium-notify-email" type="email" placeholder="Your email address" style="margin-bottom:12px;">
+      <button class="auth-btn" onclick="submitPremiumNotify()">Notify Me</button>
+    </div>
+    <div id="premium-notify-confirm" style="display:none;">
+      <div style="font-size:32px;margin-bottom:12px;">✓</div>
+      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--accent);margin-bottom:8px;">You're on the list.</div>
+      <div style="font-size:13px;color:var(--text-muted);">We'll email you the moment Premium is available.</div>
+    </div>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="app">
 
@@ -560,7 +580,7 @@
 </div>
 <!-- END APP -->
 
-<script src="app.js?v=20260513f"></script>
+<script src="app.js?v=20260513g"></script>
 </body>
 </html>
 
