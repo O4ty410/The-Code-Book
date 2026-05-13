@@ -2020,6 +2020,13 @@ function switchTopNav(tab, btn) {
     document.body.classList.remove('learn-mode');
   }
 
+  // Profile mode — theme tint on main col only when on profile tab
+  if (tab === 'profile') {
+    document.body.classList.add('profile-mode');
+  } else {
+    document.body.classList.remove('profile-mode');
+  }
+
   // Show/hide panels
   document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
   var mainContent = document.getElementById('main-content');

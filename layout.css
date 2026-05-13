@@ -98,33 +98,35 @@ body.prof-theme-obsidian-gold {
   background-attachment: fixed;
 }
 
-/* Dark surface tints — sidebar, top-bar, main col */
+/* Dark surface tints — sidebar and top-bar always follow profile theme */
 body.prof-theme-cosmic-blue   .left-sidebar,
 body.prof-theme-cosmic-blue   .right-sidebar  { background: rgba(2,6,18,1); }
 body.prof-theme-cosmic-blue   .top-bar        { background: rgba(2,4,15,1); }
-body.prof-theme-cosmic-blue   #main-col       { background: rgba(3,7,20,0.96); }
 
 body.prof-theme-aurora-teal   .left-sidebar,
 body.prof-theme-aurora-teal   .right-sidebar  { background: rgba(2,11,9,1); }
 body.prof-theme-aurora-teal   .top-bar        { background: rgba(2,8,7,1); }
-body.prof-theme-aurora-teal   #main-col       { background: rgba(3,13,10,0.96); }
 
 body.prof-theme-royal-violet  .left-sidebar,
 body.prof-theme-royal-violet  .right-sidebar  { background: rgba(7,3,15,1); }
 body.prof-theme-royal-violet  .top-bar        { background: rgba(5,2,13,1); }
-body.prof-theme-royal-violet  #main-col       { background: rgba(9,4,18,0.96); }
 
 body.prof-theme-ember-crimson .left-sidebar,
 body.prof-theme-ember-crimson .right-sidebar  { background: rgba(15,3,3,1); }
 body.prof-theme-ember-crimson .top-bar        { background: rgba(12,2,2,1); }
-body.prof-theme-ember-crimson #main-col       { background: rgba(18,4,4,0.96); }
 
 body.prof-theme-obsidian-gold .left-sidebar,
 body.prof-theme-obsidian-gold .right-sidebar  { background: rgba(12,9,3,1); }
 body.prof-theme-obsidian-gold .top-bar        { background: rgba(9,7,2,1); }
-body.prof-theme-obsidian-gold #main-col       { background: rgba(14,10,4,0.96); }
 
-/* Keep learn, premium, profile nebula backgrounds unaffected */
+/* main-col tint only when profile tab is open */
+body.profile-mode.prof-theme-cosmic-blue   #main-col { background: rgba(3,7,20,0.96); }
+body.profile-mode.prof-theme-aurora-teal   #main-col { background: rgba(3,13,10,0.96); }
+body.profile-mode.prof-theme-royal-violet  #main-col { background: rgba(9,4,18,0.96); }
+body.profile-mode.prof-theme-ember-crimson #main-col { background: rgba(18,4,4,0.96); }
+body.profile-mode.prof-theme-obsidian-gold #main-col { background: rgba(14,10,4,0.96); }
+
+/* Other modes override main-col */
 body.learn-mode   #main-col { background: none; }
 body.premium-mode #main-col { background: none; }
 
