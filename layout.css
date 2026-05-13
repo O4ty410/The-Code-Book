@@ -139,6 +139,21 @@ strong {
 #app.active         { display: block !important; }
 
 /* ============================================================
+   PREMIUM FULL-PAGE MODE
+   Hides sidebars and collapses the grid so the premium panel
+   fills the entire viewport below the top bar.
+   ============================================================ */
+
+body.premium-mode .left-sidebar  { display: none !important; }
+body.premium-mode .right-sidebar { display: none !important; }
+body.premium-mode .hamburger-btn { visibility: hidden; }
+
+body.premium-mode .app-grid {
+  grid-template-columns: 1fr;
+  transition: grid-template-columns 0.25s ease;
+}
+
+/* ============================================================
    APP SHELL
    ============================================================ */
 

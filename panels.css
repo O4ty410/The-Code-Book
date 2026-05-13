@@ -489,6 +489,17 @@ body.light .challenge-item {
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   padding: 0 32px 40px;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+/* 3 columns when the panel has full viewport width */
+body.premium-mode .premium-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 900px) {
+  body.premium-mode .premium-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 .premium-feature-card {
@@ -649,6 +660,18 @@ body.light .premium-card-tooltip {
     radial-gradient(1px   1px   at 67% 85%, rgba(255,255,255,0.25), transparent),
     radial-gradient(1.5px 1.5px at 84% 80%, rgba(180,200,255,0.35), transparent),
     radial-gradient(1px   1px   at 96% 88%, rgba(255,255,255,0.20), transparent);
+}
+
+/* ---- Full-page hero centering ---- */
+
+body.premium-mode #panel-premium .panel-hero {
+  max-width: 100%;
+}
+
+body.premium-mode #panel-premium .panel-hero-sub {
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ---- Hero ---- */

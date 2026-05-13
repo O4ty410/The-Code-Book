@@ -2001,6 +2001,13 @@ function switchTopNav(tab, btn) {
     if (mb) mb.classList.add('active');
   }
 
+  // Premium full-page mode — hide sidebars when on premium tab
+  if (tab === 'premium') {
+    document.body.classList.add('premium-mode');
+  } else {
+    document.body.classList.remove('premium-mode');
+  }
+
   // Show/hide panels
   document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
   var mainContent = document.getElementById('main-content');
