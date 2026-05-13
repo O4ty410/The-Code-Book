@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Lato:wght@400;700&display=swap');
 
 /* ============================================================
    VARIABLES & THEMING
@@ -15,8 +15,8 @@
   --accent: #7dd3fc;
   --accent2: #c084fc;
   --text: #f1f5f9;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
+  --text-muted: #7d96b4;
+  --text-dim: #b0c4db;
   --success: #4ade80;
   --floor1: #c8a96e;
   --floor2: #7eb8c8;
