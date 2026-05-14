@@ -15,3 +15,86 @@ export function markLessonComplete(playerData, lessonId) {
 export function isLessonUnlocked(playerData, lessonId, requiredLessons = []) {
   return requiredLessons.every((id) => playerData.lessonsComplete.includes(id));
 }
+
+// ── Rocket systems registry ────────────────────────────────────────────────
+// Each entry maps a terminal to its mission. Future systems are locked until
+// their missionId is registered in missions/index.js.
+
+export const ROCKET_SYSTEMS = [
+  {
+    id:         'power',
+    label:      'Power Systems',
+    desc:       'Reactor core and power distribution',
+    terminalId: 'power',
+    missionId:  'power_restoration',
+  },
+  {
+    id:         'fuel',
+    label:      'Fuel Systems',
+    desc:       'Propellant management and flow control',
+    terminalId: 'fuel',
+    missionId:  'fuel_calibration',
+  },
+  {
+    id:         'nav',
+    label:      'Navigation',
+    desc:       'Guidance computer and trajectory',
+    terminalId: 'nav',
+    missionId:  'nav_calibration',
+  },
+  {
+    id:         'engine',
+    label:      'Engine Core',
+    desc:       'Primary thruster ignition sequence',
+    terminalId: 'engine',
+    missionId:  'engine_startup',
+  },
+];
+
+// ── Mission progress persistence ───────────────────────────────────────────
+
+const SAVE_KEY = 'launch_seq_v1';
+
+function defaultProgress() {
+  return { completedMissions: [], version: 1 };
+}
+
+export function loadProgress() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return defaultProgress();
+    const parsed = JSON.parse(raw);
+    // Basic schema validation
+    if (!Array.isArray(parsed.completedMissions)) return defaultProgress();
+    return parsed;
+  } catch {
+    return defaultProgress();
+  }
+}
+
+export function saveProgress(progress) {
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(progress));
+  } catch (_) {
+    // localStorage unavailable (private browsing etc.) — silent fallback
+  }
+}
+
+export function completeMission(progress, missionId) {
+  if (progress.completedMissions.includes(missionId)) return progress;
+  const next = {
+    ...progress,
+    completedMissions: [...progress.completedMissions, missionId],
+  };
+  saveProgress(next);
+  return next;
+}
+
+export function isMissionComplete(progress, missionId) {
+  return progress.completedMissions.includes(missionId);
+}
+
+export function clearProgress() {
+  try { localStorage.removeItem(SAVE_KEY); } catch (_) {}
+  return defaultProgress();
+}
