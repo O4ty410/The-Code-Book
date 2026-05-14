@@ -11,7 +11,7 @@ export function createLaunchState() {
     flashAlpha:       0,     // white ignition flash
     alarmAlpha:       0,     // red alarm overlay
     fadeAlpha:        0,     // black fade-out during ascent
-    ignitionLevel:    1,     // 0..1 — controls flame intensity
+    ignitionLevel:    0.3,   // 0..1 — controls flame intensity; idle pre-launch = 0.3
     particles:        [],
     phaseTransitioned: false, // guard against duplicate setLaunchPhase calls
   };
@@ -19,7 +19,10 @@ export function createLaunchState() {
 
 // ── Particles ──────────────────────────────────────────────────────────────
 
+const MAX_PARTICLES = 400; // prevents unbounded growth at high refresh rates
+
 export function spawnSmoke(state, cx, baseY) {
+  if (state.particles.length >= MAX_PARTICLES) return;
   const spread = (Math.random() - 0.5) * 60;
   state.particles.push({
     type:      'smoke',
@@ -37,6 +40,7 @@ export function spawnSmoke(state, cx, baseY) {
 }
 
 export function spawnExhaust(state, cx, baseY) {
+  if (state.particles.length >= MAX_PARTICLES) return;
   state.particles.push({
     type:    'exhaust',
     x:       cx + (Math.random() - 0.5) * 28,
@@ -77,25 +81,23 @@ export function updateParticles(state, delta) {
 export function drawParticles(ctx, state) {
   state.particles.forEach((p) => {
     if (p.alpha <= 0.005 || p.r <= 0) return;
-    ctx.save();
-    ctx.globalAlpha = Math.min(1, Math.max(0, p.alpha));
     ctx.beginPath();
     ctx.arc(p.x, p.y, Math.max(0.1, p.r), 0, Math.PI * 2);
 
     if (p.type === 'smoke') {
+      // Gradient handles alpha — do NOT also set globalAlpha (would square the value)
       const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
-      g.addColorStop(0, `rgba(${p.gray}, ${p.gray}, ${p.gray + 18}, ${p.alpha})`);
+      g.addColorStop(0, `rgba(${p.gray}, ${p.gray}, ${p.gray + 18}, ${p.alpha.toFixed(3)})`);
       g.addColorStop(1, `rgba(${p.gray - 40}, ${p.gray - 40}, ${p.gray}, 0)`);
       ctx.fillStyle = g;
     } else {
       const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
       const r2 = Math.min(255, Math.floor(p.hue * 7));
-      g.addColorStop(0,   `rgba(255, 248, 210, ${p.alpha})`);
-      g.addColorStop(0.4, `rgba(255, ${r2}, 20, ${p.alpha * 0.75})`);
+      g.addColorStop(0,   `rgba(255, 248, 210, ${p.alpha.toFixed(3)})`);
+      g.addColorStop(0.4, `rgba(255, ${r2}, 20, ${(p.alpha * 0.75).toFixed(3)})`);
       g.addColorStop(1,   'rgba(180, 40, 0, 0)');
       ctx.fillStyle = g;
     }
     ctx.fill();
-    ctx.restore();
   });
 }

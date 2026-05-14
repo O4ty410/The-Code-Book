@@ -5,6 +5,13 @@ import CodeRepairChallenge from './CodeRepairChallenge';
 
 const TYPEWRITER_MS = 18;
 
+// Map worldEffect → status bar text shown after mission success.
+// Defined at module level so it isn't reallocated on every render.
+const SUCCESS_STATUS = {
+  power_restored: 'POWER SYSTEMS · ALL SYSTEMS NOMINAL',
+  nav_calibrated: 'GUIDANCE COMPUTER · TRAJECTORY LOCKED · NOMINAL',
+};
+
 // ── TerminalOverlay ───────────────────────────────────────────────────────
 // Phases:
 //   intro     → standard ARIA dialogue from terminal.sequence
@@ -150,10 +157,6 @@ export default function TerminalOverlay({ terminal, onClose, onMissionComplete }
   const isSuccess  = phase === 'success' || phase === 'complete';
   const panelClass = ['terminal-panel', isSuccess ? 'terminal-panel--success' : ''].filter(Boolean).join(' ');
 
-  const SUCCESS_STATUS = {
-    power_restored: 'POWER SYSTEMS · ALL SYSTEMS NOMINAL',
-    nav_calibrated: 'GUIDANCE COMPUTER · TRAJECTORY LOCKED · NOMINAL',
-  };
   const statusLine = isSuccess
     ? (SUCCESS_STATUS[currentMission?.success?.worldEffect] ?? 'ALL SYSTEMS NOMINAL')
     : (terminal?.statusLine ?? '');

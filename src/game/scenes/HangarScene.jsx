@@ -109,15 +109,14 @@ export default function HangarScene({ onInteract }) {
     launchRef.current.phaseTransitioned = false;
   }, [launchPhase]);
 
-  // Restore world state from saved progress on first mount
+  // Restore world state from saved progress on first mount.
+  // `progress` is already initialised via useState(() => loadProgress()) — no second read needed.
   useEffect(() => {
-    const saved = loadProgress();
-    setProgress(saved);
-    if (isMissionComplete(saved, 'power_restoration')) {
+    if (isMissionComplete(progress, 'power_restoration')) {
       setWorldState((s) => ({ ...s, powerRestored: true }));
-      launchTriggeredRef.current = true; // suppress countdown for already-played sessions
+      launchTriggeredRef.current = true; // suppress countdown for already-completed sessions
     }
-    if (isMissionComplete(saved, 'nav_calibration')) {
+    if (isMissionComplete(progress, 'nav_calibration')) {
       setWorldState((s) => ({ ...s, navCalibrated: true }));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -353,7 +352,8 @@ export default function HangarScene({ onInteract }) {
         const dy = p.y - tm.y;
         if (Math.sqrt(dx * dx + dy * dy) < TERMINAL_RADIUS) nearest = tm.id;
       });
-      setNearTerminal(nearest);
+      // Bail out when value unchanged — avoids triggering React reconciler every frame
+      setNearTerminal((prev) => (prev === nearest ? prev : nearest));
     } else if (nearTerminal !== null) {
       setNearTerminal(null);
     }
@@ -395,8 +395,8 @@ export default function HangarScene({ onInteract }) {
       drawTrajectoryArc(ctx, W / 2, rocketGroundY, W, H, t);
     }
 
-    // Rocket
-    drawRocket(ctx, W / 2, rocketGroundY, t, true, launch.ignitionLevel);
+    // Rocket — powered only after mission restores power (or during launch sequence)
+    drawRocket(ctx, W / 2, rocketGroundY, t, powerRestored || !!phase, launch.ignitionLevel);
 
     // Terminals + power indicators (only before ignition)
     if (!phase || phase === 'countdown') {
