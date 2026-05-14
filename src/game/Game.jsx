@@ -1,28 +1,36 @@
 import React, { useState } from 'react';
-import MainMenu from './scenes/MainMenu';
+import MainMenu   from './scenes/MainMenu';
 import BriefingRoom from './scenes/BriefingRoom';
-import LaunchPad from './scenes/LaunchPad';
-import HUD from './components/HUD';
+import HangarScene  from './scenes/HangarScene';
+import './styles/game.css';
 
 const SCENES = {
   MAIN_MENU: 'MAIN_MENU',
-  BRIEFING: 'BRIEFING',
-  LAUNCH_PAD: 'LAUNCH_PAD',
+  BRIEFING:  'BRIEFING',
+  HANGAR:    'HANGAR',
 };
 
 export default function Game() {
   const [scene, setScene] = useState(SCENES.MAIN_MENU);
-  const [playerData, setPlayerData] = useState({ xp: 0, level: 1, lessonsComplete: [] });
 
-  const goTo = (nextScene) => setScene(nextScene);
+  const goTo = (s) => setScene(s);
+
+  const handleInteract = (terminalId) => {
+    // placeholder — lessons will be wired here later
+    console.log('Interacted with terminal:', terminalId);
+  };
 
   return (
     <div className="game-root">
-      {scene !== SCENES.MAIN_MENU && <HUD playerData={playerData} />}
-
-      {scene === SCENES.MAIN_MENU && <MainMenu onStart={() => goTo(SCENES.BRIEFING)} />}
-      {scene === SCENES.BRIEFING  && <BriefingRoom onContinue={() => goTo(SCENES.LAUNCH_PAD)} />}
-      {scene === SCENES.LAUNCH_PAD && <LaunchPad playerData={playerData} setPlayerData={setPlayerData} />}
+      {scene === SCENES.MAIN_MENU && (
+        <MainMenu onStart={() => goTo(SCENES.BRIEFING)} />
+      )}
+      {scene === SCENES.BRIEFING && (
+        <BriefingRoom onContinue={() => goTo(SCENES.HANGAR)} />
+      )}
+      {scene === SCENES.HANGAR && (
+        <HangarScene onInteract={handleInteract} />
+      )}
     </div>
   );
 }
