@@ -8,20 +8,18 @@ export default {
   },
   sequence: [
     {
-      text: "Commander. I'm ARIA — your station intelligence. I monitor all critical systems aboard this facility. Welcome to Hangar Bay 1.",
+      text: "Commander. I'm ARIA — your station intelligence. We have a situation. The reactor's power management script is throwing a reference error. Thruster array B is offline.",
     },
     {
-      text: "Reactor core is running at 94% efficiency. All power conduits are stable. We have a clean launch window in T-minus 6 hours. Everything is holding.",
+      text: 'Every system on this station runs on code. The rocket, the life support, the launch sequence — all of it stores values in variables. Fuel level, battery charge, power output.',
     },
     {
-      text: "Before you can fly this mission, you'll need to prove you understand the systems that keep this station alive. That knowledge lives in these terminals.",
+      text: "A variable is how we name and store a value. Once declared, you reference it by that exact name. If the name is wrong — even by one character — the system can't find it.",
     },
     {
-      text: "I'll guide you through each one. I won't waste your time — only what you need, when you need it. The rest will come from doing.",
-    },
-    {
-      text: "Explore the other terminals around the hangar when you're ready. Each one controls a different sector of the station. Start anywhere — there's no wrong order.",
-      isLast: true,
+      text: "I'm routing the broken script to your terminal now. Fix the variable name and I'll restore power. The station is depending on you.",
+      type: 'mission',
+      missionId: 'power_restoration',
     },
   ],
 };

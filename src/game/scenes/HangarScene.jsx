@@ -10,6 +10,8 @@ import {
   drawRocket,
   drawTerminal,
   drawPlayer,
+  drawPowerIndicators,
+  drawPoweredAmbient,
 } from '../systems/renderSystem';
 import TerminalOverlay from '../components/TerminalOverlay';
 import { getTerminal } from '../terminals';
@@ -38,14 +40,16 @@ export default function HangarScene({ onInteract }) {
   const initDone = useRef(false);
 
   // UI state
-  const [nearTerminal,    setNearTerminal]    = useState(null);
-  const [activeTerminal,  setActiveTerminal]  = useState(null);
+  const [nearTerminal,   setNearTerminal]   = useState(null);
+  const [activeTerminal, setActiveTerminal] = useState(null);
+  const [worldState,     setWorldState]     = useState({ powerRestored: false });
 
-  // Ref so the RAF tick can read overlay state without stale closure
+  // Refs so the RAF tick reads current state without stale closures
   const overlayOpenRef = useRef(false);
-  useEffect(() => {
-    overlayOpenRef.current = activeTerminal !== null;
-  }, [activeTerminal]);
+  const worldStateRef  = useRef(worldState);
+
+  useEffect(() => { overlayOpenRef.current = activeTerminal !== null; }, [activeTerminal]);
+  useEffect(() => { worldStateRef.current  = worldState; },            [worldState]);
 
   const keys = useKeyboard();
 
@@ -82,6 +86,14 @@ export default function HangarScene({ onInteract }) {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [nearTerminal]);
+
+  // ── mission complete callback ──────────────────────────────────────────────
+  const handleMissionComplete = useCallback((missionId, worldEffect) => {
+    if (worldEffect === 'power_restored') {
+      setWorldState((s) => ({ ...s, powerRestored: true }));
+    }
+    onInteract?.(missionId);
+  }, [onInteract]);
 
   // ── game loop ─────────────────────────────────────────────────────────────
   const tick = useCallback((delta) => {
@@ -122,19 +134,29 @@ export default function HangarScene({ onInteract }) {
     setNearTerminal(nearest);
 
     // ── draw ──────────────────────────────────────────────────────────────
+    const { powerRestored } = worldStateRef.current;
+
     drawBackground(ctx, W, H);
     drawStars(ctx, starsRef.current, t);
     drawHangar(ctx, W, H);
-    drawCeilingLights(ctx, W);
+    drawCeilingLights(ctx, W, powerRestored);
     drawFloor(ctx, W, H);
 
+    if (powerRestored) {
+      drawPoweredAmbient(ctx, W, H, t);
+    }
+
     // rocket — centered
-    drawRocket(ctx, W / 2, H * 0.55, t);
+    drawRocket(ctx, W / 2, H * 0.55, t, powerRestored);
 
     // terminals
     tPositions.forEach((tm) => {
       drawTerminal(ctx, tm.x, tm.y, tm.label, tm.id === nearest, t);
     });
+
+    if (powerRestored) {
+      drawPowerIndicators(ctx, tPositions, t);
+    }
 
     // player
     drawPlayer(ctx, p.x, p.y, p.vx, t);
@@ -155,6 +177,9 @@ export default function HangarScene({ onInteract }) {
       <div className="hud-overlay">
         <div className="hud-chip">Mission <span>Active</span></div>
         <div className="hud-chip">Location <span>Hangar Bay 1</span></div>
+        {worldState.powerRestored && (
+          <div className="hud-chip hud-chip--online">Power Systems <span>Online</span></div>
+        )}
       </div>
 
       {/* Interact prompt — hidden while terminal is open */}
@@ -174,6 +199,7 @@ export default function HangarScene({ onInteract }) {
       <TerminalOverlay
         terminal={activeTerminal}
         onClose={() => setActiveTerminal(null)}
+        onMissionComplete={handleMissionComplete}
       />
     </div>
   );
