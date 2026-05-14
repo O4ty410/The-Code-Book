@@ -2971,9 +2971,10 @@ body.light .lh-badge-locked { background: rgba(0,0,0,0.03); border-color: rgba(0
 
 /* ---- Layout shell with space background ---- */
 .prof-layout {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 32px 24px 56px;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 32px 40px 56px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -2996,7 +2997,7 @@ body.light .lh-badge-locked { background: rgba(0,0,0,0.03); border-color: rgba(0
     radial-gradient(1px 1px at 45% 59%, rgba(255,255,255,0.16), transparent),
     radial-gradient(1px 1px at 30% 73%, rgba(255,255,255,0.16), transparent),
     radial-gradient(1px 1px at 75% 67%, rgba(255,255,255,0.18), transparent);
-  background-color: #030a14;
+  background-color: transparent;
   transition: background-image 0.5s ease;
 }
 
@@ -3102,6 +3103,7 @@ body.light .lh-badge-locked { background: rgba(0,0,0,0.03); border-color: rgba(0
   font-size: 24px;
   font-weight: 700;
   color: var(--pth-accent);
+  text-shadow: 0 0 12px var(--pth-glow), 0 0 24px var(--pth-glow);
   transition: color 0.4s ease;
 }
 
