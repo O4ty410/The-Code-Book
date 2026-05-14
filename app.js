@@ -3754,8 +3754,52 @@ function hideAvatarPicker() {
 function renderGamePanel() {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
-  if (panel.querySelector('iframe')) return; // already mounted
-  panel.innerHTML = '<iframe src="./game/index.html" title="Launch Sequence" allowfullscreen style="width:100%;height:100%;border:none;display:block;"></iframe>';
+  panel.innerHTML =
+    '<div class="game-hub">' +
+      '<div class="gh-header">' +
+        '<div class="gh-title">GAME HUB</div>' +
+        '<div class="gh-sub">Choose your mission. More games coming soon.</div>' +
+      '</div>' +
+      '<div class="gh-grid">' +
+
+        '<div class="gh-card gh-card--active" onclick="launchGame(\'launch-sequence\')">' +
+          '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
+          '<div class="gh-card-icon">🚀</div>' +
+          '<div class="gh-card-name">LAUNCH SEQUENCE</div>' +
+          '<div class="gh-card-desc">Educational sci-fi mission. Repair rocket systems, debug code faults, and launch to Mars.</div>' +
+          '<button class="gh-card-btn">PLAY NOW</button>' +
+        '</div>' +
+
+        '<div class="gh-card gh-card--locked">' +
+          '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
+          '<div class="gh-card-icon">🔒</div>' +
+          '<div class="gh-card-name">MISSION 2</div>' +
+          '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
+          '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
+        '</div>' +
+
+        '<div class="gh-card gh-card--locked">' +
+          '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
+          '<div class="gh-card-icon">🔒</div>' +
+          '<div class="gh-card-name">MISSION 3</div>' +
+          '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
+          '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
+        '</div>' +
+
+      '</div>' +
+    '</div>';
+}
+
+function launchGame(gameId) {
+  var panel = document.getElementById('panel-game');
+  if (!panel) return;
+  var src = gameId === 'launch-sequence' ? './game/index.html' : './game/index.html';
+  panel.innerHTML =
+    '<div class="gh-back-bar">' +
+      '<button class="gh-back-btn" onclick="renderGamePanel()">&#8592; GAME HUB</button>' +
+    '</div>' +
+    '<iframe src="' + src + '" title="' + gameId + '" allowfullscreen ' +
+      'style="width:100%;height:calc(100% - 44px);border:none;display:block;"></iframe>';
 }
 
 function renderProfilePanel() {
