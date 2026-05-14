@@ -279,6 +279,22 @@ body.premium-mode #main-col {
   max-width: 100%;
 }
 
+body.game-mode .left-sidebar  { display: none !important; }
+body.game-mode .right-sidebar { display: none !important; }
+body.game-mode .hamburger-btn { visibility: hidden; }
+
+body.game-mode .app-grid {
+  grid-template-columns: 1fr;
+}
+
+body.game-mode #main-col {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
 /* ============================================================
    APP SHELL
    ============================================================ */
