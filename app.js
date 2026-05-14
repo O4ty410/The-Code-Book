@@ -841,6 +841,11 @@ window.addEventListener('error', function(e) {
 });
 window.addEventListener('unhandledrejection', function(e) {
 });
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'QUIT_TO_HUB') {
+    renderGamePanel();
+  }
+});
 // \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 
 window.addEventListener('load', async () => {

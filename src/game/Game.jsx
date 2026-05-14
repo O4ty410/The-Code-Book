@@ -38,6 +38,19 @@ function ModeTransition({ nextMode, onDone }) {
   );
 }
 
+function PauseMenu({ onResume, onQuit }) {
+  return (
+    <div className="pause-overlay">
+      <div className="pause-panel">
+        <div className="pause-title">MISSION PAUSED</div>
+        <div className="pause-sub">Your progress is saved.</div>
+        <button className="pause-btn pause-btn--resume" onClick={onResume}>RESUME MISSION</button>
+        <button className="pause-btn pause-btn--quit"   onClick={onQuit}>QUIT TO GAME HUB</button>
+      </div>
+    </div>
+  );
+}
+
 function MusicButton() {
   const [musicOff, setMusicOff] = useState(false);
   const offRef    = useRef(false);
@@ -85,6 +98,11 @@ export default function Game() {
   const [gameMode,   setGameMode]   = useState(MODE.BUILDER);
   const [transition, setTransition] = useState(null);
   const [progress,   setProgress]   = useState(() => loadProgress());
+  const [paused,     setPaused]     = useState(false);
+
+  const handleQuitToHub = useCallback(() => {
+    try { window.parent.postMessage({ type: 'QUIT_TO_HUB' }, '*'); } catch (_) {}
+  }, []);
 
   useEffect(() => {
     const done = progress.completedMissions;
@@ -128,8 +146,13 @@ export default function Game() {
 
   return (
     <div className="game-root">
+      <button className="game-pause-btn" onClick={() => setPaused(true)} title="Pause">⏸ PAUSE</button>
       <MusicButton />
       <MuteButton />
+
+      {paused && (
+        <PauseMenu onResume={() => setPaused(false)} onQuit={handleQuitToHub} />
+      )}
 
       {scene === 'MAIN_MENU' && (
         <MainMenu onStart={() => setScene('BRIEFING')} />
