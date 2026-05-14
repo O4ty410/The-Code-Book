@@ -1,7 +1,9 @@
 import powerSystems from './powerSystems';
+import navigation   from './navigation';
 
 const REGISTRY = {
   [powerSystems.id]: powerSystems,
+  [navigation.id]:   navigation,
 };
 
 // Terminals not yet in the registry show this message.

@@ -1,7 +1,9 @@
 import powerRestoration from './powerRestoration';
+import navCalibration   from './navCalibration';
 
 const REGISTRY = {
   [powerRestoration.id]: powerRestoration,
+  [navCalibration.id]:   navCalibration,
 };
 
 export function getMission(id) {

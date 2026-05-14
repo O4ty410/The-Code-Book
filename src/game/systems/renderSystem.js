@@ -269,6 +269,57 @@ export function drawPoweredAmbient(ctx, W, H, t) {
   }
 }
 
+// ── trajectory arc (when nav is calibrated) ────────────────────────────────
+
+export function drawTrajectoryArc(ctx, cx, rocketGroundY, W, H, t) {
+  const rocketTopY = rocketGroundY - 230;
+  const pulse      = 0.65 + 0.35 * Math.sin(t * 2.1);
+
+  // Bezier control points — gentle rightward orbital arc
+  const cp1x = cx + 55;
+  const cp1y = rocketTopY - 90;
+  const cp2x = cx + 200;
+  const cp2y = rocketTopY - 210;
+  const endX = W * 0.82;
+  const endY = H * 0.06;
+
+  ctx.save();
+
+  // Wide soft glow
+  ctx.beginPath();
+  ctx.moveTo(cx, rocketTopY);
+  ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+  ctx.strokeStyle = `rgba(0, 210, 255, ${(0.08 * pulse).toFixed(3)})`;
+  ctx.lineWidth   = 14;
+  ctx.setLineDash([]);
+  ctx.stroke();
+
+  // Animated dashed line
+  ctx.beginPath();
+  ctx.moveTo(cx, rocketTopY);
+  ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+  ctx.strokeStyle   = `rgba(0, 200, 255, ${(0.72 * pulse).toFixed(3)})`;
+  ctx.lineWidth     = 1.5;
+  ctx.setLineDash([7, 5]);
+  ctx.lineDashOffset = -(t * 20) % 12;
+  ctx.stroke();
+
+  // Endpoint marker
+  ctx.setLineDash([]);
+  ctx.beginPath();
+  ctx.arc(endX, endY, 4, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(0, 230, 255, ${(0.85 * pulse).toFixed(3)})`;
+  ctx.fill();
+
+  // Label
+  ctx.fillStyle = `rgba(0, 210, 255, ${(0.55 * pulse).toFixed(3)})`;
+  ctx.font      = `bold 8px 'Courier New', monospace`;
+  ctx.textAlign = 'center';
+  ctx.fillText('TRAJECTORY LOCKED', endX, endY + 16);
+
+  ctx.restore();
+}
+
 // ── terminal ───────────────────────────────────────────────────────────────
 
 export function drawTerminal(ctx, x, y, label, isNear, t) {
