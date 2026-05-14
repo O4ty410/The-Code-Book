@@ -376,7 +376,13 @@
   border-radius: 8px;
   border: 1px solid var(--border);
   cursor: default;
+  box-shadow: 0 0 6px var(--pth-glow);
   transition: all 0.2s ease;
+}
+
+.ach-item:not(.ach-locked) {
+  border-color: var(--pth-border);
+  box-shadow: 0 0 16px var(--pth-glow), 0 0 4px var(--pth-glow);
 }
 
 .ach-locked { opacity: 0.3; filter: grayscale(1); }
@@ -3093,6 +3099,7 @@ body.light .lh-badge-locked { background: rgba(0,0,0,0.03); border-color: rgba(0
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  box-shadow: 0 0 14px var(--pth-glow), inset 0 0 8px rgba(255,255,255,0.02);
   transition: background 0.2s ease;
 }
 
