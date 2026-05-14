@@ -4,13 +4,14 @@ import { completeMission } from '../systems/progressionSystem';
 import { playErrorSound, playSuccessSound } from '../systems/audioSystem';
 
 export default function VisualLab({ progress, onComplete }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selected, setSelected]         = useState(null);
-  const [confirmed, setConfirmed]       = useState(false);
+  const [currentIndex,  setCurrentIndex]  = useState(0);
+  const [selected,      setSelected]      = useState(null);
+  const [confirmed,     setConfirmed]     = useState(false);
   const [localProgress, setLocalProgress] = useState(progress);
 
   const challenge = VISUAL_CHALLENGES[currentIndex];
   const isCorrect = selected === challenge.correct;
+  const completed = VISUAL_CHALLENGES.filter((c) => localProgress.completedMissions.includes(c.id)).length;
 
   const handleConfirm = useCallback(() => {
     if (!selected) return;
@@ -42,78 +43,100 @@ export default function VisualLab({ progress, onComplete }) {
     setConfirmed(false);
   }, []);
 
-  const completed = VISUAL_CHALLENGES.filter((c) => localProgress.completedMissions.includes(c.id)).length;
-
   return (
     <div className="visual-lab">
+
       {/* Header */}
       <div className="vl-header">
         <div className="vl-mode-label">VISUAL LAB · PHASE 3</div>
         <div className="vl-progress">{completed} / {VISUAL_CHALLENGES.length} CONFIRMED</div>
       </div>
 
-      {/* Challenge context */}
-      <div className="vl-context">
-        <div className="vl-context-system">{challenge.systemContext}</div>
-        <div className="vl-context-title">{challenge.title}</div>
-        <div className="vl-instruction">{challenge.instruction}</div>
-      </div>
+      <div className="vl-body">
 
-      {/* Code display — read only */}
-      <div className="vl-code-wrap">
-        <div className="vl-code-bar">
-          <span className="vl-code-label">SYSTEM CODE · READ ONLY</span>
+        {/* Step 1 — System Context */}
+        <div className="vl-step">
+          <div className="vl-step-label">STEP 1 · SYSTEM CONTEXT</div>
+          <div className="vl-step-text">{challenge.systemContext}</div>
         </div>
-        <pre className="vl-code">{challenge.code}</pre>
-      </div>
 
-      {/* Options */}
-      <div className="vl-options">
-        {challenge.options.map((opt) => {
-          let cls = 'vl-option';
-          if (confirmed) {
-            if (opt.value === challenge.correct) cls += ' vl-option--correct';
-            else if (opt.value === selected)     cls += ' vl-option--wrong';
-          } else if (opt.value === selected) {
-            cls += ' vl-option--selected';
-          }
-          return (
+        {/* Step 2 — System Explanation */}
+        <div className="vl-step">
+          <div className="vl-step-label">STEP 2 · SYSTEM EXPLANATION</div>
+          <div className="vl-step-text">{challenge.systemExplanation}</div>
+        </div>
+
+        {/* Step 3 — Coding Concept */}
+        <div className="vl-step vl-step--concept">
+          <div className="vl-step-label">STEP 3 · CODING CONCEPT · <span className="vl-concept-tag">{challenge.codingConcept}</span></div>
+          <div className="vl-step-text">{challenge.conceptDetail}</div>
+        </div>
+
+        {/* Step 4 — Player Task */}
+        <div className="vl-step vl-step--task">
+          <div className="vl-step-label">STEP 4 · PLAYER TASK · {challenge.title}</div>
+          <div className="vl-instruction">{challenge.instruction}</div>
+
+          {/* Read-only code */}
+          <div className="vl-code-wrap">
+            <div className="vl-code-bar">
+              <span className="vl-code-label">SYSTEM CODE · READ ONLY</span>
+            </div>
+            <pre className="vl-code">{challenge.code}</pre>
+          </div>
+
+          {/* Answer options */}
+          <div className="vl-options">
+            {challenge.options.map((opt) => {
+              let cls = 'vl-option';
+              if (confirmed) {
+                if (opt.value === challenge.correct) cls += ' vl-option--correct';
+                else if (opt.value === selected)     cls += ' vl-option--wrong';
+              } else if (opt.value === selected) {
+                cls += ' vl-option--selected';
+              }
+              return (
+                <button
+                  key={opt.value}
+                  className={cls}
+                  onClick={() => !confirmed && setSelected(opt.value)}
+                  disabled={confirmed}
+                >
+                  <span className="vl-option-key">{opt.value.toUpperCase()}</span>
+                  <span className="vl-option-label">{opt.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {!confirmed && (
             <button
-              key={opt.value}
-              className={cls}
-              onClick={() => !confirmed && setSelected(opt.value)}
-              disabled={confirmed}
+              className={`vl-confirm-btn${selected ? '' : ' vl-confirm-btn--disabled'}`}
+              onClick={handleConfirm}
+              disabled={!selected}
             >
-              <span className="vl-option-key">{opt.value.toUpperCase()}</span>
-              <span className="vl-option-label">{opt.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Explanation */}
-      {confirmed && (
-        <div className={`vl-explanation vl-explanation--${isCorrect ? 'correct' : 'wrong'}`}>
-          <div className="vl-explanation-head">{isCorrect ? 'CONFIRMED' : 'INCORRECT'}</div>
-          <div className="vl-explanation-body">{challenge.explanation}</div>
-          {!isCorrect && (
-            <button className="vl-retry-btn" onClick={handleRetry}>
-              RE-ANALYSE
+              CONFIRM READING
             </button>
           )}
         </div>
-      )}
 
-      {/* Confirm button */}
-      {!confirmed && (
-        <button
-          className={`vl-confirm-btn${selected ? '' : ' vl-confirm-btn--disabled'}`}
-          onClick={handleConfirm}
-          disabled={!selected}
-        >
-          CONFIRM READING
-        </button>
-      )}
+        {/* Step 5 — System Response */}
+        {confirmed && (
+          <div className="vl-step vl-step--response">
+            <div className="vl-step-label">STEP 5 · SYSTEM RESPONSE</div>
+            <div className={`vl-response vl-response--${isCorrect ? 'correct' : 'wrong'}`}>
+              <div className="vl-response-head">{isCorrect ? 'BEHAVIOUR CONFIRMED' : 'READING INCORRECT'}</div>
+              <div className="vl-response-body">{challenge.explanation}</div>
+              {!isCorrect && (
+                <button className="vl-retry-btn" onClick={handleRetry}>
+                  RE-ANALYSE
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }
