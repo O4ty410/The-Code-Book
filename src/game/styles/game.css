@@ -144,3 +144,326 @@
   background: rgba(50,120,220,0.35);
   box-shadow: 0 0 24px rgba(80,180,255,0.4);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Terminal Overlay
+   ═══════════════════════════════════════════════════════════ */
+
+.terminal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 4, 14, 0.86);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.30s ease;
+  z-index: 100;
+}
+
+.terminal-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.terminal-panel {
+  position: relative;
+  width: min(820px, 90vw);
+  max-height: 80vh;
+  background: rgba(3, 9, 22, 0.97);
+  border: 1px solid rgba(0, 195, 255, 0.40);
+  border-radius: 10px;
+  box-shadow:
+    0 0 50px rgba(0, 170, 255, 0.18),
+    0 0 100px rgba(0, 100, 200, 0.08),
+    inset 0 0 40px rgba(0, 70, 140, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(22px) scale(0.97);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.terminal-backdrop.open .terminal-panel {
+  transform: translateY(0) scale(1);
+}
+
+/* scanlines */
+.terminal-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.07) 2px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 10px;
+}
+
+/* ── header ── */
+.t-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(0, 180, 255, 0.16);
+  background: rgba(0, 25, 60, 0.55);
+  flex-shrink: 0;
+}
+
+.t-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.t-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00c8ff;
+  box-shadow: 0 0 8px #00c8ff;
+  flex-shrink: 0;
+  animation: t-dot-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes t-dot-pulse {
+  0%, 100% { opacity: 1;   box-shadow: 0 0 8px #00c8ff; }
+  50%       { opacity: 0.4; box-shadow: 0 0 3px #00c8ff; }
+}
+
+.t-label {
+  color: rgba(170, 225, 255, 0.95);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.t-offline-badge {
+  background: rgba(255, 80, 60, 0.15);
+  border: 1px solid rgba(255, 80, 60, 0.40);
+  border-radius: 4px;
+  color: rgba(255, 120, 100, 0.80);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 2px 7px;
+  text-transform: uppercase;
+}
+
+.t-header-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.t-esc-hint {
+  color: rgba(70, 130, 190, 0.50);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.t-close-btn {
+  background: none;
+  border: 1px solid rgba(0, 175, 255, 0.28);
+  border-radius: 4px;
+  color: rgba(100, 170, 220, 0.65);
+  font-size: 11px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+}
+
+.t-close-btn:hover {
+  border-color: rgba(0, 210, 255, 0.60);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 200, 255, 0.25);
+}
+
+/* ── status bar ── */
+.t-statusbar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 20px;
+  border-bottom: 1px solid rgba(0, 140, 220, 0.10);
+  background: rgba(0, 15, 45, 0.45);
+  flex-shrink: 0;
+}
+
+.t-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 6px #00ff88;
+  flex-shrink: 0;
+}
+
+.t-status-dot--offline {
+  background: #ff5040;
+  box-shadow: 0 0 6px #ff5040;
+}
+
+.t-status-text {
+  color: rgba(90, 195, 145, 0.70);
+  font-size: 9px;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+}
+
+/* ── dialogue body ── */
+.t-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 26px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  scroll-behavior: smooth;
+  min-height: 200px;
+}
+
+.t-body::-webkit-scrollbar { width: 4px; }
+.t-body::-webkit-scrollbar-track { background: transparent; }
+.t-body::-webkit-scrollbar-thumb { background: rgba(0, 160, 220, 0.28); border-radius: 2px; }
+
+/* ai tag */
+.t-ai-tag {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-bottom: 9px;
+  color: #00c8ff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.t-ai-title {
+  color: rgba(70, 155, 215, 0.52);
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+/* messages */
+.t-msg-text {
+  color: rgba(205, 232, 255, 0.92);
+  font-size: 15px;
+  line-height: 1.80;
+  letter-spacing: 0.025em;
+}
+
+.t-msg-old {
+  color: rgba(110, 165, 210, 0.40);
+}
+
+.t-history-msg {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(0, 100, 180, 0.10);
+}
+
+.t-current-msg {
+  cursor: pointer;
+}
+
+.t-cursor {
+  display: inline-block;
+  color: #00c8ff;
+  animation: t-blink 0.9s step-start infinite;
+  margin-left: 1px;
+  font-size: 14px;
+}
+
+@keyframes t-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* done divider */
+.t-done {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 0;
+}
+
+.t-done-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(0, 140, 220, 0.18);
+}
+
+.t-done-text {
+  color: rgba(70, 130, 195, 0.48);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── footer ── */
+.t-footer {
+  padding: 14px 30px;
+  border-top: 1px solid rgba(0, 175, 255, 0.12);
+  background: rgba(0, 12, 35, 0.65);
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.t-action-btn {
+  background: rgba(0, 40, 90, 0.40);
+  border: 1px solid rgba(0, 180, 255, 0.35);
+  border-radius: 5px;
+  color: rgba(130, 205, 255, 0.80);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 9px 22px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.t-action-btn:hover {
+  background: rgba(0, 60, 130, 0.55);
+  border-color: rgba(0, 215, 255, 0.65);
+  color: #b8e8ff;
+  box-shadow: 0 0 18px rgba(0, 200, 255, 0.22);
+}
+
+.t-btn-skip {
+  color: rgba(70, 135, 180, 0.50);
+  border-color: rgba(0, 140, 200, 0.18);
+  background: transparent;
+}
+
+.t-btn-skip:hover {
+  color: rgba(120, 180, 220, 0.75);
+  border-color: rgba(0, 170, 230, 0.40);
+  box-shadow: none;
+  background: transparent;
+}
+
+.t-close-action {
+  border-color: rgba(0, 200, 255, 0.45);
+  color: rgba(155, 225, 255, 0.88);
+}
