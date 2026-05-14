@@ -2027,6 +2027,13 @@ function switchTopNav(tab, btn) {
     document.body.classList.remove('profile-mode');
   }
 
+  // Game mode — full viewport, no sidebars
+  if (tab === 'game') {
+    document.body.classList.add('game-mode');
+  } else {
+    document.body.classList.remove('game-mode');
+  }
+
   // Show/hide panels
   document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
   var mainContent = document.getElementById('main-content');
@@ -2045,6 +2052,7 @@ function switchTopNav(tab, btn) {
       if (tab === 'tools') renderToolsPanel();
       if (tab === 'premium') renderPremiumPanel();
       if (tab === 'profile') renderProfilePanel();
+      if (tab === 'game') renderGamePanel();
     }
   }
 
@@ -3741,6 +3749,13 @@ function hideAvatarPicker() {
   if (!picker) return;
   picker.classList.remove('open');
   setTimeout(function() { if (picker.parentNode) picker.parentNode.removeChild(picker); }, 300);
+}
+
+function renderGamePanel() {
+  var panel = document.getElementById('panel-game');
+  if (!panel) return;
+  if (panel.querySelector('iframe')) return; // already mounted
+  panel.innerHTML = '<iframe src="./game/index.html" title="Launch Sequence" allowfullscreen style="width:100%;height:100%;border:none;display:block;"></iframe>';
 }
 
 function renderProfilePanel() {

@@ -66,6 +66,18 @@
 
 .top-panel.active { display: block; }
 
+#panel-game {
+  overflow: hidden;
+  height: calc(100vh - 52px);
+}
+
+#panel-game iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
 .panel-hero {
   padding: 48px 40px 36px;
   border-bottom: 1px solid var(--border);
