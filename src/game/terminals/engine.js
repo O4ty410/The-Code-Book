@@ -1,23 +1,20 @@
 export default {
   id: 'engine',
   label: 'Engine Core',
-  statusLine: 'ENGINE CORE · ISP ZERO — IGNITION BLOCKED',
-  ai: {
-    name: 'ARIA',
-    title: 'Adaptive Response Intelligence',
-  },
+  statusLine: 'ENGINE CORE · ISP ZERO · IGNITION BLOCKED',
+  ai: { name: 'ARIA', title: 'Adaptive Response Intelligence' },
   sequence: [
     {
-      text: 'Commander. Engine core is blocked. Specific impulse is reading zero — the ignition controller will not engage with a zero Isp value. The calculation function exists but is never called.',
+      text: "Commander. The engine core is blocked. The ignition controller is reporting a specific impulse value of zero — a physically impossible reading that is preventing the ignition sequence from being authorised.",
     },
     {
-      text: 'Functions are named, reusable blocks of instructions. A function definition only describes what to do. It does nothing until you call it by name.',
+      text: "Specific impulse measures how efficiently a rocket engine uses its propellant. It is one of the primary values the ignition system uses to confirm the engine is ready for operation. The calculation exists in the control script. The issue is not the calculation itself — the calculation is never executed.",
     },
     {
-      text: 'When you call a function, it runs its instructions and returns a value. If you define a function but never call it — or call it but never capture its return value — the result never reaches the system.',
+      text: "This script defines a function — a named, reusable block of instructions. Defining a function does not execute it. The function only runs when it is explicitly called by name. If the return value of that function is never assigned to a variable, the result is discarded and the system reads zero.",
     },
     {
-      text: "The engine script is on your terminal. Call the function correctly and assign its return value. Once Isp is confirmed, I can authorise the ignition sequence.",
+      text: "The fault script is on your terminal. The function exists. It is correct. It is never called. Fix the call and capture the return value. Confirm the Isp reading.",
       type: 'mission',
       missionId: 'engine_ignition',
     },

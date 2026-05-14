@@ -348,13 +348,13 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch })
 
       {launchPhase === 'complete' && (
         <div className="mission-accomplished">
-          <p className="ma-pre">All Systems · Launch Complete</p>
-          <h1 className="ma-title">Mission Accomplished</h1>
+          <p className="ma-pre">ROCKET BUILDER · ALL SYSTEMS NOMINAL</p>
+          <h1 className="ma-title">LAUNCH CONFIRMED</h1>
           <p className="ma-sub">
-            All six rocket systems were repaired and verified.<br />
-            The rocket has launched. The mission is complete.
+            All six systems repaired and verified. Ascent trajectory nominal.<br />
+            The vehicle has cleared the launch bay.
           </p>
-          <button className="ma-btn" onClick={() => setLaunchPhase(null)}>[ Continue ]</button>
+          <button className="ma-btn" onClick={() => setLaunchPhase(null)}>[ CONTINUE ]</button>
         </div>
       )}
 

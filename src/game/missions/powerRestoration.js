@@ -16,16 +16,9 @@ export default {
   success: {
     worldEffect: 'power_restored',
     dialogue: [
-      {
-        text: 'Power output confirmed. Thruster array B is back online. The reactor is responding normally.',
-      },
-      {
-        text: 'What you just fixed was a variable reference error. The script declared `power`, but tried to read a name that didn\'t exist — `powr`. One missing letter, total failure.',
-      },
-      {
-        text: 'Variables are precise by design. The name you declare is the exact name you must use — every character, every time. That rule keeps the whole system coherent.',
-        isLast: true,
-      },
+      { text: "Power distribution: nominal. Thruster Array B is receiving current. All modules at operational status." },
+      { text: "The variable was declared as `power`. The log was reading `powr` — a name that was never stored. The system found nothing to retrieve and halted distribution." },
+      { text: "In any script, the name used to store a value and the name used to retrieve it must match exactly. That precision is what keeps every dependent system operational.", isLast: true },
     ],
   },
 };

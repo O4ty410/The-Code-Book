@@ -24,16 +24,9 @@ if (velocity = escapeVelocity) {
   success: {
     worldEffect: 'nav_calibrated',
     dialogue: [
-      {
-        text: 'Guidance computer is back online. Trajectory arc is locked. Orbital insertion window confirmed at 94.3 seconds post-ignition.',
-      },
-      {
-        text: "What failed was a comparison operator. The script used = — assignment — instead of >= — greater-than-or-equal. In JavaScript, = stores a value. >= asks a question.",
-      },
-      {
-        text: "Every flight decision the computer makes runs through an if statement. Speed checks, altitude thresholds, fuel burn rates — all conditionals. The rocket doesn't guess. It tests.",
-        isLast: true,
-      },
+      { text: "Guidance computer: nominal. Trajectory condition confirmed. Orbital insertion logic responding correctly." },
+      { text: "The `=` operator was overwriting `escapeVelocity` with the value of `velocity`, then evaluating the assigned number as a condition — always resolving to true. `>=` compares the two values without modifying either." },
+      { text: "Conditionals are how the guidance system determines what to do at each flight phase. Every decision depends on the comparison operator being exact.", isLast: true },
     ],
   },
 };
