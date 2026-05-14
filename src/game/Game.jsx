@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import MainMenu        from './scenes/MainMenu';
 import BriefingRoom    from './scenes/BriefingRoom';
 import HangarScene     from './scenes/HangarScene';
@@ -10,7 +10,7 @@ import {
   completeMission,
   BUILDER_MISSION_IDS,
 } from './systems/progressionSystem';
-import { toggleMute, isMuted } from './systems/audioSystem';
+import { toggleMute, isMuted, startBackgroundMusic } from './systems/audioSystem';
 import './styles/game.css';
 
 const MODE = { BUILDER: 'builder', DEBUG: 'debug', VISUAL: 'visual', LAUNCH: 'launch' };
@@ -35,6 +35,35 @@ function ModeTransition({ nextMode, onDone }) {
       <div className="mt-sub">{l.sub}</div>
       <div className="mt-bar"><div className="mt-bar-fill" /></div>
     </div>
+  );
+}
+
+function MusicButton() {
+  const [musicOff, setMusicOff] = useState(false);
+  const offRef    = useRef(false);
+  const stopRef   = useRef(null);
+
+  useEffect(() => {
+    stopRef.current = startBackgroundMusic();
+    return () => { stopRef.current?.(); stopRef.current = null; };
+  }, []);
+
+  const toggle = useCallback(() => {
+    const nextOff = !offRef.current;
+    offRef.current = nextOff;
+    setMusicOff(nextOff);
+    if (nextOff) {
+      stopRef.current?.();
+      stopRef.current = null;
+    } else {
+      stopRef.current = startBackgroundMusic();
+    }
+  }, []);
+
+  return (
+    <button className="game-music-btn" onClick={toggle} title={musicOff ? 'Music off' : 'Music on'}>
+      {musicOff ? '♪' : '♫'}
+    </button>
   );
 }
 
@@ -99,6 +128,7 @@ export default function Game() {
 
   return (
     <div className="game-root">
+      <MusicButton />
       <MuteButton />
 
       {scene === 'MAIN_MENU' && (

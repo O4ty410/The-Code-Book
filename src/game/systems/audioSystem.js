@@ -266,3 +266,145 @@ export function playSound(src) {
   const audio = new Audio(src);
   audio.play().catch(() => {});
 }
+
+// ── Background Music — Zelda / space hybrid ────────────────────────────────────
+// A minor, 72 BPM. Triangle-wave harp arpeggios + detuned sine pads + bass.
+
+export function startBackgroundMusic() {
+  try {
+    const ctx = getCtx();
+    if (!ctx) return () => {};
+
+    const master = ctx.createGain();
+    master.gain.value = 0;
+    master.connect(ctx.destination);
+    master.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 5);
+
+    const BPM      = 72;
+    const beat     = 60 / BPM;
+    const eighth   = beat / 2;
+    const barDur   = beat * 4;
+    const phraseDur = barDur * 8;
+
+    // Frequency table (Hz)
+    const N = {
+      F2: 87.31,  A2: 110.00, C3: 130.81, E3: 164.81, F3: 174.61,
+      G3: 196.00, A3: 220.00, B3: 246.94, C4: 261.63, D4: 293.66,
+      E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+      C5: 523.25,
+    };
+
+    const allNodes = [];
+
+    function pluck(freq, t, dur) {
+      // Main triangle tone (harp body)
+      const osc1 = ctx.createOscillator(); const env1 = ctx.createGain();
+      osc1.type = 'triangle'; osc1.frequency.value = freq;
+      env1.gain.setValueAtTime(0, t);
+      env1.gain.linearRampToValueAtTime(0.11, t + 0.010);
+      env1.gain.exponentialRampToValueAtTime(0.001, t + Math.min(dur * 0.85, 0.52));
+      osc1.connect(env1); env1.connect(master);
+      osc1.start(t); osc1.stop(t + dur);
+      allNodes.push(osc1);
+
+      // Brief octave harmonic — adds plucked "attack" character
+      const osc2 = ctx.createOscillator(); const env2 = ctx.createGain();
+      osc2.type = 'sine'; osc2.frequency.value = freq * 2;
+      env2.gain.setValueAtTime(0, t);
+      env2.gain.linearRampToValueAtTime(0.032, t + 0.008);
+      env2.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+      osc2.connect(env2); env2.connect(master);
+      osc2.start(t); osc2.stop(t + 0.18);
+      allNodes.push(osc2);
+    }
+
+    function pad(freqs, t, dur) {
+      freqs.forEach((freq) => {
+        [0, 5, -5].forEach((cents) => {
+          const f = freq * Math.pow(2, cents / 1200);
+          const osc = ctx.createOscillator(); const env = ctx.createGain();
+          osc.type = 'sine'; osc.frequency.value = f;
+          env.gain.setValueAtTime(0, t);
+          env.gain.linearRampToValueAtTime(0.016, t + 1.8);
+          env.gain.setValueAtTime(0.016, t + dur - 1.8);
+          env.gain.linearRampToValueAtTime(0, t + dur);
+          osc.connect(env); env.connect(master);
+          osc.start(t); osc.stop(t + dur);
+          allNodes.push(osc);
+        });
+      });
+    }
+
+    function bassNote(freq, t, dur) {
+      const osc = ctx.createOscillator(); const env = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      env.gain.setValueAtTime(0, t);
+      env.gain.linearRampToValueAtTime(0.030, t + 0.30);
+      env.gain.setValueAtTime(0.030, t + dur - 0.6);
+      env.gain.linearRampToValueAtTime(0, t + dur);
+      osc.connect(env); env.connect(master);
+      osc.start(t); osc.stop(t + dur);
+      allNodes.push(osc);
+    }
+
+    // 8-bar melody: [freq, eighth-note-count]
+    // Bars 1-2 Am, 3-4 F, 5-6 C, 7-8 Em→Am resolve
+    const melody = [
+      [N.A3,1],[N.C4,1],[N.E4,2],[N.A4,1],[N.G4,1],[N.E4,2],   // bar 1
+      [N.C4,1],[N.E4,1],[N.G4,2],[N.A4,1],[N.E4,1],[N.C4,2],   // bar 2
+      [N.F3,1],[N.A3,1],[N.C4,2],[N.F4,1],[N.E4,1],[N.C4,2],   // bar 3
+      [N.A3,1],[N.C4,1],[N.E4,2],[N.F4,1],[N.C4,1],[N.A3,2],   // bar 4
+      [N.C4,1],[N.E4,1],[N.G4,2],[N.C5,1],[N.B4,1],[N.G4,2],   // bar 5
+      [N.E4,1],[N.G4,1],[N.B4,2],[N.C5,1],[N.G4,1],[N.E4,2],   // bar 6
+      [N.E3,1],[N.G3,1],[N.B3,2],[N.E4,1],[N.D4,1],[N.B3,2],   // bar 7
+      [N.G3,1],[N.B3,1],[N.D4,2],[N.E4,2],[N.A3,2],            // bar 8
+    ];
+
+    // Chord pads { freqs, bar (0-indexed), bars }
+    const pads = [
+      { freqs: [N.A2, N.E3, N.A3, N.C4], bar: 0, bars: 2 }, // Am
+      { freqs: [N.F2, N.C3, N.F3, N.A3], bar: 2, bars: 2 }, // F
+      { freqs: [N.C3, N.G3, N.C4, N.E4], bar: 4, bars: 2 }, // C
+      { freqs: [N.E3, N.B3, N.E4, N.G4], bar: 6, bars: 2 }, // Em
+    ];
+
+    // Bass: one note per 2 bars
+    const bass = [
+      [N.A2, 0, 2], [N.F2, 2, 2], [N.C3, 4, 2], [N.E3, 6, 2],
+    ];
+
+    function schedulePhrase(phraseStart) {
+      let t = phraseStart;
+      melody.forEach(([freq, eighths]) => {
+        pluck(freq, t, eighth * eighths);
+        t += eighth * eighths;
+      });
+      pads.forEach(({ freqs, bar, bars }) => pad(freqs, phraseStart + bar * barDur, bars * barDur));
+      bass.forEach(([freq, bar, bars]) => bassNote(freq, phraseStart + bar * barDur, bars * barDur));
+    }
+
+    const startTime = ctx.currentTime + 0.5;
+    let nextPhrase = 0;
+
+    function scheduleUpTo(until) {
+      while (startTime + nextPhrase * phraseDur < until) {
+        schedulePhrase(startTime + nextPhrase * phraseDur);
+        nextPhrase++;
+      }
+    }
+
+    scheduleUpTo(ctx.currentTime + phraseDur * 2);
+    const interval = setInterval(() => scheduleUpTo(ctx.currentTime + phraseDur * 2), (phraseDur / 2) * 1000);
+
+    return () => {
+      clearInterval(interval);
+      try {
+        master.gain.cancelScheduledValues(ctx.currentTime);
+        master.gain.linearRampToValueAtTime(0, ctx.currentTime + 2.0);
+        setTimeout(() => { allNodes.forEach((n) => { try { n.stop(); } catch (_) {} }); }, 2200);
+      } catch (_) {}
+    };
+  } catch (_) {
+    return () => {};
+  }
+}
