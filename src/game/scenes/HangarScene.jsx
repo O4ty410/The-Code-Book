@@ -22,7 +22,13 @@ import {
   drawParticles,
 } from '../systems/launchSystem';
 import TerminalOverlay from '../components/TerminalOverlay';
+import ProgressPanel   from '../components/ProgressPanel';
 import { getTerminal } from '../terminals';
+import {
+  loadProgress,
+  completeMission,
+  isMissionComplete,
+} from '../systems/progressionSystem';
 import '../styles/game.css';
 
 // ── constants ─────────────────────────────────────────────────────────────
@@ -57,11 +63,12 @@ export default function HangarScene({ onInteract }) {
   const initDone = useRef(false);
 
   // UI state
-  const [nearTerminal,   setNearTerminal]   = useState(null);
-  const [activeTerminal, setActiveTerminal] = useState(null);
-  const [worldState,     setWorldState]     = useState({ powerRestored: false });
-  const [launchPhase,    setLaunchPhase]    = useState(null);
+  const [nearTerminal,     setNearTerminal]     = useState(null);
+  const [activeTerminal,   setActiveTerminal]   = useState(null);
+  const [worldState,       setWorldState]       = useState({ powerRestored: false });
+  const [launchPhase,      setLaunchPhase]      = useState(null);
   const [countdownDisplay, setCountdownDisplay] = useState(10);
+  const [progress,         setProgress]         = useState(() => loadProgress());
 
   // Refs for RAF tick access
   const overlayOpenRef    = useRef(false);
@@ -69,13 +76,24 @@ export default function HangarScene({ onInteract }) {
   const launchPhaseRef    = useRef(null);
   const lastCountdownRef  = useRef(10);
   const launchRef         = useRef(createLaunchState());
+  const launchTriggeredRef = useRef(false);
 
   useEffect(() => { overlayOpenRef.current = activeTerminal !== null; }, [activeTerminal]);
   useEffect(() => { worldStateRef.current  = worldState; },            [worldState]);
   useEffect(() => {
     launchPhaseRef.current = launchPhase;
-    launchRef.current.phaseTransitioned = false; // reset guard on real phase change
+    launchRef.current.phaseTransitioned = false;
   }, [launchPhase]);
+
+  // Restore world state from saved progress on first mount
+  useEffect(() => {
+    const saved = loadProgress();
+    setProgress(saved);
+    if (isMissionComplete(saved, 'power_restoration')) {
+      setWorldState((s) => ({ ...s, powerRestored: true }));
+      launchTriggeredRef.current = true; // suppress countdown for already-played sessions
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const keys = useKeyboard();
 
@@ -114,6 +132,7 @@ export default function HangarScene({ onInteract }) {
 
   // ── mission complete callback ──────────────────────────────────────────────
   const handleMissionComplete = useCallback((missionId, worldEffect) => {
+    setProgress((prev) => completeMission(prev, missionId));
     if (worldEffect === 'power_restored') {
       setWorldState((s) => ({ ...s, powerRestored: true }));
     }
@@ -123,6 +142,7 @@ export default function HangarScene({ onInteract }) {
   // ── launch trigger — fires 2.8 s after terminal closes post-mission ────────
   useEffect(() => {
     if (!worldState.powerRestored || activeTerminal !== null || launchPhase !== null) return;
+    if (launchTriggeredRef.current) return; // skip if already played this session
     const timer = setTimeout(() => {
       const ls = launchRef.current;
       ls.phaseTime        = 0;
@@ -138,6 +158,7 @@ export default function HangarScene({ onInteract }) {
       ls.particles        = [];
       ls.phaseTransitioned = false;
       lastCountdownRef.current = 10;
+      launchTriggeredRef.current = true;
       setCountdownDisplay(10);
       setLaunchPhase('countdown');
     }, 2800);
@@ -400,6 +421,11 @@ export default function HangarScene({ onInteract }) {
         <div className="interact-prompt">
           <kbd>E</kbd> Interact · {nearLabel}
         </div>
+      )}
+
+      {/* Progress panel — bottom-left, hidden during launch */}
+      {!launchPhase && (
+        <ProgressPanel progress={progress} />
       )}
 
       {/* Controls hint */}
