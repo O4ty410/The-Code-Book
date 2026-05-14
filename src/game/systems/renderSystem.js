@@ -79,31 +79,33 @@ export function drawFloor(ctx, W, H) {
 
 // ── ceiling lights ─────────────────────────────────────────────────────────
 
-export function drawCeilingLights(ctx, W) {
-  const positions = [0.2, 0.5, 0.8];
+export function drawCeilingLights(ctx, W, powered = false) {
+  const positions = powered ? [0.1, 0.25, 0.5, 0.75, 0.9] : [0.2, 0.5, 0.8];
+  const bloomAlpha = powered ? 0.28 : 0.18;
+  const bloomR     = powered ? 150  : 120;
+
   positions.forEach((px) => {
     const x = W * px;
-    // radial bloom
-    const bloom = ctx.createRadialGradient(x, 0, 0, x, 0, 120);
-    bloom.addColorStop(0, 'rgba(80, 160, 255, 0.18)');
+    const bloom = ctx.createRadialGradient(x, 0, 0, x, 0, bloomR);
+    bloom.addColorStop(0, `rgba(80, 160, 255, ${bloomAlpha})`);
     bloom.addColorStop(1, 'rgba(80, 160, 255, 0.00)');
     ctx.fillStyle = bloom;
-    ctx.fillRect(x - 120, 0, 240, 120);
+    ctx.fillRect(x - bloomR, 0, bloomR * 2, bloomR);
 
-    // light strip
-    ctx.fillStyle = 'rgba(160, 210, 255, 0.65)';
+    ctx.fillStyle = powered ? 'rgba(200, 235, 255, 0.90)' : 'rgba(160, 210, 255, 0.65)';
     ctx.fillRect(x - 30, 0, 60, 3);
   });
 }
 
 // ── rocket ─────────────────────────────────────────────────────────────────
 
-export function drawRocket(ctx, cx, groundY, t) {
+export function drawRocket(ctx, cx, groundY, t, powered = false) {
   const bob   = Math.sin(t * 0.8) * 2.5;
   const baseY = groundY + bob;
 
   // exhaust flame
-  const flameH = 55 + Math.sin(t * 8) * 12;
+  const flameBase = powered ? 75 : 55;
+  const flameH = flameBase + Math.sin(t * 8) * (powered ? 18 : 12);
   const flame  = ctx.createRadialGradient(cx, baseY + 10, 2, cx, baseY + 20, flameH);
   flame.addColorStop(0,   'rgba(255, 240, 180, 0.95)');
   flame.addColorStop(0.35,'rgba(255, 140,  40, 0.70)');
@@ -163,14 +165,78 @@ export function drawRocket(ctx, cx, groundY, t) {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // glow around rocket
-  const glow = ctx.createRadialGradient(cx, baseY - bodyH / 2, 10, cx, baseY - bodyH / 2, 120);
-  glow.addColorStop(0, 'rgba(50, 130, 255, 0.08)');
+  // glow around rocket — intensified when powered
+  const glowR     = powered ? 180 : 120;
+  const glowAlpha = powered ? 0.16 : 0.08;
+  const glow = ctx.createRadialGradient(cx, baseY - bodyH / 2, 10, cx, baseY - bodyH / 2, glowR);
+  glow.addColorStop(0, `rgba(50, 130, 255, ${glowAlpha})`);
   glow.addColorStop(1, 'rgba(50, 130, 255, 0.00)');
   ctx.fillStyle = glow;
   ctx.beginPath();
-  ctx.ellipse(cx, baseY - bodyH / 2, 120, 180, 0, 0, Math.PI * 2);
+  ctx.ellipse(cx, baseY - bodyH / 2, glowR, glowR * 1.5, 0, 0, Math.PI * 2);
   ctx.fill();
+
+  if (powered) {
+    // outer power corona
+    const corona = ctx.createRadialGradient(cx, baseY - bodyH / 2, glowR * 0.5, cx, baseY - bodyH / 2, glowR * 2.2);
+    corona.addColorStop(0, 'rgba(80, 200, 255, 0.06)');
+    corona.addColorStop(1, 'rgba(80, 200, 255, 0.00)');
+    ctx.fillStyle = corona;
+    ctx.beginPath();
+    ctx.ellipse(cx, baseY - bodyH / 2, glowR * 2.2, glowR * 3, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// ── power indicators (green dots on terminals when power restored) ──────────
+
+export function drawPowerIndicators(ctx, terminals, t) {
+  const pulse = 0.70 + 0.30 * Math.sin(t * 2.8);
+  terminals.forEach(({ x, y }) => {
+    const dotY = y - 84;
+
+    // glow
+    const g = ctx.createRadialGradient(x, dotY, 0, x, dotY, 16);
+    g.addColorStop(0, `rgba(0, 255, 130, ${(0.30 * pulse).toFixed(3)})`);
+    g.addColorStop(1, 'rgba(0, 255, 130, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, dotY, 16, 0, Math.PI * 2);
+    ctx.fill();
+
+    // dot
+    ctx.beginPath();
+    ctx.arc(x, dotY, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0, 255, 130, ${(0.90 * pulse).toFixed(2)})`;
+    ctx.fill();
+  });
+}
+
+// ── powered ambient (green grid + ceiling wash when power restored) ─────────
+
+export function drawPoweredAmbient(ctx, W, H, t) {
+  const pulse   = 0.80 + 0.20 * Math.sin(t * 1.5);
+  const horizon = H * 0.55;
+
+  // soft green wash from ceiling
+  const wash = ctx.createLinearGradient(0, 0, 0, horizon * 0.7);
+  wash.addColorStop(0, `rgba(0, 200, 100, ${(0.06 * pulse).toFixed(3)})`);
+  wash.addColorStop(1, 'rgba(0, 200, 100, 0)');
+  ctx.fillStyle = wash;
+  ctx.fillRect(0, 0, W, horizon * 0.7);
+
+  // green-tinted floor grid lines (overlay a few horizontal lines)
+  ctx.strokeStyle = `rgba(0, 220, 110, ${(0.14 * pulse).toFixed(3)})`;
+  ctx.lineWidth = 1;
+  const lines = 6;
+  for (let i = 1; i <= lines; i++) {
+    const frac = i / (lines + 1);
+    const y    = horizon + (H - horizon) * Math.pow(frac, 1.8);
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(W, y);
+    ctx.stroke();
+  }
 }
 
 // ── terminal ───────────────────────────────────────────────────────────────
