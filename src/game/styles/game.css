@@ -1606,3 +1606,262 @@
   opacity: 0.35;
   cursor: default;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   MARS LAUNCH SCENE
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+.mars-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #020512;
+  overflow: hidden;
+}
+
+.mars-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Telemetry HUD (bottom-left panel) ─────────────────────────────────────── */
+
+.mars-telemetry {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(2, 10, 30, 0.82);
+  border: 1px solid rgba(0, 180, 255, 0.22);
+  border-radius: 5px;
+  padding: 14px 18px;
+  min-width: 220px;
+  backdrop-filter: blur(6px);
+  animation: telem-in 0.6s ease forwards;
+}
+
+@keyframes telem-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.mtel-label {
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(0, 200, 255, 0.55);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.mtel-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: 11px;
+  color: rgba(160, 210, 255, 0.70);
+  margin-bottom: 5px;
+}
+
+.mtel-row span:first-child {
+  color: rgba(100, 160, 200, 0.55);
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.mtel-ok {
+  color: rgba(80, 220, 130, 0.90) !important;
+}
+
+/* ── Mission control status bar (top-right, 6 system chips) ─────────────────── */
+
+.mars-mc-bar {
+  position: absolute;
+  top: 52px;
+  right: 20px;
+  display: flex;
+  gap: 6px;
+  animation: telem-in 0.7s ease forwards;
+}
+
+.mc-item {
+  font-size: 8px;
+  letter-spacing: 2px;
+  padding: 4px 8px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+
+.mc-ok {
+  color: rgba(80, 220, 130, 0.90);
+  border-color: rgba(80, 220, 130, 0.28);
+  background: rgba(80, 220, 130, 0.06);
+}
+
+/* ── Mode-select overlay ─────────────────────────────────────────────────────── */
+
+.mars-mode-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 5, 18, 0.55);
+  backdrop-filter: blur(4px);
+  animation: mo-in 0.5s ease forwards;
+  z-index: 10;
+}
+
+@keyframes mo-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.mmo-card {
+  background: rgba(4, 12, 35, 0.92);
+  border: 1px solid rgba(0, 180, 255, 0.28);
+  border-radius: 8px;
+  padding: 40px 48px 44px;
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+}
+
+.mmo-pre {
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(0, 200, 255, 0.55);
+  margin-bottom: 14px;
+}
+
+.mmo-title {
+  font-size: 22px;
+  letter-spacing: 5px;
+  color: rgba(200, 230, 255, 0.92);
+  margin-bottom: 10px;
+}
+
+.mmo-sub {
+  font-size: 12px;
+  color: rgba(140, 185, 220, 0.60);
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.mmo-options {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.mmo-btn {
+  flex: 1;
+  max-width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 16px;
+  background: rgba(0, 160, 255, 0.07);
+  border: 1px solid rgba(0, 180, 255, 0.28);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: center;
+}
+
+.mmo-btn:hover {
+  background: rgba(0, 160, 255, 0.16);
+  border-color: rgba(0, 200, 255, 0.55);
+}
+
+.mmo-btn-title {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: rgba(180, 225, 255, 0.92);
+}
+
+.mmo-btn-desc {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(120, 170, 210, 0.55);
+  line-height: 1.5;
+}
+
+/* ── Arrival screen ──────────────────────────────────────────────────────────── */
+
+.mars-arrival {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 5, 18, 0.70);
+  text-align: center;
+  padding: 32px;
+  animation: arr-in 1.8s ease forwards;
+}
+
+@keyframes arr-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.arr-pre {
+  font-size: 8px;
+  letter-spacing: 5px;
+  color: rgba(0, 200, 255, 0.60);
+  margin-bottom: 14px;
+}
+
+.arr-title {
+  font-size: clamp(26px, 5vw, 48px);
+  letter-spacing: 6px;
+  color: rgba(200, 230, 255, 0.95);
+  margin-bottom: 32px;
+  animation: arr-glow 4s ease-in-out infinite;
+}
+
+@keyframes arr-glow {
+  0%, 100% { text-shadow: 0 0 30px rgba(0, 180, 255, 0.35); }
+  50%       { text-shadow: 0 0 55px rgba(0, 200, 255, 0.65); }
+}
+
+.arr-data {
+  background: rgba(4, 12, 35, 0.80);
+  border: 1px solid rgba(0, 180, 255, 0.20);
+  border-radius: 5px;
+  padding: 18px 28px;
+  margin-bottom: 28px;
+  min-width: 280px;
+}
+
+.arr-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  font-size: 11px;
+  color: rgba(140, 190, 220, 0.70);
+  margin-bottom: 6px;
+}
+
+.arr-row span:first-child {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(100, 150, 190, 0.55);
+}
+
+.arr-ok {
+  color: rgba(80, 220, 130, 0.90) !important;
+}
+
+.arr-sub {
+  font-size: 12px;
+  color: rgba(130, 175, 210, 0.55);
+  line-height: 1.9;
+  max-width: 380px;
+}

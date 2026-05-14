@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import MainMenu    from './scenes/MainMenu';
-import BriefingRoom from './scenes/BriefingRoom';
-import HangarScene  from './scenes/HangarScene';
-import DebugArena   from './components/DebugArena';
-import VisualLab    from './components/VisualLab';
+import MainMenu        from './scenes/MainMenu';
+import BriefingRoom    from './scenes/BriefingRoom';
+import HangarScene     from './scenes/HangarScene';
+import MarsLaunchScene from './scenes/MarsLaunchScene';
+import DebugArena      from './components/DebugArena';
+import VisualLab       from './components/VisualLab';
 import {
   loadProgress,
   completeMission,
@@ -13,7 +14,6 @@ import './styles/game.css';
 
 const MODE = { BUILDER: 'builder', DEBUG: 'debug', VISUAL: 'visual', LAUNCH: 'launch' };
 
-// Shows a full-screen transition card between phases
 function ModeTransition({ nextMode, onDone }) {
   useEffect(() => {
     const t = setTimeout(onDone, 3000);
@@ -21,9 +21,9 @@ function ModeTransition({ nextMode, onDone }) {
   }, [onDone]);
 
   const labels = {
-    debug:  { pre: 'ROCKET BUILDER · COMPLETE', title: 'DEBUG ARENA', sub: 'All six systems repaired. Proceed to fault verification.' },
-    visual: { pre: 'DEBUG ARENA · COMPLETE',    title: 'VISUAL LAB',  sub: 'All faults resolved. Proceed to final systems analysis.' },
-    launch: { pre: 'ALL PHASES COMPLETE',        title: 'LAUNCH SEQUENCE INITIATED', sub: 'All systems nominal. Stand by for launch.' },
+    debug:  { pre: 'ROCKET BUILDER · COMPLETE',  title: 'DEBUG ARENA',             sub: 'All six systems repaired. Proceed to fault verification.' },
+    visual: { pre: 'DEBUG ARENA · COMPLETE',      title: 'VISUAL LAB',              sub: 'All faults resolved. Proceed to final systems analysis.' },
+    launch: { pre: 'ALL PHASES COMPLETE',         title: 'LAUNCH SEQUENCE INITIATED', sub: 'All systems nominal. Stand by for launch.' },
   };
   const l = labels[nextMode] ?? labels.launch;
 
@@ -40,22 +40,21 @@ function ModeTransition({ nextMode, onDone }) {
 export default function Game() {
   const [scene,      setScene]      = useState('MAIN_MENU');
   const [gameMode,   setGameMode]   = useState(MODE.BUILDER);
-  const [transition, setTransition] = useState(null); // null | 'debug' | 'visual' | 'launch'
+  const [transition, setTransition] = useState(null);
   const [progress,   setProgress]   = useState(() => loadProgress());
 
-  // Derive initial mode from saved progress so reloads resume correctly
+  // Derive mode from saved progress on first load
   useEffect(() => {
     const done = progress.completedMissions;
     const allBuilder = BUILDER_MISSION_IDS.every((id) => done.includes(id));
     const allDebug   = ['debug_wrong_variable', 'debug_wrong_operator', 'debug_missing_return'].every((id) => done.includes(id));
     const allVisual  = ['visual_fuel', 'visual_comms', 'visual_diagnostics'].every((id) => done.includes(id));
-    if (allVisual || allDebug && allVisual) { setGameMode(MODE.LAUNCH); return; }
+    if (allVisual || (allDebug && allVisual)) { setGameMode(MODE.LAUNCH); return; }
     if (allDebug)   { setGameMode(MODE.VISUAL);  return; }
     if (allBuilder) { setGameMode(MODE.DEBUG);   return; }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Builder mission complete — check if all 6 done → unlock Debug Arena
-  const handleBuilderMission = useCallback((missionId, worldEffect) => {
+  const handleBuilderMission = useCallback((missionId) => {
     setProgress((prev) => {
       const updated = completeMission(prev, missionId);
       const allDone = BUILDER_MISSION_IDS.every((id) => updated.completedMissions.includes(id));
@@ -64,13 +63,11 @@ export default function Game() {
     });
   }, []);
 
-  // Debug Arena complete
   const handleDebugComplete = useCallback((updatedProgress) => {
     setProgress(updatedProgress);
     setTransition('visual');
   }, []);
 
-  // Visual Lab complete
   const handleVisualComplete = useCallback((updatedProgress) => {
     setProgress(updatedProgress);
     setTransition('launch');
@@ -80,6 +77,11 @@ export default function Game() {
     setGameMode(transition);
     setTransition(null);
   }, [transition]);
+
+  // HangarScene calls this when the launch animation fade-out completes
+  const handleLaunchComplete = useCallback(() => {
+    setScene('MARS');
+  }, []);
 
   const inHangar = scene === 'HANGAR';
 
@@ -97,6 +99,7 @@ export default function Game() {
           progress={progress}
           onMissionComplete={handleBuilderMission}
           autoLaunch={gameMode === MODE.LAUNCH}
+          onLaunchComplete={gameMode === MODE.LAUNCH ? handleLaunchComplete : undefined}
         />
       )}
 
@@ -106,6 +109,10 @@ export default function Game() {
 
       {inHangar && gameMode === MODE.VISUAL && (
         <VisualLab progress={progress} onComplete={handleVisualComplete} />
+      )}
+
+      {scene === 'MARS' && (
+        <MarsLaunchScene />
       )}
 
       {transition && (

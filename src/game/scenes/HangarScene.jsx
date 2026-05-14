@@ -39,7 +39,7 @@ function countdownStatusText(timer) {
   return 'IGNITION SEQUENCE START';
 }
 
-export default function HangarScene({ progress, onMissionComplete, autoLaunch }) {
+export default function HangarScene({ progress, onMissionComplete, autoLaunch, onLaunchComplete }) {
   const canvasRef = useRef(null);
   const player    = useRef({ x: 0, y: 0, vx: 0 });
   const starsRef  = useRef([]);
@@ -62,14 +62,16 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch })
   const [launchPhase,      setLaunchPhase]      = useState(null);
   const [countdownDisplay, setCountdownDisplay] = useState(10);
 
-  const overlayOpenRef     = useRef(false);
-  const worldStateRef      = useRef(worldState);
-  const launchPhaseRef     = useRef(null);
-  const lastCountdownRef   = useRef(10);
-  const launchRef          = useRef(createLaunchState());
-  const launchTriggeredRef = useRef(false);
-  const dustRef            = useRef([]);
-  const prevTerminalRef    = useRef(null);
+  const overlayOpenRef      = useRef(false);
+  const worldStateRef       = useRef(worldState);
+  const launchPhaseRef      = useRef(null);
+  const lastCountdownRef    = useRef(10);
+  const launchRef           = useRef(createLaunchState());
+  const launchTriggeredRef  = useRef(false);
+  const dustRef             = useRef([]);
+  const prevTerminalRef     = useRef(null);
+  const onLaunchCompleteRef = useRef(onLaunchComplete);
+  useEffect(() => { onLaunchCompleteRef.current = onLaunchComplete; }, [onLaunchComplete]);
 
   useEffect(() => { setWorldState(worldFromProgress(progress)); }, [progress, worldFromProgress]);
   useEffect(() => { worldStateRef.current = worldState; }, [worldState]);
@@ -219,7 +221,12 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch })
       launch.shakeX = 0; launch.shakeY = 0;
       if (launch.phaseTime > 1.5) launch.fadeAlpha = Math.min(1, (launch.phaseTime - 1.5) / 2.2);
       if (launch.phaseTime >= 4.5 && !launch.phaseTransitioned) {
-        launch.phaseTransitioned = true; setLaunchPhase('complete');
+        launch.phaseTransitioned = true;
+        setLaunchPhase('complete');
+        // Hand off to Mars launch scene after fade completes
+        if (onLaunchCompleteRef.current) {
+          setTimeout(onLaunchCompleteRef.current, 700);
+        }
       }
     }
 
@@ -346,17 +353,7 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch })
         </div>
       )}
 
-      {launchPhase === 'complete' && (
-        <div className="mission-accomplished">
-          <p className="ma-pre">ROCKET BUILDER · ALL SYSTEMS NOMINAL</p>
-          <h1 className="ma-title">LAUNCH CONFIRMED</h1>
-          <p className="ma-sub">
-            All six systems repaired and verified. Ascent trajectory nominal.<br />
-            The vehicle has cleared the launch bay.
-          </p>
-          <button className="ma-btn" onClick={() => setLaunchPhase(null)}>[ CONTINUE ]</button>
-        </div>
-      )}
+      {/* launchPhase === 'complete' — MarsLaunchScene takes over via onLaunchComplete */}
 
       <TerminalOverlay
         terminal={activeTerminal}
