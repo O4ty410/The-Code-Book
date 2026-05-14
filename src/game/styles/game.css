@@ -23,20 +23,28 @@
   top: 20px;
   left: 24px;
   display: flex;
-  gap: 20px;
+  gap: 10px;
   pointer-events: none;
+  z-index: 2;
 }
 
 .hud-chip {
-  background: rgba(10, 20, 40, 0.75);
-  border: 1px solid rgba(80, 160, 255, 0.35);
+  background: rgba(10, 20, 40, 0.80);
+  border: 1px solid rgba(80, 160, 255, 0.32);
   border-radius: 6px;
-  padding: 6px 14px;
-  color: rgba(160, 210, 255, 0.9);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  padding: 5px 13px;
+  color: rgba(145, 200, 255, 0.85);
+  font-size: 10px;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: chip-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes chip-in {
+  from { opacity: 0; transform: translateY(-7px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0)   scale(1.00); }
 }
 
 .hud-chip span {
@@ -45,9 +53,15 @@
 }
 
 .hud-chip--online {
-  border-color: rgba(0, 255, 130, 0.45);
-  color: rgba(120, 255, 180, 0.90);
-  box-shadow: 0 0 10px rgba(0, 255, 130, 0.15);
+  border-color: rgba(0, 255, 130, 0.42);
+  color: rgba(110, 245, 170, 0.90);
+  animation: chip-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both,
+             chip-online-breathe 3.8s ease-in-out 0.6s infinite;
+}
+
+@keyframes chip-online-breathe {
+  0%, 100% { box-shadow: 0 0  8px rgba(0, 255, 130, 0.12); }
+  50%       { box-shadow: 0 0 20px rgba(0, 255, 130, 0.30), 0 0 36px rgba(0, 255, 130, 0.08); }
 }
 
 .hud-chip--online span {
@@ -101,14 +115,21 @@
   position: absolute;
   bottom: 20px;
   left: 24px;
-  background: rgba(4, 10, 26, 0.80);
-  border: 1px solid rgba(35, 90, 170, 0.30);
+  background: rgba(4, 10, 26, 0.82);
+  border: 1px solid rgba(35, 90, 170, 0.28);
   border-radius: 8px;
   padding: 12px 16px;
-  min-width: 192px;
+  min-width: 196px;
   pointer-events: none;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
+  animation: pp-in 0.50s cubic-bezier(0.22, 1, 0.36, 1) both 0.25s;
+}
+
+@keyframes pp-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .pp-header {
@@ -163,6 +184,12 @@
 .pp-system--online .pp-dot {
   background: #00ff88;
   box-shadow: 0 0 5px rgba(0, 255, 136, 0.70);
+  animation: pp-dot-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes pp-dot-glow {
+  0%, 100% { box-shadow: 0 0  5px rgba(0, 255, 136, 0.70); }
+  50%       { box-shadow: 0 0 12px rgba(0, 255, 136, 1.00), 0 0 20px rgba(0, 255, 136, 0.35); }
 }
 
 .pp-system--locked .pp-dot {
@@ -212,13 +239,36 @@
   position: absolute;
   bottom: 20px;
   right: 24px;
-  color: rgba(100, 160, 210, 0.55);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  color: rgba(90, 150, 205, 0.52);
+  font-size: 9px;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   pointer-events: none;
-  line-height: 1.7;
+  line-height: 2.0;
   text-align: right;
+  z-index: 2;
+  animation: fade-in-up 0.7s ease both 0.5s;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Keyboard key chip inside controls hint */
+.ck {
+  display: inline-block;
+  background: rgba(20, 45, 90, 0.55);
+  border: 1px solid rgba(55, 120, 195, 0.32);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-family: inherit;
+  font-size: 8px;
+  font-weight: 700;
+  color: rgba(110, 180, 230, 0.80);
+  margin: 0 1px;
+  line-height: 1.6;
 }
 
 /* ── Main-menu / BriefingRoom ── */
@@ -313,6 +363,30 @@
 
 .terminal-backdrop.open .terminal-panel {
   transform: translateY(0) scale(1);
+}
+
+/* Boot scan line — sweeps down when terminal opens */
+.terminal-panel::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  top: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 200, 255, 0.65) 50%, transparent 100%);
+  z-index: 20;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: 10px 10px 0 0;
+}
+
+.terminal-backdrop.open .terminal-panel::before {
+  animation: t-boot-scan 0.50s ease 0.05s forwards;
+}
+
+@keyframes t-boot-scan {
+  0%   { top: 0%;   opacity: 0.95; }
+  100% { top: 100%; opacity: 0.00; }
 }
 
 /* scanlines */
@@ -1054,3 +1128,25 @@
   color: #90ffd5;
   box-shadow: 0 0 26px rgba(0, 210, 150, 0.35);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Game Vignette — edge darkening for visual depth
+   ═══════════════════════════════════════════════════════════ */
+
+.game-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 92% 88% at 50% 50%,
+    transparent 42%,
+    rgba(0, 0, 0, 0.38) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Ensure interactive UI sits above vignette ── */
+.interact-prompt { z-index: 2; }
+.launch-overlay  { z-index: 3; }
+.mission-accomplished { z-index: 4; }
+.terminal-backdrop    { z-index: 100; }

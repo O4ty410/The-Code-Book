@@ -15,6 +15,46 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
+// ── ambient dust motes (slow upward drift inside the hangar) ───────────────
+
+export function initDust(count, W, H) {
+  const horizon = H * 0.55;
+  return Array.from({ length: count }, () => ({
+    x:     Math.random() * W,
+    y:     Math.random() * horizon,
+    r:     Math.random() * 0.75 + 0.2,
+    vy:    -(Math.random() * 7 + 2),        // px/s upward
+    vx:    (Math.random() - 0.5) * 3.5,
+    alpha: Math.random() * 0.32 + 0.06,
+    phase: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.7 + 0.25,
+  }));
+}
+
+export function updateDust(dust, delta, W, H) {
+  const horizon = H * 0.55;
+  dust.forEach((d) => {
+    d.y += d.vy * delta;
+    d.x += d.vx * delta;
+    // Wrap at top and sides — respawn at horizon level
+    if (d.y < 0 || d.x < -10 || d.x > W + 10) {
+      d.x = Math.random() * W;
+      d.y = horizon * 0.98;
+    }
+  });
+}
+
+export function drawDust(ctx, dust, t) {
+  dust.forEach((d) => {
+    const tw = 0.5 + 0.5 * Math.sin(d.phase + t * d.speed);
+    const a  = d.alpha * tw;
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(130, 185, 255, ${a.toFixed(3)})`;
+    ctx.fill();
+  });
+}
+
 // ── stars ──────────────────────────────────────────────────────────────────
 
 export function initStars(count, W, H) {

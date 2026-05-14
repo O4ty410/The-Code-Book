@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getMission } from '../missions';
-import { playSuccessSound } from '../systems/audioSystem';
+import { playSuccessSound, playTypeTick } from '../systems/audioSystem';
 import CodeRepairChallenge from './CodeRepairChallenge';
 
 const TYPEWRITER_MS = 18;
@@ -58,6 +58,7 @@ export default function TerminalOverlay({ terminal, onClose, onMissionComplete }
     timerRef.current = setInterval(() => {
       count++;
       setCharCount(count);
+      playTypeTick();
       if (count >= msg.text.length) clearInterval(timerRef.current);
     }, TYPEWRITER_MS);
 
@@ -146,10 +147,15 @@ export default function TerminalOverlay({ terminal, onClose, onMissionComplete }
   }, [isOpen, phase, advance]);
 
   // ── derived state ─────────────────────────────────────────────────────────
-  const isSuccess    = phase === 'success' || phase === 'complete';
-  const panelClass   = ['terminal-panel', isSuccess ? 'terminal-panel--success' : ''].filter(Boolean).join(' ');
-  const statusLine   = isSuccess
-    ? 'POWER RESTORED · ALL SYSTEMS NOMINAL'
+  const isSuccess  = phase === 'success' || phase === 'complete';
+  const panelClass = ['terminal-panel', isSuccess ? 'terminal-panel--success' : ''].filter(Boolean).join(' ');
+
+  const SUCCESS_STATUS = {
+    power_restored: 'POWER SYSTEMS · ALL SYSTEMS NOMINAL',
+    nav_calibrated: 'GUIDANCE COMPUTER · TRAJECTORY LOCKED · NOMINAL',
+  };
+  const statusLine = isSuccess
+    ? (SUCCESS_STATUS[currentMission?.success?.worldEffect] ?? 'ALL SYSTEMS NOMINAL')
     : (terminal?.statusLine ?? '');
 
   return (
