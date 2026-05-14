@@ -1461,34 +1461,64 @@
   color: rgba(255,255,255,0.4);
 }
 
-.vl-context { padding: 28px 28px 0; flex-shrink: 0; }
+/* ── 5-step body ─────────────────────────────────────────────────────────── */
 
-.vl-context-system {
-  font-size: 9px;
-  letter-spacing: 4px;
-  color: #7eb8c8;
-  text-transform: uppercase;
-  margin-bottom: 6px;
+.vl-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0 28px 36px;
 }
 
-.vl-context-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #e8e8e8;
+.vl-step {
+  padding: 22px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 22px;
+}
+
+.vl-step:first-child { margin-top: 0; border-top: none; }
+
+.vl-step-label {
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(126,184,200,0.65);
+  text-transform: uppercase;
   margin-bottom: 10px;
-  letter-spacing: 1px;
+}
+
+.vl-concept-tag {
+  color: #7eb8c8;
+  font-weight: 700;
+}
+
+.vl-step-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  max-width: 660px;
+}
+
+.vl-step--concept .vl-step-text {
+  color: rgba(200,230,255,0.60);
+}
+
+.vl-step--task .vl-step-label {
+  color: rgba(200,220,130,0.65);
+}
+
+.vl-step--response .vl-step-label {
+  color: rgba(80,220,130,0.60);
 }
 
 .vl-instruction {
   font-size: 13px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.65);
   line-height: 1.6;
-  max-width: 640px;
-  margin-bottom: 0;
+  max-width: 660px;
+  margin-bottom: 14px;
 }
 
 .vl-code-wrap {
-  margin: 20px 28px 0;
+  margin: 0 0 0;
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 6px;
   overflow: hidden;
@@ -1519,7 +1549,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin: 20px 28px 0;
+  margin: 16px 0 0;
 }
 
 .vl-option {
@@ -1568,34 +1598,34 @@
   color: rgba(255,255,255,0.75);
 }
 
-.vl-explanation {
-  margin: 16px 28px 0;
+.vl-response {
   padding: 14px 16px;
   border-radius: 5px;
   font-size: 13px;
   line-height: 1.65;
+  max-width: 660px;
 }
 
-.vl-explanation--correct {
+.vl-response--correct {
   background: rgba(100,220,140,0.07);
   border: 1px solid rgba(100,220,140,0.2);
 }
 
-.vl-explanation--wrong {
+.vl-response--wrong {
   background: rgba(255,80,60,0.07);
   border: 1px solid rgba(255,80,60,0.2);
 }
 
-.vl-explanation-head {
+.vl-response-head {
   font-size: 9px;
   letter-spacing: 4px;
   margin-bottom: 8px;
 }
 
-.vl-explanation--correct .vl-explanation-head { color: #7eeaaa; }
-.vl-explanation--wrong   .vl-explanation-head { color: #ff7060; }
+.vl-response--correct .vl-response-head { color: #7eeaaa; }
+.vl-response--wrong   .vl-response-head { color: #ff7060; }
 
-.vl-explanation-body { color: rgba(255,255,255,0.6); }
+.vl-response-body { color: rgba(255,255,255,0.6); }
 
 .vl-retry-btn {
   margin-top: 12px;
@@ -1609,11 +1639,11 @@
   text-transform: uppercase;
   cursor: pointer;
   border-radius: 3px;
+  display: block;
 }
 
 .vl-confirm-btn {
-  align-self: flex-start;
-  margin: 20px 28px 28px;
+  margin: 18px 0 0;
   padding: 12px 28px;
   background: rgba(126,184,200,0.1);
   border: 1px solid rgba(126,184,200,0.35);
@@ -1625,6 +1655,7 @@
   cursor: pointer;
   border-radius: 3px;
   transition: background 0.2s, border-color 0.2s;
+  display: block;
 }
 
 .vl-confirm-btn:hover:not(.vl-confirm-btn--disabled) {
