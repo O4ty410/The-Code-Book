@@ -15,10 +15,9 @@ export default function Game() {
 
   const goTo = (s) => setScene(s);
 
-  const handleInteract = (terminalId) => {
-    // placeholder — lessons will be wired here later
-    console.log('Interacted with terminal:', terminalId);
-  };
+  // Called by HangarScene when a mission completes.
+  // Reserved for future cross-scene events (e.g. unlocking new areas).
+  const handleInteract = (_missionId) => {};
 
   return (
     <div className="game-root">
