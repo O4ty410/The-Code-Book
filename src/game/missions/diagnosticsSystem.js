@@ -23,16 +23,9 @@ console.log("Systems online: " + onlineCount + " / " + systems.length);`,
   success: {
     worldEffect: 'diagnostics_online',
     dialogue: [
-      {
-        text: 'Diagnostics confirmed. Four systems online. Count: 4 / 4.',
-      },
-      {
-        text: 'Arrays in JavaScript are zero-indexed. The first element is at position 0, not 1. Starting your loop at `i = 1` silently skips whatever is at position zero.',
-      },
-      {
-        text: 'Loops are how the station scans every system, checks every sensor, processes every reading. The loop bounds define exactly what gets checked and what gets missed.',
-        isLast: true,
-      },
+      { text: "Diagnostic scanner: nominal. Scan confirmed: 4 / 4 systems online." },
+      { text: "The loop was beginning at `i = 1`, skipping index 0 — the first system in the array. Changing to `i = 0` ensures every element is processed from the first position." },
+      { text: "Loops are how the station automates repetition across system lists. The starting index defines exactly what is included. An off-by-one error produces no fault alert — only silent data loss.", isLast: true },
     ],
   },
 };

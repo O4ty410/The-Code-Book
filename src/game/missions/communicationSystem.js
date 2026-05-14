@@ -20,16 +20,9 @@ console.log(broadcast);`,
   success: {
     worldEffect: 'comms_online',
     dialogue: [
-      {
-        text: 'Signal confirmed. Broadcast transmitted: "LAUNCH-BAY-01 — ALL SYSTEMS NOMINAL".',
-      },
-      {
-        text: "Strings are how systems communicate — status logs, callsigns, messages. When you concatenate with `+`, every piece must be a declared variable or a literal value in quotes.",
-      },
-      {
-        text: '`statusMsg` was never declared. The system looked for a name that didn\'t exist. Renaming it to `statusMessage` gave it the correct reference.',
-        isLast: true,
-      },
+      { text: "Communications array: nominal. Broadcast transmitted: 'LAUNCH-BAY-01 — ALL SYSTEMS NOMINAL'." },
+      { text: "The variable `statusMessage` was declared correctly. The script was reading `statusMsg` — a name that did not exist. The system had nothing to retrieve and the transmission could not be assembled." },
+      { text: "Strings are how systems encode and transmit information. Every variable referenced in a string operation must match a declared name exactly, or the data cannot be included.", isLast: true },
     ],
   },
 };

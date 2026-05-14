@@ -1,23 +1,20 @@
 export default {
   id: 'comms',
   label: 'Communications',
-  statusLine: 'COMMUNICATIONS · BROADCAST ARRAY OFFLINE',
-  ai: {
-    name: 'ARIA',
-    title: 'Adaptive Response Intelligence',
-  },
+  statusLine: 'COMMUNICATIONS · REFERENCE ERROR · BROADCAST OFFLINE',
+  ai: { name: 'ARIA', title: 'Adaptive Response Intelligence' },
   sequence: [
     {
-      text: 'Commander. The communications array is down. The broadcast script is throwing a ReferenceError — it is trying to read a variable that was never declared.',
+      text: "Commander. The communications array is offline. The broadcast controller is throwing a reference error — the transmission script is attempting to read a variable that does not exist. No signal is being transmitted.",
     },
     {
-      text: 'Strings are how systems encode messages — status logs, callsigns, alerts. The broadcast message is built by combining string values with the `+` operator.',
+      text: "A spacecraft's communications system transmits status logs, telemetry data, and control confirmations to mission control and onboard systems. Every transmission is assembled as a text string — a sequence of characters built from system data. If the script cannot read a required value, the message cannot be constructed.",
     },
     {
-      text: 'Every name you reference in code must have been declared first. If the name is wrong — even a single character different — the system cannot find it. The entire broadcast fails.',
+      text: "This script assembles the broadcast using string concatenation — joining values together with the `+` operator. The fault is a variable name mismatch: the script references a name that was never declared. JavaScript throws a ReferenceError and halts the transmission entirely.",
     },
     {
-      text: "The faulty broadcast script is on your terminal. One variable name needs correcting. Fix it and I'll restore the transmission.",
+      text: "The fault script is on your terminal. The declared variable and the referenced variable are not the same name. Correct the reference. Restore the broadcast.",
       type: 'mission',
       missionId: 'comms_signal',
     },

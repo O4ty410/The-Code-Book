@@ -24,16 +24,9 @@ console.log("Engine Isp: " + isp + " s");`,
   success: {
     worldEffect: 'engine_online',
     dialogue: [
-      {
-        text: 'Engine Isp confirmed at 448.8 seconds. Ignition sequence accepted. Engine core is online.',
-      },
-      {
-        text: 'A function is a reusable block of instructions. Defining it with `function` does nothing on its own — it only runs when you call it by name and pass it the right values.',
-      },
-      {
-        text: 'The return value is what the function sends back. If you never capture that value — never assign it to a variable — the calculation is lost. The function ran, but nothing received the result.',
-        isLast: true,
-      },
+      { text: "Engine core: nominal. Specific impulse confirmed: 448.8 s. Ignition sequence authorised." },
+      { text: "The function `calculateIsp` was defined but never invoked. The variable `isp` remained at 0. Calling the function and assigning its return value gave the ignition controller a valid reading." },
+      { text: "Defining a function creates the capability. Calling it and capturing the return value is what makes the result available to the system. Without the call, the calculation never runs.", isLast: true },
     ],
   },
 };

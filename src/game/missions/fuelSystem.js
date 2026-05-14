@@ -20,16 +20,9 @@ console.log("Thrust: " + thrust + " N");`,
   success: {
     worldEffect: 'fuel_online',
     dialogue: [
-      {
-        text: 'Thrust nominal. 1,540,000 Newtons. Fuel flow controller is back online.',
-      },
-      {
-        text: "The `*` operator is multiplication. You used `-` subtraction — that gave a negative thrust value, which caused the propulsion system to reject the calculation entirely.",
-      },
-      {
-        text: "Numbers and arithmetic are how the rocket tracks everything that can be measured: thrust, fuel mass, burn time, altitude. Every quantity the system monitors runs through an expression like this.",
-        isLast: true,
-      },
+      { text: "Fuel flow controller: nominal. Thrust output: 1,540,000 N. Engine command accepted. Propulsion line cleared." },
+      { text: "The script used subtraction: 350 minus 4,400. Result: -4,050 — a negative thrust value the engine controller refused. Multiplication gives 1,540,000 N — a physically valid force." },
+      { text: "Numbers are how the rocket quantifies everything measurable. Every calculated value must use the correct operation, or the downstream systems receive data they cannot use.", isLast: true },
     ],
   },
 };
