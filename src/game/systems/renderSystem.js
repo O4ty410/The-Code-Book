@@ -99,21 +99,51 @@ export function drawCeilingLights(ctx, W, powered = false) {
 
 // ── rocket ─────────────────────────────────────────────────────────────────
 
-export function drawRocket(ctx, cx, groundY, t, powered = false) {
+// ── alarm flash (screen-space, drawn outside camera transform) ─────────────
+
+export function drawAlarmFlash(ctx, W, H, alpha) {
+  if (alpha <= 0.005) return;
+  // ceiling pulse
+  const top = ctx.createLinearGradient(0, 0, 0, 180);
+  top.addColorStop(0, `rgba(255, 15, 0, ${alpha})`);
+  top.addColorStop(1, 'rgba(255, 15, 0, 0)');
+  ctx.fillStyle = top;
+  ctx.fillRect(0, 0, W, 180);
+  // left vignette
+  const left = ctx.createLinearGradient(0, 0, 110, 0);
+  left.addColorStop(0, `rgba(220, 0, 0, ${alpha * 0.45})`);
+  left.addColorStop(1, 'rgba(220, 0, 0, 0)');
+  ctx.fillStyle = left;
+  ctx.fillRect(0, 0, 110, H);
+  // right vignette
+  const right = ctx.createLinearGradient(W - 110, 0, W, 0);
+  right.addColorStop(0, 'rgba(220, 0, 0, 0)');
+  right.addColorStop(1, `rgba(220, 0, 0, ${alpha * 0.45})`);
+  ctx.fillStyle = right;
+  ctx.fillRect(W - 110, 0, 110, H);
+}
+
+// ── rocket ─────────────────────────────────────────────────────────────────
+
+export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel = 1) {
   const bob   = Math.sin(t * 0.8) * 2.5;
   const baseY = groundY + bob;
 
   // exhaust flame
-  const flameBase = powered ? 75 : 55;
-  const flameH = flameBase + Math.sin(t * 8) * (powered ? 18 : 12);
-  const flame  = ctx.createRadialGradient(cx, baseY + 10, 2, cx, baseY + 20, flameH);
-  flame.addColorStop(0,   'rgba(255, 240, 180, 0.95)');
-  flame.addColorStop(0.35,'rgba(255, 140,  40, 0.70)');
-  flame.addColorStop(0.7, 'rgba(180,  60, 200, 0.40)');
+  const nominalBase = powered ? 75 : 55;
+  const nominalVar  = powered ? 18 : 12;
+  // ignitionLevel: 0 = tiny pre-ignition, 1 = full power
+  const flameBase = nominalBase * (0.25 + 0.75 * ignitionLevel);
+  const flameH    = flameBase + Math.sin(t * 8) * nominalVar * ignitionLevel;
+  const flameAlpha = 0.30 + 0.65 * ignitionLevel;
+  const flame  = ctx.createRadialGradient(cx, baseY + 10, 2, cx, baseY + 20, Math.max(1, flameH));
+  flame.addColorStop(0,   `rgba(255, 240, 180, ${flameAlpha})`);
+  flame.addColorStop(0.35,`rgba(255, 140,  40, ${flameAlpha * 0.73})`);
+  flame.addColorStop(0.7, `rgba(180,  60, 200, ${flameAlpha * 0.42})`);
   flame.addColorStop(1,   'rgba(100,  20, 160, 0.00)');
   ctx.fillStyle = flame;
   ctx.beginPath();
-  ctx.ellipse(cx, baseY + 35, 16, flameH, 0, 0, Math.PI * 2);
+  ctx.ellipse(cx, baseY + 35, Math.max(1, 16 * ignitionLevel), Math.max(1, flameH), 0, 0, Math.PI * 2);
   ctx.fill();
 
   // body
