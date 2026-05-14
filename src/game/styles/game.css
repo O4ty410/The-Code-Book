@@ -1277,36 +1277,53 @@
   color: rgba(255,255,255,0.4);
 }
 
-.da-context {
-  padding: 28px 28px 0;
-  flex-shrink: 0;
+/* ── 5-step body ─────────────────────────────────────────────────────────── */
+
+.da-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0 28px 36px;
+  gap: 0;
 }
 
-.da-context-system {
-  font-size: 9px;
+.da-step {
+  padding: 22px 0 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 22px;
+}
+
+.da-step:first-child { margin-top: 0; border-top: none; }
+
+.da-step-label {
+  font-size: 8px;
   letter-spacing: 4px;
-  color: #ff7b5c;
+  color: rgba(255,120,80,0.65);
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
-.da-context-title {
-  font-size: 20px;
+.da-concept-tag {
+  color: #ff9070;
   font-weight: 700;
-  color: #e8e8e8;
-  margin-bottom: 8px;
-  letter-spacing: 1px;
 }
 
-.da-context-desc {
+.da-step-text {
   font-size: 13px;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.6;
-  max-width: 640px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  max-width: 660px;
+}
+
+.da-step--concept .da-step-text {
+  color: rgba(200,230,255,0.60);
+}
+
+.da-step--task .da-step-label {
+  color: rgba(255,200,100,0.65);
 }
 
 .da-editor-wrap {
-  margin: 20px 28px 0;
+  margin: 14px 0 0;
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 6px;
   overflow: hidden;
@@ -1342,7 +1359,7 @@
 .da-editor:disabled { opacity: 0.6; cursor: default; }
 
 .da-hint {
-  margin: 12px 28px 0;
+  margin: 14px 0 0;
   padding: 10px 14px;
   background: rgba(255,200,100,0.06);
   border-left: 2px solid rgba(255,200,100,0.4);
@@ -1360,23 +1377,11 @@
   vertical-align: middle;
 }
 
-.da-status {
-  margin: 12px 28px 0;
-  padding: 10px 14px;
-  font-size: 12px;
-  border-radius: 4px;
-  line-height: 1.5;
-}
-
-.da-status--error   { background: rgba(255,80,60,0.08); color: #ff6b5b; border: 1px solid rgba(255,80,60,0.2); }
-.da-status--success { background: rgba(100,220,140,0.08); color: #7eeaaa; border: 1px solid rgba(100,220,140,0.2); }
-
 .da-deploy-btn {
-  align-self: flex-start;
-  margin: 20px 28px 28px;
+  margin: 18px 0 0;
   padding: 12px 28px;
-  background: rgba(255,120,80,0.1);
-  border: 1px solid rgba(255,120,80,0.3);
+  background: rgba(255,120,80,0.10);
+  border: 1px solid rgba(255,120,80,0.30);
   color: #ff9070;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
@@ -1385,11 +1390,36 @@
   cursor: pointer;
   border-radius: 3px;
   transition: background 0.2s, border-color 0.2s;
+  display: block;
 }
 
 .da-deploy-btn:hover {
   background: rgba(255,120,80,0.18);
   border-color: rgba(255,120,80,0.55);
+}
+
+.da-step--response .da-step-label {
+  color: rgba(80,220,130,0.60);
+}
+
+.da-step-response {
+  font-size: 13px;
+  line-height: 1.65;
+  padding: 12px 16px;
+  border-radius: 4px;
+  max-width: 660px;
+}
+
+.da-step-response--error {
+  background: rgba(255,80,60,0.07);
+  color: #ff6b5b;
+  border: 1px solid rgba(255,80,60,0.20);
+}
+
+.da-step-response--success {
+  background: rgba(80,220,130,0.07);
+  color: #7eeaaa;
+  border: 1px solid rgba(80,220,130,0.20);
 }
 
 /* ================================================================
