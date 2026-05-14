@@ -3103,6 +3103,7 @@ body.light .lh-badge-locked { background: rgba(0,0,0,0.03); border-color: rgba(0
   font-size: 24px;
   font-weight: 700;
   color: var(--pth-accent);
+  text-shadow: 0 0 12px var(--pth-glow), 0 0 24px var(--pth-glow);
   transition: color 0.4s ease;
 }
 
