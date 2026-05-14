@@ -38,7 +38,7 @@ import {
   playTerminalOpen,
   playTerminalClose,
 } from '../systems/audioSystem';
-import '../styles/game.css';
+// game.css is imported once by Game.jsx — no second import needed here
 
 // ── constants ─────────────────────────────────────────────────────────────
 const SPEED           = 260;
