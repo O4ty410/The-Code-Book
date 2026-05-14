@@ -14,6 +14,9 @@ import {
   drawPoweredAmbient,
   drawAlarmFlash,
   drawTrajectoryArc,
+  initDust,
+  updateDust,
+  drawDust,
 } from '../systems/renderSystem';
 import {
   createLaunchState,
@@ -30,6 +33,11 @@ import {
   completeMission,
   isMissionComplete,
 } from '../systems/progressionSystem';
+import {
+  startAmbientHum,
+  playTerminalOpen,
+  playTerminalClose,
+} from '../systems/audioSystem';
 import '../styles/game.css';
 
 // ── constants ─────────────────────────────────────────────────────────────
@@ -78,6 +86,21 @@ export default function HangarScene({ onInteract }) {
   const lastCountdownRef  = useRef(10);
   const launchRef         = useRef(createLaunchState());
   const launchTriggeredRef = useRef(false);
+  const dustRef            = useRef([]);
+  const prevTerminalRef    = useRef(null);
+
+  // Ambient hum — start on mount, stop on unmount
+  useEffect(() => {
+    const stopHum = startAmbientHum();
+    return stopHum;
+  }, []);
+
+  // Terminal open/close sounds
+  useEffect(() => {
+    if (activeTerminal && !prevTerminalRef.current) playTerminalOpen();
+    if (!activeTerminal && prevTerminalRef.current)  playTerminalClose();
+    prevTerminalRef.current = activeTerminal;
+  }, [activeTerminal]);
 
   useEffect(() => { overlayOpenRef.current = activeTerminal !== null; }, [activeTerminal]);
   useEffect(() => { worldStateRef.current  = worldState; },            [worldState]);
@@ -114,6 +137,7 @@ export default function HangarScene({ onInteract }) {
       if (!initDone.current) {
         player.current = { x: W / 2, y: H * 0.82, vx: 0 };
         starsRef.current = initStars(STAR_COUNT, W, H);
+        dustRef.current  = initDust(55, W, H);
         initDone.current = true;
       }
     }
@@ -357,6 +381,12 @@ export default function HangarScene({ onInteract }) {
 
     if (powerRestored || phase) drawPoweredAmbient(ctx, W, H, t);
 
+    // Ambient dust — update physics then draw above floor
+    if (!phase || phase === 'countdown') {
+      updateDust(dustRef.current, delta, W, H);
+      drawDust(ctx, dustRef.current, t);
+    }
+
     // Smoke + exhaust
     drawParticles(ctx, launch);
 
@@ -416,6 +446,7 @@ export default function HangarScene({ onInteract }) {
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas ref={canvasRef} className="hangar-canvas" />
+      <div className="game-vignette" />
 
       {/* HUD chips — hidden during launch */}
       {!launchPhase && (
@@ -446,8 +477,12 @@ export default function HangarScene({ onInteract }) {
       {/* Controls hint */}
       {!launchPhase && (
         <div className="controls-hint">
-          WASD / ↑↓←→ Move<br />
-          E — Interact
+          <div>
+            <kbd className="ck">W</kbd><kbd className="ck">A</kbd>
+            <kbd className="ck">S</kbd><kbd className="ck">D</kbd>
+            {' '}Move
+          </div>
+          <div><kbd className="ck">E</kbd> Interact</div>
         </div>
       )}
 
