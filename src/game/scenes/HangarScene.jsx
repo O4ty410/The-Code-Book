@@ -13,6 +13,7 @@ import {
   drawPowerIndicators,
   drawPoweredAmbient,
   drawAlarmFlash,
+  drawTrajectoryArc,
 } from '../systems/renderSystem';
 import {
   createLaunchState,
@@ -65,7 +66,7 @@ export default function HangarScene({ onInteract }) {
   // UI state
   const [nearTerminal,     setNearTerminal]     = useState(null);
   const [activeTerminal,   setActiveTerminal]   = useState(null);
-  const [worldState,       setWorldState]       = useState({ powerRestored: false });
+  const [worldState,       setWorldState]       = useState({ powerRestored: false, navCalibrated: false });
   const [launchPhase,      setLaunchPhase]      = useState(null);
   const [countdownDisplay, setCountdownDisplay] = useState(10);
   const [progress,         setProgress]         = useState(() => loadProgress());
@@ -92,6 +93,9 @@ export default function HangarScene({ onInteract }) {
     if (isMissionComplete(saved, 'power_restoration')) {
       setWorldState((s) => ({ ...s, powerRestored: true }));
       launchTriggeredRef.current = true; // suppress countdown for already-played sessions
+    }
+    if (isMissionComplete(saved, 'nav_calibration')) {
+      setWorldState((s) => ({ ...s, navCalibrated: true }));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -135,6 +139,9 @@ export default function HangarScene({ onInteract }) {
     setProgress((prev) => completeMission(prev, missionId));
     if (worldEffect === 'power_restored') {
       setWorldState((s) => ({ ...s, powerRestored: true }));
+    }
+    if (worldEffect === 'nav_calibrated') {
+      setWorldState((s) => ({ ...s, navCalibrated: true }));
     }
     onInteract?.(missionId);
   }, [onInteract]);
@@ -328,7 +335,7 @@ export default function HangarScene({ onInteract }) {
     }
 
     // ── Draw ─────────────────────────────────────────────────────────────
-    const { powerRestored } = worldStateRef.current;
+    const { powerRestored, navCalibrated } = worldStateRef.current;
     const rocketGroundY     = H * 0.55 + launch.rocketAscent;
 
     // 1. Background — fixed (no camera transform)
@@ -352,6 +359,11 @@ export default function HangarScene({ onInteract }) {
 
     // Smoke + exhaust
     drawParticles(ctx, launch);
+
+    // Trajectory arc — pre-launch only, when nav is calibrated
+    if (navCalibrated && (!phase || phase === 'countdown')) {
+      drawTrajectoryArc(ctx, W / 2, rocketGroundY, W, H, t);
+    }
 
     // Rocket
     drawRocket(ctx, W / 2, rocketGroundY, t, true, launch.ignitionLevel);
@@ -412,6 +424,9 @@ export default function HangarScene({ onInteract }) {
           <div className="hud-chip">Location <span>Hangar Bay 1</span></div>
           {worldState.powerRestored && (
             <div className="hud-chip hud-chip--online">Power Systems <span>Online</span></div>
+          )}
+          {worldState.navCalibrated && (
+            <div className="hud-chip hud-chip--online">Navigation <span>Online</span></div>
           )}
         </div>
       )}
