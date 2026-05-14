@@ -1,11 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { DEBUG_MISSIONS } from '../missions/debugMissions';
 import { completeMission } from '../systems/progressionSystem';
-import { playErrorSound, playSuccessSound, playTypeTick } from '../systems/audioSystem';
+import { playErrorSound, playSuccessSound, playTypeTick, startDebugAmbient } from '../systems/audioSystem';
 
 export default function DebugArena({ progress, onComplete }) {
   const [currentIndex,   setCurrentIndex]   = useState(0);
   const [code,           setCode]           = useState(DEBUG_MISSIONS[0].brokenCode);
+
+  useEffect(() => { const stop = startDebugAmbient(); return stop; }, []);
   const [status,         setStatus]         = useState(null); // null | 'error' | 'success'
   const [statusMsg,      setStatusMsg]      = useState('');
   const [attempts,       setAttempts]       = useState(0);

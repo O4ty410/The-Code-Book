@@ -10,6 +10,7 @@ import {
   completeMission,
   BUILDER_MISSION_IDS,
 } from './systems/progressionSystem';
+import { toggleMute, isMuted } from './systems/audioSystem';
 import './styles/game.css';
 
 const MODE = { BUILDER: 'builder', DEBUG: 'debug', VISUAL: 'visual', LAUNCH: 'launch' };
@@ -21,9 +22,9 @@ function ModeTransition({ nextMode, onDone }) {
   }, [onDone]);
 
   const labels = {
-    debug:  { pre: 'ROCKET BUILDER · COMPLETE',  title: 'DEBUG ARENA',             sub: 'All six systems repaired. Proceed to fault verification.' },
-    visual: { pre: 'DEBUG ARENA · COMPLETE',      title: 'VISUAL LAB',              sub: 'All faults resolved. Proceed to final systems analysis.' },
-    launch: { pre: 'ALL PHASES COMPLETE',         title: 'LAUNCH SEQUENCE INITIATED', sub: 'All systems nominal. Stand by for launch.' },
+    debug:  { pre: 'ROCKET BUILDER · COMPLETE',    title: 'DEBUG ARENA',               sub: 'All six systems repaired. Proceed to fault verification.' },
+    visual: { pre: 'DEBUG ARENA · COMPLETE',        title: 'VISUAL LAB',                sub: 'All faults resolved. Proceed to final systems analysis.' },
+    launch: { pre: 'ALL PHASES COMPLETE',           title: 'LAUNCH SEQUENCE INITIATED', sub: 'All systems nominal. Stand by for launch.' },
   };
   const l = labels[nextMode] ?? labels.launch;
 
@@ -37,13 +38,25 @@ function ModeTransition({ nextMode, onDone }) {
   );
 }
 
+function MuteButton() {
+  const [muted, setMuted] = useState(isMuted());
+  const handle = useCallback(() => {
+    const next = toggleMute();
+    setMuted(next);
+  }, []);
+  return (
+    <button className="game-mute-btn" onClick={handle} title={muted ? 'Unmute' : 'Mute'}>
+      {muted ? '🔇' : '🔊'}
+    </button>
+  );
+}
+
 export default function Game() {
   const [scene,      setScene]      = useState('MAIN_MENU');
   const [gameMode,   setGameMode]   = useState(MODE.BUILDER);
   const [transition, setTransition] = useState(null);
   const [progress,   setProgress]   = useState(() => loadProgress());
 
-  // Derive mode from saved progress on first load
   useEffect(() => {
     const done = progress.completedMissions;
     const allBuilder = BUILDER_MISSION_IDS.every((id) => done.includes(id));
@@ -78,7 +91,6 @@ export default function Game() {
     setTransition(null);
   }, [transition]);
 
-  // HangarScene calls this when the launch animation fade-out completes
   const handleLaunchComplete = useCallback(() => {
     setScene('MARS');
   }, []);
@@ -87,6 +99,8 @@ export default function Game() {
 
   return (
     <div className="game-root">
+      <MuteButton />
+
       {scene === 'MAIN_MENU' && (
         <MainMenu onStart={() => setScene('BRIEFING')} />
       )}

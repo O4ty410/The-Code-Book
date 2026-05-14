@@ -1,11 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { VISUAL_CHALLENGES } from '../missions/visualChallenges';
 import { completeMission } from '../systems/progressionSystem';
-import { playErrorSound, playSuccessSound } from '../systems/audioSystem';
+import { playErrorSound, playSuccessSound, startVisualAmbient } from '../systems/audioSystem';
 
 export default function VisualLab({ progress, onComplete }) {
   const [currentIndex,  setCurrentIndex]  = useState(0);
   const [selected,      setSelected]      = useState(null);
+
+  useEffect(() => { const stop = startVisualAmbient(); return stop; }, []);
   const [confirmed,     setConfirmed]     = useState(false);
   const [localProgress, setLocalProgress] = useState(progress);
 

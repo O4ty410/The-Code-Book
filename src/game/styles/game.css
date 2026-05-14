@@ -10,6 +10,27 @@
   user-select: none;
 }
 
+/* ── Mute Button ── */
+.game-mute-btn {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  color: #fff;
+  font-size: 18px;
+  line-height: 1;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.game-mute-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
 /* ── Canvas ── */
 .hangar-canvas {
   display: block;
