@@ -21,35 +21,17 @@ export function isLessonUnlocked(playerData, lessonId, requiredLessons = []) {
 // their missionId is registered in missions/index.js.
 
 export const ROCKET_SYSTEMS = [
-  {
-    id:         'power',
-    label:      'Power Systems',
-    desc:       'Reactor core and power distribution',
-    terminalId: 'power',
-    missionId:  'power_restoration',
-  },
-  {
-    id:         'fuel',
-    label:      'Fuel Systems',
-    desc:       'Propellant management and flow control',
-    terminalId: 'fuel',
-    missionId:  'fuel_calibration',
-  },
-  {
-    id:         'nav',
-    label:      'Navigation',
-    desc:       'Guidance computer and trajectory',
-    terminalId: 'nav',
-    missionId:  'nav_calibration',
-  },
-  {
-    id:         'engine',
-    label:      'Engine Core',
-    desc:       'Primary thruster ignition sequence',
-    terminalId: 'engine',
-    missionId:  'engine_startup',
-  },
+  { id: 'power',       label: 'Power Systems',   desc: 'Reactor core and power distribution',    terminalId: 'power',       missionId: 'power_restoration' },
+  { id: 'fuel',        label: 'Fuel Systems',     desc: 'Propellant management and flow control', terminalId: 'fuel',        missionId: 'fuel_calculation'  },
+  { id: 'nav',         label: 'Navigation',       desc: 'Guidance computer and trajectory',       terminalId: 'nav',         missionId: 'nav_calibration'   },
+  { id: 'comms',       label: 'Communications',   desc: 'Broadcast array and signal routing',     terminalId: 'comms',       missionId: 'comms_signal'      },
+  { id: 'diagnostics', label: 'Diagnostics',      desc: 'System scan and fault detection',        terminalId: 'diagnostics', missionId: 'diagnostics_scan'  },
+  { id: 'engine',      label: 'Engine Core',      desc: 'Primary thruster ignition sequence',     terminalId: 'engine',      missionId: 'engine_ignition'   },
 ];
+
+export const BUILDER_MISSION_IDS = ROCKET_SYSTEMS.map((s) => s.missionId);
+export const DEBUG_MISSION_IDS   = ['debug_wrong_variable', 'debug_wrong_operator', 'debug_missing_return'];
+export const VISUAL_MISSION_IDS  = ['visual_fuel', 'visual_comms', 'visual_diagnostics'];
 
 // ── Mission progress persistence ───────────────────────────────────────────
 
