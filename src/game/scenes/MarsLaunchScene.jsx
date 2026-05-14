@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useGameLoop } from '../hooks';
+import { startSpaceAmbient } from '../systems/audioSystem';
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const STAR_COUNT        = 240;
@@ -330,6 +331,8 @@ export default function MarsLaunchScene({ onComplete }) {
     phaseTrans.current = false;
     modeShownRef.current = false;
   }, [phase]);
+
+  useEffect(() => { const stop = startSpaceAmbient(); return stop; }, []);
 
   // Resize / init
   useEffect(() => {
