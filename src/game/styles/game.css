@@ -1,0 +1,146 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.game-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Courier New', Courier, monospace;
+  user-select: none;
+}
+
+/* ── Canvas ── */
+.hangar-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── HUD overlay ── */
+.hud-overlay {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  display: flex;
+  gap: 20px;
+  pointer-events: none;
+}
+
+.hud-chip {
+  background: rgba(10, 20, 40, 0.75);
+  border: 1px solid rgba(80, 160, 255, 0.35);
+  border-radius: 6px;
+  padding: 6px 14px;
+  color: rgba(160, 210, 255, 0.9);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+
+.hud-chip span {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ── Interact prompt ── */
+.interact-prompt {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 20, 40, 0.80);
+  border: 1px solid rgba(80, 200, 255, 0.55);
+  border-radius: 8px;
+  padding: 10px 22px;
+  color: rgba(160, 230, 255, 0.95);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(80, 200, 255, 0.25), inset 0 0 12px rgba(80, 200, 255, 0.05);
+  animation: prompt-pulse 2s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.interact-prompt kbd {
+  display: inline-block;
+  background: rgba(80, 200, 255, 0.18);
+  border: 1px solid rgba(80, 200, 255, 0.45);
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7ddcff;
+  margin-right: 6px;
+}
+
+@keyframes prompt-pulse {
+  0%, 100% { opacity: 0.75; box-shadow: 0 0 20px rgba(80,200,255,0.25); }
+  50%       { opacity: 1.00; box-shadow: 0 0 30px rgba(80,200,255,0.45); }
+}
+
+/* ── Controls hint (bottom-right) ── */
+.controls-hint {
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  color: rgba(100, 160, 210, 0.55);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+  line-height: 1.7;
+  text-align: right;
+}
+
+/* ── Main-menu / BriefingRoom ── */
+.scene-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(20,60,120,0.6) 0%, #050d1e 100%);
+  color: #c8e4ff;
+}
+
+.scene-title {
+  font-size: clamp(2rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-shadow: 0 0 30px rgba(80,180,255,0.8), 0 0 60px rgba(80,180,255,0.4);
+  margin-bottom: 16px;
+}
+
+.scene-sub {
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  color: rgba(160,210,255,0.65);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 52px;
+}
+
+.scene-btn {
+  background: rgba(30,80,180,0.25);
+  border: 1px solid rgba(80,180,255,0.55);
+  border-radius: 8px;
+  color: #a8d8ff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 14px 36px;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.scene-btn:hover {
+  background: rgba(50,120,220,0.35);
+  box-shadow: 0 0 24px rgba(80,180,255,0.4);
+}
