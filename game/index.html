@@ -6,12 +6,37 @@
     <title>Launch Sequence</title>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body, #launch-sequence-root { width: 100%; height: 100%; overflow: hidden; background: #000; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+      #visor-wrap, #launch-sequence-root { width: 100%; height: 100%; }
+      #visor-wrap { position: relative; }
     </style>
     <script type="module" crossorigin src="./assets/index-QBXstnal.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BYZyInm5.css">
   </head>
   <body>
-    <div id="launch-sequence-root"></div>
+    <div id="visor-wrap">
+      <div id="launch-sequence-root"></div>
+    </div>
+
+    <script type="module">
+      import { VisorEffect } from './visor-effect.js';
+
+      // Overlay mode: no scene canvas needed.
+      // The WebGL canvas sits on top with pointer-events:none.
+      // Glass effects (Fresnel rim, scratches, reflections, halo) render with alpha;
+      // the game shows through naturally where the visor is clear.
+      const visor = new VisorEffect(document.getElementById('visor-wrap'));
+      visor
+        .setLightPos(0.5, 0.42)   // central engine / cockpit light position
+        .setLightIntensity(1.0)
+        .start();
+
+      // Optional: let the game dispatch a CustomEvent to animate light pulses.
+      // e.g. window.dispatchEvent(new CustomEvent('visor-light', { detail: { intensity: 1.8 } }))
+      window.addEventListener('visor-light', e => {
+        if (e.detail && typeof e.detail.intensity === 'number')
+          visor.setLightIntensity(e.detail.intensity);
+      });
+    </script>
   </body>
 </html>
