@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visor Effect — Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'IBM Plex Mono', 'Courier New', monospace;
+    }
+
+    #stage {
+      position: relative;
+      width: 100%; height: 100%;
+    }
+
+    /* 2-D scene canvas — rendered every frame, then fed to the WebGL visor */
+    #scene { display: block; width: 100%; height: 100%; }
+
+    /* UI controls (sit above the WebGL overlay) */
+    #controls {
+      position: absolute;
+      bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      z-index: 200;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(125,211,252,0.2);
+      border-radius: 10px;
+      padding: 12px 22px;
+    }
+    #controls label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: rgba(125,211,252,0.8);
+      text-transform: uppercase;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    #controls input[type=range] {
+      width: 100px;
+      accent-color: #7dd3fc;
+    }
+    #controls button {
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #7dd3fc;
+      background: rgba(125,211,252,0.1);
+      border: 1px solid rgba(125,211,252,0.3);
+      border-radius: 5px;
+      padding: 7px 14px;
+      cursor: pointer;
+    }
+    #controls button:hover { background: rgba(125,211,252,0.22); }
+
+    #tag {
+      position: absolute;
+      top: 18px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: rgba(125,211,252,0.5);
+      text-transform: uppercase;
+      z-index: 200;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="scene"></canvas>
+  <!-- WebGL visor canvas is injected here by VisorEffect -->
+</div>
+
+<div id="tag">VISOR EFFECT — DEMO</div>
+
+<div id="controls">
+  <label>
+    Engine
+    <input type="range" id="sl-intensity" min="0" max="2" step="0.01" value="1">
+  </label>
+  <label>
+    Light X
+    <input type="range" id="sl-lx" min="0.1" max="0.9" step="0.01" value="0.5">
+  </label>
+  <label>
+    Light Y
+    <input type="range" id="sl-ly" min="0.1" max="0.9" step="0.01" value="0.42">
+  </label>
+  <button id="btn-pulse">PULSE</button>
+</div>
+
+<script type="module">
+// ─── import the effect ───────────────────────────────────────────────────────
+import { VisorEffect } from './visor-effect.js';
+
+// ─── scene canvas setup ──────────────────────────────────────────────────────
+const sceneEl = document.getElementById('scene');
+const ctx     = sceneEl.getContext('2d');
+
+function resizeScene() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  sceneEl.width  = Math.round(sceneEl.clientWidth  * dpr);
+  sceneEl.height = Math.round(sceneEl.clientHeight * dpr);
+}
+resizeScene();
+window.addEventListener('resize', resizeScene);
+
+// ─── star field (pre-generate, then drift slowly) ────────────────────────────
+const STAR_COUNT = 320;
+const stars = Array.from({ length: STAR_COUNT }, () => ({
+  x:   Math.random(),
+  y:   Math.random(),
+  r:   Math.random() * 1.4 + 0.3,
+  spd: Math.random() * 0.00008 + 0.00002,
+  alpha: Math.random() * 0.6 + 0.35,
+  twinklePhase: Math.random() * Math.PI * 2,
+  twinkleSpeed: Math.random() * 1.2 + 0.4,
+}));
+
+// ─── debris particles ────────────────────────────────────────────────────────
+const DEBRIS_COUNT = 18;
+const debris = Array.from({ length: DEBRIS_COUNT }, () => ({
+  x: Math.random(),
+  y: Math.random(),
+  size: Math.random() * 3 + 1,
+  vx: (Math.random() - 0.5) * 0.00015,
+  vy: Math.random() * 0.0002 + 0.00005,
+  angle: Math.random() * Math.PI * 2,
+  spin:  (Math.random() - 0.5) * 0.02,
+  alpha: Math.random() * 0.4 + 0.15,
+}));
+
+// ─── HUD readout lines ────────────────────────────────────────────────────────
+const HUD_LINES = [
+  { label: 'ALT',  val: '384,400 km' },
+  { label: 'VEL',  val: '3.07 km/s'  },
+  { label: 'FUEL', val: '74.2 %'      },
+  { label: 'O2',   val: '98.1 %'      },
+  { label: 'TEMP', val: '−126 °C'     },
+];
+
+// ─── draw one frame of the 2-D scene ─────────────────────────────────────────
+function drawScene(t, intensity) {
+  const W = sceneEl.width, H = sceneEl.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // 1. Deep space background
+  const bg = ctx.createRadialGradient(W*0.5, H*0.35, 0, W*0.5, H*0.5, W*0.8);
+  bg.addColorStop(0,   '#06090e');
+  bg.addColorStop(0.5, '#030507');
+  bg.addColorStop(1,   '#010203');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // 2. Nebula wisps (two faint colour bands)
+  const neb1 = ctx.createRadialGradient(W*0.72, H*0.28, 0, W*0.72, H*0.28, W*0.38);
+  neb1.addColorStop(0,   'rgba(60,25,120,0.14)');
+  neb1.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = neb1; ctx.fillRect(0,0,W,H);
+
+  const neb2 = ctx.createRadialGradient(W*0.25, H*0.62, 0, W*0.25, H*0.62, W*0.32);
+  neb2.addColorStop(0,   'rgba(20,80,140,0.11)');
+  neb2.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = neb2; ctx.fillRect(0,0,W,H);
+
+  // 3. Stars
+  for (const s of stars) {
+    const twinkle = 0.75 + 0.25 * Math.sin(t * s.twinkleSpeed + s.twinklePhase);
+    ctx.beginPath();
+    ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200,220,255,${s.alpha * twinkle})`;
+    ctx.fill();
+    // drift
+    s.y += s.spd;
+    if (s.y > 1) { s.y = 0; s.x = Math.random(); }
+  }
+
+  // 4. Distant planet (top-right quadrant)
+  const px = W * 0.78, py = H * 0.18, pr = Math.min(W, H) * 0.09;
+  const planetGrad = ctx.createRadialGradient(px-pr*0.3, py-pr*0.3, 0, px, py, pr);
+  planetGrad.addColorStop(0,   '#b84a28');
+  planetGrad.addColorStop(0.6, '#7a2818');
+  planetGrad.addColorStop(1,   '#1a0806');
+  ctx.beginPath();
+  ctx.arc(px, py, pr, 0, Math.PI * 2);
+  ctx.fillStyle = planetGrad;
+  ctx.fill();
+  // atmosphere ring
+  ctx.beginPath();
+  ctx.arc(px, py, pr * 1.08, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(200,80,30,0.18)';
+  ctx.lineWidth = pr * 0.12;
+  ctx.stroke();
+
+  // 5. Central engine glow (the orange light source — position matches visor uniform)
+  const glowX = W * 0.5, glowY = H * 0.42;
+  const glowR = Math.min(W, H) * (0.18 + 0.04 * Math.sin(t * 2.3));
+  const engineGrad = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, glowR);
+  engineGrad.addColorStop(0,   `rgba(255,200,80,${0.88 * intensity})`);
+  engineGrad.addColorStop(0.22, `rgba(255,120,20,${0.70 * intensity})`);
+  engineGrad.addColorStop(0.55, `rgba(200,50,10,${0.35 * intensity})`);
+  engineGrad.addColorStop(1,   'rgba(0,0,0,0)');
+  ctx.fillStyle = engineGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // bright core
+  ctx.beginPath();
+  ctx.arc(glowX, glowY, Math.min(W,H)*0.03*(0.8+0.2*Math.sin(t*4.1)), 0, Math.PI*2);
+  const coreGrad = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, Math.min(W,H)*0.03);
+  coreGrad.addColorStop(0,   `rgba(255,255,180,${intensity})`);
+  coreGrad.addColorStop(1,   'rgba(255,140,20,0)');
+  ctx.fillStyle = coreGrad; ctx.fill();
+
+  // 6. Debris / floating particles
+  for (const d of debris) {
+    const dx = d.x * W, dy = d.y * H;
+    ctx.save();
+    ctx.translate(dx, dy);
+    ctx.rotate(d.angle);
+    ctx.fillStyle = `rgba(160,180,200,${d.alpha})`;
+    ctx.fillRect(-d.size*0.5, -d.size*0.5, d.size, d.size * 0.4);
+    ctx.restore();
+    d.x += d.vx; d.y += d.vy; d.angle += d.spin;
+    if (d.y > 1.05) { d.y = -0.05; d.x = Math.random(); }
+    if (d.x < -0.02 || d.x > 1.02) { d.x = Math.random(); }
+  }
+
+  // 7. Console/cockpit silhouette at bottom (instrument panel)
+  const panelY = H * 0.80;
+  const panel = ctx.createLinearGradient(0, panelY, 0, H);
+  panel.addColorStop(0, 'rgba(8,14,22,0.92)');
+  panel.addColorStop(1, '#050a10');
+  ctx.fillStyle = panel;
+  ctx.beginPath();
+  ctx.moveTo(0, H);
+  ctx.lineTo(0, panelY);
+  ctx.quadraticCurveTo(W*0.5, panelY - H*0.06, W, panelY);
+  ctx.lineTo(W, H);
+  ctx.closePath();
+  ctx.fill();
+
+  // instrument lights on panel
+  const lights = [
+    { x:0.24, col:'rgba(80,220,120,0.9)' },
+    { x:0.32, col:'rgba(80,180,255,0.9)' },
+    { x:0.40, col:`rgba(255,${120+80*Math.abs(Math.sin(t*3.5))},20,0.9)` },
+    { x:0.60, col:'rgba(80,220,120,0.9)' },
+    { x:0.68, col:'rgba(80,180,255,0.9)' },
+    { x:0.76, col:'rgba(80,220,120,0.9)' },
+  ];
+  for (const l of lights) {
+    const lx = W*l.x, ly = panelY + H*0.04;
+    ctx.beginPath();
+    ctx.arc(lx, ly, 4, 0, Math.PI*2);
+    ctx.fillStyle = l.col; ctx.fill();
+    ctx.beginPath();
+    ctx.arc(lx, ly, 10, 0, Math.PI*2);
+    ctx.fillStyle = l.col.replace('0.9)', '0.12)'); ctx.fill();
+  }
+
+  // 8. HUD — scan line corners + readouts
+  const hudCol = 'rgba(0,210,255,0.55)';
+  const lw = Math.min(W, H) * 0.03;
+
+  // corner brackets
+  const bx = W*0.06, by = H*0.06, bw = W*0.88, bh = H*0.72;
+  for (const [cx, cy, sx, sy] of [
+    [bx,      by,      1, 1],
+    [bx+bw,   by,     -1, 1],
+    [bx,      by+bh,   1,-1],
+    [bx+bw,   by+bh,  -1,-1],
+  ]) {
+    ctx.strokeStyle = hudCol; ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx + sx*lw, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy + sy*lw);
+    ctx.stroke();
+  }
+
+  // readout text
+  ctx.font = `${Math.round(Math.min(W,H)*0.014)}px 'IBM Plex Mono', monospace`;
+  ctx.fillStyle = 'rgba(0,200,255,0.65)';
+  HUD_LINES.forEach((ln, i) => {
+    ctx.fillText(`${ln.label}  ${ln.val}`, bx + 6, by + 14 + i * Math.min(W,H)*0.022);
+  });
+
+  // scan line
+  const scanY = H * 0.06 + (H * 0.72) * ((t * 0.18) % 1);
+  const scanGrad = ctx.createLinearGradient(0, scanY-4, 0, scanY+4);
+  scanGrad.addColorStop(0,   'rgba(0,210,255,0)');
+  scanGrad.addColorStop(0.5, 'rgba(0,210,255,0.12)');
+  scanGrad.addColorStop(1,   'rgba(0,210,255,0)');
+  ctx.fillStyle = scanGrad;
+  ctx.fillRect(bx, scanY - 4, bw, 8);
+}
+
+// ─── visor overlay ────────────────────────────────────────────────────────────
+const stage  = document.getElementById('stage');
+const visor  = new VisorEffect(stage, sceneEl);
+visor.setLightPos(0.5, 0.42).setLightIntensity(1.0).start();
+
+// ─── controls ─────────────────────────────────────────────────────────────────
+const slIntensity = document.getElementById('sl-intensity');
+const slLX        = document.getElementById('sl-lx');
+const slLY        = document.getElementById('sl-ly');
+
+slIntensity.addEventListener('input', () => visor.setLightIntensity(+slIntensity.value));
+slLX.addEventListener('input', () => visor.setLightPos(+slLX.value, +slLY.value));
+slLY.addEventListener('input', () => visor.setLightPos(+slLX.value, +slLY.value));
+
+// Pulse button: briefly spike the engine light
+document.getElementById('btn-pulse').addEventListener('click', () => {
+  let frame = 0;
+  const dur = 40;
+  const base = +slIntensity.value;
+  function pulse() {
+    frame++;
+    const p = frame / dur;
+    const env = p < 0.3
+      ? p / 0.3
+      : 1 - ((p - 0.3) / 0.7);
+    visor.setLightIntensity(base + env * 1.5);
+    if (frame < dur) requestAnimationFrame(pulse);
+    else visor.setLightIntensity(base);
+  }
+  requestAnimationFrame(pulse);
+});
+
+// ─── scene render loop ────────────────────────────────────────────────────────
+let tStart = null;
+function frame(now) {
+  if (!tStart) tStart = now;
+  const t = (now - tStart) * 0.001;
+  drawScene(t, +slIntensity.value);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
