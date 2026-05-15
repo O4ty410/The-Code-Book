@@ -4990,10 +4990,20 @@ function f2Ascend() {
 // ============================================
 let lastFloorIndex = 0;
 function renderFloor(fi, si) {
-  // Propagate floor colour so all CSS hover states can use var(--floor-color)
-  var mainCol = document.getElementById('main-col');
-  if (mainCol) mainCol.style.setProperty('--floor-color', FLOORS[fi] ? FLOORS[fi].color : '#c8a96e');
-
+  var floor = FLOORS[fi];
+  var color = floor ? (floor.color || '#c8a96e') : '#c8a96e';
+  var r = parseInt(color.slice(1,3),16), g = parseInt(color.slice(3,5),16), b = parseInt(color.slice(5,7),16);
+  var glow   = 'rgba('+r+','+g+','+b+',0.10)';
+  var border = 'rgba('+r+','+g+','+b+',0.22)';
+  var subtle = 'rgba('+r+','+g+','+b+',0.05)';
+  ['main-col','main-content'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.setProperty('--floor-color',        color);
+    el.style.setProperty('--floor-hero-glow',    glow);
+    el.style.setProperty('--floor-hero-border',  border);
+    el.style.setProperty('--floor-hero-subtle',  subtle);
+  });
   loadSection(fi, si);
 }
 function renderFloorWithElevator(fi, si) {
