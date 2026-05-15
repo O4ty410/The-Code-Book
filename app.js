@@ -3582,7 +3582,7 @@ function renderNav() {
   const nav = document.getElementById('floor-nav');
   if (!nav) return;
   nav.innerHTML = FLOORS.map(function(f, fi) {
-    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isUnlocked = true; // all floors unlocked
     var isGuestLocked = false;
     var isActive = fi === state.currentFloor - 1;
     var isComplete = isFloorComplete(fi);
@@ -3649,16 +3649,6 @@ function showSageFloorIntro(fi) {
 }
 
 function goToFloor(fi) {
-  var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
-  if (!isUnlocked) {
-    // Find which sections are still incomplete on the previous floor
-    var prevFloorObj = FLOORS[fi - 1];
-    var incomplete = prevFloorObj.sections.filter(function(s) { return !state.completed[s.id]; });
-    var names = incomplete.slice(0, 2).map(function(s) { return '\u201c' + s.title + '\u201d'; }).join(', ');
-    var extra = incomplete.length > 2 ? ' and ' + (incomplete.length - 2) + ' more' : '';
-    sageMessage('Floor ' + (fi + 1) + ' is locked. Complete Floor ' + fi + ' first \u2014 still needed: ' + names + extra + '.', 'warn');
-    return;
-  }
   stopNarration();
 
   // Capture prevFloor BEFORE mutating state so direction is calculated correctly
@@ -4216,7 +4206,7 @@ function renderVisualBuilding() {
   }
   for (var i = FLOORS.length - 1; i >= 0; i--) {
     var color = FLOOR_COLORS[i] || '#c8a96e';
-    var isUnlocked = i === 0 || isFloorComplete(i - 1);
+    var isUnlocked = true; // all floors unlocked
     var isActive = (state.currentFloor - 1) === i;
     var isComplete = isFloorComplete(i);
     var div = document.createElement('div');
@@ -4509,7 +4499,7 @@ function renderLearnHub() {
   var doneSecs = Object.keys(state.completed).filter(function(k) { return sectionIds.has(k) && state.completed[k]; }).length;
   var pct = totalSecs > 0 ? Math.round((doneSecs / totalSecs) * 100) : 0;
   var floorsComplete = FLOORS.filter(function(f, fi) { return isFloorComplete(fi); }).length;
-  var floorsUnlocked = FLOORS.filter(function(f, fi) { return fi === 0 || isFloorComplete(fi - 1); }).length;
+  var floorsUnlocked = FLOORS.length; // all floors unlocked
   var currentFloorIdx = state.currentFloor - 1;
 
   var floorIcons = ['&#129504;', '&#127760;', '&#9889;', '&#128161;', '&#128295;', '&#128640;', '&#127942;'];
@@ -4526,7 +4516,7 @@ function renderLearnHub() {
     var color    = f.color || '#c8a96e';
     var glow     = hexGlow(color);
     var done     = isFloorComplete(fi);
-    var unlocked = fi === 0 || isFloorComplete(fi - 1);
+    var unlocked = true; // all floors unlocked
     var isActive = !done && fi === currentFloorIdx;
 
     var floorDone  = f.sections.filter(function(s) { return state.completed[s.id]; }).length;
@@ -5095,7 +5085,7 @@ function renderBuildingMap() {
   var FLOOR_COLORS_BM = ['--floor1', '--floor2', '--floor3', '--floor4', '--floor5', '--floor6', '--floor7'];
   map.innerHTML = FLOORS.slice().reverse().map(function(f, ri) {
     var fi = FLOORS.length - 1 - ri;
-    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isUnlocked = true; // all floors unlocked
     var isActive = fi === state.currentFloor - 1;
     var isComplete = isFloorComplete(fi);
     var color = 'var(' + (FLOOR_COLORS_BM[fi] || '--floor1') + ')';
@@ -5372,7 +5362,7 @@ function renderMapPanel() {
     var floorDone = floor.sections.filter(function(s) { return state.completed[s.id]; }).length;
     var floorTotal = floor.sections.length;
     var floorPct = Math.round((floorDone / floorTotal) * 100);
-    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isUnlocked = true; // all floors unlocked
     var isActive = (fi + 1) === state.currentFloor;
     var isComplete = isFloorComplete(fi);
 
@@ -5530,7 +5520,7 @@ function renderBuildPanel() {
     '<div class="build-grid">';
 
   projects.forEach(function(p) {
-    var unlocked = isFloorComplete(p.floor - 1) || p.floor === 1;
+    var unlocked = true; // all floors unlocked
     var done = state.completed['build-' + p.floor];
     var stepsHtml = '';
     if (unlocked && p.steps) {
@@ -6053,7 +6043,7 @@ function renderProfilePanel() {
     var done = f.sections.filter(function(s){ return state.completed[s.id]; }).length;
     var total = f.sections.length;
     var pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isUnlocked = true; // all floors unlocked
     var color = f.color || '#c8a96e';
     var status = isFloorComplete(fi) ? 'Complete' : (done > 0 ? 'In Progress' : (isUnlocked ? 'Not Started' : 'Locked'));
     return '<div class="prof-floor-row">' +
