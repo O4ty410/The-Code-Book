@@ -4431,14 +4431,43 @@ function timeAgo(ts) {
 }
 
 // \u2500\u2500 FLOOR 1 LAYOUT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+var FC_FLOOR_TOPICS = [
+  ['How the Internet Actually Works', 'How a Computer Reads Instructions', 'The Logic Behind All Code', 'Your First Look at Real Code', 'Floor 1 Check — Explain It Back'],
+  ['What HTML Is', 'What CSS Is', 'How a Browser Renders Code', 'Building Your First Page', 'Styling Basics', 'The Box Model', 'Flexbox Layout', 'Building a Real Component', 'Profile Page Project', 'Solo Project — No Template'],
+  ['What JavaScript Does', 'Variables and Data Types', 'Logic and Conditions', 'Functions', 'Loops', 'Arrays and Objects', 'DOM Manipulation', 'Events', 'Error Handling and Debugging', 'Guided To-Do List Project', 'Solo Interactive Project', 'Floor Check'],
+  ['How Developers Think', 'Reading Documentation', 'What APIs Are', 'Fetch and Async/Await', 'Local Storage', 'Error Handling at Scale', 'Git and Version Control', 'Debugging Like a Developer', 'Weather App with Real API', 'Quiz App with Score Tracking', 'Solo Project — No Brief', 'Code Review of Own Work'],
+  ['What Full Stack Means', 'How Servers Work', 'Databases', 'Authentication', 'Node and Express', 'Connecting to a Database', 'Building a REST API', 'Environment Variables and Security', 'Deployment', 'Connecting Frontend to Backend', 'Guided Full Stack Notes App', 'Adding Authentication', 'Deploying It Live', 'Solo Full Stack Project'],
+  ['The Fork in the Road', 'Frontend Engineering', 'Backend Engineering', 'Full Stack vs Specialised', 'Mobile Development', 'DevOps and Cloud Infrastructure', 'Data Engineering', 'AI and ML Engineering', 'Security Engineering', 'Building a Portfolio That Works', 'Technical Interview Preparation', 'Open Source Contribution', 'Building in Public', 'Choosing Your First Role'],
+  ['Your First Week', 'Reading a Large Codebase', 'Code Reviews', 'Technical Debt and Refactoring', 'System Design', 'Engineering in Teams', 'Production and On-Call', 'The Career Ladder', 'Engineering Leadership', 'The Long Game']
+];
+
+var FC_FLOOR_ICONS = ['🧠', '🌐', '⚡', '💡', '🔧', '🚀', '🏆'];
+
 function toggleFloorInfo(fi) {
-  var panel = document.getElementById('fc-info-' + fi);
-  if (!panel) return;
-  // Close any other open panels first
-  document.querySelectorAll('.fc-info-panel.fc-info-open').forEach(function(p) {
-    if (p.id !== 'fc-info-' + fi) p.classList.remove('fc-info-open');
-  });
-  panel.classList.toggle('fc-info-open');
+  var overlay = document.getElementById('fc-modal-overlay');
+  if (!overlay) return;
+  var floor = FLOORS[fi];
+  if (!floor) return;
+  var color = floor.color || '#c8a96e';
+  var r = parseInt(color.slice(1,3),16), g = parseInt(color.slice(3,5),16), b = parseInt(color.slice(5,7),16);
+  var glow = 'rgba('+r+','+g+','+b+',0.35)';
+  var modal = document.getElementById('fc-modal');
+  modal.style.setProperty('--fc-modal-color', color);
+  modal.style.setProperty('--fc-modal-glow', glow);
+  document.getElementById('fc-modal-badge').textContent = 'FLOOR ' + (fi + 1);
+  document.getElementById('fc-modal-badge').style.color = color;
+  document.getElementById('fc-modal-icon').textContent = FC_FLOOR_ICONS[fi] || '📚';
+  document.getElementById('fc-modal-title').textContent = floor.title;
+  var topics = FC_FLOOR_TOPICS[fi] || [];
+  document.getElementById('fc-modal-list').innerHTML = topics.map(function(t) { return '<li>' + t + '</li>'; }).join('');
+  overlay.classList.remove('fc-modal-hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFloorModal() {
+  var overlay = document.getElementById('fc-modal-overlay');
+  if (overlay) overlay.classList.add('fc-modal-hidden');
+  document.body.style.overflow = '';
 }
 
 function renderLearnHub() {
@@ -4458,15 +4487,6 @@ function renderLearnHub() {
 
   var floorIcons = ['&#129504;', '&#127760;', '&#9889;', '&#128161;', '&#128295;', '&#128640;', '&#127942;'];
 
-  var floorTopics = [
-    ['How the Internet Actually Works', 'How a Computer Reads Instructions', 'The Logic Behind All Code', 'Your First Look at Real Code', 'Floor 1 Check &mdash; Explain It Back'],
-    ['What HTML Is', 'What CSS Is', 'How a Browser Renders Code', 'Building Your First Page', 'Styling Basics', 'The Box Model', 'Flexbox Layout', 'Building a Real Component', 'Profile Page Project', 'Solo Project &mdash; No Template'],
-    ['What JavaScript Does', 'Variables and Data Types', 'Logic and Conditions', 'Functions', 'Loops', 'Arrays and Objects', 'DOM Manipulation', 'Events', 'Error Handling and Debugging', 'Guided To-Do List Project', 'Solo Interactive Project', 'Floor Check'],
-    ['How Developers Think', 'Reading Documentation', 'What APIs Are', 'Fetch and Async/Await', 'Local Storage', 'Error Handling at Scale', 'Git and Version Control', 'Debugging Like a Developer', 'Weather App with Real API', 'Quiz App with Score Tracking', 'Solo Project &mdash; No Brief', 'Code Review of Own Work'],
-    ['What Full Stack Means', 'How Servers Work', 'Databases', 'Authentication', 'Node and Express', 'Connecting to a Database', 'Building a REST API', 'Environment Variables and Security', 'Deployment', 'Connecting Frontend to Backend', 'Guided Full Stack Notes App', 'Adding Authentication', 'Deploying It Live', 'Solo Full Stack Project'],
-    ['The Fork in the Road', 'Frontend Engineering', 'Backend Engineering', 'Full Stack vs Specialised', 'Mobile Development', 'DevOps and Cloud Infrastructure', 'Data Engineering', 'AI and ML Engineering', 'Security Engineering', 'Building a Portfolio That Works', 'Technical Interview Preparation', 'Open Source Contribution', 'Building in Public', 'Choosing Your First Role'],
-    ['Your First Week', 'Reading a Large Codebase', 'Code Reviews', 'Technical Debt and Refactoring', 'System Design', 'Engineering in Teams', 'Production and On-Call', 'The Career Ladder', 'Engineering Leadership', 'The Long Game']
-  ];
 
   function hexGlow(hex) {
     var r = parseInt(hex.slice(1,3), 16);
@@ -4500,8 +4520,6 @@ function renderLearnHub() {
       (!unlocked ? ' fc-card-locked' : '') +
       (isActive  ? ' fc-card-active' : '');
     var clickAttr  = unlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
-    var topics     = floorTopics[fi] || [];
-    var topicsHtml = topics.map(function(t) { return '<li>' + t + '</li>'; }).join('');
     var icon       = floorIcons[fi] || '&#127760;';
     var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
@@ -4513,10 +4531,6 @@ function renderLearnHub() {
       '<div class="fc-title">' + f.title + '</div>' +
       '<div class="fc-sec-count">' + floorDone + '/' + floorTotal + ' sections</div>' +
       '<span class="' + statusClass + '">' + statusText + '</span>' +
-      '<div class="fc-info-panel" id="fc-info-' + fi + '">' +
-        '<div class="fc-info-title">What\'s covered</div>' +
-        '<ul class="fc-info-list">' + topicsHtml + '</ul>' +
-      '</div>' +
     '</div>';
   }).join('');
 
@@ -4539,6 +4553,16 @@ function renderLearnHub() {
       '<div class="fc-stat"><div class="fc-stat-val">' + floorsComplete + '</div><div class="fc-stat-label">Floors Complete</div></div>' +
     '</div>' +
     '<div class="fc-row">' + cardsHtml + '</div>' +
+  '</div>' +
+  '<div class="fc-modal-overlay fc-modal-hidden" id="fc-modal-overlay" onclick="closeFloorModal()">' +
+    '<div class="fc-modal" id="fc-modal" onclick="event.stopPropagation()">' +
+      '<button class="fc-modal-close" onclick="closeFloorModal()">&#x2715;</button>' +
+      '<div class="fc-modal-badge" id="fc-modal-badge"></div>' +
+      '<div class="fc-modal-icon" id="fc-modal-icon"></div>' +
+      '<div class="fc-modal-title" id="fc-modal-title"></div>' +
+      '<div class="fc-modal-sub">What\'s covered in this floor</div>' +
+      '<ul class="fc-modal-list" id="fc-modal-list"></ul>' +
+    '</div>' +
   '</div>';
 
   var mc = document.getElementById('main-content');
