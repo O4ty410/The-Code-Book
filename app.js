@@ -4994,21 +4994,6 @@ function renderFloor(fi, si) {
   var mainCol = document.getElementById('main-col');
   if (mainCol) mainCol.style.setProperty('--floor-color', FLOORS[fi] ? FLOORS[fi].color : '#c8a96e');
 
-  if (fi === 0) {
-    // Hide old right sidebar \u2014 Floor 1 has its own built-in sidebar
-    var rs = document.getElementById('right-sidebar');
-    if (rs) rs.style.display = 'none';
-    // Remove right sidebar column from grid
-    var grid = document.querySelector('.app-grid');
-    if (grid) grid.style.gridTemplateColumns = '1fr';
-    renderFloor1(si);
-    return;
-  }
-  // Restore right sidebar for other floors
-  var rs = document.getElementById('right-sidebar');
-  if (rs) rs.style.display = '';
-  var grid = document.querySelector('.app-grid');
-  if (grid) grid.style.gridTemplateColumns = '';
   loadSection(fi, si);
 }
 function renderFloorWithElevator(fi, si) {
