@@ -169,88 +169,177 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
   const bob   = Math.sin(t * 0.8) * 2.5;
   const baseY = groundY + bob;
 
-  // exhaust flame
-  const nominalBase = powered ? 75 : 55;
-  const nominalVar  = powered ? 18 : 12;
-  // ignitionLevel: 0 = tiny pre-ignition, 1 = full power
-  const flameBase = nominalBase * (0.25 + 0.75 * ignitionLevel);
-  const flameH    = flameBase + Math.sin(t * 8) * nominalVar * ignitionLevel;
-  const flameAlpha = 0.30 + 0.65 * ignitionLevel;
-  const flame  = ctx.createRadialGradient(cx, baseY + 10, 2, cx, baseY + 20, Math.max(1, flameH));
-  flame.addColorStop(0,   `rgba(255, 240, 180, ${flameAlpha})`);
-  flame.addColorStop(0.35,`rgba(255, 140,  40, ${flameAlpha * 0.73})`);
-  flame.addColorStop(0.7, `rgba(180,  60, 200, ${flameAlpha * 0.42})`);
-  flame.addColorStop(1,   'rgba(100,  20, 160, 0.00)');
-  ctx.fillStyle = flame;
-  ctx.beginPath();
-  ctx.ellipse(cx, baseY + 35, Math.max(1, 16 * ignitionLevel), Math.max(1, flameH), 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // body
   const bodyW = 52;
   const bodyH = 160;
-  const bodyGrad = ctx.createLinearGradient(cx - bodyW / 2, 0, cx + bodyW / 2, 0);
-  bodyGrad.addColorStop(0,   'rgba(30,  60, 110, 0.95)');
-  bodyGrad.addColorStop(0.4, 'rgba(80, 140, 220, 0.90)');
-  bodyGrad.addColorStop(0.7, 'rgba(60, 110, 180, 0.90)');
-  bodyGrad.addColorStop(1,   'rgba(20,  40,  80, 0.95)');
-  ctx.fillStyle = bodyGrad;
-  roundRect(ctx, cx - bodyW / 2, baseY - bodyH, bodyW, bodyH, 8);
+
+  // ── exhaust flame ────────────────────────────────────────────────────────
+  const nominalBase = powered ? 80 : 58;
+  const nominalVar  = powered ? 20 : 13;
+  const flameBase   = nominalBase * (0.25 + 0.75 * ignitionLevel);
+  const flameH      = flameBase + Math.sin(t * 9) * nominalVar * ignitionLevel;
+  const flameAlpha  = 0.35 + 0.60 * ignitionLevel;
+
+  // inner hot core
+  const flameCoreG = ctx.createRadialGradient(cx, baseY + 6, 1, cx, baseY + 8, Math.max(1, flameH * 0.5));
+  flameCoreG.addColorStop(0,   `rgba(255, 255, 220, ${flameAlpha})`);
+  flameCoreG.addColorStop(0.4, `rgba(255, 200,  80, ${flameAlpha * 0.80})`);
+  flameCoreG.addColorStop(1,   `rgba(255, 120,  20, 0.00)`);
+  ctx.fillStyle = flameCoreG;
+  ctx.beginPath();
+  ctx.ellipse(cx, baseY + 18, Math.max(1, 8 * ignitionLevel), Math.max(1, flameH * 0.55), 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // nose cone
-  ctx.fillStyle = 'rgba(100, 170, 255, 0.85)';
+  // outer flame bloom
+  const flameG = ctx.createRadialGradient(cx, baseY + 12, 2, cx, baseY + 22, Math.max(1, flameH));
+  flameG.addColorStop(0,   `rgba(255, 160,  40, ${flameAlpha * 0.70})`);
+  flameG.addColorStop(0.5, `rgba(200,  80,  10, ${flameAlpha * 0.45})`);
+  flameG.addColorStop(0.8, `rgba(160,  40, 180, ${flameAlpha * 0.22})`);
+  flameG.addColorStop(1,   'rgba(80,  10, 120, 0.00)');
+  ctx.fillStyle = flameG;
   ctx.beginPath();
-  ctx.moveTo(cx - bodyW / 2, baseY - bodyH);
-  ctx.lineTo(cx + bodyW / 2, baseY - bodyH);
-  ctx.lineTo(cx, baseY - bodyH - 70);
+  ctx.ellipse(cx, baseY + 32, Math.max(1, 18 * ignitionLevel), Math.max(1, flameH), 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── engine bell ──────────────────────────────────────────────────────────
+  ctx.fillStyle = '#4a4a52';
+  ctx.beginPath();
+  ctx.moveTo(cx - 14, baseY);
+  ctx.lineTo(cx + 14, baseY);
+  ctx.lineTo(cx + 18, baseY + 14);
+  ctx.lineTo(cx - 18, baseY + 14);
   ctx.closePath();
   ctx.fill();
-
-  // highlight stripe
-  ctx.strokeStyle = 'rgba(160, 220, 255, 0.55)';
-  ctx.lineWidth   = 2;
+  // bell rim highlight
+  ctx.strokeStyle = 'rgba(180,180,200,0.60)';
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(cx + 6, baseY - bodyH + 12);
-  ctx.lineTo(cx + 6, baseY - 18);
+  ctx.moveTo(cx - 18, baseY + 14);
+  ctx.lineTo(cx + 18, baseY + 14);
   ctx.stroke();
 
-  // fins
-  [[cx - bodyW / 2 - 22, -1], [cx + bodyW / 2 + 22, 1]].forEach(([fx, dir]) => {
-    ctx.fillStyle = 'rgba(50, 100, 190, 0.80)';
+  // ── fins ─────────────────────────────────────────────────────────────────
+  [[-1, cx - bodyW / 2], [1, cx + bodyW / 2]].forEach(([dir, fx]) => {
+    // main fin shape
+    const finGrad = ctx.createLinearGradient(fx, baseY - 50, fx - dir * 32, baseY);
+    finGrad.addColorStop(0, 'rgba(200, 210, 230, 0.88)');
+    finGrad.addColorStop(1, 'rgba(140, 150, 170, 0.72)');
+    ctx.fillStyle = finGrad;
     ctx.beginPath();
-    ctx.moveTo(cx + dir * (bodyW / 2), baseY - 40);
-    ctx.lineTo(fx, baseY + 10);
-    ctx.lineTo(cx + dir * (bodyW / 2), baseY);
+    ctx.moveTo(fx, baseY - 48);
+    ctx.lineTo(fx - dir * 30, baseY + 12);
+    ctx.lineTo(fx - dir * 8,  baseY + 12);
+    ctx.lineTo(fx,             baseY - 30);
+    ctx.closePath();
+    ctx.fill();
+    // red accent stripe on fin
+    ctx.fillStyle = 'rgba(210, 45, 35, 0.72)';
+    ctx.beginPath();
+    ctx.moveTo(fx,           baseY - 30);
+    ctx.lineTo(fx - dir * 8, baseY + 12);
+    ctx.lineTo(fx - dir * 14, baseY + 12);
+    ctx.lineTo(fx,            baseY - 22);
     ctx.closePath();
     ctx.fill();
   });
 
-  // porthole
-  ctx.beginPath();
-  ctx.arc(cx, baseY - bodyH + 55, 11, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(10, 200, 255, 0.30)';
+  // ── main body ────────────────────────────────────────────────────────────
+  const bodyGrad = ctx.createLinearGradient(cx - bodyW / 2, 0, cx + bodyW / 2, 0);
+  bodyGrad.addColorStop(0,    'rgba(168, 172, 185, 0.95)');
+  bodyGrad.addColorStop(0.18, 'rgba(230, 235, 245, 0.97)');
+  bodyGrad.addColorStop(0.50, 'rgba(245, 248, 255, 0.98)');
+  bodyGrad.addColorStop(0.78, 'rgba(210, 215, 228, 0.96)');
+  bodyGrad.addColorStop(1,    'rgba(140, 145, 160, 0.94)');
+  ctx.fillStyle = bodyGrad;
+  roundRect(ctx, cx - bodyW / 2, baseY - bodyH, bodyW, bodyH, 8);
   ctx.fill();
-  ctx.strokeStyle = 'rgba(80, 200, 255, 0.80)';
-  ctx.lineWidth = 2;
+
+  // body shadow/depth line on left edge
+  ctx.strokeStyle = 'rgba(90, 95, 110, 0.50)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx - bodyW / 2 + 4, baseY - bodyH + 10);
+  ctx.lineTo(cx - bodyW / 2 + 4, baseY - 10);
   ctx.stroke();
 
-  // glow around rocket — intensified when powered
+  // ── red accent bands ─────────────────────────────────────────────────────
+  // top accent band (below nose transition)
+  ctx.fillStyle = 'rgba(210, 38, 28, 0.88)';
+  ctx.fillRect(cx - bodyW / 2, baseY - bodyH + 2, bodyW, 14);
+  // second red band mid-body
+  ctx.fillStyle = 'rgba(210, 38, 28, 0.78)';
+  ctx.fillRect(cx - bodyW / 2, baseY - 80, bodyW, 10);
+  // thin accent stripe lower
+  ctx.fillStyle = 'rgba(190, 30, 22, 0.60)';
+  ctx.fillRect(cx - bodyW / 2, baseY - 44, bodyW, 5);
+
+  // ── "TCB" lettering on body ───────────────────────────────────────────────
+  ctx.save();
+  ctx.fillStyle = 'rgba(40, 40, 55, 0.70)';
+  ctx.font = 'bold 9px Courier New, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('TCB-1', cx, baseY - 95);
+  ctx.restore();
+
+  // ── nose cone ─────────────────────────────────────────────────────────────
+  // silver/white cone
+  const noseGrad = ctx.createLinearGradient(cx - bodyW / 2, baseY - bodyH, cx + bodyW / 2, baseY - bodyH);
+  noseGrad.addColorStop(0,    'rgba(150, 155, 170, 0.92)');
+  noseGrad.addColorStop(0.30, 'rgba(220, 228, 240, 0.95)');
+  noseGrad.addColorStop(0.55, 'rgba(240, 245, 255, 0.97)');
+  noseGrad.addColorStop(0.80, 'rgba(200, 205, 220, 0.93)');
+  noseGrad.addColorStop(1,    'rgba(130, 135, 150, 0.90)');
+  ctx.fillStyle = noseGrad;
+  ctx.beginPath();
+  ctx.moveTo(cx - bodyW / 2, baseY - bodyH);
+  ctx.lineTo(cx + bodyW / 2, baseY - bodyH);
+  ctx.quadraticCurveTo(cx + bodyW / 2 - 4, baseY - bodyH - 40, cx, baseY - bodyH - 72);
+  ctx.quadraticCurveTo(cx - bodyW / 2 + 4, baseY - bodyH - 40, cx - bodyW / 2, baseY - bodyH);
+  ctx.fill();
+
+  // nose highlight
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx + 8, baseY - bodyH - 2);
+  ctx.quadraticCurveTo(cx + 10, baseY - bodyH - 30, cx + 3, baseY - bodyH - 62);
+  ctx.stroke();
+
+  // ── porthole ──────────────────────────────────────────────────────────────
+  const portholeY = baseY - bodyH + 48;
+  // frame ring
+  ctx.beginPath();
+  ctx.arc(cx, portholeY, 13, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(80, 85, 100, 0.90)';
+  ctx.fill();
+  // glass
+  ctx.beginPath();
+  ctx.arc(cx, portholeY, 10, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(40, 180, 255, 0.28)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(100, 210, 255, 0.75)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  // glass reflection
+  ctx.beginPath();
+  ctx.arc(cx - 3, portholeY - 3, 3.5, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.30)';
+  ctx.fill();
+
+  // ── glow ─────────────────────────────────────────────────────────────────
   const glowR     = powered ? 180 : 120;
-  const glowAlpha = powered ? 0.16 : 0.08;
+  const glowAlpha = powered ? 0.14 : 0.06;
   const glow = ctx.createRadialGradient(cx, baseY - bodyH / 2, 10, cx, baseY - bodyH / 2, glowR);
-  glow.addColorStop(0, `rgba(50, 130, 255, ${glowAlpha})`);
-  glow.addColorStop(1, 'rgba(50, 130, 255, 0.00)');
+  glow.addColorStop(0, `rgba(200, 220, 255, ${glowAlpha})`);
+  glow.addColorStop(1, 'rgba(200, 220, 255, 0.00)');
   ctx.fillStyle = glow;
   ctx.beginPath();
   ctx.ellipse(cx, baseY - bodyH / 2, glowR, glowR * 1.5, 0, 0, Math.PI * 2);
   ctx.fill();
 
   if (powered) {
-    // outer power corona
     const corona = ctx.createRadialGradient(cx, baseY - bodyH / 2, glowR * 0.5, cx, baseY - bodyH / 2, glowR * 2.2);
-    corona.addColorStop(0, 'rgba(80, 200, 255, 0.06)');
-    corona.addColorStop(1, 'rgba(80, 200, 255, 0.00)');
+    corona.addColorStop(0, 'rgba(255, 160, 60, 0.08)');
+    corona.addColorStop(1, 'rgba(255, 160, 60, 0.00)');
     ctx.fillStyle = corona;
     ctx.beginPath();
     ctx.ellipse(cx, baseY - bodyH / 2, glowR * 2.2, glowR * 3, 0, 0, Math.PI * 2);
