@@ -203,373 +203,1609 @@ const FLOORS = [
   {
     id: 2,
     title: "Seeing It Come Alive",
-    subtitle: "HTML & CSS \u2014 the visual layer",
+    subtitle: "HTML, CSS and the browser",
     color: "#7eb8c8",
-    duration: "6-8 weeks",
+    duration: "3-4 weeks",
     sessions: "5 per week",
     length: "45-60 min",
-    tag: "Floor 02 \u2014 Visual Building",
+    tag: "Floor 02 \u2014 Structure",
     sections: [
       {
         id: "2-1",
-        title: "System Online \u2014 Boot Sequence",
-        body: `The system has detected an error. Your job is to fix it.\n\nBelow is a live console. A variable has been declared but not assigned. Assign the correct value to bring Floor 2 online.`,
-        interactive: 'f2-variable',
-        hint: `Variables hold values. We are on Floor 2. The value must be exactly 2 \u2014 an integer, not text.`,
-        checklist: ["I understand what a variable is", "I assigned the correct value", "The system came online"]
+        title: "What HTML Is",
+        body: `HTML is not a programming language. It has no logic, no conditions, no loops. What it has is something more fundamental: a way to describe what content <strong>is</strong>.\n\nHTML stands for HyperText Markup Language. The "markup" part is the key idea. You take a piece of content \u2014 a heading, a paragraph, an image, a button \u2014 and you wrap it in a tag that labels it. <code>&lt;h1&gt;My Title&lt;/h1&gt;</code> doesn't tell the browser to make text big and bold. It tells the browser: this is a level-one heading. The browser then applies its own default styling to that heading. CSS is what overrides those defaults.\n\nThis distinction matters. When YouTube marks up a video title with <code>&lt;h1&gt;</code>, when GitHub wraps a code block in <code>&lt;pre&gt;&lt;code&gt;</code>, when Twitter marks each post with <code>&lt;article&gt;</code> \u2014 they're not making visual decisions. They're declaring meaning. Search engines, screen readers, and other tools all use that meaning.\n\nThe tags you'll use most: <strong>h1 through h6</strong> for headings (h1 is the most important, h6 the least), <strong>p</strong> for paragraphs, <strong>a</strong> for links, <strong>img</strong> for images, <strong>ul</strong> and <strong>li</strong> for unordered lists, <strong>div</strong> for grouping content without semantic meaning, <strong>button</strong> for clickable controls, and <strong>input</strong> for form fields.\n\nBeyond those basics, HTML has semantic elements: <strong>header</strong>, <strong>main</strong>, <strong>nav</strong>, <strong>footer</strong>, <strong>section</strong>, <strong>article</strong>. These are divs with meaning attached. Use them where they fit the content. A screen reader navigating your page will thank you. So will your future self six months later trying to read your own code.`,
+        callout: {
+          type: "default",
+          label: "The Key Distinction",
+          text: "HTML describes what content is, not how it looks. A heading tag doesn't mean 'make this big' \u2014 it means 'this is a heading.' Appearance is entirely CSS's job. Keeping these responsibilities separate is one of the most important ideas in web development."
+        },
+        callout2: {
+          type: "focus",
+          label: "Why Semantic HTML Matters",
+          text: "When you use the right element for the right content \u2014 nav for navigation, article for articles, button for buttons \u2014 you're building something that works for everyone: search engines rank it better, screen readers navigate it correctly, and your code communicates its intent to every developer who reads it."
+        },
+        hint: `HTML is about labelling, not styling. The easiest way to internalise this: open any major website, right-click the page, click "View Page Source." Scan for tags. You'll see h1, p, nav, div, a, img \u2014 the same handful of elements used thousands of times.\n\n<strong>Try this:</strong> Before writing any HTML, write out what your page contains in plain English. "A heading. A paragraph. A list of three items. A button." Then translate each thing into the correct tag. Structure first, appearance never \u2014 that's CSS's job.\n\n<strong>Still fuzzy on semantic elements?</strong> Think of them as named boxes. A <code>&lt;div&gt;</code> is a box with no label. A <code>&lt;nav&gt;</code> is a box with a sign that says "navigation lives here." Both behave the same visually \u2014 the label is for humans and machines, not the browser's renderer.`,
+        quiz: {
+          question: "A developer uses a <div> for their site's main navigation instead of a <nav> element. The page looks identical either way. Why does the choice still matter?",
+          options: ["It doesn't \u2014 if the page looks the same, the HTML makes no difference", "Screen readers and search engines use element semantics to understand page structure, so the wrong tag reduces accessibility and SEO", "Browsers render <div> faster than <nav>, so <div> is technically the better choice", "The <nav> element requires CSS to function, while <div> works without any styles"],
+          correct: 1,
+          feedback: "Appearance is only one output of HTML. Screen readers use element type to help users navigate \u2014 a blind user can jump directly to the <nav> element to find links. Search engines use semantic tags to understand page structure and weight content accordingly. The <div> and <nav> look identical on screen, but one communicates meaning and one doesn't."
+        },
+        checklist: ["I understand that HTML describes content structure, not visual appearance", "I can name the core tags and what each one represents", "I understand the difference between semantic elements (nav, header, main) and generic containers (div)", "I could look at a webpage and describe its HTML structure before seeing the source", "I know that the same page can look completely different with different CSS applied to identical HTML"]
       },
       {
         id: "2-2",
-        title: "HTML \u2014 The Skeleton",
-        body: `Every webpage you have ever visited is built with HTML at its core. HTML gives a page its <strong>structure</strong> \u2014 it defines what each piece of content <em>is</em>, not how it looks.\n\nEvery HTML element follows the same pattern:\n\n<strong>Opening tag \u2192 Content \u2192 Closing tag</strong>\n\nSo <code>&lt;h1&gt;Hello&lt;/h1&gt;</code> means: this is a heading, the content is Hello, the heading is now closed. That pattern applies to every element without exception.\n\nThe elements you will use most:\n\n<strong>&lt;h1&gt; to &lt;h6&gt;</strong> \u2014 Six heading levels. h1 is the main title.\n<strong>&lt;p&gt;</strong> \u2014 A paragraph of text.\n<strong>&lt;a href="..."&gt;</strong> \u2014 A link. href is the URL it goes to.\n<strong>&lt;ul&gt; and &lt;li&gt;</strong> \u2014 An unordered list and its items.\n<strong>&lt;div&gt;</strong> \u2014 A container with no visual style of its own \u2014 used for grouping and layout.\n<strong>&lt;button&gt;</strong> \u2014 A clickable button.\n<strong>&lt;input&gt;</strong> \u2014 A text field or form control.\n<strong>&lt;img src="..."&gt;</strong> \u2014 An image. Self-closing \u2014 no closing tag needed.\n\nHTML is intentionally forgiving \u2014 browsers try to render even broken markup. But writing it correctly matters when CSS and JavaScript are added later.`,
+        title: "What CSS Is",
+        body: `CSS stands for Cascading Style Sheets. Every visual decision on every website you've ever used \u2014 every colour, every font, every spacing choice, every hover effect \u2014 is a CSS rule.\n\nThe syntax is consistent and readable once you see the pattern. You write a <strong>selector</strong> (what to target), then inside curly braces you write <strong>property: value</strong> pairs. <code>h1 { color: #1a1a1a; font-size: 32px; }</code> targets every h1 element on the page and sets two properties. That's the entire pattern.\n\nTargeting works three ways. A <strong>tag selector</strong> like <code>p { }</code> targets every paragraph. A <strong>class selector</strong> like <code>.card { }</code> targets every element with class="card" \u2014 a class can be reused across many elements. An <strong>ID selector</strong> like <code>#header { }</code> targets the single element with id="header" \u2014 IDs are unique per page. Classes are what you'll use most.\n\nThe "Cascading" in CSS is the important part that trips up beginners. When two rules target the same element, the more specific one wins. An ID selector beats a class selector. A class beats a tag name. If specificity is equal, the rule that appears last in the file wins. This hierarchy is called the <strong>cascade</strong>.\n\nSpotify's entire dark theme \u2014 the black backgrounds, the white text, the green accents \u2014 is CSS <code>background-color</code> and <code>color</code> properties applied systematically. Nothing magic. Just properties on elements.\n\nCSS can live in three places: as an inline <code>style</code> attribute on an element (avoid this except for quick tests), inside a <code>&lt;style&gt;</code> tag in the HTML head, or in a completely separate <code>.css</code> file linked with <code>&lt;link&gt;</code>. External files are the professional standard \u2014 they keep style separate from structure and let one stylesheet control an entire site.`,
         callout: {
           type: "default",
-          label: "The Pattern Never Changes",
-          text: "Opening tag, content, closing tag. That is the whole language. Knowing which elements exist and what attributes they accept comes from using them, not memorising them."
+          label: "Specificity in One Sentence",
+          text: "When two CSS rules conflict, the browser applies the more specific one. ID beats class beats tag. If specificity ties, the later rule wins. Understanding this eliminates most CSS confusion."
         },
         callout2: {
           type: "focus",
-          label: "ADHD Note",
-          text: "Don't try to memorise the element list above. Use the Code Editor tab \u2014 try each tag, see what it does. Retention through doing is faster and sticks better than retention through reading."
+          label: "Why External Stylesheets",
+          text: "An external CSS file linked to 50 HTML pages means one change to the stylesheet updates all 50 pages instantly. Inline styles mean changing the same thing 50 times. Professional CSS lives in separate files. Always."
         },
-        hint: `Open any website. Right-click anywhere and choose "View Page Source." You will see the raw HTML the server sent. It looks overwhelming at first \u2014 but scan it. You will start recognising tags: h1, p, div, a, button. They are everywhere.\n\n<strong>What are attributes?</strong> An attribute adds extra information inside an opening tag. &lt;a href="https://google.com"&gt;Click here&lt;/a&gt; \u2014 href is the attribute, the URL is the value. Different elements have different attributes. You will encounter them as you build.`,
-        code: {
-          lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 24px; line-height: 1.7; }\n    h1 { color: #7eb8c8; }\n    h2 { color: #c8a96e; font-size: 20px; }\n    a { color: #7eb8c8; }\n    button { background: #7eb8c8; color: #0d1117; border: none; padding: 8px 18px; border-radius: 5px; cursor: pointer; }\n    ul { margin: 8px 0; padding-left: 20px; }\n    li { margin: 4px 0; }\n  </style>\n</head>\n<body>\n  <h1>My HTML Page</h1>\n  <h2>A Smaller Heading</h2>\n  <p>This is a paragraph. HTML defines what type of content each piece is.</p>\n  <a href="#">A link (not pointing anywhere yet)</a>\n  <ul>\n    <li>First list item</li>\n    <li>Second list item</li>\n    <li>Third list item</li>\n  </ul>\n  <button>A Button</button>\n</body>\n</html>',
-          challenges: [
-            "Add an &lt;h3&gt; heading below the &lt;h2&gt; with any text you like",
-            "Add a second &lt;p&gt; paragraph \u2014 write one sentence about what HTML does",
-            "Change the &lt;a&gt; href attribute to a real URL like https://google.com",
-            "Add a fourth &lt;li&gt; item to the list",
-            "Add a second button below the first with different text"
-          ]
-        },
+        hint: `The selector is who. The property is what. The value is how much.\n\n<code>p { color: red; }</code> \u2014 who: all paragraphs, what: text colour, how much: red.\n\n<strong>Try this:</strong> Open the browser DevTools (F12), click the Elements tab, click any element on the page. The Styles panel on the right shows every CSS rule targeting that element, where it came from, and whether it's being overridden by a more specific rule. Spend five minutes just clicking around a site you know \u2014 you'll see specificity in action immediately.\n\n<strong>Still confused by classes vs IDs?</strong> Use classes for anything you might want to style more than once. Use IDs only when a thing is guaranteed to be unique on the page \u2014 and even then, many developers prefer classes because IDs have high specificity that can cause unexpected overriding.`,
         quiz: {
-          question: "What does the &lt;p&gt; tag define in an HTML document?",
-          options: ["A clickable button", "A paragraph of text", "A page heading", "A hyperlink to another page"],
+          question: "A page has two CSS rules: <code>p { color: black; }</code> and <code>.intro { color: blue; }</code>. A paragraph has class='intro'. What colour is the text?",
+          options: ["Black, because the p rule comes first in the file", "Blue, because the class selector is more specific than the tag selector", "Neither \u2014 conflicting rules cancel each other out", "Black, because tag selectors always override class selectors"],
           correct: 1,
-          feedback: "The &lt;p&gt; tag defines a paragraph. HTML tags label what type of content something is \u2014 not how it looks. Appearance is entirely CSS's job."
+          feedback: "The class selector .intro is more specific than the tag selector p. When two rules target the same element, specificity determines the winner \u2014 not document order. Class beats tag. So the paragraph is blue. This is the cascade in action."
         },
-        checklist: ["I understand that HTML defines structure not appearance", "I completed at least 3 code challenges", "I can write common HTML elements without looking them up"]
+        checklist: ["I understand the selector-property-value syntax of CSS", "I can explain the difference between tag, class, and ID selectors", "I understand why more specific rules override less specific ones", "I know the three ways to include CSS and which one is preferred in professional code", "I could look at a CSS rule and describe in plain English what it does"]
       },
       {
         id: "2-3",
-        title: "CSS \u2014 Making It Look Like Something",
-        body: `If HTML is the skeleton, <strong>CSS is everything visual</strong>. Colours, fonts, spacing, layout, animations \u2014 all of it is CSS.\n\nCSS works by <strong>selecting</strong> HTML elements and applying rules to them. A rule has two parts: a <strong>property</strong> (what you want to change) and a <strong>value</strong> (what you want to change it to).\n\n<code>h1 { color: #7eb8c8; font-size: 36px; }</code>\n\nThis reads: "find every h1 element and make its colour #7eb8c8 and its font size 36px."\n\nThe most useful CSS properties to know now:\n\n<strong>color</strong> \u2014 text colour\n<strong>background-color</strong> \u2014 background colour\n<strong>font-size</strong> \u2014 text size in px, em, or rem\n<strong>font-family</strong> \u2014 typeface\n<strong>margin</strong> \u2014 space outside an element\n<strong>padding</strong> \u2014 space inside an element, between content and border\n<strong>border</strong> \u2014 a line drawn around an element\n<strong>border-radius</strong> \u2014 rounds the corners\n<strong>width / height</strong> \u2014 sets dimensions\n<strong>display</strong> \u2014 controls layout behaviour (block, flex, grid, none)\n\nYou target elements three ways:\n\n<strong>By tag name</strong> \u2014 h1 { } targets all h1 elements\n<strong>By class</strong> \u2014 .highlight { } targets elements with class="highlight"\n<strong>By id</strong> \u2014 #header { } targets the element with id="header"\n\nClasses are the most common. You will use them constantly.`,
+        title: "How a Browser Renders Code",
+        body: `Browsers don't just display HTML files. They go through a precise sequence every time \u2014 and understanding it explains several decisions you'll make every day as a developer.\n\nWhen a browser receives an HTML file, it reads it from top to bottom and constructs the <strong>DOM</strong> \u2014 the Document Object Model. The DOM is the browser's internal tree-like representation of the page. Every element is a node. Every node has a parent, children, and siblings. When JavaScript adds, removes, or changes elements later, it's modifying this DOM tree.\n\nAs the browser parses HTML, it discovers linked resources \u2014 CSS files, images, scripts. CSS files are fetched and parsed into a structure called the <strong>CSSOM</strong>. The DOM and CSSOM are combined into a <strong>render tree</strong> \u2014 the set of elements that will actually be drawn on screen with their computed styles. Then comes <strong>layout</strong> (calculating each element's size and position) and <strong>paint</strong> (drawing pixels to screen). This full sequence is called the <strong>critical rendering path</strong>.\n\nThis explains two conventions you'll see everywhere. CSS goes in the <code>&lt;head&gt;</code>: because the browser needs styles before painting. If CSS arrives late, the page flashes unstyled content for a split second \u2014 this is called a FOUC (Flash of Unstyled Content) and it looks broken. JavaScript usually goes at the bottom of <code>&lt;body&gt;</code>, or uses the <code>defer</code> attribute: because JavaScript blocks parsing while it executes. A large JS file in the head means the user stares at a blank page while it downloads and runs.\n\nWhen you open DevTools and inspect an element, you're looking at the live DOM \u2014 not the original HTML file. If JavaScript has modified the page, the DevTools shows the current state. The "View Page Source" option shows the original HTML the server sent. They're often different, and that difference is JavaScript.`,
         callout: {
-          type: "focus",
-          label: "Visual Learner Moment",
-          text: "CSS is where your visual instincts become an advantage. Every design decision \u2014 every colour, every space, every proportion \u2014 is yours to control. This floor will feel natural to you."
+          type: "default",
+          label: "The DOM vs The Source",
+          text: "View Page Source shows what the server sent. DevTools shows the live DOM \u2014 what the browser is actually working with right now. On sites that use JavaScript to build the page dynamically (like React apps), the source might be nearly empty while the DOM contains hundreds of elements."
         },
         callout2: {
-          type: "default",
-          label: "The Professional Reality",
-          text: "Senior developers don't memorise every CSS property. They know the common ones and look up the rest. Learning to read CSS documentation quickly is more valuable than memorising it."
+          type: "focus",
+          label: "Why This Matters Practically",
+          text: "Every time you wonder why your CSS isn't applying, or why your page loads slowly, or why a JavaScript change doesn't show up \u2014 the answer is somewhere in this rendering sequence. Understanding it turns debugging from guesswork into diagnosis."
         },
-        hint: `Think of CSS as instructions to an interior designer. "The headings \u2014 make them blue. The background \u2014 dark. The button \u2014 rounded corners with a hover effect." CSS is that conversation written in a format the browser understands.\n\n<strong>The cascade:</strong> CSS stands for Cascading Style Sheets. "Cascading" means that if two rules target the same element, the more specific one wins. An id selector beats a class selector. A class beats a tag name. When something looks wrong, specificity is usually why.`,
-        code: {
-          lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    /* Tag selector \u2014 targets all h1 elements */\n    h1 {\n      color: #7eb8c8;\n      font-size: 36px;\n      letter-spacing: 2px;\n    }\n\n    /* Tag selector \u2014 targets the body */\n    body {\n      background: #0d1117;\n      font-family: sans-serif;\n      padding: 32px;\n    }\n\n    /* Class selector \u2014 targets elements with class="highlight" */\n    .highlight {\n      background: #c8a96e;\n      color: #0d1117;\n      padding: 2px 8px;\n      border-radius: 4px;\n    }\n\n    /* Tag selector with hover state */\n    button {\n      background: #7eb8c8;\n      color: #0d1117;\n      border: none;\n      padding: 12px 24px;\n      border-radius: 6px;\n      font-size: 14px;\n      cursor: pointer;\n    }\n    button:hover {\n      background: #a8d4e2;\n    }\n\n    p { color: #e6edf3; line-height: 1.7; max-width: 500px; }\n  </style>\n</head>\n<body>\n  <h1>CSS Changes Everything</h1>\n  <p>Without CSS this would be black text on a white background. Every colour, font, and layout decision is CSS.</p>\n  <p>This word is <span class="highlight">highlighted</span> using a CSS class.</p>\n  <button>I Have Styles</button>\n</body>\n</html>',
-          challenges: [
-            "Change the h1 color from #7eb8c8 to any hex colour you like",
-            "Change the h1 font-size from 36px to 52px",
-            "Change the button background colour",
-            "Add border-radius: 0 to the button to make it square",
-            "Add font-style: italic to the p selector to make all paragraphs italic",
-            "Create a new class called .warning with a red background and white text, then add it to one element"
-          ]
-        },
+        hint: `The critical rendering path is HTML \u2192 DOM, CSS \u2192 CSSOM, DOM + CSSOM \u2192 Render Tree \u2192 Layout \u2192 Paint.\n\n<strong>Try this:</strong> Open any website and press F12. In the Elements tab, right-click any element and click "Edit as HTML." Change something. Watch it update instantly. You're directly editing the DOM \u2014 not the file on the server, just the browser's in-memory model. Refresh the page and your change is gone.\n\n<strong>Still unclear on render-blocking?</strong> Think of parsing HTML like reading a book. When you hit a script tag with no defer, it's like someone interrupting your reading and making you solve a puzzle before you can continue. defer says "I'll tell you what puzzle to solve after you finish the page." The reading continues uninterrupted.`,
         quiz: {
-          question: "In CSS, what does the following rule do?  p { color: red; }",
-          options: [
-            "Makes all text on the page red",
-            "Makes only the first paragraph red",
-            "Makes all &lt;p&gt; elements display red text",
-            "Creates a new HTML element called p"
-          ],
-          correct: 2,
-          feedback: "p { color: red; } targets every &lt;p&gt; element on the page and sets its text colour to red. CSS selectors target HTML elements \u2014 a tag selector like p applies to every instance of that tag."
+          question: "Why do professional developers typically put <link> stylesheet tags in the <head> but <script> tags at the bottom of <body> or use the defer attribute?",
+          options: ["It's just a convention with no technical reason \u2014 browsers handle both equally", "CSS in the head prevents unstyled content flashes; scripts at the bottom or with defer prevent blocking HTML parsing", "Scripts must be at the bottom because they can only access elements that exist above them", "Browsers only read the head section for CSS and ignore styles placed elsewhere"],
+          correct: 1,
+          feedback: "CSS must arrive before the browser paints, so it goes in the head. JavaScript blocks HTML parsing while it executes, so large scripts in the head leave users staring at a blank page. Scripts at the bottom or with defer let the HTML parse and render first, then execute JavaScript. Both decisions come directly from how the critical rendering path works."
         },
-        checklist: ["I understand the difference between HTML and CSS", "I completed at least 4 code challenges", "I understand the difference between tag, class, and id selectors"]
+        checklist: ["I can describe the critical rendering path in order", "I understand what the DOM is and how it differs from the raw HTML source", "I know why CSS goes in the head and why JS often goes at the bottom", "I understand what FOUC is and why it happens", "I could open DevTools on any page and identify the DOM structure"]
       },
       {
         id: "2-4",
-        title: "Your First Webpage",
-        body: `Now you build something real. Not a tutorial you follow \u2014 a page you own.\n\nThe code editor already has a working starting point. Read through it before you change anything. Notice how the HTML and CSS are connected: the HTML defines the elements, the CSS defines how they look.\n\nThen start with the challenges. Work through them one at a time. Each one teaches you something different about how HTML and CSS interact.\n\nWhen you are done, everything you have changed is yours. You wrote it. You understand why it works. That is different from copying code from a tutorial.`,
+        title: "Building Your First Page",
+        body: `Every HTML page starts with the same scaffold. Not as a suggestion \u2014 as a requirement. The browser needs these pieces to know what it's working with.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. This tells the browser to fetch and apply the stylesheet before rendering the page. The path in href must match the actual location of your CSS file.\n\nWhen you start writing elements, read the HTML like prose. A heading, then a paragraph, then a list \u2014 in the order a user would encounter them. HTML's logical reading order should match the visual reading order. This isn't just good practice; it's how screen readers navigate the page.\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
         callout: {
-          type: "warning",
-          label: "The Cautious Learner",
-          text: "You might be tempted to just read the code rather than change it. Don't. The physical act of editing code and seeing what breaks or improves is where the actual learning happens. Watching someone drive doesn't teach you to drive."
+          type: "default",
+          label: "The Scaffold Never Changes",
+          text: "DOCTYPE, html, head (with meta charset and title), body. This is the starting point for every HTML file you will ever write. After a week it becomes muscle memory. After a month you type it faster than you can think about it."
         },
         callout2: {
           type: "focus",
-          label: "What You're Actually Practising",
-          text: "Reading code before changing it is a professional skill. Every developer who joins an existing codebase has to read it first. You are practising that right now."
+          label: "Structure Before Style",
+          text: "Write HTML first, CSS second. Always. When you write both at once you context-switch between two different problems and solve neither well. Finish the structure completely, then style it. Every experienced developer works this way."
         },
-        hint: `If something breaks when you make a change \u2014 good. That's information. Ask yourself: what did I change, and what did that cause? Then undo just that one change and try again differently.\n\n<strong>Colours in CSS:</strong> You can use named colours (red, blue, gold) or hex codes (#c8a96e) or rgb values (rgb(200, 169, 110)). All three work. Hex codes give you the most precise control.`,
+        hint: `If you open an HTML file in a browser and see nothing, check the order: Did you close all your tags? Did the link tag href actually match your CSS filename exactly (case-sensitive on some systems)? Is the CSS file in the same folder?\n\n<strong>Try this:</strong> Type out the scaffold from memory without looking at this section. DOCTYPE, html, head, meta charset, title, link, body. Five minutes. If you can do it without looking, it's yours. If you can't, type it out once more with the section open, then close it and try again.\n\n<strong>Still confused about the head vs body?</strong> Head = information about the page, not displayed to users. Body = the actual content the user sees. Meta tags, titles, CSS links \u2014 head. Headings, paragraphs, images, buttons \u2014 body. If it should appear on screen, it goes in body.`,
+        quiz: {
+          question: "Where should a <link> tag connecting an external CSS file be placed, and why?",
+          options: ["At the bottom of the body, so HTML loads first before styles are applied", "In the head element, so styles are available before the browser paints any content", "Anywhere in the document \u2014 browsers find it regardless of placement", "Inside the body, directly above the first element that needs styling"],
+          correct: 1,
+          feedback: "The link tag goes in the head so the browser has the stylesheet before it begins painting. If the stylesheet arrives after painting starts, users briefly see unstyled content (a FOUC). The head is specifically designed for metadata and resources the browser needs before rendering the page."
+        },
+        checklist: ["I can write the HTML scaffold from memory without looking it up", "I know what each part of the scaffold does and why it's needed", "I can connect an external CSS file using a link tag", "I wrote my HTML structure completely before touching CSS", "I understand why meta charset UTF-8 matters"],
         code: {
           lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    /* === BASE STYLES === */\n    body {\n      background: #0a0a0a;\n      color: #e6edf3;\n      font-family: \'Georgia\', serif;\n      padding: 40px;\n      max-width: 700px;\n      margin: 0 auto;\n    }\n\n    /* === HEADING === */\n    h1 {\n      color: #c8a96e;\n      font-size: 40px;\n      letter-spacing: 1px;\n      border-bottom: 1px solid #333;\n      padding-bottom: 16px;\n    }\n\n    /* === PARAGRAPH === */\n    p {\n      line-height: 1.8;\n      color: #b0c4db;\n    }\n\n    /* === LINKS === */\n    a {\n      color: #7eb8c8;\n      text-decoration: none;\n    }\n    a:hover { text-decoration: underline; }\n\n    /* === BUTTON === */\n    .btn {\n      display: inline-block;\n      background: #c8a96e;\n      color: #0a0a0a;\n      padding: 12px 24px;\n      border: none;\n      border-radius: 6px;\n      cursor: pointer;\n      font-size: 14px;\n      margin-top: 16px;\n    }\n    .btn:hover { background: #d9bb88; }\n  </style>\n</head>\n<body>\n  <h1>I Built This</h1>\n  <p>This is a real webpage. The HTML gives it structure. The CSS gives it style. You now understand both.</p>\n  <p>Every professional website starts with exactly this \u2014 a document, some elements, some rules about how they should look.</p>\n  <a href="#">A link to somewhere</a>\n  <br><br>\n  <button class="btn">A Styled Button</button>\n</body>\n</html>',
-          challenges: [
-            "Change the h1 colour to anything other than gold",
-            "Change the font-family from Georgia to any font you like \u2014 try \'Arial\', \'Verdana\', or \'Courier New\'",
-            "Change the body background from #0a0a0a to a dark colour of your choosing",
-            "Add a second paragraph below the first",
-            "Add an &lt;h2&gt; subheading between the h1 and the first paragraph and style it with CSS",
-            "Change the .btn class to have a different background colour and add a larger border-radius"
-          ]
-        },
-        quiz: {
-          question: "A CSS rule says: .btn { background: blue; }  What does the dot before btn mean?",
-          options: [
-            "btn is an HTML tag name",
-            "btn is a CSS property",
-            "btn is a class name \u2014 targets elements with class=\"btn\"",
-            "btn is an id \u2014 targets the element with id=\"btn\""
-          ],
-          correct: 2,
-          feedback: "A dot prefix means class selector. .btn targets all elements with class=\"btn\". An id selector uses a hash: #btn. Tag selectors have no prefix: button { }. Classes are the most commonly used selector in professional CSS."
-        },
-        checklist: ["I read through the starter code before changing it", "I completed at least 4 challenges", "I understand the difference between HTML structure and CSS style"]
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a second paragraph below the first", "Add an unordered list with 3 items", "Add an image element (the src can be any URL)", "Add a navigation bar using the nav element with 3 links"]
+        }
       },
       {
         id: "2-5",
-        title: "Floor 2 Project \u2014 Your Personal Page",
-        body: `Build a webpage about yourself. It must include your name as a heading, a short paragraph, a list of 3 interests, a background colour that feels like you, a custom font, and one thing you added that wasn't in any lesson.\n\nThat last requirement is the most important. It forces you to figure something out yourself.`,
-        callout: { type: "default", label: "Why This Matters", text: "That self-directed addition is where the developer mindset begins. Figuring something out alone \u2014 even once \u2014 builds more confidence than ten guided examples." },
-        hint: `If you're staring at a blank file not knowing where to start \u2014 start with just the HTML. No CSS yet. Get the words on the page first. Then add the style. One thing at a time.`,
-        checklist: ["I built my personal webpage", "It has all 6 elements", "I added something I figured out myself", "I'm happy with how it looks", "I'm ready for Floor 3"]
+        title: "Styling Basics",
+        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. Learn those well and the rest you look up as needed.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface \u2014 stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines \u2014 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element), <strong>padding</strong> (space inside the element, between content and border). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left \u2014 clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units, <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>em</strong> is relative to the current element's font-size. <strong>rem</strong> is relative to the root (html) element's font-size \u2014 use rem for font sizes. When the user adjusts their browser's default font size for accessibility, rem scales with it. px does not.`,
+        callout: {
+          type: "default",
+          label: "Why rem Over px for Fonts",
+          text: "Some users increase their browser's default font size because they have difficulty reading small text. If you set font sizes in px, that preference is ignored. If you use rem, your text scales with it. This is a small change that has real impact on real people."
+        },
+        callout2: {
+          type: "focus",
+          label: "Shorthand Properties",
+          text: "margin: 16px 32px sets top and bottom to 16px, left and right to 32px. margin: 16px sets all four sides. border: 2px solid #333 sets width, style, and colour in one line. Shorthand properties are everywhere in CSS \u2014 recognise the pattern rather than memorising each one."
+        },
+        hint: `When a CSS property isn't doing what you expect, open DevTools (F12), click the element, and look at the Styles panel. It shows every rule applying to that element, which rule is winning, and which rules are being crossed out (overridden). You can edit values live to experiment without touching your files.\n\n<strong>Try this:</strong> Open Spotify or any dark-themed website. In DevTools, find the body element and change background-color to white. Watch the theme collapse instantly. That's CSS in action \u2014 one property change, entire visual impact.\n\n<strong>Still confused by margin vs padding?</strong> Padding is inside the element, between the content and the edge. Margin is outside the element, pushing it away from other elements. If you add a background colour, padding sits inside the colour. Margin is transparent.`,
+        quiz: {
+          question: "A developer sets font-size: 1.5rem on a paragraph. The user has set their browser's default font size to 20px. What size does the paragraph text appear at?",
+          options: ["15px, because rem is relative to the standard 10px root size", "1.5px, because rem values are very small units", "30px, because 1.5 multiplied by the 20px root size equals 30px", "20px, because rem ignores the multiplier and uses the root size directly"],
+          correct: 2,
+          feedback: "1 rem equals the root (html) element's font size. If the user's browser sets that to 20px, then 1rem = 20px and 1.5rem = 30px. This is exactly why rem is preferred for font sizes \u2014 it respects the user's accessibility settings and scales proportionally."
+        },
+        checklist: ["I know the core CSS properties for text, spacing, and visual styling", "I understand what display: block, inline, and flex each do", "I understand the difference between px, %, em, and rem", "I can write CSS rules from scratch without copying from somewhere else", "I know why rem is preferred over px for font sizes"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Change the heading color to any hex value you choose", "Add a border-radius to the card to make it rounded", "Make the font-size of the paragraph 18px", "Add a box-shadow to the container"]
+        }
+      },
+      {
+        id: "2-6",
+        title: "The Box Model",
+        body: `Everything in CSS is a box. Every element \u2014 a heading, an image, a button, a div \u2014 is a rectangular box, and that box has four layers.\n\nFrom inside out: <strong>content</strong> (the text, image, or whatever lives inside), <strong>padding</strong> (transparent space between the content and the border), <strong>border</strong> (the edge of the element, can be visible or invisible), <strong>margin</strong> (transparent space outside the border, separating this element from its neighbours).\n\nThe box model has a quirk that causes confusion until you understand it. By default, <code>width</code> applies to the content area only. Add padding and border on top of that, and your element ends up wider than you specified. A 200px wide element with 20px padding on each side is actually 240px wide on screen.\n\nThe fix is <code>box-sizing: border-box</code>. With this property, width includes content, padding, and border. A 200px wide element with 20px padding is 200px wide \u2014 the content shrinks to accommodate the padding. This is so universally useful that Airbnb, GitHub, and essentially every professional CSS codebase starts with a global reset that applies it everywhere: <code>*, *::before, *::after { box-sizing: border-box; }</code>.\n\nMargin collapse is CSS's most confusing behaviour for beginners: when two block elements are stacked vertically, their vertical margins merge (collapse) into the larger of the two. A paragraph with 24px bottom margin and a heading with 16px top margin don't add up to 40px of space \u2014 they collapse to 24px. This doesn't happen with horizontal margins, flexbox children, or absolutely positioned elements. Knowing it exists means you won't waste an hour trying to figure out why your spacing doesn't add up.`,
+        callout: {
+          type: "default",
+          label: "The Professional Reset",
+          text: "The first CSS rule in most professional projects: *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }. This resets browser defaults and makes layout predictable. Add it to the top of every CSS file you write."
+        },
+        callout2: {
+          type: "focus",
+          label: "DevTools for the Box Model",
+          text: "In browser DevTools, click any element and scroll down in the Styles panel to find the box model diagram. It shows the exact content, padding, border, and margin values in a visual diagram. Use this constantly when layouts don't behave as expected."
+        },
+        hint: `If your layout is off by a mysterious amount \u2014 an element is wider than expected, spacing doesn't add up \u2014 the box model is usually why.\n\n<strong>Try this:</strong> Open DevTools, click any block element, and look at the box model diagram in the Styles panel. You'll see the four layers as coloured rings. Hover over each one \u2014 the browser highlights that layer on the page.\n\n<strong>Still confused by margin collapse?</strong> Picture two magnets with the same pole facing each other. They don't stack their repulsion \u2014 the stronger one wins. That's vertical margin collapse. The larger margin wins; the smaller one disappears. Horizontal margins never collapse, and neither do flex or grid container children.`,
+        quiz: {
+          question: "A div has width: 300px, padding: 20px, and border: 5px solid black. With the default box-sizing: content-box, what is the total rendered width of the element?",
+          options: ["300px \u2014 the width property always controls the total width", "325px \u2014 the border adds 5px total to each side", "350px \u2014 padding (40px) and border (10px) are added to the 300px content width", "280px \u2014 padding reduces the available content area"],
+          correct: 2,
+          feedback: "With box-sizing: content-box (the default), width applies only to the content area. Padding and border are added on top. 20px padding on each side = 40px. 5px border on each side = 10px. Total: 300 + 40 + 10 = 350px. This is why box-sizing: border-box exists \u2014 it makes the specified width include padding and border, so 300px actually means 300px."
+        },
+        checklist: ["I can describe the four layers of the CSS box model in order", "I understand why box-sizing: border-box is almost always preferable", "I know what margin collapse is and when it occurs", "I can use DevTools to visually inspect the box model of any element", "I've added a global box-sizing reset to my CSS files"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Increase the padding on the card from 16px to 32px and observe the change", "Add a 3px solid border and observe how it pushes content if box-sizing is content-box", "Add margin-top: 40px to the second card", "Make both cards use box-sizing: border-box and compare"]
+        }
+      },
+      {
+        id: "2-7",
+        title: "Flexbox Layout",
+        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. Flexbox, introduced as a CSS standard in 2012 and now universally supported, solved all of this.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. The parent becomes a <strong>flex container</strong>. You control the children's arrangement by setting properties on the container.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them \u2014 now main axis runs vertically and items stack top to bottom.\n\nThe properties you'll use constantly:\n\n<strong>justify-content</strong> aligns items along the main axis. Values: <code>flex-start</code> (packed to the start), <code>flex-end</code> (packed to the end), <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced), <code>space-around</code>.\n\n<strong>align-items</strong> aligns items along the cross axis. Values: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default \u2014 fills the cross axis).\n\n<strong>gap</strong> adds consistent space between flex items without needing margins.\n\n<strong>flex-wrap: wrap</strong> allows items to wrap onto the next line when they don't fit \u2014 essential for responsive layouts.\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
+        callout: {
+          type: "default",
+          label: "Centering With Flexbox",
+          text: "The two lines that center anything: display: flex; justify-content: center; align-items: center; on the parent element. This was notoriously difficult before flexbox. Now it's four words. Learn this combination \u2014 you'll use it hundreds of times."
+        },
+        callout2: {
+          type: "focus",
+          label: "Flexbox vs Grid",
+          text: "Flexbox is for one dimension: either a row or a column. CSS Grid is for two dimensions: rows and columns at the same time. Navigation bars, button groups, and card rows \u2014 flexbox. Full page layouts with both columns and rows \u2014 Grid. When in doubt, start with flexbox."
+        },
+        hint: `The mental model: the container is a flexible box. The children are flexible items inside it. You control how items sit in that box by setting rules on the container.\n\n<strong>Try this:</strong> Add display: flex to any element in your code editor. Watch its children line up horizontally. Then add justify-content: center. Then try space-between. Each property change reshapes the layout instantly.\n\n<strong>Still confused by justify-content vs align-items?</strong> justify-content works along the direction items are flowing (the main axis). align-items works perpendicular to that. In a row layout: justify-content controls left-right positioning, align-items controls up-down. In a column layout, they flip.`,
+        quiz: {
+          question: "A flex container has flex-direction: row (the default). Which property and value would you use to push the items to the right side of the container?",
+          options: ["align-items: flex-end \u2014 because flex-end pushes items to the end of the axis", "justify-content: flex-end \u2014 because justify-content controls the main axis, which is horizontal in a row", "flex-wrap: reverse \u2014 because reversing the wrap direction moves items right", "align-content: flex-end \u2014 because align-content positions groups of items"],
+          correct: 1,
+          feedback: "In a row-direction flex container, the main axis runs horizontally. justify-content controls placement along the main axis. flex-end pushes items to the end of that axis \u2014 the right side. align-items controls the cross axis (vertical), so align-items: flex-end would push items to the bottom, not the right."
+        },
+        checklist: ["I understand what display: flex does to a container's children", "I know the difference between the main axis and cross axis", "I can use justify-content and align-items to control item positioning", "I understand when to use flex-wrap and why", "I know when to use flexbox versus CSS Grid"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Change flex-direction to column and observe how items stack", "Change justify-content to space-between", "Add a fourth card and add flex-wrap: wrap to the container", "Use align-items: flex-end to align items to the bottom"]
+        }
+      },
+      {
+        id: "2-8",
+        title: "Building a Real Component",
+        body: `Real interfaces are made of components. A Spotify song card. A GitHub repository card. A Twitter post. A product tile on an e-commerce site. Look at any of them and you see the same anatomy: a container, an image or icon, a text hierarchy, interactive elements.\n\nBreak apart a typical card. A container div with a fixed width, background, border-radius, and box-shadow. Inside it: an image (or placeholder) that fills the top. Below the image: a title in larger text, a subtitle in smaller muted text, metadata like a date or a label. At the bottom, action elements \u2014 buttons, links, icons.\n\nNothing about this is complex individually. What makes professional work feel polished is the consistency: padding that's the same multiple throughout (8px, 16px, 24px \u2014 always multiples of 8), colours from a defined palette, font sizes that follow a logical scale.\n\nThe approach professional developers use to build a component: HTML structure first \u2014 container, then the hierarchy inside it, no CSS yet. Then CSS from outside in: style the container first, then the layout inside it (flex or grid), then individual elements. Never start styling the small details before the structure is solid.\n\nThis is the session where HTML and CSS stop feeling like separate things you're applying and start feeling like a vocabulary you're speaking. When a layout problem appears, you know which property to reach for. When something looks wrong, you know where to look.`,
+        callout: {
+          type: "default",
+          label: "CSS From Outside In",
+          text: "When building any component, style in this order: container first, then layout (flex/grid), then child elements, then typography, then interactive states (hover, focus). Working outside-in prevents you from spending an hour perfecting a detail that will move when the container changes."
+        },
+        callout2: {
+          type: "focus",
+          label: "The 8px Grid",
+          text: "Most design systems (including Airbnb's, GitHub's, Spotify's) use multiples of 8 for spacing: 8px, 16px, 24px, 32px, 48px, 64px. When you use consistent spacing multiples, layouts feel ordered even without a design spec. It's one of the easiest habits that makes the biggest visible difference."
+        },
+        hint: `If the component doesn't look right, check this order. Is the container the right size? Is the internal layout (flex/grid) working? Are the children the right sizes? Then check the individual styling.\n\n<strong>Try this:</strong> Before writing CSS, sketch the component on paper. Just boxes and labels. Container. Image area. Title. Subtitle. Button. That sketch becomes your HTML structure. The CSS then has a clear plan to follow.\n\n<strong>Hover states feel hard?</strong> Add a <code>:hover</code> selector to any element. Whatever properties you change inside it only apply when the cursor is over the element. <code>transform: translateY(-4px)</code> lifts it. <code>box-shadow</code> adds depth. <code>transition: all 0.2s ease</code> on the base element smooths the change.`,
+        quiz: {
+          question: "When building a card component, you write all the HTML first and then open the CSS file. What is the main advantage of this approach over writing HTML and CSS simultaneously?",
+          options: ["It loads faster because the browser processes HTML before CSS", "It forces you to fully think through the content structure before making any visual decisions, preventing structural changes after styling has begun", "HTML cannot reference CSS classes that don't exist yet, so HTML must be written first", "Writing HTML first is only useful for beginners \u2014 professionals write both at once"],
+          correct: 1,
+          feedback: "Structure and style are different problems. When you write HTML first, you commit to the content structure before styling it. If you build both simultaneously, you often style elements that then need to move or change \u2014 wasting effort and creating inconsistency. Every experienced developer structures before they style."
+        },
+        checklist: ["I built a multi-element card component from scratch", "I wrote HTML completely before writing CSS", "I styled from outside in (container first, then inner elements)", "I added at least one hover state", "I understand the anatomy of a real-world component"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a 'like' button to each card with a heart icon (use \u2665)", "Add a hover state that lifts the card slightly using transform: translateY(-4px)", "Add a badge to one card (like 'NEW' or 'FEATURED')", "Make the cards responsive so they stack on small screens using flex-wrap"]
+        }
+      },
+      {
+        id: "2-9",
+        title: "Guided Profile Page Project",
+        body: `You've seen profile pages hundreds of times: Dribbble, Behance, GitHub, LinkedIn. They all follow the same pattern because that pattern works. A header with name and role. An about section with a short bio. A skills section. A projects grid. Contact links.\n\nThe scaffold in the code editor covers that full structure: a header with your name and title, a bio section, a skills grid using flexbox, project cards, and footer links. The HTML is structured. The base CSS is styled. The layout is there.\n\nYour job is threefold. First: replace every piece of placeholder content with your actual information. Don't leave a single word of placeholder text \u2014 this is your page now. Second: change the visual design. The colour scheme, the typography choices, the spacing \u2014 make it feel like you, not the template. Third: add something the scaffold doesn't have. A section, an element, an interaction. Anything that requires you to figure it out yourself.\n\nThe third part is the most important. The first two are filling in blanks. The third is actual building.`,
+        callout: {
+          type: "default",
+          label: "What This Builds",
+          text: "By the end of this session you'll have a real, personal webpage. Not a tutorial exercise \u2014 a page that represents you, with your name, your projects, your design choices. That is the first thing you'll show people when they ask what you can do."
+        },
+        callout2: {
+          type: "focus",
+          label: "Make It Yours",
+          text: "The most common mistake with guided projects: leaving the template colours and changing only the text. Colour scheme is the first thing anyone notices. Pick two or three colours that feel right to you and apply them throughout. A page that looks like the template is a template. A page that looks like you is a portfolio piece."
+        },
+        hint: `If you don't know what to add as your original element, here are three options that require real CSS work: a horizontal scrolling skills bar, a timeline for your learning journey, or a dark/light mode toggle (research CSS custom properties and class toggling with JavaScript).\n\n<strong>Feeling stuck on the design?</strong> Open Dribbble or Behance and look at three profile pages you find visually interesting. Don't copy any of them. Instead, write down what they have in common: spacing generosity, font weight contrast, a strong accent colour. Use those patterns, not the specific designs.\n\n<strong>Testing on mobile:</strong> In DevTools (F12), click the icon that looks like a phone and tablet (Toggle Device Toolbar). This lets you simulate different screen sizes. If your page looks broken on mobile, the most common fix is adding max-width: 100% to images and checking that your flex containers have flex-wrap: wrap.`,
+        quiz: {
+          question: "You've built a profile page using a scaffold. You've replaced all placeholder text but kept all the original colours and layout choices. A recruiter views it alongside the original template. What's the most accurate description of what you've built?",
+          options: ["A complete portfolio piece that demonstrates your HTML and CSS ability", "A filled-in template \u2014 it shows you can read HTML but not that you can make design decisions", "An excellent starting point that just needs to be deployed to be portfolio-ready", "A technically correct page that only needs JavaScript to be complete"],
+          correct: 1,
+          feedback: "Replacing text in a template demonstrates that you can edit HTML. Making visual and structural decisions \u2014 the colour scheme, the layout modifications, the added section \u2014 demonstrates that you can build with CSS. A portfolio piece should show decision-making, not just content-filling. The template is a starting point, not the destination."
+        },
+        checklist: ["I replaced every piece of placeholder content with my own real information", "I changed the colour scheme to something that feels personal to me", "I added at least one section or element not included in the scaffold", "I tested the page at different window sizes", "I'm satisfied that this page represents me, not the template"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Replace all placeholder text with your own real information", "Change the color scheme to something that feels like you", "Add a fourth section not included in the template", "Make it work on mobile (test by resizing your browser window)"]
+        }
+      },
+      {
+        id: "2-10",
+        title: "Solo Project \u2014 No Template",
+        body: `No scaffold. No starter code. No template. A blank file and a brief.\n\n<strong>The brief:</strong> Build a landing page for something that doesn't exist yet. An app idea you've had. A fictional brand. A band. A game. A product. It can be anything \u2014 the subject doesn't matter. What matters is that you make every decision.\n\nThe page must have three sections minimum: a hero (the top section that communicates what the thing is, immediately, with a heading and a call-to-action), a features or about section (three or more reasons, benefits, or facts), and a footer with at minimum two links.\n\nEvery HTML element you use \u2014 your choice. Every colour \u2014 your choice. Every font, every spacing value, every layout approach \u2014 yours. When something doesn't work, you figure out why. When you want something you don't know how to do, you search for it.\n\nThis is what the work actually feels like. There's no right answer to compare yourself to. There's only: does it work, does it look intentional, and is it something you made.`,
+        callout: {
+          type: "default",
+          label: "The Blank Page Problem",
+          text: "The hardest part of this project is starting. The fix: open a file, write the HTML scaffold, write an h1 with your idea's name. That's it. That's the start. Once there's something on screen, the next step is always obvious. The blank page is only terrifying until you put one word on it."
+        },
+        callout2: {
+          type: "focus",
+          label: "Searching Is Part of the Work",
+          text: "If you want a feature you don't know how to build \u2014 a sticky navigation, a gradient background, a CSS animation \u2014 search for it. Searching for CSS solutions is not cheating. It's exactly what every professional developer does. The skill is knowing what to search for and evaluating what you find."
+        },
+        hint: `If you're completely blank on an idea: don't make it about an app. Make it about something you know. A landing page for your favourite book, for a coffee shop that should exist in your city, for a service that would have helped you learn to code faster. Anything you have opinions about is easier to design than something abstract.\n\n<strong>When the design feels off but you can't say why:</strong> Look at the spacing. Inconsistent spacing makes pages feel unpolished more than almost anything else. Pick one spacing unit (like 8px) and make every margin and padding a multiple of it. The page will immediately feel more ordered.\n\n<strong>Still fuzzy on the hero section?</strong> A hero needs: a strong headline (what is this), a brief supporting line (why it matters), and a button or link (what to do next). That's the complete minimum. Everything else is enhancement.`,
+        quiz: {
+          question: "You've finished the landing page. You look at it and think the layout is fine but something feels off about the design. Which of the following is most likely to make the biggest improvement?",
+          options: ["Adding more CSS animations and transitions throughout the page", "Reviewing the spacing \u2014 inconsistent padding and margins are the most common cause of layouts that look unpolished", "Changing the font to something more distinctive", "Adding more sections to give the page more content"],
+          correct: 1,
+          feedback: "Inconsistent spacing is the most common reason a page 'feels off' even when the structure and colours are correct. When padding and margins jump between arbitrary values (13px here, 21px there, 37px elsewhere), the eye perceives disorder. Switching to a consistent spacing scale \u2014 multiples of 8 \u2014 creates visual rhythm that makes layouts feel considered even without a designer."
+        },
+        checklist: ["I built the landing page from a blank file with no starter code", "It has a hero section, a features or about section, and a footer", "I made every visual decision myself", "When I didn't know how to do something, I searched for it rather than leaving it out", "I would show this page to someone as an example of what I can build"]
       }
     ]
   },
   {
     id: 3,
     title: "Building With Training Wheels",
-    subtitle: "JavaScript \u2014 making things actually work",
+    subtitle: "JavaScript \u2014 the language of the web",
     color: "#c87e9a",
-    duration: "8-10 weeks",
+    duration: "4-5 weeks",
     sessions: "5 per week",
-    length: "60 min",
-    tag: "Floor 03 \u2014 Interactivity",
+    length: "60-75 min",
+    tag: "Floor 03 \u2014 JavaScript",
     sections: [
       {
         id: "3-1",
         title: "What JavaScript Does",
-        body: `HTML is structure. CSS is style. <strong>JavaScript is behaviour.</strong>\n\nIt is the language that makes things happen when you interact with a page. A button that does something when clicked. A form that validates your input before it is sent. A menu that slides open. A countdown timer. A map that responds to dragging. A game.\n\nAll of that is JavaScript. It is what transforms a static document into something that responds to the person using it.\n\nUnlike HTML and CSS, JavaScript is a <strong>full programming language</strong>. It has variables, conditions, loops, and functions \u2014 the three concepts from Floor 1, now written in real code that the browser executes line by line.\n\nJavaScript runs <strong>in the browser</strong>. When you visit a website, the server sends your browser the HTML, CSS, and JavaScript files. The browser reads them in order: HTML first, CSS second, JavaScript third. JavaScript can then reach into the HTML and change anything on the page in real time \u2014 without reloading.\n\nThis ability to read and change the HTML structure of a page is called <strong>DOM manipulation</strong>. DOM stands for Document Object Model \u2014 it is the browser's internal representation of the page. Every element you can see is a node in the DOM. JavaScript can find any node, read it, change it, add new ones, or remove them entirely.\n\nThat is the power you are about to learn to use.`,
+        body: `HTML is structure. CSS is appearance. JavaScript is behaviour \u2014 what happens when you actually interact with a page.\n\nEvery programming language you'll encounter later in your career \u2014 Python, Go, Rust, Swift \u2014 lives on servers or devices. JavaScript is the only language browsers run natively. If it happens in a browser and it responds to you, JavaScript made it happen.\n\nThe mental model to internalise: JavaScript is <strong>event-driven</strong>. It doesn't run top-to-bottom once and stop. It loads onto the page, then sits waiting. Waiting for a click, a keypress, a timer firing, a network response arriving. When one of those things happens, the relevant function runs. When it's done, JavaScript goes back to waiting. This is fundamentally different from the sequential scripts you saw in Floor 1.\n\nJavaScript's view of the page is the <strong>DOM</strong> \u2014 Document Object Model. The browser represents every HTML element as a JavaScript object in a tree structure. JavaScript can find any node in that tree, read its properties, change its content or style, add new nodes, or remove existing ones \u2014 all without reloading the page. This is called DOM manipulation, and it's the core mechanism behind every interactive website.\n\nWhen Instagram shows a like animation the instant you tap the heart \u2014 no page reload, just an immediate response \u2014 JavaScript found the heart element in the DOM, changed its CSS class to the filled version, incremented the like count, and sent a network request to save the like to the server. All of that in milliseconds, without you seeing anything except the animation.\n\nThat is what you're about to learn to do.`,
         callout: {
           type: "default",
-          label: "The Real Shift",
-          text: "Floor 3 is where web development starts to feel like actual programming. It will be harder than Floors 1 and 2. That difficulty is the point \u2014 it means you are learning something genuinely new. Expect it. Work through it."
+          label: "The Third Layer",
+          text: "HTML gives the page content. CSS gives it appearance. JavaScript gives it behaviour. A page without JavaScript is a static document \u2014 it looks the same regardless of what you do. A page with JavaScript is a living interface that responds to you. This is the difference between a poster and an application."
         },
         callout2: {
           type: "focus",
-          label: "ADHD Note",
-          text: "Don't try to understand everything about JavaScript before you start using it. Use the editor below first. See JavaScript running. Then the explanations will have something concrete to attach to."
+          label: "Expect the Difficulty",
+          text: "Floor 3 is harder than Floors 1 and 2. JavaScript is a programming language \u2014 it has logic, state, and behaviour that HTML and CSS don't. That difficulty is real and expected. Every developer found JavaScript harder than HTML. The ones who got through it weren't smarter \u2014 they were more patient with the confusion."
         },
-        hint: `HTML = the structure. CSS = the appearance. JavaScript = the behaviour. Without JavaScript, a page cannot respond to what the user does.\n\n<strong>The console (F12):</strong> Open any website, press F12, click "Console." You are now looking at JavaScript's output channel. Type: alert("hello") and press Enter. That was JavaScript. It runs immediately, in the browser, right now.\n\n<strong>Feeling nervous?</strong> Good. Nervousness means it is new. You already understand conditions, loops, and functions from Floor 1. JavaScript is just those three things written out in code. You have more foundation than you think.`,
-        code: {
-          lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; }\n    h2 { color: #c87e9a; margin-top: 0; }\n    .demo { margin: 20px 0; }\n    .label { font-size: 10px; letter-spacing: 2px; color: #c8a96e; margin-bottom: 8px; font-family: monospace; }\n    button { background: #c87e9a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 4px; }\n    button:hover { background: #d4a0b5; }\n    #output { background: #0d1117; padding: 16px; border-radius: 8px; margin-top: 16px; min-height: 50px; color: #c8a96e; font-family: monospace; font-size: 14px; }\n    input { background: #1e293b; border: 1px solid #334155; color: white; padding: 8px 12px; border-radius: 6px; margin: 4px; font-size: 14px; }\n  </style>\n</head>\n<body>\n  <h2>JavaScript in Action</h2>\n  <p style="color:#9ca3af;font-size:13px;">Every interaction below is JavaScript responding to you in real time.</p>\n\n  <div class="demo">\n    <div class="label">CLICK EVENT</div>\n    <button onclick="handleClick()">Click me</button>\n    <button onclick="changeColour()">Random colour</button>\n  </div>\n\n  <div class="demo">\n    <div class="label">LIVE INPUT \u2014 JavaScript reads as you type</div>\n    <input type="text" id="nameInput" placeholder="Type your name..." oninput="updateName()">\n  </div>\n\n  <div id="output">Click a button or start typing above.</div>\n\n  <script>\n    var clicks = 0;\n\n    function handleClick() {\n      clicks++;\n      var word = clicks === 1 ? \'time\' : \'times\';\n      document.getElementById(\'output\').textContent = \'Button clicked \' + clicks + \' \' + word + \'.\';\n    }\n\n    function changeColour() {\n      var colours = [\'#c87e9a\', \'#7eb8c8\', \'#c8a96e\', \'#a8d5a2\', \'#9a7ec8\'];\n      var pick = colours[Math.floor(Math.random() * colours.length)];\n      document.getElementById(\'output\').style.color = pick;\n      document.getElementById(\'output\').textContent = \'Colour changed to \' + pick;\n    }\n\n    function updateName() {\n      var name = document.getElementById(\'nameInput\').value;\n      if (name) {\n        document.getElementById(\'output\').textContent = \'Hello, \' + name + \'. JavaScript is reading what you type in real time.\';\n      } else {\n        document.getElementById(\'output\').textContent = \'Click a button or start typing above.\';\n      }\n    }\n  <\/script>\n</body>\n</html>',
-          challenges: [
-            "Change the button text \'Click me\' to your own name",
-            "Add a third button that sets the output text to any message you choose",
-            "Change the starting value of the clicks variable from 0 to 10 \u2014 what happens?",
-            "Add a new colour to the colours array in the changeColour function"
-          ]
-        },
+        hint: `The best way to start is to see it, not read about it. Open any website, press F12, click the Console tab. Type: document.body.style.background = 'red' and press Enter. Watch the page turn red. That's JavaScript modifying the DOM in real time.\n\n<strong>Try this:</strong> On any page, in the console, type: document.querySelectorAll('p').forEach(p => p.style.color = 'lime'). Every paragraph on the page turns lime green. You just ran DOM manipulation from the console. That exact pattern is what JavaScript does when you write it in a script file.\n\n<strong>Still fuzzy on event-driven?</strong> Think of JavaScript as a security guard sitting at the door. When nothing is happening, they wait. When someone knocks (a click), they check who it is and respond. When the phone rings (a timer), they answer. They don't patrol the building constantly \u2014 they respond to events. That's the event-driven model.`,
         quiz: {
-          question: "What does DOM stand for, and what does JavaScript use it for?",
-          options: [
-            "Data Object Method \u2014 used to store information in a database",
-            "Document Object Model \u2014 the browser\'s representation of the page that JavaScript can read and change",
-            "Dynamic Output Mechanism \u2014 used to send data to a server",
-            "Display Object Map \u2014 used to control CSS animations"
-          ],
+          question: "When you click a 'Like' button on Instagram and the count updates immediately without the page reloading, what is happening technically?",
+          options: ["The server sends a new version of the entire page with the updated count", "JavaScript handles the click event, updates the DOM to show the new count, and sends a network request in the background", "CSS animations handle the like effect and the count is recalculated automatically", "The browser caches the updated count and displays it without contacting the server"],
           correct: 1,
-          feedback: "DOM stands for Document Object Model. It is the browser\'s internal representation of the HTML page as a tree of objects. JavaScript can find any element in the DOM, read its content, change it, add new elements, or remove them \u2014 all without the page reloading."
+          feedback: "When you click Like, JavaScript is listening for that click event. An event handler function runs: it updates the heart icon's appearance in the DOM (no reload needed), updates the count display, and sends an asynchronous network request to save the like to Instagram's server. The DOM update is instant because it's local. The server request happens in the background. This is exactly how modern web applications work."
         },
+        checklist: ["I understand that JavaScript is the only language browsers run natively", "I can explain the event-driven model \u2014 JavaScript waits, then responds to events", "I understand what the DOM is and what DOM manipulation means", "I've opened the browser console and run at least one JavaScript command", "I can describe in plain terms how Instagram's Like button works"]
       },
       {
         id: "3-2",
-        title: "Variables, Conditions and Loops in Real Code",
-        body: `The three most fundamental building blocks of any programming language are <strong>variables</strong>, <strong>conditions</strong>, and <strong>loops</strong>. Once you understand all three, you can write logic that solves real problems.\n\n<strong>Variables</strong> store information. You create one with <code>let</code> (value can change) or <code>const</code> (value is fixed). Give it a name that describes what it holds, then assign a value with <code>=</code>.\n\n<code>let score = 0;</code> — a number that starts at zero\n<code>let username = "Alex";</code> — text, always wrapped in quotes\n<code>let isLoggedIn = false;</code> — a boolean: either true or false\n<code>const MAX_LIVES = 3;</code> — a constant that cannot be reassigned\n\n<strong>Conditions</strong> let your code make decisions. The most common form is <code>if / else if / else</code>. The value inside <code>if ( )</code> must resolve to true or false. You compare values with: <code>===</code> (strictly equal), <code>!==</code> (not equal), <code>></code>, <code><</code>, <code>>=</code>, <code><=</code>.\n\n<strong>Loops</strong> repeat code. A <code>for</code> loop has three parts: where to start, when to stop, what to do each iteration.\n\n<code>for (let i = 0; i < 5; i++)</code> runs five times (i goes 0, 1, 2, 3, 4). Inside the loop body, you can use <code>i</code> to know which iteration you are on.\n\nThese three concepts are the backbone of all programming logic. Everything else in any language is built on top of them.`,
+        title: "Variables and Data Types",
+        body: `Variables are named containers that hold values. In JavaScript, you create them with <code>const</code> or <code>let</code>. The rule is simple: use <code>const</code> by default. Only use <code>let</code> when the value genuinely needs to change over time \u2014 a counter, a toggle state, an accumulating total. <code>var</code> is the old way; it has scoping behaviours that cause bugs. Avoid it.\n\nJavaScript has four primitive data types you need now. <strong>String</strong>: text, wrapped in single quotes, double quotes, or backticks. <strong>Number</strong>: all numeric values \u2014 integers and decimals alike, no distinction. <strong>Boolean</strong>: exactly two values, <code>true</code> or <code>false</code>. <strong>Undefined</strong>: a variable that's been declared but not yet assigned a value.\n\nThe <code>typeof</code> operator tells you what type a value is: <code>typeof "hello"</code> returns <code>"string"</code>, <code>typeof 42</code> returns <code>"number"</code>.\n\nTemplate literals are backtick strings that allow embedded expressions: <code>\`Hello, \${name}. You have \${count} messages.\`</code> The <code>\${}</code> interpolates any JavaScript expression. This replaces string concatenation with <code>+</code> in nearly every case.\n\nJavaScript's most confusing behaviour is <strong>type coercion</strong>: the language automatically converts between types in certain situations. <code>"5" + 3</code> is <code>"53"</code> because <code>+</code> with a string triggers string concatenation. <code>"5" - 3</code> is <code>2</code> because <code>-</code> has no string version, so JavaScript converts "5" to a number first. This is why you always use <code>===</code> (strict equality, checks value AND type) instead of <code>==</code> (loose equality, coerces types before comparing). <code>0 == false</code> is <code>true</code>. <code>0 === false</code> is <code>false</code>. The second is correct.`,
         callout: {
-          type: "focus",
-          label: "Logical Thinker Note",
-          text: "Read each block and trace through what it does before looking at the explanation. Your logical brain will get most of it right. Trust it."
+          type: "default",
+          label: "const by Default",
+          text: "Start every variable with const. If you get an error because you're trying to reassign it, change it to let. This approach forces you to think consciously about which values change \u2014 and that habit prevents entire categories of bugs."
         },
         callout2: {
-          type: "default",
-          label: "Three Concepts, One Mental Model",
-          text: "Think of variables as memory, conditions as decisions, and loops as repetition. Every program ever written is a combination of these three things — store data, decide what to do with it, repeat where needed. If you understand these deeply you understand the core of programming."
+          type: "focus",
+          label: "Always Use ===",
+          text: "Never use == in JavaScript. Always use ===. The loose equality operator performs type coercion in ways that are hard to predict and create subtle bugs. Strict equality (===) checks both value and type with no surprises. This is one of the few rules with no exceptions."
         },
-        hint: `<strong>let vs const:</strong> Use const by default. Only use let when the value genuinely needs to change (counters, accumulators, state). var is outdated — avoid it.\n\n<strong>=== vs ==:</strong> Always use === (strict equality). It checks both value and type. == does automatic type coercion which creates subtle bugs.\n\n<strong>Loop anatomy:</strong> for (initialise; condition; update). The loop runs while the condition is true. The update runs after every iteration. for (let i = 0; i < 10; i++) runs 10 times.\n\n<strong>Stuck?</strong> Open the browser console (F12 — Console tab). Type any variable name to see its value. Add console.log("reached step 2") inside loops to trace execution.`,
-        code: {
-          lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; }\n    h2 { color: #c87e9a; margin-top: 0; }\n    label { display: block; margin: 10px 0 4px; font-size: 13px; color: #a0b0c0; }\n    input[type=text], input[type=number] { background: #0d1117; border: 1px solid #30363d; color: white; padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 200px; }\n    .btn { background: #c87e9a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 8px 4px 8px 0; font-size: 13px; }\n    .btn:hover { background: #d4a0b5; }\n    #output { background: #0d1117; padding: 16px; border-radius: 8px; margin-top: 16px; min-height: 60px; color: #c8a96e; font-family: monospace; font-size: 13px; white-space: pre-wrap; }\n  </style>\n</head>\n<body>\n  <h2>Variables, Conditions &amp; Loops</h2>\n\n  <label>Your name:</label>\n  <input type="text" id="nameInput" value="Alex" />\n\n  <label>Your score (0 – 150):</label>\n  <input type="number" id="scoreInput" value="75" />\n\n  <br>\n  <button class="btn" onclick="checkScore()">Check score grade</button>\n  <button class="btn" onclick="runLoop()">Loop 5 times</button>\n  <button class="btn" onclick="clearOutput()">Clear</button>\n\n  <div id="output">Click a button to see output here.</div>\n\n  <script>\n    function checkScore() {\n      const name = document.getElementById(\'nameInput\').value;\n      const score = Number(document.getElementById(\'scoreInput\').value);\n\n      let grade;\n      if (score >= 120) {\n        grade = \'A — Outstanding!\';\n      } else if (score >= 90) {\n        grade = \'B — Great work\';\n      } else if (score >= 60) {\n        grade = \'C — Decent, keep going\';\n      } else {\n        grade = \'F — Needs more effort\';\n      }\n\n      document.getElementById(\'output\').textContent = name + \'\\\'s score: \' + score + \'\\nGrade: \' + grade;\n    }\n\n    function runLoop() {\n      const name = document.getElementById(\'nameInput\').value;\n      let result = \'\';\n\n      for (let i = 1; i <= 5; i++) {\n        result += \'Loop \' + i + \': Hello, \' + name + \'!\\n\';\n      }\n\n      document.getElementById(\'output\').textContent = result;\n    }\n\n    function clearOutput() {\n      document.getElementById(\'output\').textContent = \'Click a button to see output here.\';\n    }\n  <\/script>\n</body>\n</html>',
-          challenges: [
-            "Add a fourth grade: S rank for scores above 140 (add another else if block)",
-            "Change the loop to count DOWN from 10 to 1 instead of up from 1 to 5",
-            "Add a third button that shows the length of the name (name.length) and whether it has more than 5 characters",
-            "Change the greeting inside the loop to show a different message every other loop (use if (i % 2 === 0) to check even/odd)"
-          ]
-        },
+        hint: `Type coercion catches everyone. The key: <code>+</code> with any string becomes concatenation. Every other operator (<code>-</code>, <code>*</code>, <code>/</code>) converts strings to numbers. So <code>"10" * 2</code> is <code>20</code>, but <code>"10" + 2</code> is <code>"102"</code>.\n\n<strong>Try this:</strong> Open the browser console (F12) and try these one at a time: <code>typeof "hello"</code>, <code>typeof 42</code>, <code>typeof true</code>, <code>typeof undefined</code>, <code>"5" + 3</code>, <code>"5" - 3</code>, <code>5 == "5"</code>, <code>5 === "5"</code>. Understanding the output of each is worth more than reading about it.\n\n<strong>Still fuzzy on template literals?</strong> They're backtick strings that can contain expressions inside <code>\${}</code>. Anything JavaScript can evaluate goes inside: variables, calculations, function calls. <code>\`Total: ${price * quantity}\`</code> embeds a calculation directly in the string.`,
         quiz: {
-          question: "What is the difference between let and const in JavaScript?",
-          options: [
-            "let is for strings, const is for numbers",
-            "let variables can be reassigned later, const variables cannot be reassigned after creation",
-            "const is faster than let at runtime",
-            "There is no real difference — they both work the same way"
-          ],
+          question: "What is the output of: console.log('10' + 5); and why?",
+          options: ["15, because JavaScript adds the numbers together", "'105', because the + operator with a string triggers concatenation, not addition", "Error, because you cannot use + with mixed types", "NaN, because '10' is not a valid number"],
           correct: 1,
-          feedback: "const locks the binding — once assigned you cannot reassign it. let allows reassignment. Use const by default and only reach for let when you know the value must change (counters, state). This prevents entire categories of accidental bugs."
+          feedback: "When + encounters a string on either side, it concatenates \u2014 joins them together as text. '10' is a string, so '10' + 5 becomes '10' + '5' (5 is coerced to a string) which is '105'. This is why parseInt() or Number() is used to convert string inputs to numbers before doing maths, and why === catches this kind of type mismatch."
         },
+        checklist: ["I use const by default and only reach for let when values genuinely need to change", "I understand the four primitive types: string, number, boolean, undefined", "I can write template literals with embedded expressions", "I always use === instead of ==", "I understand what type coercion is and which operators trigger it"]
       },
       {
         id: "3-3",
-        title: "Buttons That Actually Do Things",
-        body: `This is the lesson where it starts to feel like power. You are going to connect JavaScript to HTML so that when a user does something, <strong>the page responds</strong>.\n\nThe mechanism is called <strong>DOM manipulation</strong>. DOM stands for Document Object Model \u2014 it is the browser's internal map of all the elements on the page. JavaScript can navigate that map and change anything: text, styles, visibility, structure.\n\nThe three most commonly used tools for this:\n\n<code>document.getElementById('id')</code> \u2014 finds one specific element by its id attribute\n<code>element.textContent</code> \u2014 reads or sets the text content of an element\n<code>element.style.property</code> \u2014 reads or sets a CSS property directly\n\nThere is also:\n\n<code>document.querySelector('.className')</code> \u2014 finds the first element matching a CSS selector\n<code>document.querySelectorAll('.className')</code> \u2014 finds all matching elements (returns a list)\n<code>element.classList.add('class')</code> \u2014 adds a CSS class to an element\n<code>element.classList.remove('class')</code> \u2014 removes a CSS class\n<code>element.classList.toggle('class')</code> \u2014 adds the class if absent, removes it if present\n\nThe pattern you will use thousands of times in your career:\n1. User does something (clicks, types, hovers)\n2. An event fires and calls a JavaScript function\n3. The function finds the right element(s) using DOM methods\n4. The function reads or changes those elements\n5. The page updates instantly, no reload needed`,
+        title: "Logic and Conditions",
+        body: `Conditions are how code makes decisions. The basic form: <code>if (expression) { } else if (expression) { } else { }</code>. The expression inside the parentheses must evaluate to truthy or falsy. If truthy, the block runs. If not, it falls through to the next else if, or the else.\n\nComparison operators produce booleans: <code>===</code> (strictly equal), <code>!==</code> (not equal), <code>></code> (greater than), <code><</code> (less than), <code>>=</code> (greater than or equal), <code><=</code> (less than or equal).\n\nLogical operators combine conditions: <code>&&</code> (AND \u2014 both sides must be truthy), <code>||</code> (OR \u2014 at least one side must be truthy), <code>!</code> (NOT \u2014 inverts the boolean).\n\nNow the important part that most courses underexplain: <strong>truthy and falsy</strong>. JavaScript doesn't just work with true and false \u2014 it treats every value as either truthy or falsy. The falsy values in JavaScript are exactly six: <code>false</code>, <code>0</code>, <code>""</code> (empty string), <code>null</code>, <code>undefined</code>, and <code>NaN</code>. Every other value \u2014 including empty arrays and empty objects \u2014 is truthy. This means <code>if (username)</code> checks whether username is a non-empty string without an explicit comparison.\n\nThe ternary operator is a shorthand condition on one line: <code>condition ? valueIfTrue : valueIfFalse</code>. Use it for simple assignments. Don't nest them \u2014 nested ternaries are unreadable.\n\nShort-circuit evaluation is a subtlety that shows up constantly in real code. <code>a && b</code> returns <code>a</code> if <code>a</code> is falsy (never evaluates <code>b</code>), or returns <code>b</code> if <code>a</code> is truthy. <code>a || b</code> returns <code>a</code> if truthy, or <code>b</code> if <code>a</code> is falsy. That's why <code>const name = user.name || 'Anonymous'</code> works as a default value pattern \u2014 if user.name is falsy (undefined, empty string), it falls back to 'Anonymous'.`,
         callout: {
           type: "default",
-          label: "What Is Actually Happening",
-          text: "The button calls a function. The function finds an element by its id. The function changes something about that element. Three steps. That is the entire pattern of interactive web development \u2014 everything else is just variations on those three steps."
+          label: "The Six Falsy Values",
+          text: "false, 0, '' (empty string), null, undefined, NaN. Memorise these six. Everything else is truthy \u2014 including [], {}, and '0'. The most common mistake: assuming an empty array is falsy. It isn't. Only an empty string is falsy, not an empty array."
         },
         callout2: {
           type: "focus",
-          label: "Event-Driven Programming",
-          text: "JavaScript is event-driven. Code doesn't run from top to bottom once \u2014 it sits and waits for things to happen (clicks, keypresses, timers, network responses), then runs the right function in response. This is a fundamentally different mental model from sequential scripts."
+          label: "Short-Circuit as a Pattern",
+          text: "const value = input || 'default' is one of the most common patterns in JavaScript. If input is falsy (undefined, null, empty string), value gets 'default'. You'll see this pattern in essentially every real JavaScript codebase. Recognising it and using it is a sign of fluency."
         },
-        hint: `The id attribute is a unique name tag. You put id="message" on a paragraph so JavaScript can find exactly that paragraph.\n\ndocument.getElementById("message") says: "search the entire page and give me the element whose id is message."\n\n.textContent = "new text" says: "replace whatever is written inside that element with this."\n\n<strong>classList.toggle is one of the most useful tools in DOM manipulation.</strong> If you add a class that has a CSS style (e.g., .visible { display: block; }), toggling that class shows or hides an element. That is how most show/hide interactions work.`,
-        code: {
-          lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; }\n    h2 { color: #c87e9a; margin-top: 0; }\n    .btn { background: #c87e9a; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 4px; font-size: 13px; }\n    .btn:hover { background: #d4a0b5; }\n    #output { background: #0d1117; padding: 16px; border-radius: 8px; margin: 16px 0; min-height: 50px; color: #c8a96e; font-family: monospace; }\n    #counter { font-size: 64px; color: #7eb8c8; text-align: center; margin: 8px 0; }\n    .hidden { display: none; }\n    #secret { background: #1e3a5f; padding: 16px; border-radius: 8px; margin-top: 12px; color: #7eb8c8; }\n  </style>\n</head>\n<body>\n  <h2>DOM Manipulation</h2>\n\n  <button class="btn" onclick="changeMessage()">Change the text</button>\n  <button class="btn" onclick="increment()">Count up</button>\n  <button class="btn" onclick="resetCounter()">Reset</button>\n  <button class="btn" onclick="toggleSecret()">Show / Hide</button>\n\n  <div id="output">Click any button to see JavaScript change this text.</div>\n  <div id="counter">0</div>\n\n  <div id="secret" class="hidden">\n    This element was hidden. classList.toggle() revealed it.\n  </div>\n\n  <script>\n    let count = 0;\n\n    function changeMessage() {\n      document.getElementById(\'output\').textContent = \'JavaScript changed this. The DOM was updated without a page reload.\';\n    }\n\n    function increment() {\n      count++;\n      document.getElementById(\'counter\').textContent = count;\n    }\n\n    function resetCounter() {\n      count = 0;\n      document.getElementById(\'counter\').textContent = count;\n    }\n\n    function toggleSecret() {\n      document.getElementById(\'secret\').classList.toggle(\'hidden\');\n    }\n  <\/script>\n</body>\n</html>',
-          challenges: [
-            "Change the changeMessage function to set the text to something you choose",
-            "Change the increment function to add 5 each click instead of 1",
-            "Add a fourth button that sets the counter to exactly 100",
-            "Change the counter text colour when it reaches 10 \u2014 use document.getElementById(\'counter\').style.color = \'#c87e9a\'"
-          ]
-        },
+        hint: `The best way to internalise truthy and falsy: open the console and type <code>Boolean(0)</code>, <code>Boolean('')</code>, <code>Boolean(null)</code>, <code>Boolean([])</code>, <code>Boolean({})</code>, <code>Boolean('hello')</code>. The output for each tells you directly whether it's truthy or falsy.\n\n<strong>Try this:</strong> Write a condition without a comparison operator. <code>if (username) { console.log('has username') }</code>. Set username to different values \u2014 'Alex', '', null, undefined, 0 \u2014 and see when the block runs. This is the truthy/falsy concept made concrete.\n\n<strong>Still unclear on &&?</strong> Think of it as a chain of guards. If the first guard says no (falsy), nobody else is checked \u2014 the whole chain returns false. If the first guard says yes, the second is checked, and so on. The chain only succeeds if every guard approves.`,
         quiz: {
-          question: "What does document.getElementById('header').textContent = 'Hello' do?",
-          options: [
-            "Creates a new element with id=\'header\' containing Hello",
-            "Finds the element with id=\'header\' and replaces its text content with Hello",
-            "Adds a CSS class called Hello to the element with id=\'header\'",
-            "Searches the entire internet for an element called header"
-          ],
-          correct: 1,
-          feedback: "document.getElementById finds the element with that specific id. .textContent accesses the text inside it. Assigning a new value replaces whatever was there. The page updates instantly \u2014 no reload needed."
+          question: "A function checks: if (userInput) { processInput(userInput) }. For which of the following userInput values will processInput NOT be called?",
+          options: ["'hello' \u2014 because it's a non-empty string", "[] \u2014 because empty arrays are falsy", "0 \u2014 because 0 is one of JavaScript's falsy values", "'false' \u2014 because it contains the word false"],
+          correct: 2,
+          feedback: "0 is one of the six falsy values in JavaScript, so if (0) evaluates to false and processInput is skipped. 'hello' is truthy. [] is truthy (empty arrays are truthy \u2014 only empty strings are falsy). 'false' is also truthy \u2014 it's a non-empty string containing the text 'false', not the boolean false."
         },
+        checklist: ["I can write if/else if/else chains and explain how they evaluate", "I know all six falsy values in JavaScript", "I understand that && and || return values, not just booleans", "I can use the ternary operator for simple conditional assignments", "I can use the || operator as a default value pattern"]
       },
       {
         id: "3-4",
-        title: "Understanding Why Things Break",
-        body: `Every developer in the world, at every level, writes code that breaks. The difference between a beginner and a professional is not that professionals make fewer mistakes \u2014 it is that <strong>they know how to find and fix mistakes faster</strong>.\n\nThis skill is called <strong>debugging</strong>. It is one of the most important things you will develop in your entire career.\n\nThe browser has a built-in debugging tool called the <strong>Developer Console</strong>. Open it with F12 (or Cmd+Option+I on Mac), then click the Console tab. When your JavaScript has an error, the console shows you exactly what went wrong and on which line.\n\n<strong>Reading error messages is a skill.</strong> A JavaScript error message contains:\n\n<strong>The error type</strong> \u2014 ReferenceError, TypeError, SyntaxError. Each type tells you something different about what went wrong.\n<strong>The message</strong> \u2014 a description in plain English of what the problem is.\n<strong>The file and line number</strong> \u2014 exactly where in your code the problem was detected.\n\n<strong>ReferenceError: x is not defined</strong> \u2014 you tried to use a variable that doesn't exist yet (wrong name, or used before declaration)\n<strong>TypeError: x is not a function</strong> \u2014 you tried to call something as a function but it isn't one\n<strong>SyntaxError: Unexpected token</strong> \u2014 something is wrong with the structure of your code (missing bracket, comma, etc.)\n\nThe code editor below has three intentional bugs. Your job is to find and fix all three. Open the console (F12) as you work \u2014 it will show you errors and guide you to the right line.`,
+        title: "Functions",
+        body: `A function is a named, reusable block of code. You define it once and call it by name whenever you need it to run. Without functions, code would be an unmanageable sequence of repeated instructions.\n\nThe classic declaration syntax: <code>function greet(name) { return 'Hello, ' + name; }</code>. The words inside the parentheses are <strong>parameters</strong> \u2014 placeholders that receive values when the function is called. When you call <code>greet('Alex')</code>, the string 'Alex' is the <strong>argument</strong> \u2014 the actual value that fills the parameter slot.\n\nThe <code>return</code> statement sends a value back to wherever the function was called. A function without a return statement returns <code>undefined</code> \u2014 it runs for its side effects (displaying something, modifying the DOM, logging to console) rather than producing a value.\n\nArrow functions are a shorter syntax: <code>const greet = (name) => 'Hello, ' + name;</code>. For a single expression, the return is implicit. Arrow functions are preferred in modern code for short callbacks and expressions. Regular function declarations are still used for named, top-level functions \u2014 they have the advantage of being hoisted (available before they're defined in the file), which matters in certain architectures.\n\nFunction scope: variables declared inside a function don't exist outside it. They're created when the function runs and destroyed when it finishes. This means two functions can have a variable called <code>count</code> without them interfering with each other.\n\n<strong>Pure functions</strong> are the gold standard: given the same inputs, they always return the same output, and they have no side effects (they don't modify anything outside themselves). Every time you click "Add to Cart" on Amazon, a function runs that takes the item and the current cart and returns a new cart. Same inputs, same output, no surprises.`,
         callout: {
-          type: "warning",
-          label: "Reframe This",
-          text: "Broken code is not failure. Error messages are the computer telling you exactly what it needs. A developer who can read error messages efficiently is more valuable than one who never makes errors \u2014 the second one doesn't exist."
+          type: "default",
+          label: "Parameters vs Arguments",
+          text: "Parameters are the placeholders in the function definition: function add(a, b). Arguments are the actual values passed when calling it: add(3, 5). Parameters are names. Arguments are values. The distinction matters when reading error messages and documentation."
         },
         callout2: {
           type: "focus",
-          label: "ADHD Note",
-          text: "When you are stuck and cannot find a bug \u2014 stop. Step away for five minutes. Come back with fresh eyes. The bug is almost always obvious when you return. This is not a beginner thing. This happens to everyone at every level."
+          label: "When to Use Arrow vs Regular Functions",
+          text: "Arrow functions for callbacks, array methods, and short expressions: array.map(item => item.name). Regular function declarations for top-level named functions you'll call throughout a file. Don't overthink this early on \u2014 both work, and the style preference becomes natural with exposure."
         },
-        hint: `<strong>The three most common bugs in this code:</strong>\n\n1. A variable is referenced by the wrong name (JavaScript is case-sensitive \u2014 Score and score are different variables)\n2. A comparison operator is wrong \u2014 making a condition always true or always false\n3. A calculation uses the wrong operator\n\n<strong>Debugging process:</strong>\n1. Open the console (F12)\n2. Read the error type and message\n3. Go to the line number it mentions\n4. Fix that specific thing\n5. Save and check if a new error appears\n6. Repeat until no errors remain and the output matches what is expected.`,
+        hint: `If a function doesn't return a value and you try to use its result, you get <code>undefined</code>. This is one of the most common bugs. Check: does your function have a return statement? Does it return the right thing? Add <code>console.log</code> inside the function to verify what it's producing before it returns.\n\n<strong>Try this:</strong> Write a function that takes two numbers and returns their sum. Call it with three different pairs of numbers and log the results. Then remove the return keyword \u2014 see what happens. Experiencing undefined is more memorable than reading about it.\n\n<strong>Confused about scope?</strong> Any variable declared inside a function with const or let is invisible outside it. This is protective \u2014 functions can do their work without accidentally overwriting variables from elsewhere. Think of a function's scope as a room: what happens in the room stays in the room.`,
+        quiz: {
+          question: "A function is defined as: function double(x) { x * 2; }. You call it with console.log(double(5)). What is logged and why?",
+          options: ["10, because the function multiplies x by 2", "undefined, because the function calculates x * 2 but never returns the result", "Error, because x is not defined outside the function", "null, because the function has no explicit return type"],
+          correct: 1,
+          feedback: "The function performs the calculation x * 2 but the result is never returned. A function without a return statement returns undefined. To fix it: function double(x) { return x * 2; }. This is one of the most common early mistakes \u2014 computing a value inside a function but forgetting to send it back with return."
+        },
+        checklist: ["I can write a function declaration with parameters and a return value", "I understand the difference between parameters and arguments", "I can write an arrow function and know when to prefer it", "I understand what function scope means and why it matters", "I know what a pure function is and why it's considered good practice"],
         code: {
           lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: \'IBM Plex Mono\', monospace; padding: 24px; font-size: 13px; line-height: 1.8; }\n    h2 { color: #c87e9a; margin-top: 0; }\n    .expected { color: #4ade80; padding: 12px; background: #0d2a1a; border-radius: 6px; margin-bottom: 12px; }\n    .actual { color: #f87171; padding: 12px; background: #2a0d0d; border-radius: 6px; }\n    .label { font-size: 10px; letter-spacing: 2px; color: #7d96b4; margin-bottom: 4px; }\n  </style>\n</head>\n<body>\n  <h2>Three Bugs. Find Them All.</h2>\n  <p style="color:#9ca3af;font-size:12px;">Expected output is green. Your current output is below it in red. Fix the code until they match. Open the console (F12) for error details.</p>\n  <div class="expected">\n    <div class="label">EXPECTED OUTPUT</div>\n    Full name: Alice Johnson | Age status: Adult | Total cost: \u00a354.00\n  </div>\n  <div class="actual">\n    <div class="label">YOUR OUTPUT</div>\n    <span id="result">Running...</span>\n  </div>\n  <script>\n    try {\n      // BUG 1: Wrong variable name \u2014 the variable is lastName, not last_name\n      var firstName = \'Alice\';\n      var lastName = \'Johnson\';\n      var fullName = firstName + \' \' + last_name;\n\n      // BUG 2: Wrong comparison operator \u2014 age is 25, should show \'Adult\' not \'Minor\'\n      var age = 25;\n      var status = (age <= 18) ? \'Adult\' : \'Minor\';\n\n      // BUG 3: Wrong operator \u2014 should multiply price by quantity, not add them\n      var price = 18;\n      var quantity = 3;\n      var total = \'\u00a3\' + (price + quantity).toFixed(2);\n\n      document.getElementById(\'result\').textContent =\n        \'Full name: \' + fullName + \' | Age status: \' + status + \' | Total cost: \' + total;\n    } catch(e) {\n      document.getElementById(\'result\').textContent = \'Error: \' + e.message + \' \u2014 check the console (F12) for details.\';\n    }\n  <\/script>\n</body>\n</html>',
-          challenges: [
-            "Fix Bug 1: the variable name is wrong on the fullName line",
-            "Fix Bug 2: the comparison operator is backwards \u2014 age 25 should return \'Adult\'",
-            "Fix Bug 3: total should be price multiplied by quantity, not added",
-            "Once all three are fixed and output matches expected \u2014 add a fourth variable and display it too"
-          ]
-        },
-        quiz: {
-          question: "You see this error in the console: ReferenceError: userName is not defined. What does this most likely mean?",
-          options: [
-            "The variable userName was never created, or you misspelled its name somewhere",
-            "userName is a reserved keyword that cannot be used",
-            "The browser does not support modern JavaScript",
-            "You need to add userName to your HTML file"
-          ],
-          correct: 0,
-          feedback: "ReferenceError means JavaScript tried to use a variable that it cannot find. Either it was never declared, or it was declared with a different capitalisation (JavaScript is case-sensitive \u2014 userName and username are different variables). Always check both."
-        },
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a third parameter to the greet function for a title (Mr, Ms, Dr) and include it in the output", "Write a function called calculateDiscount(price, percent) that returns the discounted price", "Convert the function declaration to an arrow function", "Write a function that takes an array of numbers and returns the largest one"]
+        }
       },
       {
         id: "3-5",
-        title: "Floor 3 Project \u2014 An Interactive Webpage",
-        body: `Your Floor 3 project is your most complex build yet. You're going to combine everything \u2014 HTML structure, CSS style, and JavaScript behaviour \u2014 into one working interactive piece.
-
-<strong>The brief:</strong> Build a quiz. Any topic you like. At least 3 questions. The user clicks their answer, the page tells them right or wrong, and at the end it shows their final score.
-
-A starter template is below. It already has the structure in place \u2014 your job is to fill in your own questions and complete the logic. Read every comment in the code; the comments explain exactly what each part needs to do.`,
+        title: "Loops",
+        body: `A loop runs a block of code repeatedly until a condition says to stop. Every time JavaScript renders a list \u2014 Spotify's playlist tracks, Instagram's feed posts, Airbnb's search results \u2014 it loops through an array of data and renders a component for each item. Loops are ubiquitous.\n\nThe <strong>for loop</strong> has three parts in the parentheses: initialisation (what to set up before the loop starts), condition (run the loop while this is true), and update (what to do after each iteration). <code>for (let i = 0; i < 10; i++)</code> runs ten times, with i going from 0 to 9.\n\nThe <strong>while loop</strong> is simpler but less safe for counted iterations: it runs while a condition is true, with no built-in counter. Use it when you don't know how many iterations are needed in advance \u2014 reading items from a stream until it's empty, for example.\n\n<code>forEach</code> is an array method that runs a function for each item: <code>songs.forEach(song => { render(song); })</code>. Clean and readable for arrays.\n\n<code>for...of</code> iterates over values in an iterable: <code>for (const song of songs)</code>. <code>for...in</code> iterates over the keys of an object \u2014 use it for objects, not arrays.\n\n<code>break</code> exits a loop immediately. <code>continue</code> skips the rest of the current iteration and moves to the next. Both are useful for early termination and filtering within loops.\n\nThe most common mistake: the infinite loop. A while loop whose condition never becomes false, or a for loop whose counter never reaches the stopping condition, will freeze the browser. Always double-check: will the condition eventually be false? Will the counter actually reach the limit?`,
         callout: {
           type: "default",
-          label: "Why a Quiz",
-          text: "A quiz uses conditions (is this answer correct?), functions (check answer, show score), DOM manipulation (change what's on screen), and variables (track the score). It exercises everything from this floor in one real build."
+          label: "for...of vs forEach",
+          text: "for...of works with any iterable (arrays, strings, NodeLists). forEach is an array method that only works on arrays. Both are fine for arrays. Prefer for...of when you might need break or continue \u2014 you can't break out of a forEach."
         },
-        hint: `Break it into the smallest steps.\n\nStep 1: Change the questions array to topics you know.\nStep 2: Run it and confirm your first question loads.\nStep 3: Set the correctIndex for each question.\nStep 4: Confirm the score increments correctly.\nStep 5: Improve the styles to make it feel like yours.\n\n<strong>Each step is small enough to not be scary.</strong> You never have to build the whole thing \u2014 just the very next piece.`,
+        callout2: {
+          type: "focus",
+          label: "The Infinite Loop Risk",
+          text: "An infinite loop crashes the browser tab. Before you run any while loop, ask: what changes in each iteration that will eventually make the condition false? If nothing changes, the loop runs forever. For loops are safer because the update step is built into the syntax."
+        },
+        hint: `If your browser freezes after writing a loop, it's almost certainly infinite. Close the tab. Reopen your editor. Check: does the while condition eventually become false? Does the for loop's counter actually reach the limit?\n\n<strong>Try this:</strong> Write a for loop that logs numbers 1 to 10. Then modify it to only log odd numbers by adding <code>if (i % 2 === 0) continue;</code>. Then modify the condition to stop at 7 instead of 10. Three small changes, three different loop behaviours.\n\n<strong>Confused by for...in vs for...of?</strong> for...in gives you keys (property names or array indices as strings). for...of gives you values. For arrays, almost always use for...of or forEach \u2014 for...in on arrays gives you index strings and includes any inherited properties, which causes subtle bugs.`,
+        quiz: {
+          question: "A for loop is written as: for (let i = 0; i < 5; i++). On which value of i does the loop stop executing its body?",
+          options: ["When i reaches 5, because the condition i < 5 becomes false", "When i reaches 4, because arrays are zero-indexed", "When i reaches 6, because i++ runs once more after the last iteration", "The loop never stops unless break is called explicitly"],
+          correct: 0,
+          feedback: "The condition is i < 5. After i increments to 5, the condition is checked: 5 < 5 is false, so the loop body does not execute and the loop ends. The body runs for i = 0, 1, 2, 3, 4 \u2014 five times total. When i becomes 5, the condition fails and the loop exits."
+        },
+        checklist: ["I can write a for loop with correct initialisation, condition, and update", "I understand when to use while vs for", "I can use forEach for clean array iteration", "I know the difference between for...of and for...in", "I understand what break and continue do and can use them correctly"],
         code: {
           lang: "HTML",
-          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; max-width: 600px; margin: 0 auto; }\n    h1 { color: #c87e9a; }\n    #question { font-size: 20px; margin: 24px 0 16px; line-height: 1.4; }\n    .answer-btn { display: block; width: 100%; text-align: left; background: #0d1117; border: 1px solid #30363d; color: white; padding: 12px 16px; border-radius: 8px; cursor: pointer; margin-bottom: 10px; font-size: 15px; }\n    .answer-btn:hover { border-color: #c87e9a; }\n    .answer-btn.correct { background: #1a3a1a; border-color: #4ade80; color: #4ade80; }\n    .answer-btn.wrong { background: #3a1a1a; border-color: #f87171; color: #f87171; }\n    #feedback { font-size: 16px; margin: 12px 0; min-height: 24px; font-weight: bold; }\n    #score-display { color: #c8a96e; font-size: 14px; margin-bottom: 16px; }\n    #next-btn { background: #c87e9a; color: white; border: none; padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; display: none; margin-top: 8px; }\n    #result { display: none; text-align: center; padding: 32px; }\n    #result h2 { color: #c87e9a; font-size: 28px; }\n  </style>\n</head>\n<body>\n  <h1>Quiz Time</h1>\n  <div id="score-display">Score: 0 / 0</div>\n\n  <div id="quiz-area">\n    <div id="question">Loading...</div>\n    <div id="answers"></div>\n    <div id="feedback"></div>\n    <button id="next-btn" onclick="nextQuestion()">Next question &rarr;</button>\n  </div>\n\n  <div id="result">\n    <h2>Quiz Complete!</h2>\n    <p id="final-score"></p>\n    <button onclick="restartQuiz()" style="background:#c87e9a;color:white;border:none;padding:10px 24px;border-radius:6px;cursor:pointer;font-size:14px;">Try again</button>\n  </div>\n\n  <script>\n    // YOUR QUESTIONS GO HERE\n    // Each needs: text, an array of 4 options, and correctIndex (0=first option, 1=second, etc.)\n    const questions = [\n      {\n        text: "What does HTML stand for?",\n        options: ["HyperText Markup Language", "High Tech Modern Language", "Hyperlink Text Making Language", "Home Tool Markup Language"],\n        correctIndex: 0\n      },\n      {\n        text: "Which CSS property changes the text colour?",\n        options: ["font-color", "text-color", "color", "foreground"],\n        correctIndex: 2\n      },\n      {\n        text: "What does === check in JavaScript?",\n        options: ["Assign a value", "Strictly equal (same value and type)", "Greater than or equal", "Approximately equal"],\n        correctIndex: 1\n      }\n      // ADD MORE QUESTIONS HERE (remember the comma after each object except the last)\n    ];\n\n    let currentQuestion = 0;\n    let score = 0;\n    let answered = false;\n\n    function loadQuestion() {\n      if (currentQuestion >= questions.length) {\n        showResult();\n        return;\n      }\n      const q = questions[currentQuestion];\n      document.getElementById(\'question\').textContent = q.text;\n      document.getElementById(\'feedback\').textContent = \'\';\n      document.getElementById(\'next-btn\').style.display = \'none\';\n      answered = false;\n      const answersDiv = document.getElementById(\'answers\');\n      answersDiv.innerHTML = \'\';\n      q.options.forEach(function(option, index) {\n        const btn = document.createElement(\'button\');\n        btn.className = \'answer-btn\';\n        btn.textContent = option;\n        btn.onclick = function() { checkAnswer(index); };\n        answersDiv.appendChild(btn);\n      });\n      updateScore();\n    }\n\n    function checkAnswer(selectedIndex) {\n      if (answered) return;\n      answered = true;\n      const q = questions[currentQuestion];\n      const buttons = document.querySelectorAll(\'.answer-btn\');\n      buttons.forEach(function(btn) { btn.onclick = null; });\n      if (selectedIndex === q.correctIndex) {\n        score++;\n        buttons[selectedIndex].classList.add(\'correct\');\n        document.getElementById(\'feedback\').textContent = \'Correct!\';\n        document.getElementById(\'feedback\').style.color = \'#4ade80\';\n      } else {\n        buttons[selectedIndex].classList.add(\'wrong\');\n        buttons[q.correctIndex].classList.add(\'correct\');\n        document.getElementById(\'feedback\').textContent = \'Wrong. Correct answer: \' + q.options[q.correctIndex];\n        document.getElementById(\'feedback\').style.color = \'#f87171\';\n      }\n      updateScore();\n      document.getElementById(\'next-btn\').style.display = \'inline-block\';\n    }\n\n    function nextQuestion() { currentQuestion++; loadQuestion(); }\n\n    function showResult() {\n      document.getElementById(\'quiz-area\').style.display = \'none\';\n      document.getElementById(\'result\').style.display = \'block\';\n      const pct = Math.round((score / questions.length) * 100);\n      document.getElementById(\'final-score\').textContent = \'You scored \' + score + \' out of \' + questions.length + \' (\' + pct + \'%)\';\n    }\n\n    function restartQuiz() {\n      currentQuestion = 0; score = 0; answered = false;\n      document.getElementById(\'quiz-area\').style.display = \'block\';\n      document.getElementById(\'result\').style.display = \'none\';\n      loadQuestion();\n    }\n\n    function updateScore() {\n      document.getElementById(\'score-display\').textContent = \'Score: \' + score + \' / \' + questions.length;\n    }\n\n    loadQuestion();\n  <\/script>\n</body>\n</html>',
-          challenges: [
-            "Replace all 3 questions with questions about a topic YOU know well",
-            "Add 2 more questions (making 5 total) — remember the comma after each object except the last",
-            "Show a percentage score at the end in addition to the raw score",
-            "Add a progress indicator showing Question X of Y at the top"
-          ]
+          starter: 'PLACEHOLDER',
+          challenges: ["Change the for loop to count down from 10 to 1 instead of up", "Add a condition inside the loop that skips even numbers (use if (i % 2 === 0) continue)", "Rewrite the for loop as a while loop", "Write a loop that finds the first number in the array greater than 50 and stops"]
+        }
+      },
+      {
+        id: "3-6",
+        title: "Arrays and Objects",
+        body: `Arrays and objects are the two data structures you'll work with constantly. Every real JavaScript application is essentially arrays of objects, transformed and displayed.\n\nAn <strong>array</strong> is an ordered list. You access items by index (starting at 0). Core methods:\n\n<code>push(item)</code> adds to the end. <code>pop()</code> removes from the end. <code>shift()</code> removes from the start. <code>unshift(item)</code> adds to the start. <code>slice(start, end)</code> returns a portion without modifying the original. <code>splice(start, count)</code> removes items in place. <code>indexOf(item)</code> finds the position. <code>includes(item)</code> returns true/false.\n\nThe three array methods that change how you write code:\n\n<code>map(fn)</code> transforms every item, returns a new array of the same length: <code>prices.map(p => p * 1.2)</code>.\n<code>filter(fn)</code> keeps only items where the function returns true: <code>movies.filter(m => m.rating > 8)</code>.\n<code>reduce(fn, initial)</code> reduces an array to a single value: totals, averages, grouped objects.\n\nAn <strong>object</strong> is a collection of key-value pairs. Access values with dot notation (<code>user.name</code>) or bracket notation (<code>user['name']</code> \u2014 useful when the key is in a variable). Objects can contain any values \u2014 strings, numbers, arrays, other objects, functions.\n\nThe most common data structure in real applications: an array of objects. A Netflix category row is an array of movie objects, each with title, imageUrl, rating, and description. When JavaScript renders the row, it maps over the array and creates a DOM element for each object.\n\n<strong>JSON</strong> (JavaScript Object Notation) is how data is sent between frontend and backend. It looks like JavaScript object and array syntax, but it's a text format \u2014 all keys must be in double quotes, values can only be strings, numbers, booleans, arrays, objects, or null. <code>JSON.stringify()</code> converts a JavaScript object to a JSON string. <code>JSON.parse()</code> converts JSON back to a JavaScript object.`,
+        callout: {
+          type: "default",
+          label: "map, filter, reduce",
+          text: "These three array methods replace most for loops in modern JavaScript. map for transformation, filter for selection, reduce for aggregation. Learning them makes code shorter, more readable, and less error-prone. They don't modify the original array \u2014 they return new ones."
         },
+        callout2: {
+          type: "focus",
+          label: "Arrays of Objects",
+          text: "const users = [{name: 'Alex', age: 28}, {name: 'Sam', age: 34}] is the most common data shape in real applications. API responses return this format. Databases return this format. Knowing how to navigate and transform arrays of objects is one of the most practically useful skills in JavaScript."
+        },
+        hint: `The difference between dot and bracket notation: use dot when you know the key name at write time (<code>user.name</code>). Use bracket notation when the key is in a variable (<code>obj[keyVariable]</code>) or when the key has special characters.\n\n<strong>Try this:</strong> Create an array of 5 objects, each with a name and a score. Use filter to get only items with a score above 50. Use map on the result to get just the names. Use reduce to sum all scores. Three method chains, three transformations, no for loops.\n\n<strong>Confused by reduce?</strong> Think of it as a running total. The accumulator starts at your initial value. For each item, your function receives the current accumulator and the current item, and returns the new accumulator. <code>arr.reduce((total, item) => total + item.price, 0)</code> starts at 0 and adds each price.`,
         quiz: {
-          question: "In the quiz starter code, what does correctIndex: 0 mean?",
-          options: [
-            "The first question in the quiz is correct",
-            "The user must score 0 points to pass",
-            "The first item in the options array (index 0) is the correct answer",
-            "Zero points are given for this question"
-          ],
-          correct: 2,
-          feedback: "Arrays in JavaScript start at index 0. So correctIndex: 0 means the first option is correct, correctIndex: 1 means the second, and so on. When the user clicks an answer, selectedIndex is compared to correctIndex to decide if they got it right."
+          question: "Given: const nums = [3, 7, 1, 9, 4]. What does nums.filter(n => n > 4) return?",
+          options: ["[7, 9] \u2014 only values strictly greater than 4", "[4, 7, 9] \u2014 values greater than or equal to 4", "[3, 1, 4] \u2014 values less than or equal to 4", "5 \u2014 the count of values greater than 4"],
+          correct: 0,
+          feedback: "filter returns a new array containing only the items where the callback function returns true. n > 4 is true for 7 and 9. 3 is not greater than 4. 1 is not greater than 4. 4 is not greater than 4 (the condition is strictly greater than, not greater than or equal). Result: [7, 9]."
         },
+        checklist: ["I know the core array methods: push, pop, slice, splice, indexOf, includes", "I can use map, filter, and reduce to transform arrays", "I can create and navigate nested objects using both dot and bracket notation", "I understand what JSON is and can convert between JSON and JavaScript objects", "I can work with arrays of objects \u2014 the most common data structure in real applications"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Use .filter() to show only movies with a rating above 8.0", "Add a new movie to the array using .push() and re-render the list", "Use .map() to create a new array of just the movie titles", "Sort the movies by rating using .sort()"]
+        }
+      },
+      {
+        id: "3-7",
+        title: "DOM Manipulation",
+        body: `The DOM is the browser's live, in-memory model of the page as a tree of objects. JavaScript can navigate this tree, read its nodes, change them, add new ones, or remove existing ones. This is how every interactive website works.\n\nFinding elements. <code>document.getElementById('id')</code> finds one element by its id attribute \u2014 fast and explicit. <code>document.querySelector('.class')</code> finds the first element matching any CSS selector. <code>document.querySelectorAll('p')</code> returns all matching elements as a NodeList, which you can loop over with forEach.\n\nReading and writing. <code>element.textContent</code> reads or sets the text inside an element \u2014 safe, just text. <code>element.innerHTML</code> reads or sets HTML content \u2014 powerful but dangerous with user-provided content because a malicious string could inject scripts (this is called XSS, Cross-Site Scripting). If you're displaying user input, always use textContent.\n\n<code>element.setAttribute('href', 'https://example.com')</code> sets any HTML attribute. <code>element.getAttribute('href')</code> reads it.\n\n<code>element.classList.add('active')</code> adds a class. <code>element.classList.remove('active')</code> removes it. <code>element.classList.toggle('active')</code> adds it if absent, removes it if present. This toggle pattern is how most show/hide, open/close, and active/inactive interactions work.\n\nCreating and removing. <code>document.createElement('div')</code> creates a new element (not yet on the page). <code>parent.appendChild(child)</code> attaches it. <code>element.remove()</code> deletes it from the DOM.\n\nWhen Twitter's compose box enables the Tweet button only when text exists, and disables it when the box is empty, that's a JavaScript event listener reading the textContent length and toggling a disabled attribute. Six lines of DOM manipulation powering a feature used billions of times daily.`,
+        callout: {
+          type: "default",
+          label: "textContent vs innerHTML",
+          text: "Use textContent when displaying text \u2014 especially any text that came from user input. textContent treats everything as plain text, so malicious script tags are displayed as text, not executed. innerHTML is for when you're constructing HTML programmatically and you control the content entirely. Never use innerHTML with user-provided strings."
+        },
+        callout2: {
+          type: "focus",
+          label: "classList.toggle Is Your Most-Used DOM Tool",
+          text: "The pattern: add a CSS class that defines one state (hidden, active, expanded), then use classList.toggle to switch between states. No if/else needed, no style manipulation, just toggling a class. This is how 80% of interactive UI behaviours work in professional code."
+        },
+        hint: `If your JavaScript isn't finding an element, there are three things to check. One: is the id or class name spelled correctly, including capitalisation? Two: is the script running before the element exists in the DOM? (script tags at the bottom of body fix this). Three: is the element actually in the HTML?\n\n<strong>Try this:</strong> In the browser console on any page, run <code>document.querySelectorAll('a')</code>. You'll get a NodeList of every link on the page. Run <code>document.querySelectorAll('a').length</code> to count them. Then <code>document.querySelectorAll('a')[0].textContent</code> to read the first link's text.\n\n<strong>Confused by appendChild vs innerHTML?</strong> appendChild attaches a single element you've created with createElement. innerHTML replaces everything inside a parent with an HTML string. appendChild is better for adding single items. innerHTML is often used to re-render an entire list (write the full HTML string, set it once).`,
+        quiz: {
+          question: "You're building a dropdown menu. Clicking a button should show the menu if it's hidden, and hide it if it's showing. Which DOM method handles this most cleanly?",
+          options: ["element.style.display = 'block' or 'none' \u2014 toggling the display property directly", "element.setAttribute('visible', true) \u2014 setting a custom attribute to track state", "element.classList.toggle('hidden') \u2014 adding or removing a CSS class that controls visibility", "element.innerHTML = '' \u2014 clearing the menu content to hide it"],
+          correct: 2,
+          feedback: "classList.toggle adds the class if absent, removes it if present \u2014 in one call. Pair it with a CSS rule like .hidden { display: none; } and the behaviour is clean and reusable. Directly manipulating style is harder to override and mixes presentation logic into JavaScript. Setting a custom attribute requires extra code to read and act on it. Clearing innerHTML destroys the content entirely rather than hiding it."
+        },
+        checklist: ["I can find elements using getElementById, querySelector, and querySelectorAll", "I know when to use textContent vs innerHTML and why innerHTML can be a security risk", "I can add, remove, and toggle CSS classes on elements", "I can create new elements with createElement and attach them with appendChild", "I understand the classList.toggle pattern for show/hide interactions"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Change the button text to 'Updated!' after clicking it", "Use classList.toggle to show/hide the message instead of changing textContent", "Add a second counter that counts how many times the button has been clicked", "Create a new paragraph element with document.createElement and append it to the page"]
+        }
+      },
+      {
+        id: "3-8",
+        title: "Events",
+        body: `JavaScript is event-driven. Code doesn't run continuously \u2014 it waits for something to happen, then responds. An event is anything that happens in the browser: a click, a keypress, text being typed, a form being submitted, a page finishing loading.\n\n<code>addEventListener</code> is the professional way to attach event handlers. <code>button.addEventListener('click', handleClick)</code> is better than the inline <code>onclick="handleClick()"</code> attribute because it keeps behaviour separate from structure, allows multiple listeners on the same element, and can be removed later.\n\nCommon events: <code>click</code>, <code>input</code> (fires on every character typed), <code>change</code> (fires when an input loses focus after value changes), <code>submit</code> (form submission), <code>keydown</code> and <code>keyup</code> (keyboard events), <code>mouseover</code> and <code>mouseout</code>, <code>focus</code> and <code>blur</code>.\n\nEvery event handler receives an <strong>event object</strong> as its first argument. It contains information about the event: <code>event.target</code> (the element that triggered the event), <code>event.type</code> (which event occurred), <code>event.key</code> (for keyboard events, which key was pressed).\n\n<code>event.preventDefault()</code> stops the browser's default action. On a form submit, the default is to reload the page \u2014 <code>preventDefault()</code> stops that so you can handle the submission with JavaScript. On a link click, it prevents navigation.\n\n<strong>Event delegation</strong> is attaching one listener to a parent element instead of many listeners to individual children. When a list item is clicked, the event bubbles up to the parent. The listener on the parent can read <code>event.target</code> to determine which item was clicked. This scales to dynamic lists where items are added after the listeners are attached.\n\nGoogle's search suggestions use the <code>input</code> event: every character you type fires a request, and results update in real time. One listener, hundreds of keystrokes, millions of users.`,
+        callout: {
+          type: "default",
+          label: "addEventListener Over onclick",
+          text: "element.addEventListener('click', fn) over onclick='fn()' in every case. The attribute form mixes behaviour into HTML. addEventListener can attach multiple handlers to one element, handles the event object correctly, and can be removed with removeEventListener. It's the standard."
+        },
+        callout2: {
+          type: "focus",
+          label: "Event Delegation Scales",
+          text: "If you have a list of 100 items and attach a click listener to each one, you have 100 listeners. Attach one listener to the parent list instead, and check event.target inside it. One listener handles any item, including ones added to the list after the listener was attached. This is how real applications handle dynamic lists."
+        },
+        hint: `If an event listener isn't firing, check these in order. One: is the listener attached to the right element? Use console.log inside the handler as the first test. Two: is the event name spelled correctly? ('click' not 'onClick'). Three: for keyboard events, log event.key to see what string the key produces.\n\n<strong>Try this:</strong> Add an event listener to the document that logs every keydown: <code>document.addEventListener('keydown', e => console.log(e.key))</code>. Press various keys. See what strings they produce. This reveals why keyboard shortcut code checks <code>e.key === 'Enter'</code> not <code>e.key === 13</code>.\n\n<strong>Confused by event bubbling?</strong> When you click an element, the event fires on that element, then on its parent, then its parent's parent, all the way up to the document. This is bubbling. Event delegation relies on it \u2014 a click on a child element bubbles up to the parent listener, which reads event.target to know which child was actually clicked.`,
+        quiz: {
+          question: "A form has a submit button. When clicked, the page reloads and the JavaScript handler seems to run for a split second then disappear. What is the most likely cause and fix?",
+          options: ["The event listener is attached incorrectly \u2014 use onclick instead of addEventListener", "The browser's default form submit is reloading the page \u2014 call event.preventDefault() at the start of the handler", "JavaScript cannot handle form submissions \u2014 use a server-side language instead", "The handler function is asynchronous and needs to be awaited"],
+          correct: 1,
+          feedback: "Form submission's default behaviour is to send the form data and reload the page. The JavaScript runs briefly but then the reload wipes everything. event.preventDefault() stops that default action, letting your JavaScript handle the submission completely without a page reload. This is one of the most common patterns in web form handling."
+        },
+        checklist: ["I use addEventListener instead of inline onclick attributes", "I know the common event types and what triggers each one", "I can access and use the event object inside a handler", "I understand event.preventDefault() and know when to use it", "I understand event delegation and can implement it on a dynamic list"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a keydown listener that fires when the user presses Enter", "Use event.preventDefault() on the form submit to prevent page reload", "Add a mouseover event that changes the button color when hovered (in JavaScript, not CSS)", "Use event delegation \u2014 attach one click listener to the list container instead of each item"]
+        }
+      },
+      {
+        id: "3-9",
+        title: "Error Handling and Debugging",
+        body: `Every developer writes broken code. The difference between a beginner and a professional isn't that professionals make fewer mistakes \u2014 it's that they find and fix mistakes faster because they have a systematic approach.\n\nJavaScript has three error types. A <strong>SyntaxError</strong> means the code isn't valid JavaScript \u2014 a missing bracket, an unclosed string, a typo in a keyword. The script doesn't execute at all. A <strong>ReferenceError</strong> means you tried to use a variable that doesn't exist \u2014 either it was never declared, or it's out of scope, or it's misspelled (JavaScript is case-sensitive). A <strong>TypeError</strong> means you performed an operation on a value of the wrong type \u2014 calling something that isn't a function, accessing a property on null or undefined.\n\nReading error messages is a skill that develops with practice. Every JavaScript error in the console tells you: the error type, a plain-English description of what went wrong, and the file name and line number where it was detected. Start there. Go to that line. The problem is usually either on that line or one line above.\n\n<code>console.log()</code> is the most-used debugging tool at every level of experience. Drop it inside a function to confirm it's being called. Log a variable to see its value at a specific moment in execution. Trace your assumptions before changing any code.\n\n<code>try { } catch (error) { }</code> wraps code that might fail and handles the error gracefully instead of crashing. The catch block receives the error object. <code>error.message</code> is the human-readable description. <code>throw new Error('Something went wrong')</code> creates a custom error with a message you choose.\n\nThe browser DevTools debugger is more powerful than console.log: click the line number in the Sources tab to set a breakpoint, run the code, and execution pauses there. You can inspect every variable's current value and step through code one line at a time. Systematic debugging \u2014 forming a hypothesis, testing it, narrowing it down \u2014 solves bugs faster than random changes.`,
+        callout: {
+          type: "default",
+          label: "Debugging Is Systematic",
+          text: "When something is broken, resist the urge to change things randomly. Instead: read the error message, identify the line, form a hypothesis about what's wrong, test it with console.log or a breakpoint, confirm or revise the hypothesis. One change at a time. Random changes compound bugs."
+        },
+        callout2: {
+          type: "focus",
+          label: "try/catch for Expected Failures",
+          text: "Use try/catch when you're calling code that might legitimately fail \u2014 parsing JSON, accessing an API, reading from localStorage. Don't wrap everything in try/catch; that suppresses bugs you need to see. Use it at the boundary where controlled failure is the correct response."
+        },
+        hint: `When the error message says something 'is not a function', the thing you're calling isn't a function. It might be undefined (the function name is misspelled), or null, or a string. Log the thing before calling it to see what it actually is.\n\n<strong>Try this:</strong> Open the DevTools Sources tab on any page, find a JavaScript file, and click on a line number to set a breakpoint. Reload the page. Execution pauses there. Hover over any variable name to see its current value. Use the step controls to move through execution one line at a time. This is what professional debugging looks like.\n\n<strong>Stuck on a bug for more than 20 minutes?</strong> Stop trying to fix it. Instead, explain the problem out loud \u2014 to a rubber duck, to the wall, to anyone. Articulating "I expect X but I'm getting Y because..." forces your brain to reprocess the logic, and the answer often appears while you're still talking. This is known as rubber duck debugging and it works.`,
+        quiz: {
+          question: "You see this error: TypeError: Cannot read properties of undefined (reading 'name'). What most likely caused it?",
+          options: ["The variable 'name' was declared with let instead of const", "You're trying to access the .name property on a value that is undefined \u2014 the object you expected to exist doesn't", "The name property needs to be in quotes to be accessed correctly", "TypeError means the JavaScript engine doesn't recognise the type of the variable"],
+          correct: 1,
+          feedback: "This TypeError means you wrote something like user.name where user is undefined. The object you expected to be there (user) doesn't exist at the moment your code runs \u2014 it might not have been returned yet, the variable is initialised as undefined, or a function didn't return a value. Log the variable just before the failing line to confirm what it contains."
+        },
+        checklist: ["I can identify the three JavaScript error types and what each one means", "I read error messages fully before touching any code", "I use console.log systematically to trace values, not randomly to hope for clues", "I understand try/catch and know when it's appropriate to use", "I've used the DevTools debugger to set a breakpoint and step through execution"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Fix the three intentional bugs in the code \u2014 read the error messages in the console for guidance", "Add a try/catch block around the broken function call and display the error message instead of crashing", "Add console.log statements to trace what value each variable holds", "Add input validation that throws a custom error if the input is empty"]
+        }
+      },
+      {
+        id: "3-10",
+        title: "Guided To-Do List Project",
+        body: `The to-do list is the classic beginner project because it isn't trivial. Done properly, it exercises every concept from this floor: DOM creation, event listeners, array state management, and localStorage persistence.\n\nThe scaffold in the editor handles the visual layout and structure. Your job is to complete four functions. Read every comment in the code before writing a single line \u2014 the comments describe exactly what each function needs to do.\n\n<code>addTodo</code>: read the input value, validate it's not empty, add it to the todos array, create a DOM element for it, append to the list, clear the input.\n\n<code>deleteTodo</code>: given an id, remove the matching item from the todos array, remove its DOM element.\n\n<code>toggleComplete</code>: given an id, find the item in the todos array, flip its completed boolean, update the DOM element's visual state.\n\n<code>saveToStorage</code>: convert the todos array to JSON and save it to localStorage. Call this after every state change.\n\nThe sequence matters. Get addTodo working first \u2014 confirm items appear in the list. Then deleteTodo. Then toggleComplete. Then saveToStorage and the load-on-startup logic. Each function is a small, self-contained problem. Solve them one at a time and the whole system assembles itself.`,
+        callout: {
+          type: "default",
+          label: "Read Before Writing",
+          text: "Read all four function stubs and their comments completely before implementing any of them. Understanding how they interact \u2014 what data each expects, what each one changes \u2014 prevents you from building yourself into a corner halfway through."
+        },
+        callout2: {
+          type: "focus",
+          label: "State and DOM Must Stay in Sync",
+          text: "The todos array is the source of truth. The DOM is a visual representation of that array. Every time the array changes, the relevant part of the DOM must update to match. If you ever manually change the DOM without updating the array first, they get out of sync and bugs appear."
+        },
+        hint: `If items are appearing in the list but deletion isn't working, check that each todo has a unique id and that the delete button is referencing that same id. If toggleComplete isn't updating the visual state, confirm you're finding the right DOM element \u2014 log the id you're looking for and the element you found.\n\n<strong>For addTodo:</strong> The most common mistake is forgetting to clear the input after adding. The second most common is not validating for empty strings \u2014 <code>if (!input.trim()) return;</code> stops empty todos.\n\n<strong>For localStorage:</strong> Save after every state-changing operation. Load on startup with <code>JSON.parse(localStorage.getItem('todos')) || []</code>. The <code>|| []</code> handles the case where nothing is saved yet \u2014 without it, JSON.parse(null) throws an error.`,
+        quiz: {
+          question: "The to-do list stores todos in both a JavaScript array and the DOM. When a user deletes an item, you correctly remove its DOM element but forget to remove it from the todos array. What happens on the next page refresh?",
+          options: ["The item is permanently deleted because the DOM update is authoritative", "The item reappears, because localStorage was saved from the array which still contains it", "Nothing \u2014 the DOM and array don't affect each other", "A TypeError is thrown because the array and DOM are out of sync"],
+          correct: 1,
+          feedback: "The array is the source of truth. localStorage is saved from the array. On refresh, the saved data is loaded from localStorage and the list is re-rendered from the array. If the item was removed from the DOM but not from the array, it was saved to localStorage and will reappear on refresh. Always update the source of truth (the array) first, then update the DOM to reflect it."
+        },
+        checklist: ["I read all function stubs and comments before implementing anything", "The addTodo function correctly validates input, updates the array, and creates a DOM element", "The deleteTodo function removes items from both the array and the DOM", "The toggleComplete function updates both the array state and the DOM visual state", "The todos persist through page refresh using localStorage"],
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Complete the addTodo function so new items appear in the list", "Complete the deleteTodo function so items can be removed", "Complete the toggleComplete function so items can be marked done", "Add localStorage persistence so the list survives a page refresh"]
+        }
+      },
+      {
+        id: "3-11",
+        title: "Solo Interactive Project",
+        body: `No scaffold. No hints until you've spent 30 minutes trying on your own. The brief is intentionally open.\n\n<strong>Build something interactive that responds to user input.</strong> Ideas: a tip calculator, a colour picker, a character counter with a limit, a random quote generator, a unit converter, a password strength checker, a countdown timer. The complexity is yours to choose. The subject is yours to choose. But it must actually work.\n\nMinimum requirements: at least one input or button, JavaScript that reads from that input, and DOM manipulation that changes the page based on what the user does. Beyond that, the decisions are yours. How much to build, how polished to make it, what edge cases to handle.\n\nWhen you hit a wall \u2014 and you will \u2014 apply the debugging process. Read the error. Identify the line. Form a hypothesis. Test it with console.log. One change at a time.\n\nSearching for solutions is not cheating. Every professional developer searches. The skill is knowing what to search for, evaluating what you find, and integrating it into code you understand. If you copy something without understanding it, run it, break it, and figure out why. Understanding is the requirement, not original authorship.`,
+        callout: {
+          type: "default",
+          label: "Choose Scope Deliberately",
+          text: "The difference between a good solo project and a half-finished one is choosing a scope you can complete. A tip calculator that fully works is worth more than a social network that's 10% built. Constraint is not failure. Building something complete is the skill being practised here."
+        },
+        callout2: {
+          type: "focus",
+          label: "The 30-Minute Rule",
+          text: "Spend at least 30 minutes genuinely attempting a problem before searching for a solution. Not 30 minutes of staring \u2014 30 minutes of forming hypotheses, trying things, reading error messages, and narrowing down what's wrong. That process is the skill. The answer matters less than developing the ability to find it."
+        },
+        hint: `If you're completely blank on a project idea: open your phone, look at the last 10 apps you used. Every one of them takes input and produces output. A calculator. A unit converter. A text formatter. A colour tool. Pick the simplest one. Build the simplest version of it. Then add one feature. Then another.\n\n<strong>Feeling overwhelmed before you start?</strong> Open a file. Write the HTML scaffold. Add an h1 with the project name. That's it for the first five minutes. Momentum is built by starting, not by planning.\n\n<strong>Something works but looks broken?</strong> That's a CSS problem, not a JavaScript problem. Get the functionality completely working first \u2014 correct output in the right elements. Then improve the appearance. Trying to fix both simultaneously is how sessions go nowhere.`,
+        quiz: {
+          question: "You find a Stack Overflow answer that solves your problem. You paste the code in and it works. What is the most important next step?",
+          options: ["Nothing \u2014 if it works, it works, and moving on is the right choice", "Delete the answer and write it yourself from memory to ensure you've understood it", "Read the code line by line until you can explain what each part does and why it works", "Add a comment crediting the Stack Overflow answer"],
+          correct: 2,
+          feedback: "Code you can't explain is code you don't own. It will behave unexpectedly when conditions change, and you won't know how to modify or debug it. Read it until you understand each line. Break it intentionally \u2014 remove a line, change a value \u2014 and observe what fails. Understanding a solution is the real goal, not just having one that runs."
+        },
+        checklist: ["I spent at least 30 minutes attempting the project before searching for anything", "The project responds to real user input", "I can explain every line of code I wrote or incorporated", "When I got stuck, I applied the debugging process systematically", "The project is complete enough that I'd show it to someone as an example of what I built"]
+      },
+      {
+        id: "3-12",
+        title: "Floor Check",
+        body: `Before Floor 4, a hard check. Not "did you finish the sections" \u2014 that's the minimum. The question is whether you actually understand what you built.\n\nFloor 4 has no guided building. You receive a brief and produce working code. There are no step-by-step walkthroughs. If you're missing foundations from Floor 3, Floor 4 will not teach them to you \u2014 it will expose the gap and it will be harder to fill from there.\n\nSo before moving: can you explain the DOM to someone who has never coded? Not recite the definition \u2014 explain it, with an example, in a way that would make sense to them. Can you write a function from memory that takes parameters, does something with them, and returns a value? Without looking anything up? Can you debug your own code? When something breaks, do you read the error, identify the line, form a hypothesis, and test it \u2014 or do you change things randomly and hope?\n\nIf any of these feel shaky, spend another week on Floor 3 projects. Not re-reading sections \u2014 building things. Build two more interactive projects. Build them without scaffolds. Debug the inevitable breakages. The foundation solidifies through doing, not through reviewing.\n\nIf you can answer all three questions clearly: you're ready. Floor 4 is waiting.`,
+        callout: {
+          type: "default",
+          label: "Understanding vs Completion",
+          text: "Completing sections and understanding concepts are different things. You can finish every section by reading and clicking without internalising anything. The check is whether you can use the knowledge independently \u2014 produce something new without being walked through it. If you can, move on. If you can't, more projects are the prescription."
+        },
+        callout2: {
+          type: "focus",
+          label: "Another Week Is Not Failure",
+          text: "Spending an extra week on Floor 3 because the foundations aren't solid is the smart choice. Rushing to Floor 4 with shaky fundamentals creates a debt that compounds. Every floor is built on the one before it. A solid Floor 3 makes Floor 4 easier. A shaky one makes every subsequent floor harder."
+        },
+        hint: `Three things to test right now, before deciding you're ready.\n\nOne: close this app, open a blank HTML file, and write a complete page with a JavaScript function that responds to a button click and modifies the DOM. No looking anything up. If you can do it, the fundamentals are there.\n\nTwo: take one of the projects you built this floor and add a feature that wasn't in the original. Something you have to figure out. If the process of figuring it out feels manageable, you're ready.\n\nThree: read someone else's short JavaScript snippet \u2014 something you didn't write. Can you explain what it does line by line? If yes, you're reading code fluently enough for Floor 4.`,
+        quiz: {
+          question: "You've finished every Floor 3 section but when you try to build something from scratch you feel lost without the guided structure. What does this most accurately indicate?",
+          options: ["You're ready for Floor 4 \u2014 feeling uncertain at the start of new projects is normal for everyone", "The sections were too difficult and Floor 3 content needs to be simplified", "You've understood the concepts passively but haven't yet built the ability to apply them independently \u2014 more project practice is needed before Floor 4", "Floor 4 will teach you to build independently so it's fine to proceed"],
+          correct: 2,
+          feedback: "Passive understanding (reading, following along) and active capability (building independently) are different skills that develop at different rates. The sections built passive understanding. Independent projects build active capability. If the second is missing, more project practice \u2014 not more section reading \u2014 is what closes the gap. Floor 4 assumes active capability. It does not build it from scratch."
+        },
+        checklist: ["I can explain the DOM to someone who has never coded, using a concrete example", "I can write a function from memory that takes parameters and returns a value", "I can debug broken JavaScript systematically, not by making random changes", "I've built at least two interactive projects without a scaffold", "I am confident I understand the material, not just that I completed the sections"]
       }
     ]
   },
   {
     id: 4,
     title: "Building Alone",
-    subtitle: "Where the doer starts to emerge",
+    subtitle: "Independence, APIs and the developer mindset",
     color: "#9a7ec8",
-    duration: "10-12 weeks",
+    duration: "2-3 months",
     sessions: "5 per week",
     length: "60-90 min",
-    tag: "Floor 04 \u2014 Independence",
+    tag: "Floor 04 — Independence",
     sections: [
-      { id: "4-1", title: "Receiving a Brief", body: `From this floor onward, things change. I give you a brief — a description of what to build — and you figure out how to build it without being walked through every step.\n\nThis is how real development works. A client, a manager, or your own idea gives you a target. You use what you know, research what you don\'t, and produce something that works.\n\n<strong>The pattern is always the same:</strong> understand the brief, plan before you code, build, test, review.\n\nThe starter below gives you the HTML structure and styling for the tip calculator brief. Your job is to write the JavaScript logic that makes it work.`, callout: { type: "default", label: "Brief 01", text: "Build a tip calculator. The user enters a bill amount and selects a tip percentage (10%, 15%, 20%). The page calculates and displays the tip amount and the total bill." }, callout2: { type: "focus", label: "Plan First", text: "Before touching the code editor, write out in plain English what the calculator needs to do. Then identify: which elements you need to read from, what calculation to perform, which element shows the result. Plan first. Code second. This habit never stops being useful." }, hint: `Three questions before touching code:\n\n1. What does the user input? (the bill amount — read it with document.getElementById(\'bill\').value)\n2. What does the page calculate? (tip = billAmount * tipPercent / 100)\n3. What does the page display? (tip amount and the total = bill + tip)\n\n<strong>Still stuck?</strong> Start even smaller — just get the number out of the input with console.log(). Then multiply it. One tiny step at a time.`, code: { lang: "HTML", starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 32px; max-width: 420px; margin: 0 auto; }\n    h2 { color: #9a7ec8; margin-top: 0; }\n    label { display: block; margin: 16px 0 6px; font-size: 13px; color: #a0b0c0; }\n    input[type=number] { background: #0d1117; border: 1px solid #30363d; color: white; padding: 10px 14px; border-radius: 6px; font-size: 16px; width: 100%; box-sizing: border-box; }\n    .tip-btns { display: flex; gap: 10px; margin: 6px 0; }\n    .tip-btn { flex: 1; padding: 10px; background: #0d1117; border: 1px solid #30363d; color: white; border-radius: 6px; cursor: pointer; font-size: 15px; }\n    .tip-btn.active { border-color: #9a7ec8; background: rgba(154,126,200,0.12); color: #9a7ec8; }\n    .result-box { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 20px; margin-top: 20px; }\n    .result-row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 15px; }\n    .result-row.total { font-weight: bold; color: #9a7ec8; font-size: 18px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #30363d; }\n    #calc-btn { width: 100%; margin-top: 16px; padding: 12px; background: #9a7ec8; border: none; color: white; border-radius: 6px; font-size: 15px; cursor: pointer; }\n    #calc-btn:hover { background: #b09ada; }\n  </style>\n</head>\n<body>\n  <h2>Tip Calculator</h2>\n\n  <label>Bill amount (£)</label>\n  <input type="number" id="bill" placeholder="0.00" min="0" step="0.01" />\n\n  <label>Tip percentage</label>\n  <div class="tip-btns">\n    <button class="tip-btn" onclick="selectTip(10, this)">10%</button>\n    <button class="tip-btn" onclick="selectTip(15, this)">15%</button>\n    <button class="tip-btn" onclick="selectTip(20, this)">20%</button>\n  </div>\n\n  <button id="calc-btn" onclick="calculate()">Calculate</button>\n\n  <div class="result-box">\n    <div class="result-row"><span>Bill</span><span id="res-bill">£0.00</span></div>\n    <div class="result-row"><span>Tip</span><span id="res-tip">£0.00</span></div>\n    <div class="result-row total"><span>Total</span><span id="res-total">£0.00</span></div>\n  </div>\n\n  <script>\n    let selectedTip = 0;\n\n    function selectTip(pct, btn) {\n      selectedTip = pct;\n      // Remove active class from all buttons, add to clicked one\n      document.querySelectorAll(\'.tip-btn\').forEach(function(b) { b.classList.remove(\'active\'); });\n      btn.classList.add(\'active\');\n    }\n\n    function calculate() {\n      // TODO: Get the bill amount from the input (use parseFloat, not Number, for decimal currency)\n      const bill = 0; // replace 0 with the real value\n\n      // TODO: Calculate the tip\n      const tip = 0; // replace 0 with the formula\n\n      // TODO: Calculate the total\n      const total = 0; // replace 0 with the formula\n\n      // TODO: Display the results (format to 2 decimal places with .toFixed(2))\n      document.getElementById(\'res-bill\').textContent = \'£\' + bill.toFixed(2);\n      document.getElementById(\'res-tip\').textContent = \'£\' + tip.toFixed(2);\n      document.getElementById(\'res-total\').textContent = \'£\' + total.toFixed(2);\n    }\n  <\/script>\n</body>\n</html>', challenges: ["Complete the calculate() function — replace the 0s with the real formulas", "Add validation: if no tip percentage is selected, show an alert telling the user to select one first", "Add a split bill feature: a fourth input that divides the total by the number of people", "Add a custom tip percentage input field as a fourth option alongside 10%, 15%, 20%"] }, quiz: { question: "In the tip calculator, what does parseFloat(document.getElementById('bill').value) do?", options: ["Creates a new input field on the page", "Gets the text from the bill input and converts it to a decimal number", "Sets the value of the bill input to 0.0", "Checks if the bill input exists on the page"], correct: 1, feedback: "document.getElementById('bill') finds the input element. .value gets whatever the user typed as a string. parseFloat() converts that string to a floating-point number so you can do maths with it. Without parseFloat, '50' + 10 would give '5010' (string concatenation) instead of 60." }, checklist: ["I read the brief carefully", "I planned the build before starting", "I built the tip calculator", "It works correctly with different inputs"] },
-      { id: "4-2", title: "How Developers Actually Think", body: `Professional developers don't memorise everything. They can't \u2014 there's too much. What they have instead is a <strong>process</strong>.\n\nWhen they face a new problem: they break it down into smaller pieces. They solve the smallest piece first. Then the next. They use documentation and search engines without shame. They test constantly. And they know that the first version doesn't have to be perfect \u2014 it just has to work.\n\nThis floor is about building that process in you.`, callout: { type: "default", label: "The Developer Mindset", text: "A professional developer Googles things every single day. Knowing how to find answers quickly and evaluate them correctly is itself a core skill. You are learning to think like a developer, not to become a dictionary." }, hint: `If you feel like you should already know the answer without looking it up \u2014 let that feeling go. It isn't how this works.\n\nThe skill isn't memorising. The skill is knowing <strong>how to find the answer quickly and recognise a good one</strong>. That takes time to build and it builds through practice, not through reading.\n\n<strong>Practical tip:</strong> When you search for something, after you've solved it, close the tab and try to write the solution again from memory. That repetition is what moves it from "I found it" to "I know it."`, checklist: ["I understand that looking things up is normal", "I can break a problem into smaller steps", "I test my code as I build, not just at the end"] },
-      { id: "4-3", title: "Introduction to Storing Data", body: `So far, everything your code does disappears when the page refreshes. Real applications need to <strong>remember things</strong>.\n\nThis section introduces two ideas: <strong>localStorage</strong> (the browser can store small amounts of data that survives page closes and reopens) and the concept of <strong>databases</strong> (covered in Floor 5).\n\nlocalStorage is a key-value store: you save data under a name, and retrieve it by that name later. The critical thing to know: localStorage only stores strings. If you want to save a list or an object, convert it to a string with <code>JSON.stringify()</code> and convert it back with <code>JSON.parse()</code>.\n\nThe demo below builds a persistent note-saver. Type a note, save it, refresh the page — it\'s still there. That\'s localStorage.`, callout: { type: "default", label: "Why This Matters", text: "The moment your code can remember things is the moment it starts feeling like a real product rather than a demo. localStorage is the first step toward real data persistence." }, hint: `localStorage works like a notepad the browser keeps permanently.\n\nlocalStorage.setItem(\'key\', \'value\') — save something\nlocalStorage.getItem(\'key\') — read it back\nlocalStorage.removeItem(\'key\') — delete it\n\n<strong>Saving a list:</strong> localStorage.setItem(\'notes\', JSON.stringify(myArray))\n<strong>Reading it back:</strong> const myArray = JSON.parse(localStorage.getItem(\'notes\')) || [];\n\nThe || [] means "if there\'s nothing saved yet, use an empty array instead of null."`, code: { lang: "HTML", starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; max-width: 500px; margin: 0 auto; }\n    h2 { color: #9a7ec8; margin-top: 0; }\n    textarea { width: 100%; background: #0d1117; border: 1px solid #30363d; color: white; padding: 12px; border-radius: 6px; font-size: 14px; resize: vertical; min-height: 80px; box-sizing: border-box; font-family: sans-serif; }\n    .btn { background: #9a7ec8; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 8px 4px 0 0; font-size: 13px; }\n    .btn.danger { background: rgba(248,113,113,0.15); border: 1px solid rgba(248,113,113,0.3); color: #f87171; }\n    #notes-list { margin-top: 24px; }\n    .note-item { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }\n    .note-text { flex: 1; font-size: 14px; line-height: 1.5; white-space: pre-wrap; }\n    .note-delete { background: none; border: none; color: #f87171; cursor: pointer; font-size: 18px; padding: 0; line-height: 1; }\n    #empty-msg { color: #4a5568; font-size: 14px; text-align: center; padding: 32px; }\n  </style>\n</head>\n<body>\n  <h2>Persistent Notes</h2>\n  <textarea id="note-input" placeholder="Type a note..."></textarea>\n  <br>\n  <button class="btn" onclick="saveNote()">Save note</button>\n  <button class="btn danger" onclick="clearAll()">Clear all</button>\n\n  <div id="notes-list"></div>\n\n  <script>\n    // Load existing notes from localStorage on startup\n    // JSON.parse converts the saved string back to a JavaScript array\n    // The || [] means "if nothing is saved yet, start with an empty array"\n    let notes = JSON.parse(localStorage.getItem(\'notes\')) || [];\n\n    function saveNote() {\n      const input = document.getElementById(\'note-input\');\n      const text = input.value.trim();\n\n      if (!text) return; // Do nothing if the input is empty\n\n      // Add the new note to our array\n      notes.push(text);\n\n      // Save the updated array to localStorage\n      // JSON.stringify converts the array to a string for storage\n      localStorage.setItem(\'notes\', JSON.stringify(notes));\n\n      input.value = \'\'; // Clear the textarea\n      renderNotes(); // Update the display\n    }\n\n    function deleteNote(index) {\n      // Remove one item at position index\n      notes.splice(index, 1);\n      localStorage.setItem(\'notes\', JSON.stringify(notes));\n      renderNotes();\n    }\n\n    function clearAll() {\n      notes = [];\n      localStorage.removeItem(\'notes\');\n      renderNotes();\n    }\n\n    function renderNotes() {\n      const list = document.getElementById(\'notes-list\');\n\n      if (notes.length === 0) {\n        list.innerHTML = \'<div id="empty-msg">No notes yet. Type one above.</div>\';\n        return;\n      }\n\n      list.innerHTML = \'\'; // Clear the list before re-rendering\n\n      // Loop through every note and create an element for it\n      notes.forEach(function(note, index) {\n        const div = document.createElement(\'div\');\n        div.className = \'note-item\';\n        div.innerHTML =\n          \'<span class="note-text">\' + note + \'</span>\' +\n          \'<button class="note-delete" onclick="deleteNote(\' + index + \')">✕</button>\';\n        list.appendChild(div);\n      });\n    }\n\n    // Render any notes that were saved in a previous session\n    renderNotes();\n  <\/script>\n</body>\n</html>', challenges: ["Add a timestamp to each note showing when it was saved (use new Date().toLocaleTimeString())", "Add the ability to edit a note after saving it", "Add a character limit of 200 — show a counter updating as the user types", "Save the notes with a title as well as body text (you'll need to change notes from an array of strings to an array of objects)"] }, quiz: { question: "Why do we use JSON.stringify() before saving an array to localStorage?", options: ["Because localStorage only accepts JSON format files", "Because localStorage only stores strings, and JSON.stringify converts an array to a string", "Because arrays cannot be used in JavaScript without converting them first", "Because JSON.stringify compresses the data to make it smaller"], correct: 1, feedback: "localStorage is a key-value store that only accepts string values. An array like ['note one', 'note two'] is not a string — it's a JavaScript object. JSON.stringify converts it to the string '[\"note one\",\"note two\"]' for storage. JSON.parse then converts it back to an array when you need it." }, checklist: ["I understand what localStorage does", "I built something that saves data between page refreshes", "I understand that databases do the same thing at a much larger scale"] },
-      { id: "4-4", title: "Code Review \u2014 Looking at What You Built", body: `A code review is when you look back at your own code with fresh eyes \u2014 or when someone else does \u2014 and asks: is this the best way to do it?\n\nAs you review your previous projects, ask yourself:\n\n<strong>Is it readable?</strong> Could someone else understand what this code does?\n<strong>Is it repetitive?</strong> Am I writing the same thing multiple times when a function could handle it?\n<strong>Does it handle mistakes?</strong> What happens if the user enters something unexpected?`, callout: { type: "focus", label: "The Logical Thinker's Favourite Section", text: "Code review is where your logical mind shines. You're not just making things work \u2014 you're asking why it works and whether it could work better. That habit separates good developers from great ones." }, hint: `When reviewing your own code, read it as if you've never seen it before. Better still \u2014 leave it for a day, then come back.\n\n<strong>Three quick questions for any piece of code:</strong>\n1. If I read this variable name alone, do I know what it holds?\n2. Could I explain what this function does in one sentence?\n3. What happens if the user does something I didn't expect?\n\nIf any answer is "I'm not sure" \u2014 that's what needs fixing. Not because it's broken, but because unclear code causes problems later.`, checklist: ["I reviewed my Floor 3 project with fresh eyes", "I found at least one thing I could improve", "I improved it"] },
-      { id: "4-5", title: "Floor 4 Project \u2014 Something You Designed", body: `No brief this time. Just a constraint.\n\n<strong>Build something that solves a problem you actually have.</strong>\n\nIt can be small. A habit tracker. A simple budget tool. A random meal picker. A reading list. Anything that would genuinely be useful to you.\n\nIt must use HTML, CSS, and JavaScript. It must store at least one piece of data. And it must be something you'd actually use.`, callout: { type: "warning", label: "The Fear of the Blank Page", text: "This is where the cautious learner hesitates. You might feel like your idea isn't good enough or too simple. <strong>Build it anyway.</strong> The idea doesn't matter as much as the act of designing and building something from nothing." }, hint: `If you truly cannot think of an idea, use one of these:\n\u2014 A mood tracker that saves today's mood with a date\n\u2014 A simple counter that remembers its number after refresh\n\u2014 A personal quote collection where you save your favourite quotes\n\u2014 A daily water intake tracker\n\nNone of these are impressive. All of them are real. The point isn't the idea \u2014 it's the experience of making every decision yourself, from the first line to the last.`, checklist: ["I identified a real problem to solve", "I planned the build before starting", "I built it", "It uses localStorage", "I would actually use it", "I'm ready for Floor 5"] }
+      {
+        id: "4-1",
+        title: "How Developers Think",
+        body: `Professional developers don't memorise — they have a process. When they face a new problem, they break it down into the smallest possible piece, solve that piece, then move to the next. The first version doesn't need to be perfect. It needs to work. Then you improve it.
+
+One of the most useful debugging techniques has a ridiculous name: rubber duck debugging. You explain your code, line by line, to an inanimate object. The act of explaining forces you to articulate assumptions you didn't know you were making. The bug usually reveals itself before you finish the sentence.
+
+The 20-minute rule: try to solve something yourself for 20 minutes before searching. After 20 minutes of searching, ask someone. Both limits matter — the first builds genuine problem-solving capacity, the second prevents you from losing an hour to something a colleague could answer in 30 seconds.
+
+Reading error messages properly is a skill most beginners skip. Every error has a type (what kind of error), a message (what went wrong in plain English), a file name, and a line number. The line number is where the error was <em>detected</em>, not always where the bug <em>is</em>. Stack traces show the chain of function calls that led to the error — read them from the bottom up.`,
+        callout: {
+          type: "default",
+          label: "The Process",
+          text: "Break it down. Solve the smallest piece. Test it. Move to the next piece. Repeat. Every professional developer works this way — the ones who don't are the ones who ship broken software."
+        },
+        callout2: {
+          type: "focus",
+          label: "Common Confusion",
+          text: "The line number in an error message tells you where the problem was detected, not necessarily where you made the mistake. A missing variable declared on line 5 might only cause an error when it's used on line 40."
+        },
+        hint: `You're stuck and you don't know why the code isn't working. That is the normal state of development. It isn't a sign you're doing it wrong.
+
+<strong>Try this:</strong> Explain what the code should be doing, line by line, out loud. Don't skip lines. If you can't explain a line, that line is probably where the problem is.
+
+<strong>Still stuck?</strong> Read the error message in full before doing anything else. The error type tells you what category of problem it is. The message tells you what specifically went wrong. The line number tells you where to look. You have more information than you think.`,
+        quiz: {
+          question: "You see an error on line 47 of your code. What does this tell you about where the bug actually is?",
+          options: ["The bug is definitely on line 47", "Line 47 is where the error was detected, but the actual mistake could be on an earlier line", "The bug is on a line after line 47", "The error message is unreliable and should be ignored"],
+          correct: 1,
+          feedback: "Line 47 is where JavaScript noticed something was wrong, not necessarily where you made the mistake. If a variable is misspelled on line 12, the error might only surface when you try to use it on line 47. Start at the reported line, then trace backwards through the call stack to find the root cause."
+        },
+        checklist: ["I understand the 20-minute rule", "I can read an error message and extract the type, message, and line number", "I understand what a stack trace is", "I've tried rubber duck debugging at least once", "I break problems into smaller pieces before writing code"]
+      },
+      {
+        id: "4-2",
+        title: "Reading Documentation",
+        body: `MDN Web Docs is the authoritative reference for everything on the web. Not a blog post, not a Stack Overflow answer — MDN. It is maintained by Mozilla and browser vendors and reflects the actual specification. When you want to know how something works, MDN is where you go.
+
+Reading documentation is a skill. A doc page has a consistent structure: description of what the thing is, syntax showing how to call it, parameters explaining what it accepts, return value describing what it gives back, and examples. Skim the structure first, then read the part that answers your specific question.
+
+Searching docs effectively means knowing what you're looking for. Searching "array remove item" in MDN gives you Array.prototype.splice() and Array.prototype.filter(). From there you can decide which fits your situation. Documentation is a reference, not a textbook — you look things up when you need them, not memorise them in advance.
+
+Stack Overflow answers require more evaluation. Before trusting an answer: check when it was posted (a 2012 answer may use outdated syntax), check the vote count (highly voted answers are usually correct), and check whether the question matches your exact situation (the question might look similar but have a crucial difference).
+
+The browser console is an underused sandbox. Any line of JavaScript can be typed directly into the console and run immediately. Before adding code to a file, test the concept in the console first. It saves the file-save, browser-refresh cycle entirely.`,
+        callout: {
+          type: "default",
+          label: "MDN First",
+          text: "When something on the web confuses you, go to MDN first. developer.mozilla.org. Bookmark it. It is more reliable than any tutorial, blog, or AI-generated explanation. It is what the browser vendors themselves use."
+        },
+        callout2: {
+          type: "focus",
+          label: "Stack Overflow Gotcha",
+          text: "A Stack Overflow answer with 800 upvotes from 2014 can be completely wrong for modern JavaScript. Always check the date alongside the vote count. The most dangerous answers are the highly-voted outdated ones — they look authoritative but lead you to deprecated patterns."
+        },
+        hint: `You're reading a doc page and it makes no sense. That's normal. Documentation is written for people who already understand the basics — it's a reference, not a tutorial.
+
+<strong>Try this:</strong> Skip to the Examples section at the bottom. Read a working example first, then go back to the description. Code before theory makes the theory stick.
+
+<strong>Still stuck?</strong> Type the specific thing you want to do into the browser console. If it works, you understand it. If it errors, read the error. The console gives you immediate feedback that documentation can't.`,
+        quiz: {
+          question: "You find a Stack Overflow answer that perfectly matches your problem. It has 1,200 upvotes. Before using it, what should you check?",
+          options: ["Nothing — 1,200 upvotes means it's definitely correct and up to date", "The date it was posted and whether the question describes exactly your situation", "Whether the answerer has a gold badge", "Whether the page has been viewed more than 10,000 times"],
+          correct: 1,
+          feedback: "Vote counts measure historical usefulness, not current accuracy. A JavaScript answer from 2013 may use var, callbacks, and patterns that have been superseded. Always check the date. Also verify the question actually matches your situation — similar-looking problems can have different root causes."
+        },
+        checklist: ["I know how to navigate MDN Web Docs", "I understand the structure of a documentation page", "I can evaluate a Stack Overflow answer critically", "I use the browser console to test code before adding it to a file", "I read documentation examples before reading descriptions"]
+      },
+      {
+        id: "4-3",
+        title: "What APIs Are",
+        body: `APIs let your code talk to other systems. Every major product you use is built on top of other people's APIs. Uber doesn't build maps — it uses Google Maps API. Spotify doesn't build payment processing — it uses Stripe. Every "Login with Google" button you've ever clicked is an OAuth API call.
+
+REST APIs use the same HTTP methods your browser uses to load pages. GET retrieves data. POST creates something new. PUT or PATCH updates something existing. DELETE removes something. These four methods map onto the four database operations: read, create, update, delete.
+
+Every API call goes to an <strong>endpoint</strong> — a URL that represents a specific resource or action. https://api.spotify.com/v1/tracks/123 is an endpoint that returns data about a specific track. The request goes out, the server processes it, and the response comes back with data and a status code.
+
+HTTP status codes tell you what happened: 200 means success, 201 means something was created, 400 means your request was malformed, 401 means you're not authenticated, 403 means you don't have permission, 404 means the resource doesn't exist, 500 means the server broke. Knowing these by feel speeds up debugging dramatically.
+
+APIs speak in JSON — JavaScript Object Notation. It is the universal format for data exchange between systems: key-value pairs, arrays, nested objects. Any language on any platform can read it. That's why it won.`,
+        callout: {
+          type: "default",
+          label: "APIs Are Everywhere",
+          text: "Every feature you use that involves another company's service is an API: weather data, maps, payments, authentication, email delivery, image recognition. Learning to use APIs is learning to leverage thousands of engineers' work from a single function call."
+        },
+        callout2: {
+          type: "focus",
+          label: "Status Codes That Bite Everyone",
+          text: "401 Unauthorized means you're not authenticated (no valid credentials sent). 403 Forbidden means you ARE authenticated but don't have permission for this resource. These two look similar but require completely different fixes. Getting them confused wastes time."
+        },
+        hint: `You're calling an API and getting an error status code but don't know what it means.
+
+<strong>Try this:</strong> Look up the status code directly — "HTTP 422" in a search returns the exact meaning immediately. Then look at the response body — most APIs include a JSON error message explaining exactly what went wrong.
+
+<strong>Still stuck?</strong> Open the Network tab in DevTools. Find your API request, click it, and look at the Headers and Response tabs. You'll see the exact request that went out and the exact response that came back. This is the fastest way to diagnose any API problem.`,
+        quiz: {
+          question: "An API returns a 401 status code. What does this tell you about what went wrong?",
+          options: ["The server crashed and needs to be restarted", "The resource you requested does not exist", "Your request did not include valid authentication credentials", "You have permission to read but not to write to this resource"],
+          correct: 2,
+          feedback: "401 Unauthorized means the server doesn't know who you are — no valid API key, token, or credentials were included in the request. 403 Forbidden means the server knows who you are but won't let you do this specific thing. 404 means the resource doesn't exist. 500 means the server failed."
+        },
+        checklist: ["I understand what an API is and why they exist", "I know the four HTTP methods and when to use each", "I can read and understand common HTTP status codes", "I understand what JSON is and what it looks like", "I understand what an API endpoint is"]
+      },
+      {
+        id: "4-4",
+        title: "Fetch and Async/Await",
+        body: `The browser's fetch() function sends HTTP requests from JavaScript. When you search GitHub and results appear without a page reload, that's fetch() making API calls as you type.
+
+fetch() is <strong>asynchronous</strong> — it doesn't block the rest of your code while waiting for the server to respond. Instead, it returns a <strong>Promise</strong>: an object that represents a value that will be available in the future. When the response arrives, the Promise resolves and your code continues.
+
+async/await is syntax that makes asynchronous code read like synchronous code. Mark a function as async, then use await before any operation that returns a Promise. The function pauses at that point, waits for the Promise to resolve, and continues. Under the hood it's still a Promise — async/await is just cleaner syntax on top.
+
+Error handling in async functions uses try/catch. Wrap your await calls in try, and handle network failures or bad responses in catch. An unhandled async error silently fails — the user sees nothing, and the bug is invisible. Always handle errors in production code.
+
+A critical mistake: never try to use fetched data outside the async function without properly awaiting it. The data doesn't exist yet at the point the outer code runs — the Promise hasn't resolved. This is the number one source of undefined errors in code that makes API calls.`,
+        callout: {
+          type: "default",
+          label: "Why Async Exists",
+          text: "JavaScript runs on a single thread. If fetch() blocked while waiting for a server response, the entire page would freeze — no scrolling, no clicks, nothing. Async operations keep the thread free while waiting. That's why the page stays responsive during network requests."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Classic Mistake",
+          text: "fetch() returns a Response object, not the data. You need to call .json() on the response to parse the body — and .json() is also async. So you await fetch(), then await response.json(). Forgetting the second await gives you a Promise object where you expected data."
+        },
+        hint: `Your fetch call returns undefined or a Promise object instead of the data you expected.
+
+<strong>Try this:</strong> Add console.log() immediately after each await line. If you see [object Promise] instead of your data, you're missing an await somewhere. If you see undefined, the data property you're accessing doesn't exist — console.log the whole response object first to see its actual shape.
+
+<strong>Still stuck?</strong> Open the Network tab in DevTools, find your fetch request, and look at the Response tab. That shows exactly what the API returned. Compare that structure to how you're accessing the data in your code.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Change the API call to fetch user ID 5 instead of 1", "Add error handling that shows a message if the fetch fails", "Display 3 more fields from the response object", "Add a loading indicator that shows while the fetch is in progress"]
+        },
+        quiz: {
+          question: "Why can't you use data fetched from an API on the line immediately after calling fetch() without async/await?",
+          options: ["Because fetch() only works inside event listeners", "Because fetch() is asynchronous — the data doesn't exist yet when the next line runs", "Because the data needs to be converted from binary before use", "Because fetch() requires a callback function to return data"],
+          correct: 1,
+          feedback: "fetch() starts a network request and returns immediately with a Promise — it doesn't wait for the response. The next line of code runs before the server has responded. To wait for the data, you must either use .then() chaining or mark the function as async and use await before fetch()."
+        },
+        checklist: ["I understand what asynchronous code means", "I can write a fetch call using async/await", "I handle errors with try/catch in async functions", "I understand that .json() is also async and needs to be awaited", "I never try to use fetched data outside the async context without proper handling"]
+      },
+      {
+        id: "4-5",
+        title: "Local Storage",
+        body: `localStorage is the browser's built-in key-value store. Data saved to localStorage survives page refreshes and browser restarts — it persists until explicitly cleared. Medium uses it to save your draft article so you don't lose it if you close the tab by accident.
+
+localStorage stores strings only. Save a number or boolean and it becomes a string when you read it back. To save objects or arrays, use JSON.stringify() to convert them to a string before saving, and JSON.parse() to convert them back after reading.
+
+The API is minimal: localStorage.setItem('key', value) to save, localStorage.getItem('key') to read (returns null if the key doesn't exist), localStorage.removeItem('key') to delete one item, localStorage.clear() to wipe everything.
+
+sessionStorage works identically but is cleared when the tab closes. The difference matters: use localStorage for things that should persist (user preferences, saved data), sessionStorage for things that should reset each session (temporary UI state, one-time notices).
+
+Common use cases: dark mode preference (so the user doesn't have to toggle it every visit), draft content (so input isn't lost on refresh), cached API responses (so you don't re-fetch the same data), and shopping cart state (so items don't vanish on navigation).`,
+        callout: {
+          type: "default",
+          label: "The String Trap",
+          text: "localStorage.setItem('count', 5) saves the number 5. localStorage.getItem('count') returns the string '5'. Then '5' + 1 equals '51', not 6. Always parse numbers back with Number() or parseInt(), and objects with JSON.parse()."
+        },
+        callout2: {
+          type: "focus",
+          label: "sessionStorage vs localStorage",
+          text: "If you save something to sessionStorage and the user closes the tab and reopens it, the data is gone. localStorage survives that. Pick based on whether the data should outlast the session — don't default to one or the other without thinking about it."
+        },
+        hint: `Your data disappears on page refresh even though you're using localStorage.
+
+<strong>Try this:</strong> Open DevTools, go to Application > Local Storage. You can see exactly what's stored, what keys exist, and what values they hold. If your key isn't there, setItem isn't running correctly — add a console.log just before it to confirm it's being called.
+
+<strong>Still stuck?</strong> The most common mistake is saving an object without JSON.stringify. localStorage.setItem('user', {name: 'Alex'}) saves the string '[object Object]' — completely useless. Always stringify objects before saving.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a clear all button that removes all saved notes", "Add a timestamp to each saved note", "Add a character count that updates as the user types", "Make the notes list sortable by date saved"]
+        },
+        quiz: {
+          question: "You save an array to localStorage with localStorage.setItem('items', myArray). When you retrieve it with getItem, what do you get?",
+          options: ["The original array, ready to use", "The string '[object Array]'", "The array converted to a comma-separated string", "null, because localStorage cannot store arrays"],
+          correct: 1,
+          feedback: "localStorage coerces anything that isn't a string using .toString(). An array's toString() returns '[object Array]'. To save an array properly, use JSON.stringify(myArray) before saving. To retrieve it, use JSON.parse(localStorage.getItem('items')). Skipping this step is one of the most common localStorage bugs."
+        },
+        checklist: ["I understand what localStorage persists and what it doesn't", "I use JSON.stringify and JSON.parse with objects and arrays", "I know the difference between localStorage and sessionStorage", "I can read and clear localStorage using DevTools", "I can name three appropriate use cases for localStorage"]
+      },
+      {
+        id: "4-6",
+        title: "Error Handling at Scale",
+        body: `try/catch is not optional in production code. The question is not whether errors will happen — they will. The question is whether your application handles them gracefully or crashes silently and confuses the user.
+
+There are two categories of error. <strong>Expected errors</strong> are things you anticipate: the user enters invalid input, the network times out, the API returns no results. These should be handled explicitly with informative messages. <strong>Unexpected errors</strong> are bugs: null pointer exceptions, type mismatches, logic errors. These should be caught, logged, and surfaced in a way that doesn't expose your internals to users.
+
+Defensive programming means checking that data exists before trying to use it. If an API response might not include a nested property, don't access it directly — use optional chaining: user?.address?.city returns undefined instead of throwing a TypeError when address doesn't exist.
+
+Nullish coalescing (??) provides fallback values for null or undefined. user?.name ?? 'Anonymous' returns 'Anonymous' if name is null or undefined, but returns the actual name otherwise. It's more precise than || because || also triggers on 0 and empty string, which are valid values.
+
+Production applications fail gracefully. When Spotify can't load your playlist, it shows a retry button — not a blank screen, not a stack trace. The user should always know what happened and what they can do about it.`,
+        callout: {
+          type: "default",
+          label: "The Production Standard",
+          text: "A blank screen is never acceptable. A console error the user can't see is never acceptable. Every error state your application can reach should show the user something useful: what went wrong and what to do next."
+        },
+        callout2: {
+          type: "focus",
+          label: "Optional Chaining",
+          text: "user.profile.avatar.url throws a TypeError if any step in that chain is null or undefined. user?.profile?.avatar?.url returns undefined safely. Use optional chaining whenever you're accessing data that came from an API — you can't guarantee the shape of every response."
+        },
+        hint: `Your code crashes when the API returns unexpected data, but you're not sure where to add the error handling.
+
+<strong>Try this:</strong> Find every place you access a property on data that came from an API. Ask: what happens if this property doesn't exist? Add optional chaining (?.) to every nested property access. Then add ?? fallbacks wherever you need a default value.
+
+<strong>Still stuck?</strong> Add console.log(data) before any property access to inspect the full shape of what you're working with. API responses often differ from the documentation in edge cases.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a case that handles when the API returns no results", "Wrap the main function in try/catch and display a friendly error message", "Use optional chaining to safely access a nested property that might not exist", "Add a retry button that re-runs the failed operation"]
+        },
+        quiz: {
+          question: "What does the optional chaining operator (?.) do in the expression data?.user?.name?",
+          options: ["It makes the expression run asynchronously", "It checks if data is optional before proceeding", "It safely accesses nested properties, returning undefined instead of throwing if any step is null or undefined", "It creates optional parameters in a function definition"],
+          correct: 2,
+          feedback: "Optional chaining stops the property access chain early and returns undefined if any value in the chain is null or undefined, rather than throwing a TypeError. data?.user?.name is equivalent to: data && data.user && data.user.name — but shorter and clearer. Essential when working with API data where any nested property might be absent."
+        },
+        checklist: ["I use try/catch in all async functions", "I distinguish between expected and unexpected errors", "I use optional chaining when accessing nested API data", "I use nullish coalescing to provide fallback values", "My error states show users something useful, not a blank screen"]
+      },
+      {
+        id: "4-7",
+        title: "Git and Version Control",
+        body: `Git is non-negotiable. Every professional developer uses it every day. If it's not in Git, it doesn't exist. A file on your hard drive that isn't committed is a file that can be lost.
+
+The core workflow: git init to start tracking a folder. git add filename (or git add . for everything) to stage changes. git commit -m "describe what you did" to save a snapshot. git push to send it to GitHub. That four-command sequence is 90% of day-to-day Git.
+
+Branches let you work on something new without breaking what already works. git checkout -b feature/new-thing creates a new branch and switches to it. Work there, commit there. When it's ready, merge it back with git merge. If the same line was changed in both branches, that's a merge conflict — Git will mark the conflict and you resolve it manually.
+
+Commit messages matter. "fixed stuff" tells your future self nothing. "fix: prevent crash when API returns empty array" tells your future self exactly what changed and why. The history of your commit messages is the history of your thinking. Write them accordingly.
+
+The GitHub workflow for team projects: fork the repo, clone your fork, create a branch, make commits, push the branch, open a pull request. The pull request is where code gets reviewed before it's merged into the main codebase.`,
+        callout: {
+          type: "default",
+          label: "Start Now",
+          text: "Go back to every project you've built. Create a GitHub repository for each one. Push them. Your GitHub profile is your portfolio and your commit history is evidence of consistent work. Start building that record today."
+        },
+        callout2: {
+          type: "focus",
+          label: "git restore vs git revert",
+          text: "git restore unstages changes or discards uncommitted edits — it modifies your working directory. git revert creates a new commit that undoes a previous commit — it's safe for shared branches because it preserves history. Never use git reset --hard on a branch others are using."
+        },
+        hint: `You made a commit with a mistake and want to undo it.
+
+<strong>Try this:</strong> If the commit isn't pushed yet, git reset HEAD~1 moves the commit back to staged changes. You can fix the mistake and recommit. If it's already pushed and others may have pulled it, use git revert HEAD instead — this creates a new commit that undoes it safely.
+
+<strong>Still stuck?</strong> Run git log to see your commit history. Each commit has a hash (a long string like a3f9d2b). git revert <hash> undoes that specific commit. git diff <hash> shows what changed in it.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Write a commit message for each of these changes: adding a new feature, fixing a bug, updating documentation", "Create a new branch called 'feature/dark-mode' using git checkout -b", "Explain in plain English what git merge does and what a merge conflict is", "Write the exact sequence of git commands to push your first project to GitHub"]
+        },
+        quiz: {
+          question: "You're working on a new feature and you want to make sure it doesn't break the existing working code. What's the correct Git approach?",
+          options: ["Edit the files directly on the main branch and commit as you go", "Create a new branch for the feature, work on it there, and merge when it's ready", "Create a copy of the entire project folder and work in that", "Delete the old code before writing the new feature"],
+          correct: 1,
+          feedback: "Branches exist exactly for this: isolate work-in-progress from working code. Create a branch, make commits on it, and only merge when the feature is tested and working. The main branch should always be in a deployable state. Working directly on main without branching is how teams break each other's work."
+        },
+        checklist: ["I have Git installed and configured", "I have a GitHub account with at least one project pushed", "I write descriptive commit messages", "I understand what branches are and when to use them", "I know how to view commit history with git log"]
+      },
+      {
+        id: "4-8",
+        title: "Debugging Like a Developer",
+        body: `Debugging is a systematic process, not a random one. The instinct to change things and hope something improves is the most expensive debugging habit you can have — it wastes time, introduces new bugs, and teaches you nothing.
+
+The correct process: first, reproduce the bug reliably. A bug you can't reproduce consistently is a bug you can't fix confidently. Then isolate where it breaks. Then fix the root cause, not the symptom.
+
+The DevTools debugger in the Sources tab is more powerful than console.log for complex bugs. Set a breakpoint by clicking a line number. When code execution hits that line, it pauses. You can then step over (run the next line), step into (go inside a function call), or step out (finish the current function and return). You can inspect every variable's value at that exact moment.
+
+console.log is not embarrassing. Every developer at every level uses it. The art is in knowing where to put it and what to log. Log variable values at key points in your logic. Log the start and end of functions you're unsure about.
+
+The Network tab shows every request your page makes and the exact response that came back. When an API call isn't working, the Network tab shows you whether the request was even sent, what URL it went to, what headers were included, and what the server returned. This eliminates guessing.
+
+The most important debugging habit: change one thing at a time. Change two things simultaneously and you don't know which one fixed it or which one caused the new problem.`,
+        callout: {
+          type: "default",
+          label: "The Single Change Rule",
+          text: "When debugging: change one thing. Test. If it's fixed, you know what the bug was. If not, revert that change and try a different one. Changing multiple things at once makes it impossible to understand cause and effect."
+        },
+        callout2: {
+          type: "focus",
+          label: "Breakpoints vs console.log",
+          text: "console.log requires you to know in advance what you want to inspect. Breakpoints let you pause execution and inspect everything at once. Use console.log for quick checks on values you already know you want. Use breakpoints when you're not sure what's wrong or where."
+        },
+        hint: `Something is broken but you can't figure out where the problem is.
+
+<strong>Try this:</strong> Add console.log('reached here', variableName) at key points in your code. Run it and watch the console. The last log that prints before the error tells you which section the bug is in. Then narrow it down further with more logs.
+
+<strong>Still stuck?</strong> Open DevTools Sources tab, find your script, and click the line number where you think the problem might be to set a breakpoint. Run the code and when it pauses, look at the Scope panel on the right — it shows every variable's current value. This is often faster than reasoning about what might be wrong.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Use the debugger to step through the code and find where the wrong value is assigned", "Fix all three bugs in the code — each bug is a different type (reference, type, logic)", "Add console.log statements to trace the exact value of the variable at each step", "Open the Network tab in DevTools, reload the page, and identify all the resources it loads"]
+        },
+        quiz: {
+          question: "You change three things at once trying to fix a bug, and the bug disappears. What problem does this create?",
+          options: ["No problem — fixing the bug is all that matters regardless of how", "You don't know which of the three changes fixed it, making future debugging harder", "The other two changes will definitely cause new bugs", "You need to revert to zero changes and start again from scratch"],
+          correct: 1,
+          feedback: "If you fix a bug by changing three things simultaneously, you've learned nothing about what caused it. When a similar bug appears later, you have no basis for diagnosing it. Worse, you might have introduced subtle problems with the two changes that weren't needed. Change one thing, test, understand what changed. This habit compounds over time."
+        },
+        checklist: ["I reproduce bugs reliably before trying to fix them", "I change one thing at a time when debugging", "I can set and use breakpoints in DevTools", "I read error messages in full before changing anything", "I use the Network tab to diagnose API problems"]
+      },
+      {
+        id: "4-9",
+        title: "Weather App with Real API",
+        body: `This is your first real application using a real external API. The OpenWeatherMap API is free, well-documented, and used by thousands of real applications. The scaffold connects to the API and displays current weather — your job is to extend it.
+
+This is exactly how professional development works. You inherit a codebase. You read it. You understand it. You extend it. The difference between a junior and senior developer is not who writes things from scratch — it's who reads, understands, and extends code more effectively.
+
+Read every line of the scaffold before changing anything. Understand what each function does. Understand what data the API returns by checking the Network tab when you run it. Then extend it. Make it yours.
+
+Real APIs have real constraints: rate limits (you can only make a certain number of requests per hour), authentication requirements (your API key goes in the request, not the code you commit to GitHub), and data formats that can change. These are not hypothetical concerns — they are things you will hit in the first hour of working with a real API.`,
+        callout: {
+          type: "default",
+          label: "API Key Security",
+          text: "Your OpenWeatherMap API key should never be committed to a public GitHub repository. Anyone who finds it can use your API quota. For learning projects, it's acceptable to use it directly. For anything public, environment variables are the answer — covered in section 5-8."
+        },
+        callout2: {
+          type: "focus",
+          label: "Read Before You Change",
+          text: "The professional habit with inherited code: read the entire file, understand the data flow, then make your first change. Developers who jump straight to changing things without reading spend three times as long fixing the confusion they created."
+        },
+        hint: `The app isn't showing data and you can't tell if it's the API call or the display code.
+
+<strong>Try this:</strong> Open the Network tab in DevTools and run the app. Find the API request. Check the status code first — 200 means it reached the API, anything else means the call failed. If it's 200, click the request and look at the Response tab to see the raw JSON the API returned. Now you know whether the problem is the fetch or the display.
+
+<strong>Still stuck?</strong> Add console.log(data) right after you receive the API response. Look at the actual shape of what came back and compare it to what your display code expects. APIs don't always match documentation exactly.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a 5-day forecast section below the current weather", "Add weather icons using the icon code from the API response", "Add a toggle between Celsius and Fahrenheit", "Save the last 3 searched cities to localStorage and show them as quick-access buttons"]
+        },
+        quiz: {
+          question: "The weather app shows no data and throws no errors. What should you do first?",
+          options: ["Rewrite the fetch function from scratch", "Open the Network tab in DevTools to see if the API request was made and what it returned", "Check the CSS to see if the data might be hidden", "Add more console.log statements randomly until something appears"],
+          correct: 1,
+          feedback: "Silent failures in network requests are almost always visible in the Network tab. It shows whether the request was sent, what URL it went to, what the response status code was, and what data came back. This is the fastest way to separate a network/API problem from a display/logic problem."
+        },
+        checklist: ["I read the full scaffold before making any changes", "I understand the data structure the API returns", "I extended the app with at least one new feature", "I handle the case where the city isn't found", "The app works with different city names"]
+      },
+      {
+        id: "4-10",
+        title: "Quiz App with Score Tracking",
+        body: `A quiz app is more complex than it looks. It has <strong>state</strong>: the current question index, the score, whether the user has answered the current question. It has multiple <strong>UI states</strong>: showing a question, showing answer feedback, showing results. Managing state and driving UI from it is the fundamental challenge of interactive application development.
+
+This is the kind of stateful thinking that React, Vue, and Angular formalise with hooks, reactive properties, and components. Understanding how to manage it in vanilla JavaScript first means you'll understand those frameworks at a conceptual level, not just a syntactic one. You'll know why they exist, not just how to use them.
+
+The scaffold handles the rendering. Your job is to implement the state logic: what happens when an answer is selected, how the score is updated, when to advance to the next question, when to show results. Every piece of the logic should update state first, then re-render from that state. Never update the DOM directly without first updating the underlying data.
+
+The relationship between state and UI is: state is the truth, DOM is the display of that truth. When state changes, the DOM should be regenerated from state. When the DOM changes, state should update first. This single discipline prevents an entire category of synchronisation bugs.`,
+        callout: {
+          type: "default",
+          label: "State Before DOM",
+          text: "Every interactive application has state — data that changes over time and drives what the user sees. The discipline is: always update state first, then render from state. Never update the DOM and then try to remember what state it represents."
+        },
+        callout2: {
+          type: "focus",
+          label: "The 'Answered' Flag",
+          text: "The answered boolean is a common source of bugs in quiz apps. Without it, a user can click multiple answers and the score increments multiple times. Check answered at the start of every checkAnswer function and return early if it's already true. State guards prevent invalid state transitions."
+        },
+        hint: `The quiz is advancing to the next question before the user can see the feedback.
+
+<strong>Try this:</strong> Add a small delay before calling nextQuestion(), or better, show a "Next" button that only appears after the answer is checked. The user should explicitly advance, not have it happen automatically. This is also a better user experience — it gives them time to read the feedback.
+
+<strong>Still stuck?</strong> Log the state variables (currentIndex, score, answered) to the console at the start of every function that modifies them. If the values aren't what you expect, you'll see exactly where state is diverging from your intention.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a progress bar that fills as the user progresses through questions", "Add a timer that counts down from 30 seconds per question", "Add a high score tracker using localStorage", "Add a review screen at the end showing each question and the user's answer"]
+        },
+        quiz: {
+          question: "In a quiz app, the score keeps incrementing every time the user clicks, even after they've already answered. What state variable is missing?",
+          options: ["A variable tracking how many questions are left", "A boolean that tracks whether the current question has already been answered", "A timer that prevents clicks for 2 seconds after each answer", "A counter tracking how many times each option was clicked"],
+          correct: 1,
+          feedback: "An 'answered' boolean (initially false, set to true when the user first clicks) is the standard guard against multiple submissions. At the start of your click handler: if (answered) return; answered = true; then process the answer. This is called a state guard — it prevents the system from entering an invalid state."
+        },
+        checklist: ["I understand what application state is", "I update state before updating the DOM", "I handle the answered state to prevent multiple submissions", "The quiz shows correct feedback for right and wrong answers", "The final score is accurate"]
+      },
+      {
+        id: "4-11",
+        title: "Solo Project — No Brief",
+        body: `No brief. No scaffold. No requirements beyond this: build something that uses a real external API.
+
+It must make at least one fetch request and display real data. The idea, the design, the implementation — all yours. This is the first time in this course that nothing is given to you.
+
+Stuck for ideas? GitHub's API lets you search repositories and display star counts and descriptions. The NASA API has photos from Mars taken by the Curiosity rover, updated daily. The Dictionary API can power a word lookup tool. The Open Library API has data on millions of books. The CocktailDB has thousands of cocktail recipes. Any of these work.
+
+The constraint is the point. Working with real external data forces you to handle things that don't exist in contrived examples: missing properties, unexpected response shapes, rate limits, API keys, authentication. These are the problems you'll solve every day as a professional.
+
+The project doesn't have to be impressive. It has to be finished and working. A working, deployed tool that shows real API data is worth more than an ambitious unfinished one.`,
+        callout: {
+          type: "default",
+          label: "The Only Rule",
+          text: "It must use a real external API and display real data. Everything else — the idea, the design, the features — is yours. If it works and it's deployed, you've done it correctly."
+        },
+        callout2: {
+          type: "focus",
+          label: "Starting Point",
+          text: "Pick the API first. Read its documentation for 20 minutes. Make one working fetch call and log the response to the console. Once you can see real data in your console, you have the foundation. Build the UI around what the data actually looks like, not what you imagined it would look like."
+        },
+        hint: `You have an idea but you can't get the API to return data.
+
+<strong>Try this:</strong> Test the API URL directly in your browser before writing any code. If it's a GET endpoint with no authentication, paste the URL into the browser address bar. You should see the raw JSON response. If you see an error there, the problem is the URL or the API key — not your JavaScript.
+
+<strong>Still stuck?</strong> Use the API's official documentation examples first, unchanged. Get those working. Then modify them step by step to return the data you actually want. Don't write custom code until you understand what the API returns.`,
+        quiz: {
+          question: "You're building a project with a public API and getting a 401 error on every request. What is the most likely cause?",
+          options: ["The API server is down", "You're missing or incorrectly sending an API key", "Your JavaScript has a syntax error", "The API doesn't support the data format you're requesting"],
+          correct: 1,
+          feedback: "401 Unauthorized means the server received your request but doesn't recognise you as an authorised caller. Most public APIs require an API key to be sent in a header or as a query parameter. Check the API documentation for exactly how it expects the key to be sent — the format varies by API."
+        },
+        checklist: ["I chose an API and read its documentation", "I made a working fetch call and confirmed the response shape", "I built a UI that displays the real data", "I handle loading and error states", "The project is deployed and accessible via URL"]
+      },
+      {
+        id: "4-12",
+        title: "Code Review of Own Work",
+        body: `Take every project you've built on Floor 4. Review each one as if it belongs to a colleague you've never met — not to you. Remove the emotional attachment to your decisions and ask the questions a reviewer would ask.
+
+Can someone unfamiliar with this code understand what it does in five minutes? If not, the naming or structure is the problem. Are there functions doing more than one thing? Split them. Are error cases handled? Add them. Is there repetition that a function could eliminate? Refactor it. Are variable names descriptive enough to replace comments? If you need a comment to explain what a variable is, the variable name is wrong.
+
+Write down one genuine improvement for each project. Not a vague note — a specific change: "rename variable x to userSearchQuery", "extract the renderCard logic into a separate function", "add error handling to the fetch call in getWeatherData". Then implement at least three of them.
+
+Code review is where you stop being a person who writes code and start being a person who thinks about code. The most valuable developers on any team are not the fastest typists — they're the ones who catch problems before they become production incidents. That skill starts here, reviewing your own work with honesty.`,
+        callout: {
+          type: "default",
+          label: "The Reviewer's Question",
+          text: "The question every code reviewer asks: if I had to maintain this code for the next two years without the original author available, would I be able to? If the answer is no, something needs to change. Apply that lens to your own work."
+        },
+        callout2: {
+          type: "focus",
+          label: "Naming Is Architecture",
+          text: "If you have to read a function's implementation to understand what it does, the function name is wrong. A well-named function is self-documenting. calculateTotalWithTax(price, taxRate) tells you everything. calc(p, r) tells you nothing. Naming is not a minor detail — it's the most read part of your code."
+        },
+        hint: `You're looking at your own code and everything seems fine — you understand it perfectly.
+
+<strong>Try this:</strong> Leave the code for 48 hours without looking at it. Come back and read it as if you wrote it a year ago. The things that are actually unclear will reveal themselves immediately when the memory of writing it fades.
+
+<strong>Still not sure what to improve?</strong> Apply one test to every function: cover the body and read only the name. Without reading the implementation, can you predict what it does and what it returns? If not, the name needs work.`,
+        quiz: {
+          question: "You're reviewing a function called processData() that is 60 lines long and handles fetching, parsing, validating, and displaying results. What is the main problem?",
+          options: ["The function is too long — it needs to be shortened by removing some functionality", "The function has too many responsibilities — it should be split into four separate functions", "The function name is fine because it accurately describes processing data", "The function should be replaced with a class that has separate methods"],
+          correct: 1,
+          feedback: "A function that handles fetching, parsing, validating, and displaying has four responsibilities. The single responsibility principle says each function should do one thing. Split it: fetchData(), parseResponse(), validateInput(), displayResults(). Each part is now independently testable, readable, and replaceable — the name tells you exactly what it does."
+        },
+        checklist: ["I reviewed all Floor 4 projects as if reading a colleague's code", "I identified at least one real improvement per project", "I implemented at least three improvements", "My functions have descriptive names that don't require reading the body to understand", "Error cases are handled in each project"]
+      }
     ]
   },
   {
     id: 5,
     title: "Solving Real Problems",
-    subtitle: "Backend, databases, APIs \u2014 the full picture",
+    subtitle: "Backend, databases and full stack",
     color: "#7ec8a9",
     duration: "4-5 months",
     sessions: "5 per week",
     length: "60-90 min",
-    tag: "Floor 05 \u2014 Full Stack",
+    tag: "Floor 05 — Full Stack",
     sections: [
-      { id: "5-1", title: "What is the Backend?", body: `Everything you've built so far lives in the <strong>frontend</strong> \u2014 the part the user sees and interacts with in the browser. But most real applications have a second layer: the <strong>backend</strong>.\n\nThe backend is a computer (a server) that runs code the user never directly sees. It handles things that can't be done safely in the browser: storing sensitive data, processing payments, managing user accounts, running complex logic.\n\nIf the frontend is the shop floor, the backend is the warehouse and the office. The customer sees the shop floor. Everything that makes it function is behind the scenes.`, callout: { type: "default", label: "The Stack", text: "When you can build both the frontend and the backend, you are a Full Stack developer. That's what Floor 7 looks like. Floor 5 is where the second half begins." }, hint: `Think of a bank. The website you log into is the frontend \u2014 buttons, forms, your balance on screen. But the actual money, the security checks, the transaction history \u2014 none of that lives in your browser. It all lives on the bank's servers. That's the backend.\n\n<strong>Why can't we just do everything in the browser?</strong> Because the browser is public. Anyone can open developer tools and see your JavaScript. You would never put a password or payment logic somewhere anyone can read. The backend is where the sensitive work happens safely.`, checklist: ["I understand the difference between frontend and backend", "I understand why a backend is necessary", "I understand what a server does"] },
-      { id: "5-2", title: "Databases \u2014 Storing Real Information", body: `A database is an organised system for storing and retrieving information. Think of it like an enormous, structured spreadsheet that code can read from and write to instantly.\n\nThe most common type of database is a <strong>relational database</strong> \u2014 it stores data in tables with rows and columns, and tables can relate to each other. The language used to talk to these databases is called <strong>SQL</strong>.\n\nSQL lets you: create tables, add data, retrieve data, update data, and delete data. Four operations. Everything a database ever does is a variation of one of those four.`, callout: { type: "default", label: "Your First SQL", text: "SELECT * FROM users WHERE name = 'You';\n\nThis reads as: 'Get everything from the users table where the name column equals You.' Plain English that has become code. That's SQL." }, hint: `The four database operations have a nickname: <strong>CRUD</strong>.\nCreate \u2014 add new data\nRead \u2014 get existing data\nUpdate \u2014 change existing data\nDelete \u2014 remove data\n\nEvery app you've ever used is CRUD at its core. Instagram: Create a post. Read your feed. Update your bio. Delete a comment. That's it.\n\n<strong>SQL still looks strange?</strong> Read it out loud as a sentence. SELECT name FROM users WHERE age > 18 \u2014 "Give me the name column, from the users table, where the age is over 18." It reads like a question asked to the database.`, checklist: ["I understand what a database is", "I understand the four basic database operations", "I can read basic SQL"] },
-      { id: "5-3", title: "APIs — Making Systems Talk to Each Other", body: `An API (Application Programming Interface) is how different pieces of software talk to each other. When you check the weather on your phone, your app doesn\'t have its own satellite — it sends a request to a weather API and gets data back.\n\nAPIs are everywhere. Login with Google? API. Map embedded in a website? API. Payment on a checkout page? API. As a developer, you\'ll both <strong>use</strong> other people\'s APIs and eventually <strong>build</strong> your own.\n\n<strong>How an API call works:</strong>\n1. Your code sends an HTTP <strong>request</strong> to a URL (called an endpoint)\n2. The server processes the request\n3. The server sends back a <strong>response</strong> — usually data in JSON format\n4. Your code reads the JSON and uses it\n\nIn JavaScript, the modern way to make API calls is the <code>fetch()</code> function. It\'s asynchronous — meaning the code continues running while it waits for the response, then does something when the data arrives.\n\nThe demo below simulates an API call. It shows the exact pattern you\'ll use when connecting to real APIs.`, callout: { type: "focus", label: "The Exciting Part", text: "APIs are what let you build powerful things quickly. Instead of building a mapping system from scratch, you use Google\'s. Instead of payment infrastructure, you use Stripe\'s. You focus on the unique part of your idea — the API handles the rest." }, hint: `The fetch pattern every API call follows:\n\nfetch(\'https://api.example.com/data\')\n  .then(response => response.json())\n  .then(data => { /* use data here */ })\n  .catch(error => { /* handle errors */ });\n\nfetch returns a Promise — something that will complete in the future. The .then() chains run when the data arrives. The .catch() runs if anything goes wrong.\n\n<strong>Real first step:</strong> After this section, go to openweathermap.org, get a free API key (takes 2 minutes), and make a real weather call. Seeing real data appear from a URL you made is one of the best moments in learning to code.`, code: { lang: "HTML", starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; max-width: 560px; margin: 0 auto; }\n    h2 { color: #7ec8a9; margin-top: 0; }\n    .btn { background: #7ec8a9; color: #0a0a0a; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 4px 4px 0 0; font-size: 13px; font-weight: bold; }\n    .btn:hover { background: #9ed8b9; }\n    #status { color: #c8a96e; font-size: 13px; margin: 12px 0 6px; min-height: 20px; }\n    #result { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin-top: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap; min-height: 60px; color: #7ec8a9; }\n    .user-card { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin-top: 10px; }\n    .user-card strong { color: #7ec8a9; }\n  </style>\n</head>\n<body>\n  <h2>API Fetch Demo</h2>\n  <p style="color:#8892a0;font-size:14px;">This demo calls a real public API — JSONPlaceholder, which returns fake user data for practice.</p>\n\n  <button class="btn" onclick="fetchUser()">Fetch random user</button>\n  <button class="btn" onclick="fetchPosts()">Fetch recent posts</button>\n\n  <div id="status"></div>\n  <div id="result">Click a button to make an API call.</div>\n\n  <script>\n    function setStatus(msg) {\n      document.getElementById(\'status\').textContent = msg;\n    }\n\n    function fetchUser() {\n      setStatus(\'Sending request...\');\n      document.getElementById(\'result\').textContent = \'\';\n\n      // Pick a random user ID between 1 and 10\n      const userId = Math.floor(Math.random() * 10) + 1;\n\n      // fetch() sends an HTTP GET request to the URL\n      fetch(\'https://jsonplaceholder.typicode.com/users/\' + userId)\n        .then(function(response) {\n          // response.json() reads the body and parses it as JSON\n          return response.json();\n        })\n        .then(function(user) {\n          // \'user\' is now a plain JavaScript object\n          setStatus(\'Response received:\');\n          document.getElementById(\'result\').textContent =\n            \'Name: \' + user.name + \'\\n\' +\n            \'Email: \' + user.email + \'\\n\' +\n            \'Company: \' + user.company.name + \'\\n\' +\n            \'City: \' + user.address.city;\n        })\n        .catch(function(error) {\n          // .catch() handles network errors or bad responses\n          setStatus(\'Error: \' + error.message);\n        });\n    }\n\n    function fetchPosts() {\n      setStatus(\'Sending request...\');\n      document.getElementById(\'result\').textContent = \'\';\n\n      // You can pass query parameters in the URL\n      fetch(\'https://jsonplaceholder.typicode.com/posts?_limit=3\')\n        .then(response => response.json())\n        .then(function(posts) {\n          setStatus(\'3 posts received:\');\n          let output = \'\';\n          posts.forEach(function(post, i) {\n            output += (i + 1) + \'. \' + post.title + \'\\n\';\n          });\n          document.getElementById(\'result\').textContent = output;\n        })\n        .catch(error => setStatus(\'Error: \' + error.message));\n    }\n  <\/script>\n</body>\n</html>', challenges: ["Modify fetchUser() to display all the fields in the user object (log the full object first with console.log(user) to see what's available)", "Add a third button that fetches a specific post by ID — let the user type the ID in an input", "Add a loading spinner or 'Loading...' message that shows while the request is in flight", "Handle the case where the API returns an error response (check response.ok before calling response.json())"] }, quiz: { question: "What does the .then(response => response.json()) part of a fetch call do?", options: ["Sends the data to a JSON file on the server", "Waits for the HTTP response to arrive, then parses its body as JSON data", "Converts JavaScript objects to JSON format for sending", "Checks whether the response contains valid JSON before fetching"], correct: 1, feedback: "fetch() is asynchronous — it immediately returns a Promise that resolves when the server responds. The first .then() receives the raw Response object. Calling .json() on it reads the response body and parses it into a JavaScript object. The second .then() receives that parsed object, which you can use directly in your code." }, checklist: ["I understand what an API is", "I made a request to a real API and displayed the data", "I understand the concept of API keys and why they exist"] },
-      { id: "5-4", title: "Version Control \u2014 How Professionals Manage Work", body: `Every professional developer uses version control. The most common tool is called <strong>Git</strong>.\n\nGit keeps a complete history of every change you've ever made to your code. It lets you go back to any previous version. It lets multiple people work on the same codebase without overwriting each other. And it lets you experiment safely \u2014 try something, see if it works, and undo it if it doesn't.\n\n<strong>GitHub</strong> is a website where you store your Git projects online. It's also where employers look when they want to see your work.`, callout: { type: "warning", label: "Start Using Git Now", text: "Don't wait until you feel ready. Start putting all your projects from this point forward into Git repositories. Your GitHub profile becomes your portfolio. Every commit is evidence of your growth." }, hint: `The three Git commands you'll use 90% of the time:\n\ngit add . \u2014 "package up all my changes"\ngit commit -m "what I did" \u2014 "save a snapshot with a label"\ngit push \u2014 "send it up to GitHub"\n\nThat's it to start. Everything else \u2014 branches, merging, pull requests \u2014 comes naturally once those three are muscle memory.\n\n<strong>Common first mistake:</strong> Writing vague commit messages like "fixed stuff." Write what you actually did \u2014 "added tip calculation function" or "fixed button colour on mobile." Future you will thank present you.`, checklist: ["I installed Git", "I created a GitHub account", "I pushed at least one project to GitHub", "I understand the basic Git workflow: add, commit, push"] },
-      { id: "5-5", title: "Deploying \u2014 Putting Work Live on the Internet", body: `Everything you've built so far only exists on your computer. Deployment is the process of putting your work on a server so anyone in the world can access it through a URL.\n\nFor frontend projects, <strong>Netlify</strong> and <strong>Vercel</strong> let you deploy for free in minutes. For full stack projects with a backend, platforms like <strong>Railway</strong> or <strong>Render</strong> handle the server side.\n\nThe moment you deploy your first project, you cross a line. You're no longer a student with files on a hard drive. You're a developer with work on the internet.`, callout: { type: "default", label: "Floor 5 Project", text: "Build a full stack application. It should have a frontend the user interacts with, a backend that handles data, and a database that stores it. A simple one: a note-taking app where users can create, read, update and delete notes. Deploy it. Share the link." }, hint: `Netlify is the easiest starting point for frontend deployment.\n\n1. Push your project to GitHub\n2. Go to netlify.com and sign up\n3. Click "Add new site" \u2192 "Import from Git"\n4. Connect your GitHub and select your repo\n5. Click deploy\n\nThat's genuinely it. Your project gets a live URL in under two minutes.\n\n<strong>Something broke after deploying?</strong> Check the deploy log in Netlify \u2014 it shows exactly what went wrong. Usually it's a file path that works on your computer but not on the server, or a missing dependency.`, checklist: ["I built a full stack application", "It has a real backend", "It uses a database", "It is deployed and accessible via a URL", "I'm ready for Floor 6"] }
+      {
+        id: "5-1",
+        title: "What Full Stack Means",
+        body: `Full stack means you can build the complete system: <strong>frontend</strong> (what the user sees), <strong>backend</strong> (what the server runs), and <strong>database</strong> (where data lives). Each layer has a distinct responsibility and a distinct set of technologies.
+
+Frontend is HTML, CSS, and JavaScript running in the browser. The browser downloads these files from the server and executes them locally on the user's machine. This is what you've been building. It's what Instagram's photo grid is, what Airbnb's search page is.
+
+Backend is code running on a server — Node.js, Python, Go, Java, or dozens of other languages. The user never sees this code and can never modify it. This is where business logic lives, where authentication happens, where data is validated before it touches a database.
+
+The database is where data persists after the user leaves. Without a database, every user's data disappears when they close the browser. With one, it's there when they return — across devices, across time.
+
+The HTTP request cycle across the full stack: browser sends a request → server receives it, authenticates the user, queries the database, formats the response → database returns data to the server → server returns formatted response to browser → browser renders what the user sees.
+
+The separation matters for three reasons: security (you never trust the browser to validate data), scale (servers handle thousands of simultaneous users), and persistence (data survives after the user leaves).`,
+        callout: {
+          type: "default",
+          label: "Why the Separation",
+          text: "The browser is a public environment. Anything you put in JavaScript can be read, modified, or replicated by anyone with DevTools. Business logic, passwords, payment processing, and data validation must happen on the server where the user can't touch them."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Instagram Example",
+          text: "When you post on Instagram, the browser sends a POST request to Instagram's backend with the image data and caption. The backend validates it, compresses the image, stores it (likely in object storage like S3), saves metadata to a database, updates your follower feeds, and returns a success response. None of that happens in the browser."
+        },
+        hint: `You're confused about which layer handles what.
+
+<strong>Try this:</strong> Take any feature of an app you use daily. Ask three questions: does this run in the browser, on a server, or in a database? Login button click = browser. Password verification = server. Stored password hash = database. Tracing features through layers builds the mental model faster than any explanation.
+
+<strong>Still fuzzy?</strong> The rule of thumb: anything that must be secure, private, or persistent goes on the server or database. Anything that's just about what the user sees and interacts with goes in the browser.`,
+        quiz: {
+          question: "A user submits a payment form on an e-commerce site. Where must the actual payment processing happen and why?",
+          options: ["In the browser's JavaScript, for the fastest user experience", "On the server, because JavaScript in the browser can be modified by anyone", "In the database, because it needs to persist", "In the browser's localStorage for security"],
+          correct: 1,
+          feedback: "Payment processing must happen server-side. Any JavaScript in the browser can be read, modified, and re-sent by someone with DevTools. A user could modify the price, skip validation, or steal API keys. The server is a controlled environment the user cannot modify. This applies to any security-sensitive operation: authentication, authorisation, payment, data validation."
+        },
+        checklist: ["I can describe the role of frontend, backend, and database", "I understand why sensitive logic must live on the server", "I understand the full HTTP request cycle from browser to database and back", "I can give three examples of what belongs server-side vs client-side", "I understand why data persistence requires a database"]
+      },
+      {
+        id: "5-2",
+        title: "How Servers Work",
+        body: `A server is a computer running continuously, waiting for HTTP requests. When a request arrives, it goes to the right piece of code based on the URL and HTTP method, that code runs, and the response goes back. That's it. Everything else is detail.
+
+A web server handles <strong>routing</strong>: mapping URLs and methods to code. When a GET request arrives for /users/123, what code runs? The router matches the URL pattern and calls the corresponding handler function. Handler functions receive a request object (the incoming data) and a response object (the channel to send data back).
+
+<strong>Middleware</strong> is code that runs before your route handlers. Authentication middleware runs first — if the user isn't logged in, the request never reaches the route. Logging middleware records every request. Request parsing middleware converts the raw request body into usable JavaScript objects. Middleware runs in a chain; each piece decides whether to pass the request along or end it.
+
+The distinction between server types matters as applications grow. A web server handles HTTP and routing. An application server runs business logic. A database server stores and retrieves data. In small applications, all three often run on the same machine. At Instagram's scale, each is a separate fleet of hundreds of servers.
+
+Ports: a server listens on a specific port number. Port 80 is HTTP, 443 is HTTPS, 3000 and 8080 are common development defaults. When you visit http://localhost:3000, you're connecting to port 3000 on your own machine.`,
+        callout: {
+          type: "default",
+          label: "Middleware Is the Architecture",
+          text: "In a production Express application, 80% of the interesting logic lives in middleware: authentication, rate limiting, request validation, logging, error handling. Route handlers are often just one or two lines that call a database and return the result. Middleware is where security and reliability live."
+        },
+        callout2: {
+          type: "focus",
+          label: "Request Object vs Response Object",
+          text: "In Express (and most web frameworks), every route handler receives req (the incoming request: headers, body, params, the user's identity) and res (the outgoing response: what to send back and with what status code). Understanding what lives on each object is the foundation of server-side development."
+        },
+        hint: `You're building a server route but the request isn't reaching your handler.
+
+<strong>Try this:</strong> Add console.log('Route hit') as the very first line of your handler. If it doesn't print, the request isn't matching your route. Check: is the HTTP method correct (GET vs POST)? Is the URL path exact? Is there middleware before it that might be blocking?
+
+<strong>Still stuck?</strong> Add a catch-all route at the very bottom: app.use((req, res) => res.status(404).send('Not found: ' + req.path)). This catches any request that didn't match a defined route and tells you exactly what URL the server is seeing.`,
+        quiz: {
+          question: "Authentication middleware is registered before route handlers in an Express app. A request arrives for a protected route. What is the correct order of execution?",
+          options: ["Route handler runs first, then auth middleware verifies the result", "Auth middleware runs, checks the credentials, and either passes the request to the route handler or rejects it", "Both run simultaneously in parallel", "Auth middleware runs after the route handler returns data"],
+          correct: 1,
+          feedback: "Middleware executes in the order it's registered, before route handlers. Authentication middleware checks credentials and calls next() to pass to the route handler if valid, or sends a 401 response directly if not. The route handler only runs if middleware allows it through. This is the gatekeeper pattern — protect the resource before the handler ever runs."
+        },
+        checklist: ["I understand what a server does and how routing works", "I understand what middleware is and what it's used for", "I understand the request and response objects", "I know the difference between web server, application server, and database server", "I understand what ports are"]
+      },
+      {
+        id: "5-3",
+        title: "Databases",
+        body: `Every application that stores user data has a database. The database's job is to persist data reliably, retrieve it quickly, and enforce data integrity.
+
+The two main categories: <strong>relational databases</strong> (PostgreSQL, MySQL, SQLite) store data in tables with rows and columns. Relationships between tables are defined by foreign keys: a posts table has a user_id column that references the users table. SQL is the language for querying them.
+
+<strong>Document databases</strong> (MongoDB, Firestore) store data as JSON-like documents. There's no fixed schema — different documents in the same collection can have different fields. Flexible, but at the cost of enforced structure.
+
+SQL commands you need to know: SELECT (retrieve data), INSERT (add data), UPDATE (modify data), DELETE (remove data). With WHERE clauses to filter, ORDER BY to sort, JOIN to combine tables, and LIMIT to paginate. These are the tools for 90% of database work.
+
+<strong>Indexes</strong> are how databases stay fast as data grows. Without an index, a query scans every row in the table. With an index on the column you're filtering by, the database finds matching rows in milliseconds. Add indexes on columns you query frequently, especially foreign keys.
+
+<strong>ACID</strong> properties guarantee data integrity: Atomicity (a transaction either fully succeeds or fully fails, never halfway), Consistency (the database stays in a valid state), Isolation (concurrent transactions don't interfere), Durability (committed data survives crashes). When a bank transfer fails halfway through, ACID properties ensure neither account is left in an inconsistent state.`,
+        callout: {
+          type: "default",
+          label: "SQL vs NoSQL",
+          text: "The honest answer: use PostgreSQL for most things. It's relational, ACID-compliant, scales well, and handles most use cases correctly. Reach for MongoDB when your data genuinely has no fixed schema and changes shape frequently. Don't choose NoSQL to avoid learning SQL."
+        },
+        callout2: {
+          type: "focus",
+          label: "Indexes or Slow Queries",
+          text: "A query that takes 50ms with 1,000 rows takes 50 seconds with 1,000,000 rows without an index. Database queries are almost always the performance bottleneck in web applications. Add an index on every column you filter by in a WHERE clause and every foreign key column."
+        },
+        hint: `Your database query is returning wrong or unexpected results.
+
+<strong>Try this:</strong> Run the query directly in the database tool (pgAdmin for PostgreSQL, Compass for MongoDB) before running it through your application code. If the query is wrong there, it's a SQL problem. If it's correct there but wrong in your app, it's a code problem. Isolate the layer first.
+
+<strong>Still stuck?</strong> Add a LIMIT 5 clause to your SELECT to see a small sample of results. Check the actual data that's in the table — sometimes the issue is that the data was never inserted correctly, or was inserted with the wrong values.`,
+        quiz: {
+          question: "A bank transfer involves debiting one account and crediting another. The server crashes after the debit but before the credit. What database property prevents both accounts from ending up in an inconsistent state?",
+          options: ["Indexing — fast lookups ensure both operations complete before timeout", "Atomicity — the transaction either fully completes or fully rolls back, never partially", "Isolation — other transactions can't see the debit until the credit is complete", "Durability — the data is written to disk immediately"],
+          correct: 1,
+          feedback: "Atomicity means all operations in a transaction succeed together or fail together. If the credit operation fails (or the server crashes before it), the debit is automatically rolled back. The database returns to the state before the transaction started. This is why financial applications use ACID-compliant relational databases, not eventually-consistent document stores."
+        },
+        checklist: ["I understand the difference between relational and document databases", "I can write basic SELECT, INSERT, UPDATE, DELETE queries", "I understand what indexes are and when to use them", "I can explain the ACID properties", "I understand when to use SQL vs NoSQL"]
+      },
+      {
+        id: "5-4",
+        title: "Authentication",
+        body: `Authentication is proving who you are. Authorisation is proving what you're allowed to do. The distinction matters: you can be authenticated (the server knows you're Alex) but not authorised (Alex doesn't have admin access). These are two separate checks.
+
+The session-based approach: after login, the server creates a session record in a database and sends a session ID to the browser in a cookie. Every subsequent request includes that cookie. The server looks up the session ID to identify the user. Sessions are revocable: delete the session record and the user is logged out everywhere.
+
+The token-based approach (JWT): after login, the server creates a signed token containing the user's ID and sends it to the client. The client stores it (usually in memory or localStorage) and sends it in the Authorization header of every subsequent request. The server verifies the signature — no database lookup needed. JWTs expire but can't be revoked before expiry without additional infrastructure.
+
+Password storage: you never, under any circumstances, store plain text passwords. If your database is compromised and passwords are plain text, every user's password is exposed. You store a hash: a one-way transformation of the password. bcrypt is the standard — it's deliberately slow (to make brute-force attacks expensive) and adds a random salt (to prevent rainbow table attacks).
+
+OAuth: "Login with Google" delegates authentication to a trusted provider. Google verifies the user's identity and tells your application who it is. You never handle the password. This is the right approach for any application where managing credentials securely is more complexity than you want to take on.`,
+        callout: {
+          type: "default",
+          label: "Never Build Auth From Scratch",
+          text: "Authentication has too many failure modes that aren't obvious. For new applications, use an established library: Passport.js for Node, Devise for Rails, or a service like Auth0 or Clerk. Build it from scratch only once you understand the security model thoroughly. This is one of the few areas where 'do it yourself' is genuinely dangerous."
+        },
+        callout2: {
+          type: "focus",
+          label: "JWT Expiry",
+          text: "JWTs have an expiry time (typically 15 minutes to 24 hours). After expiry, the token is invalid and the user must re-authenticate. To avoid constant logouts, applications use refresh tokens: a longer-lived token that can exchange for a new JWT. Get the access/refresh token pattern right before shipping any JWT-based auth."
+        },
+        hint: `Users are getting logged out unexpectedly or tokens aren't working.
+
+<strong>Try this:</strong> Decode your JWT at jwt.io (it's a public tool for inspection). Check the exp field — it's a Unix timestamp showing when the token expires. If tokens expire faster than expected, check that the server clock is accurate (time drift breaks JWT validation).
+
+<strong>Still stuck?</strong> Log the Authorization header on the server for every request. If it's missing, the client isn't sending it — check the fetch call. If it's there but invalid, the server-side verification code has an issue — check the secret key.`,
+        quiz: {
+          question: "A user's JWT token is compromised. The token expires in 7 days. What is the fundamental limitation of JWT-based authentication in this scenario?",
+          options: ["Nothing — the server can delete the token from its database to invalidate it immediately", "The token cannot be revoked before its expiry time without additional infrastructure like a token blocklist", "The user must change their password to invalidate the token", "JWTs can be recalled remotely by the token issuer at any time"],
+          correct: 1,
+          feedback: "JWTs are stateless — the server doesn't store them, so there's nothing to delete. Any request with a valid, unexpired JWT will be accepted, even if the token was stolen. To immediately revoke a JWT, you need a server-side blocklist of invalidated tokens, which reintroduces statefulness. This is JWT's main trade-off compared to session-based auth where you just delete the session record."
+        },
+        checklist: ["I understand the difference between authentication and authorisation", "I understand session-based vs token-based authentication", "I know why passwords must be hashed and what bcrypt does", "I understand what OAuth is", "I would use an existing library rather than building auth from scratch"]
+      },
+      {
+        id: "5-5",
+        title: "Node and Express",
+        body: `Node.js runs JavaScript on the server. The same language you've been writing in the browser now runs outside it — with access to the filesystem, the network, and the ability to listen for HTTP connections. No DOM, no window object, but full access to the operating system.
+
+Express is the most widely used Node.js web framework. It provides routing, middleware, and request/response handling. The core concept: register handlers for HTTP method + path combinations. When a matching request arrives, the handler runs.
+
+The request object (req) contains everything about the incoming request: req.params for URL parameters (/users/:id makes id available on req.params), req.query for query string parameters (?page=2 makes page available on req.query), req.body for the request body (POST/PUT data, after body-parser middleware), req.headers for HTTP headers including Authorization.
+
+The response object (res) is how you send data back: res.json(data) sends JSON with a 200 status, res.status(404).json({error: 'Not found'}) sends an error, res.send() for plain text.
+
+Middleware with app.use() runs before route handlers. Order matters: body parser before routes that need req.body, auth middleware before protected routes, error handler after all routes.
+
+GitHub's API, Stripe's API, Shopify's API — all built on frameworks equivalent to Express. Every endpoint you call as a developer is a route handler like the ones you're about to write.`,
+        callout: {
+          type: "default",
+          label: "Node Is JavaScript",
+          text: "The mental model adjustment: Node.js is the same JavaScript you know, running in a different environment. The syntax is identical. What changes is what's available — no document or window, but fs (file system), http, and process instead. Your existing JavaScript knowledge transfers directly."
+        },
+        callout2: {
+          type: "focus",
+          label: "Body Parser",
+          text: "Without body-parsing middleware, req.body is undefined. Express doesn't parse request bodies automatically. Add app.use(express.json()) before any route that needs to read POST or PUT body data. This is one of the most common 'why is req.body undefined' mistakes in new Express applications."
+        },
+        hint: `Your Express route isn't receiving the data you're sending from the frontend.
+
+<strong>Try this:</strong> Add console.log('Headers:', req.headers, 'Body:', req.body) at the top of your route handler. If body is undefined, you're missing body-parsing middleware. If headers don't include Content-Type: application/json, the client isn't sending JSON correctly. Both of these are fixable in one line.
+
+<strong>Still stuck?</strong> Test the route directly with Postman or Thunder Client before connecting the frontend. Send the exact request you expect the frontend to send. If it works in Postman but not from the browser, the problem is in the frontend fetch call, not the server.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a new GET route for /api/products that returns an array of product objects", "Add middleware that logs the request method and path for every request", "Add a POST route that reads data from req.body and returns it back", "Add a 404 handler for any route that doesn't match the defined routes"]
+        },
+        quiz: {
+          question: "An Express route needs to read data from the request body sent by a POST request. req.body is undefined. What is missing?",
+          options: ["The route needs to be registered before app.listen()", "Body-parsing middleware (app.use(express.json())) is not registered before the route", "POST requests don't support body data in Express", "The route handler needs to manually parse req.rawBody"],
+          correct: 1,
+          feedback: "Express doesn't parse request bodies by default. app.use(express.json()) must be registered before any route that reads req.body. It reads the raw request body, parses it as JSON, and attaches the result to req.body. Without it, req.body is undefined for all routes. Register it near the top of your app, before route definitions."
+        },
+        checklist: ["I can start a basic Express server", "I can write GET and POST route handlers", "I understand req.params, req.query, req.body, and req.headers", "I can add middleware with app.use()", "I can send JSON responses with correct status codes"]
+      },
+      {
+        id: "5-6",
+        title: "Connecting to a Database",
+        body: `The connection between your server and database is managed by a client library. For PostgreSQL, pg or Prisma. For MongoDB, Mongoose. The library handles the connection, translates your code into database queries, and returns results as JavaScript objects.
+
+<strong>Connection pooling</strong> is critical for performance. Opening a new database connection for every request takes 50-200ms and has an upper limit on concurrent connections. A connection pool maintains a set of open connections that are reused. pg and Prisma handle this automatically when configured correctly.
+
+The decision between an ORM (Object-Relational Mapper) and raw SQL has real trade-offs. ORMs like Prisma let you write JavaScript that generates SQL — faster to write, database-agnostic, but hides complexity and can generate inefficient queries. Raw SQL gives you precise control and transparency but requires writing more code. Know both. Use ORMs for productivity, drop to raw SQL for performance-critical queries.
+
+<strong>Database transactions</strong> are essential when multiple operations must succeed or fail together. Transferring money between two accounts requires both the debit and credit to succeed — if the credit fails after the debit, the transaction rolls back and both accounts return to their original state. Without transactions, partial writes corrupt your data.
+
+Profile before optimising. The query that looks slow might be fast. The query that looks simple might be doing a full table scan. Add EXPLAIN ANALYZE before any PostgreSQL query to see exactly what the database is doing and where time is spent.`,
+        callout: {
+          type: "default",
+          label: "Queries Are the Bottleneck",
+          text: "In most web applications, database queries are the performance bottleneck — not JavaScript, not network latency. Before optimising anything else, profile your queries. Add EXPLAIN ANALYZE, look for sequential scans on large tables, and add indexes. Ten minutes of query optimisation often outperforms days of JavaScript optimisation."
+        },
+        callout2: {
+          type: "focus",
+          label: "N+1 Queries",
+          text: "The N+1 problem: you fetch 10 posts, then for each post you fetch the author in a separate query — 11 queries total. With 100 posts it's 101 queries. The fix is a JOIN query that fetches posts and authors together in one query. ORMs can generate N+1 problems silently. Always check what SQL your ORM actually produces."
+        },
+        hint: `Your database queries are working in isolation but failing when called from your Express routes.
+
+<strong>Try this:</strong> Test each database function in isolation with a small test script before integrating with the server. If the function works standalone but fails in the route, the problem is usually that you're not awaiting an async function, or an error isn't being caught.
+
+<strong>Still stuck?</strong> Add try/catch to every database function and log the full error including the error.code. PostgreSQL error codes are specific — 23505 means a unique constraint violation (duplicate data), 23503 means a foreign key violation (referencing a row that doesn't exist). The code tells you exactly what's wrong.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Write a function that retrieves a single user by ID", "Write a function that creates a new user and returns the created record", "Add error handling for when the user is not found (return 404)", "Write a transaction that creates a post and increments the author's post count atomically"]
+        },
+        quiz: {
+          question: "You need to create a new order and deduct the items from inventory. If the inventory update fails, the order should not be created. What database feature handles this?",
+          options: ["A foreign key constraint that links the order to the inventory table", "A database transaction that wraps both operations and rolls back if either fails", "A trigger that automatically runs when an order is created", "An index on the inventory table to speed up the update"],
+          correct: 1,
+          feedback: "A transaction wraps multiple operations into a single atomic unit. BEGIN starts the transaction, you run both the INSERT and the UPDATE, and COMMIT applies both permanently. If any operation fails, ROLLBACK undoes everything — the database returns to its state before BEGIN. This is how all multi-step operations that must stay consistent are handled."
+        },
+        checklist: ["I can connect to a database from a Node.js application", "I understand connection pooling", "I can write CRUD queries using a database client", "I understand when to use transactions", "I understand the trade-offs between ORMs and raw SQL"]
+      },
+      {
+        id: "5-7",
+        title: "Building a REST API",
+        body: `A REST API is a set of HTTP endpoints that expose your data and operations in a consistent, predictable way. RESTful conventions are not a standard — they're widely adopted patterns that make APIs easier to use and understand.
+
+The conventions: GET /users returns all users. GET /users/123 returns user 123. POST /users creates a new user. PUT /users/123 replaces user 123 entirely. PATCH /users/123 updates specific fields of user 123. DELETE /users/123 removes user 123. These patterns are recognisable to any developer who's worked with APIs before.
+
+Request validation must happen before any database interaction. If required fields are missing or values are invalid, return a 400 status with a clear error message explaining exactly what's wrong. Never let invalid data reach the database.
+
+Response consistency matters. Always return the same shape for the same type of response. If success responses look like {data: {...}} and error responses look like {error: '...'}, that's a contract every client can depend on. Inconsistent response shapes are one of the most common sources of frontend bugs.
+
+Versioning protects existing clients when you change the API: /api/v1/users and /api/v2/users can coexist. Clients using v1 aren't broken by changes to v2. Don't version until you have external consumers, but design with versioning in mind from the start.
+
+Design your API as if a developer you've never met needs to use it without documentation. The URL should say what the resource is. The method should say what operation. The status code should tell them what happened. The response body should have everything they need.`,
+        callout: {
+          type: "default",
+          label: "API Design Is a Skill",
+          text: "A well-designed API is a pleasure to use. A poorly designed one causes bugs on every client that integrates with it. Spend time on naming, consistency, and error messages. The people integrating with your API — including future you — will notice."
+        },
+        callout2: {
+          type: "focus",
+          label: "Validate Before Touching the Database",
+          text: "Every POST and PUT request should validate its input before running any database query. Check required fields are present, types are correct, values are in valid ranges. Return 400 with a specific error message if anything is wrong. Letting invalid data reach the database causes harder-to-diagnose problems than a clear 400 response."
+        },
+        hint: `Your API is returning data but the frontend is having trouble using it.
+
+<strong>Try this:</strong> Open the Network tab in the browser DevTools and look at the actual response your API is sending. Is it the shape you expected? Compare the exact JSON structure to what the frontend code expects to receive. The mismatch is usually obvious once you look at both side by side.
+
+<strong>Still stuck?</strong> Test your API with Postman or curl to isolate it from the frontend. If the API returns correct data in Postman but the frontend breaks, the problem is how the frontend is parsing the response — not the API itself.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add input validation that returns a 400 error if required fields are missing", "Add pagination to the list endpoint: accept page and limit query parameters", "Add a search endpoint that filters results by a query parameter", "Document your API endpoints in the code comments in the format: METHOD /path — description"]
+        },
+        quiz: {
+          question: "A client sends a POST request to create a user but omits the required email field. What should the API return?",
+          options: ["201 Created with a partial user record that has no email", "500 Internal Server Error if the database rejects the insert", "400 Bad Request with an error message specifying that email is required", "200 OK with a flag indicating the request was incomplete"],
+          correct: 2,
+          feedback: "400 Bad Request means the client sent something invalid. The error message should tell them exactly what's wrong: 'email is required' or 'email must be a valid email address'. Don't let invalid data reach the database — validate first and return 400 immediately. 500 is for server failures, not client mistakes. 201 with missing required data is incorrect by definition."
+        },
+        checklist: ["I can build RESTful endpoints for a resource", "I validate request input before any database interaction", "I return consistent response shapes across all endpoints", "I use correct HTTP status codes", "My endpoints follow RESTful URL conventions"]
+      },
+      {
+        id: "5-8",
+        title: "Environment Variables and Security",
+        body: `Environment variables store secrets and configuration outside your code. Database passwords, API keys, JWT secrets, and third-party service credentials must never be committed to a Git repository. A public GitHub repository with a database password in it is a security incident, not just a mistake.
+
+The dotenv package reads a .env file and loads its contents into process.env. Add .env to your .gitignore immediately when you create any project. Commit a .env.example file that shows what variables are needed with placeholder values — this is the convention for onboarding new developers without exposing secrets.
+
+SQL injection is the most common web application vulnerability. It happens when you build SQL queries with string concatenation: 'SELECT * FROM users WHERE name = ' + userInput. If userInput is ' OR '1'='1, the query returns every row in the table. The fix is parameterised queries: the query and the data are sent separately, and the database handles the escaping. Never build SQL with string concatenation.
+
+XSS (Cross-Site Scripting) happens when user input is rendered as HTML without sanitisation. If a user submits <script>steal(document.cookie)</script> as a comment and you display it directly, that script runs in every reader's browser. Sanitise or encode user content before rendering it.
+
+CORS (Cross-Origin Resource Sharing) is the browser's mechanism for restricting which domains can call your API. Configure CORS explicitly: list the specific origins your frontend runs on. Never set Access-Control-Allow-Origin: * in a production application that uses authentication — it allows any website to make authenticated requests on behalf of your users.`,
+        callout: {
+          type: "default",
+          label: "The .gitignore Rule",
+          text: "Before your first git add on any project: add .env to .gitignore. Check it's there before your first commit. Once a secret is committed to Git, assume it's compromised even if you remove it later — Git history is permanent and crawled by automated tools."
+        },
+        callout2: {
+          type: "focus",
+          label: "Parameterised Queries",
+          text: "Every database client supports parameterised queries: pg uses db.query('SELECT * FROM users WHERE id = $1', [userId]). The $1 is a placeholder — the database treats the value as data, not SQL syntax. This is not optional in production code. SQL injection vulnerabilities have caused some of the largest data breaches in history."
+        },
+        hint: `You've committed sensitive data to a public repository.
+
+<strong>What to do right now:</strong> Revoke and regenerate the compromised credentials immediately — new database password, new API key, new JWT secret. Do this before doing anything else. Then remove the secrets from the codebase and add them to .env. Then use BFG Repo Cleaner or git filter-branch to purge them from Git history. Removing a file from the current commit doesn't remove it from history.
+
+<strong>Prevention:</strong> Use git-secrets or pre-commit hooks that block commits containing credential patterns. The few minutes of setup prevents this conversation.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Move the hardcoded API key in the code to a .env file", "Add CORS middleware that only allows requests from http://localhost:3000", "Add rate limiting middleware that blocks IPs making more than 100 requests per minute", "Identify and fix the SQL injection vulnerability in the code"]
+        },
+        quiz: {
+          question: "A developer builds a query: 'SELECT * FROM users WHERE username = \'' + req.body.username + '\'' What is wrong with this?",
+          options: ["String concatenation is slower than template literals for SQL queries", "The query is vulnerable to SQL injection — malicious input can manipulate the query logic", "Single quotes should be escaped differently in SQL", "The WHERE clause syntax is incorrect for PostgreSQL"],
+          correct: 1,
+          feedback: "String-concatenated SQL is vulnerable to injection. If req.body.username is ' OR '1'='1, the query becomes: SELECT * FROM users WHERE username = '' OR '1'='1' — which returns every user. Use parameterised queries: db.query('SELECT * FROM users WHERE username = $1', [req.body.username]). The database treats $1 as data, making injection impossible."
+        },
+        checklist: ["All secrets are stored in .env and never committed", ".env is in .gitignore", "I use parameterised queries for all database operations", "I understand what CORS is and have configured it explicitly", "I understand XSS and sanitise user-generated content before rendering"]
+      },
+      {
+        id: "5-9",
+        title: "Deployment",
+        body: `Deployment is putting your application on a server that anyone on the internet can reach. Until you deploy, only you can use what you've built.
+
+For Node/Express backends, Railway, Render, and Fly.io offer free or low-cost hosting with minimal configuration. You connect your GitHub repository, configure environment variables in the platform dashboard (never in the code), and the platform handles the server, the network, and keeping your process running.
+
+For frontends, Netlify and Vercel detect your repository, build it automatically on every push to main, and serve it from a global CDN. Deployment becomes automatic: push to main, wait two minutes, the live site is updated.
+
+Process managers like PM2 keep your Node.js application running if it crashes. Without PM2 or an equivalent, your server goes down every time there's an unhandled error. Railway and Render handle process management for you — on a VPS, you manage it yourself.
+
+Environment variables in production are set in the platform dashboard, not in code or .env files (which you'd never deploy). Every platform has a variables section. Set them before your first deployment.
+
+<strong>Monitoring</strong> is knowing your application is down before users tell you. A basic uptime monitor (UptimeRobot is free) pings your /health endpoint every 5 minutes and notifies you if it doesn't respond. On day one this feels unnecessary. On the day your app is down and you find out from a tweet, it feels essential.
+
+Deployment is not the end. It's where the real work begins: watching logs, responding to errors, iterating from real user feedback.`,
+        callout: {
+          type: "default",
+          label: "Continuous Deployment",
+          text: "Connect your GitHub repository to Railway or Render and enable automatic deployments. Every push to main triggers a new build and deploy. This removes the manual deploy step and means your production environment always reflects your main branch. It's the standard for any team moving faster than once a week."
+        },
+        callout2: {
+          type: "focus",
+          label: "Logs Are Your Eyes",
+          text: "In production, you can't open DevTools. Logs are how you see what's happening. Every platform has a log viewer. Check them when something breaks. Add structured logging (Winston or Pino) to your Node application so you have context when things go wrong: which user, which endpoint, what data, what error."
+        },
+        hint: `Your application works locally but fails after deployment.
+
+<strong>Try this:</strong> Check the deployment logs first — every platform shows the build and runtime logs. Most production failures are one of: missing environment variable, port mismatch (your app must listen on process.env.PORT, not a hardcoded 3000), or a dependency that wasn't in package.json.
+
+<strong>Still stuck?</strong> Compare your .env file to the environment variables set in the platform dashboard. A missing variable causes the exact application startup failure that's hardest to diagnose without logs.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Write the exact sequence of commands to deploy a Node.js app to Railway", "Write a health check endpoint GET /health that returns {status: 'ok', uptime: process.uptime()}", "Add environment-specific configuration — different database URLs for development and production", "Set up a basic monitoring check: a script that hits your /health endpoint every 5 minutes and logs if it fails"]
+        },
+        quiz: {
+          question: "Your Node.js app works on localhost:3000 but fails to start on Railway. What is the most common reason?",
+          options: ["Railway doesn't support Node.js applications", "The application is listening on a hardcoded port 3000 instead of process.env.PORT", "The package.json is missing from the repository", "Railway requires a separate configuration file for every environment variable"],
+          correct: 1,
+          feedback: "Cloud platforms assign a dynamic port to your application via the PORT environment variable. Your app must listen on process.env.PORT. If it's hardcoded to 3000, it starts on 3000, but the platform is routing traffic to a different port — the app is running but unreachable. The fix: app.listen(process.env.PORT || 3000)."
+        },
+        checklist: ["I can deploy a Node.js application to Railway or Render", "Environment variables are set in the platform dashboard, not in code", "My app listens on process.env.PORT", "I have a /health endpoint", "I check deployment logs when something breaks"]
+      },
+      {
+        id: "5-10",
+        title: "Connecting Frontend to Backend",
+        body: `The frontend and backend are separate systems that communicate over HTTP. They might be on different domains. They might be built with different technologies. They talk to each other exactly the same way your browser talks to any other server: HTTP requests.
+
+CORS is the browser's mechanism for restricting cross-origin requests. When your frontend on localhost:3000 calls your API on localhost:8000, the browser blocks it unless the server explicitly allows that origin. Configure the cors middleware on your Express server: cors({ origin: 'http://localhost:3000' }). In production, replace that with your deployed frontend URL.
+
+The standard fetch workflow from the frontend: for read operations, GET request, handle loading and error states. For write operations, POST/PATCH/DELETE with Content-Type: application/json and JSON.stringify in the body. Always handle the loading state (show a spinner or disable the submit button) and the error state (show a message, don't just fail silently).
+
+Authentication headers: after login, store the JWT in memory or localStorage. Send it with every authenticated request: headers: { 'Authorization': 'Bearer ' + token }. The server extracts and verifies the token in auth middleware before the route handler runs.
+
+Treat your backend API as if it belongs to a completely separate team. Test it with Postman before connecting the frontend. Define the response shape before writing either side. This discipline exposes misalignments early, when they're cheap to fix.`,
+        callout: {
+          type: "default",
+          label: "Design the Contract First",
+          text: "Before writing the frontend fetch code or the backend route handler, write down the API contract: URL, method, request body shape, success response shape, error response shapes. Both sides build to the same contract. This is how teams that don't talk constantly still build systems that work together."
+        },
+        callout2: {
+          type: "focus",
+          label: "Optimistic UI",
+          text: "Optimistic UI updates the interface immediately when the user takes an action, before the server confirms. If the server returns an error, the update is reverted. Twitter uses this for likes — the heart fills instantly, the server is updated in the background. It makes applications feel fast. Instagram, Notion, and Linear all use it extensively."
+        },
+        hint: `Your fetch request is being blocked by CORS.
+
+<strong>Try this:</strong> Look at the browser console error message carefully. It will say exactly which origin is blocked and which origin the server allows. The fix is always server-side: add the correct origin to your CORS configuration. The browser enforces CORS — you can't bypass it client-side.
+
+<strong>Still stuck?</strong> A CORS error only appears in browsers. If you test with curl or Postman and it works, the API is fine. The CORS error is specifically the browser blocking the cross-origin request. Configure the cors middleware with the exact origin your frontend is running on, including the port number.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a loading state that shows a spinner while the request is in progress", "Add error handling that shows a specific message for 401 (unauthorized) vs 404 (not found) vs 500 (server error)", "Add an Authorization header with a JWT token to the fetch request", "Implement optimistic UI: update the list immediately when a new item is added, before the server confirms"]
+        },
+        quiz: {
+          question: "Your frontend fetch request to the backend is blocked with a CORS error. Where is the fix applied?",
+          options: ["In the frontend fetch() call, by adding mode: 'no-cors'", "In the browser settings, by disabling the same-origin policy", "On the backend server, by adding CORS middleware that allows the frontend's origin", "In the HTTP request headers, by adding a CORS bypass header"],
+          correct: 2,
+          feedback: "CORS is enforced by the browser based on what the server allows. The server must include the correct Access-Control-Allow-Origin header in its response. Adding mode: 'no-cors' to fetch doesn't solve the problem — it just hides the error while preventing you from reading the response. The fix is always server-side: configure cors middleware to explicitly allow your frontend's origin."
+        },
+        checklist: ["I understand why CORS exists and how to configure it", "I can send authenticated requests with JWT headers", "I handle loading and error states for every fetch operation", "I test my API with Postman before connecting the frontend", "I understand optimistic UI and when to use it"]
+      },
+      {
+        id: "5-11",
+        title: "Guided Full Stack Notes App",
+        body: `The notes app is your first complete full stack project: frontend, backend, database, deployed. Not a tutorial you follow — a system you build by connecting the pieces you've learned on this floor.
+
+The scaffold provides a React-style HTML frontend, an Express backend with in-memory array storage, and basic CRUD endpoints for notes. Your job is to connect the frontend to the backend, replace the in-memory array with a real database, add proper error handling to every operation, and deploy both services.
+
+This is the project where everything from Floor 5 becomes a single working system. The database you learned in section 5-3. The Express server from 5-5. The database connection from 5-6. The REST API design from 5-7. The environment variables from 5-8. The deployment from 5-9. The frontend-backend connection from 5-10. It all converges here.
+
+Read the full scaffold before writing a single line. Understand the data flow: what does the frontend send, what does the backend receive, what does the database store, what does the response look like. Draw it on paper if it helps. Build the data layer first, then the API layer, then connect the frontend, then deploy.
+
+The order matters. A working backend you can test with Postman before the frontend exists is much easier to debug than a system where everything breaks simultaneously.`,
+        callout: {
+          type: "default",
+          label: "Build Order",
+          text: "Database schema first. Then database functions. Then Express routes that use those functions. Test with Postman. Then connect the frontend. Then deploy. Each layer is independently testable before the next layer is added. This is how professionals build systems — not all at once."
+        },
+        callout2: {
+          type: "focus",
+          label: "In-Memory vs Database",
+          text: "The scaffold uses an in-memory array to store notes. It works, but data is lost every time the server restarts. Replacing it with real database queries is the most important change you'll make. Every note stored in the array needs a corresponding row in a database table."
+        },
+        hint: `The frontend and backend are both working independently but don't communicate correctly.
+
+<strong>Try this:</strong> Open the browser Network tab and watch the request your frontend sends when you create a note. Check: is the URL correct? Is the method POST? Is the body JSON? Is the Content-Type header set? Then look at the server logs for the same moment — did the request arrive? What does the server log?
+
+<strong>Still stuck?</strong> Add console.log(req.method, req.path, req.body) at the top of every route. This shows you exactly what the server receives. If the route isn't logging, the request isn't reaching Express. If it's logging but req.body is empty, body-parsing middleware is missing.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Connect the frontend fetch calls to the backend API endpoints", "Replace the in-memory array with real database queries", "Add a loading state for each async operation", "Deploy both frontend and backend and update the frontend API URL to point to the live backend"]
+        },
+        quiz: {
+          question: "You've built the notes API and tested it with Postman. Now you connect the frontend and notes aren't saving. What should you check first?",
+          options: ["The database schema for errors", "The browser Network tab to see the exact request being sent and the response received", "The frontend HTML for layout issues", "The Express router registration order"],
+          correct: 1,
+          feedback: "The Network tab shows you the exact request the browser sends and the exact response it receives. You already know the backend works (Postman proved it), so the problem is either the frontend isn't sending the right request, or isn't handling the response correctly. The Network tab shows both. This is the fastest way to find the disconnect."
+        },
+        checklist: ["The frontend connects to the backend API", "Notes persist in a real database", "Loading and error states are handled", "Both frontend and backend are deployed", "The app works end-to-end on the live URL"]
+      },
+      {
+        id: "5-12",
+        title: "Adding Authentication",
+        body: `Adding authentication to the notes app means building the complete auth flow: register endpoint, login endpoint, JWT generation, auth middleware, and route protection. Then on the frontend: storing the token, sending it with every request, handling logout, and redirecting unauthenticated users.
+
+The notes should be private per user. A user should only see their own notes, not everyone's. This requires adding a userId foreign key to the notes table. Every note is owned by a user. Every query for notes filters by the authenticated user's ID extracted from the JWT.
+
+The auth flow in detail: the user submits a login form → the frontend POSTs credentials to /api/auth/login → the server finds the user by email, verifies the password with bcrypt.compare(), generates a JWT signed with the secret key, and returns it → the frontend stores the token and includes it in the Authorization header of every subsequent request → the auth middleware on the server verifies the JWT, extracts the userId, and attaches it to req.user → route handlers use req.user.id to filter data to the authenticated user's records.
+
+Common mistakes: not hashing passwords with bcrypt before storage, not verifying the JWT secret matches between generation and verification, not filtering database queries by userId so users can see each other's notes, and not handling the case where a token is expired or invalid.`,
+        callout: {
+          type: "default",
+          label: "The JWT Secret",
+          text: "The JWT secret is what makes your tokens trustworthy. It must be a long, random string that only your server knows. Store it in an environment variable. If someone learns your secret, they can generate valid tokens for any user. Rotate it if it's ever compromised."
+        },
+        callout2: {
+          type: "focus",
+          label: "Filter by User ID",
+          text: "After adding auth, every database query for notes must include WHERE user_id = $1 with the authenticated user's ID. Without this filter, any logged-in user can read any note. This is the most common data isolation bug in new full stack applications. Test it explicitly: log in as user A, try to access user B's note ID, confirm you get a 403."
+        },
+        hint: `Authentication works but users can see each other's notes.
+
+<strong>Try this:</strong> Look at your database query for fetching notes. Does it have a WHERE user_id = $1 clause? If not, add it. The userId comes from req.user.id, which your auth middleware should be attaching. Log req.user at the top of the route to confirm it's there and contains the correct ID.
+
+<strong>Still stuck?</strong> Test with two different accounts in two different browser windows (or one regular, one incognito). Create a note in each. Confirm each account only sees its own notes. This test exposes data isolation bugs that unit tests often miss.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Implement the register endpoint that hashes the password and creates a user", "Implement the login endpoint that verifies the password and returns a JWT", "Add the auth middleware that verifies the JWT and attaches the user to req", "Update the notes endpoints to filter by the authenticated user's ID"]
+        },
+        quiz: {
+          question: "After adding authentication, a logged-in user can still see notes belonging to other users. What is missing from the database query?",
+          options: ["The JWT is not being verified correctly on the server", "The database query is not filtering notes by the authenticated user's ID", "The frontend is not sending the Authorization header", "The notes table is missing a primary key"],
+          correct: 1,
+          feedback: "Authentication tells you who the user is. But if your SELECT query for notes doesn't include WHERE user_id = req.user.id, it returns all notes regardless of who's asking. Authentication without data scoping is incomplete. Every query that returns user-owned data must filter by the authenticated user's identifier."
+        },
+        checklist: ["Users can register and log in", "Passwords are hashed with bcrypt", "JWTs are generated on login and verified on protected routes", "Notes are filtered by the authenticated user's ID", "Users cannot access other users' notes"]
+      },
+      {
+        id: "5-13",
+        title: "Deploying It Live",
+        body: `Deploy the complete authenticated notes application to production. This is not a practice run — it's a real deployed application with real authentication and real data persistence.
+
+Backend to Railway or Render. Database to Supabase or PlanetScale (both have free tiers sufficient for this project). Frontend to Netlify or Vercel. Set every environment variable in the platform dashboards: DATABASE_URL, JWT_SECRET, the frontend API base URL, and CORS origin.
+
+Test the deployed app end-to-end after deployment: register a new account using the live URL, create a note, log out, log back in, confirm the note is still there. Then register a second account and confirm the first account's notes are not visible. If anything breaks, check the deployment logs — they contain the exact error.
+
+Share the URL. Not because it's required, but because a deployed, working, authenticated full stack application is something worth showing. This is not beginner-level work. A production-ready notes application with authentication is something many developers with years of experience have never built cleanly from scratch.
+
+Monitor it for 24 hours after deployment. Watch the logs. Note what errors appear in real usage that you didn't catch in development. Fix them. This is the production feedback loop that makes software better.`,
+        callout: {
+          type: "default",
+          label: "This Is Real",
+          text: "A deployed full stack application with user authentication and a real database is a production-grade project. It has the same architecture as the internal tools used at companies you've heard of. The scale is different. The architecture is not."
+        },
+        callout2: {
+          type: "focus",
+          label: "Environment Variables Are Critical",
+          text: "The most common production deployment failure is a missing environment variable. Before deploying, make a list of every variable in your .env file. Confirm every single one is set in the platform dashboard. A missing JWT_SECRET or DATABASE_URL will cause immediate startup failure."
+        },
+        hint: `The deployed app works but database changes aren't persisting.
+
+<strong>Try this:</strong> Check that your production DATABASE_URL points to the hosted database (Supabase or PlanetScale), not to localhost. If it points to localhost, the server is trying to connect to a database on its own machine rather than the hosted one. This is a common mistake when copying local environment variables to production.
+
+<strong>Still stuck?</strong> Add a log at application startup that prints (safely) which database host is being connected to. Never log the full connection string, but logging the host is enough to confirm you're connecting to the right place.`,
+        quiz: {
+          question: "After deploying, the app registers users but their notes disappear after a few hours. What is the most likely cause?",
+          options: ["JWTs expire after a few hours, deleting the user's data", "The backend is using an in-memory array instead of the database, and the server restarts periodically", "The database has a scheduled cleanup job running", "The frontend is clearing localStorage on page load"],
+          correct: 1,
+          feedback: "Cloud platforms restart your server process periodically (for updates, scaling, or failure recovery). An in-memory array is wiped clean on every restart. If notes disappear periodically, the backend is storing them in memory instead of the database. This is exactly why in-memory storage is only acceptable for development — production requires a persistent database."
+        },
+        checklist: ["The backend is deployed to Railway or Render", "The database is hosted on Supabase or PlanetScale", "The frontend is deployed to Netlify or Vercel", "All environment variables are set in production", "The app works end-to-end on the live URL with two different accounts"]
+      },
+      {
+        id: "5-14",
+        title: "Solo Full Stack Project",
+        body: `Design and build a full stack application from scratch. No scaffold, no starter code, no prescribed idea. Yours completely.
+
+The requirements are structural: a frontend (HTML/CSS/JS or React), a backend (Node/Express or another language if you've explored one), a database, user authentication, and deployment. The idea is yours. It should be something you would actually use or that solves a real problem you've encountered.
+
+The complexity target is honest: more complex than the notes app, less complex than Airbnb. That's a wide range. Ideas that fit: a expense tracker that splits bills between friends, a recipe manager that generates shopping lists, a habit tracker with streaks, a link organiser with tags and search, a reading list with notes per book. All of these are within reach. All of them are worth building.
+
+Timeline: 3-4 weeks at full session intensity. This is a real project that takes real time. Resist the urge to rush the planning phase — the decisions you make before writing code determine how hard the last 40% is.
+
+When it's deployed: write a README that explains what the application does, the technical decisions you made (why this database, why this architecture), and what you'd do differently. This written reflection is as valuable as the code — it's evidence of how you think, not just what you can build.`,
+        callout: {
+          type: "default",
+          label: "The Planning Phase",
+          text: "Before writing code: define the data model (what tables, what columns, what relationships). Define the API (what endpoints, what they accept, what they return). Sketch the UI (even rough boxes on paper). Three hours of planning prevents three days of refactoring."
+        },
+        callout2: {
+          type: "focus",
+          label: "Scope Ruthlessly",
+          text: "Every feature you add to the spec is time you're committing to. Start with the minimum version: the smallest set of features that makes the application genuinely useful. Build that first. Deploy it. Then add features from a position of working software rather than an incomplete prototype."
+        },
+        hint: `The project feels too big to start.
+
+<strong>Try this:</strong> Write the database schema first — just the CREATE TABLE statements. No code, no server, no frontend. Just the data model. If you can define what data the application stores, you understand the application. The schema is the clearest expression of what the system does.
+
+<strong>Still stuck?</strong> Build the most boring version first. Ignore design, ignore edge cases, ignore optimisation. Get one thing working end-to-end: create one record through the API and see it in the database. That first working vertical slice is the hardest part. Everything after it is extending something that already works.`,
+        quiz: {
+          question: "You're designing a full stack app where users can create posts and comment on them. What is the minimum schema you need?",
+          options: ["One table: posts (with comments as a JSON column)", "Two tables: users and posts (comments can be added later)", "Three tables: users, posts, and comments (with foreign keys linking them)", "Four tables: users, posts, comments, and a junction table for user-post relationships"],
+          correct: 2,
+          feedback: "Users, posts, and comments are distinct entities with their own attributes and relationships. posts has a user_id foreign key (who created it). comments has both a user_id (who wrote it) and a post_id (which post it's on). A JSON column for comments breaks querying, filtering, and indexing. Start with normalised tables — you can always denormalise for performance later if needed."
+        },
+        checklist: ["I planned the data model before writing any code", "The application has a working frontend, backend, database, and authentication", "It is deployed and accessible via URL", "The README explains what it does and how I built it", "I'm proud of it and would show it to a potential employer"]
+      }
     ]
   },
   {
@@ -579,14 +1815,336 @@ A starter template is below. It already has the structure in place \u2014 your j
     color: "#c8967e",
     duration: "3-4 months",
     sessions: "5 per week",
-    length: "60-90 min",
-    tag: "Floor 06 \u2014 Your Direction",
+    length: "90 min",
+    tag: "Floor 06 \u2014 Direction",
     sections: [
-      { id: "6-1", title: "Identifying Your Lane", body: `By now you have built enough to know what excites you. That feeling when you're working on something and time disappears \u2014 that's your signal.\n\nThe main lanes are:\n\n<strong>Frontend focused</strong> \u2014 You love building beautiful, interactive user interfaces. React is your next major skill.\n<strong>Backend focused</strong> \u2014 You love the logic, the architecture, the systems. Node.js, Python, databases.\n<strong>Full Stack product builder</strong> \u2014 You want to build complete products alone. Both sides, end to end.\n<strong>Data and AI</strong> \u2014 You're drawn to working with information, finding patterns, building intelligent systems. Python is your language.`, callout: { type: "focus", label: "No Wrong Answer", text: "Every lane leads to professional grade work. The best developers aren't the ones who know the most \u2014 they're the ones who went deepest in the direction that excited them most." }, hint: `Can't decide? Ask yourself these:\n\n\u2014 When you finished a project, what part did you most enjoy building \u2014 how it looked, or how it worked?\n\u2014 Do you find yourself thinking more about the user experience or about the logic underneath?\n\u2014 When you imagine your ideal job, are you designing interfaces or engineering systems?\n\nIf you genuinely enjoy both equally, Full Stack is your lane. If one made you lose track of time and the other felt like a chore \u2014 that's your answer.`, checklist: ["I know which direction pulls me most", "I've chosen my lane for this floor"] },
-      { id: "6-2", title: "Going Deep in Your Chosen Direction", body: `This is where the curriculum diverges. Based on the lane you identified in section 6-1, the technology you focus on is different — but the approach is the same regardless.\n\n<strong>Frontend (React):</strong> React is the dominant UI library. Everything is a component — a reusable piece of UI that manages its own data (state) and renders based on that data. Below is an interactive React-style component built in vanilla JS so you can understand the mental model before installing anything.\n\n<strong>Backend (Node.js):</strong> Node runs JavaScript on a server. You build APIs that the frontend calls. Your first step is: install Node, run node app.js, see "Server running" in the terminal.\n\n<strong>Full Stack:</strong> You\'re doing both. Start with the React fundamentals, then build a backend API it can talk to. Your first full stack app will be a notes app with a real database.\n\n<strong>Data and AI (Python):</strong> Python dominates data science. Your first steps: install Python, install pandas with pip, load a CSV file and analyse it. Then move to machine learning with scikit-learn.\n\nWhatever your lane — the pattern is always the same: learn the concept, build a tiny thing with it immediately, then build something bigger. The demo below shows the React component mental model in a way that runs right now, no setup needed.`, callout: { type: "default", label: "The Technology Ladder", text: "Frontend: HTML/CSS/JS → React → Next.js\nBackend: Node.js → Express → databases → auth\nFull Stack: both ladders in parallel\nData/AI: Python → pandas → scikit-learn → PyTorch\n\nYou don\'t need to see the top of the ladder. You just need to take the next step." }, callout2: { type: "focus", label: "ADHD Note", text: "New technology feels overwhelming because everything is unfamiliar at once. That\'s normal. It\'s not a sign you\'ve chosen the wrong lane. Give yourself two weeks before judging whether something clicks. The first week is always the hardest." }, hint: `The biggest mistake at this stage: tutorial-hopping. You watch half of one React tutorial, then switch to a different one, then switch again.\n\n<strong>Instead:</strong> Pick one source, go through it completely, then build something small of your own before consuming any more content. The project you build yourself — even badly — teaches you ten times more than the tutorial.\n\n<strong>When you get stuck:</strong> That\'s not a signal to find a different tutorial. It\'s a signal to go to the official documentation and search for exactly the thing you\'re stuck on.`, code: { lang: "HTML", starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; }\n    h2 { color: #c8967e; margin-top: 0; }\n    p { color: #8892a0; font-size: 14px; line-height: 1.6; }\n    .component { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin: 16px 0; }\n    .component h3 { color: #c8967e; margin: 0 0 12px; font-size: 16px; }\n    .count-display { font-size: 48px; text-align: center; color: #7ec8a9; margin: 10px 0; }\n    .btn { background: #c8967e; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; margin: 4px; font-size: 13px; }\n    .btn.secondary { background: rgba(200,150,126,0.15); border: 1px solid rgba(200,150,126,0.3); color: #c8967e; }\n    .todo-input { background: #111827; border: 1px solid #30363d; color: white; padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 60%; }\n    .todo-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #1e293b; font-size: 14px; }\n    .todo-item.done { text-decoration: line-through; opacity: 0.45; }\n    .todo-del { background: none; border: none; color: #f87171; cursor: pointer; font-size: 16px; }\n  </style>\n</head>\n<body>\n  <h2>React Component Mental Model</h2>\n  <p>In React, UIs are built from <strong>components</strong> — functions that hold state (data) and return HTML based on that data. When state changes, the component re-renders automatically. This demo shows that pattern in pure JavaScript so you can understand it before installing React.</p>\n\n  <!-- COMPONENT 1: Counter -->\n  <div class="component">\n    <h3>Counter Component</h3>\n    <p style="font-size:13px;color:#8892a0;">State: one number. When state changes, the display re-renders.</p>\n    <div class="count-display" id="count-display">0</div>\n    <div style="text-align:center">\n      <button class="btn" onclick="counterDispatch(\'decrement\')">− 1</button>\n      <button class="btn secondary" onclick="counterDispatch(\'reset\')">Reset</button>\n      <button class="btn" onclick="counterDispatch(\'increment\')">+ 1</button>\n    </div>\n  </div>\n\n  <!-- COMPONENT 2: Todo list -->\n  <div class="component">\n    <h3>Todo List Component</h3>\n    <p style="font-size:13px;color:#8892a0;">State: an array of items. Every change re-renders the list.</p>\n    <div style="display:flex;gap:8px;margin-bottom:12px">\n      <input class="todo-input" id="todo-input" placeholder="Add a task..." onkeydown="if(event.key===\'Enter\')addTodo()" />\n      <button class="btn" onclick="addTodo()">Add</button>\n    </div>\n    <div id="todo-list"></div>\n  </div>\n\n  <script>\n    // ===== COUNTER COMPONENT =====\n    // State: a single number\n    let count = 0;\n\n    // Reducer: a function that takes current state and an action, returns new state\n    // This is exactly how React\'s useReducer works\n    function counterReducer(state, action) {\n      if (action === \'increment\') return state + 1;\n      if (action === \'decrement\') return state - 1;\n      if (action === \'reset\') return 0;\n      return state;\n    }\n\n    function counterDispatch(action) {\n      count = counterReducer(count, action);\n      renderCounter(); // Re-render after state change\n    }\n\n    function renderCounter() {\n      document.getElementById(\'count-display\').textContent = count;\n    }\n\n    // ===== TODO COMPONENT =====\n    // State: an array of todo objects\n    let todos = [];\n\n    function addTodo() {\n      const input = document.getElementById(\'todo-input\');\n      const text = input.value.trim();\n      if (!text) return;\n      // Create new state — never mutate the existing array, create a new one\n      todos = [...todos, { id: Date.now(), text: text, done: false }];\n      input.value = \'\';\n      renderTodos();\n    }\n\n    function toggleTodo(id) {\n      // Map creates a new array — React requires immutable state updates\n      todos = todos.map(function(t) {\n        return t.id === id ? { ...t, done: !t.done } : t;\n      });\n      renderTodos();\n    }\n\n    function deleteTodo(id) {\n      todos = todos.filter(function(t) { return t.id !== id; });\n      renderTodos();\n    }\n\n    function renderTodos() {\n      const list = document.getElementById(\'todo-list\');\n      if (todos.length === 0) {\n        list.innerHTML = \'<div style="color:#4a5568;font-size:13px;padding:8px 0;">No tasks yet.</div>\';\n        return;\n      }\n      list.innerHTML = todos.map(function(t) {\n        return \'<div class="todo-item\' + (t.done ? \' done\' : \'\') + \'" onclick="toggleTodo(\' + t.id + \')">\'  +\n          \'<span style="flex:1">\' + t.text + \'</span>\' +\n          \'<button class="todo-del" onclick="event.stopPropagation();deleteTodo(\' + t.id + \')">✕</button>\' +\n          \'</div>\';\n      }).join(\'\');\n    }\n\n    renderTodos();\n  <\/script>\n</body>\n</html>', challenges: ["Add a 'step size' input to the counter — instead of always adding 1, add whatever number is in the input", "Add a filter to the todo list: three buttons (All / Active / Done) that show only the matching tasks", "Add localStorage persistence to the todo list so tasks survive a page refresh", "Add a \'clear completed\' button that removes all tasks marked as done in one click"] }, quiz: { question: "In the component mental model shown in the demo, what happens every time state changes?", options: ["The page reloads to show the new state", "The render function runs again to update only the affected part of the UI", "A new copy of the component is created and added to the page", "State changes are saved to the server before the UI updates"], correct: 1, feedback: "This is the core idea behind React and all modern UI frameworks: state drives the UI. When state changes, the render function runs again and updates the DOM to match. In React this happens automatically and efficiently — it only updates the parts that actually changed. Understanding this pattern is the conceptual foundation for all of React." }, checklist: ["I\'ve started learning the core technology for my lane", "I\'ve built my first thing with it", "I\'m working toward my Floor 6 project"] },
-      { id: "6-3", title: "Building More Complex Products", body: `The projects in this floor are bigger. They take longer. They'll hit walls you don't know how to get past yet.\n\nWhen that happens \u2014 and it will \u2014 the process is:\n\n<strong>1.</strong> Define exactly what you're stuck on. Not "it doesn't work" but "this specific function isn't returning what I expect."\n<strong>2.</strong> Search for that specific thing.\n<strong>3.</strong> Try the solution.\n<strong>4.</strong> If it doesn't work, define the new problem and repeat.\n\nThis isn't struggling. This is the job. Every developer does this every day.`, callout: { type: "focus", label: "ADHD Note", text: "Complex projects can feel overwhelming at the start. Break them into the smallest possible next task. Not 'build the login system' \u2014 'make the input field appear on screen.' Then the next tiny thing. Momentum builds from small wins." }, hint: `When a project feels too big to start, use the "next physical action" approach.\n\nDon't write "build the dashboard." Write "create a new file called dashboard.html." That's it. One physical action.\n\nWhen that's done, the next physical action becomes obvious. Then the next. The project builds itself one tiny step at a time \u2014 you just have to keep asking "what is the very next thing I can do right now?"\n\n<strong>Losing motivation mid-project?</strong> Ship something. Deploy whatever you have, even unfinished. Seeing it live makes it real. Real things are worth finishing.`, checklist: ["I'm working on my most complex project yet", "I've hit at least one wall and pushed through it", "I understand that getting stuck is normal"] },
-      { id: "6-4", title: "Using Professional Tools and Resources", body: `By Floor 6 you should be comfortable with:\n\n<strong>Documentation</strong> \u2014 every technology has official docs. Learning to read them is a superpower.\n<strong>Stack Overflow</strong> \u2014 the world's largest database of developer questions and answers.\n<strong>GitHub</strong> \u2014 not just storing your work, but reading other people's code.\n<strong>AI coding assistants</strong> \u2014 tools like GitHub Copilot that suggest code as you type. Powerful when you know enough to evaluate what they suggest.\n\nNone of these replace understanding. But all of them accelerate it.`, callout: { type: "warning", label: "The Dependency Trap", text: "AI coding tools are powerful and useful. They are also dangerous if you rely on them before you understand what the code does. Use them to speed up work you understand, not to skip understanding." }, hint: `Reading documentation feels hard at first because docs are written for people who already know the basics. Here's how to approach them:\n\n1. Read the "Getting Started" section fully\n2. Skim the rest to know what exists\n3. Come back to specific sections when you need them\n\nYou don't read docs cover to cover like a book. You use them like a reference \u2014 you know they contain the answer, and you know roughly where to look.\n\n<strong>Stack Overflow tip:</strong> If your question has already been asked (it almost always has), look for the answer with the most votes AND check the date. A highly voted answer from 2015 might be outdated. Prefer recent answers for modern technologies.`, checklist: ["I'm comfortable reading documentation", "I've used Stack Overflow to solve a real problem", "I've read someone else's code on GitHub", "I understand when and how to use AI coding tools"] },
-      { id: "6-5", title: "Floor 6 Project \u2014 Your Speciality in Action", body: `The most ambitious thing you've built yet. It must be in your chosen lane, use the technology you've learned this floor, and be something you couldn't have built six months ago.\n\nThere is no specific brief. You choose the idea. You plan the build. You execute it.\n\nWhen it's done, deploy it, write a short description of what it does and how you built it, and add it to your GitHub portfolio.`, callout: { type: "default", label: "The Portfolio", text: "By the end of Floor 6 you should have at least 3 deployed projects on GitHub with descriptions. This is your portfolio. This is what you show people." }, hint: `If you're struggling with the idea, think about who you were before you started coding. What problem did that person have that a developer could have solved?\n\nOr think forward \u2014 what's the simplest possible version of something you'd actually want to exist?\n\n<strong>The README matters as much as the code.</strong> When an employer looks at your GitHub, they read the README first. Write it like you're explaining the project to someone smart who isn't a developer. What does it do? Why did you build it? What did you learn making it?`, checklist: ["I built my most complex project yet", "It demonstrates my speciality", "It is deployed and on GitHub", "I wrote a description of how I built it", "I'm ready for Floor 7"] }
+      {
+        id: "6-1",
+        title: "The Fork in the Road",
+        body: `You've reached the point where "web developer" is no longer a precise enough description. The skills you have now \u2014 HTML, CSS, JavaScript, basic backend, databases \u2014 are the foundation. What you build on top of that foundation is your choice. And the choice matters more than most people tell you.\n\nSpecialisation is not about closing doors. It's about going deep enough in one direction to become genuinely valuable. Netflix doesn't hire "web developers." They hire frontend engineers who know React's reconciliation algorithm, or backend engineers who understand distributed consensus, or data engineers who can process petabytes. The title reflects the depth.\n\nThe main paths: <strong>frontend engineering</strong> (UI, browser performance, accessibility, design systems), <strong>backend engineering</strong> (APIs, databases, system design, infrastructure), <strong>mobile development</strong> (iOS, Android, or cross-platform), <strong>DevOps and cloud</strong> (infrastructure, deployment pipelines, reliability), <strong>data engineering</strong> (pipelines, warehousing, analytics), <strong>AI/ML engineering</strong> (model training, inference, deployment), and <strong>security engineering</strong> (application security, penetration testing, threat modelling).\n\nNone of these paths requires you to forget everything else. A backend engineer who understands CSS is more valuable than one who doesn't. A frontend engineer who can write a SQL query is easier to work with. What you're choosing is your primary depth \u2014 the area where you become expert rather than competent.\n\nThe practical advice: pick based on what you've enjoyed most so far, not what pays the most or what someone told you is "in demand." Demand shifts. Enjoyment is what keeps you grinding through the hard parts three years in.`,
+        callout: {
+          type: "default",
+          label: "Depth vs Breadth",
+          text: "Early in your career, going deep in one area makes you more hireable than being average at three. Once you have your first role and real projects under your belt, you can expand deliberately. But the first job usually requires a clear answer to 'what do you specialise in?'"
+        },
+        callout2: {
+          type: "focus",
+          label: "The T-Shape Model",
+          text: "The most effective engineers have a T-shaped skill set: deep expertise in one area (the vertical bar), with enough breadth to collaborate across the stack (the horizontal bar). You're building the vertical bar now. The horizontal bar fills in naturally over years of working with teammates who have their own vertical bars."
+        },
+        hint: `The question isn't which path is objectively best \u2014 it's which problems you find genuinely interesting. Frontend engineers care about how things feel and how fast they render. Backend engineers care about how systems hold together under load. Neither is superior. Both are essential.\n\n<strong>Honest self-audit:</strong> Look at the projects you've built so far. Which parts did you spend extra time on, beyond what was required? Which parts did you rush to get through? That pattern tells you something real.\n\n<strong>If you're still not sure:</strong> Spend one week going deep on frontend (build a complex UI component with state), and one week going deep on backend (build an API with authentication and a database). The week that felt like flow is the answer.`,
+        quiz: {
+          question: "A junior developer is choosing between frontend and backend specialisation. Their backend projects work correctly but they always find themselves spending extra time polishing the UI. What does this suggest?",
+          options: ["They should specialise in backend because it's working correctly", "They should choose frontend because the extra time they spend on UI signals genuine interest", "They should stay generalist to keep all options open", "They should ask a recruiter what is most in demand"],
+          correct: 1,
+          feedback: "Where you voluntarily spend extra time \u2014 beyond what's required \u2014 is one of the most reliable signals of genuine interest. Interest drives the sustained effort that turns competence into expertise. A recruiter can tell you what's in demand this year; only you can tell you what you'll still enjoy working on in five years."
+        },
+        checklist: ["I understand the main specialisation paths and what each involves", "I've honestly assessed which parts of my past projects I enjoyed most", "I've chosen a primary direction to go deep on for this floor", "I understand that specialisation doesn't mean ignoring everything else", "I know that I can change direction later \u2014 this choice is not permanent"]
+      },
+      {
+        id: "6-2",
+        title: "Frontend Engineering",
+        body: `Frontend engineering is harder than it looks from the outside. The browser is a hostile environment: inconsistent rendering across Safari, Chrome, Firefox and Edge, network requests that fail unpredictably, device widths that range from 320px to 2560px, users with screen readers, slow connections, and high expectations. Making something that works in all those conditions requires engineering.\n\nThe dominant tool is React, but React is not the job \u2014 it's a means to an end. The job is building interfaces that are fast, accessible, and maintainable. React's core idea is the component: a self-contained piece of UI with its own state and rendering logic. Spotify's "Now Playing" bar is a component. GitHub's code diff is a component. Airbnb's date picker \u2014 the one that has to handle time zones and disabled dates and keyboard navigation \u2014 is a notoriously complex component.\n\nState management is where frontend complexity lives. React's local useState hook handles component-level state. When that state needs to be shared across many components, you reach for Context, or a library like Redux or Zustand. The question is always: what is the minimum state needed to describe the UI, and where does it live? Answering this well is what separates frontend engineers from frontend coders.\n\nPerformance is measurable and professional frontend engineers measure it. The browser's Network tab shows every request and how long it takes. Lighthouse gives you a performance score with specific recommendations. Core Web Vitals \u2014 Largest Contentful Paint, Cumulative Layout Shift, Interaction to Next Paint \u2014 are what Google uses to rank pages. Instagram's feed loads images lazily, prioritises above-the-fold content, and pre-fetches the next page before you scroll to it. These are deliberate engineering decisions.\n\nAccessibility is not optional if you're engineering professionally. ARIA attributes, keyboard navigation, colour contrast ratios, focus management \u2014 these ensure your interface works for the estimated 15% of users who have some form of disability. Screen readers like VoiceOver and NVDA announce elements based on semantic HTML and ARIA roles. Building accessibly from the start is far easier than retrofitting it.`,
+        callout: {
+          type: "default",
+          label: "Components Are Contracts",
+          text: "A well-built component has a clear API: specific props it accepts, predictable behaviour, and no hidden dependencies. When you can use a component without reading its implementation \u2014 just its interface \u2014 that's good component design. This is what Airbnb and Spotify's design systems enforce at scale."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Performance Gotcha",
+          text: "React re-renders a component every time its state or props change. If a parent component re-renders, all its children re-render too, by default. This is usually fine. But if a child component is expensive to render, you reach for React.memo, useMemo, or useCallback. These are optimisation tools \u2014 reach for them when you measure a problem, not preemptively."
+        },
+        hint: `Frontend is not just making things look good \u2014 it's managing the gap between what designers draw and what the browser actually renders, across every possible device and network condition.\n\n<strong>If you're learning React:</strong> Don't start with Redux. Don't start with TypeScript. Start with useState and useEffect. Build five things using only those two hooks before reaching for anything else. The fundamentals compound into everything.\n\n<strong>Measure before optimising:</strong> The browser's Lighthouse tab can run a performance audit on any page in 30 seconds. Run it on your projects. Fix the things that score below 80. Learning to read Lighthouse output is more valuable than memorising React's reconciliation algorithm.`,
+        quiz: {
+          question: "A React component re-renders every time its parent re-renders, causing visible lag. What is the correct first step?",
+          options: ["Rewrite the component using vanilla JavaScript", "Add React.memo to the component immediately", "Use the browser's Performance tab to confirm the render is actually causing the lag before optimising", "Move all state to Redux to prevent unnecessary re-renders"],
+          correct: 2,
+          feedback: "Optimisation without measurement is guesswork. React DevTools Profiler and the browser's Performance tab show exactly which renders are expensive and how much time they take. React.memo is only useful if the component is actually expensive \u2014 wrapping cheap components in memo adds overhead without benefit. Measure first, then decide whether and how to optimise."
+        },
+        checklist: ["I understand what React components are and how they compose", "I understand state and when to lift state up vs keep it local", "I know how to use the browser's Network tab and Lighthouse", "I understand the basics of web accessibility (ARIA, semantic HTML, keyboard navigation)", "I've built a multi-component React application with shared state"]
+      },
+      {
+        id: "6-3",
+        title: "Backend Engineering",
+        body: `Backend engineering is the engineering of systems that users never directly see. The Stripe API that processes millions of payments daily, the GitHub API that serves billions of code requests, the Netflix recommendation engine that decides what 230 million users watch next \u2014 all backend. Invisible, foundational, and unforgiving of mistakes.\n\nThe core of backend work is designing APIs and the services behind them. A well-designed API is consistent, predictable, and hard to misuse. RESTful APIs use HTTP methods and status codes correctly, version their endpoints (/v1/, /v2/), and return errors with enough information to debug without exposing internal implementation. GraphQL takes a different approach: the client specifies exactly what data it needs, and the server returns exactly that \u2014 GitHub's API v4 is GraphQL.\n\nDatabases are where most backend complexity lives. Choosing between relational (PostgreSQL, MySQL) and non-relational (MongoDB, DynamoDB) depends on your data's structure and access patterns. Relational databases enforce referential integrity and make complex queries possible. Non-relational databases offer flexible schemas and horizontal scaling. Most systems use both: Airbnb uses MySQL for structured booking data and Redis for caching. Understanding indexing, query optimisation, and connection pooling is what separates senior backend engineers from junior ones.\n\nAuthentication and security are non-negotiable. Passwords must be hashed with bcrypt or Argon2 \u2014 never MD5, never SHA1, never stored plaintext. JWTs (JSON Web Tokens) handle session management in stateless APIs. Rate limiting prevents abuse. Input validation at every API boundary prevents injection attacks. Stripe's security team publishes their practices publicly; reading them is an education.\n\nScaling is the final layer. A backend that handles 100 users might need to handle 100,000. Horizontal scaling (more servers) requires stateless design. Caching frequently-accessed data in Redis or Memcached reduces database load. Message queues (RabbitMQ, SQS, Kafka) decouple services so one slow component doesn't block everything else. These patterns are what system design interviews test.`,
+        callout: {
+          type: "default",
+          label: "Design APIs for Consumers",
+          text: "An API's primary stakeholder is the developer who calls it, not the one who built it. The best APIs are self-documenting, consistent, and make wrong usage difficult. When you design an API, think about what a developer who has never seen your code will try to do with it. Make the obvious use case trivially easy."
+        },
+        callout2: {
+          type: "focus",
+          label: "The N+1 Query Problem",
+          text: "Fetching a list of 50 users and then making a separate database query for each user's posts is 51 queries (1 + 50). This is the N+1 problem, and it's a silent performance killer that looks fine in development and catastrophic in production. ORM tools like Sequelize and Prisma have eager loading features that collapse this into 2 queries. Learn to spot it."
+        },
+        hint: `Backend work punishes assumptions. Every input is potentially malicious. Every external service can go down. Every database query can fail. The discipline of defensive programming \u2014 validating inputs, handling errors explicitly, timing out slow dependencies \u2014 is what makes backend systems reliable.\n\n<strong>Build a habit now:</strong> Every time you write a route handler, ask: what happens if the database is slow? What if the input is malformed? What if the external API call fails? Handle those cases before they happen in production.\n\n<strong>On SQL:</strong> Write raw SQL queries before using an ORM. Understand joins, indexes, and EXPLAIN ANALYZE before letting a library abstract them. ORM convenience has a cost \u2014 the cost is understanding what SQL it's generating. Know the SQL first.`,
+        quiz: {
+          question: "Your API endpoint returns a list of posts, and for each post you make a separate database query to get the author's name. In development with 10 posts this is fast. In production with 500 posts it's slow. What is happening?",
+          options: ["Production servers are slower than development machines", "The N+1 query problem: 500 posts trigger 501 database queries instead of 2", "The database needs more indexes on the posts table", "The API response needs to be compressed with gzip"],
+          correct: 1,
+          feedback: "This is the N+1 query problem. 1 query fetches the posts, then N queries (one per post) fetch the author. With 500 posts that's 501 database round trips. The fix is eager loading: one JOIN query that fetches posts and their authors together. Every ORM has a way to do this. Learning to recognise this pattern saves significant production debugging time."
+        },
+        checklist: ["I understand RESTful API design principles and common conventions", "I know the difference between relational and non-relational databases and when to use each", "I understand password hashing, JWT authentication, and basic API security", "I can identify and fix the N+1 query problem", "I've built a backend API with authentication, a database, and proper error handling"]
+      },
+      {
+        id: "6-4",
+        title: "Full Stack vs Specialised",
+        body: `The debate between being full stack and being specialised misses a more useful question: what does the market you're entering actually need? A startup with 5 engineers needs everyone to touch everything. An engineering org with 500 engineers has dedicated frontend, backend, data, and platform teams. The same person can be differently described as "full stack" or "frontend specialist" depending on which company they're talking to.\n\nFull stack means you can contribute meaningfully to both the frontend and backend of a product. Not equally expert in both \u2014 almost no one is \u2014 but capable enough to work across the codebase without being blocked. At a startup, this is enormously valuable. A full stack engineer who can take a feature from database schema to React component without handing off to anyone is a multiplier.\n\nSpecialisation means you go deep enough in one domain to tackle problems that generalists can't. A pure frontend specialist who knows every rendering optimisation, every browser quirk, every accessibility standard, and every design system pattern is exactly what a company like Figma or Linear needs for their editor. A pure backend specialist who understands distributed systems, consensus algorithms, and database internals is what Cockroach Labs or Cloudflare hires.\n\nThe practical career advice: start by being capable across the stack, then identify where you add the most value and go deeper there. Most engineers who call themselves "full stack" actually have a primary depth in one area \u2014 they're just also fluent enough in the other side to not be blocked. That's the realistic version of the term.\n\nSalary data doesn't settle this debate. Both paths can reach the same senior levels and compensation. The difference is how you get there: the full stack path rewards versatility and shipping, the specialist path rewards depth and the ability to solve very hard problems in a narrow domain.`,
+        callout: {
+          type: "default",
+          label: "Context Determines Value",
+          text: "At a 5-person startup, being the only person who can fix both the React component and the Postgres query is invaluable. At a 500-person company, being the person who can make the query 10x faster through careful indexing and query planning is invaluable. Know which context you're optimising for."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Hidden Advantage of Full Stack",
+          text: "Full stack engineers have a systems-level view that pure specialists sometimes lack. When you've written both the frontend code that makes an API call and the backend code that handles it, you understand latency, data shapes, and error propagation in ways that make you a better engineer on either side. The full stack experience is a foundation, not a ceiling."
+        },
+        hint: `Most job postings that say "full stack" actually mean "frontend-leaning with some backend capability." Most job postings that say "backend engineer" mean someone who can write an API endpoint and a SQL query. Read job descriptions literally, not aspirationally.\n\n<strong>Signal over noise:</strong> Look at the tech stack listed in job postings for roles you want. React + Node means different depths than React + Go + Kubernetes. The stack tells you what you actually need to know.\n\n<strong>Practical test:</strong> Can you build a complete feature end-to-end in your current skill set, touching both the UI and the server? If yes, you're functionally full stack. Whether you call it that on a CV is a positioning choice, not a technical one.`,
+        quiz: {
+          question: "A developer with strong React skills and intermediate Node.js skills is applying to a 6-person startup. Should they position themselves as a frontend specialist or full stack developer?",
+          options: ["Frontend specialist, because specialisation always commands higher rates", "Full stack developer, because the startup's context requires cross-stack contribution and their skills cover both", "They should not apply until their Node skills match their React skills exactly", "Backend specialist, because that's the rarer and more in-demand skill"],
+          correct: 1,
+          feedback: "Positioning is context-dependent. A startup with 6 engineers needs people who can contribute across the stack. 'Intermediate Node.js' is enough to be unblocked on backend work. Calling yourself a frontend specialist in that context undersells your utility. In a larger company with dedicated teams, the same developer might more accurately position as a frontend engineer."
+        },
+        checklist: ["I understand the real difference between full stack and specialised roles", "I know which context I'm currently optimising for (startup vs larger org)", "I've built at least one complete feature touching both frontend and backend", "I can honestly assess where my primary depth lies", "I understand that the label is a positioning choice, not a permanent identity"]
+      },
+      {
+        id: "6-5",
+        title: "Mobile Development",
+        body: `Mobile development is split into three camps and choosing between them is one of the most consequential decisions in this path. <strong>Native iOS</strong> (Swift + SwiftUI or UIKit), <strong>native Android</strong> (Kotlin + Jetpack Compose or XML layouts), and <strong>cross-platform</strong> frameworks (React Native, Flutter) each have genuine trade-offs that no amount of preference will make disappear.\n\nNative development gives you direct access to platform APIs, the best performance, and the tightest integration with OS features. The iOS app for Airbnb, the Android app for Spotify \u2014 these are built natively because the experience demands it. Features like widgets, live activities, background processing, and deep system integrations are easiest with native code. The cost is maintaining two codebases in two different languages and frameworks.\n\nReact Native lets you write JavaScript that renders native UI components. Facebook built it and uses it in production across Instagram and the Facebook app. The main promise is code sharing across platforms \u2014 in practice, a meaningful amount of platform-specific code is still needed. The performance is close to native for most use cases; the gap shows in animation-heavy or graphics-intensive apps.\n\nFlutter, Google's framework, uses the Dart language and renders every pixel itself rather than delegating to native components. This gives precise control over appearance and consistent cross-platform behaviour. Apps built with Flutter include Google Pay and eBay Motors. The framework is excellent; Dart is less widely known than JavaScript, which affects the talent pool and library ecosystem.\n\nThe practical choice: if you know JavaScript and want to get into mobile quickly, React Native has the lowest barrier. If you're committed to iOS specifically, Swift is worth learning from scratch. Flutter is worth considering if you want genuinely cross-platform with great visual control. All three paths lead to professional mobile roles.`,
+        callout: {
+          type: "default",
+          label: "Mobile-First Is Not Mobile-Only",
+          text: "Understanding mobile constraints \u2014 touch targets, network variability, battery usage, limited screen real estate \u2014 makes you a better engineer for any platform. Many concepts from mobile (offline-first design, efficient data fetching, responsive layouts) translate directly to web engineering."
+        },
+        callout2: {
+          type: "focus",
+          label: "App Store Distribution",
+          text: "Shipping a mobile app involves a review process that web deployment doesn't. Apple's App Store review can take 24-48 hours. A critical bug fix in production can't be shipped in minutes like a web deploy \u2014 it waits for review. This changes how you think about feature flags, remote configuration, and testing before release."
+        },
+        hint: `The mobile ecosystem moves fast. APIs change, OS versions fragment, and review guidelines evolve. The skill that matters most isn't knowing the current API \u2014 it's knowing how to read official documentation and adapt quickly when things change.\n\n<strong>If starting React Native:</strong> Use Expo for the first few projects. It abstracts away the build tooling and lets you focus on the app. When you hit Expo's limits, you'll understand enough to eject with confidence.\n\n<strong>Test on real devices early:</strong> The simulator lies. Touch targets that feel fine with a mouse are unusable with a thumb. Animations that are smooth on a high-end simulator chug on a 3-year-old mid-range Android. Get a real device in hand as early as possible.`,
+        quiz: {
+          question: "A web developer who knows React well wants to build a mobile app that works on both iOS and Android. They have limited time to learn new tools. Which approach makes the most sense?",
+          options: ["Learn Swift for iOS first, then Kotlin for Android", "Use React Native, leveraging their existing JavaScript and React knowledge", "Use Flutter because it has better performance than React Native", "Build a mobile-optimised website instead of a native app"],
+          correct: 1,
+          feedback: "React Native has the lowest barrier for an existing React developer. The component model, state management, and JavaScript are all transferable. The mobile-specific concepts (navigation, gestures, native APIs) are learnable incrementally. Starting with native Swift and Kotlin requires learning two new languages and two new ecosystems simultaneously \u2014 a steeper ramp for the same outcome."
+        },
+        checklist: ["I understand the trade-offs between native and cross-platform mobile development", "I've chosen a primary mobile path and understand why", "I've built at least one mobile app that runs on a real device", "I understand the App Store / Play Store distribution process", "I know the key mobile-specific constraints (touch targets, network variability, OS fragmentation)"]
+      },
+      {
+        id: "6-6",
+        title: "DevOps and Cloud Infrastructure",
+        body: `DevOps is the discipline of closing the gap between writing code and running code in production reliably. It emerged as a response to the old model where developers threw code "over the wall" to operations teams who deployed and maintained it. The dysfunction that model caused \u2014 slow releases, unclear ownership, production fires blamed on whoever touched last \u2014 drove the industry toward teams that own their software from commit to production.\n\nThe major cloud platforms \u2014 AWS, Google Cloud, Azure \u2014 provide the infrastructure that replaced physical servers. Instead of buying and racking hardware, you provision virtual machines, managed databases, object storage, and load balancers through an API or console. Netflix runs entirely on AWS and famously uses chaos engineering \u2014 deliberately causing failures in production \u2014 to test resilience. Airbnb uses AWS for its compute and Google BigQuery for analytics. Understanding how to use at least one cloud provider is now a baseline competency.\n\nContainers changed how software is packaged and deployed. Docker bundles your application and its dependencies into a container image that runs identically on any host. Kubernetes orchestrates containers at scale \u2014 scheduling them across machines, restarting failures, scaling up when load increases, and routing traffic. Spotify's backend services run in Kubernetes. Understanding containers is no longer optional for backend or DevOps engineers.\n\nCI/CD \u2014 Continuous Integration and Continuous Deployment \u2014 is the automation pipeline that takes code from a developer's branch to running in production. GitHub Actions, CircleCI, and Jenkins define the pipeline: run tests, build the container, push to a registry, deploy to staging, then production. A good CI/CD pipeline is what lets teams deploy dozens of times a day safely. Stripe reportedly deploys to production thousands of times per day.\n\nInfrastructure as Code (IaC) means defining your infrastructure in version-controlled configuration files rather than clicking through a console. Terraform lets you describe what AWS resources you need, and it creates them. Changing infrastructure becomes a code review, not a manual process. This is how teams keep infrastructure consistent across environments and recoverable after disaster.`,
+        callout: {
+          type: "default",
+          label: "Own Your Deployment",
+          text: "The shift from 'I write code' to 'I own this service in production' is one of the most important mental shifts in software engineering. Understanding how your code gets to users \u2014 containers, pipelines, health checks, rollbacks \u2014 makes you a fundamentally better developer even if DevOps is not your primary specialisation."
+        },
+        callout2: {
+          type: "focus",
+          label: "Start with One Cloud, One Tool",
+          text: "AWS has over 200 services. Trying to learn all of them is how people give up. Start with EC2 (virtual machines), S3 (object storage), and RDS (managed databases). Get comfortable there. Add Lambda (serverless functions) when you have a use case. Add everything else only when a real problem requires it."
+        },
+        hint: `DevOps has the highest density of acronyms and tooling in any engineering discipline. The tools are not the job \u2014 they're how the job gets done. The underlying problems (reliability, deployability, observability) existed before any of these tools.\n\n<strong>Best first project:</strong> Take an application you've already built and deploy it properly: containerise it with Docker, run it on a cloud VM, put a reverse proxy (Nginx) in front of it, and add a GitHub Actions workflow that redeploys on every push to main. That end-to-end experience teaches more than any course.\n\n<strong>Learn to read logs:</strong> Every production system generates logs. Learning to grep, tail, and query logs \u2014 in CloudWatch, Datadog, or just a terminal \u2014 is how you diagnose problems after they've already happened. This is one of the highest-leverage DevOps skills.`,
+        code: {
+          lang: "HTML",
+          starter: 'PLACEHOLDER',
+          challenges: ["Add a step that randomly fails with a 30% chance and shows an error message in red", "Add a timer that shows total pipeline duration when complete", "Add a step counter showing '3 of 7 steps complete'", "Add a cancel button that stops the pipeline mid-run"]
+        },
+        quiz: {
+          question: "A team deploys by manually SSHing into a server and running git pull. What is the primary problem with this approach?",
+          options: ["SSH is a security risk and should never be used", "Manual deployments are error-prone, inconsistent, and not auditable \u2014 CI/CD automation solves all three", "git pull is slower than other deployment methods", "This approach doesn't support Docker containers"],
+          correct: 1,
+          feedback: "The problem is not SSH itself \u2014 it's the manual, human-dependent process. Someone can run the wrong branch, skip a migration, forget to restart a service, or deploy at the wrong time. CI/CD pipelines are automated, consistent, run only when tests pass, and produce an audit trail of every deployment. The reliability difference between the two approaches is enormous at scale."
+        },
+        checklist: ["I understand what DevOps means and the problems it solves", "I can containerise an application with Docker", "I've deployed something to a cloud platform (AWS, GCP, or Azure)", "I understand what a CI/CD pipeline does and have configured one", "I know what Infrastructure as Code is and why it matters"]
+      },
+      {
+        id: "6-7",
+        title: "Data Engineering",
+        body: `Data engineering is the work of making data reliably available to the people and systems that need it. Not analysing the data \u2014 that's data science. Not building ML models \u2014 that's ML engineering. Data engineering is building and maintaining the pipelines, warehouses, and infrastructure that make all of that possible.\n\nThe core problem data engineers solve is that raw data is messy, scattered, and arrives at different rates. User events come from mobile apps. Orders come from the transaction database. Page views come from web analytics. Support tickets come from Zendesk. Each source has a different schema, different cadence, and different reliability characteristics. The data engineer's job is to pull all of this together \u2014 <strong>extract</strong> from source systems, <strong>transform</strong> into a consistent schema, and <strong>load</strong> into a warehouse where analysts can query it. This is ETL, and it is the foundation of data engineering.\n\nThe modern data stack has standardised around a set of tools. Fivetran or Airbyte handle extraction from common sources automatically. dbt (data build tool) handles SQL-based transformations, adding version control and testing to what used to be spaghetti SQL. Snowflake, BigQuery, or Redshift serve as the analytical warehouse. Airflow or Prefect orchestrate the pipelines \u2014 scheduling them, retrying failures, and sending alerts. Spotify uses a version of this stack internally; so does Airbnb, which open-sourced Apache Airflow from their internal tooling.\n\nData quality is where data engineers spend significant time. A pipeline that silently drops 10% of records, or that introduces a schema mismatch, or that duplicates events \u2014 these failures corrupt the data that analysts and ML models depend on. Data quality tools like Great Expectations and dbt tests add assertions: this column should never be null, this count should be within 5% of yesterday's count. When an assertion fails, the pipeline fails loudly rather than passing garbage downstream.\n\nStreaming vs batch is a fundamental architecture choice. Batch pipelines run on a schedule \u2014 every hour, every day \u2014 and process accumulated data. Streaming pipelines process events as they arrive, with latency measured in seconds. Kafka is the dominant streaming infrastructure. Flink and Spark Streaming process the Kafka events. Netflix uses streaming to update recommendations in near-real-time. Which you need depends entirely on how fresh the data needs to be.`,
+        callout: {
+          type: "default",
+          label: "Bad Data Is Worse Than No Data",
+          text: "An analysis based on incomplete or incorrect data produces confident wrong conclusions. Data quality is not a nice-to-have \u2014 it is the difference between a data team that adds value and one that erodes trust over time. Every pipeline should have assertions. Every transformation should be testable."
+        },
+        callout2: {
+          type: "focus",
+          label: "SQL Is the Core Skill",
+          text: "Most data engineering work is SQL \u2014 complex SQL. Window functions, CTEs, incremental materialisation, query optimisation. The engineers who go deep on SQL and understand how query planners work are disproportionately effective in data roles. Python is important too, but SQL is the primary tool."
+        },
+        hint: `Data engineering rewards systems thinking. Every decision \u2014 batch or streaming, wide or narrow schema, early or late aggregation \u2014 has downstream consequences for the analysts and engineers who consume the data. Build with the consumer in mind.\n\n<strong>Start here:</strong> Build a pipeline that reads from a public API (weather, GitHub events, Reddit), stores the raw data, transforms it into a clean schema using SQL or dbt, and loads it into a SQLite or Postgres database. That end-to-end experience covers the entire data engineering lifecycle in miniature.\n\n<strong>Learn to love SQL:</strong> Before learning Spark or Kafka, write 50 SQL queries of increasing complexity. Window functions (ROW_NUMBER, LAG, LEAD) and CTEs are where data engineering SQL separates from basic SELECT. Spend the time.`,
+        quiz: {
+          question: "A data pipeline runs successfully every night but analysis teams notice their sales numbers change retroactively \u2014 yesterday's report shows different numbers today than it did yesterday. What is most likely happening?",
+          options: ["The data warehouse is corrupted and needs to be rebuilt", "The pipeline is overwriting historical data on each run instead of appending or using incremental logic correctly", "The analysts are querying the wrong table", "The transformation SQL has a syntax error that appears randomly"],
+          correct: 1,
+          feedback: "Retroactive changes to historical data almost always indicate a pipeline overwrite problem. Pipelines that delete and recreate data on each run will reflect late-arriving data or corrected source records in historical periods. Whether that's correct depends on business requirements. Slowly Changing Dimensions (SCD) and immutable event logs are the data engineering patterns that control how historical data is handled."
+        },
+        checklist: ["I understand the ETL pattern and why it exists", "I can write complex SQL including window functions and CTEs", "I understand what a data warehouse is and how it differs from a transactional database", "I know what a data pipeline orchestrator does", "I've built an end-to-end pipeline that extracts, transforms, and loads data"]
+      },
+      {
+        id: "6-8",
+        title: "AI and ML Engineering",
+        body: `AI engineering is distinct from AI research. Researchers discover new model architectures and training techniques. AI engineers take models \u2014 often pre-trained, often from third parties \u2014 and build reliable, scalable systems around them. The gap between a proof-of-concept that works on a laptop and a production system that handles 10 million requests per day is where AI engineering lives.\n\nThe most accessible entry point is the API layer. OpenAI, Anthropic, Google, and Cohere all expose powerful models through HTTP APIs. Building an application that calls these APIs, handles the responses, manages context, and delivers a useful experience is AI engineering at the application layer. Retrieval-Augmented Generation (RAG) \u2014 augmenting a language model with external knowledge by retrieving relevant documents and including them in the context \u2014 is the most widely deployed technique for making LLMs useful on specific data.\n\nVector databases (Pinecone, Weaviate, pgvector) store embeddings \u2014 high-dimensional numerical representations of text, images, or other data. Semantic search works by converting a query into an embedding and finding the database records with the closest embeddings. This is how Spotify's "search by mood" or Google's semantic search work. The engineering challenge is indexing millions of vectors and retrieving the most similar ones in milliseconds.\n\nDeploying and serving ML models introduces a set of engineering problems distinct from serving regular software. Models are large \u2014 sometimes gigabytes. Inference (running the model on new inputs) is compute-intensive. Latency requirements are strict. Model versioning, A/B testing between model versions, and monitoring for model drift (when production inputs differ from training data in ways that degrade performance) are all problems that don't exist in conventional software.\n\nThe engineering principles underneath AI systems are the same as all other systems: reliability, observability, testability, deployability. What's different is the probabilistic nature of model outputs. A conventional function returns the same output for the same input. A model doesn't. Evaluating model quality at scale, catching regressions before deployment, and monitoring live accuracy \u2014 these are the uniquely hard problems of AI engineering.`,
+        callout: {
+          type: "default",
+          label: "Prompt Engineering Is Engineering",
+          text: "How you phrase a prompt to an LLM dramatically affects the output quality. System prompts, few-shot examples, chain-of-thought instructions \u2014 these are not workarounds for bad models. They're the primary mechanism for controlling model behaviour. Treating prompt engineering as a first-class engineering concern, with version control and systematic evaluation, is what separates good AI products from bad ones."
+        },
+        callout2: {
+          type: "focus",
+          label: "Eval Before Deploy",
+          text: "Before deploying any AI feature, define how you'll measure whether it's working. What does success look like? How will you know if a new model version is better or worse? An evaluation framework \u2014 a set of test cases with expected outputs \u2014 is the AI engineering equivalent of a test suite. Build the eval before building the feature."
+        },
+        hint: `The AI tooling landscape changes faster than almost any other area of engineering. A framework that was standard six months ago may be superseded. The fundamentals \u2014 embeddings, context windows, inference, retrieval \u2014 are stable. Build your mental model around the fundamentals, not the tools.\n\n<strong>Best first project:</strong> Build a RAG system over a document set you care about. Chunk the documents, embed them, store in a vector database, and build a query interface that retrieves relevant chunks and synthesises an answer. This covers the full AI engineering stack in miniature.\n\n<strong>On fine-tuning:</strong> Most production use cases don't need fine-tuned models. RAG and prompt engineering solve the majority of problems cheaper and more maintainably. Fine-tune only when you have a clearly defined task, high-quality labelled data, and evidence that base models with RAG can't achieve the required quality.`,
+        quiz: {
+          question: "An AI feature works well in testing but produces noticeably worse outputs for certain user queries in production. What is this phenomenon called and what is the correct response?",
+          options: ["Overfitting \u2014 retrain the model on a larger dataset", "Model drift \u2014 analyse which input types are failing, add them to your evaluation suite, and investigate whether the model, prompt, or retrieval is the weak link", "API rate limiting \u2014 implement request queuing", "Context overflow \u2014 reduce the system prompt length"],
+          correct: 1,
+          feedback: "When model performance degrades on a subset of real-world inputs that weren't well represented in testing, this is a distribution mismatch \u2014 sometimes called model drift when it's the production environment shifting, or evaluation gap when the test suite didn't cover the real distribution. The correct response is to analyse failures, characterise the failing input types, add them to your evaluation suite, and diagnose whether the model, the prompt, or the retrieval step is the weak point."
+        },
+        checklist: ["I understand the difference between AI research and AI engineering", "I can build a RAG pipeline using embeddings and a vector database", "I know what model drift is and how to monitor for it", "I've built an application using an LLM API with proper error handling and retries", "I understand why evaluations (evals) are essential before deploying AI features"]
+      },
+      {
+        id: "6-9",
+        title: "Security Engineering",
+        body: `Security engineering is the discipline of building systems that resist attack. Not just knowing what vulnerabilities exist \u2014 every developer should know that \u2014 but deeply understanding how attackers think, how systems fail, and how to build software that fails safely when the inevitable compromise happens.\n\nThe OWASP Top 10 is the standard reference for web application vulnerabilities. Injection attacks (SQL injection, command injection) occur when untrusted input is executed as code. A query built by concatenating user input \u2014 <code>"SELECT * FROM users WHERE name = '" + username + "'"</code> \u2014 is an injection vector. Parameterised queries eliminate this class of vulnerability. Cross-Site Scripting (XSS) occurs when untrusted content is rendered as HTML, allowing attacker-controlled JavaScript to run in a user's browser. Output encoding prevents it. Broken authentication, insecure direct object references, security misconfiguration \u2014 these are the patterns behind the majority of real-world breaches.\n\nThreat modelling is the practice of systematically identifying what can go wrong in a system before building it. STRIDE \u2014 Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege \u2014 is a structured framework for thinking through threats. Who are the attackers? What are they trying to achieve? What access do they have? Where are the trust boundaries? Answering these questions before writing code is how security-conscious teams avoid being reactive.\n\nPenetration testing \u2014 attempting to compromise your own systems using attacker techniques \u2014 is how you validate that defences actually work. Tools like Burp Suite intercept and modify HTTP traffic, revealing how an application handles unexpected inputs. SQL injection can be tested by entering <code>' OR '1'='1</code> in input fields and observing the response. Responsible disclosure and bug bounty programs (GitHub, Stripe, and most major tech companies run them) allow external researchers to report vulnerabilities safely.\n\nAt the infrastructure level, security means least-privilege access (each component has only the permissions it needs), encrypted data at rest and in transit, comprehensive audit logging, and incident response planning. The Equifax breach (147 million records) came from an unpatched Apache Struts vulnerability. The Capital One breach came from a misconfigured AWS WAF. Both were preventable with engineering discipline.`,
+        callout: {
+          type: "default",
+          label: "Never Trust Input",
+          text: "Every piece of data that comes from outside your system \u2014 user input, API responses, file uploads, URL parameters, HTTP headers \u2014 is potentially adversarial. Validate at the boundary. Sanitise before storage. Encode before rendering. This single principle eliminates entire categories of vulnerabilities."
+        },
+        callout2: {
+          type: "focus",
+          label: "Security by Default",
+          text: "The most effective security is built into the framework so developers don't have to think about it. Django's ORM uses parameterised queries by default. React escapes rendered content by default. Rails has CSRF protection on by default. Using frameworks that are secure by default reduces the surface area of human error."
+        },
+        hint: `The most dangerous security posture is assuming you're not a target. Small applications get compromised at scale by automated scanners that test every IP on the internet for known vulnerabilities. The scan doesn't care if your app has five users.\n\n<strong>Start with the OWASP Top 10:</strong> Read each category, understand the attack, and then look for that vulnerability class in code you've written. You will find things. That's the exercise.\n\n<strong>Set up a bug bounty mindset:</strong> When you finish building a feature, spend 30 minutes trying to break it. What happens if you inject quotes into form fields? What happens if you modify the URL parameters? What happens if you send a request without authentication? This habit catches more issues than any automated tool.`,
+        quiz: {
+          question: "A web application builds SQL queries by concatenating user input directly into the query string. An attacker enters \u2018 OR 1=1 -- as their username. What attack is this and what is the fix?",
+          options: ["A brute force attack \u2014 add rate limiting to the login endpoint", "SQL injection \u2014 fix by using parameterised queries or prepared statements instead of string concatenation", "A CSRF attack \u2014 add CSRF tokens to all forms", "An XSS attack \u2014 encode all output before rendering it in HTML"],
+          correct: 1,
+          feedback: "This is SQL injection. The input \u2018 OR 1=1 -- breaks out of the quoted string context in SQL, adding a condition that is always true (OR 1=1), and comments out the rest of the query with --. The result is typically returning all rows. Parameterised queries solve this by separating SQL code from data \u2014 the database treats the parameter as literal data regardless of its contents."
+        },
+        checklist: ["I understand the OWASP Top 10 and can identify each vulnerability class", "I always use parameterised queries and never build SQL by string concatenation", "I understand what XSS is and how output encoding prevents it", "I've done at least one threat model exercise on a system I built", "I understand the principle of least privilege and apply it to access control"]
+      },
+      {
+        id: "6-10",
+        title: "Building a Portfolio That Works",
+        body: `A portfolio is evidence. Not a declaration of what you know \u2014 evidence of what you've built. The distinction matters because every candidate claims to know React and Node and Postgres. The ones who have built three real projects that someone can click through, poke at, and inspect the code of are the ones who get callbacks.\n\nProject selection is where most portfolios fail. Avoid tutorial clones (a to-do app, a weather app, a blog from a YouTube tutorial). Every hiring manager has seen hundreds of them. They demonstrate that you can follow instructions; they don't demonstrate that you can engineer. Instead, build projects that solve a problem you actually have, or recreate the core functionality of a tool you use and respect. A minimal Notion clone, a GitHub repository analyser, a budget tracker with multi-currency support \u2014 these are more interesting than a weather app.\n\nThree projects is enough if each is genuinely complete. "Complete" means: it works without a local setup guide, it handles edge cases and errors gracefully, it has a real data set or realistic dummy data, and the code would not embarrass you if a senior engineer reviewed it. Deployed and accessible beats impressive-on-paper every time. A working link is worth more than a beautiful screenshot.\n\nYour GitHub profile is part of the portfolio. Commit history matters. A repository with 50 small, well-named commits tells a story of a developer who works iteratively. A repository with two commits ("Initial commit" and "Final version") tells a different story. Write descriptive commit messages. Maintain a good README: what the project does, why you built it, the tech stack, and how to run it.\n\nThe code itself is the most important signal. Before putting a project in your portfolio, do a self-review: consistent naming conventions, no dead code, no console.log() statements, readable structure, and no obvious security issues (hardcoded API keys, SQL injection vectors). Assume a reviewer will read the code. Because they will.`,
+        callout: {
+          type: "default",
+          label: "Deployed Beats Impressive",
+          text: "A working, deployed project with straightforward code beats a technically ambitious project that doesn't run. Reviewers click links. When a link produces a 404 or a blank page, the project ceases to exist for that reviewer. Deployment is part of the project, not an afterthought."
+        },
+        callout2: {
+          type: "focus",
+          label: "The README Is a Cover Letter",
+          text: "Your project README is the first thing a reviewer reads. It should explain what the project does in one sentence, why you built it, and what technical decisions you made (and why). A good README demonstrates communication skills alongside engineering skills. Most portfolios have READMEs that say only 'Installation: npm install && npm start.'"
+        },
+        hint: `The goal of a portfolio project is to give a hiring manager something to say about you in an interview debrief. "I looked at their GitHub and they built a real-time collaborative editor using WebSockets \u2014 the code was clean and they had 80+ commits." That sentence is what gets you to the next round.\n\n<strong>The most common portfolio mistake:</strong> Too many projects, none of them complete. Three polished, deployed projects outperform ten unfinished ones every time. Pick three, finish them properly, then stop.\n\n<strong>Before adding a project to your portfolio:</strong> Ask someone outside tech to use it without instructions. If they get confused or hit errors, fix those problems first. If a hiring manager can't use the app in 30 seconds without help, the first impression is bad.`,
+        quiz: {
+          question: "A developer has a portfolio with 8 projects, but most are tutorial clones and none are deployed. Another developer has 3 original projects, all deployed, with clean READMEs. Who has the stronger portfolio?",
+          options: ["The first, because more projects demonstrates more breadth", "The second, because deployed original projects with good READMEs demonstrate far more than a large quantity of incomplete tutorials", "They are equivalent \u2014 both show evidence of learning", "The first, because 8 is more impressive than 3"],
+          correct: 1,
+          feedback: "Quality, originality, and deployability are what make a portfolio compelling. Tutorial clones are the most common portfolio project; they don't differentiate. Deployed original projects require independent decision-making, problem-solving, and the engineering discipline to finish \u2014 which is what hiring managers are trying to assess. Three strong projects is a better signal than eight weak ones."
+        },
+        checklist: ["I have at least 2 original deployed projects (not tutorial clones)", "Each project has a clear README explaining what it does and how it was built", "My commit history tells a story of iterative development", "I've reviewed my own code as if I were the hiring reviewer", "My portfolio links all work and load within 5 seconds"]
+      },
+      {
+        id: "6-11",
+        title: "Technical Interview Preparation",
+        body: `Technical interviews test a different skill from daily engineering work. In daily work you have context, documentation, a codebase to reference, and time to think. In a coding interview you have a whiteboard or a shared editor, a time limit, and someone watching you. These are genuinely different conditions that require specific preparation, and failing to prepare specifically is the most common reason good engineers perform badly in interviews.\n\nAlgorithm and data structure interviews \u2014 LeetCode-style problems \u2014 are still the dominant format at most large tech companies. Google, Meta, Stripe, and many others use them in some form. The goal is not to test whether you memorised quicksort. The goal is to test how you approach unfamiliar problems: do you understand the constraints, identify the bottleneck, choose an appropriate data structure, and communicate your reasoning? The algorithm is the vehicle; the process is what's being evaluated.\n\nThe core data structures to know deeply: arrays, hash maps (and when they're O(1) vs O(n)), linked lists, stacks and queues, trees (binary search trees, in particular), and graphs. The core algorithms: binary search, depth-first search, breadth-first search, two pointers, sliding window, and dynamic programming fundamentals. You do not need to know every graph algorithm. You need to know how to recognise when a problem is a graph problem and apply BFS or DFS.\n\nSystem design interviews test a different dimension. "Design a URL shortener," "Design Twitter's feed," "Design a notification system." These are open-ended problems with no single right answer. The interviewer is evaluating whether you ask clarifying questions, estimate scale, propose sensible components, identify bottlenecks, and discuss trade-offs. Reading the architecture blog posts of companies like Airbnb, Dropbox, and GitHub is better preparation than any textbook.\n\nBehavioural interviews \u2014 "Tell me about a time you had a conflict with a teammate," "Tell me about a technical decision you regret" \u2014 are evaluated using structured frameworks. STAR (Situation, Task, Action, Result) keeps your answers focused and completeable within 2 minutes. Prepare 6-8 stories from your experience that can be adapted to different questions. The best stories are specific, have a clear challenge, and result in a concrete outcome.`,
+        callout: {
+          type: "default",
+          label: "Think Out Loud",
+          text: "In an algorithm interview, silence is the worst possible response. Interviewers are evaluating your problem-solving process, not just your solution. Narrate your thinking: 'I'm considering a hash map here because I need O(1) lookup, but the space trade-off might be a concern.' Wrong answers with good process often beat correct answers with no explanation."
+        },
+        callout2: {
+          type: "focus",
+          label: "LeetCode Isn't the Goal",
+          text: "Solving 300 LeetCode problems without understanding the underlying patterns is less effective than solving 50 problems while deeply understanding why each solution works. Pattern recognition \u2014 'this is a sliding window problem,' 'this needs BFS' \u2014 is what makes you fast on unfamiliar problems."
+        },
+        hint: `The most reliable preparation strategy: solve 1-2 problems per day for 2 months, review the solution after 15 minutes if stuck, and write out why the solution works. Space the topics: one week on arrays, one week on trees, one week on graphs.\n\n<strong>Practice talking while coding:</strong> Solve problems out loud, alone. Explain every line as you write it. This feels awkward and is the point \u2014 the awkwardness disappears after 10 sessions and what remains is the habit of communicating during problem-solving.\n\n<strong>System design prep:</strong> Read 3 engineering blog posts per week from Airbnb, Uber, Stripe, GitHub, or Cloudflare's engineering blog. Each post teaches a real system design decision with the context that made it the right choice. That contextual knowledge is what makes system design answers concrete rather than generic.`,
+        quiz: {
+          question: "In a technical interview, you encounter a problem you've never seen before and don't immediately know the solution. What is the best first response?",
+          options: ["Ask to skip to a different problem", "Stay silent and think until you have the full solution", "Restate the problem in your own words, ask a clarifying question about constraints, and describe your initial thinking out loud before writing any code", "Start coding immediately to show you're action-oriented"],
+          correct: 2,
+          feedback: "The first two minutes of an algorithm interview set the tone. Restating the problem confirms you understood it correctly. Clarifying questions surface constraints that affect the solution (array size? value range? sorted?). Describing your thinking before coding shows process and gives the interviewer a chance to redirect if you're heading somewhere wrong. Silent coding or immediate coding without understanding are both antipatterns."
+        },
+        checklist: ["I understand the core data structures and their time complexities", "I can solve array, hash map, and tree problems without looking up solutions", "I've practised explaining my reasoning out loud while solving problems", "I have 6-8 STAR stories ready for behavioural interviews", "I've read at least 5 system design case studies from real engineering blogs"]
+      },
+      {
+        id: "6-12",
+        title: "Open Source Contribution",
+        body: `Open source contribution is one of the most underused career accelerators available to early-career developers. A merged pull request to a well-known project is public, verifiable evidence of code quality. A GitHub profile that shows contributions to React, Postgres, or Django tells a hiring manager more than most interview performances.\n\nThe barrier most people imagine \u2014 "I'm not good enough to contribute to real projects" \u2014 is false. The vast majority of open source contributions are not new features or performance optimisations. They're documentation improvements, test additions, small bug fixes, and typo corrections. These are how almost every open source contributor starts, and they're genuinely valuable. Projects depend on them.\n\nFinding where to start: look at the issue trackers of projects you actually use. Sort by "good first issue" or "help wanted" labels. Read the contributing guide. Clone the repo, run the tests, and make sure you can reproduce the issue described before writing any code. A response to an issue that says "I've reproduced this, here's what I found" is valued before a single line of code is written.\n\nThe review process is an education that no tutorial provides. Submitting a PR to an active open source project means having your code reviewed by maintainers who have seen thousands of pull requests. Their feedback \u2014 on style, approach, edge cases, performance \u2014 is high-signal and directly applicable to professional engineering. This kind of feedback is not available from side projects or tutorials.\n\nBeyond individual contribution: maintaining an open source project \u2014 even a small one \u2014 teaches a different set of skills. API design, documentation, issue triage, versioning, community management. These are the skills that senior engineers exercise daily and that are hard to develop without real users depending on your software.`,
+        callout: {
+          type: "default",
+          label: "Start With What You Use",
+          text: "The best first open source contributions come from projects you depend on. You already understand what the tool does. You've probably run into a bug or confusing documentation. That personal context is the best starting point for a contribution that's genuinely useful, not just performative."
+        },
+        callout2: {
+          type: "focus",
+          label: "The PR Description Matters",
+          text: "Open source maintainers review dozens of PRs. A PR with a clear description \u2014 what problem it solves, how it was tested, any trade-offs considered \u2014 gets reviewed faster and merged more often than a PR with no description. Writing well is part of contributing well."
+        },
+        hint: `Your first PR will probably be rejected or significantly revised. That is the normal experience, not a failure. Read the feedback carefully, respond professionally, and update the PR. The interaction is training for professional code review, which operates the same way.\n\n<strong>Good first targets:</strong> Projects that are actively maintained (recent commits), have a contributing guide, and have issues labelled "good first issue." Projects with hundreds of open issues and no recent maintainer activity are harder places to contribute.\n\n<strong>Before submitting:</strong> Read three merged PRs in the same repository. Match their style: commit message format, test structure, documentation update pattern. PRs that follow the project's conventions get merged; PRs that don't create extra work for maintainers and often get abandoned.`,
+        quiz: {
+          question: "A developer wants to contribute to open source but feels their skills aren't good enough to help. What is the most accurate assessment of this belief?",
+          options: ["It's accurate \u2014 open source projects only accept contributions from experienced engineers", "It's inaccurate \u2014 documentation improvements, bug reproductions, and test additions are valuable contributions accessible to early-career developers", "It's partially accurate \u2014 they should wait until they can contribute features, not just documentation", "It depends entirely on which project they choose"],
+          correct: 1,
+          feedback: "The belief that open source requires expert-level skill is the single biggest barrier to contribution and it is false. Documentation is frequently outdated, tests are frequently missing, and bug reports often lack reproducible examples. All of these are valuable contributions that projects depend on. The skill level required for a 'fix a typo in the docs' PR is zero. The learning that comes from navigating the codebase to find the typo and submitting a clean PR is significant."
+        },
+        checklist: ["I've found at least one open source project I use that has open 'good first issue' issues", "I've read the contributing guide for a project I want to contribute to", "I've submitted at least one PR to an open source project", "I understand that documentation and test contributions are valuable", "I've read the review feedback on merged PRs in a target project to understand the code standards"]
+      },
+      {
+        id: "6-13",
+        title: "Building in Public",
+        body: `Building in public means sharing your work, your progress, and your thinking while you're building \u2014 not just when it's complete. It's not self-promotion. It's a discipline that forces clarity of thinking, builds a discoverable track record, and creates connections with people working on similar problems.\n\nThe mechanism is straightforward: write about what you're building, what you're learning, what you got wrong, and what you figured out. Twitter threads, blog posts, LinkedIn updates, YouTube videos \u2014 the format matters less than the consistency. Developers who document their process publicly accumulate an audience of people interested in the same problems. That audience becomes a network of collaborators, users, and referrers.\n\nSpecificity beats generality. "I'm learning web development" generates no signal. "I spent three hours today debugging a React useEffect infinite loop and this is what finally fixed it" is useful to every developer who will face that problem. The more specific and honest the post, the more valuable it is. This is counterintuitive \u2014 documenting struggle feels risky, but it's what resonates.\n\nThe compounding effect is the reason it works. A blog post written today continues attracting readers for years through search. A well-written Twitter thread gets shared across developer communities. A solved GitHub issue with a clear explanation gets starred. Each piece of public work is a permanent signal that accumulates. Developers who have been building in public for two years have a track record that no portfolio of projects can fully replicate.\n\nPractical concerns: you don't need a large audience for this to be valuable. Even a blog with 50 readers per month is evidence of commitment and clarity. The side effect of explaining something clearly \u2014 for yourself, if for no one else \u2014 is that you understand it more deeply. The act of writing about what you built surfaces gaps in your understanding that the building itself didn't reveal.`,
+        callout: {
+          type: "default",
+          label: "Document the Struggle",
+          text: "The most valuable public developer content documents problems honestly: what you tried, what failed, what you misunderstood, and what finally worked. Polished success stories are common. Honest accounts of debugging are rare and disproportionately useful. The struggle is the content."
+        },
+        callout2: {
+          type: "focus",
+          label: "Consistency Over Viral",
+          text: "One post a week for a year is more valuable than ten posts in one week and nothing after. Audiences and search rankings compound over time. The developers with large audiences almost universally describe the same thing: they showed up consistently for longer than felt reasonable, and then things started to compound."
+        },
+        hint: `The most common objection: "I don't have anything valuable to say." Every problem you've solved this week was a problem that someone else will face. Your explanation of how you solved it is the content. Start there.\n\n<strong>Lowest-friction start:</strong> Write a Twitter thread or a short blog post about the most interesting thing you debugged this week. Describe the symptom, what you tried, what the actual cause was, and how you fixed it. That's it. That's the post.\n\n<strong>On imposter syndrome:</strong> You don't need to be an expert to explain something. You need to be one step ahead of someone else on the same path. A developer who just figured out async/await can explain it better to another beginner than an expert can, because the expert has forgotten what was confusing.`,
+        quiz: {
+          question: "A developer is reluctant to build in public because they're not an expert and worry about sharing incorrect information. What is the most useful framing of this concern?",
+          options: ["The concern is valid \u2014 only experts should share technical information publicly", "The concern is natural but counterproductive \u2014 sharing your learning process (including corrections) is valuable, and documenting your own problem-solving is useful regardless of expertise level", "The concern is irrelevant \u2014 audience size is what determines whether building in public is worthwhile", "The concern is valid for blog posts but not for Twitter threads"],
+          correct: 1,
+          feedback: "Expertise is not required for public documentation of a learning process. The developer who documents their path through confusion \u2014 including corrections and updates \u2014 provides a service to every developer behind them on the same path. The fear of being wrong is better addressed by being explicit about your current understanding and inviting correction, not by staying silent."
+        },
+        checklist: ["I've published at least one piece of public writing about something I built or learned", "I have a consistent place to document my work (blog, Twitter, GitHub README)", "I've written at least one post that documents a problem I solved in detail", "I understand that consistency matters more than audience size", "I've linked my public writing from my portfolio and GitHub profile"]
+      },
+      {
+        id: "6-14",
+        title: "Choosing Your First Role",
+        body: `Your first engineering role shapes the next five years more than any course or project. Who you work with, what kind of code you're exposed to, how much autonomy you have, how much mentorship exists \u2014 these compound. Choosing thoughtfully matters more than most people realise when they're just trying to get any offer.\n\nStartups vs large companies is the most common framing, and it's useful as far as it goes. At a startup with 10-50 engineers, you ship faster, have broader responsibility, and are closer to the product decisions. The downside: less mentorship structure, more chaotic codebase, higher probability the company doesn't survive. At a large company (Google, Stripe, Shopify, a bank), you have structured onboarding, access to senior engineers who have solved hard problems, and a defined career ladder. The downside: slower decision-making, more specialised and narrower scope.\n\nTitle inflation is real and it cuts both ways. A "senior engineer" at a 5-person startup is different from a "senior engineer" at Microsoft. Be sceptical of inflated titles at tiny companies \u2014 you might be the most experienced engineer in a team with no one to learn from. Be equally sceptical of large company prestige \u2014 the brand matters less than the team and the problem.\n\nThe most important question to ask in every interview: "What does the code review process look like?" A company with rigorous code review has a culture of shared standards and learning. A company where "we just merge when we're happy with it" has no structured feedback mechanism. Code review culture is a proxy for engineering culture more broadly.\n\nCompensation negotiation is expected and not rude. Research salaries using Levels.fyi, Glassdoor, and LinkedIn Salary before any negotiation. The first offer is rarely the best offer. "Thank you for the offer \u2014 I was hoping to be closer to [X] based on my research into the market rate for this role in this city. Is there flexibility?" is a sentence that works. Most candidates leave money on the table because they don't say it.`,
+        callout: {
+          type: "default",
+          label: "Team Over Company",
+          text: "The company name on your CV matters less than the team you join and the work you do. A strong team at a company you've never heard of will teach you more and open more doors than a passive role at a famous company. Interview the team as much as they interview you."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Mentorship Question",
+          text: "In every first-role interview, ask: 'Who will I learn from on this team, and how does that typically happen?' If the answer is vague or they can't name specific people and mechanisms, that's a signal. If they describe pair programming sessions, structured code review, and experienced engineers who actively mentor juniors, that's a very different signal."
+        },
+        hint: `The pressure of getting any offer can make you accept the wrong role. Don't. If you get one offer, you'll probably get two. Evaluate each one against what you actually want to learn and who you want to work with.\n\n<strong>Red flags in interviews:</strong> Defensive responses to questions about tech stack, inability to describe how the team communicates, engineers who seem bored or disengaged during the interview, or a hiring process that feels disorganised. These reflect the culture you'd be joining.\n\n<strong>Green flags:</strong> Engineers who are genuinely enthusiastic about the technical problems they're solving, a clear answer to "what does good look like on this team," evidence of psychological safety (people admit mistakes and discuss them openly), and a hiring process that respects your time.`,
+        quiz: {
+          question: "A developer receives two job offers: a well-known large company with a vague onboarding description and a specialised role on a small project, and a smaller company with a structured mentorship program, active code review culture, and a senior engineer who will directly mentor them. Which should they prioritise if their goal is to grow quickly?",
+          options: ["The large company \u2014 brand recognition opens more doors in the long run", "The smaller company with structured mentorship and code review \u2014 growth comes from feedback and challenge, not brand", "They are equivalent \u2014 both will provide similar growth trajectories", "The large company \u2014 the stability reduces risk early in a career"],
+          correct: 1,
+          feedback: "Growth early in a career comes from structured feedback (code review), mentorship from more experienced engineers, and being challenged. A company brand opens doors at the hiring stage; what you actually learned and built opens doors once you're inside. A junior engineer who receives rigorous code review and direct mentorship for two years grows faster than one who ships code in isolation at a prestigious company."
+        },
+        checklist: ["I understand the real trade-offs between startups and large companies", "I've identified what I most want to learn in my first role", "I know what questions to ask to evaluate team culture in an interview", "I understand salary research tools (Levels.fyi, Glassdoor) and will use them before negotiating", "I've practised asking clarifying questions about mentorship, code review, and team culture"]
+      }
     ]
   },
   {
@@ -599,11 +2157,236 @@ A starter template is below. It already has the structure in place \u2014 your j
     length: "90 min",
     tag: "Floor 07 \u2014 Arrival",
     sections: [
-      { id: "7-1", title: "System Design — Thinking at Scale", body: `At a professional level, writing code that works is the baseline. What separates senior developers is the ability to <strong>design systems</strong> — to think about how all the pieces of a large application fit together before writing a single line.\n\nSystem design asks: How does this handle a million users? What happens if one component fails? How do services communicate? Where is data stored and why? How do we prevent data loss?\n\nKey concepts to understand:\n\n<strong>Scalability:</strong> Horizontal scaling (add more servers) vs vertical scaling (make the server bigger). Stateless services scale horizontally. Stateful services are harder.\n\n<strong>Caching:</strong> Store frequently-requested data in fast memory (Redis) to avoid hitting the database every time. Twitter\'s timeline is cached. Wikipedia pages are cached.\n\n<strong>Load balancing:</strong> Distribute traffic across multiple servers so no single one is overwhelmed. NGINX and AWS ELB are common tools.\n\n<strong>Databases at scale:</strong> A single database hits limits. Strategies: read replicas (copies for read traffic), sharding (split data across multiple databases), CQRS (separate read and write paths).\n\n<strong>Failure design:</strong> Systems fail. Good design assumes failure and plans for it: retries, circuit breakers, fallbacks, health checks.\n\nThe exercise below walks through a real system design question — the kind asked in senior developer interviews.`, callout: { type: "default", label: "Start Small", text: "Take one of your previous projects and ask: how would I redesign this if 100,000 people used it tomorrow? What would break first? What would I change? That thinking exercise is where system design starts — not with giant diagrams, but with honest questions about your own work." }, hint: `System design interviews follow a pattern. Practice this structure:\n\n1. <strong>Clarify requirements</strong> — how many users? read-heavy or write-heavy? global or regional?\n2. <strong>Estimate scale</strong> — requests per second, storage needed\n3. <strong>Design the API</strong> — what endpoints exist?\n4. <strong>Design the data model</strong> — what tables/collections?\n5. <strong>Choose infrastructure</strong> — SQL or NoSQL? cache? CDN?\n6. <strong>Identify bottlenecks</strong> — what fails first under load?\n7. <strong>Propose improvements</strong> — caching, sharding, async processing\n\nYou don\'t need perfect answers. You need to show you ask the right questions and reason through trade-offs.`, code: { lang: "HTML", starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; max-width: 680px; margin: 0 auto; }\n    h2 { color: #e8d5a0; margin-top: 0; }\n    h3 { color: #c8a96e; margin: 24px 0 8px; font-size: 15px; }\n    p, li { color: #c0cad8; font-size: 14px; line-height: 1.65; }\n    .question-box { background: #0d1117; border-left: 3px solid #e8d5a0; padding: 16px 20px; border-radius: 0 8px 8px 0; margin: 12px 0; }\n    .question-box p { margin: 0; color: #e8d5a0; font-weight: bold; font-size: 15px; }\n    textarea { width: 100%; background: #111827; border: 1px solid #30363d; color: white; padding: 10px 12px; border-radius: 6px; font-size: 13px; font-family: sans-serif; resize: vertical; min-height: 80px; box-sizing: border-box; margin-top: 8px; }\n    .btn { background: #e8d5a0; color: #0a0a0a; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; margin-top: 6px; }\n    .saved { color: #4ade80; font-size: 12px; margin-top: 4px; display: none; }\n    .tradeoff { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; margin: 8px 0; font-size: 13px; }\n    .tradeoff strong { color: #e8d5a0; }\n  </style>\n</head>\n<body>\n  <h2>System Design Exercise</h2>\n  <p>Design a URL shortener (like bit.ly). This is one of the most common system design interview questions. Work through each section before moving on.</p>\n\n  <h3>Step 1 — Clarify Requirements</h3>\n  <div class="question-box"><p>What does the system need to do? Write 3-5 core requirements.</p></div>\n  <p style="font-size:13px;color:#8892a0;">Example: "Users paste a long URL and get a short one. Short URL redirects to the original."</p>\n  <textarea id="req" placeholder="Write your requirements here..."></textarea>\n  <button class="btn" onclick="save(\'req\')">Save</button>\n  <div class="saved" id="req-saved">Saved.</div>\n\n  <h3>Step 2 — Estimate Scale</h3>\n  <div class="question-box"><p>Assume 100 million URLs shortened per day. How many redirects per second? How much storage after 5 years?</p></div>\n  <textarea id="scale" placeholder="Do the maths here: 100M URLs/day = ? per second. Average URL length 100 chars = ? GB/year..."></textarea>\n  <button class="btn" onclick="save(\'scale\')">Save</button>\n  <div class="saved" id="scale-saved">Saved.</div>\n\n  <h3>Step 3 — Key Design Decisions</h3>\n  <p style="font-size:13px;color:#8892a0;">Think through these trade-offs:</p>\n  <div class="tradeoff"><strong>Short code generation:</strong> Random string? Hash of the URL? Counter? What are the pros and cons of each?</div>\n  <div class="tradeoff"><strong>Database:</strong> SQL or NoSQL for this use case? The read:write ratio here is roughly 100:1 (far more redirects than creations). How does that affect your choice?</div>\n  <div class="tradeoff"><strong>Caching:</strong> Most traffic goes to a small number of popular links (Pareto principle). Where would you add a cache and what would it cache?</div>\n  <div class="tradeoff"><strong>Scale:</strong> How would you handle 10x more traffic than you designed for?</div>\n  <textarea id="decisions" placeholder="Write your answers to each trade-off above..."></textarea>\n  <button class="btn" onclick="save(\'decisions\')">Save</button>\n  <div class="saved" id="decisions-saved">Saved.</div>\n\n  <script>\n    [\'req\',\'scale\',\'decisions\'].forEach(function(id) {\n      const s = localStorage.getItem(\'sd-\' + id);\n      if (s) document.getElementById(id).value = s;\n    });\n    function save(id) {\n      localStorage.setItem(\'sd-\' + id, document.getElementById(id).value);\n      const el = document.getElementById(id + \'-saved\');\n      el.style.display = \'block\';\n      setTimeout(function() { el.style.display = \'none\'; }, 2000);\n    }\n  <\/script>\n</body>\n</html>', challenges: ["Complete all three steps of the URL shortener design with your own answers", "Research how bit.ly actually works and compare it to your design — what did you miss?", "Design a second system: a simple Twitter timeline (what you see when you open Twitter). Apply the same 3-step framework", "Write a paragraph explaining your URL shortener design to a non-technical person"] }, quiz: { question: "A URL shortener has 100 million URL creations per day but 10 billion redirects per day. What does this tell you about the system design?", options: ["The system should prioritise write performance since millions of URLs are added daily", "The system is read-heavy — caching redirect lookups is critical and could eliminate 90%+ of database reads", "The system needs equal optimisation for reads and writes", "The high redirect count means you need more servers for URL creation"], correct: 1, feedback: "A 100:1 read-to-write ratio means the system is overwhelmingly read-heavy. The dominant operation is looking up short codes and returning the original URL. A cache (like Redis) storing the most popular short codes means most redirects never need to hit the database at all — only cache misses go to the database. This kind of analysis is exactly what system design interviews test." }, checklist: ["I understand what system design means", "I\'ve thought about scalability in the context of my own projects"] },
-      { id: "7-2", title: "Code Quality — Writing Code Others Can Read", body: `Professional code is read far more than it is written. A codebase is a living document that multiple people touch over years. Code that only you can understand is a liability — and a sign that the author was optimising for writing speed rather than team sustainability.\n\nCode quality has four dimensions:\n\n<strong>Naming:</strong> Variables and functions named for what they do, not what type they are. getUserProfile() not getObject(). totalPriceWithTax not x.\n\n<strong>Single responsibility:</strong> Each function does one thing. A function called validateAndSaveAndNotifyUser() does three things and should be three functions.\n\n<strong>Comments:</strong> Explain why, not what. The code already shows what. Comments explain the decision: "Using debounce here because the input fires on every keystroke and the API has a rate limit."\n\n<strong>Consistency:</strong> The same pattern used throughout. If you use camelCase, use it everywhere. If you format if blocks a certain way, do it the same way every time.\n\nThe editor below has deliberately bad code. Your job is to refactor it — make it do exactly the same thing, but clearly and cleanly.`, callout: { type: "focus", label: "The Logical Thinker\'s Final Level", text: "Code quality is applied logical thinking. You\'re not just solving the problem — you\'re solving it in the clearest possible way for the next person who has to understand it. In a team, that person is often yourself six months later." }, hint: `The naming test: cover the rest of the code and read just the variable or function name. Do you know what it holds or does?\n\nBad: let d = new Date(); let x = getUser(); function calc(a, b) {}\nGood: let currentDate = new Date(); let activeUser = getUser(); function calculateTotalWithTax(price, taxRate) {}\n\n<strong>The function length test:</strong> If a function is longer than 20 lines, it probably does more than one thing. Find where it changes topic and split it there.\n\n<strong>Before you submit code for review:</strong> Read it aloud. If you stumble or have to backtrack and re-read, that part needs simplifying.`, code: { lang: "HTML", starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; max-width: 640px; margin: 0 auto; }\n    h2 { color: #e8d5a0; margin-top: 0; }\n    h3 { color: #c8a96e; font-size: 15px; }\n    p { color: #8892a0; font-size: 14px; line-height: 1.6; }\n    .btn { background: #e8d5a0; color: #0a0a0a; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; margin: 4px 4px 4px 0; }\n    input[type=number] { background: #0d1117; border: 1px solid #30363d; color: white; padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 120px; }\n    #output { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin-top: 16px; font-family: monospace; font-size: 13px; color: #c8a96e; white-space: pre-wrap; min-height: 60px; }\n  </style>\n</head>\n<body>\n  <h2>Code Quality Refactoring</h2>\n  <p>The JavaScript below works correctly but is written badly. Refactor it: the output should stay exactly the same, but the code should be clean, well-named, and readable. Run it first to understand what it does, then rewrite it.</p>\n\n  <h3>Input</h3>\n  <label style="font-size:13px;color:#a0b0c0;">Hours worked: </label>\n  <input type="number" id="h" value="40" min="0" />\n  <label style="font-size:13px;color:#a0b0c0;margin-left:12px;">Rate (£/hr): </label>\n  <input type="number" id="r" value="25" min="0" />\n  <br><br>\n  <button class="btn" onclick="go()">Calculate pay</button>\n\n  <div id="output">Click the button to see output.</div>\n\n  <script>\n    // ===== BAD CODE — REFACTOR THIS =====\n    // This code is intentionally poorly written.\n    // It works, but the names are cryptic, it does too many things in one function,\n    // and the logic is hard to follow.\n    // Your job: rewrite it so someone reading it for the first time understands it immediately.\n\n    var TAX = 0.2;\n    var NI = 0.12;\n    var OT = 1.5;\n    var OTLIMIT = 40;\n\n    function go() {\n      var h = parseFloat(document.getElementById(\'h\').value);\n      var r = parseFloat(document.getElementById(\'r\').value);\n      if (isNaN(h) || isNaN(r) || h < 0 || r < 0) { document.getElementById(\'output\').textContent = \'bad input\'; return; }\n      var g;\n      if (h > OTLIMIT) {\n        g = (OTLIMIT * r) + ((h - OTLIMIT) * r * OT);\n      } else {\n        g = h * r;\n      }\n      var t = g * TAX;\n      var n = g * NI;\n      var net = g - t - n;\n      var out = \'Gross pay: £\' + g.toFixed(2) + \'\\n\' +\n               \'Income tax (20%): -£\' + t.toFixed(2) + \'\\n\' +\n               \'NI (12%): -£\' + n.toFixed(2) + \'\\n\' +\n               \'Net pay: £\' + net.toFixed(2);\n      if (h > OTLIMIT) out += \'\\nOvertime hours: \' + (h - OTLIMIT) + \' @ £\' + (r * OT).toFixed(2) + \'/hr\';\n      document.getElementById(\'output\').textContent = out;\n    }\n    // ===== END OF BAD CODE =====\n    // Goals for your refactor:\n    // 1. Replace all single-letter variables with descriptive names\n    // 2. Replace TAX, NI, OT, OTLIMIT with self-describing names\n    // 3. Split go() into at least 3 functions: one to read inputs, one to calculate, one to display\n    // 4. Add one comment that explains WHY (not what) — a non-obvious decision in the logic\n  <\/script>\n</body>\n</html>', challenges: ["Rename every variable to be self-describing — no single letters, no abbreviations", "Split the go() function into at least 3 smaller functions with clear single responsibilities", "Add input validation that shows a helpful error message (not just 'bad input')", "After refactoring, compare your version to the original — count how many lines it takes and whether each line is immediately understandable"] }, quiz: { question: "A function is 80 lines long and handles input validation, data calculation, formatting, and DOM updates. What should you do?", options: ["Leave it — long functions show more work was done", "Add detailed comments explaining each section within the function", "Split it into four separate functions, one for each responsibility", "Move the logic to a separate file to reduce the visible length"], correct: 2, feedback: "The single responsibility principle: each function should do one thing. An 80-line function that does four things is four functions that haven\'t been separated yet. Splitting it makes each part independently testable, independently readable, and independently replaceable. This is one of the most consistently valuable habits in professional software development." }, checklist: ["I reviewed my Floor 6 project for code quality", "I renamed at least 3 things to be clearer", "I broke at least one large function into smaller ones"] },
-      { id: "7-3", title: "Real World Problem Solving", body: `This section has no tutorials. Only problems.\n\nEach scenario below is the kind of situation actual developers face. Some are technical decisions. Some are about communicating with non-technical stakeholders. Some are architectural. All of them require you to think, not just apply a formula.\n\n<strong>Scenario 1 — The Slow Page:</strong> A client\'s e-commerce page takes 8 seconds to load on mobile. Users are leaving. You have one week and cannot rewrite the backend. What do you investigate first, and what changes would you make?\n\n<strong>Scenario 2 — The Database Decision:</strong> You\'re building a social app. Users create posts, comment on them, and tag each other. You need to choose between a relational database (SQL) and a document database (NoSQL). What questions do you ask before deciding?\n\n<strong>Scenario 3 — The Stakeholder:</strong> Your manager asks why the new feature is taking two weeks when it "should only take a few hours." How do you explain the technical complexity without being defensive or dismissive?\n\n<strong>Scenario 4 — The Bug Report:</strong> A user reports "the checkout is broken." That\'s all you have. No error message, no steps to reproduce, no device info. What is your exact process for investigating this?\n\n<strong>Scenario 5 — The Security Hole:</strong> A colleague\'s code stores user passwords as plain text in the database. They\'re about to deploy. What do you say, and what should the code look like instead?\n\nWork through each scenario below. Write your approach before looking at the hint.`, callout: { type: "warning", label: "The Final Discomfort", text: "These scenarios will make you feel uncertain. That feeling is accurate — real problems don\'t come with answers attached. What you\'re building here is the confidence to reason through ambiguity and take a position. That\'s what professional grade looks like." }, callout2: { type: "focus", label: "ADHD Note", text: "If all five scenarios feel overwhelming at once, pick just one. Spend a full session on it. Write your answer out. Then check the hint. Move on to the next scenario in the next session. Depth beats breadth here — one scenario fully worked is worth more than five glanced at." }, hint: `<strong>Scenario 1 (Slow page) — start here:</strong> Audit what loads. Open DevTools Network tab, filter by size. Images are the most common culprit — compress them (use WebP, add loading="lazy"). Next: check for render-blocking scripts (move to bottom of body or add defer). Then: check if assets are cached.\n\n<strong>Scenario 2 (Database choice):</strong> Ask — how relational is the data? Posts and comments with users are highly relational — SQL is the natural fit. If the schema changes constantly or data is highly variable per record — document DB. For social apps, most teams use SQL (PostgreSQL).\n\n<strong>Scenario 3 (Stakeholder):</strong> Don\'t defend, translate. "What looks like an input box is actually integrating with two APIs, a payment system, and email confirmation — each with edge cases and error handling. Here\'s what the two weeks covers..." Break down the work visibly.\n\n<strong>Scenario 4 (Bug report):</strong> Reproduce first. Try checkout yourself across browsers. Check error logs (server logs, browser console). Ask the user for their browser, device, and steps. Narrow down: which step in checkout fails?\n\n<strong>Scenario 5 (Passwords):</strong> Never store plain text passwords. Use a hashing library — bcrypt in Node, Werkzeug in Python. Hashing is one-way: you can verify a password without ever storing it. The conversation: "Hey, I noticed the passwords are stored as plain text — this is a security issue. Here\'s the fix..."`, code: { lang: "HTML", starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 24px; max-width: 640px; margin: 0 auto; }\n    h2 { color: #e8d5a0; margin-top: 0; }\n    .scenario { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin: 16px 0; }\n    .scenario h3 { color: #e8d5a0; margin: 0 0 10px; font-size: 15px; }\n    .scenario p { color: #c0cad8; font-size: 14px; line-height: 1.6; margin: 0 0 12px; }\n    textarea { width: 100%; background: #111827; border: 1px solid #30363d; color: white; padding: 10px 12px; border-radius: 6px; font-size: 13px; font-family: sans-serif; resize: vertical; min-height: 80px; box-sizing: border-box; line-height: 1.5; }\n    .btn { background: #e8d5a0; color: #0a0a0a; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; margin-top: 8px; }\n    .saved-msg { color: #4ade80; font-size: 12px; margin-top: 6px; display: none; }\n  </style>\n</head>\n<body>\n  <h2>Real World Problem Solving</h2>\n\n  <div class="scenario">\n    <h3>Scenario 1 — The Slow Page</h3>\n    <p>A client\'s e-commerce page takes 8 seconds to load on mobile. Users are leaving before the page finishes. You cannot rewrite the backend. What do you investigate first and what changes do you make?</p>\n    <textarea id="s1" placeholder="Write your approach here before reading the hint..."></textarea>\n    <button class="btn" onclick="save(\'s1\')">Save answer</button>\n    <div class="saved-msg" id="s1-msg">Saved.</div>\n  </div>\n\n  <div class="scenario">\n    <h3>Scenario 2 — The Database Decision</h3>\n    <p>You\'re building a social app: users, posts, comments, tags. You must choose between PostgreSQL (relational) and MongoDB (document). What questions do you ask before deciding, and which would you lean toward?</p>\n    <textarea id="s2" placeholder="Write your approach here before reading the hint..."></textarea>\n    <button class="btn" onclick="save(\'s2\')">Save answer</button>\n    <div class="saved-msg" id="s2-msg">Saved.</div>\n  </div>\n\n  <div class="scenario">\n    <h3>Scenario 3 — The Stakeholder</h3>\n    <p>Your manager says the new feature should "only take a few hours." It actually takes two weeks. How do you explain the technical complexity without being defensive?</p>\n    <textarea id="s3" placeholder="Write what you would actually say..."></textarea>\n    <button class="btn" onclick="save(\'s3\')">Save answer</button>\n    <div class="saved-msg" id="s3-msg">Saved.</div>\n  </div>\n\n  <div class="scenario">\n    <h3>Scenario 4 — The Bug Report</h3>\n    <p>A user reports: "the checkout is broken." No error message, no steps, no device info. What is your exact investigation process?</p>\n    <textarea id="s4" placeholder="Step by step — what do you do first?"></textarea>\n    <button class="btn" onclick="save(\'s4\')">Save answer</button>\n    <div class="saved-msg" id="s4-msg">Saved.</div>\n  </div>\n\n  <div class="scenario">\n    <h3>Scenario 5 — The Security Hole</h3>\n    <p>A colleague\'s code stores user passwords as plain text in the database. They\'re about to deploy. What do you say, and what should the correct code look like?</p>\n    <textarea id="s5" placeholder="How do you handle this conversation and what\'s the fix?"></textarea>\n    <button class="btn" onclick="save(\'s5\')">Save answer</button>\n    <div class="saved-msg" id="s5-msg">Saved.</div>\n  </div>\n\n  <script>\n    // Load any previously saved answers\n    [\'s1\',\'s2\',\'s3\',\'s4\',\'s5\'].forEach(function(id) {\n      const saved = localStorage.getItem(\'floor7-\' + id);\n      if (saved) document.getElementById(id).value = saved;\n    });\n\n    function save(id) {\n      const text = document.getElementById(id).value;\n      localStorage.setItem(\'floor7-\' + id, text);\n      const msg = document.getElementById(id + \'-msg\');\n      msg.style.display = \'block\';\n      setTimeout(function() { msg.style.display = \'none\'; }, 2000);\n    }\n  <\/script>\n</body>\n</html>', challenges: ["Work through all 5 scenarios — write your answer before reading the hint for each", "For Scenario 5, research bcrypt and write pseudocode showing how password hashing would work in a real Node.js app", "For Scenario 1, open DevTools on any slow website you know and run an actual performance audit — what do you find?", "Write a Scenario 6 of your own: a real problem you\'ve hit while building something, and how you solved it (or would solve it)"] }, quiz: { question: "A user reports 'it\'s broken.' What is the first thing a professional developer does?", options: ["Immediately look at the code and start changing things", "Ask the user for more detail and try to reproduce the bug yourself", "Revert the last deployment and restore a backup", "Apologise and tell the user it will be fixed in the next release"], correct: 1, feedback: "You cannot fix a bug you cannot reproduce. The first step is always: gather enough information to reproduce the exact failure. That means asking for the user\'s browser, device, steps, and any error messages — then trying those exact steps yourself. Only once you can reproduce it reliably should you start looking at code." }, checklist: ["I\'m working through real-world problems", "I attempt a solution before researching", "I\'m becoming comfortable with uncertainty"] },
-      { id: "7-4", title: "Portfolio Building", body: `Your portfolio is your evidence. For someone without a degree or years of employment history, it is everything.\n\nBy the end of this floor your portfolio should include:\n\n<strong>3-5 deployed projects</strong> \u2014 accessible via URL, each with a README explaining what it does and how you built it\n<strong>A personal website</strong> \u2014 built by you, representing you, linking to your work\n<strong>A GitHub profile</strong> \u2014 with consistent commit history showing that you show up regularly\n<strong>A written case study</strong> \u2014 for your most complex project, walking through the problem, your decisions, and what you'd do differently\n\nThis is what you send instead of a CV.`, callout: { type: "default", label: "The Honest Truth", text: "A portfolio of 4 real projects built and deployed by someone who started from nothing 18 months ago is more compelling to most employers than a degree with no work to show. The work is the argument." }, hint: `Your personal website doesn't need to be complex. In fact, simpler is often better.\n\nIt needs: your name, one sentence about what you do, links to your projects, a way to contact you.\n\nThat's it. Clean, fast, works on mobile. The personal website is itself a project \u2014 it shows you can build something professional and make decisions about design and content.\n\n<strong>GitHub activity matters:</strong> Employers look at the contribution graph \u2014 the grid of green squares showing when you've been committing code. Consistent small contributions over 18 months tells a better story than a burst of activity followed by silence.`, checklist: ["I have 3-5 deployed projects", "Each has a README", "I have a personal website", "My GitHub shows consistent activity", "I've written a case study for my best project"] },
-      { id: "7-5", title: "The Final Project \u2014 Something You're Proud Of", body: `No brief. No requirements. No checklist.\n\nBuild the thing you've been thinking about since you started this book.\n\nThe idea that made you want to learn in the first place \u2014 or the one that appeared somewhere along the way and wouldn't leave you alone.\n\nUse everything. Take your time. Make it right.\n\nWhen it's done, you're not a student anymore.`, callout: { type: "default", label: "The Only Instruction", text: "Build something that, when you show it to someone, makes you feel proud rather than apologetic. That feeling is the destination. Everything in this book was the road to it." }, callout2: { type: "focus", label: "You Made It Here", text: "Floors 1 through 6 built you. Floor 7 is just proof. The person who finishes this is not the same person who started it. That gap \u2014 between who you were and who you became \u2014 was crossed one session at a time.\n\nNow go build something." }, hint: `If the idea still feels too big \u2014 shrink it.\n\nThe final project doesn't have to be an empire. It has to be yours. A tool that helps one person do one thing better. A product that solves one real problem cleanly.\n\nStart with the smallest version that would still make you proud. Build that. Then, if you want to keep going, add to it.\n\n<strong>The most important thing:</strong> Finish it. Ship it. Put it in the world. An imperfect thing that exists is worth infinitely more than a perfect thing that doesn't.`, checklist: ["I built my final project", "I'm proud of it", "I deployed it", "I am a developer"] }
+      {
+        id: "7-1",
+        title: "Your First Week",
+        body: `The first week of your first engineering job is not a test of technical skill. It's a test of how quickly you can build context: how the team works, what the codebase does, how decisions get made, and where to go when you're stuck. Technical skill gets you the offer. Context-building determines whether you thrive in the first six months.\n\nResist the urge to immediately produce. The instinct to prove yourself by shipping something in week one is understandable and usually counterproductive. Week one is for understanding, not contributing. Read the codebase. Set up your dev environment properly. Run the tests. Follow the CI/CD pipeline through a deploy. Trace a user request from the frontend to the database and back. Ask "how does this work" about ten different things before forming any opinions about what should change.\n\nThe questions you ask in week one matter. Good questions signal attention to context: "How does the team decide what gets prioritised?", "What's the preferred way to get a code review when the reviewer is busy?", "What does done look like for a ticket?" Bad questions signal impatience: "Why is this codebase structured this way?" or "Has anyone considered using X instead?" on day three. The second set of questions is fine eventually; it's not fine when you have zero context.\n\nFind your onboarding buddy or mentor within the first two days and schedule regular 1:1 time. Not for tasks \u2014 for context. "Can you walk me through the most important parts of the codebase?" and "What should I know about how this team operates that isn't written down?" are two of the highest-value questions you can ask.\n\nBy the end of week one, you should know: who to ask about what, how to run the project locally, how to submit a PR, what the team is currently working on, and at least three things about the codebase that you don't fully understand yet. That last point is not a gap \u2014 it's an accurate inventory. Write it down. It becomes your learning list.`,
+        callout: {
+          type: "default",
+          label: "Context Before Contribution",
+          text: "The engineers who make the strongest first impressions are the ones who understand the system deeply before suggesting changes to it. Asking good questions and demonstrating genuine comprehension signals capability more effectively than shipping code in week one."
+        },
+        callout2: {
+          type: "focus",
+          label: "Write Everything Down",
+          text: "Your first week produces an enormous amount of new information. You will not remember it all. Take notes: how to run the dev environment, what the acronyms mean, what each service does, who owns what. A well-maintained onboarding doc you write for yourself becomes valuable for the next person who joins \u2014 which makes it a contribution worth sharing."
+        },
+        hint: `Everyone remembers their first week as overwhelming. The amount of new information is not a sign of incompetence \u2014 it's just the normal state of starting somewhere new. The engineers who look calm in week one have either been there before or are very good at not showing how much they're processing.\n\n<strong>One thing to do immediately:</strong> Find something small, self-contained, and well-defined to work on. Fixing a minor bug or updating some documentation in week two gives you the experience of going through the full PR process \u2014 branch, commit, review, merge, deploy \u2014 without the pressure of high-stakes work.\n\n<strong>On imposter syndrome:</strong> It peaks in week one and two and then recedes as context builds. Every person who has started a new engineering role has experienced it. The engineers who look confident around you have their own version of the same feeling about different things.`,
+        quiz: {
+          question: "In your first week at a new engineering job, your manager asks you to share your first impressions of the codebase architecture. What is the most appropriate response?",
+          options: ["Share a detailed critique of the architecture's weaknesses and suggested improvements", "Describe what you've observed and understood so far, ask clarifying questions about decisions you don't yet understand the context for, and reserve judgment until you have more context", "Say the architecture looks good to avoid creating conflict early", "Propose a refactoring plan to demonstrate initiative"],
+          correct: 1,
+          feedback: "Architecture decisions have context that a new joiner doesn't have yet: historical constraints, deliberate trade-offs, failed alternatives, team capability at the time. Critiquing before understanding that context creates an impression of poor judgment even if the critique is technically valid. Describing what you observe, asking about the reasoning, and reserving judgment while you build context is the signal of a high-quality engineer."
+        },
+        checklist: ["I know who to go to with questions about different parts of the system", "I can run the project locally, run the tests, and submit a PR", "I've traced a complete user request through the system from frontend to database", "I've written down things I don't understand yet as a learning list", "I've scheduled regular 1:1 time with my onboarding buddy or manager"]
+      },
+      {
+        id: "7-2",
+        title: "Reading a Large Codebase",
+        body: `Professional codebases are not like tutorial projects. A real production codebase might have 500,000 lines of code across 200 services, built over ten years by engineers who have long since left the company. Reading it is a skill that is almost never taught but is among the most practically valuable things a professional engineer does.\n\nThe first principle: never start by reading code. Start by understanding what the code is supposed to do. Read the documentation, the API contracts, the test descriptions, the commit messages, the pull request descriptions. These tell you the intended behaviour. The code tells you the actual behaviour. Understanding both, and the gap between them, is the full picture.\n\nThe second principle: read from the outside in. Find the entry point \u2014 the HTTP route handler, the main function, the CLI entry point \u2014 and trace the execution path for one complete user action. Don't get distracted by branches or edge cases on the first pass. The goal is to understand the happy path for one concrete request before exploring anything else.\n\nGit history is underused by most developers. <code>git log --follow -p path/to/file</code> shows every change to a file, with context. <code>git blame</code> shows who changed each line and when. <code>git bisect</code> finds the exact commit that introduced a bug by binary search. When code looks strange and you want to know why, git history tells you the reason more reliably than any comment or documentation.\n\nThe skill that separates senior from junior engineers in large codebases: the ability to identify what doesn't need to be understood. Not everything in a 500,000-line codebase is relevant to your current task. Experienced engineers scope their reading to what's relevant, hold the rest at arm's length, and resist the urge to understand everything before acting.`,
+        callout: {
+          type: "default",
+          label: "Git Blame Is Not an Accusation",
+          text: "git blame shows you who wrote each line and when. It's a navigation tool, not a judgment. Finding the engineer who wrote a confusing section lets you ask them why they made the choice they made \u2014 often the answer reveals a constraint or business requirement that makes the code make sense immediately."
+        },
+        callout2: {
+          type: "focus",
+          label: "Tests Are Documentation",
+          text: "In a well-maintained codebase, the test suite documents expected behaviour more reliably than any comment or README. Read the tests for a module before reading its implementation. The tests tell you what the module is supposed to do, with concrete inputs and outputs, in a way that is verified to be accurate."
+        },
+        hint: `When you're dropped into an unfamiliar codebase and asked to make a change, the fastest path is usually: find the test for the behaviour closest to what you're changing, understand what it tests, find the code under test, make the change, update the test. This scope-limited approach avoids getting lost in the 99% of the codebase irrelevant to your task.\n\n<strong>Build a map:</strong> When you first encounter a large codebase, draw a diagram. Boxes for services or major modules, arrows for the dependencies between them. This doesn't need to be accurate in every detail \u2014 it needs to give you a mental model that stops you getting disoriented.\n\n<strong>Use the tooling:</strong> IDE features like "go to definition," "find all references," and "show call hierarchy" are how professional engineers navigate large codebases quickly. Learning the keyboard shortcuts for these in your IDE is a multiplier.`,
+        quiz: {
+          question: "You need to make a change in an unfamiliar part of a 400,000-line codebase. What is the most efficient first step?",
+          options: ["Read the entire module that contains the code you need to change", "Find the test that covers the behaviour you need to change, read it to understand the expected behaviour, then find the code under test", "Ask a senior engineer to explain the entire module before you start", "Search the codebase for similar changes made previously and follow the same pattern"],
+          correct: 1,
+          feedback: "Tests are the most reliable documentation for specific behaviour. Finding the test for what you need to change tells you exactly what the current expected behaviour is (in verifiable, executable form), shows you where the code under test lives, and gives you a target to update when you make your change. Reading the entire module is almost always too broad a scope for a focused change."
+        },
+        checklist: ["I can navigate a large codebase using IDE features (go to definition, find references)", "I use git blame and git log to understand why code is the way it is", "I read tests before reading implementation when exploring new code", "I can trace a complete user request through a codebase I haven't seen before", "I identify what I don't need to understand before reading broadly"]
+      },
+      {
+        id: "7-3",
+        title: "Code Reviews",
+        body: `Code review is the primary mechanism by which professional engineering teams maintain quality, share knowledge, and transmit standards. A pull request without a code review is just code that went to production \u2014 it might be fine, but you don't know. Code review is how you find out.\n\nGiving good code review is a skill that takes years to develop. The signal-to-noise ratio matters enormously. A review that flags 40 issues, half of which are stylistic preferences rather than real problems, is harder to act on than a review that flags 8 real issues clearly. Prioritise ruthlessly: blocking issues (bugs, security vulnerabilities, broken interfaces) must be addressed before merge. Suggestions (better variable names, alternative approaches) are advisory. Preferences (your preferred way to structure a loop) don't belong in a code review at all.\n\nThe tone of a code review is not separable from its content. "This is wrong" and "I think this might cause a race condition when two requests arrive simultaneously \u2014 can you think through that case?" are not equivalent, even if the underlying concern is the same. The second invites thinking. The first provokes defensiveness. The most effective reviewers ask questions rather than issue directives: "What happens if this value is null?" rather than "This will crash if the value is null."\n\nReceiving code review is its own skill. Read every comment before responding to any. Understand what the reviewer is concerned about before deciding whether you agree. "I disagree because..." is a valid response if the reasoning is sound. "Thanks, fixed" is appropriate for clear bugs. "I see what you're suggesting \u2014 I went with X because Y, but happy to change if you feel strongly" is appropriate for trade-offs. The worst response is silence \u2014 leaving review comments unaddressed.\n\nThe hidden function of code review is knowledge transfer. The reviewer learns about the change and its context. The author learns about the codebase and standards through the reviewer's questions. Both parties develop shared understanding of how the system works. This is how teams remain coherent as they grow. GitHub's engineering team has written publicly about code review as a culture-building tool, not just a quality gate.`,
+        callout: {
+          type: "default",
+          label: "Review the Code, Not the Person",
+          text: "Every comment in a code review should be about the code, not the author. 'This variable name is ambiguous' is a code review comment. 'You always name variables poorly' is not. The distinction seems obvious and is frequently violated under time pressure or frustration. The best code review cultures are psychologically safe precisely because this boundary is maintained."
+        },
+        callout2: {
+          type: "focus",
+          label: "The 24-Hour Rule",
+          text: "A code review left unreviewed for more than 24 hours blocks the person who submitted it. At most high-functioning engineering teams, responding to a review request within 24 hours \u2014 even if it's just to say 'I'll look at this tomorrow morning' \u2014 is a team norm. Unreviewed PRs sitting for days demoralise contributors and slow delivery."
+        },
+        hint: `The quality of your code reviews is how senior engineers assess your engineering judgment before you have a track record. A junior engineer who asks precise, useful review questions signals more than one who approves everything with a thumbs-up.\n\n<strong>Framework for reviewing:</strong> Read the PR description first (understand the intent). Scan the diff at a high level (understand the shape of the change). Then read carefully for: bugs, unhandled edge cases, security issues, performance problems, and interface design. Leave blocking comments clearly marked as such.\n\n<strong>On approving PRs:</strong> Only approve if you would be comfortable being the one who merged it. "Looks good to me" is a commitment, not a formality. If you're uncertain about something but it's not your domain, say so: "I can't fully evaluate the database query, but the application logic looks correct to me."`,
+        quiz: {
+          question: "A code reviewer leaves a comment saying 'This will definitely cause performance problems at scale.' The author believes the performance is acceptable for current requirements and has benchmarked it. What is the best response?",
+          options: ["Immediately change the code to match the reviewer's preference", "Close the PR and start over with a different approach", "Respond with the benchmark results, explain why performance meets current requirements, and ask whether they see a specific scenario where it would be insufficient", "Ignore the comment and merge anyway"],
+          correct: 2,
+          feedback: "A code review comment is the beginning of a conversation, not a directive. The author has context the reviewer may lack (current scale, benchmarks, business requirements). The right response is to provide that context, explain the trade-off, and engage with the specific concern. If the reviewer has a scenario in mind where performance would be insufficient, that's worth knowing. If they don't, the benchmarks resolve the concern."
+        },
+        checklist: ["I can give code review that distinguishes blocking issues from suggestions from preferences", "I ask questions in code review rather than issuing directives", "I respond to every review comment, even if just to acknowledge it", "I review PRs within 24 hours of being requested", "I've had at least one code review conversation that resulted in a better solution than either party started with"]
+      },
+      {
+        id: "7-4",
+        title: "Technical Debt and Refactoring",
+        body: `Technical debt is a deliberate or accidental trade-off: you write code that is faster to ship now and harder to maintain later. Ward Cunningham coined the metaphor. The "debt" is real \u2014 it accrues interest in the form of slower feature development, more frequent bugs, and higher cognitive load for every engineer who touches the affected code. Like financial debt, it's not inherently bad. Shipping fast with some debt to validate a product idea is a reasonable decision. Never paying it down is how systems become unmaintainable.\n\nThe distinction between necessary and unnecessary debt matters. Necessary debt: you shipped a feature quickly before a deadline because validating it was more important than the quality of the implementation. You knew it was debt when you made the decision. Unnecessary debt: code that is poorly structured because of lack of care, skills, or time \u2014 not a deliberate trade-off but accumulated neglect.\n\nRefactoring is the process of restructuring existing code without changing its observable behaviour. The refactoring is safe if you have good test coverage \u2014 you can change the structure and verify the behaviour hasn't changed by running the tests. The refactoring is risky without tests, because you can't verify equivalence. Before refactoring untested code, write tests for the current behaviour first. Then refactor. Then verify the tests still pass.\n\nThe Boy Scout Rule: leave the code better than you found it. Not a massive refactor on every PR \u2014 small, consistent improvements. Rename an ambiguous variable. Extract a readable function from a 60-line block. Add a comment explaining why, not what. These accumulate into healthier codebases over years.\n\nKnowing when not to refactor is as important as knowing how. Refactoring code that is rarely touched, that works correctly, and that is clearly understood is risk for no benefit. Refactoring code you're actively working on \u2014 that you need to extend and have to understand thoroughly anyway \u2014 is when the cost-benefit works. The decision is always: does the risk of change outweigh the benefit of clarity?`,
+        callout: {
+          type: "default",
+          label: "Make It Work, Then Make It Right",
+          text: "The phrase has an important third part that gets omitted: make it work, make it right, make it fast. In order. A working solution with technical debt is preferable to an unshipped perfect solution. But 'make it right' is not optional \u2014 it just happens after 'make it work' is validated."
+        },
+        callout2: {
+          type: "focus",
+          label: "Tests Before Refactoring",
+          text: "Refactoring untested code is rewriting it. You cannot know whether you've changed the behaviour if you have no specification of what the behaviour was. Write characterisation tests \u2014 tests that document the current behaviour, not the desired behaviour \u2014 before touching a legacy codebase. Then refactor. Then verify the tests still pass."
+        },
+        hint: `The biggest mistake teams make with technical debt: treating it as an all-or-nothing. "We'll do a big refactor quarter" never happens, because the refactor is never as urgent as the next feature. Incremental improvement, on every PR, adds up to a meaningfully better codebase over six months.\n\n<strong>The 20% heuristic:</strong> Some teams reserve 20% of engineering time for technical debt and maintenance. It's not a magic number, but the principle is right: if tech debt is never scheduled, it never happens. Make it explicit.\n\n<strong>Before a refactor:</strong> Be able to answer: what specific problem does this solve? How will I know it's an improvement? What's the risk of getting it wrong? How will I test that the behaviour hasn't changed? If you can't answer these questions, you're not ready to refactor.`,
+        quiz: {
+          question: "An engineer wants to refactor a critical, untested module that handles payment processing. The module works correctly but the code is difficult to read. What is the most responsible approach?",
+          options: ["Refactor it immediately \u2014 the risk is worth the improved readability", "Don't touch it \u2014 if it works, never change it", "Write characterisation tests to document the current behaviour first, then refactor incrementally, verifying tests pass after each change", "Rewrite the module from scratch in a new file and switch to it once complete"],
+          correct: 2,
+          feedback: "Refactoring payment-critical code without tests is extremely high risk. The current behaviour is undocumented, and any change that introduces a regression could process payments incorrectly. Characterisation tests document the current behaviour (including any bugs or quirks that callers depend on). With those tests in place, you can refactor incrementally with a safety net. A complete rewrite is higher risk still \u2014 it's easy to miss edge cases that the original code handled."
+        },
+        checklist: ["I can distinguish between necessary technical debt (deliberate trade-off) and unnecessary debt (neglect)", "I know how to write characterisation tests before refactoring untested code", "I leave code marginally better on every PR I touch", "I can make the case for when a refactor is and isn't worth the risk", "I know that 'make it right' is not optional, just sequenced after 'make it work'"]
+      },
+      {
+        id: "7-5",
+        title: "System Design",
+        body: `System design is the practice of making high-level architectural decisions about how a system is structured before (or while) building it. It's where engineering meets scale: how do you build something that works for a million users when you're starting with ten? The decisions made at this level \u2014 which services to separate, where to put the database, how to handle state, whether to use queues \u2014 are expensive to change later and cheap to change now.\n\nThe vocabulary of system design: <strong>horizontal scaling</strong> (adding more servers to distribute load), <strong>vertical scaling</strong> (making each server more powerful), <strong>load balancing</strong> (distributing requests across multiple servers), <strong>caching</strong> (storing frequently accessed data in memory to avoid repeated computation or database queries), <strong>sharding</strong> (splitting a database across multiple servers by some partition key), <strong>replication</strong> (keeping copies of data on multiple servers for availability), and <strong>eventual consistency</strong> (accepting that distributed nodes may temporarily disagree on state, with convergence guaranteed later).\n\nCAP theorem states that a distributed system can guarantee at most two of: Consistency (every read returns the most recent write), Availability (every request receives a response), and Partition tolerance (the system works despite network failures). In practice, partition tolerance is non-negotiable \u2014 networks fail. The real choice is between consistency and availability during a partition. Stripe prioritises consistency for payment data (a wrong balance is worse than an error). Twitter prioritises availability for tweet delivery (seeing an older timeline is acceptable).\n\nMicroservices vs monolith is not a question with a universal answer. A monolith is a single deployable unit containing all the application's functionality. Microservices split functionality into many independently deployable services. Monoliths are simpler to develop, test, and debug \u2014 they're how most successful products start. Microservices provide independent deployability, technology flexibility, and fault isolation \u2014 they're how large teams work without stepping on each other. Netflix moved from a monolith to microservices because the monolith deployment affected hundreds of features simultaneously. Shopify still runs its core commerce platform as a modular monolith.\n\nThe practitioner's perspective: system design interviews ask you to design at a scale you've probably never operated at. What they're actually testing is whether you know the vocabulary, understand the trade-offs, ask the right clarifying questions, and reason systematically. "It depends" is often the honest answer. The quality of the follow-up \u2014 "it depends on whether consistency or availability matters more for this use case" \u2014 is what they're evaluating.`,
+        callout: {
+          type: "default",
+          label: "Design for the Next 10x",
+          text: "Don't over-engineer for a scale you'll never reach. Design for the next order of magnitude, not the theoretical maximum. A system designed for 10x your current load is a reasonable investment. A system designed for 1000x current load before you've validated the product is waste. The premature optimisation problem exists at the architecture level too."
+        },
+        callout2: {
+          type: "focus",
+          label: "Caching Is the Most Powerful Tool",
+          text: "Caching \u2014 storing expensive computations in memory so you don't repeat them \u2014 is responsible for a disproportionate share of web performance improvements. A database query that takes 100ms cached at the application layer takes microseconds. Netflix caches movie metadata at every layer. Understanding when and what to cache, and the consistency implications, is high-leverage system design knowledge."
+        },
+        hint: `System design interviews reward structured thinking, not encyclopedic knowledge. The pattern: clarify requirements and scale, estimate rough numbers, choose the major components, identify bottlenecks, propose solutions to each bottleneck, discuss trade-offs. Following this structure with incomplete knowledge beats wandering through perfect knowledge.\n\n<strong>Read real architecture posts:</strong> Airbnb's engineering blog on their service mesh. GitHub's description of how they handle merge conflicts at scale. Cloudflare's explanation of their CDN architecture. Stripe's approach to idempotency. These are the real answers to system design questions \u2014 learn from how professionals solved actual problems.\n\n<strong>The most common system design mistake:</strong> Jumping to microservices because that's what large companies use. Start with a monolith in almost every design exercise. Then describe what scale or team size would cause you to split it, and which services you'd extract first. That's a more sophisticated answer than immediately drawing 15 boxes.`,
+        quiz: {
+          question: "A designer wants to build a URL shortener that needs to handle millions of reads per day but far fewer writes. Which component would most improve read performance at scale?",
+          options: ["Rewrite the application in a faster language", "Add a caching layer (Redis) to store frequently accessed short URL mappings in memory, reducing database load", "Use a NoSQL database instead of a relational one", "Add more application servers"],
+          correct: 1,
+          feedback: "For a read-heavy system where the data changes rarely (a URL mapping doesn't change once created), caching is the highest-leverage improvement. A Redis cache serving hot URLs from memory handles millions of reads per second with millisecond latency, while the database only receives cache misses. Adding more application servers helps with compute but doesn't reduce database load. Changing languages has minimal impact compared to eliminating database round trips."
+        },
+        checklist: ["I understand the vocabulary of system design (sharding, replication, caching, load balancing)", "I understand the CAP theorem and its practical implications", "I can explain the trade-offs between monolith and microservices architectures", "I've read at least 5 real engineering architecture posts from production systems", "I can structure a system design response: requirements, estimation, components, bottlenecks, trade-offs"]
+      },
+      {
+        id: "7-6",
+        title: "Engineering in Teams",
+        body: `Software engineering is a team sport and most of its hardest problems are human, not technical. The technical problems have known solution spaces; the human problems \u2014 communication, alignment, trust, conflict \u2014 are where engineering velocity actually lives or dies.\n\nThe daily collaboration loops that matter most: standup (what are you working on, what's blocking you), code review (how does the team maintain quality and share context), planning (how does the team decide what to build and in what order), and retrospectives (how does the team reflect on what's working and what isn't). Each of these is a ritual that compounds into culture when done consistently, and degrades into theatre when done mechanically.\n\nWritten communication is disproportionately important in engineering teams, especially distributed ones. A well-written engineering design doc \u2014 explaining the problem, the options considered, the decision made, and the rationale \u2014 replaces hours of meetings and creates a record that new team members can learn from months later. Google, Airbnb, and Stripe all have design doc cultures. The discipline of writing down architectural decisions before making them surfaces assumptions, invites feedback, and prevents revisiting settled questions.\n\nConflict is inevitable in teams where smart people care about outcomes. The productive form: technical disagreement argued with evidence, decided with data, and committed to fully once the decision is made. The dysfunctional form: personal, unresolved, and affecting code quality or team morale. "Disagree and commit" \u2014 Amazon's phrase for it \u2014 is a genuinely useful norm: you can disagree with a decision, but once it's made, you implement it fully and don't passive-aggressively undermine it.\n\nPsychological safety \u2014 the belief that you can say a wrong thing, ask a stupid question, or disagree with someone senior without punishment \u2014 is the most predictive factor in high-performing engineering teams. Google's Project Aristotle found this more important than team composition, manager quality, or any other variable. You can't control whether your team has it; you can contribute to it by modelling the behaviour: admitting mistakes openly, asking questions without self-deprecation, and responding to others' wrong answers with curiosity rather than judgment.`,
+        callout: {
+          type: "default",
+          label: "Write It Down",
+          text: "A decision made in a meeting that isn't documented doesn't exist \u2014 six months later, nobody agrees on what was decided or why. Engineering teams that write down decisions (in docs, in PR descriptions, in ADRs \u2014 Architecture Decision Records) have fewer revisited arguments and faster onboarding. The cost of writing a decision down is minutes. The benefit compounds indefinitely."
+        },
+        callout2: {
+          type: "focus",
+          label: "Disagree and Commit",
+          text: "Healthy teams debate decisions vigorously before they're made and implement them fully after. The alternative \u2014 losing the debate and then half-implementing the decision \u2014 is the worst outcome. It combines the costs of the decision you didn't want (you're doing it) with the costs of the decision you wanted (you're not getting the benefits). Make your case clearly, then commit."
+        },
+        hint: `Your reputation on an engineering team is built almost entirely through written artefacts: code reviews, PR descriptions, design docs, Slack messages, tickets. People who have never worked with you directly will form opinions based on these. Write with precision and generosity \u2014 precise about what you mean, generous about what others mean.\n\n<strong>On meetings:</strong> A meeting without an agenda is usually replaceable with a document. A meeting without a decision or action item is a ceremony. Value your team's time as you value your own, and push for async over sync wherever the work allows it.\n\n<strong>On disagreement:</strong> The most effective way to win a technical argument is with data. "I think approach A is faster" is an opinion. "I benchmarked both approaches and A was 3x faster under load" is a data point. Arguments from data are easier to resolve and leave less residue.`,
+        quiz: {
+          question: "Two senior engineers disagree about the database choice for a new service. Discussion has gone in circles for a week. What is the most effective way to resolve this?",
+          options: ["Escalate to the engineering manager to make the final call", "Let the engineer with more seniority decide", "Write a design doc presenting both options with their trade-offs, share it for async feedback, and set a specific decision date", "Do both implementations and see which performs better in production"],
+          correct: 2,
+          feedback: "A design doc forces both sides to articulate their position with reasoning, allows broader input from people not in the original discussion, and creates a record of the decision. Escalating to a manager removes ownership from the engineers closest to the problem. Defaulting to seniority bypasses the reasoning that should drive technical decisions. Building both in production is high cost for what is usually a resolvable trade-off."
+        },
+        checklist: ["I understand what psychological safety is and how to contribute to it", "I write clear PR descriptions that explain the what and the why", "I understand the difference between productive technical disagreement and personal conflict", "I can write a basic design doc that presents a problem, options, and recommendation", "I know the 'disagree and commit' norm and can apply it"]
+      },
+      {
+        id: "7-7",
+        title: "Production and On-Call",
+        body: `Production is where your code meets real users, real load, and real failure modes that staging never anticipated. The discipline of operating production systems \u2014 monitoring, alerting, incident response, post-mortem analysis \u2014 is distinct from the discipline of building them. Both are required for senior engineering competence.\n\nObservability is the property of a system that lets you understand its internal state from external outputs. The three pillars: <strong>metrics</strong> (numeric measurements over time: error rate, latency, throughput), <strong>logs</strong> (timestamped records of events: a request came in, a query ran, an error occurred), and <strong>traces</strong> (end-to-end records of a request's path through distributed services). Prometheus collects metrics. Datadog, New Relic, and Grafana visualise them. OpenTelemetry instruments traces. Without these, production is opaque \u2014 you know something is wrong but not where or why.\n\nAlerting should be actionable. An alert that fires when a metric exceeds a threshold is useful only if there is something a human can do in response. Alerts that fire constantly and are ignored \u2014 alert fatigue \u2014 are worse than no alerts, because they train the team to ignore all alerts, including the critical ones. Good alerting culture: alert on symptoms (user-facing errors) rather than causes (CPU usage), tune thresholds to eliminate false positives, and review alerts in retrospectives to remove the noise.\n\nOn-call is the rotation where engineers carry a pager \u2014 or phone \u2014 and are responsible for responding to production incidents outside business hours. It is uncomfortable and educational. The discomfort is real: being woken at 3am by an alert that a service is down is stressful. The education is also real: on-call teaches you more about how a system actually behaves \u2014 at real load, with real failures \u2014 than any amount of development work.\n\nPost-mortems are blameless analyses of what went wrong in an incident. Blameless means the focus is on system failures, process gaps, and missing safeguards \u2014 not on who made the mistake. This distinction is fundamental. When people fear being blamed, they hide information, which prevents learning. Stripe's incident response culture, like most mature engineering organisations, produces public post-mortems that document the timeline, contributing factors, and action items. These documents are some of the most valuable engineering learning available.`,
+        callout: {
+          type: "default",
+          label: "Every Incident Is a Learning",
+          text: "An incident that is resolved without a post-mortem is a wasted learning opportunity. The post-mortem process \u2014 timeline reconstruction, contributing factor analysis, action items \u2014 converts a painful experience into improved systems and processes. Teams that do blameless post-mortems consistently improve faster than teams that don't."
+        },
+        callout2: {
+          type: "focus",
+          label: "The On-Call Covenant",
+          text: "If engineers are on-call for a system, they need the authority to fix it. On-call without deployment access, without the ability to change configuration, or without understanding of the system is an untenable position. The deal is: carry the pager, have the tools. Teams that put engineers on-call without tools and authority have an on-call problem, not an on-call rotation."
+        },
+        hint: `The fastest way to learn how a production system really works is to be on-call for it. Incidents expose assumptions that years of development work never surface. The system you think you built and the system that runs in production are always different. On-call closes that gap.\n\n<strong>Before your first on-call shift:</strong> Know how to check the health dashboard, how to read the logs, how to roll back a deployment, and who to escalate to if you're stuck. Having these answers written down \u2014 in a runbook \u2014 is a sign of a mature on-call setup.\n\n<strong>During an incident:</strong> Stay calm, communicate clearly ("I'm investigating the payment service \u2014 will update in 10 minutes"), and don't make speculative changes. The most common incident antipattern is making multiple changes simultaneously in a panic, making it impossible to know which change fixed (or further broke) the system.`,
+        quiz: {
+          question: "After a production incident, a post-mortem is being conducted. The on-call engineer who made the change that triggered the incident is worried about being blamed. What does 'blameless post-mortem' mean in this context?",
+          options: ["The engineer will not face any consequences regardless of how serious the incident was", "The analysis focuses on systemic factors (missing safeguards, process gaps, ambiguous documentation) rather than individual blame, to maximise honest information sharing and learning", "The post-mortem is optional and the engineer can choose not to participate", "Blame is assigned to the system rather than any person for legal liability reasons"],
+          correct: 1,
+          feedback: "Blameless means the post-mortem investigates systems and processes, not individuals. The reasoning: if an engineer made a reasonable decision given the information available and the system's safeguards didn't prevent the outcome, the problem is the system and process, not the person. This framing encourages honest reporting of what actually happened \u2014 critical for learning. It doesn't mean engineers face no professional consequences for grossly negligent decisions; it means well-intentioned mistakes are treated as system design opportunities."
+        },
+        checklist: ["I understand the three pillars of observability: metrics, logs, and traces", "I know what alert fatigue is and why alerting on symptoms beats alerting on causes", "I understand the blameless post-mortem process and its purpose", "I've read at least 3 post-mortems from real engineering teams", "I know what a runbook is and why on-call engineers need one"]
+      },
+      {
+        id: "7-8",
+        title: "The Career Ladder",
+        body: `Engineering career ladders describe levels of increasing scope, independence, and impact. The labels vary: Junior, Mid, Senior, Staff, Principal, Distinguished Fellow. The progression from junior to senior describes expanding technical capability. The progression from senior upward describes expanding organisational scope \u2014 impact that reaches beyond your immediate team.\n\nJunior engineers execute defined tasks with guidance. The expectation is that you produce working code when given a clear problem, ask for help when blocked, and learn the team's norms. Mistakes are expected and handled by the system (code review, tests, staging). The primary growth edge is increasing the scope of what you can execute independently.\n\nMid-level engineers own features end-to-end. You take a requirement from ticket to production without being guided through each step. You debug independently, review others' code, and contribute to technical discussions. The primary growth edge is increasing the ambiguity you can handle \u2014 moving from "implement this spec" to "figure out how to solve this problem."\n\nSenior engineers own problems, not tasks. They understand the business context behind technical decisions, push back on requirements that would create unnecessary complexity, mentor more junior engineers, and make architectural decisions that affect the team's velocity for months. The primary growth edge is multiplying others' effectiveness rather than only your own.\n\nStaff engineers and above work at the organisational level. They identify the technical problems the company doesn't know it has yet. They define technical strategy, build alignment across teams, and make decisions that affect multiple engineering organisations. The competencies at this level are partly technical and heavily about communication, influence, and systems thinking at an organisational scale.`,
+        callout: {
+          type: "default",
+          label: "Scope Is the Ladder",
+          text: "Promotion is fundamentally about demonstrating that you already operate at the next level. Asking for a promotion before demonstrating the behaviours is common and ineffective. Operating at the next level consistently, then asking for the title to match, is the sequence that works. The gap is usually: at what scope does your influence extend?"
+        },
+        callout2: {
+          type: "focus",
+          label: "The Senior Engineer Shift",
+          text: "The most important shift in a senior engineer career is moving from 'how do I build this?' to 'should we build this, and if so, why this way?' Questioning requirements, surfacing trade-offs, and thinking about long-term maintainability are senior behaviours. Junior engineers implement the plan. Senior engineers shape the plan."
+        },
+        hint: `The engineers who get promoted aren't necessarily the best coders. They're the ones who make their teams more effective. Code quality matters. Communication matters more at senior levels. Making your work legible to others \u2014 well-documented PRs, clear design docs, proactive updates \u2014 is what gets you noticed for promotion.\n\n<strong>Ask for a career growth conversation early:</strong> In your first three months, ask your manager what the next level looks like and what you'd need to demonstrate to get there. This conversation aligns you and gives you a target. Many engineers wait for their annual review to get this information \u2014 that's a year of potentially growing in the wrong direction.\n\n<strong>The hidden key to promotion:</strong> Make your manager's job easier. Proactively communicate what you're working on, flag blockers early, and handle the things in your scope without requiring follow-up. Managers promote engineers whose work they trust to be visible and complete.`,
+        quiz: {
+          question: "A mid-level engineer consistently delivers high-quality code on assigned tasks but rarely participates in technical discussions and has not mentored any junior engineers. What is the most accurate assessment of their career progression?",
+          options: ["They're ready for senior and should request a promotion based on their code quality", "They're demonstrating mid-level competence but missing the broader contributions (technical leadership, mentoring, independent problem scoping) required for senior", "They should focus on shipping faster before worrying about mentoring", "Their situation is fine \u2014 code quality is the primary criterion for promotion"],
+          correct: 1,
+          feedback: "Senior engineering is not a function of code quality alone. A mid-level engineer who executes assigned tasks well is meeting the mid-level bar. Senior requires demonstrating expanded scope: contributing to technical direction, mentoring others, taking ownership of ambiguous problems, and making the team more effective. These are different skills that require deliberate development alongside technical craft."
+        },
+        checklist: ["I understand the levels of an engineering career ladder and what each requires", "I know what operating at the next level above mine looks like concretely", "I've had a career growth conversation with my manager about what promotion requires", "I understand that senior engineering is about team multiplier effect, not just personal output", "I actively look for opportunities to mentor more junior engineers"]
+      },
+      {
+        id: "7-9",
+        title: "Engineering Leadership",
+        body: `Engineering leadership is not the same as engineering management. Management involves direct reports, performance reviews, headcount, and organisational structure. Leadership is about influence \u2014 shaping how technical work gets done, setting standards, enabling other engineers, and moving the organisation in the right direction. You can lead without being a manager. You can be a manager without leading. The best engineering organisations have both.\n\nTechnical leadership at the senior and staff level manifests in specific behaviours. Writing design docs that help the team make better decisions. Setting up coding standards that reduce review friction. Giving talks that transfer knowledge across teams. Mentoring engineers who then mentor others. Identifying the technical problem the company doesn't know it has yet \u2014 and driving the solution. These compound over time and their impact is felt long after the individual engineer has moved on.\n\nEngineering management is a separate career track that some engineers choose. The manager's job is to ensure the team has clear goals, the context to make good decisions, the feedback to grow, and the support to remove blockers. Good engineering managers were usually strong engineers first \u2014 the technical credibility is needed to have informed conversations about trade-offs and to earn team trust. But the skills are genuinely different: coaching, hiring, performance management, and cross-functional coordination are not extensions of coding skills.\n\nThe most common mistake in the engineering-to-management transition: continuing to do the engineering work rather than enabling others to do it. A manager who codes instead of coaching is getting in their reports' way. The hardest part of the transition is that shipping code feels productive and impactful in an immediate, measurable way. Enabling someone else to grow and ship is slower feedback and less personally visible. The leverage ratio is completely different \u2014 ten engineers shipping well is 10x a single manager shipping well \u2014 but it takes time to feel that.\n\nMany engineers find that the technical leadership path \u2014 Staff, Principal, Distinguished Engineer \u2014 is more aligned with what they actually want than people management. This path is available at most large tech companies now, and it's a legitimate, senior, and well-compensated path. The decision between IC (individual contributor) and management is not a judgment about ambition. It's a judgment about where you create the most value and what work you find fulfilling.`,
+        callout: {
+          type: "default",
+          label: "Leadership Is a Practice",
+          text: "Engineering leadership is not a title conferred on you. It's a set of behaviours practised consistently: sharing knowledge, raising the team's quality bar, mentoring, asking the inconvenient questions, and taking ownership of problems that don't have a clear owner. These behaviours are available to engineers at every level."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Manager's Primary Job",
+          text: "A good engineering manager's job is not to have the best technical ideas \u2014 it's to create the conditions where the team produces good technical ideas. That means clear goals, psychological safety, useful feedback, and protection from organisational noise. Managers who substitute their technical opinions for their reports' are underusing their engineers and over-using themselves."
+        },
+        hint: `The question of whether to go into management should be answered by what you want to do every day, not by what you think is more prestigious or better paid. Management involves significantly more communication, less coding, and different sources of satisfaction. Take an honest inventory before deciding.\n\n<strong>Try leadership before committing to management:</strong> Mentor a junior engineer. Lead a design doc process. Run a team retrospective. Own a cross-team technical initiative. These give you real data about whether leadership work is energising or draining for you.\n\n<strong>On the staff engineer path:</strong> The Staff+ track requires that your influence extends meaningfully beyond your immediate team. This usually means driving alignment across teams, setting technical standards, and identifying and solving the problems that are blocking multiple teams. If your influence is mostly within your team, you're operating at the senior level regardless of title.`,
+        quiz: {
+          question: "A senior engineer is considering whether to pursue engineering management or the staff individual contributor track. What is the most useful framework for making this decision?",
+          options: ["Choose management \u2014 it has higher compensation and more career progression", "Choose staff IC \u2014 staying technical is always better than going into management", "Reflect on what you want to do daily: management is primarily coaching, communication, and organisational coordination; staff IC is primarily technical leadership and cross-team influence. Choose based on which work you find energising", "Ask your current manager what they recommend based on your skills"],
+          correct: 2,
+          feedback: "The IC vs management decision is fundamentally about what kind of work you find meaningful and energising. Compensation is similar at senior levels across both tracks. Prestige is not a useful criterion. Your manager's recommendation is input, not the answer. The people who make the transition successfully and stay effective are those who genuinely want to do the work of management \u2014 not those who thought it was the next logical step."
+        },
+        checklist: ["I understand the difference between engineering leadership and engineering management", "I know what the Staff/Principal IC path looks like at companies I'm interested in", "I've tried leadership behaviours (mentoring, design docs, standards-setting) to get real data on what they're like", "I understand that management is a career change, not a promotion", "I can articulate which type of work I find more energising: technical leadership or people management"]
+      },
+      {
+        id: "7-10",
+        title: "The Long Game",
+        body: `A software engineering career is not a sprint to a destination. It's a compounding investment that pays increasing returns over time if the fundamentals are right. The engineers who are most effective at 15 years in are not those who learned the most frameworks. They're the ones who built deep judgment, maintained intellectual curiosity, cultivated strong professional relationships, and developed the communication skills to translate technical decisions into terms non-technical stakeholders can act on.\n\nLearning strategy changes as you become more senior. Early career: learn the fundamentals deeply (algorithms, systems, the properties of the languages you use). Mid career: learn adjacent skills that multiply your effectiveness (product thinking, data fluency, communication). Senior and above: learn through doing high-stakes, high-ambiguity work that you haven't done before. The frontier moves. Your learning approach should move with it.\n\nRelationships are professional infrastructure. The engineers you work with closely in your 20s and 30s become the senior leaders who recommend you for roles, invest in your startup, or invite you into interesting projects in your 40s. Technical skill gets you in the room; relationships keep you in the network. This is not cynical \u2014 it's the observed mechanics of how careers actually work. Build genuine relationships, not transactional ones.\n\nBurnout is a real occupational hazard in engineering. High cognitive load, deadline pressure, always-on communication, and the pressure to keep up with a rapidly evolving field can accumulate into exhaustion that doesn't respond to a week off. The engineers who avoid burnout share practices: they protect focused work time aggressively, they maintain interests outside engineering, they set sustainable pace expectations rather than heroic ones, and they escalate scope creep before it becomes overtime.\n\nThe honest truth about the long game: most of what you learn in the first two years of your career will be superseded. The frameworks will change. The languages will evolve. The architectures will shift. What won't change: your ability to learn, to think systematically, to communicate clearly, and to build trust with the people you work with. Invest disproportionately in those fundamentals.`,
+        callout: {
+          type: "default",
+          label: "Fundamentals Over Frameworks",
+          text: "React will be replaced. Node will evolve. Kubernetes will be abstracted away. The fundamentals \u2014 how computers work, how networks work, how databases work, how to reason about complexity \u2014 will not be replaced. Every hour invested in fundamentals compounds across every technology you'll ever use. Every hour invested in framework-specific knowledge has a deprecation date."
+        },
+        callout2: {
+          type: "focus",
+          label: "Pace Is Strategy",
+          text: "Sustained 60-hour weeks produce less output than consistent 40-hour weeks over a year because of the cognitive degradation that accumulates. Engineering that requires heroic effort to maintain is poorly structured engineering. Optimise for a pace you can sustain for decades, not sprints you can sustain for months. The engineers with the most impact over long careers are almost uniformly those who worked sustainably."
+        },
+        hint: `The most underrated long-game move: staying curious about the work itself. The engineers who remain excellent at 20 years are genuinely interested in the craft \u2014 they're excited about new ideas not because they need to be but because they still find them interesting. If you stop finding the work interesting, that's worth taking seriously as information, not suppressing.\n\n<strong>Career insurance:</strong> Write. Teach. Speak. Engineers with a public record of their thinking \u2014 blog posts, talks, open source, documented work \u2014 are resilient to layoffs and downturns in ways that engineers who only work internally are not. A public record is career insurance.\n\n<strong>On regrets:</strong> The most common regret engineers report late in their careers is not writing enough, not building enough in public, and not investing enough in relationships. The technical skills were fine. The artefacts and connections that would have made the work visible and durable are what was missing. Start now. Literally now.`,
+        quiz: {
+          question: "A mid-career engineer has mastered their current tech stack and is trying to decide where to invest learning time next. What investment will compound most over a 20-year career?",
+          options: ["Learning the newest JavaScript framework to stay current with the ecosystem", "Deepening fundamentals (systems, networks, databases) and building communication skills that apply across all technologies", "Specialising further in their current stack to become the company expert", "Focusing purely on shipping features to build a track record of output"],
+          correct: 1,
+          feedback: "Frameworks are replaced on 3-5 year cycles. Fundamentals and communication skills compound across every technology change for an entire career. The engineer who deeply understands databases can adapt to any new database tool. The engineer who can communicate clearly can work with any team, any technology, any business context. The return on investment for fundamentals and communication massively exceeds the return on any single framework over a 20-year horizon."
+        },
+        checklist: ["I understand that engineering is a long compounding investment, not a series of short sprints", "I have a sustainable learning approach that doesn't require heroic effort to maintain", "I'm investing in professional relationships, not just technical skills", "I know the signs of burnout and have strategies to prevent it", "I'm building public artefacts (writing, open source, documentation) that create a durable record of my work"]
+      }
     ]
   }
 ];
