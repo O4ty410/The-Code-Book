@@ -3427,7 +3427,7 @@ function renderNav() {
   if (!nav) return;
   nav.innerHTML = FLOORS.map(function(f, fi) {
     var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
-    var isGuestLocked = isGuest && fi >= 2;
+    var isGuestLocked = false;
     var isActive = fi === state.currentFloor - 1;
     var isComplete = isFloorComplete(fi);
     var sections = isActive ? f.sections.map(function(s, si) {
@@ -3466,11 +3466,6 @@ function updateProgress() {
   if (lsp) lsp.textContent = pct + '%';
 }
 function goToFloor(fi) {
-  // Guest users can only access floors 1 and 2
-  if (isGuest && fi >= 2) {
-    showGuestLockPopup();
-    return;
-  }
   var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
   if (!isUnlocked) {
     // Find which sections are still incomplete on the previous floor
