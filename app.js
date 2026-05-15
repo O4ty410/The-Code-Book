@@ -2582,9 +2582,9 @@ function startLandingCanvas() {
     return {
       phase:     Math.random() * Math.PI * 2,
       speed:     0.25 + Math.random() * 0.9,
-      baseAlpha: 0.055 + Math.random() * 0.055,
+      baseAlpha: 0.16 + Math.random() * 0.12,
       spark:     0,
-      sparkDecay: 1.4 + Math.random() * 1.8,
+      sparkDecay: 1.2 + Math.random() * 1.4,
       sparkColor: Math.random() > 0.5 ? 0 : 1, // 0=cyan, 1=green
     };
   });
@@ -2623,21 +2623,24 @@ function startLandingCanvas() {
     lines.forEach(function(line, i) {
       var s = ls[i];
       var twinkle = 0.5 + 0.5 * Math.sin(s.phase + t * s.speed);
-      var a = s.baseAlpha * (0.55 + 0.45 * twinkle);
+      var a = s.baseAlpha * (0.35 + 0.65 * twinkle);
 
       if (s.spark > 0) {
         s.spark = Math.max(0, s.spark - dt * s.sparkDecay);
       }
 
       var glowing = s.spark > 0.05;
-      var fa = Math.min(0.88, a + s.spark * 0.60);
+      var fa = Math.min(0.95, a + s.spark * 0.75);
 
       ctx.save();
       if (glowing) {
         ctx.shadowColor = s.sparkColor === 0
-          ? 'rgba(0,230,255,' + (s.spark * 0.85).toFixed(2) + ')'
-          : 'rgba(0,255,160,' + (s.spark * 0.85).toFixed(2) + ')';
-        ctx.shadowBlur = 7 + s.spark * 14;
+          ? 'rgba(0,230,255,' + (s.spark * 0.95).toFixed(2) + ')'
+          : 'rgba(0,255,160,' + (s.spark * 0.95).toFixed(2) + ')';
+        ctx.shadowBlur = 12 + s.spark * 24;
+      } else {
+        ctx.shadowColor = 'rgba(80,200,195,0.35)';
+        ctx.shadowBlur = 4;
       }
       ctx.fillStyle = 'rgba(80,200,195,' + fa.toFixed(3) + ')';
       ctx.fillText(line[2], line[0] * W, line[1] * H);

@@ -175,11 +175,12 @@
 }
 
 .landing-title {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Orbitron', sans-serif;
   font-size: clamp(42px, 9vw, 96px);
-  font-weight: 700;
+  font-weight: 900;
   color: #e8f4ff;
   line-height: 1.0;
+  letter-spacing: -1px;
   margin-bottom: 22px;
   animation: fadeUp 0.7s ease forwards 0.3s;
   opacity: 0;
