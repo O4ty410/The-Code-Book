@@ -2711,7 +2711,7 @@ body.learn-mode #main-col {
   min-height: calc(100vh - 52px);
 }
 
-.fc-header { margin-bottom: 28px; }
+.fc-header { margin-bottom: 28px; text-align: center; }
 
 .fc-header-label {
   font-size: 10px;
@@ -2719,15 +2719,34 @@ body.learn-mode #main-col {
   color: #00d4ff;
   text-transform: uppercase;
   margin-bottom: 10px;
+  display: block;
 }
 
 .fc-header-title {
   font-size: clamp(28px, 4vw, 46px);
   font-weight: 800;
-  color: #d0eeff;
   line-height: 1.1;
   margin-bottom: 10px;
   font-family: 'IBM Plex Mono', monospace;
+  background: linear-gradient(
+    90deg,
+    #7eb8c8 0%,
+    #d0eeff 30%,
+    rgba(255,255,255,0.95) 50%,
+    #d0eeff 70%,
+    #7eb8c8 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: fcTitleShimmer 3.5s linear infinite;
+}
+
+@keyframes fcTitleShimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
 }
 
 .fc-header-sub {
@@ -2776,7 +2795,7 @@ body.learn-mode #main-col {
   flex: 1;
   min-width: 118px;
   background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
-  border: 1px solid #0c1c30;
+  border: 1px solid rgba(var(--fc-color-rgb, 200,169,110), 0.25);
   border-radius: 14px;
   padding: 16px 12px 14px;
   position: relative;
@@ -2787,11 +2806,14 @@ body.learn-mode #main-col {
   text-align: center;
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
   overflow: visible;
+  box-shadow: 0 0 10px var(--fc-glow, rgba(200,169,110,0.12)),
+              0 2px 12px rgba(0,0,0,0.45);
 }
 
 .fc-card:hover:not(.fc-card-locked) {
   border-color: var(--fc-color, #c8a96e);
-  box-shadow: 0 0 22px var(--fc-glow, rgba(200,169,110,0.22)),
+  box-shadow: 0 0 30px var(--fc-glow, rgba(200,169,110,0.40)),
+              0 0 12px var(--fc-glow, rgba(200,169,110,0.20)),
               0 6px 28px rgba(0,0,0,0.55);
   transform: translateY(-4px);
 }
@@ -2806,6 +2828,8 @@ body.learn-mode #main-col {
 .fc-card-locked {
   opacity: 0.50;
   cursor: default;
+  box-shadow: none !important;
+  border-color: #0c1c30 !important;
 }
 .fc-card-locked:hover { transform: none !important; box-shadow: none !important; border-color: #0c1c30 !important; }
 
