@@ -1949,7 +1949,8 @@
 
 .mmo-options {
   display: flex;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
   justify-content: center;
 }
 
@@ -1987,6 +1988,18 @@
   letter-spacing: 1px;
   color: rgba(120, 170, 210, 0.55);
   line-height: 1.5;
+}
+
+.mmo-btn-featured {
+  background: rgba(200, 150, 30, 0.10);
+  border-color: rgba(220, 170, 50, 0.40);
+}
+.mmo-btn-featured:hover {
+  background: rgba(200, 150, 30, 0.20);
+  border-color: rgba(240, 190, 70, 0.65);
+}
+.mmo-btn-featured .mmo-btn-title {
+  color: rgba(240, 200, 110, 0.95);
 }
 
 /* ── Arrival screen ──────────────────────────────────────────────────────────── */
