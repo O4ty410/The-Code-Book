@@ -3005,6 +3005,80 @@ body.learn-mode #main-col {
   margin-bottom: 6px;
 }
 
+/* Sage pose stage inside the floor info modal */
+.fc-modal-sage {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: rgba(0, 180, 255, 0.05);
+  border: 1px solid rgba(0, 180, 255, 0.12);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 14px 0 20px;
+}
+
+.fc-sage-figure {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 52px;
+}
+
+.fc-sage-owl {
+  font-size: 38px;
+  line-height: 1;
+  display: inline-block;
+  filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.55));
+}
+
+.fc-sage-cane {
+  width: 4px;
+  height: 44px;
+  background: linear-gradient(180deg, rgba(200,180,130,0.90) 0%, rgba(160,130,80,0.60) 100%);
+  border-radius: 3px;
+  margin-top: 2px;
+  transform-origin: top center;
+  position: relative;
+}
+
+/* Knob at the top of the cane */
+.fc-sage-cane::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: rgba(210,180,110,0.95);
+  border-radius: 50%;
+  box-shadow: 0 0 6px rgba(200,169,110,0.60);
+}
+
+/* Rubber tip at the bottom */
+.fc-sage-cane::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background: rgba(80,80,80,0.80);
+  border-radius: 50%;
+}
+
+.fc-sage-quote {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  color: rgba(180, 220, 255, 0.85);
+  line-height: 1.6;
+  flex: 1;
+}
+
 .fc-modal-sub {
   font-family: 'Inter', sans-serif;
   font-size: 13px;

@@ -4460,6 +4460,24 @@ var FC_FLOOR_TOPICS = [
 
 var FC_FLOOR_ICONS = ['🧠', '🌐', '⚡', '💡', '🔧', '🚀', '🏆'];
 
+var FC_SAGE_POSES = [
+  // Floor 1: Classic lecturer — cane angled forward, owl facing right
+  { flip: 1,  angle: 28,  quote: 'Every expert started exactly here. Take your time.' },
+  // Floor 2: Leaning in — cane pointing at the page
+  { flip: 1,  angle: 50,  quote: 'The web is three files working together. Simple as that.' },
+  // Floor 3: Energetic — cane thrust forward
+  { flip: -1, angle: -30, quote: 'This floor changes everything. Pay close attention.' },
+  // Floor 4: Thoughtful — cane horizontal like a pointer
+  { flip: 1,  angle: 80,  quote: 'This is where you start thinking like a developer.' },
+  // Floor 5: Firm — cane planted straight down
+  { flip: 1,  angle: 10,  quote: 'Front end. Back end. One mind.' },
+  // Floor 6: Surveying — cane swept wide
+  { flip: -1, angle: -55, quote: 'Many paths open from here. All of them good.' },
+  // Floor 7: Triumphant — cane raised high like a scepter
+  { flip: 1,  angle: -70, quote: 'Your final floor. You have come a long way.' },
+];
+
+
 function toggleFloorInfo(fi) {
   var overlay = document.getElementById('fc-modal-overlay');
   if (!overlay) return;
@@ -4477,6 +4495,16 @@ function toggleFloorInfo(fi) {
   document.getElementById('fc-modal-title').textContent = floor.title;
   var topics = FC_FLOOR_TOPICS[fi] || [];
   document.getElementById('fc-modal-list').innerHTML = topics.map(function(t) { return '<li>' + t + '</li>'; }).join('');
+  var pose = FC_SAGE_POSES[fi] || FC_SAGE_POSES[0];
+  var sageEl = document.getElementById('fc-modal-sage');
+  if (sageEl) {
+    sageEl.innerHTML =
+      '<div class="fc-sage-figure">' +
+        '<span class="fc-sage-owl" style="transform:scaleX(' + pose.flip + ')">🦉</span>' +
+        '<div class="fc-sage-cane" style="transform:rotate(' + pose.angle + 'deg)"></div>' +
+      '</div>' +
+      '<div class="fc-sage-quote">' + pose.quote + '</div>';
+  }
   overlay.classList.remove('fc-modal-hidden');
   document.body.style.overflow = 'hidden';
 }
@@ -4577,6 +4605,7 @@ function renderLearnHub() {
       '<div class="fc-modal-badge" id="fc-modal-badge"></div>' +
       '<div class="fc-modal-icon" id="fc-modal-icon"></div>' +
       '<div class="fc-modal-title" id="fc-modal-title"></div>' +
+      '<div class="fc-modal-sage" id="fc-modal-sage"></div>' +
       '<div class="fc-modal-sub">What\'s covered in this floor</div>' +
       '<ul class="fc-modal-list" id="fc-modal-list"></ul>' +
     '</div>' +
