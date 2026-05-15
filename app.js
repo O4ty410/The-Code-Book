@@ -4275,13 +4275,18 @@ function timeAgo(ts) {
 }
 
 // \u2500\u2500 FLOOR 1 LAYOUT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+function toggleFloorInfo(fi) {
+  var panel = document.getElementById('fc-info-' + fi);
+  if (!panel) return;
+  panel.classList.toggle('fc-info-open');
+}
+
 function renderLearnHub() {
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
   var grid = document.querySelector('.app-grid');
   if (grid) grid.style.gridTemplateColumns = '1fr';
 
-  // Stats
   var sectionIds = new Set();
   FLOORS.forEach(function(f) { f.sections.forEach(function(s) { sectionIds.add(s.id); }); });
   var totalSecs = sectionIds.size;
@@ -4289,98 +4294,99 @@ function renderLearnHub() {
   var pct = totalSecs > 0 ? Math.round((doneSecs / totalSecs) * 100) : 0;
   var floorsComplete = FLOORS.filter(function(f, fi) { return isFloorComplete(fi); }).length;
   var currentFloorIdx = state.currentFloor - 1;
-  var currentFloor = FLOORS[currentFloorIdx] || FLOORS[0];
 
-  // Floor pills for the Learning Floors card
-  var pillsHtml = FLOORS.map(function(f, fi) {
-    var done = isFloorComplete(fi);
-    var active = fi === currentFloorIdx;
+  var floorTopics = [
+    ['How the Internet Actually Works', 'How a Computer Reads Instructions', 'The Logic Behind All Code', 'Your First Look at Real Code', 'Floor 1 Check &mdash; Explain It Back'],
+    ['What HTML Is', 'What CSS Is', 'How a Browser Renders Code', 'Building Your First Page', 'Styling Basics', 'The Box Model', 'Flexbox Layout', 'Building a Real Component', 'Profile Page Project', 'Solo Project &mdash; No Template'],
+    ['What JavaScript Does', 'Variables and Data Types', 'Logic and Conditions', 'Functions', 'Loops', 'Arrays and Objects', 'DOM Manipulation', 'Events', 'Error Handling and Debugging', 'Guided To-Do List Project', 'Solo Interactive Project', 'Floor Check'],
+    ['How Developers Think', 'Reading Documentation', 'What APIs Are', 'Fetch and Async/Await', 'Local Storage', 'Error Handling at Scale', 'Git and Version Control', 'Debugging Like a Developer', 'Weather App with Real API', 'Quiz App with Score Tracking', 'Solo Project &mdash; No Brief', 'Code Review of Own Work'],
+    ['What Full Stack Means', 'How Servers Work', 'Databases', 'Authentication', 'Node and Express', 'Connecting to a Database', 'Building a REST API', 'Environment Variables and Security', 'Deployment', 'Connecting Frontend to Backend', 'Guided Full Stack Notes App', 'Adding Authentication', 'Deploying It Live', 'Solo Full Stack Project'],
+    ['The Fork in the Road', 'Frontend Engineering', 'Backend Engineering', 'Full Stack vs Specialised', 'Mobile Development', 'DevOps and Cloud Infrastructure', 'Data Engineering', 'AI and ML Engineering', 'Security Engineering', 'Building a Portfolio That Works', 'Technical Interview Preparation', 'Open Source Contribution', 'Building in Public', 'Choosing Your First Role'],
+    ['Your First Week', 'Reading a Large Codebase', 'Code Reviews', 'Technical Debt and Refactoring', 'System Design', 'Engineering in Teams', 'Production and On-Call', 'The Career Ladder', 'Engineering Leadership', 'The Long Game']
+  ];
+
+  function hexGlow(hex) {
+    var r = parseInt(hex.slice(1,3), 16);
+    var g = parseInt(hex.slice(3,5), 16);
+    var b = parseInt(hex.slice(5,7), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',0.28)';
+  }
+
+  var cardsHtml = FLOORS.map(function(f, fi) {
+    var color = f.color || '#c8a96e';
+    var glow  = hexGlow(color);
+    var done  = isFloorComplete(fi);
     var unlocked = fi === 0 || isFloorComplete(fi - 1);
-    var pillClass = 'ch-pill' + (done ? ' ch-pill-done' : active ? ' ch-pill-active' : unlocked ? ' ch-pill-open' : ' ch-pill-locked');
-    var click = unlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
-    return '<div class="' + pillClass + '" style="--pill-color:' + (f.color || '#c8a96e') + '"' + click + '>F' + (fi + 1) + (done ? ' ✓' : '') + '</div>';
+    var floorDone  = f.sections.filter(function(s) { return state.completed[s.id]; }).length;
+    var floorTotal = f.sections.length;
+    var floorPct   = floorTotal > 0 ? Math.round((floorDone / floorTotal) * 100) : 0;
+    var isActive   = !done && fi === currentFloorIdx;
+
+    var statusClass, statusText;
+    if (done) {
+      statusClass = 'fc-status fc-status-done'; statusText = '&#10003; Complete';
+    } else if (isActive) {
+      statusClass = 'fc-status fc-status-active'; statusText = 'In Progress';
+    } else if (unlocked) {
+      statusClass = 'fc-status fc-status-open'; statusText = 'Available';
+    } else {
+      statusClass = 'fc-status fc-status-locked'; statusText = '&#128274; Locked';
+    }
+
+    var numStr    = (fi + 1 < 10 ? '0' : '') + (fi + 1);
+    var clickAttr = unlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
+    var cardClass = 'fc-card' + (unlocked ? '' : ' fc-card-locked');
+    var topics    = floorTopics[fi] || [];
+    var topicsHtml = topics.map(function(t) { return '<li>' + t + '</li>'; }).join('');
+    var infoBtn   = unlocked
+      ? '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>'
+      : '';
+
+    return '<div class="' + cardClass + '" style="--fc-color:' + color + ';--fc-glow:' + glow + '"' + clickAttr + '>' +
+      '<div class="fc-accent"></div>' +
+      '<div class="fc-num">' + numStr + '</div>' +
+      '<div class="fc-title">' + f.title + '</div>' +
+      '<div class="fc-sub">' + (f.subtitle || '') + '</div>' +
+      '<div class="fc-progress-wrap">' +
+        '<div class="fc-progress-track"><div class="fc-progress-fill" style="width:' + floorPct + '%"></div></div>' +
+        '<div class="fc-progress-text">' + floorDone + ' / ' + floorTotal + ' sections</div>' +
+      '</div>' +
+      '<div class="fc-footer">' +
+        '<span class="' + statusClass + '">' + statusText + '</span>' +
+        infoBtn +
+      '</div>' +
+      '<div class="fc-info-panel" id="fc-info-' + fi + '">' +
+        '<div class="fc-info-title">What\'s covered</div>' +
+        '<ul class="fc-info-list">' + topicsHtml + '</ul>' +
+      '</div>' +
+    '</div>';
   }).join('');
 
-  // Continue button label
-  var continueDoneSecs = currentFloor.sections.filter(function(s) { return state.completed[s.id]; }).length;
-  var continueLabel = continueDoneSecs > 0 ? 'Continue — ' + currentFloor.title : 'Start — ' + currentFloor.title;
-
-  // Overall progress bar
   var overallBar = '<div class="ch-overall-bar-wrap">' +
     '<div class="ch-overall-bar"><div class="ch-overall-fill" style="width:' + pct + '%"></div></div>' +
-    '<span class="ch-overall-label">' + pct + '% complete</span>' +
+    '<span class="ch-overall-label">' + pct + '% complete overall</span>' +
     '</div>';
 
-  var html = '<div class="ch-layout">' +
-
-    // Header
-    '<div class="ch-header">' +
-    '<div class="ch-header-label">Code Hub</div>' +
-    '<div class="ch-header-title">What do you want to work on?</div>' +
-    overallBar +
+  var html = '<div class="fc-hub">' +
+    '<div class="fc-header">' +
+      '<div class="fc-header-label">Your Learning Path</div>' +
+      '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
+      '<div class="fc-header-sub">Work through each floor in order. Each one builds directly on the last.</div>' +
+      '<div style="margin-top:18px;">' + overallBar + '</div>' +
     '</div>' +
-
-    // Stats row
-    '<div class="ch-stats">' +
-    '<div class="ch-stat"><div class="ch-stat-val">' + doneSecs + '</div><div class="ch-stat-label">Sections done</div></div>' +
-    '<div class="ch-stat"><div class="ch-stat-val">' + (state.xp || 0) + '</div><div class="ch-stat-label">XP earned</div></div>' +
-    '<div class="ch-stat"><div class="ch-stat-val">' + (state.streak || 0) + '</div><div class="ch-stat-label">Day streak</div></div>' +
-    '<div class="ch-stat"><div class="ch-stat-val">' + floorsComplete + '</div><div class="ch-stat-label">Floors complete</div></div>' +
+    '<div class="fc-stats">' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + doneSecs + '</div><div class="fc-stat-label">Sections done</div></div>' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + (state.xp || 0) + '</div><div class="fc-stat-label">XP earned</div></div>' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + (state.streak || 0) + '</div><div class="fc-stat-label">Day streak</div></div>' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + floorsComplete + '</div><div class="fc-stat-label">Floors complete</div></div>' +
     '</div>' +
-
-    // Category label
-    '<div class="ch-section-label">Categories</div>' +
-
-    // Grid
-    '<div class="ch-grid">' +
-
-    // Learning Floors — featured card
-    '<div class="ch-card ch-card-featured" onclick="goToFloor(' + currentFloorIdx + ')">' +
-    '<div class="ch-card-accent" style="background:linear-gradient(90deg,' + (currentFloor.color || '#c8a96e') + ',#9a7ec8)"></div>' +
-    '<div class="ch-card-badge ch-badge-live">Live</div>' +
-    '<div class="ch-card-icon">&#128218;</div>' +
-    '<div class="ch-card-tag">Main Course</div>' +
-    '<div class="ch-card-title">Learning Floors</div>' +
-    '<div class="ch-card-desc">A structured path from zero to professional engineer — 7 floors, 72 sections. Work through each floor at your own pace.</div>' +
-    '<div class="ch-pills">' + pillsHtml + '</div>' +
-    '<div class="ch-card-progress-wrap">' +
-    '<div class="ch-card-progress-track"><div class="ch-card-progress-fill" style="width:' + pct + '%;background:' + (currentFloor.color || '#c8a96e') + '"></div></div>' +
-    '<div class="ch-card-progress-text">' + doneSecs + ' of ' + totalSecs + ' sections complete</div>' +
-    '</div>' +
-    '<button class="ch-btn ch-btn-primary" onclick="event.stopPropagation();goToFloor(' + currentFloorIdx + ')">' + continueLabel + ' →</button>' +
-    '</div>' +
-
-    // Practice — coming soon
-    '<div class="ch-card ch-card-locked">' +
-    '<div class="ch-card-accent" style="background:#1e1e1e"></div>' +
-    '<div class="ch-card-lock">&#128274;</div>' +
-    '<div class="ch-card-badge ch-badge-soon">Coming soon</div>' +
-    '<div class="ch-card-icon">&#9889;</div>' +
-    '<div class="ch-card-tag">Drills</div>' +
-    '<div class="ch-card-title">Practice</div>' +
-    '<div class="ch-card-desc">Short focused exercises to reinforce what you’ve learned. No setup required.</div>' +
-    '<button class="ch-btn ch-btn-secondary" disabled>Coming soon</button>' +
-    '</div>' +
-
-    // Projects — coming soon
-    '<div class="ch-card ch-card-locked">' +
-    '<div class="ch-card-accent" style="background:#1e1e1e"></div>' +
-    '<div class="ch-card-lock">&#128274;</div>' +
-    '<div class="ch-card-badge ch-badge-soon">Coming soon</div>' +
-    '<div class="ch-card-icon">&#128296;</div>' +
-    '<div class="ch-card-tag">Build</div>' +
-    '<div class="ch-card-title">Projects</div>' +
-    '<div class="ch-card-desc">Guided builds from brief to deployed product. Real things, no toy examples.</div>' +
-    '<button class="ch-btn ch-btn-secondary" disabled>Coming soon</button>' +
-    '</div>' +
-
-    '</div>' + // ch-grid
-    '</div>'; // ch-layout
+    '<div class="fc-section-label">Learning Floors</div>' +
+    '<div class="fc-row">' + cardsHtml + '</div>' +
+  '</div>';
 
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
 }
-
 function renderFloor1(si) {
   var floor = FLOORS[0];
   var fi = 0;
