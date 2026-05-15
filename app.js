@@ -3785,33 +3785,28 @@ if (!section) { return; }
   var showEditor = !!(section.code);
   var showQuiz = !!(section.quiz || section.checklist);
 
-  // Tab bar
+  // Tab bar + go-back button
   var tabs = '<div class="section-tabs-bar">' +
     '<button class="section-tab-btn active" onclick="switchSectionTab(\'read\',\'' + section.id + '\',this)">Read</button>' +
     (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
     (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
-    '</div>';
+    '</div>' +
+    '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
 var fi = state.currentFloor - 1;
-  
+
   // READ
    var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
     '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
     '<div class="floor-title">' + floor.title + '<br><em>' + floor.subtitle + '</em></div>' +
     '<div class="floor-meta">' +
-    '<div class="floor-meta-item"><div class="floor-meta-label">DURATION</div><div class="floor-meta-value">' + floor.duration + '</div></div>' +
-    '<div class="floor-meta-item"><div class="floor-meta-label">SESSIONS</div><div class="floor-meta-value">' + floor.sessions + '</div></div>' +
-    '<div class="floor-meta-item"><div class="floor-meta-label">LENGTH</div><div class="floor-meta-value">' + floor.length + '</div></div>' +
-    '</div></div>' +
-    '<div class="section-content">' +
-    '<div class="section-number">Section ' + (si+1) + ' of ' + floor.sections.length + '</div>' +
-    '<div class="section-title-row"><div class="section-title">' + section.title + '</div>' +
-    (section.hint ? '<button class="hint-btn" onclick="toggleHint(\'hint-' + section.id + '\')" title="Need help?">?</button>' : '') +
+    '<div class="floor-meta-item"><div class="floor-meta-label">SECTION</div><div class="floor-meta-value">' + (si+1) + ' of ' + floor.sections.length + '</div></div>' +
+    '<div class="floor-meta-item floor-meta-listen"><button class="listen-btn" id="listen-btn-' + section.id + '" onclick="toggleNarration(\'' + section.id + '\')"><span class="listen-dot"></span>&#9654; Listen</button></div>' +
+    '<div class="floor-meta-item"><div class="floor-meta-label">OFFLINE</div><div class="floor-meta-value floor-meta-offline"><span class="offline-dot-pulse"></span>Available</div></div>' +
     '</div>' +
-    '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px;">' +
-    '<button class="listen-btn" id="listen-btn-' + section.id + '" onclick="toggleNarration(\'' + section.id + '\')">' +
-    '<span class="listen-dot"></span>&#9654; Listen</button>' +
-    '<span class="offline-pill"><span class="offline-dot-pulse"></span>AVAILABLE OFFLINE</span>' +
-    '</div>';
+    '<div class="floor-section-title">' + section.title + '</div>' +
+    '</div>' +
+    '<div class="section-content">' +
+    (section.hint ? '<button class="hint-btn" onclick="toggleHint(\'hint-' + section.id + '\')" title="Need help?">?</button>' : '');
 
   if (section.hint) {
     r += '<div class="hint-box" id="hint-' + section.id + '">' +
