@@ -145,46 +145,78 @@
 }
 
 /* ============================================================
-   LANDING SCREEN (background.png + Begin button)
+   LANDING SCREEN — animated canvas version
    ============================================================ */
 
-.landing-screen {
-  position: fixed;
-  inset: 0;
-  background: url('./background.png') center center / cover no-repeat;
-  background-color: #0a0a0a;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-top: 420px;
-  z-index: 9999;
-}
-
-.landing-begin-wrap {
+/* Full-screen centred layout */
+.landing-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  padding: 0 24px;
+  width: 100%;
+  max-width: 760px;
 }
 
-.landing-begin-title { display: none; }
-.landing-begin-sub   { display: none; }
+.landing-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(0, 210, 255, 0.65);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  animation: fadeUp 0.7s ease forwards 0.1s;
+  opacity: 0;
+}
+
+.landing-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(42px, 9vw, 96px);
+  font-weight: 700;
+  color: #e8f4ff;
+  line-height: 1.0;
+  margin-bottom: 22px;
+  animation: fadeUp 0.7s ease forwards 0.3s;
+  opacity: 0;
+}
+
+.landing-title span {
+  color: #00d4ff;
+  animation: bookGlow 3s ease-in-out infinite;
+}
+
+.landing-tagline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(15px, 2.2vw, 22px);
+  color: rgba(200, 225, 255, 0.75);
+  line-height: 1.55;
+  margin-bottom: 40px;
+  animation: fadeUp 0.7s ease forwards 0.5s;
+  opacity: 0;
+}
 
 .landing-begin-btn {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 15px;
+  font-size: 14px;
   letter-spacing: 6px;
   text-transform: uppercase;
-  color: #0a0a0a;
+  color: #000e1e;
   background: #7eb8c8;
   border: none;
-  padding: 22px 80px;
+  padding: 20px 80px;
   cursor: pointer;
   border-radius: 2px;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: background 0.25s, transform 0.2s;
+  margin-bottom: 32px;
+  animation: fadeUp 0.7s ease forwards 0.7s;
+  opacity: 0;
 }
 
 .landing-begin-btn:hover {
@@ -192,35 +224,36 @@
   transform: translateY(-2px);
 }
 
-/* ============================================================
-   ALIVE EFFECTS
-   1. Glow pulse on Book. span (enhances image glow)
-   2. Shimmer sweep on BEGIN button
-   ============================================================ */
+.landing-human {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: rgba(100, 150, 180, 0.55);
+  line-height: 1.7;
+  animation: fadeUp 0.7s ease forwards 0.9s;
+  opacity: 0;
+}
+
+/* ── Animations ── */
 
 @keyframes bookGlow {
   0%, 100% {
     text-shadow:
-      0 0 20px rgba(0,220,255,0.4),
-      0 0 40px rgba(0,220,255,0.2),
-      0 0 80px rgba(0,220,255,0.1);
+      0 0 20px rgba(0,220,255,0.45),
+      0 0 50px rgba(0,220,255,0.20),
+      0 0 90px rgba(0,220,255,0.10);
   }
   50% {
     text-shadow:
-      0 0 30px rgba(0,220,255,0.8),
-      0 0 60px rgba(0,220,255,0.5),
-      0 0 100px rgba(0,220,255,0.3),
-      0 0 140px rgba(0,220,255,0.1);
+      0 0 30px rgba(0,220,255,0.90),
+      0 0 65px rgba(0,220,255,0.55),
+      0 0 110px rgba(0,220,255,0.28),
+      0 0 160px rgba(0,220,255,0.10);
   }
 }
 
 @keyframes shimmer {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
-}
-
-.landing-begin-title span {
-  animation: bookGlow 3s ease-in-out infinite;
 }
 
 .landing-begin-btn::after {
@@ -230,13 +263,18 @@
   background: linear-gradient(
     105deg,
     transparent 40%,
-    rgba(255,255,255,0.2) 50%,
+    rgba(255,255,255,0.22) 50%,
     transparent 60%
   );
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
   pointer-events: none;
 }
+
+/* Legacy selectors (kept for safety) */
+.landing-begin-wrap { display: none; }
+.landing-begin-title { display: none; }
+.landing-begin-sub   { display: none; }
 
 /* ============================================================
    AUTH SCREEN COLOUR THEME ORBS

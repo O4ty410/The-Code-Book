@@ -2508,6 +2508,158 @@ function togglePasswordVisibility(inputId, btn) {
   }
 }
 
+// ── Landing canvas: twinkling code background ──────────────────────────────
+
+var _landingRAF = null;
+
+function startLandingCanvas() {
+  var canvas = document.getElementById('landing-canvas');
+  if (!canvas) return;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  canvas._lcResize = resize;
+  window.addEventListener('resize', resize);
+
+  // [x_frac, y_frac, text]
+  var lines = [
+    [0.01, 0.04, 'function fetchData(url) {'],
+    [0.01, 0.07, '  return fetch(url)'],
+    [0.01, 0.09, '    .then(r => r.json())'],
+    [0.01, 0.11, '    .catch(err => null);'],
+    [0.01, 0.13, '}'],
+    [0.01, 0.22, 'const state = { user: null, xp: 0 };'],
+    [0.01, 0.25, 'localStorage.setItem(key,'],
+    [0.01, 0.27, '  JSON.stringify(state));'],
+    [0.01, 0.35, 'try {'],
+    [0.01, 0.37, '  const v = JSON.parse(raw);'],
+    [0.01, 0.39, '  setState(v);'],
+    [0.01, 0.41, '} catch(e) { return false; }'],
+    [0.01, 0.50, 'for (let i = 0; i < n; i++) {'],
+    [0.01, 0.52, '  if (arr[i] > max) max = arr[i];'],
+    [0.01, 0.54, '}'],
+    [0.01, 0.63, 'const lerp = (a, b, t) =>'],
+    [0.01, 0.65, '  a + (b - a) * Math.max(0,'],
+    [0.01, 0.67, '    Math.min(1, t));'],
+    [0.01, 0.76, 'return false;'],
+    [0.01, 0.80, 'export { lerp, clamp, round };'],
+    [0.01, 0.87, 'returnValue = setStateValue(key, v);'],
+    [0.72, 0.03, 'const main = async () => {'],
+    [0.72, 0.05, '  const n = parseInt(input);'],
+    [0.72, 0.07, '  for (let i=2; i<=n; i++) {'],
+    [0.72, 0.09, '    fib[i] = fib[i-1]+fib[i-2];'],
+    [0.72, 0.11, '  }'],
+    [0.72, 0.13, '  return fib[n];'],
+    [0.72, 0.15, '};'],
+    [0.72, 0.24, 'SELECT id, username, email,'],
+    [0.72, 0.26, '       created_at'],
+    [0.72, 0.28, 'FROM users'],
+    [0.72, 0.30, 'WHERE active = 1'],
+    [0.72, 0.32, 'ORDER BY created_at DESC'],
+    [0.72, 0.34, 'LIMIT 50;'],
+    [0.72, 0.43, 'const cloneDeep = (obj) => {'],
+    [0.72, 0.45, '  if (typeof obj !== "object")'],
+    [0.72, 0.47, '    return obj;'],
+    [0.72, 0.49, '  return JSON.parse('],
+    [0.72, 0.51, '    JSON.stringify(obj)'],
+    [0.72, 0.53, '  );'],
+    [0.72, 0.55, '};'],
+    [0.72, 0.64, 'function quickSort(arr) {'],
+    [0.72, 0.66, '  if (!arr.length) return arr;'],
+    [0.72, 0.68, '  const pivot = arr[Math.floor('],
+    [0.72, 0.70, '    arr.length / 2)];'],
+    [0.72, 0.72, '  const left  = arr.filter(x => x < pivot);'],
+    [0.72, 0.74, '  const right = arr.filter(x => x > pivot);'],
+    [0.72, 0.76, '  return [...quickSort(left),'],
+    [0.72, 0.78, '    pivot, ...quickSort(right)];'],
+    [0.72, 0.80, '}'],
+  ];
+
+  var ls = lines.map(function() {
+    return {
+      phase:     Math.random() * Math.PI * 2,
+      speed:     0.25 + Math.random() * 0.9,
+      baseAlpha: 0.055 + Math.random() * 0.055,
+      spark:     0,
+      sparkDecay: 1.4 + Math.random() * 1.8,
+      sparkColor: Math.random() > 0.5 ? 0 : 1, // 0=cyan, 1=green
+    };
+  });
+
+  // Schedule random spark events
+  var _sparkTimer = null;
+  function spark() {
+    var idx = Math.floor(Math.random() * ls.length);
+    ls[idx].spark = 0.65 + Math.random() * 0.35;
+    _sparkTimer = setTimeout(spark, 60 + Math.random() * 200);
+  }
+  spark();
+
+  var t0 = performance.now() / 1000;
+  var lastT = t0;
+
+  function draw() {
+    var now = performance.now() / 1000;
+    var dt  = Math.min(0.05, now - lastT);
+    lastT   = now;
+    var t   = now - t0;
+    var W = canvas.width, H = canvas.height;
+    var ctx = canvas.getContext('2d');
+
+    // Background gradient
+    var bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0,   '#000a18');
+    bg.addColorStop(0.5, '#000d22');
+    bg.addColorStop(1,   '#000814');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.font = '11px "IBM Plex Mono",Consolas,monospace';
+    ctx.textBaseline = 'top';
+
+    lines.forEach(function(line, i) {
+      var s = ls[i];
+      var twinkle = 0.5 + 0.5 * Math.sin(s.phase + t * s.speed);
+      var a = s.baseAlpha * (0.55 + 0.45 * twinkle);
+
+      if (s.spark > 0) {
+        s.spark = Math.max(0, s.spark - dt * s.sparkDecay);
+      }
+
+      var glowing = s.spark > 0.05;
+      var fa = Math.min(0.88, a + s.spark * 0.60);
+
+      ctx.save();
+      if (glowing) {
+        ctx.shadowColor = s.sparkColor === 0
+          ? 'rgba(0,230,255,' + (s.spark * 0.85).toFixed(2) + ')'
+          : 'rgba(0,255,160,' + (s.spark * 0.85).toFixed(2) + ')';
+        ctx.shadowBlur = 7 + s.spark * 14;
+      }
+      ctx.fillStyle = 'rgba(80,200,195,' + fa.toFixed(3) + ')';
+      ctx.fillText(line[2], line[0] * W, line[1] * H);
+      ctx.restore();
+    });
+
+    _landingRAF = requestAnimationFrame(draw);
+  }
+
+  draw();
+  canvas._lcSpark = _sparkTimer;
+}
+
+function stopLandingCanvas() {
+  if (_landingRAF) { cancelAnimationFrame(_landingRAF); _landingRAF = null; }
+  var canvas = document.getElementById('landing-canvas');
+  if (canvas) {
+    if (canvas._lcResize) { window.removeEventListener('resize', canvas._lcResize); canvas._lcResize = null; }
+    if (canvas._lcSpark)  { clearTimeout(canvas._lcSpark); canvas._lcSpark = null; }
+  }
+}
+
 function showAuthFromLanding() {
   // Check if user has already started \u2014 skip auth and go straight in
   const sectionIds = new Set();
@@ -2520,14 +2672,14 @@ function showAuthFromLanding() {
     // Returning user — go straight into the app
     loadState();
     updateStreak();
-    document.getElementById('new-user-landing').style.display = 'none';
+    stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
     document.body.style.overflow = '';
     document.getElementById('app').style.display = 'block';
     applyTheme();
     launchApp();
   } else {
     // New user — show onboarding or auth
-    document.getElementById('new-user-landing').style.display = 'none';
+    stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
     const hasOnboarded = localStorage.getItem('codebook_onboarded');
     if (!hasOnboarded) {
       showOnboarding();
@@ -2631,7 +2783,7 @@ function populateDashboard() {
   // Apply saved cover screen theme (independent from app theme)
   applyCoverTheme(getCoverTheme());
 
-  // Show the BEGIN button overlay
+  // Show the landing overlay and start animated canvas
   var landing = document.getElementById('new-user-landing');
   if (landing) {
     landing.style.display = 'block';
@@ -2642,6 +2794,7 @@ function populateDashboard() {
     landing.style.height = '100vh';
     landing.style.zIndex = '99999';
     landing.style.background = 'transparent';
+    startLandingCanvas();
   }
   var cover = document.getElementById('cover');
   if (cover) cover.style.display = 'none';
@@ -2739,7 +2892,7 @@ async function handleAuth() {
   updateStreak();
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('cover').style.display = 'none';
-  document.getElementById('new-user-landing').style.display = 'none';
+  stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
   document.body.style.overflow = '';
   document.getElementById('app').style.display = 'block';
   applyTheme();
@@ -2751,7 +2904,7 @@ async function onUserLoggedIn() {
   updateStreak();
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('cover').style.display = 'none';
-  document.getElementById('new-user-landing').style.display = 'none';
+  stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
   document.body.style.overflow = '';
   document.getElementById('app').style.display = 'block';
   applyTheme();

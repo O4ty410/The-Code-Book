@@ -359,14 +359,20 @@
 </div>
 
 <!-- NEW USER LANDING -->
-<div id="new-user-landing" style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;">
-  <img src="./background.png" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-1;" alt="">
-  <div class="landing-begin-wrap" style="position:fixed;top:79%;left:50%;transform:translate(-50%,-50%);">
-    <div class="landing-begin-title">The Code <span>Book.</span></div>
-    <div class="landing-begin-sub">A calm path into coding</div>
+<div id="new-user-landing" style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;overflow:hidden;">
+  <!-- Animated twinkling code canvas -->
+  <canvas id="landing-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
+  <!-- Dark centre vignette so text is readable -->
+  <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 55% 65% at 50% 50%,rgba(0,8,20,0.72) 0%,transparent 100%);pointer-events:none;"></div>
+  <!-- Main landing content -->
+  <div class="landing-content" style="position:relative;z-index:2;">
+    <div class="landing-label">A calm path into coding</div>
+    <div class="landing-title">The Code <span>Book.</span></div>
+    <div class="landing-tagline">Learn coding without overwhelm.<br>One clear step at a time.</div>
     <button class="landing-begin-btn" onclick="showAuthFromLanding()">Begin</button>
+    <div class="landing-human">Built for people who overthink, lose focus, or get stuck in tutorials.<br>This is built differently.</div>
   </div>
-  <div id="cover-user" class="cover-user-badge">
+  <div id="cover-user" class="cover-user-badge" style="position:absolute;z-index:3;">
     Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
     <span onclick="signOut()" class="cover-signout-link">Sign out</span>
   </div>
