@@ -489,6 +489,35 @@
 .vb-floor-row.vb-active .vb-fnum { color: var(--accent); }
 
 /* ============================================================
+   GO BACK BUTTON
+   ============================================================ */
+
+.go-back-wrap {
+  padding: 10px 24px 0;
+}
+
+.go-back-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--floor-color, rgba(200,180,130,0.70));
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  opacity: 0.70;
+  transition: opacity 0.2s, color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.go-back-btn:hover {
+  opacity: 1;
+  color: var(--floor-color, #c8a96e);
+}
+
+/* ============================================================
    FLOOR HERO
    ============================================================ */
 
@@ -572,6 +601,38 @@
   text-align: center;
 }
 .floor-meta-item:last-child { border-right: none; }
+
+/* Listen button inside meta bar */
+.floor-meta-listen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.floor-meta-listen .listen-btn {
+  margin: 0;
+  font-size: 12px;
+  padding: 8px 18px;
+}
+
+/* Offline value with pulse dot */
+.floor-meta-offline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Section title inside hero, centred */
+.floor-section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(20px, 3.5vw, 34px);
+  font-weight: 700;
+  color: #e8f2ff;
+  text-align: center;
+  margin-top: 28px;
+  line-height: 1.25;
+  padding: 0 20px;
+}
 
 .floor-meta-label {
   font-family: 'IBM Plex Mono', monospace;
