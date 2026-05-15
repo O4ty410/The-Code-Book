@@ -5959,40 +5959,75 @@ function renderGamePanel() {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
   panel.innerHTML =
-    '<div class="game-hub">' +
-      '<div class="gh-header">' +
-        '<div class="gh-title">GAME HUB</div>' +
-        '<div class="gh-sub">Choose your mission. More games coming soon.</div>' +
+    '<div class="game-hub gh-lights-off" id="game-hub-root">' +
+
+      '<div class="gh-switch-row">' +
+        '<button class="gh-light-switch" onclick="toggleGameLight()" title="Toggle light">' +
+          '<div class="gh-switch-plate">' +
+            '<div class="gh-switch-rocker"></div>' +
+          '</div>' +
+        '</button>' +
       '</div>' +
-      '<div class="gh-grid">' +
 
-        '<div class="gh-card gh-card--active" onclick="launchGame(\'launch-sequence\')">' +
-          '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
-          '<div class="gh-card-icon">🚀</div>' +
-          '<div class="gh-card-name">LAUNCH SEQUENCE</div>' +
-          '<div class="gh-card-desc">Educational sci-fi mission. Repair rocket systems, debug code faults, and launch to Mars.</div>' +
-          '<button class="gh-card-btn">PLAY NOW</button>' +
+      '<div class="gh-dark-overlay" id="gh-dark-overlay">' +
+        '<div class="gh-sage-dark">' +
+          '<div class="gh-sage-owl">&#129417;</div>' +
+          '<div class="gh-sage-msg">Switch on the light to reveal the room.</div>' +
         '</div>' +
-
-        '<div class="gh-card gh-card--locked">' +
-          '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
-          '<div class="gh-card-icon">🔒</div>' +
-          '<div class="gh-card-name">MISSION 2</div>' +
-          '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
-          '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
-        '</div>' +
-
-        '<div class="gh-card gh-card--locked">' +
-          '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
-          '<div class="gh-card-icon">🔒</div>' +
-          '<div class="gh-card-name">MISSION 3</div>' +
-          '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
-          '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
-        '</div>' +
-
       '</div>' +
+
+      '<div class="gh-content">' +
+        '<div class="gh-header">' +
+          '<div class="gh-title">GAME HUB</div>' +
+          '<div class="gh-sub">Choose your mission. More games coming soon.</div>' +
+        '</div>' +
+        '<div class="gh-grid">' +
+
+          '<div class="gh-card gh-card--active" onclick="launchGame(\'launch-sequence\')">' +
+            '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
+            '<div class="gh-card-icon">&#128640;</div>' +
+            '<div class="gh-card-name">LAUNCH SEQUENCE</div>' +
+            '<div class="gh-card-desc">Educational sci-fi mission. Repair rocket systems, debug code faults, and launch to Mars.</div>' +
+            '<button class="gh-card-btn">PLAY NOW</button>' +
+          '</div>' +
+
+          '<div class="gh-card gh-card--locked">' +
+            '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
+            '<div class="gh-card-icon">&#128274;</div>' +
+            '<div class="gh-card-name">MISSION 2</div>' +
+            '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
+            '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
+          '</div>' +
+
+          '<div class="gh-card gh-card--locked">' +
+            '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
+            '<div class="gh-card-icon">&#128274;</div>' +
+            '<div class="gh-card-name">MISSION 3</div>' +
+            '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
+            '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
+          '</div>' +
+
+        '</div>' +
+      '</div>' +
+
     '</div>';
 }
+
+function toggleGameLight() {
+  var root = document.getElementById('game-hub-root');
+  var overlay = document.getElementById('gh-dark-overlay');
+  if (!root) return;
+  if (root.classList.contains('gh-lights-off')) {
+    root.classList.remove('gh-lights-off');
+    root.classList.add('gh-lights-on');
+    if (overlay) overlay.style.display = 'none';
+  } else {
+    root.classList.remove('gh-lights-on');
+    root.classList.add('gh-lights-off');
+    if (overlay) overlay.style.display = 'flex';
+  }
+}
+
 
 function launchGame(gameId) {
   var panel = document.getElementById('panel-game');
