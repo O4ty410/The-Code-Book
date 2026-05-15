@@ -4278,6 +4278,10 @@ function timeAgo(ts) {
 function toggleFloorInfo(fi) {
   var panel = document.getElementById('fc-info-' + fi);
   if (!panel) return;
+  // Close any other open panels first
+  document.querySelectorAll('.fc-info-panel.fc-info-open').forEach(function(p) {
+    if (p.id !== 'fc-info-' + fi) p.classList.remove('fc-info-open');
+  });
   panel.classList.toggle('fc-info-open');
 }
 
@@ -4293,7 +4297,10 @@ function renderLearnHub() {
   var doneSecs = Object.keys(state.completed).filter(function(k) { return sectionIds.has(k) && state.completed[k]; }).length;
   var pct = totalSecs > 0 ? Math.round((doneSecs / totalSecs) * 100) : 0;
   var floorsComplete = FLOORS.filter(function(f, fi) { return isFloorComplete(fi); }).length;
+  var floorsUnlocked = FLOORS.filter(function(f, fi) { return fi === 0 || isFloorComplete(fi - 1); }).length;
   var currentFloorIdx = state.currentFloor - 1;
+
+  var floorIcons = ['&#129504;', '&#127760;', '&#9889;', '&#128161;', '&#128295;', '&#128640;', '&#127942;'];
 
   var floorTopics = [
     ['How the Internet Actually Works', 'How a Computer Reads Instructions', 'The Logic Behind All Code', 'Your First Look at Real Code', 'Floor 1 Check &mdash; Explain It Back'],
@@ -4313,48 +4320,43 @@ function renderLearnHub() {
   }
 
   var cardsHtml = FLOORS.map(function(f, fi) {
-    var color = f.color || '#c8a96e';
-    var glow  = hexGlow(color);
-    var done  = isFloorComplete(fi);
+    var color    = f.color || '#c8a96e';
+    var glow     = hexGlow(color);
+    var done     = isFloorComplete(fi);
     var unlocked = fi === 0 || isFloorComplete(fi - 1);
+    var isActive = !done && fi === currentFloorIdx;
+
     var floorDone  = f.sections.filter(function(s) { return state.completed[s.id]; }).length;
     var floorTotal = f.sections.length;
-    var floorPct   = floorTotal > 0 ? Math.round((floorDone / floorTotal) * 100) : 0;
-    var isActive   = !done && fi === currentFloorIdx;
 
     var statusClass, statusText;
     if (done) {
-      statusClass = 'fc-status fc-status-done'; statusText = '&#10003; Complete';
+      statusClass = 'fc-status fc-status-done';   statusText = '&#10003; Complete';
     } else if (isActive) {
-      statusClass = 'fc-status fc-status-active'; statusText = 'In Progress';
+      statusClass = 'fc-status fc-status-active';  statusText = 'In Progress';
     } else if (unlocked) {
-      statusClass = 'fc-status fc-status-open'; statusText = 'Available';
+      statusClass = 'fc-status fc-status-open';    statusText = 'Available';
     } else {
-      statusClass = 'fc-status fc-status-locked'; statusText = '&#128274; Locked';
+      statusClass = 'fc-status fc-status-locked';  statusText = '&#128274; Locked';
     }
 
-    var numStr    = (fi + 1 < 10 ? '0' : '') + (fi + 1);
-    var clickAttr = unlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
-    var cardClass = 'fc-card' + (unlocked ? '' : ' fc-card-locked');
-    var topics    = floorTopics[fi] || [];
+    var cardClasses = 'fc-card' +
+      (!unlocked ? ' fc-card-locked' : '') +
+      (isActive  ? ' fc-card-active' : '');
+    var clickAttr  = unlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
+    var topics     = floorTopics[fi] || [];
     var topicsHtml = topics.map(function(t) { return '<li>' + t + '</li>'; }).join('');
-    var infoBtn   = unlocked
-      ? '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>'
-      : '';
+    var icon       = floorIcons[fi] || '&#127760;';
+    var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
-    return '<div class="' + cardClass + '" style="--fc-color:' + color + ';--fc-glow:' + glow + '"' + clickAttr + '>' +
+    return '<div class="' + cardClasses + '" style="--fc-color:' + color + ';--fc-glow:' + glow + '"' + clickAttr + '>' +
       '<div class="fc-accent"></div>' +
-      '<div class="fc-num">' + numStr + '</div>' +
+      infoBtn +
+      '<div class="fc-floor-badge">Floor ' + (fi + 1) + '</div>' +
+      '<div class="fc-icon">' + icon + '</div>' +
       '<div class="fc-title">' + f.title + '</div>' +
-      '<div class="fc-sub">' + (f.subtitle || '') + '</div>' +
-      '<div class="fc-progress-wrap">' +
-        '<div class="fc-progress-track"><div class="fc-progress-fill" style="width:' + floorPct + '%"></div></div>' +
-        '<div class="fc-progress-text">' + floorDone + ' / ' + floorTotal + ' sections</div>' +
-      '</div>' +
-      '<div class="fc-footer">' +
-        '<span class="' + statusClass + '">' + statusText + '</span>' +
-        infoBtn +
-      '</div>' +
+      '<div class="fc-sec-count">' + floorDone + '/' + floorTotal + ' sections</div>' +
+      '<span class="' + statusClass + '">' + statusText + '</span>' +
       '<div class="fc-info-panel" id="fc-info-' + fi + '">' +
         '<div class="fc-info-title">What\'s covered</div>' +
         '<ul class="fc-info-list">' + topicsHtml + '</ul>' +
@@ -4364,7 +4366,7 @@ function renderLearnHub() {
 
   var overallBar = '<div class="ch-overall-bar-wrap">' +
     '<div class="ch-overall-bar"><div class="ch-overall-fill" style="width:' + pct + '%"></div></div>' +
-    '<span class="ch-overall-label">' + pct + '% complete overall</span>' +
+    '<span class="ch-overall-label">' + pct + '% complete</span>' +
     '</div>';
 
   var html = '<div class="fc-hub">' +
@@ -4372,15 +4374,14 @@ function renderLearnHub() {
       '<div class="fc-header-label">Your Learning Path</div>' +
       '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
       '<div class="fc-header-sub">Work through each floor in order. Each one builds directly on the last.</div>' +
-      '<div style="margin-top:18px;">' + overallBar + '</div>' +
+      '<div style="margin-top:16px;">' + overallBar + '</div>' +
     '</div>' +
     '<div class="fc-stats">' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + doneSecs + '</div><div class="fc-stat-label">Sections done</div></div>' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + (state.xp || 0) + '</div><div class="fc-stat-label">XP earned</div></div>' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + (state.streak || 0) + '</div><div class="fc-stat-label">Day streak</div></div>' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + floorsComplete + '</div><div class="fc-stat-label">Floors complete</div></div>' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + floorsUnlocked + '</div><div class="fc-stat-label">Floors Unlocked</div></div>' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + (state.xp || 0) + '</div><div class="fc-stat-label">XP Earned</div></div>' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + (state.streak || 0) + '</div><div class="fc-stat-label">Day Streak</div></div>' +
+      '<div class="fc-stat"><div class="fc-stat-val">' + floorsComplete + '</div><div class="fc-stat-label">Floors Complete</div></div>' +
     '</div>' +
-    '<div class="fc-section-label">Learning Floors</div>' +
     '<div class="fc-row">' + cardsHtml + '</div>' +
   '</div>';
 
