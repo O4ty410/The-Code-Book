@@ -2855,10 +2855,10 @@ body.learn-mode #main-col {
   margin-bottom: 28px;
   padding: 14px 0;
 }
-.fc-stat { flex: 1; text-align: center; border-right: 1px solid #0a1828; }
+.fc-stat { flex: 1; text-align: center; border-right: 1px solid rgba(255,255,255,0.06); }
 .fc-stat:last-child { border-right: none; }
-.fc-stat-val { font-size: 24px; font-weight: 700; color: #c8a96e; }
-.fc-stat-label { font-size: 10px; color: #1e3050; text-transform: uppercase; letter-spacing: 0.10em; margin-top: 3px; }
+.fc-stat-val { font-size: 24px; font-weight: 700; color: #ffffff; }
+.fc-stat-label { font-size: 10px; color: rgba(200,220,255,0.70); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 4px; }
 
 .fc-section-label {
   font-size: 10px;
