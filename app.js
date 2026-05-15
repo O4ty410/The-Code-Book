@@ -3161,7 +3161,7 @@ function launchApp() {
 
   // Render content
   renderNav();
-  renderFloor(state.currentFloor - 1, state.currentSection);
+  renderLearnHub();
   updateTimeLog();
   updateXPPanel();
   resetSageIdleTimer();
@@ -3621,6 +3621,33 @@ function updateProgress() {
   var lsp = document.getElementById('ls-progress');
   if (lsp) lsp.textContent = pct + '%';
 }
+function showSageFloorIntro(fi) {
+  var existing = document.getElementById('sage-floor-intro-overlay');
+  if (existing) existing.remove();
+  var floor = FLOORS[fi];
+  if (!floor) { goToFloor(fi); return; }
+
+  var introTexts = [
+    'Before you write a single line of code, let me make sure you understand how the internet actually works — and why it works that way.<br><br>In Floor 1 we cover how browsers talk to servers, what HTML, CSS and JavaScript actually are, and the three ideas that every program ever written is built on: conditions, loops and functions.<br><br>Five sections. No prior experience needed. Take your time with each one.'
+  ];
+  var text = introTexts[fi] || 'This floor builds directly on everything you have learned so far. Each section is designed to be completed in one sitting.';
+
+  var el = document.createElement('div');
+  el.id = 'sage-floor-intro-overlay';
+  el.innerHTML = [
+    '<div class="sfi-card">',
+      '<div class="sfi-owl">🦉</div>',
+      '<div class="sfi-sage-label">SAGE</div>',
+      '<div class="sfi-floor-badge">FLOOR ' + (fi + 1) + ' — ' + floor.title.toUpperCase() + '</div>',
+      '<p class="sfi-message">' + text + '</p>',
+      '<div class="sfi-question">Are you ready to begin?</div>',
+      '<button class="sfi-ready-btn" onclick="document.getElementById(\'sage-floor-intro-overlay\').remove();goToFloor(' + fi + ')">I am ready</button>',
+      '<button class="sfi-back-btn" onclick="document.getElementById(\'sage-floor-intro-overlay\').remove()">Not yet — take me back</button>',
+    '</div>'
+  ].join('');
+  document.body.appendChild(el);
+}
+
 function goToFloor(fi) {
   var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
   if (!isUnlocked) {
@@ -4519,7 +4546,7 @@ function renderLearnHub() {
     var cardClasses = 'fc-card' +
       (!unlocked ? ' fc-card-locked' : '') +
       (isActive  ? ' fc-card-active' : '');
-    var clickAttr  = unlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
+    var clickAttr  = unlocked ? ' onclick="' + (fi === 0 ? 'showSageFloorIntro(0)' : 'goToFloor(' + fi + ')') + '"' : '';
     var icon       = floorIcons[fi] || '&#127760;';
     var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
