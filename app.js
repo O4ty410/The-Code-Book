@@ -4276,65 +4276,106 @@ function timeAgo(ts) {
 
 // \u2500\u2500 FLOOR 1 LAYOUT \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 function renderLearnHub() {
-  // Reset to standard two-col layout
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
   var grid = document.querySelector('.app-grid');
   if (grid) grid.style.gridTemplateColumns = '1fr';
 
-  var html = '<div class="lh-layout">' +
-    '<div class="lh-header">' +
-    '<div class="lh-header-label">YOUR LEARNING PATH</div>' +
-    '<div class="lh-header-title">Seven Floors.<br>One Goal.</div>' +
-    '<div class="lh-header-sub">Work through each floor in order. Each one builds directly on the last.</div>' +
+  // Stats
+  var sectionIds = new Set();
+  FLOORS.forEach(function(f) { f.sections.forEach(function(s) { sectionIds.add(s.id); }); });
+  var totalSecs = sectionIds.size;
+  var doneSecs = Object.keys(state.completed).filter(function(k) { return sectionIds.has(k) && state.completed[k]; }).length;
+  var pct = totalSecs > 0 ? Math.round((doneSecs / totalSecs) * 100) : 0;
+  var floorsComplete = FLOORS.filter(function(f, fi) { return isFloorComplete(fi); }).length;
+  var currentFloorIdx = state.currentFloor - 1;
+  var currentFloor = FLOORS[currentFloorIdx] || FLOORS[0];
+
+  // Floor pills for the Learning Floors card
+  var pillsHtml = FLOORS.map(function(f, fi) {
+    var done = isFloorComplete(fi);
+    var active = fi === currentFloorIdx;
+    var unlocked = fi === 0 || isFloorComplete(fi - 1);
+    var pillClass = 'ch-pill' + (done ? ' ch-pill-done' : active ? ' ch-pill-active' : unlocked ? ' ch-pill-open' : ' ch-pill-locked');
+    var click = unlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
+    return '<div class="' + pillClass + '" style="--pill-color:' + (f.color || '#c8a96e') + '"' + click + '>F' + (fi + 1) + (done ? ' ✓' : '') + '</div>';
+  }).join('');
+
+  // Continue button label
+  var continueDoneSecs = currentFloor.sections.filter(function(s) { return state.completed[s.id]; }).length;
+  var continueLabel = continueDoneSecs > 0 ? 'Continue — ' + currentFloor.title : 'Start — ' + currentFloor.title;
+
+  // Overall progress bar
+  var overallBar = '<div class="ch-overall-bar-wrap">' +
+    '<div class="ch-overall-bar"><div class="ch-overall-fill" style="width:' + pct + '%"></div></div>' +
+    '<span class="ch-overall-label">' + pct + '% complete</span>' +
+    '</div>';
+
+  var html = '<div class="ch-layout">' +
+
+    // Header
+    '<div class="ch-header">' +
+    '<div class="ch-header-label">Code Hub</div>' +
+    '<div class="ch-header-title">What do you want to work on?</div>' +
+    overallBar +
     '</div>' +
-    '<div class="lh-floors">';
 
-  FLOORS.forEach(function(floor, fi) {
-    var isComplete = isFloorComplete(fi);
-    var isUnlocked = fi === 0 || isFloorComplete(fi - 1);
-    var doneSecs = floor.sections.filter(function(s) { return state.completed[s.id]; }).length;
-    var totalSecs = floor.sections.length;
-    var pct = totalSecs > 0 ? Math.round((doneSecs / totalSecs) * 100) : 0;
-    var num = fi < 9 ? '0' + (fi + 1) : '' + (fi + 1);
-    var color = floor.color || '#c8a96e';
+    // Stats row
+    '<div class="ch-stats">' +
+    '<div class="ch-stat"><div class="ch-stat-val">' + doneSecs + '</div><div class="ch-stat-label">Sections done</div></div>' +
+    '<div class="ch-stat"><div class="ch-stat-val">' + (state.xp || 0) + '</div><div class="ch-stat-label">XP earned</div></div>' +
+    '<div class="ch-stat"><div class="ch-stat-val">' + (state.streak || 0) + '</div><div class="ch-stat-label">Day streak</div></div>' +
+    '<div class="ch-stat"><div class="ch-stat-val">' + floorsComplete + '</div><div class="ch-stat-label">Floors complete</div></div>' +
+    '</div>' +
 
-    var badge, badgeClass;
-    if (isComplete) {
-      badge = '&#10003; Complete'; badgeClass = 'lh-badge-complete';
-    } else if (isUnlocked && doneSecs > 0) {
-      badge = 'In Progress'; badgeClass = 'lh-badge-active';
-    } else if (isUnlocked) {
-      badge = 'Start'; badgeClass = 'lh-badge-open';
-    } else {
-      badge = 'Locked'; badgeClass = 'lh-badge-locked';
-    }
+    // Category label
+    '<div class="ch-section-label">Categories</div>' +
 
-    var cardClass = 'lh-floor-card' +
-      (isComplete ? ' lh-complete' : (isUnlocked && doneSecs > 0 ? ' lh-in-progress' : '')) +
-      (isUnlocked ? '' : ' lh-locked');
+    // Grid
+    '<div class="ch-grid">' +
 
-    var onClick = isUnlocked ? ' onclick="goToFloor(' + fi + ')"' : '';
+    // Learning Floors — featured card
+    '<div class="ch-card ch-card-featured" onclick="goToFloor(' + currentFloorIdx + ')">' +
+    '<div class="ch-card-accent" style="background:linear-gradient(90deg,' + (currentFloor.color || '#c8a96e') + ',#9a7ec8)"></div>' +
+    '<div class="ch-card-badge ch-badge-live">Live</div>' +
+    '<div class="ch-card-icon">&#128218;</div>' +
+    '<div class="ch-card-tag">Main Course</div>' +
+    '<div class="ch-card-title">Learning Floors</div>' +
+    '<div class="ch-card-desc">A structured path from zero to professional engineer — 7 floors, 72 sections. Work through each floor at your own pace.</div>' +
+    '<div class="ch-pills">' + pillsHtml + '</div>' +
+    '<div class="ch-card-progress-wrap">' +
+    '<div class="ch-card-progress-track"><div class="ch-card-progress-fill" style="width:' + pct + '%;background:' + (currentFloor.color || '#c8a96e') + '"></div></div>' +
+    '<div class="ch-card-progress-text">' + doneSecs + ' of ' + totalSecs + ' sections complete</div>' +
+    '</div>' +
+    '<button class="ch-btn ch-btn-primary" onclick="event.stopPropagation();goToFloor(' + currentFloorIdx + ')">' + continueLabel + ' →</button>' +
+    '</div>' +
 
-    html += '<div class="' + cardClass + '"' + onClick + ' style="--lh-color:' + color + '">' +
-      '<div class="lh-floor-num">' + num + '</div>' +
-      '<div class="lh-floor-body">' +
-      '<div class="lh-floor-title">' + floor.title + '</div>' +
-      '<div class="lh-floor-sub">' + floor.subtitle + '</div>' +
-      (isUnlocked
-        ? '<div class="lh-floor-progress">' +
-          '<div class="lh-progress-track"><div class="lh-progress-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
-          '<span class="lh-progress-text">' + doneSecs + ' / ' + totalSecs + ' sections</span>' +
-          '</div>'
-        : '<div class="lh-floor-locked-hint">Complete Floor ' + fi + ' to unlock</div>') +
-      '</div>' +
-      '<div class="lh-floor-right">' +
-      '<span class="lh-badge ' + badgeClass + '">' + badge + '</span>' +
-      '</div>' +
-      '</div>';
-  });
+    // Practice — coming soon
+    '<div class="ch-card ch-card-locked">' +
+    '<div class="ch-card-accent" style="background:#1e1e1e"></div>' +
+    '<div class="ch-card-lock">&#128274;</div>' +
+    '<div class="ch-card-badge ch-badge-soon">Coming soon</div>' +
+    '<div class="ch-card-icon">&#9889;</div>' +
+    '<div class="ch-card-tag">Drills</div>' +
+    '<div class="ch-card-title">Practice</div>' +
+    '<div class="ch-card-desc">Short focused exercises to reinforce what you’ve learned. No setup required.</div>' +
+    '<button class="ch-btn ch-btn-secondary" disabled>Coming soon</button>' +
+    '</div>' +
 
-  html += '</div></div>';
+    // Projects — coming soon
+    '<div class="ch-card ch-card-locked">' +
+    '<div class="ch-card-accent" style="background:#1e1e1e"></div>' +
+    '<div class="ch-card-lock">&#128274;</div>' +
+    '<div class="ch-card-badge ch-badge-soon">Coming soon</div>' +
+    '<div class="ch-card-icon">&#128296;</div>' +
+    '<div class="ch-card-tag">Build</div>' +
+    '<div class="ch-card-title">Projects</div>' +
+    '<div class="ch-card-desc">Guided builds from brief to deployed product. Real things, no toy examples.</div>' +
+    '<button class="ch-btn ch-btn-secondary" disabled>Coming soon</button>' +
+    '</div>' +
+
+    '</div>' + // ch-grid
+    '</div>'; // ch-layout
 
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
