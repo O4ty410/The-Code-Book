@@ -7957,6 +7957,8 @@ function closeFloorModal() {
 function renderLearnHub() {
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
+  var ls = document.getElementById('left-sidebar');
+  if (ls) ls.style.display = 'none';
   var grid = document.querySelector('.app-grid');
   if (grid) grid.style.gridTemplateColumns = '1fr';
 
@@ -8055,6 +8057,8 @@ function renderLearnHub() {
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
 }
 function renderFloor1(si) {
+  var ls = document.getElementById('left-sidebar');
+  if (ls) ls.style.display = 'flex';
   var floor = FLOORS[0];
   var fi = 0;
 
@@ -8451,6 +8455,8 @@ function f2Ascend() {
 // ============================================
 let lastFloorIndex = 0;
 function renderFloor(fi, si) {
+  var ls = document.getElementById('left-sidebar');
+  if (ls) ls.style.display = 'flex';
   var floor = FLOORS[fi];
   var color = floor ? (floor.color || '#c8a96e') : '#c8a96e';
   var r = parseInt(color.slice(1,3),16), g = parseInt(color.slice(3,5),16), b = parseInt(color.slice(5,7),16);
