@@ -2996,20 +2996,8 @@ body.learn-mode #main-col {
   line-height: 1.1;
   margin-bottom: 10px;
   font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(
-    90deg,
-    #7eb8c8 0%,
-    #d0eeff 30%,
-    rgba(255,255,255,0.95) 50%,
-    #d0eeff 70%,
-    #7eb8c8 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: fcTitleShimmer 3.5s linear infinite;
+  color: #d0eeff;
+  text-shadow: 0 0 40px rgba(126,184,200,0.5), 0 0 80px rgba(126,184,200,0.2);
 }
 
 @keyframes fcTitleShimmer {
