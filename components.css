@@ -4791,3 +4791,262 @@ body.light .prof-theme-swatch:hover { background: rgba(0,0,0,0.04); }
 }
 .sage-chat-send:hover { opacity: 0.85; }
 .sage-chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ============================================================
+   NOTES TAB
+   ============================================================ */
+
+.notes-tab-btn { position: relative; }
+
+.notes-panel {
+  padding: 24px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 480px;
+}
+
+.notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.notes-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.notes-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.notes-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.notes-subtitle {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.notes-save-status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  opacity: 0.6;
+  transition: color 0.3s, opacity 0.3s;
+}
+.notes-save-status.saved {
+  color: #4caf7d;
+  opacity: 1;
+}
+
+.notes-prompt-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--floor-color, var(--accent));
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.notes-prompt-q {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.notes-prompt-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 220px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text);
+  resize: vertical;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent calc(1.75em - 1px),
+    var(--border) calc(1.75em - 1px),
+    var(--border) 1.75em
+  );
+  background-attachment: local;
+}
+.notes-textarea:focus {
+  outline: none;
+  border-color: var(--floor-color, var(--accent));
+}
+.notes-textarea::placeholder {
+  color: var(--text-dim);
+  opacity: 0.5;
+}
+
+.notes-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.notes-wordcount {
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.notes-footer-hint { opacity: 0.55; }
+
+/* ============================================================
+   HUB NOTES BUTTON
+   ============================================================ */
+
+.hub-notes-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.hub-notes-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* ============================================================
+   NOTES REVIEW OVERLAY
+   ============================================================ */
+
+.nr-panel {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.nr-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.nr-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.nr-sub {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.nr-close {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+  color: var(--text-dim);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nr-close:hover { color: var(--text); border-color: var(--text-dim); }
+
+.nr-body { display: flex; flex-direction: column; gap: 40px; }
+
+.nr-floor-group { display: flex; flex-direction: column; gap: 16px; }
+
+.nr-floor-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.nr-note-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+
+.nr-section-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.3px;
+}
+
+.nr-note-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+
+.nr-empty {
+  text-align: center;
+  padding: 80px 24px;
+}
+
+.nr-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.nr-empty-text {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .notes-panel { padding: 16px 16px 32px; }
+  .nr-panel { padding: 24px 16px 60px; }
+  .nr-title { font-size: 22px; }
+}
