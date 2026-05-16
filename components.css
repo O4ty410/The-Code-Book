@@ -847,13 +847,23 @@
   font-weight: 500;
 }
 
+.section-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.section-sticky-header .section-progress-dots {
+  padding: 6px 24px 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
 .section-tabs-bar {
   display: flex;
-  border-bottom: 1px solid var(--border);
   background: var(--surface);
-  position: sticky;
-  top: 37px;
-  z-index: 10;
+  border-bottom: none;
 }
 
 .section-tab-btn {

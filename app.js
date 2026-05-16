@@ -6104,15 +6104,9 @@ if (!section) { return; }
   var showQuiz = !!(section.quiz || section.checklist);
 
   // Tab bar + go-back button
-  var tabs = '<div class="section-tabs-bar">' +
-    '<button class="section-tab-btn active" onclick="switchSectionTab(\'read\',\'' + section.id + '\',this)">Read</button>' +
-    (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
-    (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
-    '</div>' +
-    '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
-var fi = state.currentFloor - 1;
+  var fi = state.currentFloor - 1;
 
-  // Progress dots
+  // Progress dots (locked inside sticky header)
   var dots = '<div class="section-progress-dots" style="--floor-color:' + (floor.color||'#c8a96e') + '">';
   floor.sections.forEach(function(sec, i) {
     var dotCls = i === si ? 'spd-dot spd-current' : (state.completed[sec.id] ? 'spd-dot spd-done' : 'spd-dot');
@@ -6120,8 +6114,18 @@ var fi = state.currentFloor - 1;
   });
   dots += '</div>';
 
+  var tabs = '<div class="section-sticky-header">' +
+    '<div class="section-tabs-bar">' +
+    '<button class="section-tab-btn active" onclick="switchSectionTab(\'read\',\'' + section.id + '\',this)">Read</button>' +
+    (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
+    (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
+    '</div>' +
+    dots +
+    '</div>' +
+    '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
+
   // READ
-   var r = dots + '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
+   var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
     '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
     '<div class="floor-title">' + floor.title + '<br><em>' + floor.subtitle + '</em></div>' +
     '<div class="floor-meta">' +
