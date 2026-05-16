@@ -1002,11 +1002,6 @@ body.light .premium-card-tooltip {
 
 /* ---- Nebula orbs inside the hero ---- */
 
-#panel-premium .panel-hero {
-  position: relative;
-  overflow: hidden;
-}
-
 /* Large purple orb — top-left */
 #panel-premium .panel-hero::before {
   content: "";
@@ -1055,6 +1050,8 @@ body.premium-mode #panel-premium .panel-hero-sub {
 /* ---- Hero ---- */
 
 #panel-premium .panel-hero {
+  position: relative;
+  overflow: hidden;
   background:
     radial-gradient(ellipse 90% 120% at 50% -30%, rgba(139,92,246,0.28) 0%, transparent 60%),
     radial-gradient(ellipse 60% 60% at  5% 60%, rgba(59,130,246,0.12) 0%, transparent 55%),

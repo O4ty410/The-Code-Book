@@ -313,9 +313,6 @@ body.game-mode #main-col {
   box-sizing: border-box;
 }
 
-.left-sidebar { display: none !important; }
-.hamburger-btn { display: none !important; }
-
 .app-layout {
   display: flex;
   min-height: 100vh;
