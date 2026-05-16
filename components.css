@@ -3078,7 +3078,7 @@ body.learn-mode #main-col {
   align-items: center;
   text-align: center;
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 0 10px var(--fc-glow, rgba(200,169,110,0.12)),
               0 2px 12px rgba(0,0,0,0.45);
 }
@@ -3168,7 +3168,10 @@ body.learn-mode #main-col {
   line-height: 1.35;
   margin-bottom: 5px;
   width: 100%;
-  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Section count */
