@@ -1571,6 +1571,200 @@ render();
           ]
         },
         checklist: ["I can explain the DOM to someone who has never coded, using a concrete example", "I can write a function from memory that takes parameters and returns a value", "I can debug broken JavaScript systematically, not by making random changes", "I've built at least two interactive projects without a scaffold", "I am confident I understand the material, not just that I completed the sections"]
+      },
+      {
+        id: "3-api-bridge",
+        title: "Your First API Call",
+        body: `Everything you've built so far uses data you created yourself — arrays, objects, hardcoded values. The real web is different. Almost every useful application pulls live data from somewhere: current weather, stock prices, user profiles, search results. That data comes from <strong>APIs</strong>.\n\nAn API (Application Programming Interface) is a URL that returns data in response to a request. You visit a URL in your browser and see a webpage. Your JavaScript visits a URL and gets back structured data — usually JSON. The request works the same way. The response is different.\n\nHere's what a real API call looks like in JavaScript:\n\n<pre style="background:#0f0f0f;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;overflow:auto"><code>fetch('https://api.example.com/users/1')\n  .then(function(response) {\n    return response.json();\n  })\n  .then(function(user) {\n    console.log(user.name);\n  });</code></pre>\n\n<code>fetch()</code> sends the request. The server responds with a <code>Response</code> object — not the data yet, just the response. <code>response.json()</code> reads the body and converts it from JSON text to a JavaScript object. That object is what you work with.\n\nThe API you'll use in the editor: <code>https://jsonplaceholder.typicode.com</code> — a free, public test API used by millions of developers. It has fake users, posts, and comments you can fetch without an API key. Perfect for learning.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — based on the fetch pattern above, what do you think happens to your code while the request is in flight? Does the browser freeze, or does something else continue running?</div>\n\nYou'll explore what's actually happening inside the fetch mechanism in Floor 4. For now, the pattern is enough: fetch a URL, handle the response, use the data. This is exactly how every weather app, social media feed, and news site works.`,
+        callout: {
+          type: "default",
+          label: "JSON Is Just Text",
+          text: "JSON (JavaScript Object Notation) looks exactly like a JavaScript object literal, but it's just a string — a specific format for serialising data. fetch() receives it as text, and .json() parses that text into a real JavaScript object your code can work with. Anything you can do with a regular object, you can do with parsed JSON."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Two-Step Pattern",
+          text: "Every fetch call follows the same pattern: await the fetch to get the Response, then await .json() to get the data. Forgetting the second step is one of the most common mistakes in JavaScript. You get a Promise object back instead of your data, and nothing in your code works as expected."
+        },
+        hint: `The fetch call isn't returning what you expected.\n\n<strong>First check:</strong> Open the Network tab in DevTools (F12). Find the request. Click it. Look at the Response tab — you'll see exactly what the API sent back. Compare that to what you're accessing in your code. If the API returned <code>{"user": {"name": "Alex"}}</code>, you need <code>data.user.name</code>, not <code>data.name</code>.\n\n<strong>Still confused?</strong> Add <code>console.log(data)</code> immediately after parsing — before trying to access any properties. Look at the shape of the object. Then access what you actually see.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#9c8dc0;margin-bottom:16px}
+button{background:#9c8dc0;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:13px;cursor:pointer;margin-bottom:16px}
+button:hover{background:#b3a6d4}
+#output{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;min-height:80px}
+.loading{color:#666;font-style:italic}
+.field{display:flex;gap:16px;margin-bottom:6px}
+.key{color:#888;font-size:11px;min-width:90px;margin-top:2px}
+.val{color:#9c8dc0}
+.label{color:#555;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+</style></head><body>
+<h2>Your First API Call</h2>
+<button onclick="fetchUser()">Fetch a User</button>
+<div id="output"><p class="loading">Press the button to make a real API request...</p></div>
+<script>
+function fetchUser() {
+  var output = document.getElementById('output');
+  output.innerHTML = '<p class="loading">Fetching...</p>';
+
+  fetch('https://jsonplaceholder.typicode.com/users/1')
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(user) {
+      output.innerHTML = '<div class="label">Response received</div>' +
+        '<div class="field"><span class="key">name</span><span class="val">' + user.name + '</span></div>' +
+        '<div class="field"><span class="key">email</span><span class="val">' + user.email + '</span></div>' +
+        '<div class="field"><span class="key">city</span><span class="val">' + user.address.city + '</span></div>' +
+        '<div class="field"><span class="key">company</span><span class="val">' + user.company.name + '</span></div>';
+    })
+    .catch(function(error) {
+      output.innerHTML = '<p style="color:#f87171">Error: ' + error.message + '</p>';
+    });
+}
+<\/script></body></html>`,
+          challenges: [
+            "Change the user ID from 1 to 5 — you'll get a different user's data",
+            "Display 2 more fields from the user object (log the full object first to see what's available)",
+            "Fetch a post instead of a user: https://jsonplaceholder.typicode.com/posts/1",
+            "Display a loading spinner or 'Fetching...' message while the request is in flight"
+          ]
+        },
+        quiz: {
+          question: "You call <code>fetch('https://api.example.com/data')</code> and immediately on the next line try to use the response. Why doesn't it work?",
+          options: [
+            "fetch() requires a callback function to return data — you can't chain from it",
+            "fetch() is asynchronous — the next line runs before the response arrives. You must handle the result inside .then() or use await",
+            "fetch() only works inside event handlers",
+            "The API hasn't received the request yet when the next line runs"
+          ],
+          correct: 1,
+          feedback: "fetch() starts the network request and returns a Promise immediately — before the response has arrived. JavaScript doesn't pause and wait. The next line runs with no data yet. To use the response, you must either chain .then() (which runs when the response arrives) or use async/await (which tells the function to pause at that point). This is the fundamental behaviour of all asynchronous JavaScript."
+        },
+        checklist: [
+          "I made a real API call that fetched live data and displayed it on screen",
+          "I can explain what .json() does and why it's a separate step from fetch()",
+          "I handle the error case with .catch() — I don't assume the request always succeeds",
+          "I can read a JSON response in the Network tab and map it to properties in my JavaScript code",
+          "I understand that fetch() is asynchronous — the data doesn't exist on the next line"
+        ]
+      },
+      {
+        id: "3-testing-intro",
+        title: "Testing: Does Your Code Actually Work?",
+        body: `You've been testing code all along — you run it, look at the output, and check it matches what you expected. That's manual testing. It works when you have five functions. It breaks down when you have fifty.\n\nAutomated testing is writing code that tests your code. You write a function, then write a small test that calls it with known inputs and checks the output matches what you expect. Run the test suite and you get an instant report: everything passes, or something broke.\n\nThe simplest possible test is just an assertion — a check that something is true:\n\n<pre style="background:#0f0f0f;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;overflow:auto"><code>function add(a, b) {\n  return a + b;\n}\n\n// Manual test\nconsole.log(add(2, 3)); // you check it looks like 5\n\n// Automated test\nif (add(2, 3) !== 5) {\n  throw new Error('add(2, 3) should return 5');\n}</code></pre>\n\nReal testing frameworks (Jest is the most popular for JavaScript) provide better syntax and run hundreds of tests automatically:\n<pre style="background:#0f0f0f;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;overflow:auto"><code>test('add returns correct sum', () => {\n  expect(add(2, 3)).toBe(5);\n  expect(add(-1, 1)).toBe(0);\n  expect(add(0, 0)).toBe(0);\n});</code></pre>\n\nThe value becomes obvious the moment you change a function. Without tests: you make a change, then manually click through every feature that might be affected — hoping you caught everything. With tests: you make a change and run one command. If anything broke, you're told exactly what and where in two seconds.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — pick any function you wrote this floor. What are three different inputs you'd want to test it with — beyond the obvious happy path?</div>\n\nThe discipline to apply now: when something breaks, before you fix it, write a test that reproduces the bug. Fix the bug. The test now passes. Next time someone changes that code, the test prevents the same bug from silently reappearing. This is how professional codebases stay stable as they grow.`,
+        callout: {
+          type: "default",
+          label: "Tests Are Documentation",
+          text: "A test suite tells the next developer — or your future self — exactly what each function is supposed to do. <code>expect(formatDate('2024-01-01')).toBe('1 January 2024')</code> is more precise than any comment. Tests don't get out of date the way comments do — a failing test is immediately visible."
+        },
+        callout2: {
+          type: "focus",
+          label: "What to Test",
+          text: "Test edge cases more than happy paths. The happy path (valid input, expected output) usually works. Edge cases break things: empty strings, null values, zero, very large numbers, inputs in unexpected formats. Think: 'what's the weirdest thing someone could pass to this function?' Write a test for that."
+        },
+        hint: `Writing your first test and not sure what to assert.\n\n<strong>Start with: </strong> what is the function supposed to return? Write that as an assertion first. Then think: what should happen with an empty input? A negative number? A null? A string where a number is expected? Write one test for each case.\n\n<strong>The naming pattern:</strong> Good test names describe the scenario: <code>'returns empty array when input is empty'</code>, <code>'throws error for negative values'</code>, <code>'handles strings with leading spaces'</code>. The test name is the spec.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#9c8dc0;margin-bottom:4px}
+p{color:#666;margin-bottom:16px;font-size:12px}
+.test-block{background:#111;border:1px solid #222;border-radius:8px;padding:16px;margin-bottom:12px}
+.test-title{color:#9c8dc0;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+button{background:#9c8dc0;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:13px;cursor:pointer;margin-bottom:16px;font-weight:600}
+button:hover{background:#b3a6d4}
+.result{margin-top:4px;padding:6px 10px;border-radius:4px;font-size:12px}
+.pass{background:#052e16;color:#4ade80;border:1px solid #14532d}
+.fail{background:#450a0a;color:#f87171;border:1px solid #7f1d1d}
+.summary{margin-top:12px;padding:10px 14px;border-radius:6px;font-size:12px}
+.summary.all-pass{background:#052e16;color:#4ade80}.summary.has-fail{background:#450a0a;color:#f87171}
+</style></head><body>
+<h2>Write Your Own Tests</h2>
+<p>The functions below have tests. Run them. Then add more tests.</p>
+<button onclick="runTests()">Run All Tests</button>
+<div id="results"></div>
+<script>
+// --- Functions under test ---
+function capitalise(str) {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function countWords(sentence) {
+  if (!sentence.trim()) return 0;
+  return sentence.trim().split(/\\s+/).length;
+}
+
+function isEven(n) {
+  return n % 2 === 0;
+}
+
+// --- Test suite ---
+const tests = [
+  // capitalise tests
+  { name: 'capitalise: makes first letter uppercase', fn: () => capitalise('hello') === 'Hello' },
+  { name: 'capitalise: leaves rest unchanged', fn: () => capitalise('hELLO') === 'HELLO' },
+  { name: 'capitalise: handles empty string', fn: () => capitalise('') === '' },
+  { name: 'capitalise: single character', fn: () => capitalise('a') === 'A' },
+  // countWords tests
+  { name: 'countWords: counts words in sentence', fn: () => countWords('Hello World') === 2 },
+  { name: 'countWords: handles single word', fn: () => countWords('Hello') === 1 },
+  { name: 'countWords: handles multiple spaces', fn: () => countWords('  two  words  ') === 2 },
+  { name: 'countWords: empty string returns 0', fn: () => countWords('') === 0 },
+  // isEven tests
+  { name: 'isEven: even number returns true', fn: () => isEven(4) === true },
+  { name: 'isEven: odd number returns false', fn: () => isEven(3) === false },
+  { name: 'isEven: zero is even', fn: () => isEven(0) === true },
+  // ADD YOUR OWN TESTS BELOW:
+];
+
+function runTests() {
+  let passed = 0, failed = 0, html = '';
+  tests.forEach(t => {
+    try {
+      const ok = t.fn();
+      html += '<div class="result ' + (ok ? 'pass' : 'fail') + '">' + (ok ? '✓' : '✗') + ' ' + t.name + '</div>';
+      ok ? passed++ : failed++;
+    } catch(e) {
+      html += '<div class="result fail">✗ ' + t.name + ' — threw: ' + e.message + '</div>';
+      failed++;
+    }
+  });
+  html += '<div class="summary ' + (failed ? 'has-fail' : 'all-pass') + '">' +
+    passed + ' passed, ' + failed + ' failed</div>';
+  document.getElementById('results').innerHTML = html;
+}
+<\/script></body></html>`,
+          challenges: [
+            "Add a test for capitalise(null) — what should it return? Make the test pass.",
+            "Add a test for isEven(-2) — negative even numbers",
+            "Add a new function reverse(str) that reverses a string, then write 4 tests for it",
+            "Intentionally break the capitalise function and watch the tests catch it — then fix it"
+          ]
+        },
+        quiz: {
+          question: "You fix a bug in a function. Before writing a single line of code, what should you do first?",
+          options: [
+            "Run the whole app to confirm the bug exists",
+            "Write a test that reproduces the failing behaviour — so when the fix lands, the test passes and the bug can never silently return",
+            "Look at the git log to find when the bug was introduced",
+            "Ask a colleague to review the code before changing anything"
+          ],
+          correct: 1,
+          feedback: "Test-first bug fixing — often called TDD (Test-Driven Development) applied to bugs — ensures two things: (1) you've confirmed you can reproduce the bug programmatically, and (2) when the test passes, the fix is verified. More importantly, the test stays in the suite permanently. The next time someone modifies that function, the test prevents the same bug from reappearing silently."
+        },
+        checklist: [
+          "I can write a test function from scratch that calls code with known inputs and asserts the outputs",
+          "I test edge cases: empty inputs, nulls, zeros, boundary values — not just the happy path",
+          "I can explain why automated tests are more reliable than manual testing for growing codebases",
+          "I've written at least 5 tests for functions I built this floor",
+          "I understand what 'test-first' bug fixing means and why it prevents regressions"
+        ]
       }
     ]
   },
@@ -1686,6 +1880,119 @@ APIs speak in JSON — JavaScript Object Notation. It is the universal format fo
           feedback: "401 Unauthorized means the server doesn't know who you are — no valid API key, token, or credentials were included in the request. 403 Forbidden means the server knows who you are but won't let you do this specific thing. 404 means the resource doesn't exist. 500 means the server failed."
         },
         checklist: ["I can explain what an API is to someone non-technical using a concrete real-world analogy", "I can name the four HTTP methods and describe what each one is used for", "I can read an HTTP status code and know whether the request succeeded or failed — and why", "I can describe what JSON looks like and how it relates to JavaScript objects", "I can identify an API endpoint in a URL and explain what each part means"]
+      },
+      {
+        id: "4-promises",
+        title: "Understanding Promises",
+        body: `JavaScript is single-threaded: it can only do one thing at a time. When you make a network request, read a file, or set a timer, you can't just stop and wait — the page would freeze completely. So these operations are <strong>asynchronous</strong>: you start the operation, register what should happen when it's done, and move on. The result arrives later.\n\nA <strong>Promise</strong> is an object that represents the eventual result of an asynchronous operation. It exists in one of three states: <strong>pending</strong> (the operation hasn't finished), <strong>fulfilled</strong> (it succeeded, there's a value), or <strong>rejected</strong> (it failed, there's an error). Once a Promise moves from pending to either fulfilled or rejected, it stays there — it never changes state again.\n\nYou handle a fulfilled Promise with <code>.then()</code>, and a rejected one with <code>.catch()</code>:\n\n<pre style="background:#0f0f0f;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;overflow:auto"><code>fetch('https://api.example.com/data')\n  .then(response => response.json())   // runs when fetch succeeds\n  .then(data => console.log(data))     // runs when .json() resolves\n  .catch(error => console.error(error)) // runs if anything fails\n  .finally(() => setLoading(false));   // runs always</code></pre>\n\nEach <code>.then()</code> returns a new Promise, so you can chain them. Each link in the chain receives the return value of the previous one. If any link throws an error or rejects, the chain skips straight to <code>.catch()</code>.\n\n<strong>Promise.all()</strong> runs multiple Promises in parallel and waits for all of them: <code>const [users, posts] = await Promise.all([fetchUsers(), fetchPosts()])</code>. If any one rejects, the whole thing rejects. <strong>Promise.allSettled()</strong> waits for all to complete regardless of success or failure, giving you each result individually.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if a Promise chain has three .then() calls and the second one throws an error, what happens to the third .then()? Where does the error go?</div>\n\nUnderstanding this is essential before using <code>async/await</code> — the next section. async/await is syntax that makes Promise code easier to read, but it's built entirely on Promises underneath. When you <code>await</code> something, you're waiting for a Promise to settle. If it rejects, you get an error. Knowing this makes the next section click immediately.`,
+        callout: {
+          type: "default",
+          label: "Promises vs Callbacks",
+          text: "Before Promises, async code used callbacks — functions passed as arguments that run when an operation completes. Callbacks work but nesting them creates 'callback hell': deeply nested code that's hard to read and harder to handle errors in correctly. Promises flatten that nesting into a linear chain. async/await flattens it further into code that looks synchronous."
+        },
+        callout2: {
+          type: "focus",
+          label: "Always Handle Rejection",
+          text: "An unhandled Promise rejection is a silent failure. The operation fails, your code does nothing, and the user sees nothing change — no error, no loading state, nothing. Always add .catch() or wrap await in try/catch. The browser console will warn about unhandled rejections, but in production you might never see them."
+        },
+        hint: `You have a <code>.then()</code> chain but can't see where an error is happening.\n\n<strong>Try this:</strong> Add a <code>.catch(err => console.error('CAUGHT:', err))</code> at the end of the chain. Run the code. The error will appear in the console with the message that explains what failed.\n\n<strong>Still confused about chain order?</strong> Read the chain top to bottom. Each <code>.then()</code> receives what the previous one returned. <code>fetch()</code> resolves to a Response. <code>.then(r => r.json())</code> converts it to an object. <code>.then(data => ...)</code> now has your actual data. Think of each <code>.then()</code> as one step in an assembly line.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#818cf8;margin-bottom:16px}
+button{background:#818cf8;color:#000;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:13px;cursor:pointer;margin-right:10px;margin-bottom:12px;font-weight:600}
+button:hover{background:#a5b4fc}
+button:disabled{opacity:0.5;cursor:not-allowed}
+#log{background:#111;border:1px solid #222;border-radius:8px;padding:16px;min-height:120px;font-size:12px;line-height:1.8}
+.pending{color:#fbbf24}.fulfilled{color:#4ade80}.rejected{color:#f87171}.info{color:#818cf8}
+.ts{color:#555;font-size:11px;margin-right:8px}
+</style></head><body>
+<h2>Promise States in Action</h2>
+<button onclick="runSuccess()" id="btn1">Fetch Real Data</button>
+<button onclick="runFailure()" id="btn2">Trigger a Rejection</button>
+<button onclick="runParallel()" id="btn3">Promise.all (parallel)</button>
+<div id="log"><p class="info">Click a button to see Promises in action...</p></div>
+<script>
+function log(msg, cls) {
+  const ts = new Date().toISOString().slice(11,23);
+  document.getElementById('log').innerHTML +=
+    '<div><span class="ts">'+ts+'</span><span class="'+cls+'">'+msg+'</span></div>';
+}
+function clearLog() { document.getElementById('log').innerHTML = ''; }
+
+function runSuccess() {
+  clearLog();
+  log('Promise created — state: PENDING', 'pending');
+  fetch('https://jsonplaceholder.typicode.com/posts/1')
+    .then(response => {
+      log('First .then() — got Response object, calling .json()', 'info');
+      return response.json();
+    })
+    .then(data => {
+      log('Second .then() — state: FULFILLED', 'fulfilled');
+      log('Title: ' + data.title.slice(0, 50), 'fulfilled');
+    })
+    .catch(err => log('REJECTED: ' + err.message, 'rejected'))
+    .finally(() => log('finally() runs regardless of outcome', 'info'));
+}
+
+function runFailure() {
+  clearLog();
+  log('Promise created — state: PENDING', 'pending');
+  fetch('https://does-not-exist-404xyz.invalid/api')
+    .then(response => {
+      log('.then() — this will NOT run', 'fulfilled');
+      return response.json();
+    })
+    .catch(err => {
+      log('REJECTED: state changed to REJECTED', 'rejected');
+      log('Error: ' + err.message, 'rejected');
+    })
+    .finally(() => log('finally() still runs after rejection', 'info'));
+}
+
+function runParallel() {
+  clearLog();
+  log('Promise.all — 3 requests starting simultaneously...', 'pending');
+  Promise.all([
+    fetch('https://jsonplaceholder.typicode.com/posts/1').then(r=>r.json()),
+    fetch('https://jsonplaceholder.typicode.com/posts/2').then(r=>r.json()),
+    fetch('https://jsonplaceholder.typicode.com/posts/3').then(r=>r.json())
+  ]).then(([p1, p2, p3]) => {
+    log('All 3 resolved — FULFILLED', 'fulfilled');
+    log('Post 1: ' + p1.title.slice(0,30)+'...', 'fulfilled');
+    log('Post 2: ' + p2.title.slice(0,30)+'...', 'fulfilled');
+    log('Post 3: ' + p3.title.slice(0,30)+'...', 'fulfilled');
+  }).catch(err => log('One failed — all rejected: ' + err.message, 'rejected'));
+}
+<\/script></body></html>`,
+          challenges: [
+            "Add a fourth button that uses Promise.race() — it resolves with the first Promise to settle",
+            "In runSuccess(), add a second stage that constructs an object from the fetched data and returns it",
+            "What happens if you remove the .catch() from runFailure()? Try it and check the browser console",
+            "Modify runParallel() to use Promise.allSettled() instead and log which succeeded vs failed"
+          ]
+        },
+        quiz: {
+          question: "A Promise chain: <code>fetch(url).then(r => r.json()).then(data => processData(data)).catch(err => handleError(err))</code> — the <code>r.json()</code> call fails. Which parts of the chain run?",
+          options: [
+            "All three .then() calls run, then .catch() runs at the end",
+            "The first .then() runs, then the failure skips to .catch() — the second .then() is skipped",
+            "Nothing runs — the whole chain is cancelled",
+            ".catch() only runs if fetch() itself fails — .json() failures are swallowed"
+          ],
+          correct: 1,
+          feedback: "When a .then() callback throws or returns a rejected Promise, the chain skips all subsequent .then() callbacks and jumps straight to the next .catch(). So r.json() failing means processData() is never called — the error goes directly to handleError(). This is one of the key behaviours of Promise chains: one failure propagates to the nearest .catch()."
+        },
+        checklist: [
+          "I can describe the three states of a Promise and explain that a settled Promise never changes state",
+          "I can chain .then() calls and explain what each one receives from the previous",
+          "I always handle rejection with .catch() — I never leave Promises without error handling",
+          "I can explain the difference between Promise.all() and Promise.allSettled()",
+          "I understand that async/await is syntax built on top of Promises — I can explain what await is actually doing"
+        ]
       },
       {
         id: "4-4",
@@ -2171,6 +2478,189 @@ console.log(user.adress.city);</div>
           feedback: "If you fix a bug by changing three things simultaneously, you've learned nothing about what caused it. When a similar bug appears later, you have no basis for diagnosing it. Worse, you might have introduced subtle problems with the two changes that weren't needed. Change one thing, test, understand what changed. This habit compounds over time."
         },
         checklist: ["I can reproduce a bug reliably before attempting to fix it", "I change one thing at a time when debugging — not multiple things simultaneously", "I can set a breakpoint in DevTools and use step-over/step-into to trace execution", "I read error messages completely and identify type, message, and line before changing anything", "I use the Network tab to inspect API requests and verify what was actually sent and received"]
+      },
+      {
+        id: "4-npm",
+        title: "npm and Package Management",
+        body: `Every serious JavaScript project uses npm — the Node Package Manager. npm is two things: a registry containing over two million packages that other developers have published, and a command-line tool for installing, managing, and updating those packages.\n\n<code>npm init</code> creates a <code>package.json</code> file — the manifest for your project. It records your project's name, version, and most importantly, its <strong>dependencies</strong>: the packages your project needs to run. When someone else clones your project, they run <code>npm install</code> and npm reads <code>package.json</code> to install exactly the right packages.\n\nInstalling a package: <code>npm install express</code> downloads Express and adds it to <code>dependencies</code> in package.json. <code>npm install --save-dev jest</code> installs Jest as a <strong>devDependency</strong> — a tool only needed during development, not in production. Your test runner doesn't need to be installed on the production server.\n\n<strong>Semantic versioning (semver)</strong> is the version number system: <code>MAJOR.MINOR.PATCH</code>. A patch release (1.0.1 → 1.0.2) fixes bugs without changing the API. A minor release (1.0.0 → 1.1.0) adds features backward-compatibly. A major release (1.0.0 → 2.0.0) breaks backward compatibility — upgrading may require code changes. The <code>^</code> prefix in package.json (e.g. <code>"express": "^4.18.0"</code>) means "accept any minor or patch update to version 4, but not a major version change."\n\n<code>node_modules</code> is the folder where installed packages live. It can be enormous (gigabytes on large projects). You never commit it to git — add it to <code>.gitignore</code>. The package.json and <code>package-lock.json</code> files are what you commit. The lock file records the exact version of every installed package (including dependencies of dependencies) so the install is reproducible.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — why would you commit package.json but not node_modules? What would happen if two developers on the same project had different versions of the same package installed?</div>`,
+        callout: {
+          type: "default",
+          label: "The Lock File Matters",
+          text: "package-lock.json records the exact version tree of every installed package. Without it, npm install might grab a newer patch of a dependency that breaks something. Commit the lock file. When you see 'npm ci' in CI/CD scripts — that's a stricter version of npm install that uses only the lock file. This is how teams ensure reproducible builds."
+        },
+        callout2: {
+          type: "focus",
+          label: "dependencies vs devDependencies",
+          text: "dependencies are packages your app needs to run in production (express, mongoose, jsonwebtoken). devDependencies are tools you need during development only (jest, eslint, prettier, nodemon). When you deploy, most platforms run npm install --production which skips devDependencies. Putting a test runner in dependencies wastes bandwidth and memory in production."
+        },
+        hint: `You run npm install and get a red wall of errors.\n\n<strong>First: read the last error,</strong> not the first. npm error output is verbose — the final ERESOLVE or ERR! line is the actual cause. Common causes: Node.js version incompatibility (check the 'engines' field in the failing package's npm page), peer dependency conflicts, or corrupted cache.\n\n<strong>Quick reset:</strong> Delete <code>node_modules</code> and <code>package-lock.json</code>, then run <code>npm install</code> again. This forces a clean resolution and fixes most mysterious npm errors.\n\n<strong>To see what's installed:</strong> Run <code>npm list --depth=0</code> to see all top-level packages and their installed versions.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#fb923c;margin-bottom:4px}
+p{color:#666;margin-bottom:16px;font-size:12px}
+.file{background:#111;border:1px solid #222;border-radius:8px;padding:16px;margin-bottom:12px}
+.filename{color:#fb923c;font-size:11px;letter-spacing:1px;margin-bottom:8px}
+pre{margin:0;color:#ccc;font-size:12px;line-height:1.6;overflow:auto}
+.key{color:#93c5fd}.str{color:#86efac}.num{color:#fbbf24}.note{color:#555}
+.cmd{background:#0f0f0f;border:1px solid #333;border-radius:4px;padding:12px;margin-bottom:12px}
+.cmd-line{margin-bottom:4px}.prompt{color:#4ade80}.command{color:#fff}
+.comment{color:#555}
+</style></head><body>
+<h2>npm Project Structure</h2>
+<p>A well-configured project — the files that travel with your code</p>
+<div class="file">
+<div class="filename">package.json</div>
+<pre>{
+  <span class="key">"name"</span>: <span class="str">"my-project"</span>,
+  <span class="key">"version"</span>: <span class="str">"1.0.0"</span>,
+  <span class="key">"scripts"</span>: {
+    <span class="key">"start"</span>: <span class="str">"node server.js"</span>,
+    <span class="key">"dev"</span>: <span class="str">"nodemon server.js"</span>,
+    <span class="key">"test"</span>: <span class="str">"jest"</span>
+  },
+  <span class="key">"dependencies"</span>: {
+    <span class="key">"express"</span>: <span class="str">"^4.18.0"</span>,   <span class="note">// ^ = allow minor updates</span>
+    <span class="key">"mongoose"</span>: <span class="str">"^7.5.0"</span>
+  },
+  <span class="key">"devDependencies"</span>: {
+    <span class="key">"jest"</span>: <span class="str">"^29.0.0"</span>,
+    <span class="key">"nodemon"</span>: <span class="str">"^3.0.0"</span>   <span class="note">// dev only — not in production</span>
+  }
+}</pre>
+</div>
+<div class="file">
+<div class="filename">.gitignore</div>
+<pre><span class="note"># Never commit these</span>
+node_modules/
+.env
+.env.local
+dist/
+*.log</pre>
+</div>
+<div class="cmd">
+<div class="cmd-line"><span class="prompt">$</span> <span class="command">npm init -y</span>         <span class="comment"># create package.json with defaults</span></div>
+<div class="cmd-line"><span class="prompt">$</span> <span class="command">npm install express</span>  <span class="comment"># add to dependencies</span></div>
+<div class="cmd-line"><span class="prompt">$</span> <span class="command">npm install -D jest</span>  <span class="comment"># add to devDependencies</span></div>
+<div class="cmd-line"><span class="prompt">$</span> <span class="command">npm install</span>          <span class="comment"># install everything from package.json</span></div>
+<div class="cmd-line"><span class="prompt">$</span> <span class="command">npm run test</span>         <span class="comment"># run the test script</span></div>
+<div class="cmd-line"><span class="prompt">$</span> <span class="command">npm outdated</span>         <span class="comment"># see which packages have updates</span></div>
+</div>
+</body></html>`,
+          challenges: [
+            "What does the ^ before a version number mean — and what would ~ mean?",
+            "What is the difference between npm install and npm ci?",
+            "Why is nodemon listed as a devDependency rather than a regular dependency?",
+            "Add a 'build' script entry to the package.json that runs 'webpack --mode production'"
+          ]
+        },
+        quiz: {
+          question: "You clone a project from GitHub. There is no node_modules folder but there is a package.json and a package-lock.json. What command installs the dependencies and why?",
+          options: [
+            "npm init — to create the package.json first",
+            "npm install — reads package.json (and uses package-lock.json for exact versions) to install all dependencies",
+            "npm start — this automatically installs missing packages",
+            "You need to manually create the node_modules folder first"
+          ],
+          correct: 1,
+          feedback: "npm install reads package.json to know what to install and uses package-lock.json to install the exact same version tree that the original developer had. node_modules is never committed to git — it can be enormous and is fully reproducible from package.json. npm install is the standard first step after cloning a JavaScript project."
+        },
+        checklist: [
+          "I can create a new npm project from scratch and explain what each field in package.json does",
+          "I know the difference between dependencies and devDependencies — and can give two examples of each",
+          "I understand semantic versioning and can explain what 1.2.3, ^1.2.3, and ~1.2.3 each mean",
+          "My projects have a .gitignore that excludes node_modules and .env files",
+          "I commit package.json and package-lock.json but never node_modules"
+        ]
+      },
+      {
+        id: "4-pr-workflow",
+        title: "Pull Requests and Code Reviews",
+        body: `In professional teams, code doesn't go directly to the main branch. It goes through a <strong>pull request</strong> (PR) — a formal request to merge a branch into main, with the opportunity for review before the merge happens. Every company that ships reliable software does this. The exceptions are either very small or very late-stage startups moving fast and accepting the risk.\n\nThe workflow: create a feature branch, build the feature, push the branch, open a PR, teammates review, you address feedback, the PR is approved and merged. The main branch always contains reviewed, tested, deployable code. Feature branches are where work-in-progress lives.\n\nA good PR description answers three questions for the reviewer: <strong>What</strong> does this change? <strong>Why</strong> was this change needed? <strong>How</strong> can it be tested? A PR description that says only "fixes login bug" fails all three. A good description says: "The login endpoint was accepting expired JWTs because we were only checking the signature, not the expiry claim. Added expiry validation in the auth middleware. To test: generate a token, wait for expiry (or manually set exp to a past timestamp), and confirm the 401 response."\n\nCode review is not a gatekeeping exercise. Its purpose is to catch bugs before production, share knowledge across the team, and maintain code quality as the codebase grows. As a reviewer, your job is not to impose your style preferences — it's to ask whether the code is correct, readable, and appropriately handles edge cases.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if a reviewer leaves a comment saying "I'd write this differently," but the current code works correctly and is readable, what's the appropriate response?</div>\n\nHandling review feedback professionally: distinguish between blocking issues (the code is wrong or unsafe — must be changed) and suggestions (the reviewer's preference, not a requirement). Address all blocking issues. Respond to suggestions either by implementing them or by explaining why you didn't. Never silently ignore a reviewer's comment — even "acknowledged, keeping original approach because X" is the professional response.',`,
+        callout: {
+          type: "default",
+          label: "Small PRs Get Better Reviews",
+          text: "A 2,000-line pull request gets rubber-stamped. A 200-line PR gets read carefully. This is human nature, not poor practice. Professional developers make small, focused PRs: one feature, one bug fix, one refactor. If your PR touches ten different things, it should probably be ten PRs. Reviewers can only give you useful feedback on code they can actually understand."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Nit Convention",
+          text: "In code review, 'nit:' before a comment means 'nitpick' — a minor stylistic suggestion that is not blocking. 'nit: rename x to userCount for clarity' means the reviewer prefers it but won't block the PR. Learning to distinguish nitpicks from real issues is a skill. Don't get defensive about nits, and don't die on hills over them."
+        },
+        hint: `You've opened a PR and the reviewer left 12 comments. It feels personal. It isn't.\n\n<strong>Read all the comments first before responding to any.</strong> Some comments clarify earlier ones. Some you'll agree with immediately. Some you'll want to think about.\n\n<strong>The right framing:</strong> Every comment is the reviewer doing their job — trying to make the code better before it ships. The ideal outcome is better code, not winning an argument.\n\n<strong>If you disagree:</strong> Explain your reasoning concisely. "Keeping the current approach because X" with X being a technical reason is a valid response. "Because I prefer it" is not. If it's a genuine disagreement, bring it to a conversation — don't fight it out in PR comments.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#34d399;margin-bottom:4px}
+p{color:#666;margin-bottom:16px;font-size:12px}
+.pr{background:#111;border:1px solid #222;border-radius:8px;padding:16px;margin-bottom:12px}
+.pr-title{color:#34d399;font-size:14px;font-weight:600;margin-bottom:8px}
+.pr-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.good-label{color:#34d399}.bad-label{color:#f87171}
+.pr-body{color:#ccc;font-size:12px;line-height:1.6;white-space:pre-wrap}
+.review{background:#0f1a14;border:1px solid #14532d;border-radius:6px;padding:12px;margin-top:12px;font-size:12px}
+.review-header{color:#4ade80;margin-bottom:6px;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.comment{margin-bottom:8px;padding:8px;background:#111;border-radius:4px;border-left:2px solid #333}
+.comment.blocking{border-left-color:#f87171}.comment.nit{border-left-color:#f59e0b}.comment.suggest{border-left-color:#60a5fa}
+.badge{font-size:10px;padding:2px 6px;border-radius:3px;margin-right:6px}
+.badge.block{background:#7f1d1d;color:#fca5a5}
+.badge.nit-b{background:#78350f;color:#fcd34d}
+.badge.suggest-b{background:#1e3a5f;color:#93c5fd}
+</style></head><body>
+<h2>PR Description Quality</h2>
+<p>The difference between a PR that gets reviewed and one that gets ignored</p>
+<div class="pr">
+<div class="bad-label">Bad PR description</div>
+<div class="pr-title">Fix bug</div>
+<div class="pr-body">Fixed the login issue.</div>
+</div>
+<div class="pr">
+<div class="good-label">Good PR description</div>
+<div class="pr-title">Fix: JWT expiry not validated on login endpoint</div>
+<div class="pr-body">What: Added expiry claim validation to auth middleware.
+Why: The /api/login endpoint verified JWT signatures but not the exp claim — expired tokens were accepted as valid, allowing session continuation after logout or token expiry.
+How to test:
+  1. Log in, copy the JWT from localStorage
+  2. Manually set the exp field to a past timestamp (use jwt.io)
+  3. Make a request to /api/protected with the modified token
+  4. Confirm 401 Unauthorized — previously this returned 200</div>
+</div>
+<div class="review">
+<div class="review-header">Example review comments</div>
+<div class="comment blocking"><span class="badge block">BLOCKING</span>auth.js:47 — This doesn't handle the case where exp is missing entirely. A token with no exp field will throw here.</div>
+<div class="comment nit"><span class="badge nit-b">NIT</span>auth.js:52 — Minor: const tokenAge is never used below, can be removed.</div>
+<div class="comment suggest"><span class="badge suggest-b">SUGGEST</span>Consider extracting the validation logic to a helper function — makes it easier to test in isolation.</div>
+</div>
+</body></html>`,
+          challenges: [
+            "Write a PR description for a feature you built this floor using the What/Why/How format",
+            "What's the difference between a 'blocking' and a 'nit' comment in a review?",
+            "How would you respond professionally to the blocking comment above?",
+            "What command creates a new branch for a feature and what's the git workflow to open a PR?"
+          ]
+        },
+        quiz: {
+          question: "A code reviewer leaves a comment: 'nit: I'd rename userObj to userData for consistency with the rest of the codebase.' The code works correctly either way. What is the appropriate response?",
+          options: [
+            "Ignore the comment — it's a nitpick and doesn't affect functionality",
+            "Either make the rename (explaining you're accepting the suggestion) or briefly explain why you're keeping the current name — never silently ignore a comment",
+            "Push back firmly — the reviewer is overstepping by commenting on naming",
+            "Only accept the feedback if the reviewer is senior to you"
+          ],
+          correct: 1,
+          feedback: "Every PR comment deserves a response — even a nit. 'Done' or 'Good call, updated' if you make the change. 'Keeping userObj here because it matches the pattern in authService — open to discussion' if you don't. Silent ignoring creates uncertainty: did the author see it? Did they disagree? Respond to everything, even briefly. This is professional code review culture."
+        },
+        checklist: [
+          "I can explain the PR workflow from feature branch to merged main — every step",
+          "My PR descriptions answer What, Why, and How to test — not just what changed",
+          "I know the difference between a blocking review comment and a nit",
+          "I respond to every review comment, even if only to acknowledge it",
+          "I've submitted at least one PR with a proper description and addressed the feedback"
+        ]
       },
       {
         id: "4-phase2-review",
@@ -3805,6 +4295,219 @@ When it's deployed: write a README that explains what the application does, the 
           ]
         },
         checklist: ["I planned the data model before writing any code — tables/collections and relationships", "The application has working frontend, backend, database, and authentication", "It is deployed and accessible via a public URL anyone can visit", "The README explains what the app does, why I built it, and how to run it locally", "I'm proud of it and would show it to a potential employer as evidence of what I can build"]
+      },
+      {
+        id: "5-testing",
+        title: "Testing Your Application",
+        body: `Untested code is code you can only trust by running it. As applications grow, manual testing becomes impossible — you can't click every path after every change. Automated tests do it for you, in seconds, every time.\n\nThe three levels of testing: <strong>unit tests</strong> test one function in isolation, with no database, no network, no UI. You call the function with known inputs and assert the output matches expectations. Fast to write, fast to run, cheap to maintain. <strong>Integration tests</strong> test multiple pieces working together — your API endpoint plus the database it writes to, or your frontend component plus the API it calls. <strong>End-to-end tests</strong> simulate a real user in a real browser clicking through real flows. Slow to write, slow to run, but catch problems the other levels miss.\n\nFor Node.js and JavaScript, <strong>Jest</strong> is the dominant testing framework. The pattern is always the same: describe a unit, list test cases, call the function, assert the result.\n\n<pre style="background:#0f0f0f;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;overflow:auto"><code>// sum.js\nfunction sum(a, b) { return a + b; }\nmodule.exports = sum;\n\n// sum.test.js\nconst sum = require('./sum');\n\ntest('adds positive numbers', () => {\n  expect(sum(2, 3)).toBe(5);\n});\n\ntest('handles negative numbers', () => {\n  expect(sum(-1, 1)).toBe(0);\n});</code></pre>\n\nThe most important principle: test behaviour, not implementation. Don't test that a function calls another function internally — test that given these inputs, the visible output is correct. Tests tied to implementation break every refactor. Tests tied to behaviour survive them.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if you have a function that formats a currency amount (e.g. <code>formatCurrency(1050)</code> → <code>'£1,050.00'</code>), what are three edge cases you should write tests for beyond the basic happy path?</div>\n\nFor API integration testing, tools like <strong>Supertest</strong> let you make HTTP requests to your Express app in tests without starting a real server. You can test your routes, your middleware, your error responses — all without deployment.\n\nWhat not to test: don't test library code (someone else already did), don't test trivial getters and setters, don't chase 100% coverage as a metric. Coverage is a tool for finding what you missed — it's not the goal. A test suite with 70% coverage and meaningful assertions beats one with 100% coverage and useless ones.`,
+        callout: {
+          type: "default",
+          label: "The Confidence Argument",
+          text: "Tests don't prove code is correct — they prove it behaves correctly under the scenarios you thought to test. The value is confidence: when you refactor, add features, or fix bugs, your tests tell you within seconds whether you've broken existing behaviour. Without tests, every change is a guess."
+        },
+        callout2: {
+          type: "focus",
+          label: "Where to Start",
+          text: "Don't try to retrofit tests to an existing untested codebase all at once. Start with the most critical path: what would be worst to break? Write tests for that first. Then, as a rule: when you fix a bug, write a test that would have caught it. Over time, the coverage grows where it matters most."
+        },
+        hint: `You're writing a test and it's hard to write because the function depends on a database call or an API call.\n\n<strong>Try this:</strong> Extract the pure logic from the function. A function that fetches users and formats their names can be split into fetchUsers() and formatNames(names). You test formatNames() with pure arrays — no database needed. Difficult-to-test code is usually code that's doing too many things.\n\n<strong>Mocking:</strong> When you must test code that calls an API or database, use Jest mocks to replace the real call with a fake one that returns controlled data. jest.fn() creates a mock function. jest.mock('./database') replaces the whole module. Mocks let you test logic without real infrastructure.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#a78bfa;margin-bottom:4px}
+p{color:#666;margin-bottom:20px;font-size:12px}
+.suite{background:#111;border:1px solid #222;border-radius:8px;padding:16px;margin-bottom:12px}
+.suite-title{color:#a78bfa;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.test{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;font-size:12px}
+.pass{color:#4ade80}.fail{color:#f87171}
+.test-name{color:#ccc}
+.run-btn{background:#a78bfa;color:#000;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:13px;cursor:pointer;font-weight:600;margin-bottom:20px}
+.run-btn:hover{background:#c4b5fd}
+#results{display:none}
+.summary{margin-top:12px;color:#666;font-size:12px}
+</style></head><body>
+<h2>Mini Test Runner</h2>
+<p>Click Run Tests to execute the test suite against the functions below</p>
+<button class="run-btn" onclick="runAllTests()">Run Tests</button>
+<div id="results"></div>
+<script>
+// --- Code Under Test ---
+function formatCurrency(amount) {
+  if (typeof amount !== 'number') return 'Invalid';
+  return '£' + amount.toFixed(2).replace(/\\B(?=(\\d{3})+(?!\\d))/g, ',');
+}
+
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function truncate(str, maxLen) {
+  if (str.length <= maxLen) return str;
+  return str.slice(0, maxLen - 3) + '...';
+}
+
+// --- Mini Test Framework ---
+const suites = [];
+function describe(name, fn) { const s={name,tests:[]}; suites.push(s); const t=(n,f)=>s.tests.push({name:n,fn:f}); fn(t); }
+function expect(val) {
+  return {
+    toBe: exp => ({ ok: val===exp, msg: 'expected '+JSON.stringify(val)+' to be '+JSON.stringify(exp) }),
+    toEqual: exp => ({ ok: JSON.stringify(val)===JSON.stringify(exp), msg: 'expected '+JSON.stringify(val)+' to equal '+JSON.stringify(exp) }),
+    toBeTruthy: () => ({ ok: !!val, msg: 'expected '+JSON.stringify(val)+' to be truthy' })
+  };
+}
+
+// --- Test Suites ---
+describe('formatCurrency', t => {
+  t('formats whole number', () => expect(formatCurrency(1000)).toBe('£1,000.00'));
+  t('formats decimal', () => expect(formatCurrency(9.5)).toBe('£9.50'));
+  t('handles zero', () => expect(formatCurrency(0)).toBe('£0.00'));
+  t('rejects non-number', () => expect(formatCurrency('abc')).toBe('Invalid'));
+  t('formats large amount', () => expect(formatCurrency(1234567)).toBe('£1,234,567.00'));
+});
+
+describe('clamp', t => {
+  t('returns value within range', () => expect(clamp(5, 0, 10)).toBe(5));
+  t('clamps below min', () => expect(clamp(-5, 0, 10)).toBe(0));
+  t('clamps above max', () => expect(clamp(15, 0, 10)).toBe(10));
+  t('handles equal to min', () => expect(clamp(0, 0, 10)).toBe(0));
+});
+
+describe('truncate', t => {
+  t('returns short strings unchanged', () => expect(truncate('Hello', 10)).toBe('Hello'));
+  t('truncates long strings with ellipsis', () => expect(truncate('Hello World', 8)).toBe('Hello...'));
+  t('handles exact length', () => expect(truncate('Hi', 2)).toBe('Hi'));
+});
+
+function runAllTests() {
+  let passed=0, failed=0, html='';
+  suites.forEach(s => {
+    html += '<div class="suite"><div class="suite-title">'+s.name+'</div>';
+    s.tests.forEach(t => {
+      try {
+        const r = t.fn();
+        if (!r || r.ok) { html+='<div class="test"><span class="pass">PASS</span><span class="test-name">'+t.name+'</span></div>'; passed++; }
+        else { html+='<div class="test"><span class="fail">FAIL</span><span class="test-name">'+t.name+' — '+r.msg+'</span></div>'; failed++; }
+      } catch(e) { html+='<div class="test"><span class="fail">ERR</span><span class="test-name">'+t.name+' — '+e.message+'</span></div>'; failed++; }
+    });
+    html += '</div>';
+  });
+  const el = document.getElementById('results');
+  el.style.display='block';
+  el.innerHTML = html + '<div class="summary">'+passed+' passed, '+failed+' failed</div>';
+}
+<\/script></body></html>`,
+          challenges: [
+            "Add a test for formatCurrency(-10) — what should negative currency return?",
+            "Make the truncate function fail a test by introducing a bug, then fix it",
+            "Add a new function isPalindrome(str) and write at least 4 tests for it",
+            "Add a test that you know will fail — observe how the failure message looks"
+          ]
+        },
+        quiz: {
+          question: "You write a unit test that asserts a function calls another internal function. Then you refactor to use a different internal approach but the output stays identical. The test fails. What does this tell you?",
+          options: [
+            "The refactor broke something — the test is correctly catching the regression",
+            "The test is testing implementation details rather than behaviour — it should be rewritten to assert on outputs",
+            "Unit tests should always be rewritten after every refactor",
+            "The failing test means the refactor was wrong and should be reverted"
+          ],
+          correct: 1,
+          feedback: "A test that breaks when behaviour hasn't changed is testing implementation, not behaviour. Tests should assert: 'given these inputs, the output is X.' They shouldn't care about how the function produces that output internally. Tests tied to implementation are brittle — they make refactoring expensive without adding safety. Rewrite the test to verify the output, not the internals."
+        },
+        checklist: [
+          "I can explain the difference between unit, integration, and end-to-end tests — and when to use each",
+          "I can write a Jest-style test suite with at least three test cases for a pure function",
+          "I test behaviour (inputs → outputs) not implementation (which functions are called internally)",
+          "I know what a mock is and can describe when you'd use one",
+          "I've identified the three most critical paths in one of my projects and written tests for them"
+        ]
+      },
+      {
+        id: "5-security",
+        title: "Security in Practice",
+        body: `Security is not a feature you add at the end. Every input your application accepts from the outside world is an attack surface. The vulnerabilities below are responsible for the majority of real-world breaches — not because developers are careless, but because they didn't know what to look for.\n\n<strong>Cross-Site Scripting (XSS)</strong> happens when you render user-supplied text as HTML instead of as a string. A user submits: <code>&lt;script&gt;document.cookie='stolen='+document.cookie&lt;/script&gt;</code> as their username. Your app renders that as HTML. Their script runs in every other user's browser, stealing session cookies.\n\nFix: never use <code>innerHTML</code> with user data. Use <code>textContent</code> instead — it renders the string as text, not markup. In templating engines, use the safe output syntax (e.g. <code>{{name}}</code> not <code>{{{name}}}</code> in Handlebars).\n\n<strong>SQL Injection</strong> happens when user input is concatenated directly into a SQL query. A login form with username=<code>admin' OR '1'='1</code> can bypass authentication entirely if the query is built as: <code>'SELECT * FROM users WHERE username = '' + input + '''</code>.\n\nFix: always use parameterised queries (prepared statements). <code>db.query('SELECT * FROM users WHERE username = ?', [input])</code> — the database treats the parameter as data, never as SQL. Never concatenate user input into SQL strings.\n\n<strong>Cross-Site Request Forgery (CSRF)</strong> tricks a logged-in user's browser into making requests to your server without their knowledge. A hidden form on a malicious website, when loaded by someone logged into your bank, can submit a transfer.\n\nFix: CSRF tokens — include a secret, unique token in every form that your server validates. The malicious site doesn't have the token and can't forge it. Express uses csurf middleware, or modern frameworks handle it automatically.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — look at the notes app you built in Floor 5. Which of these three vulnerabilities does it currently protect against? Which does it not?</div>\n\n<strong>The broader principle:</strong> Never trust input from the client. Validate on the server, escape on output, use parameterised queries for data access. Security is a mindset applied to every piece of data that crosses a trust boundary.`,
+        callout: {
+          type: "default",
+          label: "The OWASP Top 10",
+          text: "The Open Web Application Security Project maintains the OWASP Top 10 — the ten most critical web application security risks, updated every few years based on real vulnerability data. XSS, SQL injection, and broken authentication are perennial entries. Reading the current OWASP Top 10 once is worth an hour of your time."
+        },
+        callout2: {
+          type: "focus",
+          label: "innerHTML Is Dangerous",
+          text: "The single most common XSS mistake in JavaScript is using innerHTML to render user-provided content. Every time you write element.innerHTML = userInput, ask: is this string something a user typed, clicked, or submitted? If yes, use textContent instead, or sanitise with DOMPurify before rendering."
+        },
+        hint: `You're not sure if your application is vulnerable to XSS.\n\n<strong>Quick test:</strong> Find any input field or URL parameter your app renders back on screen. Submit the string <code>&lt;b&gt;test&lt;/b&gt;</code>. If the word "test" appears bold on screen, you're rendering HTML and you're vulnerable to XSS. If it appears literally as &lt;b&gt;test&lt;/b&gt; on screen, you're escaping correctly.\n\n<strong>For SQL injection:</strong> Look at every database query in your codebase. If you see string concatenation (+ or template literals) inside the query string, that's the vulnerability. Replace with parameterised queries.\n\n<strong>Never test security vulnerabilities on systems you don't own</strong> — test only on your own local application.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#f87171;margin-bottom:4px}
+p{color:#666;margin-bottom:20px;font-size:12px}
+.demo{background:#111;border-radius:8px;padding:16px;margin-bottom:16px}
+.demo-title{font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
+.vulnerable{border:1px solid #7f1d1d}.safe{border:1px solid #14532d}
+.vulnerable .demo-title{color:#f87171}.safe .demo-title{color:#4ade80}
+input{width:100%;background:#1a1a1a;border:1px solid #333;border-radius:4px;padding:8px;color:#fff;font-family:inherit;font-size:12px;box-sizing:border-box;margin-bottom:8px}
+button{background:#333;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-family:inherit;font-size:12px;cursor:pointer;margin-bottom:8px}
+button:hover{background:#444}
+.output{background:#0f0f0f;border-radius:4px;padding:10px;min-height:36px;font-size:12px;border:1px solid #222}
+.vuln-label{color:#f87171;font-size:11px;margin-top:4px}
+.safe-label{color:#4ade80;font-size:11px;margin-top:4px}
+</style></head><body>
+<h2>XSS: Vulnerable vs Safe Rendering</h2>
+<p>Type some text — including HTML tags — and see the difference</p>
+<div class="demo vulnerable">
+<div class="demo-title">Vulnerable: using innerHTML</div>
+<input id="v-input" type="text" placeholder="Try: &lt;b&gt;bold&lt;/b&gt; or &lt;em style='color:red'&gt;red&lt;/em&gt;" value="<b>This text is bold</b>">
+<button onclick="renderVulnerable()">Render with innerHTML</button>
+<div class="output" id="v-output"></div>
+<div class="vuln-label">⚠ HTML is being interpreted — an attacker could inject scripts</div>
+</div>
+<div class="demo safe">
+<div class="demo-title">Safe: using textContent</div>
+<input id="s-input" type="text" placeholder="Same input, safe output" value="<b>This text is bold</b>">
+<button onclick="renderSafe()">Render with textContent</button>
+<div class="output" id="s-output"></div>
+<div class="safe-label">✓ HTML tags are displayed as literal text — no injection possible</div>
+</div>
+<script>
+function renderVulnerable() {
+  document.getElementById('v-output').innerHTML = document.getElementById('v-input').value;
+}
+function renderSafe() {
+  document.getElementById('s-output').textContent = document.getElementById('s-input').value;
+}
+renderVulnerable(); renderSafe();
+<\/script></body></html>`,
+          challenges: [
+            "Try typing <img src=x onerror=\"alert('XSS')\"> in the vulnerable input — what happens?",
+            "Try the same string in the safe input — confirm it appears as literal text",
+            "Add a third demo showing DOMPurify sanitisation (safe innerHTML with a library)",
+            "Add a 'SQL Injection' demo section showing a vulnerable string-concatenated query vs a parameterised one"
+          ]
+        },
+        quiz: {
+          question: "A login form builds a SQL query: 'SELECT * FROM users WHERE email = '' + email + '' AND password = '' + password + '''. A user submits email = <code>admin@site.com' --</code>. What happens?",
+          options: [
+            "The query returns no results because the email is invalid",
+            "The -- comments out the password check, returning the admin user without a correct password",
+            "SQL rejects the query because of the apostrophe syntax",
+            "The application crashes with an unhandled exception"
+          ],
+          correct: 1,
+          feedback: "The -- in SQL is a comment delimiter. The constructed query becomes: SELECT * FROM users WHERE email = 'admin@site.com' -- AND password = '...'. Everything after -- is ignored. The password check is commented out. The query returns the admin user. The attacker logs in without knowing the password. Parameterised queries prevent this entirely — the parameter is treated as data, not SQL syntax."
+        },
+        checklist: [
+          "I can explain XSS, SQL injection, and CSRF to a non-technical person using a real-world analogy",
+          "I never use innerHTML with user-supplied data — I use textContent or sanitise first",
+          "Every database query in my projects uses parameterised queries, not string concatenation",
+          "I can perform a basic XSS test on my own application (the <b>test</b> technique) and know what a vulnerable result looks like",
+          "I've audited at least one project I built this floor for the three vulnerabilities covered here"
+        ]
       }
     ]
   },
@@ -3909,6 +4612,100 @@ When it's deployed: write a README that explains what the application does, the 
           feedback: "Positioning is context-dependent. A startup with 6 engineers needs people who can contribute across the stack. 'Intermediate Node.js' is enough to be unblocked on backend work. Calling yourself a frontend specialist in that context undersells your utility. In a larger company with dedicated teams, the same developer might more accurately position as a frontend engineer."
         },
         checklist: ["I can explain the real trade-offs between full stack and specialised roles — not just the labels", "I know which context I'm optimising for right now and can articulate why", "I've built at least one complete feature that touched both frontend and backend", "I can honestly assess where my primary depth lies today", "I understand that 'full stack' is a positioning choice relative to team context, not a fixed definition"]
+      },
+      {
+        id: "6-typescript",
+        title: "TypeScript: Why Teams Use It",
+        body: `TypeScript is JavaScript with type annotations. Every JavaScript file is valid TypeScript. The difference is that TypeScript adds a compile step that checks your types before the code runs — catching a category of bugs that JavaScript would only surface at runtime, in production, when a user hits them.\n\nThe basic idea: instead of writing <code>function greet(name) { return 'Hello, ' + name; }</code>, you write <code>function greet(name: string): string { return 'Hello, ' + name; }</code>. You've declared that name must be a string and the function returns a string. TypeScript now enforces this everywhere greet is called — pass a number, get a compile-time error instead of a runtime bug.\n\nWhere TypeScript pays off most: large codebases with many contributors, functions that call functions that call functions, API responses being shaped and passed around, and refactoring. When you rename a property, TypeScript shows you every place in the codebase that uses the old name — instantly. In JavaScript you find out by testing, or by users reporting errors.\n\nThe interfaces feature is where experienced developers say TypeScript changes how they think. You define the shape of an object once:\n<code>interface User { id: number; email: string; role: 'admin' | 'member'; }</code>\nNow every function that accepts a User gets type-checked. If an API response adds a new field or changes a type, TypeScript tells you before you deploy.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — in a JavaScript codebase with 50 files, if you rename a property from <code>user.name</code> to <code>user.fullName</code>, how would you find every place that uses it? How does TypeScript change that?</div>\n\nWhen should you use it? If you're building something that will grow, working in a team, or building a library other people will consume — TypeScript pays for itself quickly. If you're building a 200-line script for yourself, it may be overhead. The industry has largely moved toward TypeScript for production JavaScript — React, Node, Vue, and most major frameworks have first-class TypeScript support.`,
+        callout: {
+          type: "default",
+          label: "TypeScript Doesn't Change JavaScript",
+          text: "TypeScript compiles to plain JavaScript. Your users never see TypeScript — the browser runs the compiled JS. TypeScript is a development tool: it makes the experience of writing and maintaining JavaScript safer and more productive. The runtime is identical."
+        },
+        callout2: {
+          type: "focus",
+          label: "The Adoption Decision",
+          text: "Most professional JavaScript teams use TypeScript today. When you join a team or contribute to an open source project, you'll encounter it. You don't need to master it now — understanding what it is and why it exists is enough for this stage. Floor 7 assumes TypeScript literacy."
+        },
+        hint: `The fastest way to start: open any JavaScript project and rename a file from <code>.js</code> to <code>.ts</code>. Run <code>npx tsc --noEmit</code>. TypeScript will immediately show you every place it has questions about your types. You don't have to fix all of them — they tell you where the most ambiguity lives in your code.\n\n<strong>Key terms to know:</strong> Type annotation (<code>: string</code>), interface (a named object shape), union type (<code>'admin' | 'member'</code>), generic (<code>Array&lt;User&gt;</code>), type inference (TypeScript guesses the type when you don't declare it).\n\n<strong>Still unclear why it matters?</strong> Try building a fetch call that returns user data and passes it through three functions. In JavaScript, each function has to trust that the shape is right. In TypeScript, each function checks the shape at compile time. The first time TypeScript catches a real bug you would have only found in production, the value is obvious.`,
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#60a5fa;margin-bottom:16px}
+.card{background:#111;border:1px solid #222;border-radius:8px;padding:16px;margin-bottom:12px}
+.ts-label{color:#60a5fa;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.js-label{color:#f59e0b;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+code{background:#1a1a1a;border-radius:4px;padding:2px 6px;color:#86efac;font-family:inherit;font-size:12px}
+.error{color:#f87171}.ok{color:#4ade80}
+</style></head><body>
+<h2>TypeScript: Catching Bugs Before Runtime</h2>
+<div class="card">
+<div class="js-label">JavaScript — error only at runtime</div>
+<pre style="color:#f59e0b;margin:0;font-size:12px">function greet(user) {
+  return "Hello, " + user.name.toUpperCase();
+}
+greet(null); // TypeError at runtime — user is null</pre>
+</div>
+<div class="card">
+<div class="ts-label">TypeScript — error at compile time</div>
+<pre style="color:#86efac;margin:0;font-size:12px">interface User { name: string; }
+
+function greet(user: User): string {
+  return "Hello, " + user.name.toUpperCase();
+}
+// greet(null) → TS error: Argument of type 'null'
+// is not assignable to parameter of type 'User'</pre>
+</div>
+<div class="card">
+<div class="ts-label">Union types — valid values only</div>
+<pre style="color:#86efac;margin:0;font-size:12px">type Role = 'admin' | 'member' | 'viewer';
+
+function setRole(role: Role) {
+  console.log("Role set to:", role);
+}
+// setRole('superuser') → TS error immediately
+// setRole('admin') → compiles fine</pre>
+</div>
+<div id="demo" style="margin-top:16px"></div>
+<script>
+// This is compiled JS — types are stripped at runtime
+// But we can demonstrate type-safety logic:
+function validateRole(role) {
+  const valid = ['admin', 'member', 'viewer'];
+  const ok = valid.includes(role);
+  document.getElementById('demo').innerHTML =
+    '<p class="' + (ok ? 'ok' : 'error') + '">' +
+    (ok ? '✓' : '✗') + ' Role "' + role + '" is ' + (ok ? 'valid' : 'INVALID — TypeScript would catch this at compile time') + '</p>';
+}
+validateRole('admin');
+<\/script></body></html>`,
+          challenges: [
+            "Change validateRole('admin') to validateRole('superuser') and see the runtime validation fail",
+            "Add a second role to the valid array and test it works",
+            "Add a greet() function that takes a name parameter and returns 'Hello, ' + name",
+            "What error would TypeScript show if you called greet(42) — where a number is passed instead of a string?"
+          ]
+        },
+        quiz: {
+          question: "A TypeScript function is declared as: function processUser(user: User): string. A colleague calls it with processUser(null). What happens?",
+          options: [
+            "The function runs normally — null is a valid JavaScript value",
+            "TypeScript reports a compile-time error before the code runs, because null is not assignable to type User",
+            "The function returns an empty string because null doesn't match User",
+            "The error only appears if the function tries to access a property on user"
+          ],
+          correct: 1,
+          feedback: "TypeScript checks types at compile time — before the code runs. Passing null where a User is expected is a type error that TypeScript reports immediately. In plain JavaScript, the error only surfaces when processUser(null) executes and tries to access user.name — at runtime, potentially in production. This is the core value of TypeScript: catching an entire category of bugs before deployment."
+        },
+        checklist: [
+          "I can explain what TypeScript adds on top of JavaScript — in one sentence — without using the word 'better'",
+          "I understand that TypeScript compiles to JavaScript and users never see TypeScript directly",
+          "I can describe what a type annotation is and write a basic one from memory",
+          "I can explain what an interface is and why defining object shapes explicitly helps in large codebases",
+          "I understand why most professional JavaScript teams have adopted TypeScript and when it's worth the overhead"
+        ]
       },
       {
         id: "6-5",
