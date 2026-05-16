@@ -19,7 +19,7 @@ function getAudioContext() {
 
 const FLOORS = [
   
-  {
+    {
     id: 1,
     title: "Understanding Before Touching",
     subtitle: "How code actually thinks",
@@ -27,14 +27,12 @@ const FLOORS = [
     duration: "3-4 weeks",
     sessions: "5 per week",
     length: "45-60 min",
-    tag: "Floor 01 \u2014 Foundation",
+    tag: "Floor 01 — Foundation",
     sections: [
       {
         id: "1-1",
         title: "How the Internet Actually Works",
-        body: `Before you write a single line of code, you need to understand what the internet actually is.\n\nEvery time you type a web address and press Enter, a precise sequence unfolds in under a second. Your browser sends a <strong>request</strong> \u2014 a message that says "give me this page." That request travels across the internet to a <strong>server</strong> \u2014 another computer, somewhere in the world, that is always on and waiting. The server finds the right files and sends them back. Your browser reads those files and draws the page you see.\n\nEvery webpage is made of three types of files working together:\n\n<strong>HTML</strong> \u2014 the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> \u2014 the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> \u2014 the behaviour. What happens when you click, type, or scroll.\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nThat is what a web developer does.`,
-
-
+        body: `Before you write a single line of code, you need to understand what the internet actually is.\n\nEvery time you type a web address and press Enter, a precise sequence unfolds in under a second. Your browser sends a <strong>request</strong> — a message that says "give me this page." That request travels across the internet to a <strong>server</strong> — another computer, somewhere in the world, that is always on and waiting. The server finds the right files and sends them back. Your browser reads those files and draws the page you see.\n\nEvery webpage is made of three types of files working together:\n\n<strong>HTML</strong> — the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> — the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> — the behaviour. What happens when you click, type, or scroll.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — when you loaded this very page, what do you think happened between your browser and a server?</div>\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nThat is what a web developer does.`,
         callout: {
           type: "default",
           label: "The Key Idea",
@@ -45,26 +43,31 @@ const FLOORS = [
           label: "For Your Brain",
           text: "Don't try to memorise this. Just let the idea sit. You're building a mental picture, not a fact sheet. The detail comes later through doing."
         },
-        hint: `The request-response cycle is how the entire web works. Browser asks. Server answers.\n\n<strong>Try this right now:</strong> Open any website. Right-click anywhere on the page and choose "View Page Source." What you see \u2014 all of it \u2014 is what the server sent back to your browser. Every site you've ever visited sent files that looked like that.\n\n<strong>Still fuzzy?</strong> Think of it like ordering food. You place an order (request). The kitchen prepares it (server processes). The waiter brings it to your table (response). Your browser is the waiter. You're the one eating.`,
+        hint: `The request-response cycle is how the entire web works. Browser asks. Server answers.\n\n<strong>Try this right now:</strong> Open any website. Right-click anywhere on the page and choose "View Page Source." What you see — all of it — is what the server sent back to your browser. Every site you've ever visited sent files that looked like that.\n\n<strong>Still fuzzy?</strong> Think of it like ordering food. You place an order (request). The kitchen prepares it (server processes). The waiter brings it to your table (response). Your browser is the waiter. You're the one eating.`,
         quiz: {
           question: "When you visit a website, what is your browser actually doing?",
-          options: ["Creating the website from scratch", "Requesting and displaying files from another computer", "Downloading the entire internet", "Connecting directly to the website owner"],
+          options: [
+            "Creating the website from scratch using your computer's resources",
+            "Requesting and displaying files sent from another computer called a server",
+            "Downloading the entire internet to your hard drive",
+            "Connecting directly to the website owner's personal computer"
+          ],
           correct: 1,
-          feedback: "Correct. Your browser sends a request to a server \u2014 another computer \u2014 which sends back files. Your browser reads those files and displays them. That's it. That's the web."
+          feedback: "Your browser sends a request to a server — another computer — which sends back files. Your browser reads those files and displays them. That's it. Option A is wrong because browsers don't create content — they display it. Option C is wrong because only the specific files for that page are sent. Option D is wrong because servers are dedicated machines, not personal computers."
         },
         match: {
           prompt: "Every webpage is built from three types of files. Match each to what it does:",
           pairs: [
-            { term: "HTML", def: "The structure \u2014 headings, paragraphs, buttons" },
-            { term: "CSS", def: "The visual style \u2014 colours, fonts, layout" },
-            { term: "JavaScript", def: "The behaviour \u2014 what happens when you interact" }
+            { term: "HTML", def: "The structure — headings, paragraphs, buttons" },
+            { term: "CSS", def: "The visual style — colours, fonts, layout" },
+            { term: "JavaScript", def: "The behaviour — what happens when you interact" }
           ]
         }
       },
       {
         id: "1-2",
         title: "How a Computer Reads Instructions",
-        body: `Computers are extraordinarily fast. But they are not smart. They do <strong>exactly</strong> what you tell them \u2014 nothing more, nothing less.\n\nA computer reads code <strong>line by line, top to bottom</strong>. It doesn't skip ahead. It doesn't assume. It reads instruction 1, executes it, then reads instruction 2. This is called <strong>sequential execution</strong> and it is the foundation of everything.\n\nThe order you write things in <strong>matters enormously</strong>. A recipe that says "serve the cake" before "bake the cake" produces nothing edible. Code works the same way. Ask a computer to display a result before it has calculated the result \u2014 and it has nothing to show.\n\nThis is one of the most common beginner mistakes. And now you already understand why it happens.\n\nProfessional developers spend a lot of time thinking about order. Not just what to do \u2014 but when.`,
+        body: `Computers are extraordinarily fast. But they are not smart. They do <strong>exactly</strong> what you tell them — nothing more, nothing less.\n\nA computer reads code <strong>line by line, top to bottom</strong>. It doesn't skip ahead. It doesn't assume. It reads instruction 1, executes it, then reads instruction 2. This is called <strong>sequential execution</strong> and it is the foundation of everything.\n\nThe order you write things in <strong>matters enormously</strong>. A recipe that says "serve the cake" before "bake the cake" produces nothing edible. Code works the same way. Ask a computer to display a result before it has calculated the result — and it has nothing to show.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — can you think of a real situation in your daily life where the order of steps is non-negotiable? What goes wrong if you change the order?</div>\n\nThis is one of the most common beginner mistakes. And now you already understand why it happens.\n\nProfessional developers spend a lot of time thinking about order. Not just what to do — but when.`,
         callout: {
           type: "default",
           label: "The Logical Thinker in You",
@@ -75,18 +78,23 @@ const FLOORS = [
           label: "ADHD Note",
           text: "<strong>Don't rush this section.</strong> The concept of sequential execution is small but everything else is built on top of it. Two minutes understanding this properly saves hours of confusion later."
         },
-        hint: `Think of a recipe. If it says "serve the cake" before "bake the cake" \u2014 you have a problem. Computers are the same. They do exactly what you say, in exactly the order you say it. No guessing, no common sense.\n\n<strong>Still fuzzy?</strong> Write out 5 instructions for making a cup of tea in order. That sequential thinking \u2014 that's exactly how a computer reads code.`,
+        hint: `Think of a recipe. If it says "serve the cake" before "bake the cake" — you have a problem. Computers are the same. They do exactly what you say, in exactly the order you say it. No guessing, no common sense.\n\n<strong>Still fuzzy?</strong> Write out 5 instructions for making a cup of tea in order. That sequential thinking — that's exactly how a computer reads code.`,
         quiz: {
-          question: "If your code says: Step 1: Display the result. Step 2: Calculate the result. What happens?",
-          options: ["It works fine, computers are smart enough to reorder", "It displays nothing or an error, because the result doesn't exist yet", "It calculates first anyway", "It asks you what to do"],
+          question: "Your code has two steps: Step 1 displays a discount amount, Step 2 calculates what that discount is. What happens when you run it?",
+          options: [
+            "It works fine — computers are smart enough to figure out the right order",
+            "It displays nothing or an error, because the discount hasn't been calculated yet when Step 1 runs",
+            "It automatically calculates the discount first, then displays it",
+            "It asks you which step to run first"
+          ],
           correct: 1,
-          feedback: "The computer tries to display the result before it's been calculated \u2014 so there's nothing to show. Order is everything. This is one of the most common beginner mistakes, and now you already understand why it happens."
+          feedback: "The computer tries to display the discount before it's been calculated — so there's nothing to show. Sequential execution means instructions run in the exact order written, top to bottom. Option A is wrong because computers have no 'common sense' — they follow instructions literally. Options C and D are wrong because computers never reorder or negotiate with you about steps."
         },
         code: {
           lang: "JavaScript",
-          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.7;">\n<h2 style="color:#c8a96e;margin-top:0;">Order Matters</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // Step 1: Set a price\n  var price = 40;\n  out += \'<p>1. Price set to: \u00a3\' + price + \'</p>\';\n\n  // Step 2: Calculate a 10% discount\n  var discount = price * 0.10;\n  out += \'<p>2. Discount calculated: \u00a3\' + discount.toFixed(2) + \'</p>\';\n\n  // Step 3: Apply it\n  var finalPrice = price - discount;\n  out += \'<p style="color:#c8a96e;font-size:18px;margin-top:16px;">You pay: \u00a3\' + finalPrice.toFixed(2) + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
+          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.7;">\n<h2 style="color:#c8a96e;margin-top:0;">Order Matters</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // Step 1: Set a price\n  var price = 40;\n  out += \'<p>1. Price set to: £\' + price + \'</p>\';\n\n  // Step 2: Calculate a 10% discount\n  var discount = price * 0.10;\n  out += \'<p>2. Discount calculated: £\' + discount.toFixed(2) + \'</p>\';\n\n  // Step 3: Apply it\n  var finalPrice = price - discount;\n  out += \'<p style="color:#c8a96e;font-size:18px;margin-top:16px;">You pay: £\' + finalPrice.toFixed(2) + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
           challenges: [
-            "Move Step 3 above Step 2 \u2014 what breaks and why?",
+            "Move Step 3 above Step 2 — what breaks and why?",
             "Change the price from 40 to 120",
             "Change the discount from 10% to 25%"
           ]
@@ -95,8 +103,7 @@ const FLOORS = [
       {
         id: "1-3",
         title: "The Logic Behind All Code",
-        body: `Every program ever written \u2014 from a calculator app to a social network \u2014 is built from exactly three ideas.\n\n<strong>Conditions</strong> decide which path to take. If the user is logged in, show the dashboard. If not, show the login page. Every decision in code is a condition. There are no exceptions.\n\n<strong>Loops</strong> repeat instructions until something changes. Check every item in a shopping cart and add up the total. Send a notification to every user in a list. Any time something needs to happen "for each item" or "until a condition is met" \u2014 that is a loop.\n\n<strong>Functions</strong> are named, reusable blocks of instructions. Instead of writing the same ten lines every time you need to validate a form, you write it once, give it a name, and call that name whenever you need it. Functions are how professional code stays manageable as it scales.\n\nThere is nothing in any programming language \u2014 not one thing \u2014 that is not built on some combination of these three ideas. When you are writing complex software in two years, you will still be thinking in conditions, loops and functions.`,
-
+        body: `Every program ever written — from a calculator app to a social network — is built from exactly three ideas.\n\n<strong>Conditions</strong> decide which path to take. If the user is logged in, show the dashboard. If not, show the login page. Every decision in code is a condition. There are no exceptions.\n\n<strong>Loops</strong> repeat instructions until something changes. Check every item in a shopping cart and add up the total. Send a notification to every user in a list. Any time something needs to happen "for each item" or "until a condition is met" — that is a loop.\n\n<strong>Functions</strong> are named, reusable blocks of instructions. Instead of writing the same ten lines every time you need to validate a form, you write it once, give it a name, and call that name whenever you need it. Functions are how professional code stays manageable as it scales.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — pick any app on your phone. Can you identify one decision it makes (condition), one thing it does repeatedly (loop), and one action it reuses across multiple screens (function)?</div>\n\nThere is nothing in any programming language — not one thing — that is not built on some combination of these three ideas. When you are writing complex software in two years, you will still be thinking in conditions, loops and functions.`,
         callout: {
           type: "default",
           label: "The Professional Lens",
@@ -104,10 +111,15 @@ const FLOORS = [
         },
         hint: `A <strong>condition</strong> is a fork in the road. The road splits. You go one way or the other based on what's true.\nA <strong>loop</strong> is a roundabout. You go around until you're told to exit.\nA <strong>function</strong> is a shortcut. You name a journey once. Then you can take it anytime just by saying its name.\n\n<strong>Try this:</strong> Pick any app on your phone. Describe one condition it uses, one loop it uses, and one repeated action that is probably a function. You will find all three in under a minute.`,
         quiz: {
-          question: "Which of the three core concepts means: 'Do this over and over until something stops you'?",
-          options: ["A condition", "A function", "A loop", "A variable"],
+          question: "A shopping cart calculates tax on every item in the basket. Which concept handles the 'do this for every item' part?",
+          options: [
+            "A condition — because the cart needs to decide whether tax applies",
+            "A function — because the tax calculation is reused",
+            "A loop — because it repeats the same operation for each item until all items are processed",
+            "A variable — because it stores the running total"
+          ],
           correct: 2,
-          feedback: "A loop repeats instructions until a condition tells it to stop. A condition decides which path to take. A function is a reusable block of instructions. These three are the building blocks of everything."
+          feedback: "A loop repeats instructions for each item until there are no more items left. A condition (option A) would decide whether something applies — like whether tax is applicable at all. A function (option B) would hold the tax calculation logic, but the 'do this for every item' part is still a loop calling that function. A variable (option D) stores data, not a repeated process."
         },
         code: {
           lang: "JavaScript",
@@ -130,11 +142,11 @@ const FLOORS = [
       {
         id: "1-4",
         title: "Your First Look at Real Code",
-        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Before you speak a language fluently, you learn to recognise it. Same principle applies here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\nLook at the example below. Do not panic. Do not try to memorise it. Just try to read it like a sentence \u2014 guess what each line does before you read the explanation. That act of guessing is already how developers think.`,
+        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Before you speak a language fluently, you learn to recognise it. Same principle applies here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\nLook at the example below. Do not panic. Do not try to memorise it. Just try to read it like a sentence — guess what each line does before you read the explanation. That act of guessing is already how developers think.`,
         code: {
           lang: "HTML",
           lines: [
-            '<span class="code-comment"><!-- This is a comment. The computer ignores it. It\'s just a note for humans. --></span>',
+            '<span class="code-comment">&lt;!-- This is a comment. The computer ignores it. It\'s just a note for humans. --&gt;</span>',
             '',
             '<span class="code-tag">&lt;h1&gt;</span>Hello, World<span class="code-tag">&lt;/h1&gt;</span>',
             '<span class="code-tag">&lt;p&gt;</span>This is my first piece of code.<span class="code-tag">&lt;/p&gt;</span>',
@@ -151,7 +163,7 @@ const FLOORS = [
         callout: {
           type: "default",
           label: "What You're Looking At",
-          text: "Those angle brackets \u2014 the &lt; and &gt; \u2014 are called <strong>tags</strong>. They're labels that tell the browser what each piece of content is. h1 means a big heading. p means a paragraph. button means a clickable button. Open tag, content, close tag. That's the pattern."
+          text: "Those angle brackets — the &lt; and &gt; — are called <strong>tags</strong>. They're labels that tell the browser what each piece of content is. h1 means a big heading. p means a paragraph. button means a clickable button. Open tag, content, close tag. That's the pattern."
         },
         callout2: {
           type: "focus",
@@ -160,21 +172,21 @@ const FLOORS = [
         },
         hint: `Don't read the code like a sentence. Read it like signs on a road.\n\nThe tag name tells you what type of thing it is. &lt;h1&gt; = big heading. &lt;p&gt; = paragraph. &lt;button&gt; = button. The words between the opening and closing tag are what actually appears on screen.\n\n<strong>Still fuzzy?</strong> Think of tags like labels on boxes. The label tells you what's inside. The content is the thing inside the box. Open the box (opening tag), here's what's inside (content), close the box (closing tag).`,
         quiz: {
-          question: "Looking at the code above — what does the <h1> tag tell the browser?",
+          question: "Looking at the code example — what does the &lt;p&gt; tag tell the browser about the content inside it?",
           options: [
-            "To make the text bold and underlined",
-            "That this content is a large heading",
-            "To link to another page",
-            "To ignore this line — it is a comment"
+            "That this content should be in a large, bold font",
+            "That this content is a paragraph of regular body text",
+            "That this content should be clickable like a button",
+            "That this line is a comment the browser should ignore"
           ],
           correct: 1,
-          feedback: "h1 means 'heading level 1' — the largest, most important heading on the page. Tags are labels. They tell the browser what type of content is inside them. Open tag, content, close tag. That is the entire pattern of HTML."
-        },
+          feedback: "The &lt;p&gt; tag labels its content as a paragraph — regular body text. It doesn't style it bold (that's CSS, not HTML), it doesn't make it clickable (that's &lt;button&gt;), and comments use &lt;!-- --&gt; syntax, not tags. Tags are labels: they tell the browser what type of content is inside, and the browser applies its default styling for that type."
+        }
       },
       {
         id: "1-5",
-        title: "Floor 1 Check \u2014 Explain It Back",
-        body: `You have covered the four ideas that underpin everything in web development.\n\nHow the internet works. How computers read instructions. The three building blocks of all code. And your first look at HTML.\n\nThis is not a small thing. Most people who try to learn to code never properly understand these foundations \u2014 they rush to write syntax before they understand what it is or why it works. You have not done that.\n\nBefore you move to Floor 2, do one final check. Not for us \u2014 for you. Answer the question below in your head before selecting an option. If you can explain it clearly, you are ready. If something feels shaky, go back to that one section. Not the whole floor \u2014 just that section.`,
+        title: "Floor 1 Check — Prove It Back",
+        body: `Before you move to Floor 2, do a genuine check — not for this app, but for yourself.\n\nYou have covered the four ideas that underpin everything in web development: how the internet works, how computers read instructions sequentially, the three building blocks of all code, and your first look at HTML tags.\n\nThis is not a small thing. Most people who try to learn to code never properly understand these foundations — they rush to write syntax before they understand what it is or why it works. You have not done that.\n\nThe questions below get progressively harder. They test whether you can connect and apply what you've learned — not just recall it. Answer each one honestly in your head before selecting. If something feels shaky, go back to that one section. Not the whole floor — just that section.`,
         callout: {
           type: "default",
           label: "The Foundation",
@@ -185,18 +197,77 @@ const FLOORS = [
           label: "Floor 2 Preview",
           text: `Floor 2 is where it becomes real. You will write actual HTML and CSS and see the results on screen immediately. Everything you understood here becomes something you can build.`
         },
-        hint: `If you cannot answer the question below without guessing \u2014 that is useful information, not failure. It tells you exactly which section to return to. One weak brick does not mean a broken building. It means one brick to fix.`,
+        hint: `If you cannot answer the questions below without guessing — that is useful information, not failure. It tells you exactly which section to return to. One weak brick does not mean a broken building. It means one brick to fix.`,
         quiz: {
-          question: "A developer builds a system that: checks whether a user has paid (condition), processes each item in their order one by one (loop), and uses the same discount calculation in three different places (function). Which statement is true?",
-          options: [
-            "This system uses all three core building blocks of programming",
-            "Loops and functions are the same thing \u2014 both repeat code",
-            "Conditions are not needed here \u2014 loops can make decisions",
-            "You would need a fourth concept to build this"
-          ],
-          correct: 0,
-          feedback: "Exactly right. One condition, one loop, one function \u2014 and you have described a real piece of professional software. Every system, no matter how complex, is built from combinations of these three things. You now have the lens every developer uses."
-        },
+          questions: [
+            {
+              question: "What is the correct term for what happens when a browser sends a message to a server asking for a webpage?",
+              options: [
+                "A download — because the page is saved to your computer",
+                "A request — the browser asks, the server responds with files",
+                "A render — because the browser draws the page",
+                "A compile — because the browser converts the files"
+              ],
+              correct: 1,
+              feedback: "The browser sends a request and the server sends a response containing files. This request-response cycle is the foundation of how the entire web works. 'Download' implies permanent storage. 'Render' happens after the files arrive — it's what the browser does with them. 'Compile' is a different process entirely (converting source code to machine code)."
+            },
+            {
+              question: "Code is written in this order: Line 1 displays a total. Line 2 calculates the total. What happens?",
+              options: [
+                "The total is displayed correctly because computers optimise execution order",
+                "Line 1 displays nothing or an error because the total hasn't been calculated yet",
+                "Line 2 runs first automatically because calculations must precede display",
+                "An error is thrown and the program stops before either line runs"
+              ],
+              correct: 1,
+              feedback: "Sequential execution means the computer runs Line 1 exactly as written — before Line 2. The total doesn't exist yet. Computers don't optimise or reorder instructions. They don't 'know' that a calculation should come first. This is why order is everything in code."
+            },
+            {
+              question: "Which of the three core building blocks would you use to 'send a welcome email to every new user who signed up this week'?",
+              options: [
+                "A condition — because you need to check if they signed up this week",
+                "A function — because the email-sending logic should be reusable",
+                "A loop — because you need to repeat the action for each user in the list",
+                "A combination of loop and function — the loop iterates users, the function sends each email"
+              ],
+              correct: 3,
+              feedback: "This is the most sophisticated answer — and the correct one. The loop handles 'for each new user,' and the function holds the reusable email-sending logic that the loop calls. A condition alone can't repeat. A function alone doesn't iterate. The combination is how real code works: loops call functions, and conditions live inside both."
+            },
+            {
+              question: "A developer builds a system that: checks whether a user has paid (condition), processes each item in their order one by one (loop), and uses the same discount calculation in three different places (function). Which statement is true?",
+              options: [
+                "This system uses all three core building blocks of programming",
+                "Loops and functions are the same thing — both repeat code",
+                "Conditions are not needed here — loops can make decisions",
+                "You would need a fourth concept beyond conditions, loops, and functions"
+              ],
+              correct: 0,
+              feedback: "Exactly right. One condition, one loop, one function — and you have described a real piece of professional software. Every system, no matter how complex, is built from combinations of these three things. Loops repeat but don't hold logic the way functions do. Conditions decide but don't repeat. All three serve distinct purposes."
+            },
+            {
+              question: "What does the &lt;h1&gt; tag communicate to the browser?",
+              options: [
+                "Make this text large and bold using the browser's default heading style",
+                "This content is the most important heading on the page",
+                "Both A and B — h1 instructs styling AND declares semantic importance",
+                "Ignore this line — h1 is a comment tag"
+              ],
+              correct: 2,
+              feedback: "Both are true, but for different reasons. &lt;h1&gt; semantically declares this as the page's primary heading (most important), which search engines and screen readers use. The browser also applies default styling (large, bold) to headings. The semantic meaning is HTML's job. The styling is the browser's default — and CSS can override it entirely. &lt;h1&gt; is definitely not a comment — comments use &lt;!-- --&gt;."
+            },
+            {
+              question: "You want to explain 'what a server is' to a friend who has never coded. Which explanation is most accurate?",
+              options: [
+                "A server is special software that creates websites when users visit them",
+                "A server is another computer — always on, always connected — that stores and sends files when browsers request them",
+                "A server is what a browser uses to translate HTML into visual pages",
+                "A server is a type of database that stores website passwords"
+              ],
+              correct: 1,
+              feedback: "A server is fundamentally another computer — one that is always running and connected, waiting to respond to requests. It stores files and sends them when asked. It doesn't create websites on demand (the files already exist), it doesn't translate HTML (the browser does that), and it's not specifically a database or a password store — though servers often connect to databases."
+            }
+          ]
+        }
       }
     ]
   },
@@ -208,35 +279,46 @@ const FLOORS = [
     duration: "3-4 weeks",
     sessions: "5 per week",
     length: "45-60 min",
-    tag: "Floor 02 \u2014 Structure",
+    tag: "Floor 02 — Structure",
     sections: [
       {
         id: "2-1",
         title: "What HTML Is",
-        body: `HTML is not a programming language. It has no logic, no conditions, no loops. What it has is something more fundamental: a way to describe what content <strong>is</strong>.\n\nHTML stands for HyperText Markup Language. The "markup" part is the key idea. You take a piece of content \u2014 a heading, a paragraph, an image, a button \u2014 and you wrap it in a tag that labels it. <code>&lt;h1&gt;My Title&lt;/h1&gt;</code> doesn't tell the browser to make text big and bold. It tells the browser: this is a level-one heading. The browser then applies its own default styling to that heading. CSS is what overrides those defaults.\n\nThis distinction matters. When YouTube marks up a video title with <code>&lt;h1&gt;</code>, when GitHub wraps a code block in <code>&lt;pre&gt;&lt;code&gt;</code>, when Twitter marks each post with <code>&lt;article&gt;</code> \u2014 they're not making visual decisions. They're declaring meaning. Search engines, screen readers, and other tools all use that meaning.\n\nThe tags you'll use most: <strong>h1 through h6</strong> for headings (h1 is the most important, h6 the least), <strong>p</strong> for paragraphs, <strong>a</strong> for links, <strong>img</strong> for images, <strong>ul</strong> and <strong>li</strong> for unordered lists, <strong>div</strong> for grouping content without semantic meaning, <strong>button</strong> for clickable controls, and <strong>input</strong> for form fields.\n\nBeyond those basics, HTML has semantic elements: <strong>header</strong>, <strong>main</strong>, <strong>nav</strong>, <strong>footer</strong>, <strong>section</strong>, <strong>article</strong>. These are divs with meaning attached. Use them where they fit the content. A screen reader navigating your page will thank you. So will your future self six months later trying to read your own code.`,
+        body: `HTML is not a programming language. It has no logic, no conditions, no loops. What it has is something more fundamental: a way to describe what content <strong>is</strong>.\n\nHTML stands for HyperText Markup Language. The "markup" part is the key idea. You take a piece of content — a heading, a paragraph, an image, a button — and you wrap it in a tag that labels it. <code>&lt;h1&gt;My Title&lt;/h1&gt;</code> doesn't tell the browser to make text big and bold. It tells the browser: this is a level-one heading. The browser then applies its own default styling to that heading. CSS is what overrides those defaults.\n\nThis distinction matters. When YouTube marks up a video title with <code>&lt;h1&gt;</code>, when GitHub wraps a code block in <code>&lt;pre&gt;&lt;code&gt;</code>, when Twitter marks each post with <code>&lt;article&gt;</code> — they're not making visual decisions. They're declaring meaning. Search engines, screen readers, and other tools all use that meaning.\n\nThe tags you'll use most: <strong>h1 through h6</strong> for headings (h1 is the most important, h6 the least), <strong>p</strong> for paragraphs, <strong>a</strong> for links, <strong>img</strong> for images, <strong>ul</strong> and <strong>li</strong> for unordered lists, <strong>div</strong> for grouping content without semantic meaning, <strong>button</strong> for clickable controls, and <strong>input</strong> for form fields.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if HTML describes what content IS rather than how it looks, what do you think happens when a screen reader for a blind user encounters an &lt;h1&gt; vs a &lt;div&gt; containing the same text?</div>\n\nBeyond those basics, HTML has semantic elements: <strong>header</strong>, <strong>main</strong>, <strong>nav</strong>, <strong>footer</strong>, <strong>section</strong>, <strong>article</strong>. These are divs with meaning attached. Use them where they fit the content. A screen reader navigating your page will thank you. So will your future self six months later trying to read your own code.`,
         callout: {
           type: "default",
           label: "The Key Distinction",
-          text: "HTML describes what content is, not how it looks. A heading tag doesn't mean 'make this big' \u2014 it means 'this is a heading.' Appearance is entirely CSS's job. Keeping these responsibilities separate is one of the most important ideas in web development."
+          text: "HTML describes what content is, not how it looks. A heading tag doesn't mean 'make this big' — it means 'this is a heading.' Appearance is entirely CSS's job. Keeping these responsibilities separate is one of the most important ideas in web development."
         },
         callout2: {
           type: "focus",
           label: "Why Semantic HTML Matters",
-          text: "When you use the right element for the right content \u2014 nav for navigation, article for articles, button for buttons \u2014 you're building something that works for everyone: search engines rank it better, screen readers navigate it correctly, and your code communicates its intent to every developer who reads it."
+          text: "When you use the right element for the right content — nav for navigation, article for articles, button for buttons — you're building something that works for everyone: search engines rank it better, screen readers navigate it correctly, and your code communicates its intent to every developer who reads it."
         },
-        hint: `HTML is about labelling, not styling. The easiest way to internalise this: open any major website, right-click the page, click "View Page Source." Scan for tags. You'll see h1, p, nav, div, a, img \u2014 the same handful of elements used thousands of times.\n\n<strong>Try this:</strong> Before writing any HTML, write out what your page contains in plain English. "A heading. A paragraph. A list of three items. A button." Then translate each thing into the correct tag. Structure first, appearance never \u2014 that's CSS's job.\n\n<strong>Still fuzzy on semantic elements?</strong> Think of them as named boxes. A <code>&lt;div&gt;</code> is a box with no label. A <code>&lt;nav&gt;</code> is a box with a sign that says "navigation lives here." Both behave the same visually \u2014 the label is for humans and machines, not the browser's renderer.`,
+        hint: `HTML is about labelling, not styling. The easiest way to internalise this: open any major website, right-click the page, click "View Page Source." Scan for tags. You'll see h1, p, nav, div, a, img — the same handful of elements used thousands of times.\n\n<strong>Try this:</strong> Before writing any HTML, write out what your page contains in plain English. "A heading. A paragraph. A list of three items. A button." Then translate each thing into the correct tag. Structure first, appearance never — that's CSS's job.\n\n<strong>Still fuzzy on semantic elements?</strong> Think of them as named boxes. A <code>&lt;div&gt;</code> is a box with no label. A <code>&lt;nav&gt;</code> is a box with a sign that says "navigation lives here." Both behave the same visually — the label is for humans and machines, not the browser's renderer.`,
         quiz: {
-          question: "A developer uses a <div> for their site's main navigation instead of a <nav> element. The page looks identical either way. Why does the choice still matter?",
-          options: ["It doesn't \u2014 if the page looks the same, the HTML makes no difference", "Screen readers and search engines use element semantics to understand page structure, so the wrong tag reduces accessibility and SEO", "Browsers render <div> faster than <nav>, so <div> is technically the better choice", "The <nav> element requires CSS to function, while <div> works without any styles"],
+          question: "A developer uses a &lt;div&gt; for their site's main navigation instead of a &lt;nav&gt; element. The page looks identical either way. Why does the choice still matter?",
+          options: [
+            "It doesn't — if the page looks the same, the HTML makes no difference",
+            "Screen readers and search engines use element semantics to understand page structure, so the wrong tag reduces accessibility and SEO",
+            "Browsers render &lt;div&gt; faster than &lt;nav&gt;, so &lt;div&gt; is technically the better choice",
+            "The &lt;nav&gt; element requires CSS to function, while &lt;div&gt; works without any styles"
+          ],
           correct: 1,
-          feedback: "Appearance is only one output of HTML. Screen readers use element type to help users navigate \u2014 a blind user can jump directly to the <nav> element to find links. Search engines use semantic tags to understand page structure and weight content accordingly. The <div> and <nav> look identical on screen, but one communicates meaning and one doesn't."
+          feedback: "Appearance is only one output of HTML. Screen readers use element type to help users navigate — a blind user can jump directly to the &lt;nav&gt; element to find links. Search engines use semantic tags to understand page structure and weight content accordingly. Option A ignores non-visual users entirely. Option C is false — there is no meaningful rendering speed difference. Option D is false — both work without CSS."
         },
-        checklist: ["I understand that HTML describes content structure, not visual appearance", "I can name the core tags and what each one represents", "I understand the difference between semantic elements (nav, header, main) and generic containers (div)", "I could look at a webpage and describe its HTML structure before seeing the source", "I know that the same page can look completely different with different CSS applied to identical HTML"]
+        checklist: [
+          "I can explain in my own words why HTML describes structure rather than appearance — without looking at the lesson",
+          "I could write the 10 most common HTML tags from memory right now without looking them up",
+          "I can describe the difference between a &lt;div&gt; and a &lt;nav&gt; to someone who has never coded",
+          "I understand why semantic HTML matters — not just what it is",
+          "I could look at any webpage and name the HTML elements making up its structure before seeing the source"
+        ]
       },
       {
         id: "2-2",
         title: "What CSS Is",
-        body: `CSS stands for Cascading Style Sheets. Every visual decision on every website you've ever used \u2014 every colour, every font, every spacing choice, every hover effect \u2014 is a CSS rule.\n\nThe syntax is consistent and readable once you see the pattern. You write a <strong>selector</strong> (what to target), then inside curly braces you write <strong>property: value</strong> pairs. <code>h1 { color: #1a1a1a; font-size: 32px; }</code> targets every h1 element on the page and sets two properties. That's the entire pattern.\n\nTargeting works three ways. A <strong>tag selector</strong> like <code>p { }</code> targets every paragraph. A <strong>class selector</strong> like <code>.card { }</code> targets every element with class="card" \u2014 a class can be reused across many elements. An <strong>ID selector</strong> like <code>#header { }</code> targets the single element with id="header" \u2014 IDs are unique per page. Classes are what you'll use most.\n\nThe "Cascading" in CSS is the important part that trips up beginners. When two rules target the same element, the more specific one wins. An ID selector beats a class selector. A class beats a tag name. If specificity is equal, the rule that appears last in the file wins. This hierarchy is called the <strong>cascade</strong>.\n\nSpotify's entire dark theme \u2014 the black backgrounds, the white text, the green accents \u2014 is CSS <code>background-color</code> and <code>color</code> properties applied systematically. Nothing magic. Just properties on elements.\n\nCSS can live in three places: as an inline <code>style</code> attribute on an element (avoid this except for quick tests), inside a <code>&lt;style&gt;</code> tag in the HTML head, or in a completely separate <code>.css</code> file linked with <code>&lt;link&gt;</code>. External files are the professional standard \u2014 they keep style separate from structure and let one stylesheet control an entire site.`,
+        body: `CSS stands for Cascading Style Sheets. Every visual decision on every website you've ever used — every colour, every font, every spacing choice, every hover effect — is a CSS rule.\n\nThe syntax is consistent and readable once you see the pattern. You write a <strong>selector</strong> (what to target), then inside curly braces you write <strong>property: value</strong> pairs. <code>h1 { color: #1a1a1a; font-size: 32px; }</code> targets every h1 element on the page and sets two properties. That's the entire pattern.\n\nTargeting works three ways. A <strong>tag selector</strong> like <code>p { }</code> targets every paragraph. A <strong>class selector</strong> like <code>.card { }</code> targets every element with class="card" — a class can be reused across many elements. An <strong>ID selector</strong> like <code>#header { }</code> targets the single element with id="header" — IDs are unique per page. Classes are what you'll use most.\n\nThe "Cascading" in CSS is the important part that trips up beginners. When two rules target the same element, the more specific one wins. An ID selector beats a class selector. A class beats a tag name. If specificity is equal, the rule that appears last in the file wins. This hierarchy is called the <strong>cascade</strong>.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if a tag selector, a class selector, and an ID selector all target the same element with conflicting colour values, which one do you predict wins? Why?</div>\n\nSpotify's entire dark theme — the black backgrounds, the white text, the green accents — is CSS <code>background-color</code> and <code>color</code> properties applied systematically. Nothing magic. Just properties on elements.\n\nCSS can live in three places: as an inline <code>style</code> attribute on an element (avoid this except for quick tests), inside a <code>&lt;style&gt;</code> tag in the HTML head, or in a completely separate <code>.css</code> file linked with <code>&lt;link&gt;</code>. External files are the professional standard — they keep style separate from structure and let one stylesheet control an entire site.`,
         callout: {
           type: "default",
           label: "Specificity in One Sentence",
@@ -247,42 +329,128 @@ const FLOORS = [
           label: "Why External Stylesheets",
           text: "An external CSS file linked to 50 HTML pages means one change to the stylesheet updates all 50 pages instantly. Inline styles mean changing the same thing 50 times. Professional CSS lives in separate files. Always."
         },
-        hint: `The selector is who. The property is what. The value is how much.\n\n<code>p { color: red; }</code> \u2014 who: all paragraphs, what: text colour, how much: red.\n\n<strong>Try this:</strong> Open the browser DevTools (F12), click the Elements tab, click any element on the page. The Styles panel on the right shows every CSS rule targeting that element, where it came from, and whether it's being overridden by a more specific rule. Spend five minutes just clicking around a site you know \u2014 you'll see specificity in action immediately.\n\n<strong>Still confused by classes vs IDs?</strong> Use classes for anything you might want to style more than once. Use IDs only when a thing is guaranteed to be unique on the page \u2014 and even then, many developers prefer classes because IDs have high specificity that can cause unexpected overriding.`,
+        hint: `The selector is who. The property is what. The value is how much.\n\n<code>p { color: red; }</code> — who: all paragraphs, what: text colour, how much: red.\n\n<strong>Try this:</strong> Open the browser DevTools (F12), click the Elements tab, click any element on the page. The Styles panel on the right shows every CSS rule targeting that element, where it came from, and whether it's being overridden by a more specific rule. Spend five minutes just clicking around a site you know — you'll see specificity in action immediately.\n\n<strong>Still confused by classes vs IDs?</strong> Use classes for anything you might want to style more than once. Use IDs only when a thing is guaranteed to be unique on the page — and even then, many developers prefer classes because IDs have high specificity that can cause unexpected overriding.`,
         quiz: {
-          question: "A page has two CSS rules: <code>p { color: black; }</code> and <code>.intro { color: blue; }</code>. A paragraph has class='intro'. What colour is the text?",
-          options: ["Black, because the p rule comes first in the file", "Blue, because the class selector is more specific than the tag selector", "Neither \u2014 conflicting rules cancel each other out", "Black, because tag selectors always override class selectors"],
+          question: "A page has two CSS rules: <code>p { color: black; }</code> and <code>.intro { color: blue; }</code>. A paragraph has class='intro'. What colour is the text and why?",
+          options: [
+            "Black, because the p rule appears first in the file",
+            "Blue, because the class selector (.intro) is more specific than the tag selector (p)",
+            "Neither — conflicting rules cancel each other out and the browser uses its default",
+            "Black, because tag selectors always override class selectors"
+          ],
           correct: 1,
-          feedback: "The class selector .intro is more specific than the tag selector p. When two rules target the same element, specificity determines the winner \u2014 not document order. Class beats tag. So the paragraph is blue. This is the cascade in action."
+          feedback: "The class selector .intro is more specific than the tag selector p. Specificity determines the winner, not document order — document order only breaks ties between rules of equal specificity. Option A is wrong because specificity outweighs order. Option C is wrong — rules don't cancel out. Option D is wrong — it's the opposite: class beats tag."
         },
-        checklist: ["I understand the selector-property-value syntax of CSS", "I can explain the difference between tag, class, and ID selectors", "I understand why more specific rules override less specific ones", "I know the three ways to include CSS and which one is preferred in professional code", "I could look at a CSS rule and describe in plain English what it does"]
+        checklist: [
+          "I can write a complete CSS rule from memory — selector, property, value — without looking it up",
+          "I can explain the difference between tag, class, and ID selectors to someone who has never seen CSS",
+          "I understand why more specific rules win — not just that they do, but why that makes CSS manageable",
+          "I could look at a CSS rule and describe in plain English exactly what it does and what it affects",
+          "I understand why external stylesheets are preferred over inline styles in professional projects"
+        ]
       },
       {
         id: "2-3",
         title: "How a Browser Renders Code",
-        body: `Browsers don't just display HTML files. They go through a precise sequence every time \u2014 and understanding it explains several decisions you'll make every day as a developer.\n\nWhen a browser receives an HTML file, it reads it from top to bottom and constructs the <strong>DOM</strong> \u2014 the Document Object Model. The DOM is the browser's internal tree-like representation of the page. Every element is a node. Every node has a parent, children, and siblings. When JavaScript adds, removes, or changes elements later, it's modifying this DOM tree.\n\nAs the browser parses HTML, it discovers linked resources \u2014 CSS files, images, scripts. CSS files are fetched and parsed into a structure called the <strong>CSSOM</strong>. The DOM and CSSOM are combined into a <strong>render tree</strong> \u2014 the set of elements that will actually be drawn on screen with their computed styles. Then comes <strong>layout</strong> (calculating each element's size and position) and <strong>paint</strong> (drawing pixels to screen). This full sequence is called the <strong>critical rendering path</strong>.\n\nThis explains two conventions you'll see everywhere. CSS goes in the <code>&lt;head&gt;</code>: because the browser needs styles before painting. If CSS arrives late, the page flashes unstyled content for a split second \u2014 this is called a FOUC (Flash of Unstyled Content) and it looks broken. JavaScript usually goes at the bottom of <code>&lt;body&gt;</code>, or uses the <code>defer</code> attribute: because JavaScript blocks parsing while it executes. A large JS file in the head means the user stares at a blank page while it downloads and runs.\n\nWhen you open DevTools and inspect an element, you're looking at the live DOM \u2014 not the original HTML file. If JavaScript has modified the page, the DevTools shows the current state. The "View Page Source" option shows the original HTML the server sent. They're often different, and that difference is JavaScript.`,
+        body: `Browsers don't just display HTML files. They go through a precise sequence every time — and understanding it explains several decisions you'll make every day as a developer.\n\nWhen a browser receives an HTML file, it reads it from top to bottom and constructs the <strong>DOM</strong> — the Document Object Model. The DOM is the browser's internal tree-like representation of the page. Every element is a node. Every node has a parent, children, and siblings. When JavaScript adds, removes, or changes elements later, it's modifying this DOM tree.\n\nAs the browser parses HTML, it discovers linked resources — CSS files, images, scripts. CSS files are fetched and parsed into a structure called the <strong>CSSOM</strong>. The DOM and CSSOM are combined into a <strong>render tree</strong> — the set of elements that will actually be drawn on screen with their computed styles. Then comes <strong>layout</strong> (calculating each element's size and position) and <strong>paint</strong> (drawing pixels to screen). This full sequence is called the <strong>critical rendering path</strong>.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — based on this sequence, where do you think CSS should be placed in an HTML file to prevent a flash of unstyled content? And where should JavaScript go to prevent the page appearing blank while it loads?</div>\n\nThis explains two conventions you'll see everywhere. CSS goes in the <code>&lt;head&gt;</code>: because the browser needs styles before painting. If CSS arrives late, the page flashes unstyled content for a split second — this is called a FOUC (Flash of Unstyled Content) and it looks broken. JavaScript usually goes at the bottom of <code>&lt;body&gt;</code>, or uses the <code>defer</code> attribute: because JavaScript blocks parsing while it executes. A large JS file in the head means the user stares at a blank page while it downloads and runs.\n\nWhen you open DevTools and inspect an element, you're looking at the live DOM — not the original HTML file. If JavaScript has modified the page, the DevTools shows the current state. The "View Page Source" option shows the original HTML the server sent. They're often different, and that difference is JavaScript.`,
         callout: {
           type: "default",
           label: "The DOM vs The Source",
-          text: "View Page Source shows what the server sent. DevTools shows the live DOM \u2014 what the browser is actually working with right now. On sites that use JavaScript to build the page dynamically (like React apps), the source might be nearly empty while the DOM contains hundreds of elements."
+          text: "View Page Source shows what the server sent. DevTools shows the live DOM — what the browser is actually working with right now. On sites that use JavaScript to build the page dynamically (like React apps), the source might be nearly empty while the DOM contains hundreds of elements."
         },
         callout2: {
           type: "focus",
           label: "Why This Matters Practically",
-          text: "Every time you wonder why your CSS isn't applying, or why your page loads slowly, or why a JavaScript change doesn't show up \u2014 the answer is somewhere in this rendering sequence. Understanding it turns debugging from guesswork into diagnosis."
+          text: "Every time you wonder why your CSS isn't applying, or why your page loads slowly, or why a JavaScript change doesn't show up — the answer is somewhere in this rendering sequence. Understanding it turns debugging from guesswork into diagnosis."
         },
-        hint: `The critical rendering path is HTML \u2192 DOM, CSS \u2192 CSSOM, DOM + CSSOM \u2192 Render Tree \u2192 Layout \u2192 Paint.\n\n<strong>Try this:</strong> Open any website and press F12. In the Elements tab, right-click any element and click "Edit as HTML." Change something. Watch it update instantly. You're directly editing the DOM \u2014 not the file on the server, just the browser's in-memory model. Refresh the page and your change is gone.\n\n<strong>Still unclear on render-blocking?</strong> Think of parsing HTML like reading a book. When you hit a script tag with no defer, it's like someone interrupting your reading and making you solve a puzzle before you can continue. defer says "I'll tell you what puzzle to solve after you finish the page." The reading continues uninterrupted.`,
+        hint: `The critical rendering path is HTML → DOM, CSS → CSSOM, DOM + CSSOM → Render Tree → Layout → Paint.\n\n<strong>Try this:</strong> Open any website and press F12. In the Elements tab, right-click any element and click "Edit as HTML." Change something. Watch it update instantly. You're directly editing the DOM — not the file on the server, just the browser's in-memory model. Refresh the page and your change is gone.\n\n<strong>Still unclear on render-blocking?</strong> Think of parsing HTML like reading a book. When you hit a script tag with no defer, it's like someone interrupting your reading and making you solve a puzzle before you can continue. defer says "I'll tell you what puzzle to solve after you finish the page." The reading continues uninterrupted.`,
         quiz: {
-          question: "Why do professional developers typically put <link> stylesheet tags in the <head> but <script> tags at the bottom of <body> or use the defer attribute?",
-          options: ["It's just a convention with no technical reason \u2014 browsers handle both equally", "CSS in the head prevents unstyled content flashes; scripts at the bottom or with defer prevent blocking HTML parsing", "Scripts must be at the bottom because they can only access elements that exist above them", "Browsers only read the head section for CSS and ignore styles placed elsewhere"],
+          question: "Why do professional developers typically put &lt;link&gt; stylesheet tags in the &lt;head&gt; but &lt;script&gt; tags at the bottom of &lt;body&gt; or use the defer attribute?",
+          options: [
+            "It's just a convention with no technical reason — browsers handle both equally",
+            "CSS in the head prevents unstyled content flashes; scripts at the bottom or with defer prevent blocking HTML parsing",
+            "Scripts must be at the bottom because they can only access elements that exist above them in the source",
+            "Browsers only read the head section for CSS and ignore styles placed anywhere else"
+          ],
           correct: 1,
-          feedback: "CSS must arrive before the browser paints, so it goes in the head. JavaScript blocks HTML parsing while it executes, so large scripts in the head leave users staring at a blank page. Scripts at the bottom or with defer let the HTML parse and render first, then execute JavaScript. Both decisions come directly from how the critical rendering path works."
+          feedback: "Both decisions come directly from the critical rendering path. CSS must arrive before the browser paints, so it goes in the head. JavaScript blocks HTML parsing while it executes — a large script in the head leaves users staring at a blank page. Option C is partially true for inline scripts without defer, but the primary reason is blocking. Option D is false — browsers can process CSS from the body, but the FOUC is the problem."
         },
-        checklist: ["I can describe the critical rendering path in order", "I understand what the DOM is and how it differs from the raw HTML source", "I know why CSS goes in the head and why JS often goes at the bottom", "I understand what FOUC is and why it happens", "I could open DevTools on any page and identify the DOM structure"]
+        checklist: [
+          "I can describe the critical rendering path in the correct order from memory",
+          "I can explain what the DOM is and how it differs from the raw HTML source to someone else",
+          "I understand why CSS goes in the head and can explain the technical reason, not just the rule",
+          "I know what FOUC is, why it happens, and how to prevent it",
+          "I could open DevTools on any page and point to the live DOM versus explain what View Page Source shows"
+        ]
+      },
+      {
+        id: "2-phase1-review",
+        title: "Phase 1 Review — HTML, CSS, and the Browser",
+        body: `Before moving further, test whether you can connect what you've learned across the first three sections. These questions are harder than the section quizzes — they test understanding and application, not just recall.`,
+        quiz: {
+          questions: [
+            {
+              question: "A developer wants to make a site's navigation accessible to screen reader users. They currently use &lt;div class='nav'&gt;. What is the single most impactful change they can make?",
+              options: [
+                "Add role='navigation' to the div as an ARIA attribute",
+                "Replace the div with a &lt;nav&gt; element — semantic HTML communicates meaning natively without extra attributes",
+                "Add a hidden heading inside the div that says 'Navigation'",
+                "Add tabindex='0' so keyboard users can focus on it"
+              ],
+              correct: 1,
+              feedback: "Using &lt;nav&gt; is the correct semantic approach. It communicates the element's role to screen readers natively, without needing extra ARIA attributes. ARIA role='navigation' on a div achieves a similar effect but is a workaround for when you can't change the HTML. The semantic element is always preferred when available."
+            },
+            {
+              question: "You have a CSS rule: <code>h2 { color: red; }</code> and <code>#headline { color: green; }</code>. An h2 element has id='headline'. What colour does it appear?",
+              options: [
+                "Red — the h2 tag selector applies to the element directly",
+                "Green — the ID selector is more specific than the tag selector",
+                "The last rule in the file wins regardless of specificity",
+                "Both colours apply and the element appears brown"
+              ],
+              correct: 1,
+              feedback: "ID selectors have higher specificity than tag selectors. The cascade applies the most specific matching rule. Document order only matters when specificity is equal. CSS properties don't blend — one value wins."
+            },
+            {
+              question: "A React app sends nearly empty HTML from the server. After the JavaScript loads, the DOM contains 500 elements. What would 'View Page Source' show versus what DevTools Elements panel shows?",
+              options: [
+                "Both show the same 500-element structure — browsers sync the source with the DOM",
+                "View Page Source shows the original near-empty HTML; DevTools shows the live DOM after JavaScript built it",
+                "DevTools shows the source code; View Page Source shows the rendered DOM",
+                "View Page Source shows the CSS; DevTools shows the HTML"
+              ],
+              correct: 1,
+              feedback: "View Page Source always shows the original HTML the server sent — before any JavaScript runs. DevTools shows the live DOM, which reflects all JavaScript modifications. This distinction is critical for debugging React and other JavaScript-heavy apps where the source is nearly empty but the live page is rich with content."
+            },
+            {
+              question: "Which sequence correctly describes what the browser does after receiving an HTML file?",
+              options: [
+                "Parse HTML → Paint pixels → Build DOM → Apply CSS",
+                "Parse HTML → Build DOM → Fetch and parse CSS → Build render tree → Layout → Paint",
+                "Fetch CSS → Build CSSOM → Parse HTML → Paint → Layout",
+                "Build render tree → Parse HTML → Apply CSS → Layout → Paint"
+              ],
+              correct: 1,
+              feedback: "The critical rendering path goes: parse HTML → build DOM, fetch and parse CSS → build CSSOM, combine into render tree → calculate layout → paint pixels. CSS must be parsed before the render tree can be built. Layout must happen before painting. The order is not arbitrary — each step depends on the previous one."
+            },
+            {
+              question: "A developer writes all their CSS as inline style attributes directly on each HTML element. What is the primary professional problem with this approach?",
+              options: [
+                "Inline styles cause slower page rendering because they are parsed separately",
+                "Inline styles cannot use class selectors or hover states",
+                "Inline styles mix structure and appearance, cannot be reused, and require updating every element individually when a design changes",
+                "Inline styles have lower specificity than external stylesheets and are frequently overridden"
+              ],
+              correct: 2,
+              feedback: "The main problems with inline styles are architectural: they mix HTML (structure) with CSS (appearance), they cannot be shared across elements, and changing a design means editing every single element. Option B is partially true — inline styles can't use hover. Option D is wrong — inline styles actually have the highest specificity, which can cause override problems."
+            }
+          ]
+        }
       },
       {
         id: "2-4",
         title: "Building Your First Page",
-        body: `Every HTML page starts with the same scaffold. Not as a suggestion \u2014 as a requirement. The browser needs these pieces to know what it's working with.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. This tells the browser to fetch and apply the stylesheet before rendering the page. The path in href must match the actual location of your CSS file.\n\nWhen you start writing elements, read the HTML like prose. A heading, then a paragraph, then a list \u2014 in the order a user would encounter them. HTML's logical reading order should match the visual reading order. This isn't just good practice; it's how screen readers navigate the page.\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
+        body: `Every HTML page starts with the same scaffold. Not as a suggestion — as a requirement. The browser needs these pieces to know what it's working with.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. This tells the browser to fetch and apply the stylesheet before rendering the page. The path in href must match the actual location of your CSS file.\n\nWhen you start writing elements, read the HTML like prose. A heading, then a paragraph, then a list — in the order a user would encounter them. HTML's logical reading order should match the visual reading order. This isn't just good practice; it's how screen readers navigate the page.\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
         callout: {
           type: "default",
           label: "The Scaffold Never Changes",
@@ -293,24 +461,40 @@ const FLOORS = [
           label: "Structure Before Style",
           text: "Write HTML first, CSS second. Always. When you write both at once you context-switch between two different problems and solve neither well. Finish the structure completely, then style it. Every experienced developer works this way."
         },
-        hint: `If you open an HTML file in a browser and see nothing, check the order: Did you close all your tags? Did the link tag href actually match your CSS filename exactly (case-sensitive on some systems)? Is the CSS file in the same folder?\n\n<strong>Try this:</strong> Type out the scaffold from memory without looking at this section. DOCTYPE, html, head, meta charset, title, link, body. Five minutes. If you can do it without looking, it's yours. If you can't, type it out once more with the section open, then close it and try again.\n\n<strong>Still confused about the head vs body?</strong> Head = information about the page, not displayed to users. Body = the actual content the user sees. Meta tags, titles, CSS links \u2014 head. Headings, paragraphs, images, buttons \u2014 body. If it should appear on screen, it goes in body.`,
+        hint: `If you open an HTML file in a browser and see nothing, check the order: Did you close all your tags? Did the link tag href actually match your CSS filename exactly (case-sensitive on some systems)? Is the CSS file in the same folder?\n\n<strong>Try this:</strong> Type out the scaffold from memory without looking at this section. DOCTYPE, html, head, meta charset, title, link, body. Five minutes. If you can do it without looking, it's yours. If you can't, type it out once more with the section open, then close it and try again.\n\n<strong>Still confused about the head vs body?</strong> Head = information about the page, not displayed to users. Body = the actual content the user sees. Meta tags, titles, CSS links — head. Headings, paragraphs, images, buttons — body. If it should appear on screen, it goes in body.`,
         quiz: {
-          question: "Where should a <link> tag connecting an external CSS file be placed, and why?",
-          options: ["At the bottom of the body, so HTML loads first before styles are applied", "In the head element, so styles are available before the browser paints any content", "Anywhere in the document \u2014 browsers find it regardless of placement", "Inside the body, directly above the first element that needs styling"],
+          question: "Where should a &lt;link&gt; tag connecting an external CSS file be placed, and why?",
+          options: [
+            "At the bottom of the body, so HTML loads first before styles are applied",
+            "In the head element, so styles are available before the browser paints any content",
+            "Anywhere in the document — browsers find it regardless of placement",
+            "Inside the body, directly above the first element that needs styling"
+          ],
           correct: 1,
-          feedback: "The link tag goes in the head so the browser has the stylesheet before it begins painting. If the stylesheet arrives after painting starts, users briefly see unstyled content (a FOUC). The head is specifically designed for metadata and resources the browser needs before rendering the page."
+          feedback: "The link tag goes in the head so the browser has the stylesheet before it begins painting. If the stylesheet arrives after painting starts, users briefly see unstyled content (a FOUC). The head is specifically designed for metadata and resources the browser needs before rendering. Option A would guarantee a FOUC. Option C is technically possible but breaks the rendering path. Option D is similarly problematic."
         },
-        checklist: ["I can write the HTML scaffold from memory without looking it up", "I know what each part of the scaffold does and why it's needed", "I can connect an external CSS file using a link tag", "I wrote my HTML structure completely before touching CSS", "I understand why meta charset UTF-8 matters"],
+        checklist: [
+          "I can write the full HTML scaffold from memory right now without looking it up",
+          "I can explain what each part of the scaffold does and why it's required — not just that it exists",
+          "I can connect an external CSS file using the correct link tag syntax",
+          "I completed my HTML structure entirely before writing a single line of CSS",
+          "I understand the difference between what belongs in &lt;head&gt; versus &lt;body&gt; and can explain it"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Add a second paragraph below the first", "Add an unordered list with 3 items", "Add an image element (the src can be any URL)", "Add a navigation bar using the nav element with 3 links"]
+          starter: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My First Page</title>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 32px; }\n    h1 { color: #7eb8c8; }\n    p { line-height: 1.6; color: #ccc; }\n    nav a { color: #7eb8c8; margin-right: 16px; text-decoration: none; }\n    nav a:hover { text-decoration: underline; }\n  </style>\n</head>\n<body>\n  <nav>\n    <a href="#">Home</a>\n    <a href="#">About</a>\n    <a href="#">Contact</a>\n  </nav>\n  <h1>Welcome to My Page</h1>\n  <p>This is the first paragraph of content on my page.</p>\n</body>\n</html>',
+          challenges: [
+            "Add a second paragraph below the first",
+            "Add an unordered list with 3 items below the paragraphs",
+            "Add an image element (the src can be any URL from the web)",
+            "Add a fourth navigation link"
+          ]
         }
       },
       {
         id: "2-5",
         title: "Styling Basics",
-        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. Learn those well and the rest you look up as needed.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface \u2014 stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines \u2014 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element), <strong>padding</strong> (space inside the element, between content and border). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left \u2014 clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units, <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>em</strong> is relative to the current element's font-size. <strong>rem</strong> is relative to the root (html) element's font-size \u2014 use rem for font sizes. When the user adjusts their browser's default font size for accessibility, rem scales with it. px does not.`,
+        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. Learn those well and the rest you look up as needed.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface — stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines — 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element), <strong>padding</strong> (space inside the element, between content and border). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left — clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — what's the difference between margin and padding in terms of where the space appears? If you add a background colour to an element, which one would you see the colour extend through?</div>\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units, <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>em</strong> is relative to the current element's font-size. <strong>rem</strong> is relative to the root (html) element's font-size — use rem for font sizes. When the user adjusts their browser's default font size for accessibility, rem scales with it. px does not.`,
         callout: {
           type: "default",
           label: "Why rem Over px for Fonts",
@@ -319,26 +503,42 @@ const FLOORS = [
         callout2: {
           type: "focus",
           label: "Shorthand Properties",
-          text: "margin: 16px 32px sets top and bottom to 16px, left and right to 32px. margin: 16px sets all four sides. border: 2px solid #333 sets width, style, and colour in one line. Shorthand properties are everywhere in CSS \u2014 recognise the pattern rather than memorising each one."
+          text: "margin: 16px 32px sets top and bottom to 16px, left and right to 32px. margin: 16px sets all four sides. border: 2px solid #333 sets width, style, and colour in one line. Shorthand properties are everywhere in CSS — recognise the pattern rather than memorising each one."
         },
-        hint: `When a CSS property isn't doing what you expect, open DevTools (F12), click the element, and look at the Styles panel. It shows every rule applying to that element, which rule is winning, and which rules are being crossed out (overridden). You can edit values live to experiment without touching your files.\n\n<strong>Try this:</strong> Open Spotify or any dark-themed website. In DevTools, find the body element and change background-color to white. Watch the theme collapse instantly. That's CSS in action \u2014 one property change, entire visual impact.\n\n<strong>Still confused by margin vs padding?</strong> Padding is inside the element, between the content and the edge. Margin is outside the element, pushing it away from other elements. If you add a background colour, padding sits inside the colour. Margin is transparent.`,
+        hint: `When a CSS property isn't doing what you expect, open DevTools (F12), click the element, and look at the Styles panel. It shows every rule applying to that element, which rule is winning, and which rules are being crossed out (overridden). You can edit values live to experiment without touching your files.\n\n<strong>Try this:</strong> Open Spotify or any dark-themed website. In DevTools, find the body element and change background-color to white. Watch the theme collapse instantly. That's CSS in action — one property change, entire visual impact.\n\n<strong>Still confused by margin vs padding?</strong> Padding is inside the element, between the content and the edge. Margin is outside the element, pushing it away from other elements. If you add a background colour, padding sits inside the colour. Margin is transparent.`,
         quiz: {
           question: "A developer sets font-size: 1.5rem on a paragraph. The user has set their browser's default font size to 20px. What size does the paragraph text appear at?",
-          options: ["15px, because rem is relative to the standard 10px root size", "1.5px, because rem values are very small units", "30px, because 1.5 multiplied by the 20px root size equals 30px", "20px, because rem ignores the multiplier and uses the root size directly"],
+          options: [
+            "15px, because rem is relative to the standard 10px root size",
+            "1.5px, because rem values are very small units requiring multiplication",
+            "30px, because 1.5 multiplied by the 20px root size equals 30px",
+            "20px, because rem ignores the multiplier and uses the root size directly"
+          ],
           correct: 2,
-          feedback: "1 rem equals the root (html) element's font size. If the user's browser sets that to 20px, then 1rem = 20px and 1.5rem = 30px. This is exactly why rem is preferred for font sizes \u2014 it respects the user's accessibility settings and scales proportionally."
+          feedback: "1rem equals the root element's font size. The user set it to 20px, so 1rem = 20px and 1.5rem = 30px. This is exactly why rem is preferred — it respects the user's accessibility preferences. Option A assumes a fixed 10px root (a browser default that users can override). Option D misunderstands how multiplication works with rem."
         },
-        checklist: ["I know the core CSS properties for text, spacing, and visual styling", "I understand what display: block, inline, and flex each do", "I understand the difference between px, %, em, and rem", "I can write CSS rules from scratch without copying from somewhere else", "I know why rem is preferred over px for font sizes"],
+        checklist: [
+          "I know the core text, spacing, and visual CSS properties and could write them from memory",
+          "I can explain the difference between display: block, inline, and flex in plain language",
+          "I understand why rem is preferred over px for font sizes — and I can explain the accessibility reason",
+          "I can describe the difference between margin and padding to someone who has never coded",
+          "I wrote all my CSS after fully completing the HTML structure"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Change the heading color to any hex value you choose", "Add a border-radius to the card to make it rounded", "Make the font-size of the paragraph 18px", "Add a box-shadow to the container"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 32px; }\n    .card {\n      background: #1a1a1a;\n      padding: 24px;\n      max-width: 400px;\n      margin: 0 auto;\n    }\n    .card h2 { color: #7eb8c8; font-size: 1.4rem; margin-top: 0; }\n    .card p { color: #aaa; line-height: 1.6; font-size: 1rem; }\n  </style>\n</head>\n<body>\n  <div class="card">\n    <h2>Card Title</h2>\n    <p>This card demonstrates basic CSS styling with text, spacing, and visual properties.</p>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Change the heading colour to any hex value you choose",
+            "Add a border-radius of 12px to the card to round its corners",
+            "Change the paragraph font-size to 1.1rem",
+            "Add a box-shadow to the card: try 0 4px 20px rgba(0,0,0,0.4)"
+          ]
         }
       },
       {
         id: "2-6",
         title: "The Box Model",
-        body: `Everything in CSS is a box. Every element \u2014 a heading, an image, a button, a div \u2014 is a rectangular box, and that box has four layers.\n\nFrom inside out: <strong>content</strong> (the text, image, or whatever lives inside), <strong>padding</strong> (transparent space between the content and the border), <strong>border</strong> (the edge of the element, can be visible or invisible), <strong>margin</strong> (transparent space outside the border, separating this element from its neighbours).\n\nThe box model has a quirk that causes confusion until you understand it. By default, <code>width</code> applies to the content area only. Add padding and border on top of that, and your element ends up wider than you specified. A 200px wide element with 20px padding on each side is actually 240px wide on screen.\n\nThe fix is <code>box-sizing: border-box</code>. With this property, width includes content, padding, and border. A 200px wide element with 20px padding is 200px wide \u2014 the content shrinks to accommodate the padding. This is so universally useful that Airbnb, GitHub, and essentially every professional CSS codebase starts with a global reset that applies it everywhere: <code>*, *::before, *::after { box-sizing: border-box; }</code>.\n\nMargin collapse is CSS's most confusing behaviour for beginners: when two block elements are stacked vertically, their vertical margins merge (collapse) into the larger of the two. A paragraph with 24px bottom margin and a heading with 16px top margin don't add up to 40px of space \u2014 they collapse to 24px. This doesn't happen with horizontal margins, flexbox children, or absolutely positioned elements. Knowing it exists means you won't waste an hour trying to figure out why your spacing doesn't add up.`,
+        body: `Everything in CSS is a box. Every element — a heading, an image, a button, a div — is a rectangular box, and that box has four layers.\n\nFrom inside out: <strong>content</strong> (the text, image, or whatever lives inside), <strong>padding</strong> (transparent space between the content and the border), <strong>border</strong> (the edge of the element, can be visible or invisible), <strong>margin</strong> (transparent space outside the border, separating this element from its neighbours).\n\nThe box model has a quirk that causes confusion until you understand it. By default, <code>width</code> applies to the content area only. Add padding and border on top of that, and your element ends up wider than you specified. A 200px wide element with 20px padding on each side is actually 240px wide on screen.\n\nThe fix is <code>box-sizing: border-box</code>. With this property, width includes content, padding, and border. A 200px wide element with 20px padding is 200px wide — the content shrinks to accommodate the padding. This is so universally useful that Airbnb, GitHub, and essentially every professional CSS codebase starts with a global reset that applies it everywhere: <code>*, *::before, *::after { box-sizing: border-box; }</code>.\n\nMargin collapse is CSS's most confusing behaviour for beginners: when two block elements are stacked vertically, their vertical margins merge (collapse) into the larger of the two. A paragraph with 24px bottom margin and a heading with 16px top margin don't add up to 40px of space — they collapse to 24px. This doesn't happen with horizontal margins, flexbox children, or absolutely positioned elements. Knowing it exists means you won't waste an hour trying to figure out why your spacing doesn't add up.`,
         callout: {
           type: "default",
           label: "The Professional Reset",
@@ -349,52 +549,137 @@ const FLOORS = [
           label: "DevTools for the Box Model",
           text: "In browser DevTools, click any element and scroll down in the Styles panel to find the box model diagram. It shows the exact content, padding, border, and margin values in a visual diagram. Use this constantly when layouts don't behave as expected."
         },
-        hint: `If your layout is off by a mysterious amount \u2014 an element is wider than expected, spacing doesn't add up \u2014 the box model is usually why.\n\n<strong>Try this:</strong> Open DevTools, click any block element, and look at the box model diagram in the Styles panel. You'll see the four layers as coloured rings. Hover over each one \u2014 the browser highlights that layer on the page.\n\n<strong>Still confused by margin collapse?</strong> Picture two magnets with the same pole facing each other. They don't stack their repulsion \u2014 the stronger one wins. That's vertical margin collapse. The larger margin wins; the smaller one disappears. Horizontal margins never collapse, and neither do flex or grid container children.`,
+        hint: `If your layout is off by a mysterious amount — an element is wider than expected, spacing doesn't add up — the box model is usually why.\n\n<strong>Try this:</strong> Open DevTools, click any block element, and look at the box model diagram in the Styles panel. You'll see the four layers as coloured rings. Hover over each one — the browser highlights that layer on the page.\n\n<strong>Still confused by margin collapse?</strong> Picture two magnets with the same pole facing each other. They don't stack their repulsion — the stronger one wins. That's vertical margin collapse. The larger margin wins; the smaller one disappears. Horizontal margins never collapse, and neither do flex or grid container children.`,
         quiz: {
           question: "A div has width: 300px, padding: 20px, and border: 5px solid black. With the default box-sizing: content-box, what is the total rendered width of the element?",
-          options: ["300px \u2014 the width property always controls the total width", "325px \u2014 the border adds 5px total to each side", "350px \u2014 padding (40px) and border (10px) are added to the 300px content width", "280px \u2014 padding reduces the available content area"],
+          options: [
+            "300px — the width property always controls the total width",
+            "325px — only the border adds to the width, not padding",
+            "350px — padding (40px total) and border (10px total) are added to the 300px content width",
+            "280px — padding reduces the available content area inside the width"
+          ],
           correct: 2,
-          feedback: "With box-sizing: content-box (the default), width applies only to the content area. Padding and border are added on top. 20px padding on each side = 40px. 5px border on each side = 10px. Total: 300 + 40 + 10 = 350px. This is why box-sizing: border-box exists \u2014 it makes the specified width include padding and border, so 300px actually means 300px."
+          feedback: "With box-sizing: content-box (the default), width applies only to the content area. Padding and border are added on top. 20px padding on each side = 40px total. 5px border on each side = 10px total. Total: 300 + 40 + 10 = 350px. This is why box-sizing: border-box exists — it makes the specified width include padding and border, so 300px actually means 300px."
         },
-        checklist: ["I can describe the four layers of the CSS box model in order", "I understand why box-sizing: border-box is almost always preferable", "I know what margin collapse is and when it occurs", "I can use DevTools to visually inspect the box model of any element", "I've added a global box-sizing reset to my CSS files"],
+        checklist: [
+          "I can name the four layers of the CSS box model in order from inside to outside",
+          "I understand why box-sizing: border-box changes how width is calculated — not just that it does",
+          "I can explain margin collapse to someone else without looking at the lesson",
+          "I have added a global box-sizing reset to my CSS files",
+          "I can use DevTools to visually inspect the box model of any element on a real page"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Increase the padding on the card from 16px to 32px and observe the change", "Add a 3px solid border and observe how it pushes content if box-sizing is content-box", "Add margin-top: 40px to the second card", "Make both cards use box-sizing: border-box and compare"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; padding: 32px; font-family: sans-serif; color: white; }\n    .card {\n      background: #1a1a1a;\n      width: 300px;\n      padding: 16px;\n      border: 2px solid #7eb8c8;\n      margin-bottom: 16px;\n    }\n    .card h3 { color: #7eb8c8; margin-bottom: 8px; }\n    .card p { color: #aaa; font-size: 0.9rem; }\n  </style>\n</head>\n<body>\n  <div class="card">\n    <h3>Card One</h3>\n    <p>This card uses box-sizing: border-box.</p>\n  </div>\n  <div class="card">\n    <h3>Card Two</h3>\n    <p>Both cards are exactly 300px wide.</p>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Increase the padding on both cards from 16px to 32px — note the width stays 300px with border-box",
+            "Remove the box-sizing reset and observe how the width changes",
+            "Add margin-top: 40px to the second card and observe the gap",
+            "Add a third card with a different border colour"
+          ]
         }
       },
       {
         id: "2-7",
         title: "Flexbox Layout",
-        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. Flexbox, introduced as a CSS standard in 2012 and now universally supported, solved all of this.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. The parent becomes a <strong>flex container</strong>. You control the children's arrangement by setting properties on the container.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them \u2014 now main axis runs vertically and items stack top to bottom.\n\nThe properties you'll use constantly:\n\n<strong>justify-content</strong> aligns items along the main axis. Values: <code>flex-start</code> (packed to the start), <code>flex-end</code> (packed to the end), <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced), <code>space-around</code>.\n\n<strong>align-items</strong> aligns items along the cross axis. Values: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default \u2014 fills the cross axis).\n\n<strong>gap</strong> adds consistent space between flex items without needing margins.\n\n<strong>flex-wrap: wrap</strong> allows items to wrap onto the next line when they don't fit \u2014 essential for responsive layouts.\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
+        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. Flexbox, introduced as a CSS standard in 2012 and now universally supported, solved all of this.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. The parent becomes a <strong>flex container</strong>. You control the children's arrangement by setting properties on the container.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them — now main axis runs vertically and items stack top to bottom.\n\nThe properties you'll use constantly:\n\n<strong>justify-content</strong> aligns items along the main axis. Values: <code>flex-start</code> (packed to the start), <code>flex-end</code> (packed to the end), <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced), <code>space-around</code>.\n\n<strong>align-items</strong> aligns items along the cross axis. Values: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default — fills the cross axis).\n\n<strong>gap</strong> adds consistent space between flex items without needing margins.\n\n<strong>flex-wrap: wrap</strong> allows items to wrap onto the next line when they don't fit — essential for responsive layouts.\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
         callout: {
           type: "default",
           label: "Centering With Flexbox",
-          text: "The two lines that center anything: display: flex; justify-content: center; align-items: center; on the parent element. This was notoriously difficult before flexbox. Now it's four words. Learn this combination \u2014 you'll use it hundreds of times."
+          text: "The two lines that center anything: display: flex; justify-content: center; align-items: center; on the parent element. This was notoriously difficult before flexbox. Now it's four words. Learn this combination — you'll use it hundreds of times."
         },
         callout2: {
           type: "focus",
           label: "Flexbox vs Grid",
-          text: "Flexbox is for one dimension: either a row or a column. CSS Grid is for two dimensions: rows and columns at the same time. Navigation bars, button groups, and card rows \u2014 flexbox. Full page layouts with both columns and rows \u2014 Grid. When in doubt, start with flexbox."
+          text: "Flexbox is for one dimension: either a row or a column. CSS Grid is for two dimensions: rows and columns at the same time. Navigation bars, button groups, and card rows — flexbox. Full page layouts with both columns and rows — Grid. When in doubt, start with flexbox."
         },
         hint: `The mental model: the container is a flexible box. The children are flexible items inside it. You control how items sit in that box by setting rules on the container.\n\n<strong>Try this:</strong> Add display: flex to any element in your code editor. Watch its children line up horizontally. Then add justify-content: center. Then try space-between. Each property change reshapes the layout instantly.\n\n<strong>Still confused by justify-content vs align-items?</strong> justify-content works along the direction items are flowing (the main axis). align-items works perpendicular to that. In a row layout: justify-content controls left-right positioning, align-items controls up-down. In a column layout, they flip.`,
         quiz: {
-          question: "A flex container has flex-direction: row (the default). Which property and value would you use to push the items to the right side of the container?",
-          options: ["align-items: flex-end \u2014 because flex-end pushes items to the end of the axis", "justify-content: flex-end \u2014 because justify-content controls the main axis, which is horizontal in a row", "flex-wrap: reverse \u2014 because reversing the wrap direction moves items right", "align-content: flex-end \u2014 because align-content positions groups of items"],
+          question: "A flex container has flex-direction: row (the default). Which property and value would push all items to the right side of the container?",
+          options: [
+            "align-items: flex-end — because flex-end pushes items to the end of an axis",
+            "justify-content: flex-end — because justify-content controls the main (horizontal) axis in a row",
+            "flex-wrap: reverse — because reversing the wrap direction moves items right",
+            "align-content: flex-end — because align-content positions groups of items"
+          ],
           correct: 1,
-          feedback: "In a row-direction flex container, the main axis runs horizontally. justify-content controls placement along the main axis. flex-end pushes items to the end of that axis \u2014 the right side. align-items controls the cross axis (vertical), so align-items: flex-end would push items to the bottom, not the right."
+          feedback: "In a row-direction flex container, the main axis runs horizontally. justify-content controls placement along the main axis. flex-end pushes items to the end of that axis — the right side. Option A is wrong: align-items controls the cross axis (vertical), so align-items: flex-end pushes items to the bottom. Option C doesn't exist. Option D (align-content) only works when there are multiple lines of flex items."
         },
-        checklist: ["I understand what display: flex does to a container's children", "I know the difference between the main axis and cross axis", "I can use justify-content and align-items to control item positioning", "I understand when to use flex-wrap and why", "I know when to use flexbox versus CSS Grid"],
+        checklist: [
+          "I can explain what display: flex does to a container's children in plain language",
+          "I know the difference between the main axis and cross axis — and could flip my explanation for column direction",
+          "I can use justify-content and align-items correctly without looking them up",
+          "I understand when to use flex-wrap and can explain why it matters for responsive layouts",
+          "I know when a layout problem calls for flexbox versus CSS Grid"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Change flex-direction to column and observe how items stack", "Change justify-content to space-between", "Add a fourth card and add flex-wrap: wrap to the container", "Use align-items: flex-end to align items to the bottom"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; padding: 32px; font-family: sans-serif; }\n    .container {\n      display: flex;\n      gap: 16px;\n      justify-content: flex-start;\n      align-items: stretch;\n    }\n    .card {\n      background: #1a1a1a;\n      border: 1px solid #333;\n      padding: 20px;\n      color: white;\n      flex: 1;\n    }\n    .card h3 { color: #7eb8c8; margin-bottom: 8px; }\n    .card p { color: #aaa; font-size: 0.9rem; }\n  </style>\n</head>\n<body>\n  <div class="container">\n    <div class="card"><h3>Card A</h3><p>First card in a flex row.</p></div>\n    <div class="card"><h3>Card B</h3><p>Second card, equal width.</p></div>\n    <div class="card"><h3>Card C</h3><p>Third card in the row.</p></div>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Change flex-direction to column and observe how items stack vertically",
+            "Change justify-content to space-between and observe the spacing",
+            "Add a fourth card and add flex-wrap: wrap to the container",
+            "Use align-items: flex-end to align all cards to the bottom of the container"
+          ]
+        }
+      },
+      {
+        id: "2-phase2-review",
+        title: "Phase 2 Review — Layout and the Box Model",
+        body: `Test your understanding across the layout sections before moving to building real components. These questions require connecting ideas, not just recalling individual facts.`,
+        quiz: {
+          questions: [
+            {
+              question: "An element has width: 200px, padding: 30px on all sides, and box-sizing: border-box. How wide is the content area inside the padding?",
+              options: [
+                "200px — border-box means the full element including padding is 200px",
+                "140px — the 200px total minus 30px padding on each side (60px total)",
+                "260px — width plus padding on both sides",
+                "170px — 200px minus 30px on one side only"
+              ],
+              correct: 1,
+              feedback: "With border-box, the specified width (200px) is the total element width including padding. 30px padding on each side = 60px total padding. Content area = 200 - 60 = 140px. This is the advantage of border-box: the element stays 200px wide regardless of padding."
+            },
+            {
+              question: "You have a flex container with flex-direction: column. Which property controls how items are spaced along the vertical axis?",
+              options: [
+                "align-items — it always controls the vertical axis",
+                "justify-content — it controls the main axis, which is vertical in column direction",
+                "flex-wrap — it controls how items stack when there are multiple",
+                "align-content — it always controls vertical distribution"
+              ],
+              correct: 1,
+              feedback: "justify-content always controls the main axis. In flex-direction: row, main axis is horizontal. In flex-direction: column, main axis is vertical. So in column direction, justify-content controls vertical spacing and align-items controls horizontal alignment — the opposite of row direction."
+            },
+            {
+              question: "Two paragraphs are stacked vertically. The first has margin-bottom: 32px. The second has margin-top: 16px. How much space appears between them?",
+              options: [
+                "48px — the margins add together",
+                "32px — the larger margin wins due to margin collapse",
+                "16px — the smaller margin overrides when elements are adjacent",
+                "0px — vertical margins between block elements cancel each other"
+              ],
+              correct: 1,
+              feedback: "This is margin collapse. When block elements are stacked vertically, adjacent margins merge into the larger of the two. 32px beats 16px. The gap is 32px, not 48px. This only applies to vertical margins between block elements — not to flex children, not to horizontal margins."
+            },
+            {
+              question: "A navigation bar needs to have the logo on the left and navigation links on the right, vertically centred. Which CSS layout approach and properties solve this?",
+              options: [
+                "display: block with float: right on the links",
+                "display: flex on the nav, with justify-content: space-between and align-items: center",
+                "display: grid with two columns defined",
+                "display: inline-block on both the logo and links"
+              ],
+              correct: 1,
+              feedback: "Flexbox with justify-content: space-between pushes items to opposite ends of the main axis (logo left, links right). align-items: center vertically centres all children within the flex container. This is one of the most common flexbox patterns in professional navigation bars. Float-based layouts are a legacy approach. Grid works but is more complex for this simple one-dimensional case."
+            }
+          ]
         }
       },
       {
         id: "2-8",
         title: "Building a Real Component",
-        body: `Real interfaces are made of components. A Spotify song card. A GitHub repository card. A Twitter post. A product tile on an e-commerce site. Look at any of them and you see the same anatomy: a container, an image or icon, a text hierarchy, interactive elements.\n\nBreak apart a typical card. A container div with a fixed width, background, border-radius, and box-shadow. Inside it: an image (or placeholder) that fills the top. Below the image: a title in larger text, a subtitle in smaller muted text, metadata like a date or a label. At the bottom, action elements \u2014 buttons, links, icons.\n\nNothing about this is complex individually. What makes professional work feel polished is the consistency: padding that's the same multiple throughout (8px, 16px, 24px \u2014 always multiples of 8), colours from a defined palette, font sizes that follow a logical scale.\n\nThe approach professional developers use to build a component: HTML structure first \u2014 container, then the hierarchy inside it, no CSS yet. Then CSS from outside in: style the container first, then the layout inside it (flex or grid), then individual elements. Never start styling the small details before the structure is solid.\n\nThis is the session where HTML and CSS stop feeling like separate things you're applying and start feeling like a vocabulary you're speaking. When a layout problem appears, you know which property to reach for. When something looks wrong, you know where to look.`,
+        body: `Real interfaces are made of components. A Spotify song card. A GitHub repository card. A Twitter post. A product tile on an e-commerce site. Look at any of them and you see the same anatomy: a container, an image or icon, a text hierarchy, interactive elements.\n\nBreak apart a typical card. A container div with a fixed width, background, border-radius, and box-shadow. Inside it: an image (or placeholder) that fills the top. Below the image: a title in larger text, a subtitle in smaller muted text, metadata like a date or a label. At the bottom, action elements — buttons, links, icons.\n\nNothing about this is complex individually. What makes professional work feel polished is the consistency: padding that's the same multiple throughout (8px, 16px, 24px — always multiples of 8), colours from a defined palette, font sizes that follow a logical scale.\n\nThe approach professional developers use to build a component: HTML structure first — container, then the hierarchy inside it, no CSS yet. Then CSS from outside in: style the container first, then the layout inside it (flex or grid), then individual elements. Never start styling the small details before the structure is solid.\n\nThis is the session where HTML and CSS stop feeling like separate things you're applying and start feeling like a vocabulary you're speaking. When a layout problem appears, you know which property to reach for. When something looks wrong, you know where to look.`,
         callout: {
           type: "default",
           label: "CSS From Outside In",
@@ -407,26 +692,42 @@ const FLOORS = [
         },
         hint: `If the component doesn't look right, check this order. Is the container the right size? Is the internal layout (flex/grid) working? Are the children the right sizes? Then check the individual styling.\n\n<strong>Try this:</strong> Before writing CSS, sketch the component on paper. Just boxes and labels. Container. Image area. Title. Subtitle. Button. That sketch becomes your HTML structure. The CSS then has a clear plan to follow.\n\n<strong>Hover states feel hard?</strong> Add a <code>:hover</code> selector to any element. Whatever properties you change inside it only apply when the cursor is over the element. <code>transform: translateY(-4px)</code> lifts it. <code>box-shadow</code> adds depth. <code>transition: all 0.2s ease</code> on the base element smooths the change.`,
         quiz: {
-          question: "When building a card component, you write all the HTML first and then open the CSS file. What is the main advantage of this approach over writing HTML and CSS simultaneously?",
-          options: ["It loads faster because the browser processes HTML before CSS", "It forces you to fully think through the content structure before making any visual decisions, preventing structural changes after styling has begun", "HTML cannot reference CSS classes that don't exist yet, so HTML must be written first", "Writing HTML first is only useful for beginners \u2014 professionals write both at once"],
+          question: "When building a card component, you write all the HTML first and then open the CSS file. What is the main advantage of this approach?",
+          options: [
+            "The browser loads HTML faster than CSS, so pages appear sooner",
+            "It forces you to fully think through the content structure before any visual decisions, preventing structural changes after styling has begun",
+            "HTML cannot reference CSS classes that don't exist yet, so HTML must be written first technically",
+            "Writing HTML first is only useful for beginners — professionals write both simultaneously"
+          ],
           correct: 1,
-          feedback: "Structure and style are different problems. When you write HTML first, you commit to the content structure before styling it. If you build both simultaneously, you often style elements that then need to move or change \u2014 wasting effort and creating inconsistency. Every experienced developer structures before they style."
+          feedback: "Structure and style are different problems that deserve separate focus. When you write HTML first, you commit to the content hierarchy before styling it. If you build both simultaneously, you often style elements that then need to move — wasting effort and creating inconsistency. Every experienced developer structures before styling. Option C is technically false — HTML can reference non-existent classes."
         },
-        checklist: ["I built a multi-element card component from scratch", "I wrote HTML completely before writing CSS", "I styled from outside in (container first, then inner elements)", "I added at least one hover state", "I understand the anatomy of a real-world component"],
+        checklist: [
+          "I built a multi-element card component from scratch without following a step-by-step guide",
+          "I wrote all the HTML completely before writing a single CSS rule",
+          "I styled from outside in — container first, then layout, then child elements",
+          "I added at least one hover state using the :hover selector and transition",
+          "I used spacing multiples of 8 throughout the component"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Add a 'like' button to each card with a heart icon (use \u2665)", "Add a hover state that lifts the card slightly using transform: translateY(-4px)", "Add a badge to one card (like 'NEW' or 'FEATURED')", "Make the cards responsive so they stack on small screens using flex-wrap"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; padding: 32px; font-family: sans-serif; display: flex; gap: 16px; flex-wrap: wrap; }\n    .card {\n      background: #1a1a1a;\n      border-radius: 12px;\n      width: 280px;\n      overflow: hidden;\n      transition: transform 0.2s ease, box-shadow 0.2s ease;\n    }\n    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }\n    .card-image { background: #2a2a3a; height: 160px; display: flex; align-items: center; justify-content: center; color: #7eb8c8; font-size: 2rem; }\n    .card-body { padding: 16px; }\n    .card-body h3 { color: white; font-size: 1rem; margin-bottom: 4px; }\n    .card-body p { color: #888; font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px; }\n    .card-body button { background: #7eb8c8; border: none; color: #0a0a0a; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }\n  </style>\n</head>\n<body>\n  <div class="card">\n    <div class="card-image">&#9834;</div>\n    <div class="card-body">\n      <h3>Track Title</h3>\n      <p>Artist name &mdash; Album name</p>\n      <button>Play</button>\n    </div>\n  </div>\n  <div class="card">\n    <div class="card-image">&#9835;</div>\n    <div class="card-body">\n      <h3>Another Track</h3>\n      <p>Different artist &mdash; Another album</p>\n      <button>Play</button>\n    </div>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Add a 'like' button to each card with a heart icon (use ♥)",
+            "Add a badge to one card (like a 'NEW' or 'FEATURED' label) using absolute positioning",
+            "Add a third card with different content",
+            "Make the cards responsive so they stack on narrow screens using flex-wrap"
+          ]
         }
       },
       {
         id: "2-9",
         title: "Guided Profile Page Project",
-        body: `You've seen profile pages hundreds of times: Dribbble, Behance, GitHub, LinkedIn. They all follow the same pattern because that pattern works. A header with name and role. An about section with a short bio. A skills section. A projects grid. Contact links.\n\nThe scaffold in the code editor covers that full structure: a header with your name and title, a bio section, a skills grid using flexbox, project cards, and footer links. The HTML is structured. The base CSS is styled. The layout is there.\n\nYour job is threefold. First: replace every piece of placeholder content with your actual information. Don't leave a single word of placeholder text \u2014 this is your page now. Second: change the visual design. The colour scheme, the typography choices, the spacing \u2014 make it feel like you, not the template. Third: add something the scaffold doesn't have. A section, an element, an interaction. Anything that requires you to figure it out yourself.\n\nThe third part is the most important. The first two are filling in blanks. The third is actual building.`,
+        body: `You've seen profile pages hundreds of times: Dribbble, Behance, GitHub, LinkedIn. They all follow the same pattern because that pattern works. A header with name and role. An about section with a short bio. A skills section. A projects grid. Contact links.\n\nThe scaffold in the code editor covers that full structure: a header with your name and title, a bio section, a skills grid using flexbox, project cards, and footer links. The HTML is structured. The base CSS is styled. The layout is there.\n\nYour job is threefold. First: replace every piece of placeholder content with your actual information. Don't leave a single word of placeholder text — this is your page now. Second: change the visual design. The colour scheme, the typography choices, the spacing — make it feel like you, not the template. Third: add something the scaffold doesn't have. A section, an element, an interaction. Anything that requires you to figure it out yourself.\n\nThe third part is the most important. The first two are filling in blanks. The third is actual building.`,
         callout: {
           type: "default",
           label: "What This Builds",
-          text: "By the end of this session you'll have a real, personal webpage. Not a tutorial exercise \u2014 a page that represents you, with your name, your projects, your design choices. That is the first thing you'll show people when they ask what you can do."
+          text: "By the end of this session you'll have a real, personal webpage. Not a tutorial exercise — a page that represents you, with your name, your projects, your design choices. That is the first thing you'll show people when they ask what you can do."
         },
         callout2: {
           type: "focus",
@@ -435,44 +736,123 @@ const FLOORS = [
         },
         hint: `If you don't know what to add as your original element, here are three options that require real CSS work: a horizontal scrolling skills bar, a timeline for your learning journey, or a dark/light mode toggle (research CSS custom properties and class toggling with JavaScript).\n\n<strong>Feeling stuck on the design?</strong> Open Dribbble or Behance and look at three profile pages you find visually interesting. Don't copy any of them. Instead, write down what they have in common: spacing generosity, font weight contrast, a strong accent colour. Use those patterns, not the specific designs.\n\n<strong>Testing on mobile:</strong> In DevTools (F12), click the icon that looks like a phone and tablet (Toggle Device Toolbar). This lets you simulate different screen sizes. If your page looks broken on mobile, the most common fix is adding max-width: 100% to images and checking that your flex containers have flex-wrap: wrap.`,
         quiz: {
-          question: "You've built a profile page using a scaffold. You've replaced all placeholder text but kept all the original colours and layout choices. A recruiter views it alongside the original template. What's the most accurate description of what you've built?",
-          options: ["A complete portfolio piece that demonstrates your HTML and CSS ability", "A filled-in template \u2014 it shows you can read HTML but not that you can make design decisions", "An excellent starting point that just needs to be deployed to be portfolio-ready", "A technically correct page that only needs JavaScript to be complete"],
+          question: "You've built a profile page using the scaffold. You replaced all text but kept all original colours and layout. A recruiter views it alongside the original template. What's the most accurate description of what you've built?",
+          options: [
+            "A complete portfolio piece that demonstrates your HTML and CSS ability",
+            "A filled-in template — it shows you can edit HTML but not that you can make independent design decisions",
+            "An excellent starting point that just needs to be deployed to be portfolio-ready",
+            "A technically correct page that only needs JavaScript to be professionally complete"
+          ],
           correct: 1,
-          feedback: "Replacing text in a template demonstrates that you can edit HTML. Making visual and structural decisions \u2014 the colour scheme, the layout modifications, the added section \u2014 demonstrates that you can build with CSS. A portfolio piece should show decision-making, not just content-filling. The template is a starting point, not the destination."
+          feedback: "Replacing text in a template demonstrates that you can edit HTML. Making visual and structural decisions — the colour scheme, layout modifications, added sections — demonstrates that you can build with CSS. A portfolio piece should show decision-making, not just content-filling. The template is a starting point. The destination is a page that looks like you, not the template."
         },
-        checklist: ["I replaced every piece of placeholder content with my own real information", "I changed the colour scheme to something that feels personal to me", "I added at least one section or element not included in the scaffold", "I tested the page at different window sizes", "I'm satisfied that this page represents me, not the template"],
+        checklist: [
+          "I replaced every piece of placeholder content with my own real information — nothing generic remains",
+          "I changed the colour scheme to something that feels like my personal aesthetic",
+          "I added at least one section or element not included in the scaffold that required me to figure it out",
+          "I tested the page at multiple different browser widths",
+          "I would feel comfortable showing this page to someone as something I created"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Replace all placeholder text with your own real information", "Change the color scheme to something that feels like you", "Add a fourth section not included in the template", "Make it work on mobile (test by resizing your browser window)"]
+          starter: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Your Name — Developer</title>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; color: white; font-family: sans-serif; }\n    header { padding: 64px 32px; text-align: center; border-bottom: 1px solid #222; }\n    header h1 { font-size: 2.5rem; color: #7eb8c8; margin-bottom: 8px; }\n    header p { color: #888; font-size: 1.1rem; }\n    section { padding: 48px 32px; max-width: 800px; margin: 0 auto; }\n    section h2 { color: #7eb8c8; margin-bottom: 24px; font-size: 1.4rem; }\n    .skills { display: flex; flex-wrap: wrap; gap: 8px; }\n    .skill { background: #1a1a1a; border: 1px solid #333; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: #ccc; }\n    .projects { display: flex; flex-wrap: wrap; gap: 16px; }\n    .project-card { background: #1a1a1a; border-radius: 8px; padding: 20px; flex: 1; min-width: 220px; border: 1px solid #2a2a2a; }\n    .project-card h3 { color: white; margin-bottom: 8px; }\n    .project-card p { color: #888; font-size: 0.9rem; line-height: 1.5; }\n    footer { padding: 32px; text-align: center; border-top: 1px solid #222; color: #555; }\n    footer a { color: #7eb8c8; text-decoration: none; margin: 0 12px; }\n  </style>\n</head>\n<body>\n  <header>\n    <h1>Your Name Here</h1>\n    <p>Junior Web Developer &mdash; Learning every day</p>\n  </header>\n  <section>\n    <h2>About</h2>\n    <p style="color:#aaa;line-height:1.7;">Replace this with a real bio. Write 2-3 sentences about who you are, what you\'re learning, and what you\'re building toward.</p>\n  </section>\n  <section>\n    <h2>Skills</h2>\n    <div class="skills">\n      <span class="skill">HTML</span>\n      <span class="skill">CSS</span>\n      <span class="skill">JavaScript</span>\n      <span class="skill">Add your own</span>\n    </div>\n  </section>\n  <section>\n    <h2>Projects</h2>\n    <div class="projects">\n      <div class="project-card"><h3>Project One</h3><p>Replace with a real project description.</p></div>\n      <div class="project-card"><h3>Project Two</h3><p>Replace with a real project description.</p></div>\n    </div>\n  </section>\n  <footer>\n    <a href="#">GitHub</a>\n    <a href="#">LinkedIn</a>\n    <a href="#">Email</a>\n  </footer>\n</body>\n</html>',
+          challenges: [
+            "Replace all placeholder text with your own real information",
+            "Change the colour scheme — replace all #7eb8c8 with a colour that feels like you",
+            "Add a fourth section not included in the scaffold (timeline, testimonials, contact form, etc.)",
+            "Make it work on mobile — test by resizing your browser to 375px wide"
+          ]
         }
       },
       {
         id: "2-10",
-        title: "Solo Project \u2014 No Template",
-        body: `No scaffold. No starter code. No template. A blank file and a brief.\n\n<strong>The brief:</strong> Build a landing page for something that doesn't exist yet. An app idea you've had. A fictional brand. A band. A game. A product. It can be anything \u2014 the subject doesn't matter. What matters is that you make every decision.\n\nThe page must have three sections minimum: a hero (the top section that communicates what the thing is, immediately, with a heading and a call-to-action), a features or about section (three or more reasons, benefits, or facts), and a footer with at minimum two links.\n\nEvery HTML element you use \u2014 your choice. Every colour \u2014 your choice. Every font, every spacing value, every layout approach \u2014 yours. When something doesn't work, you figure out why. When you want something you don't know how to do, you search for it.\n\nThis is what the work actually feels like. There's no right answer to compare yourself to. There's only: does it work, does it look intentional, and is it something you made.`,
+        title: "Floor 2 Check — No Template",
+        body: `Before you advance to Floor 3, prove to yourself you understood this floor.\n\nNo scaffold. No starter code. No template. A blank file and a brief.\n\n<strong>The brief:</strong> Build a landing page for something that doesn't exist yet. An app idea you've had. A fictional brand. A band. A game. A product. It can be anything — the subject doesn't matter. What matters is that you make every decision.\n\nThe page must have three sections minimum: a hero (the top section with a heading and a call-to-action), a features or about section (three or more benefits or facts), and a footer with at minimum two links.\n\nEvery HTML element — your choice. Every colour — your choice. Every font, every spacing value, every layout approach — yours. When something doesn't work, you figure out why. When you want something you don't know how to do, you search for it.\n\nThis is what the work actually feels like. There's no right answer to compare yourself to. There's only: does it work, does it look intentional, and is it something you made.\n\nThe questions below assess the full floor — not just this final section.`,
         callout: {
           type: "default",
           label: "The Blank Page Problem",
-          text: "The hardest part of this project is starting. The fix: open a file, write the HTML scaffold, write an h1 with your idea's name. That's it. That's the start. Once there's something on screen, the next step is always obvious. The blank page is only terrifying until you put one word on it."
+          text: "The hardest part of this project is starting. The fix: open a file, write the HTML scaffold, write an h1 with your idea's name. That's it. Once there's something on screen, the next step is always obvious. The blank page is only terrifying until you put one word on it."
         },
         callout2: {
           type: "focus",
           label: "Searching Is Part of the Work",
-          text: "If you want a feature you don't know how to build \u2014 a sticky navigation, a gradient background, a CSS animation \u2014 search for it. Searching for CSS solutions is not cheating. It's exactly what every professional developer does. The skill is knowing what to search for and evaluating what you find."
+          text: "If you want a feature you don't know how to build — a sticky navigation, a gradient background, a CSS animation — search for it. Searching for CSS solutions is not cheating. It's exactly what every professional developer does. The skill is knowing what to search for and evaluating what you find."
         },
-        hint: `If you're completely blank on an idea: don't make it about an app. Make it about something you know. A landing page for your favourite book, for a coffee shop that should exist in your city, for a service that would have helped you learn to code faster. Anything you have opinions about is easier to design than something abstract.\n\n<strong>When the design feels off but you can't say why:</strong> Look at the spacing. Inconsistent spacing makes pages feel unpolished more than almost anything else. Pick one spacing unit (like 8px) and make every margin and padding a multiple of it. The page will immediately feel more ordered.\n\n<strong>Still fuzzy on the hero section?</strong> A hero needs: a strong headline (what is this), a brief supporting line (why it matters), and a button or link (what to do next). That's the complete minimum. Everything else is enhancement.`,
+        hint: `If you're completely blank on an idea: don't make it about an app. Make it about something you know. A landing page for your favourite book, for a coffee shop that should exist in your city, for a service that would have helped you learn to code faster. Anything you have opinions about is easier to design than something abstract.\n\n<strong>When the design feels off but you can't say why:</strong> Look at the spacing. Inconsistent spacing makes pages feel unpolished more than almost anything else. Pick one spacing unit (like 8px) and make every margin and padding a multiple of it.\n\n<strong>Still fuzzy on the hero section?</strong> A hero needs: a strong headline, a brief supporting line, and a button or link. That's the complete minimum.`,
         quiz: {
-          question: "You've finished the landing page. You look at it and think the layout is fine but something feels off about the design. Which of the following is most likely to make the biggest improvement?",
-          options: ["Adding more CSS animations and transitions throughout the page", "Reviewing the spacing \u2014 inconsistent padding and margins are the most common cause of layouts that look unpolished", "Changing the font to something more distinctive", "Adding more sections to give the page more content"],
-          correct: 1,
-          feedback: "Inconsistent spacing is the most common reason a page 'feels off' even when the structure and colours are correct. When padding and margins jump between arbitrary values (13px here, 21px there, 37px elsewhere), the eye perceives disorder. Switching to a consistent spacing scale \u2014 multiples of 8 \u2014 creates visual rhythm that makes layouts feel considered even without a designer."
-        },
-        checklist: ["I built the landing page from a blank file with no starter code", "It has a hero section, a features or about section, and a footer", "I made every visual decision myself", "When I didn't know how to do something, I searched for it rather than leaving it out", "I would show this page to someone as an example of what I can build"]
+          questions: [
+            {
+              question: "You've finished your landing page but something feels visually off. The structure is correct and the colours are fine. What should you check first?",
+              options: [
+                "Add more CSS animations and transitions to make it more dynamic",
+                "Check the spacing — inconsistent padding and margins create visual disorder that is the most common cause of 'something feels off'",
+                "Change the font to something more distinctive and unusual",
+                "Add more sections to give the page more visual weight"
+              ],
+              correct: 1,
+              feedback: "Inconsistent spacing is the most common reason a page 'feels off' when structure and colours are fine. When padding jumps between arbitrary values, the eye perceives disorder. A consistent spacing scale — multiples of 8 — creates visual rhythm that makes layouts feel considered."
+            },
+            {
+              question: "A paragraph element has a tag selector rule setting color: gray and a class selector rule setting color: white. The element has the class applied. What colour does the text appear?",
+              options: [
+                "Gray — the tag selector is more fundamental to the element",
+                "White — the class selector is more specific than the tag selector",
+                "A mix of both — the browser averages conflicting colour values",
+                "Gray — the tag selector rule appears first in the stylesheet"
+              ],
+              correct: 1,
+              feedback: "Class selectors are more specific than tag selectors, so the class rule wins regardless of document order. This is the cascade: specificity determines which rule applies when multiple rules target the same element."
+            },
+            {
+              question: "You want to centre three cards in a row both horizontally and have equal spacing between them. Which CSS properties on the container achieve this?",
+              options: [
+                "text-align: center on the container",
+                "display: flex; justify-content: center; gap: 16px",
+                "display: flex; justify-content: space-between with fixed widths on cards",
+                "display: block; margin: auto on each card"
+              ],
+              correct: 1,
+              feedback: "display: flex enables the flexbox layout. justify-content: center centres the items on the main axis. gap: 16px adds consistent space between items. Space-between (option C) places items at the edges, not centred. text-align only works for inline content. margin: auto on block elements only centres horizontally when width is defined."
+            },
+            {
+              question: "A developer builds their entire landing page with inline style attributes on every element. They want to change the primary colour from blue to green. What happens?",
+              options: [
+                "They change one value in the CSS file and all blue elements update instantly",
+                "They must change the style attribute on every single element individually — potentially dozens of edits",
+                "They use a find-and-replace in their editor, which takes 30 seconds",
+                "They add a CSS class and it automatically overrides the inline styles"
+              ],
+              correct: 1,
+              feedback: "Inline styles are one of the core reasons external stylesheets exist. Changing a colour across a site with inline styles requires editing every element. An external stylesheet means one change updates everything. Option C is technically possible but fragile. Option D is wrong — inline styles have the highest specificity and override class rules."
+            },
+            {
+              question: "The browser's DevTools shows an element as 350px wide, but your CSS says width: 300px with padding: 20px. What explains the discrepancy?",
+              options: [
+                "DevTools is displaying incorrect information and the element is actually 300px",
+                "The element is using the default box-sizing: content-box, so padding (40px total) is added to the content width (300px)",
+                "The browser automatically adds 50px for accessibility reasons",
+                "The element has margin: 25px which is included in the rendered width"
+              ],
+              correct: 1,
+              feedback: "With box-sizing: content-box (the default), width applies to the content only. 20px padding on each side adds 40px. 300 + 40 = 340px — though 350 would suggest other factors like a border. The fix is box-sizing: border-box so the specified width includes padding. Margin is never included in the element's own width calculation."
+            },
+            {
+              question: "You've built a profile page from a scaffold by replacing all text but keeping the original colours and layout. You've also built a landing page from scratch with your own design choices. Which is stronger portfolio evidence of CSS ability?",
+              options: [
+                "The profile page — it's more polished because it started with a solid foundation",
+                "The landing page — it demonstrates independent decision-making across structure, layout, and visual design",
+                "They're equally strong — both demonstrate HTML and CSS knowledge",
+                "The profile page — recruiters prefer clean, recognisable layouts"
+              ],
+              correct: 1,
+              feedback: "A page built from scratch demonstrates that you can make independent design decisions: choosing layout approaches, establishing visual hierarchy, picking colour palettes, solving structural problems. A filled-in template demonstrates that you can edit HTML. Both have value, but the from-scratch project is stronger evidence of CSS engineering ability."
+            }
+          ]
+        }
       }
     ]
   },
-  {
+    {
     id: 3,
     title: "Building With Training Wheels",
     subtitle: "JavaScript \u2014 the language of the web",
@@ -485,7 +865,7 @@ const FLOORS = [
       {
         id: "3-1",
         title: "What JavaScript Does",
-        body: `HTML is structure. CSS is appearance. JavaScript is behaviour \u2014 what happens when you actually interact with a page.\n\nEvery programming language you'll encounter later in your career \u2014 Python, Go, Rust, Swift \u2014 lives on servers or devices. JavaScript is the only language browsers run natively. If it happens in a browser and it responds to you, JavaScript made it happen.\n\nThe mental model to internalise: JavaScript is <strong>event-driven</strong>. It doesn't run top-to-bottom once and stop. It loads onto the page, then sits waiting. Waiting for a click, a keypress, a timer firing, a network response arriving. When one of those things happens, the relevant function runs. When it's done, JavaScript goes back to waiting. This is fundamentally different from the sequential scripts you saw in Floor 1.\n\nJavaScript's view of the page is the <strong>DOM</strong> \u2014 Document Object Model. The browser represents every HTML element as a JavaScript object in a tree structure. JavaScript can find any node in that tree, read its properties, change its content or style, add new nodes, or remove existing ones \u2014 all without reloading the page. This is called DOM manipulation, and it's the core mechanism behind every interactive website.\n\nWhen Instagram shows a like animation the instant you tap the heart \u2014 no page reload, just an immediate response \u2014 JavaScript found the heart element in the DOM, changed its CSS class to the filled version, incremented the like count, and sent a network request to save the like to the server. All of that in milliseconds, without you seeing anything except the animation.\n\nThat is what you're about to learn to do.`,
+        body: `HTML is structure. CSS is appearance. JavaScript is behaviour \u2014 what happens when you actually interact with a page.\n\nEvery programming language you'll encounter later in your career \u2014 Python, Go, Rust, Swift \u2014 lives on servers or devices. JavaScript is the only language browsers run natively. If it happens in a browser and it responds to you, JavaScript made it happen.\n\nThe mental model to internalise: JavaScript is <strong>event-driven</strong>. It doesn't run top-to-bottom once and stop. It loads onto the page, then sits waiting. Waiting for a click, a keypress, a timer firing, a network response arriving. When one of those things happens, the relevant function runs. When it's done, JavaScript goes back to waiting. This is fundamentally different from the sequential scripts you saw in Floor 1.\n\nJavaScript's view of the page is the <strong>DOM</strong> \u2014 Document Object Model. The browser represents every HTML element as a JavaScript object in a tree structure. JavaScript can find any node in that tree, read its properties, change its content or style, add new nodes, or remove existing ones \u2014 all without reloading the page. This is called DOM manipulation, and it's the core mechanism behind every interactive website.\n\nWhen Instagram shows a like animation the instant you tap the heart \u2014 no page reload, just an immediate response \u2014 JavaScript found the heart element in the DOM, changed its CSS class to the filled version, incremented the like count, and sent a network request to save the like to the server. All of that in milliseconds, without you seeing anything except the animation.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — pick one interaction on a website you use daily. Can you name the event that triggers it, what changes in the DOM, and whether a network request is involved?</div>\n\nThat is what you're about to learn to do.`,
         callout: {
           type: "default",
           label: "The Third Layer",
@@ -503,7 +883,7 @@ const FLOORS = [
           correct: 1,
           feedback: "When you click Like, JavaScript is listening for that click event. An event handler function runs: it updates the heart icon's appearance in the DOM (no reload needed), updates the count display, and sends an asynchronous network request to save the like to Instagram's server. The DOM update is instant because it's local. The server request happens in the background. This is exactly how modern web applications work."
         },
-        checklist: ["I understand that JavaScript is the only language browsers run natively", "I can explain the event-driven model \u2014 JavaScript waits, then responds to events", "I understand what the DOM is and what DOM manipulation means", "I've opened the browser console and run at least one JavaScript command", "I can describe in plain terms how Instagram's Like button works"]
+        checklist: ["I can explain the event-driven model without using the word 'event' — JavaScript sits idle, then runs a function when something happens", "I can describe three specific things JavaScript can do to the DOM without looking anything up", "I've opened the browser console and changed something on a live page using JavaScript", "I can explain in plain terms how Instagram's Like button works without a page reload", "I understand why JavaScript is the only language that runs natively in browsers"]
       },
       {
         id: "3-2",
@@ -526,7 +906,7 @@ const FLOORS = [
           correct: 1,
           feedback: "When + encounters a string on either side, it concatenates \u2014 joins them together as text. '10' is a string, so '10' + 5 becomes '10' + '5' (5 is coerced to a string) which is '105'. This is why parseInt() or Number() is used to convert string inputs to numbers before doing maths, and why === catches this kind of type mismatch."
         },
-        checklist: ["I use const by default and only reach for let when values genuinely need to change", "I understand the four primitive types: string, number, boolean, undefined", "I can write template literals with embedded expressions", "I always use === instead of ==", "I understand what type coercion is and which operators trigger it"]
+        checklist: ["I default to const and can explain WHY — without looking it up", "I can name the four primitive types and give a concrete example of each", "I can write a template literal with a calculation inside \${} from memory", "I always use === and can predict the result of '5' == 5 vs '5' === 5 before running it", "I can predict what '10' + 3 returns and explain why it differs from '10' - 3"]
       },
       {
         id: "3-3",
@@ -549,7 +929,7 @@ const FLOORS = [
           correct: 2,
           feedback: "0 is one of the six falsy values in JavaScript, so if (0) evaluates to false and processInput is skipped. 'hello' is truthy. [] is truthy (empty arrays are truthy \u2014 only empty strings are falsy). 'false' is also truthy \u2014 it's a non-empty string containing the text 'false', not the boolean false."
         },
-        checklist: ["I can write if/else if/else chains and explain how they evaluate", "I know all six falsy values in JavaScript", "I understand that && and || return values, not just booleans", "I can use the ternary operator for simple conditional assignments", "I can use the || operator as a default value pattern"]
+        checklist: ["I can list all six falsy values without looking them up", "I can predict whether if ([]) runs — and explain why", "I can write a default value using || and explain what happens when the left side is falsy", "I can use the ternary operator for a simple assignment and read one written by someone else", "I can explain && short-circuit evaluation using a concrete example"]
       },
       {
         id: "3-4",
@@ -572,11 +952,93 @@ const FLOORS = [
           correct: 1,
           feedback: "The function performs the calculation x * 2 but the result is never returned. A function without a return statement returns undefined. To fix it: function double(x) { return x * 2; }. This is one of the most common early mistakes \u2014 computing a value inside a function but forgetting to send it back with return."
         },
-        checklist: ["I can write a function declaration with parameters and a return value", "I understand the difference between parameters and arguments", "I can write an arrow function and know when to prefer it", "I understand what function scope means and why it matters", "I know what a pure function is and why it's considered good practice"],
+        checklist: ["I can write a function with parameters and a return value from memory", "I can explain in one sentence the difference between parameters and arguments", "I can write an arrow function equivalent of a regular function declaration", "I can explain what happens to a variable declared inside a function when the function finishes", "I can describe what makes a function 'pure' and give an example from a real app"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.8}
+h2{color:#c87e9a;margin:0 0 16px}
+#output p{margin:4px 0}
+.result{color:#c8a96e;font-size:16px;margin-top:12px}
+</style></head><body>
+<h2>Functions</h2>
+<div id="output"></div>
+<script>
+var out='';
+function greet(name){return 'Hello, '+name+'! Welcome to The Code Book.';}
+function add(a,b){return a+b;}
+function applyDiscount(price,pct){return price-(price*(pct/100));}
+out+='<p>'+greet('Developer')+'</p>';
+out+='<p>3 + 7 = '+add(3,7)+'</p>';
+out+='<p class="result">After 20% discount: £'+applyDiscount(50,20).toFixed(2)+'</p>';
+document.getElementById('output').innerHTML=out;
+</script></body></html>`,
           challenges: ["Add a third parameter to the greet function for a title (Mr, Ms, Dr) and include it in the output", "Write a function called calculateDiscount(price, percent) that returns the discounted price", "Convert the function declaration to an arrow function", "Write a function that takes an array of numbers and returns the largest one"]
+        }
+      },
+      {
+        id: "3-phase1-review",
+        title: "Phase 1 Review — JavaScript Foundations",
+        body: `Five questions covering what JavaScript is, variables, conditions, and functions. If any question gives you trouble, go back to that section before continuing.`,
+        quiz: {
+          questions: [
+            {
+              question: "JavaScript is event-driven. What does this mean in practice?",
+              options: [
+                "JavaScript runs all code top-to-bottom once when the page loads, then stops",
+                "JavaScript loads onto the page and then waits for events — clicks, keypresses, timers — and runs the relevant function when each event fires",
+                "JavaScript runs continuously in an infinite loop checking for changes",
+                "JavaScript only runs when the user explicitly calls it from the browser console"
+              ],
+              correct: 1,
+              feedback: "Event-driven means JavaScript sits idle after loading, responding to events as they occur rather than running once or looping constantly. An event listener registers interest in an event; when the event fires, the handler function runs. This is what lets a page stay responsive without blocking."
+            },
+            {
+              question: "What is the difference between const and let in JavaScript?",
+              options: [
+                "const is faster than let at runtime",
+                "const cannot be reassigned after declaration; let can be reassigned",
+                "let is for strings; const is for numbers",
+                "const is only available in browser environments; let works everywhere"
+              ],
+              correct: 1,
+              feedback: "const declares a binding that cannot be reassigned. let declares one that can. Use const by default — it signals that the value should not change. Only reach for let when the value genuinely needs to be updated (counters, toggles, accumulating results). This discipline prevents accidental reassignment bugs."
+            },
+            {
+              question: "Which values in JavaScript are falsy?",
+              options: [
+                "false, null, undefined, 0, NaN, and '' (empty string)",
+                "false, null, and undefined only",
+                "false, 0, null, undefined, '', [], and {}",
+                "false, 0, and '' — null and undefined are truthy"
+              ],
+              correct: 0,
+              feedback: "There are exactly six falsy values in JavaScript: false, 0, '' (empty string), null, undefined, and NaN. Everything else is truthy — including [], {}, 'false', and -1. Empty arrays and objects are truthy, which surprises many developers. Memorise the six falsy values; everything else is truthy."
+            },
+            {
+              question: "function multiply(x, y) { x * y; } — what does console.log(multiply(3, 4)) print?",
+              options: [
+                "12, because x * y is calculated inside the function",
+                "undefined, because the function performs the calculation but has no return statement",
+                "NaN, because the parameters haven't been declared with const or let",
+                "Error: x is not defined"
+              ],
+              correct: 1,
+              feedback: "Without a return statement, a function returns undefined regardless of what it calculates internally. The expression x * y computes 12 but the result is immediately discarded. To fix it: return x * y. This is one of the most common beginner mistakes — compute a value inside a function but forget to send it back."
+            },
+            {
+              question: "What is the difference between a function's parameters and its arguments?",
+              options: [
+                "Parameters are the actual values passed in; arguments are the placeholders in the definition",
+                "Parameters are the named placeholders in the function definition; arguments are the actual values passed when calling the function",
+                "They're the same thing — the terms are interchangeable",
+                "Parameters are for arrow functions; arguments are for regular function declarations"
+              ],
+              correct: 1,
+              feedback: "Parameters are defined in the function signature: function add(a, b) — a and b are parameters. Arguments are the values passed when calling: add(3, 5) — 3 and 5 are arguments. Parameters are names (placeholders). Arguments are values. The distinction matters when reading error messages and documentation."
+            }
+          ]
         }
       },
       {
@@ -600,10 +1062,34 @@ const FLOORS = [
           correct: 0,
           feedback: "The condition is i < 5. After i increments to 5, the condition is checked: 5 < 5 is false, so the loop body does not execute and the loop ends. The body runs for i = 0, 1, 2, 3, 4 \u2014 five times total. When i becomes 5, the condition fails and the loop exits."
         },
-        checklist: ["I can write a for loop with correct initialisation, condition, and update", "I understand when to use while vs for", "I can use forEach for clean array iteration", "I know the difference between for...of and for...in", "I understand what break and continue do and can use them correctly"],
+        checklist: ["I can write a for loop from memory with correct initialisation, condition, and update", "I can explain why break doesn't work inside forEach — and what to use instead", "I can use forEach for clean array iteration without looking at examples", "I can explain the difference between for...of and for...in and when to use each", "I can write a loop that exits early when a condition is met"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px}
+.section{margin-bottom:20px}
+.label{color:#888;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+p{margin:2px 0}
+.highlight{color:#c8a96e}
+</style></head><body>
+<h2>Loops in Action</h2>
+<div id="output"></div>
+<script>
+var out='';
+out+='<div class="section"><div class="label">For Loop (1 to 5)</div>';
+for(var i=1;i<=5;i++){out+='<p>Iteration '+i+'</p>';}
+out+='</div>';
+out+='<div class="section"><div class="label">Odd numbers only (continue)</div>';
+for(var j=1;j<=10;j++){if(j%2===0)continue;out+='<p class="highlight">'+j+'</p>';}
+out+='</div>';
+var languages=['HTML','CSS','JavaScript','Python'];
+out+='<div class="section"><div class="label">forEach on array</div>';
+languages.forEach(function(lang,idx){out+='<p>'+(idx+1)+'. '+lang+'</p>';});
+out+='</div>';
+document.getElementById('output').innerHTML=out;
+</script></body></html>`,
           challenges: ["Change the for loop to count down from 10 to 1 instead of up", "Add a condition inside the loop that skips even numbers (use if (i % 2 === 0) continue)", "Rewrite the for loop as a while loop", "Write a loop that finds the first number in the array greater than 50 and stops"]
         }
       },
@@ -628,10 +1114,44 @@ const FLOORS = [
           correct: 0,
           feedback: "filter returns a new array containing only the items where the callback function returns true. n > 4 is true for 7 and 9. 3 is not greater than 4. 1 is not greater than 4. 4 is not greater than 4 (the condition is strictly greater than, not greater than or equal). Result: [7, 9]."
         },
-        checklist: ["I know the core array methods: push, pop, slice, splice, indexOf, includes", "I can use map, filter, and reduce to transform arrays", "I can create and navigate nested objects using both dot and bracket notation", "I understand what JSON is and can convert between JSON and JavaScript objects", "I can work with arrays of objects \u2014 the most common data structure in real applications"],
+        checklist: ["I can access a nested property in an object without looking up the syntax", "I can use filter() to get a subset of an array and explain what it returns", "I can use map() to transform an array and explain how its return value differs from forEach", "I can chain filter() and map() together and predict the result", "I can explain the difference between an array of primitives and an array of objects"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px;font-size:16px}
+.card{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px;margin-bottom:10px}
+.title{color:#c8a96e;font-size:13px;margin-bottom:4px}
+.meta{color:#888;font-size:11px}
+.rating{color:#ffd700}
+.section-label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin:16px 0 8px}
+.filtered{border-color:#3a4a2a}
+.titles{color:#7eb8c8}
+</style></head><body>
+<h2>Arrays & Objects</h2>
+<div id="output"></div>
+<script>
+var movies=[
+  {title:'Interstellar',rating:8.6,genre:'Sci-Fi'},
+  {title:'The Dark Knight',rating:9.0,genre:'Action'},
+  {title:'Inception',rating:8.8,genre:'Sci-Fi'},
+  {title:'Tenet',rating:7.4,genre:'Action'},
+  {title:'Dunkirk',rating:7.9,genre:'War'}
+];
+var out='<div class="section-label">All Movies</div>';
+movies.forEach(function(m){
+  out+='<div class="card"><div class="title">'+m.title+'</div>';
+  out+='<div class="meta"><span class="rating">★ '+m.rating+'</span>  '+m.genre+'</div></div>';
+});
+var highRated=movies.filter(function(m){return m.rating>8.5;});
+out+='<div class="section-label">filter: rating > 8.5</div>';
+highRated.forEach(function(m){out+='<div class="card filtered"><div class="title">'+m.title+'</div></div>';});
+var titles=movies.map(function(m){return m.title;});
+out+='<div class="section-label">map: titles only</div>';
+out+='<div class="card"><div class="titles">'+titles.join(', ')+'</div></div>';
+document.getElementById('output').innerHTML=out;
+</script></body></html>`,
           challenges: ["Use .filter() to show only movies with a rating above 8.0", "Add a new movie to the array using .push() and re-render the list", "Use .map() to create a new array of just the movie titles", "Sort the movies by rating using .sort()"]
         }
       },
@@ -656,10 +1176,36 @@ const FLOORS = [
           correct: 2,
           feedback: "classList.toggle adds the class if absent, removes it if present \u2014 in one call. Pair it with a CSS rule like .hidden { display: none; } and the behaviour is clean and reusable. Directly manipulating style is harder to override and mixes presentation logic into JavaScript. Setting a custom attribute requires extra code to read and act on it. Clearing innerHTML destroys the content entirely rather than hiding it."
         },
-        checklist: ["I can find elements using getElementById, querySelector, and querySelectorAll", "I know when to use textContent vs innerHTML and why innerHTML can be a security risk", "I can add, remove, and toggle CSS classes on elements", "I can create new elements with createElement and attach them with appendChild", "I understand the classList.toggle pattern for show/hide interactions"],
+        checklist: ["I can find an element with querySelector and change its text without looking up the syntax", "I can explain when to use textContent vs innerHTML — and why innerHTML carries a security risk", "I can add, remove, and toggle a CSS class on an element from memory", "I can create a new element, set its content, and append it to the DOM", "I've used classList.toggle to build a show/hide interaction"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#c87e9a;margin:0 0 20px}
+button{font-family:inherit;font-size:12px;letter-spacing:1px;cursor:pointer;border:none;border-radius:6px;padding:10px 20px}
+#count-btn{background:#7eb8c8;color:#000;margin-right:10px}
+#count-btn:hover{background:#a8d8e8}
+#toggle-btn{background:#333;color:#fff;border:1px solid #555}
+#counter{font-size:48px;color:#c8a96e;margin:20px 0;font-weight:900}
+#message{margin-top:20px;padding:16px;border-radius:8px;background:#1a2a1a;color:#6dbf6d}
+.hidden{display:none}
+</style></head><body>
+<h2>DOM Manipulation</h2>
+<button id="count-btn" onclick="increment()">Click to Count</button>
+<button id="toggle-btn" onclick="toggleMessage()">Show Message</button>
+<div id="counter">0</div>
+<div id="message" class="hidden">JavaScript found this element and toggled its visibility using classList.toggle('hidden')</div>
+<script>
+var count=0;
+function increment(){count++;document.getElementById('counter').textContent=count;}
+function toggleMessage(){
+  var msg=document.getElementById('message');
+  var btn=document.getElementById('toggle-btn');
+  msg.classList.toggle('hidden');
+  btn.textContent=msg.classList.contains('hidden')?'Show Message':'Hide Message';
+}
+</script></body></html>`,
           challenges: ["Change the button text to 'Updated!' after clicking it", "Use classList.toggle to show/hide the message instead of changing textContent", "Add a second counter that counts how many times the button has been clicked", "Create a new paragraph element with document.createElement and append it to the page"]
         }
       },
@@ -684,11 +1230,106 @@ const FLOORS = [
           correct: 1,
           feedback: "Form submission's default behaviour is to send the form data and reload the page. The JavaScript runs briefly but then the reload wipes everything. event.preventDefault() stops that default action, letting your JavaScript handle the submission completely without a page reload. This is one of the most common patterns in web form handling."
         },
-        checklist: ["I use addEventListener instead of inline onclick attributes", "I know the common event types and what triggers each one", "I can access and use the event object inside a handler", "I understand event.preventDefault() and know when to use it", "I understand event delegation and can implement it on a dynamic list"],
+        checklist: ["I use addEventListener instead of onclick attributes and can explain why", "I can name four common event types and describe what triggers each one", "I can access e.target inside a handler to identify what was clicked", "I can use event.preventDefault() and explain one concrete example where it's needed", "I can implement event delegation on a dynamic list and explain why it's more efficient"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#c87e9a;margin:0 0 20px}
+.field{margin-bottom:16px}
+label{display:block;color:#888;font-size:11px;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+input{background:#111;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:6px;font-family:inherit;font-size:13px;width:100%;max-width:320px}
+input:focus{outline:none;border-color:#7eb8c8}
+button{background:#7eb8c8;color:#000;border:none;border-radius:6px;padding:10px 24px;font-family:inherit;font-size:12px;cursor:pointer;letter-spacing:1px}
+button:hover{background:#a8d8e8}
+#live{color:#c8a96e;font-size:18px;margin:16px 0;min-height:28px}
+#log{margin-top:16px;color:#666;font-size:11px;line-height:1.8}
+</style></head><body>
+<h2>Events</h2>
+<div class="field">
+<label>Type something (input event fires on every key)</label>
+<input type="text" id="text-input" placeholder="Start typing...">
+</div>
+<div id="live"></div>
+<button id="submit-btn">Submit (uses preventDefault)</button>
+<div id="log"></div>
+<script>
+var log=document.getElementById('log');
+document.getElementById('text-input').addEventListener('input',function(e){
+  document.getElementById('live').textContent=e.target.value;
+});
+document.getElementById('submit-btn').addEventListener('click',function(e){
+  e.preventDefault();
+  var val=document.getElementById('text-input').value;
+  log.innerHTML+='<p>Submitted: "'+(val||'(empty)')+'" — page did NOT reload</p>';
+});
+</script></body></html>`,
           challenges: ["Add a keydown listener that fires when the user presses Enter", "Use event.preventDefault() on the form submit to prevent page reload", "Add a mouseover event that changes the button color when hovered (in JavaScript, not CSS)", "Use event delegation \u2014 attach one click listener to the list container instead of each item"]
+        }
+      },
+      {
+        id: "3-phase2-review",
+        title: "Phase 2 Review — Loops, Arrays, DOM, and Events",
+        body: `Five questions covering loops, arrays and objects, DOM manipulation, and events. If any question gives you trouble, return to that section.`,
+        quiz: {
+          questions: [
+            {
+              question: "An array contains 100 items. You want a new array containing only items where item.price > 50. Which method is correct?",
+              options: [
+                "array.forEach() — it loops through every item and lets you select some",
+                "array.map() — it transforms every item to a new value",
+                "array.filter() — it returns a new array containing only items that pass the test",
+                "array.find() — it returns the first item that matches the condition"
+              ],
+              correct: 2,
+              feedback: "filter() creates a new array containing only elements for which the callback returns truthy. forEach() is for side effects only — it always returns undefined. map() transforms every element but always returns an array of the same length. find() returns the first match, not all matches. filter() is the right tool when you want a subset."
+            },
+            {
+              question: "What is the DOM?",
+              options: [
+                "The list of CSS rules applied to the current page",
+                "The browser's tree-like representation of the page's HTML elements as JavaScript objects that can be read and modified",
+                "The JavaScript engine that executes code in the browser",
+                "The database of all websites indexed by the browser"
+              ],
+              correct: 1,
+              feedback: "The DOM (Document Object Model) is the browser's internal representation of the page as a tree of objects. Each HTML element is a node. JavaScript can read, add, modify, or remove any node without reloading the page. When you call document.querySelector() or change element.textContent, you're working with the DOM."
+            },
+            {
+              question: "What is the difference between a for loop and a forEach loop in JavaScript?",
+              options: [
+                "for loops are faster; forEach loops are for small arrays only",
+                "for loops can break early or skip items with continue; forEach cannot use break or continue",
+                "forEach loops work on arrays; for loops only work on numbers",
+                "They are functionally identical — the syntax is just personal preference"
+              ],
+              correct: 1,
+              feedback: "The key practical difference: for loops support break (exit early) and continue (skip to next iteration). forEach does not — calling break inside a forEach callback has no effect on the outer loop. Use for (or for...of) when you might need to exit early. Use forEach when you want to process every element without exceptions."
+            },
+            {
+              question: "You call element.addEventListener('click', handler). When does the handler function run?",
+              options: [
+                "Immediately when the line of code is executed",
+                "Every 100ms while the element exists on the page",
+                "Only when the user explicitly calls handler() in the console",
+                "Each time the user clicks the element"
+              ],
+              correct: 3,
+              feedback: "addEventListener registers a callback that runs in response to the specified event. 'click' fires each time the user clicks the element. The registration happens immediately when the line runs, but the handler itself is only called when the event occurs. This is the event-driven model — register interest, respond when it happens."
+            },
+            {
+              question: "What does event.preventDefault() do?",
+              options: [
+                "Stops the event from firing again if the user clicks twice",
+                "Cancels the browser's default behaviour for the event — e.g., preventing a form submit from reloading the page",
+                "Prevents the event from bubbling up to parent elements",
+                "Removes the event listener after the first trigger"
+              ],
+              correct: 1,
+              feedback: "Each event has a default browser behaviour: click on a link navigates, submit a form reloads the page, right-click opens a context menu. preventDefault() cancels that default behaviour so you can replace it with your own. It doesn't stop the event from firing or from bubbling — for that, you'd use stopPropagation()."
+            }
+          ]
         }
       },
       {
@@ -712,10 +1353,34 @@ const FLOORS = [
           correct: 1,
           feedback: "This TypeError means you wrote something like user.name where user is undefined. The object you expected to be there (user) doesn't exist at the moment your code runs \u2014 it might not have been returned yet, the variable is initialised as undefined, or a function didn't return a value. Log the variable just before the failing line to confirm what it contains."
         },
-        checklist: ["I can identify the three JavaScript error types and what each one means", "I read error messages fully before touching any code", "I use console.log systematically to trace values, not randomly to hope for clues", "I understand try/catch and know when it's appropriate to use", "I've used the DevTools debugger to set a breakpoint and step through execution"],
+        checklist: ["I can identify a TypeError, ReferenceError, and SyntaxError from their messages alone", "I read error messages completely before touching any code", "I use console.log systematically — at specific points to trace values, not randomly", "I can write a try/catch block and explain when it's appropriate vs not", "I've set a breakpoint in DevTools and stepped through execution line by line"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px}
+.section{margin-bottom:24px}
+.label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.ok{color:#6dbf6d}.err{color:#ff6b6b}
+</style></head><body>
+<h2>Error Handling</h2>
+<div class="section"><div class="label">Bug #1 — Spot and fix this:</div><div id="bug1"></div></div>
+<div class="section"><div class="label">try/catch in action</div><div id="trycatch"></div></div>
+<script>
+function double(x){x*2;} // BUG: missing return
+var result=double(5);
+document.getElementById('bug1').innerHTML=
+  '<p class="err">double(5) returned: '+result+' (expected 10 — can you see the bug?)</p>';
+
+function parseData(input){
+  try{var p=JSON.parse(input);return '<p class="ok">✓ Parsed: '+JSON.stringify(p)+'</p>';}
+  catch(e){return '<p class="err">✗ Error: '+e.message+'</p>';}
+}
+var el=document.getElementById('trycatch');
+el.innerHTML=parseData('{"name":"Alex"}');
+el.innerHTML+=parseData('this is not valid JSON');
+</script></body></html>`,
           challenges: ["Fix the three intentional bugs in the code \u2014 read the error messages in the console for guidance", "Add a try/catch block around the broken function call and display the error message instead of crashing", "Add console.log statements to trace what value each variable holds", "Add input validation that throws a custom error if the input is empty"]
         }
       },
@@ -740,10 +1405,60 @@ const FLOORS = [
           correct: 1,
           feedback: "The array is the source of truth. localStorage is saved from the array. On refresh, the saved data is loaded from localStorage and the list is re-rendered from the array. If the item was removed from the DOM but not from the array, it was saved to localStorage and will reappear on refresh. Always update the source of truth (the array) first, then update the DOM to reflect it."
         },
-        checklist: ["I read all function stubs and comments before implementing anything", "The addTodo function correctly validates input, updates the array, and creates a DOM element", "The deleteTodo function removes items from both the array and the DOM", "The toggleComplete function updates both the array state and the DOM visual state", "The todos persist through page refresh using localStorage"],
+        checklist: ["I read and understood the full scaffold before writing any code", "My addTodo function validates input, updates the array, and creates a DOM element", "My deleteTodo removes the item from both the array and the DOM in sync", "My toggleComplete updates both the data state and the DOM visual state correctly", "Todos persist through a page refresh — I can explain how localStorage makes this work"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;min-height:100vh}
+h2{color:#c87e9a;margin-bottom:20px}
+.add-row{display:flex;gap:10px;margin-bottom:20px}
+input{flex:1;background:#111;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#c87e9a}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:10px 18px;font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+button:hover{background:#d89ab5}
+#todo-list{list-style:none}
+.todo-item{display:flex;align-items:center;gap:12px;padding:12px;background:#111;border:1px solid #222;border-radius:6px;margin-bottom:8px}
+.todo-item.done .todo-text{text-decoration:line-through;color:#555}
+.todo-text{flex:1;cursor:pointer}
+.del-btn{background:transparent;border:1px solid #444;color:#888;border-radius:4px;padding:4px 10px;font-size:11px}
+.del-btn:hover{border-color:#ff6b6b;color:#ff6b6b;background:transparent}
+.empty{color:#555;font-size:12px;padding:16px 0}
+</style></head><body>
+<h2>To-Do List</h2>
+<div class="add-row">
+<input type="text" id="todo-input" placeholder="Add a task...">
+<button onclick="addTodo()">Add</button>
+</div>
+<ul id="todo-list"><li class="empty">No tasks yet — add one above</li></ul>
+<script>
+var todos=JSON.parse(localStorage.getItem('codebook_todos'))||[];
+var nextId=todos.length?Math.max.apply(null,todos.map(function(t){return t.id;}))+1:1;
+function render(){
+  var list=document.getElementById('todo-list');
+  if(!todos.length){list.innerHTML='<li class="empty">No tasks yet — add one above</li>';return;}
+  list.innerHTML=todos.map(function(t){
+    return '<li class="todo-item'+(t.done?' done':'')+'">'+
+      '<span class="todo-text" onclick="toggleTodo('+t.id+')">'+t.text+'</span>'+
+      '<button class="del-btn" onclick="deleteTodo('+t.id+')">Remove</button></li>';
+  }).join('');
+}
+function addTodo(){
+  var input=document.getElementById('todo-input');
+  var text=input.value.trim();if(!text)return;
+  todos.push({id:nextId++,text:text,done:false});
+  input.value='';save();render();
+}
+function deleteTodo(id){todos=todos.filter(function(t){return t.id!==id;});save();render();}
+function toggleTodo(id){
+  todos=todos.map(function(t){return t.id===id?{id:t.id,text:t.text,done:!t.done}:t;});
+  save();render();
+}
+function save(){localStorage.setItem('codebook_todos',JSON.stringify(todos));}
+document.getElementById('todo-input').addEventListener('keydown',function(e){if(e.key==='Enter')addTodo();});
+render();
+</script></body></html>`,
           challenges: ["Complete the addTodo function so new items appear in the list", "Complete the deleteTodo function so items can be removed", "Complete the toggleComplete function so items can be marked done", "Add localStorage persistence so the list survives a page refresh"]
         }
       },
@@ -768,7 +1483,7 @@ const FLOORS = [
           correct: 2,
           feedback: "Code you can't explain is code you don't own. It will behave unexpectedly when conditions change, and you won't know how to modify or debug it. Read it until you understand each line. Break it intentionally \u2014 remove a line, change a value \u2014 and observe what fails. Understanding a solution is the real goal, not just having one that runs."
         },
-        checklist: ["I spent at least 30 minutes attempting the project before searching for anything", "The project responds to real user input", "I can explain every line of code I wrote or incorporated", "When I got stuck, I applied the debugging process systematically", "The project is complete enough that I'd show it to someone as an example of what I built"]
+        checklist: ["I built something without following a guide — the idea and approach were mine", "The project responds to real user input and produces meaningful output", "I can explain every line of code I wrote, including code I found online", "When I got stuck, I read the error, formed a hypothesis, and tested it before searching", "The project is complete enough that I'd show it to someone as evidence of what I can build"]
       },
       {
         id: "3-12",
@@ -786,10 +1501,74 @@ const FLOORS = [
         },
         hint: `Three things to test right now, before deciding you're ready.\n\nOne: close this app, open a blank HTML file, and write a complete page with a JavaScript function that responds to a button click and modifies the DOM. No looking anything up. If you can do it, the fundamentals are there.\n\nTwo: take one of the projects you built this floor and add a feature that wasn't in the original. Something you have to figure out. If the process of figuring it out feels manageable, you're ready.\n\nThree: read someone else's short JavaScript snippet \u2014 something you didn't write. Can you explain what it does line by line? If yes, you're reading code fluently enough for Floor 4.`,
         quiz: {
-          question: "You've finished every Floor 3 section but when you try to build something from scratch you feel lost without the guided structure. What does this most accurately indicate?",
-          options: ["You're ready for Floor 4 \u2014 feeling uncertain at the start of new projects is normal for everyone", "The sections were too difficult and Floor 3 content needs to be simplified", "You've understood the concepts passively but haven't yet built the ability to apply them independently \u2014 more project practice is needed before Floor 4", "Floor 4 will teach you to build independently so it's fine to proceed"],
-          correct: 2,
-          feedback: "Passive understanding (reading, following along) and active capability (building independently) are different skills that develop at different rates. The sections built passive understanding. Independent projects build active capability. If the second is missing, more project practice \u2014 not more section reading \u2014 is what closes the gap. Floor 4 assumes active capability. It does not build it from scratch."
+          questions: [
+            {
+              question: "Without looking anything up: what is the DOM and what can JavaScript do with it?",
+              options: [
+                "The DOM is the JavaScript engine — it executes code and cannot be directly modified",
+                "The DOM is the browser's object representation of the page's HTML. JavaScript can read, modify, add, and remove elements without a page reload",
+                "The DOM is the CSS styling system — JavaScript modifies visual properties through the DOM",
+                "The DOM is a database of all elements ever created in HTML history"
+              ],
+              correct: 1,
+              feedback: "The DOM is the browser's live, object-based representation of the HTML document. Every element is a node in a tree. JavaScript accesses it through document.querySelector(), document.getElementById(), etc. and can change content (.textContent, .innerHTML), attributes, classes, and styles — all without reloading the page."
+            },
+            {
+              question: "A variable is declared as: const users = []; Then later: users = ['Alex']; What happens?",
+              options: [
+                "users now holds ['Alex'] — const allows you to change the contents of arrays",
+                "TypeError: Assignment to constant variable — const prevents reassignment of the binding",
+                "The original empty array and the new array both exist in memory",
+                "Nothing — JavaScript silently ignores reassignment of const variables"
+              ],
+              correct: 1,
+              feedback: "const prevents reassignment of the variable binding. users = ['Alex'] is reassignment and throws a TypeError. However, the array's contents can still be changed: users.push('Alex') works fine because you're mutating the array, not reassigning the binding. const means 'this variable always points to the same thing' — not 'the thing can't change internally'."
+            },
+            {
+              question: "You want to loop through an array of 10 users and stop as soon as you find a user with admin: true. Which approach is correct?",
+              options: [
+                "array.forEach(user => { if (user.admin) break; }) — break exits the forEach",
+                "array.filter(user => user.admin) — it automatically stops at the first match",
+                "A for or for...of loop with break inside the if block — forEach cannot use break",
+                "array.map(user => user.admin) and check the result"
+              ],
+              correct: 2,
+              feedback: "forEach cannot use break — break inside a forEach callback has no effect on the outer iteration. For early exit, use a for loop, for...of loop, or array.find(). Array.find() returns the first matching element and stops iterating — it's the cleanest solution for this exact case: const admin = users.find(u => u.admin);"
+            },
+            {
+              question: "Explain what happens when this code runs: const btn = document.querySelector('#submit'); btn.addEventListener('click', e => { e.preventDefault(); });",
+              options: [
+                "The button is found, a click handler is attached, and when clicked the button's default submit action is prevented",
+                "The code throws an error because arrow functions cannot be used as event handlers",
+                "The button's click event is permanently disabled — it can never fire again",
+                "The code does nothing until the button's default action fires first"
+              ],
+              correct: 0,
+              feedback: "querySelector finds the element with id='submit'. addEventListener attaches a click handler. When the button is clicked, the handler runs, e.preventDefault() cancels the browser's default action (likely submitting a form and reloading the page). The handler runs on every click unless the listener is removed. Arrow functions work perfectly as event handlers."
+            },
+            {
+              question: "A function named processOrder takes an order object and updates a total variable defined outside the function. Is this a pure function? Why does it matter?",
+              options: [
+                "Yes — it's pure because it takes a parameter and produces an output",
+                "No — it's impure because it modifies state outside itself (a side effect). Impure functions are harder to test and can cause bugs when called multiple times",
+                "Yes — modifying external variables is the standard way functions communicate results",
+                "The purity classification only applies to arrow functions, not regular function declarations"
+              ],
+              correct: 1,
+              feedback: "A pure function always returns the same output for the same inputs and has no side effects — it doesn't modify anything outside itself. Modifying total (an external variable) is a side effect, making processOrder impure. Impure functions are harder to test (you need to set up external state), harder to reason about (calling it twice has different results), and can cause hidden bugs when refactored."
+            },
+            {
+              question: "You're debugging: a button click should show a message but nothing happens. What is the correct debugging sequence?",
+              options: [
+                "Refresh the page and try clicking multiple times",
+                "Rewrite the function from scratch — the original approach is probably wrong",
+                "Open DevTools console → check for errors → add console.log inside the handler → verify the event listener is attached to the right element",
+                "Delete and re-add the event listener code"
+              ],
+              correct: 2,
+              feedback: "Systematic debugging: (1) Console first — errors tell you what broke and where. (2) Log at the entry point — does the handler even run? If no log appears, the listener isn't attached. (3) If it runs but doesn't work, log the intermediate values to find where the logic fails. Random changes waste time. Read errors, form a hypothesis, test it."
+            }
+          ]
         },
         checklist: ["I can explain the DOM to someone who has never coded, using a concrete example", "I can write a function from memory that takes parameters and returns a value", "I can debug broken JavaScript systematically, not by making random changes", "I've built at least two interactive projects without a scaffold", "I am confident I understand the material, not just that I completed the sections"]
       }
@@ -808,7 +1587,7 @@ const FLOORS = [
       {
         id: "4-1",
         title: "How Developers Think",
-        body: `Professional developers don't memorise — they have a process. When they face a new problem, they break it down into the smallest possible piece, solve that piece, then move to the next. The first version doesn't need to be perfect. It needs to work. Then you improve it.
+        body: `Professional developers don't memorise — they have a process. When they face a new problem, they break it down into the smallest possible piece, solve that piece, then move to the next. The first version doesn't need to be perfect. It needs to work. Then you improve it.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — think of the last time you got stuck on something for more than 20 minutes. What was the smallest piece of the problem you could have isolated and searched for specifically? What would that search query have looked like?</div>
 
 One of the most useful debugging techniques has a ridiculous name: rubber duck debugging. You explain your code, line by line, to an inanimate object. The act of explaining forces you to articulate assumptions you didn't know you were making. The bug usually reveals itself before you finish the sentence.
 
@@ -836,7 +1615,7 @@ Reading error messages properly is a skill most beginners skip. Every error has 
           correct: 1,
           feedback: "Line 47 is where JavaScript noticed something was wrong, not necessarily where you made the mistake. If a variable is misspelled on line 12, the error might only surface when you try to use it on line 47. Start at the reported line, then trace backwards through the call stack to find the root cause."
         },
-        checklist: ["I understand the 20-minute rule", "I can read an error message and extract the type, message, and line number", "I understand what a stack trace is", "I've tried rubber duck debugging at least once", "I break problems into smaller pieces before writing code"]
+        checklist: ["I can break an unfamiliar problem into pieces small enough to search for individually", "I've used the 20-minute rule: attempted a problem genuinely before searching", "I can read an error message, identify the type and line number, and form a hypothesis before changing anything", "I've used rubber duck debugging — explained a problem out loud — and it helped", "I can identify the minimal reproducible version of a bug I'm debugging"]
       },
       {
         id: "4-2",
@@ -871,7 +1650,7 @@ The browser console is an underused sandbox. Any line of JavaScript can be typed
           correct: 1,
           feedback: "Vote counts measure historical usefulness, not current accuracy. A JavaScript answer from 2013 may use var, callbacks, and patterns that have been superseded. Always check the date. Also verify the question actually matches your situation — similar-looking problems can have different root causes."
         },
-        checklist: ["I know how to navigate MDN Web Docs", "I understand the structure of a documentation page", "I can evaluate a Stack Overflow answer critically", "I use the browser console to test code before adding it to a file", "I read documentation examples before reading descriptions"]
+        checklist: ["I can navigate MDN to find the syntax, parameters, and return value of a method I've never used", "I can read a function signature and understand what it expects and returns", "I've successfully read API documentation and written a working fetch call from it without a tutorial", "I can distinguish between the method's description, its parameters, and its return value in docs", "I know where to look first when something isn't working: docs before Stack Overflow"]
       },
       {
         id: "4-3",
@@ -906,7 +1685,7 @@ APIs speak in JSON — JavaScript Object Notation. It is the universal format fo
           correct: 2,
           feedback: "401 Unauthorized means the server doesn't know who you are — no valid API key, token, or credentials were included in the request. 403 Forbidden means the server knows who you are but won't let you do this specific thing. 404 means the resource doesn't exist. 500 means the server failed."
         },
-        checklist: ["I understand what an API is and why they exist", "I know the four HTTP methods and when to use each", "I can read and understand common HTTP status codes", "I understand what JSON is and what it looks like", "I understand what an API endpoint is"]
+        checklist: ["I can explain what an API is to someone non-technical using a concrete real-world analogy", "I can name the four HTTP methods and describe what each one is used for", "I can read an HTTP status code and know whether the request succeeded or failed — and why", "I can describe what JSON looks like and how it relates to JavaScript objects", "I can identify an API endpoint in a URL and explain what each part means"]
       },
       {
         id: "4-4",
@@ -917,9 +1696,9 @@ fetch() is <strong>asynchronous</strong> — it doesn't block the rest of your c
 
 async/await is syntax that makes asynchronous code read like synchronous code. Mark a function as async, then use await before any operation that returns a Promise. The function pauses at that point, waits for the Promise to resolve, and continues. Under the hood it's still a Promise — async/await is just cleaner syntax on top.
 
-Error handling in async functions uses try/catch. Wrap your await calls in try, and handle network failures or bad responses in catch. An unhandled async error silently fails — the user sees nothing, and the bug is invisible. Always handle errors in production code.
+Error handling in async functions uses try/catch. Wrap your await calls in try, and handle network failures or bad responses in catch. An unhandled async error silently fails — the user sees nothing, and the bug is invisible. Always handle errors in production code.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you write const data = await fetch(url) and the network is down, what happens? Where does the error go if there’s no try/catch? What does the user see?</div>
 
-A critical mistake: never try to use fetched data outside the async function without properly awaiting it. The data doesn't exist yet at the point the outer code runs — the Promise hasn't resolved. This is the number one source of undefined errors in code that makes API calls.`,
+A critical mistake: never try to use fetched data outside the async function without properly awaiting it.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you write const data = await fetch(url) and the network is down, what exception is thrown? Where does it go if there is no try/catch around the await?</div> The data doesn't exist yet at the point the outer code runs — the Promise hasn't resolved. This is the number one source of undefined errors in code that makes API calls.`,
         callout: {
           type: "default",
           label: "Why Async Exists",
@@ -937,7 +1716,45 @@ A critical mistake: never try to use fetched data outside the async function wit
 <strong>Still stuck?</strong> Open the Network tab in DevTools, find your fetch request, and look at the Response tab. That shows exactly what the API returned. Compare that structure to how you're accessing the data in your code.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin:0 0 16px}
+button{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:13px;cursor:pointer;margin-bottom:16px}
+button:hover{background:#8de08d}
+button:disabled{opacity:0.5;cursor:not-allowed}
+#result{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;min-height:80px}
+.field{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.key{color:#888;font-size:11px;min-width:100px}
+.val{color:#c8a96e}
+.loading{color:#666;font-style:italic}
+.err{color:#ff6b6b}
+.label{color:#555;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+</style></head><body>
+<h2>Fetch & Async/Await</h2>
+<button id="btn" onclick="loadUser()">Fetch User from API</button>
+<div id="result"><p class="loading">Press the button to make a real API call...</p></div>
+<script>
+async function loadUser(){
+  var btn=document.getElementById('btn');
+  var result=document.getElementById('result');
+  btn.disabled=true;
+  result.innerHTML='<p class="loading">Fetching...</p>';
+  try{
+    var response=await fetch('https://jsonplaceholder.typicode.com/users/1');
+    if(!response.ok)throw new Error('HTTP '+response.status);
+    var user=await response.json();
+    result.innerHTML='<div class="label">User fetched successfully</div>'+
+      field('name',user.name)+field('email',user.email)+
+      field('username',user.username)+field('city',user.address.city)+
+      field('company',user.company.name);
+  }catch(e){
+    result.innerHTML='<p class="err">Error: '+e.message+'</p>';
+  }
+  btn.disabled=false;
+}
+function field(k,v){return '<div class="field"><span class="key">'+k+'</span><span class="val">'+v+'</span></div>';}
+</script></body></html>`,
           challenges: ["Change the API call to fetch user ID 5 instead of 1", "Add error handling that shows a message if the fetch fails", "Display 3 more fields from the response object", "Add a loading indicator that shows while the fetch is in progress"]
         },
         quiz: {
@@ -946,7 +1763,71 @@ A critical mistake: never try to use fetched data outside the async function wit
           correct: 1,
           feedback: "fetch() starts a network request and returns immediately with a Promise — it doesn't wait for the response. The next line of code runs before the server has responded. To wait for the data, you must either use .then() chaining or mark the function as async and use await before fetch()."
         },
-        checklist: ["I understand what asynchronous code means", "I can write a fetch call using async/await", "I handle errors with try/catch in async functions", "I understand that .json() is also async and needs to be awaited", "I never try to use fetched data outside the async context without proper handling"]
+        checklist: ["I can write a complete async/await fetch call with error handling from memory", "I can explain why you need to await both fetch() and .json() — and what happens if you forget", "I wrap all async operations in try/catch and show the user a meaningful error message on failure", "I never try to use fetched data outside the async function without proper awaiting", "I can explain what a Promise is in one sentence without using the word 'asynchronous'"]
+      },
+      {
+        id: "4-phase1-review",
+        title: "Phase 1 Review — Developer Mindset, APIs, and Async",
+        body: `Five questions covering how developers think, reading documentation, what APIs are, and fetch with async/await.`,
+        quiz: {
+          questions: [
+            {
+              question: "A developer is building a feature and doesn't know how to do part of it. What is the professional approach?",
+              options: [
+                "Stop working until someone more experienced can help",
+                "Skip the difficult part and implement a simpler alternative",
+                "Break the problem into the smallest possible unknown, search for that specific thing, read the documentation, try it, iterate",
+                "Copy the closest Stack Overflow answer without reading it"
+              ],
+              correct: 2,
+              feedback: "Professional developers decompose problems. They identify the specific unknown, search for exactly that, read documentation or examples, implement a minimal test, and iterate. The skill isn't knowing everything — it's knowing how to find what you don't know and integrating it quickly. This process is repeatable regardless of the technology."
+            },
+            {
+              question: "An API endpoint is documented as: GET /api/users/{id} Returns: { id, name, email }. You call fetch('/api/users/42'). What do you expect to receive?",
+              options: [
+                "An array of all users — the id in the path is ignored",
+                "A JSON object with id, name, and email for user 42",
+                "A raw HTML page with user 42's profile",
+                "A number — the user's ID as a plain integer"
+              ],
+              correct: 1,
+              feedback: "The documentation tells you: path parameter {id} identifies which user, the method is GET (read only), and the response is a JSON object with three fields. You'd get: { id: 42, name: 'Alex Chen', email: 'alex@...' }. Reading documentation before writing code prevents guessing — the documentation is the contract."
+            },
+            {
+              question: "Why must you call .json() on a fetch response AND await that call?",
+              options: [
+                ".json() is only needed for large responses to decompress them",
+                "fetch() returns a Response object, not the data. .json() reads and parses the body — and it's also async because it streams data, so it must be awaited",
+                ".json() converts the response to a JavaScript array automatically",
+                ".json() is optional — the data is already on the response object as response.data"
+              ],
+              correct: 1,
+              feedback: "fetch() gives you a Response object, not the data. The actual body hasn't been read yet — it streams from the network. .json() reads the body stream and parses it as JSON. Because reading the stream is asynchronous (it might not be fully arrived yet), .json() returns a Promise that must be awaited. Forgetting either await — for fetch or for .json() — gives you a Promise object instead of data."
+            },
+            {
+              question: "An async function contains: const data = fetch('https://api.example.com/data'); console.log(data); — what does the console show?",
+              options: [
+                "The response data from the API",
+                "undefined — fetch hasn't finished yet",
+                "A Promise object — fetch is asynchronous and returns a Promise, not the data",
+                "An error — you cannot use fetch without await"
+              ],
+              correct: 2,
+              feedback: "Without await, fetch() returns a Promise immediately. The console.log runs before the network request completes and logs the Promise object, not the data. To get the data: const response = await fetch(url); const data = await response.json(); The absence of await is one of the most common async bugs — you get a Promise where you expected data."
+            },
+            {
+              question: "How should you find information about a new JavaScript method you've never used?",
+              options: [
+                "Ask a colleague — documentation is too complex to read effectively",
+                "Trial and error — run variations until something works",
+                "Search MDN Web Docs for the method name, read the Syntax section, then look at the Examples",
+                "Search Stack Overflow for the exact question you have and use the top answer"
+              ],
+              correct: 2,
+              feedback: "MDN (Mozilla Developer Network) is the authoritative reference for all web APIs. The pattern: Syntax section shows the method signature and all parameters. Parameters section explains each option. Return value section tells you what you get back. Examples section shows real usage. Stack Overflow is useful for problems — MDN is the reference for how things work."
+            }
+          ]
+        }
       },
       {
         id: "4-5",
@@ -977,7 +1858,56 @@ Common use cases: dark mode preference (so the user doesn't have to toggle it ev
 <strong>Still stuck?</strong> The most common mistake is saving an object without JSON.stringify. localStorage.setItem('user', {name: 'Alex'}) saves the string '[object Object]' — completely useless. Always stringify objects before saving.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin-bottom:20px}
+.row{display:flex;gap:10px;margin-bottom:16px}
+input{flex:1;background:#111;border:1px solid #333;color:#fff;padding:10px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#6dbf6d}
+button{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 18px;font-family:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+button:hover{background:#8de08d}
+.note{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.note-text{flex:1;line-height:1.6;color:#ccc}
+.del{background:none;border:1px solid #444;color:#888;border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;white-space:nowrap}
+.del:hover{border-color:#ff6b6b;color:#ff6b6b}
+.empty{color:#555;font-size:12px;padding:16px 0}
+.meta{color:#555;font-size:10px;margin-top:8px}
+</style></head><body>
+<h2>Local Storage Notes</h2>
+<div class="row">
+<input type="text" id="note-input" placeholder="Write a note...">
+<button onclick="addNote()">Save</button>
+</div>
+<div id="notes"></div>
+<script>
+var notes=JSON.parse(localStorage.getItem('codebook_notes'))||[];
+function render(){
+  var el=document.getElementById('notes');
+  if(!notes.length){el.innerHTML='<p class="empty">No notes yet — type one above and click Save</p>';return;}
+  el.innerHTML=notes.map(function(n,i){
+    return '<div class="note"><div><div class="note-text">'+n.text+'</div>'+
+      '<div class="meta">Saved: '+n.date+'</div></div>'+
+      '<button class="del" onclick="deleteNote('+i+')">Delete</button></div>';
+  }).join('');
+}
+function addNote(){
+  var input=document.getElementById('note-input');
+  var text=input.value.trim();if(!text)return;
+  notes.push({text:text,date:new Date().toLocaleTimeString()});
+  input.value='';
+  localStorage.setItem('codebook_notes',JSON.stringify(notes));
+  render();
+}
+function deleteNote(i){
+  notes.splice(i,1);
+  localStorage.setItem('codebook_notes',JSON.stringify(notes));
+  render();
+}
+document.getElementById('note-input').addEventListener('keydown',function(e){if(e.key==='Enter')addNote();});
+render();
+</script></body></html>`,
           challenges: ["Add a clear all button that removes all saved notes", "Add a timestamp to each saved note", "Add a character count that updates as the user types", "Make the notes list sortable by date saved"]
         },
         quiz: {
@@ -986,7 +1916,7 @@ Common use cases: dark mode preference (so the user doesn't have to toggle it ev
           correct: 1,
           feedback: "localStorage coerces anything that isn't a string using .toString(). An array's toString() returns '[object Array]'. To save an array properly, use JSON.stringify(myArray) before saving. To retrieve it, use JSON.parse(localStorage.getItem('items')). Skipping this step is one of the most common localStorage bugs."
         },
-        checklist: ["I understand what localStorage persists and what it doesn't", "I use JSON.stringify and JSON.parse with objects and arrays", "I know the difference between localStorage and sessionStorage", "I can read and clear localStorage using DevTools", "I can name three appropriate use cases for localStorage"]
+        checklist: ["I always JSON.stringify objects before saving to localStorage — and can explain why", "I always JSON.parse when reading objects back — and handle the case where the value is null", "I can name three appropriate use cases for localStorage and one case where it's wrong", "I know the difference between localStorage and sessionStorage in terms of persistence", "I can view and clear localStorage in DevTools without looking up the steps"]
       },
       {
         id: "4-6",
@@ -1017,7 +1947,60 @@ Production applications fail gracefully. When Spotify can't load your playlist, 
 <strong>Still stuck?</strong> Add console.log(data) before any property access to inspect the full shape of what you're working with. API responses often differ from the documentation in edge cases.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#6dbf6d;margin:0 0 20px}
+.section{margin-bottom:24px}
+.label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.ok{color:#6dbf6d}.err{color:#ff6b6b}.warn{color:#c8a96e}
+button{background:#333;color:#fff;border:1px solid #555;border-radius:6px;padding:8px 18px;font-family:inherit;font-size:12px;cursor:pointer;margin-bottom:10px}
+button:hover{border-color:#6dbf6d}
+#log{background:#111;border:1px solid #222;border-radius:8px;padding:16px;max-height:200px;overflow-y:auto}
+#log p{margin:3px 0}
+</style></head><body>
+<h2>Error Handling at Scale</h2>
+<div class="section">
+<div class="label">Retry with exponential backoff</div>
+<button onclick="runRetry()">Simulate Unstable API Call</button>
+<div id="log"><p class="warn">Click the button to run...</p></div>
+</div>
+<script>
+var logEl=document.getElementById('log');
+function log(msg,cls){var p=document.createElement('p');p.className=cls||'';p.textContent=msg;logEl.appendChild(p);logEl.scrollTop=logEl.scrollHeight;}
+
+async function fakeUnstableApi(attempt){
+  await new Promise(function(r){setTimeout(r,300);});
+  if(attempt<3)throw new Error('Network timeout (attempt '+attempt+')');
+  return {status:'ok',data:'Response received'};
+}
+
+async function fetchWithRetry(fn,maxRetries){
+  for(var i=1;i<=maxRetries;i++){
+    try{
+      log('Attempt '+i+'...','warn');
+      var result=await fn(i);
+      log('✓ Success: '+JSON.stringify(result),'ok');
+      return result;
+    }catch(e){
+      log('✗ Failed: '+e.message,'err');
+      if(i<maxRetries){
+        var delay=Math.pow(2,i)*200;
+        log('Retrying in '+delay+'ms...','warn');
+        await new Promise(function(r){setTimeout(r,delay);});
+      }else{
+        log('All retries exhausted.','err');
+        throw e;
+      }
+    }
+  }
+}
+
+function runRetry(){
+  logEl.innerHTML='';
+  fetchWithRetry(fakeUnstableApi,4).catch(function(){});
+}
+</script></body></html>`,
           challenges: ["Add a case that handles when the API returns no results", "Wrap the main function in try/catch and display a friendly error message", "Use optional chaining to safely access a nested property that might not exist", "Add a retry button that re-runs the failed operation"]
         },
         quiz: {
@@ -1026,7 +2009,7 @@ Production applications fail gracefully. When Spotify can't load your playlist, 
           correct: 2,
           feedback: "Optional chaining stops the property access chain early and returns undefined if any value in the chain is null or undefined, rather than throwing a TypeError. data?.user?.name is equivalent to: data && data.user && data.user.name — but shorter and clearer. Essential when working with API data where any nested property might be absent."
         },
-        checklist: ["I use try/catch in all async functions", "I distinguish between expected and unexpected errors", "I use optional chaining when accessing nested API data", "I use nullish coalescing to provide fallback values", "My error states show users something useful, not a blank screen"]
+        checklist: ["I use try/catch in every async function that makes network requests", "I distinguish between errors the user caused (400) and errors the server caused (500) in my UI", "I use optional chaining (?.) when accessing nested API data that might be undefined", "I use nullish coalescing (??) to provide fallback values for missing data", "My error states show the user something helpful — not a blank screen or a raw error object"]
       },
       {
         id: "4-7",
@@ -1057,7 +2040,46 @@ The GitHub workflow for team projects: fork the repo, clone your fork, create a 
 <strong>Still stuck?</strong> Run git log to see your commit history. Each commit has a hash (a long string like a3f9d2b). git revert <hash> undoes that specific commit. git diff <hash> shows what changed in it.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#6dbf6d;margin-bottom:20px;font-size:16px}
+.cmd-list{list-style:none;margin-bottom:24px}
+.cmd-item{display:flex;align-items:flex-start;gap:14px;padding:10px 14px;border-radius:6px;cursor:pointer;transition:background 0.15s;margin-bottom:4px;border:1px solid transparent}
+.cmd-item:hover,.cmd-item.active{background:#111;border-color:#2a2a2a}
+.cmd-code{color:#6dbf6d;min-width:200px;font-size:12px}
+.cmd-desc{color:#888;font-size:11px;line-height:1.5}
+.detail{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;min-height:60px}
+.detail h3{color:#c8a96e;font-size:12px;margin-bottom:6px}
+.detail p{color:#aaa;line-height:1.7;font-size:12px}
+</style></head><body>
+<h2>Git Cheatsheet — Click a command</h2>
+<ul class="cmd-list" id="cmd-list"></ul>
+<div class="detail" id="detail"><p style="color:#555">Select a command above to see details.</p></div>
+<script>
+var cmds=[
+  {cmd:'git init',desc:'Start a new repository',detail:'Creates a hidden .git directory. Run once per project in the project root.'},
+  {cmd:'git add .',desc:'Stage all changes',detail:'Moves changes to the staging area. Only staged files are included in the next commit. Use "git add filename" to stage specific files.'},
+  {cmd:'git commit -m "msg"',desc:'Save a snapshot',detail:'Records the staged changes permanently with a message explaining why. The message should describe what changed and why, not what files were changed.'},
+  {cmd:'git push origin main',desc:'Upload to remote',detail:'Sends your commits to the remote repository (GitHub, etc). Others can now see and pull your changes.'},
+  {cmd:'git pull',desc:'Download and merge',detail:'Fetches commits from the remote and merges them into your current branch. Do this before starting work each day.'},
+  {cmd:'git branch feature-x',desc:'Create a branch',detail:'Branches let you work on features without touching main. Work on feature-x, test it, then merge back to main when done.'},
+  {cmd:'git status',desc:'Show working tree status',detail:'Shows which files are modified, staged, or untracked. Run this frequently — it tells you exactly where you are.'},
+];
+var list=document.getElementById('cmd-list');
+var detail=document.getElementById('detail');
+cmds.forEach(function(c,i){
+  var li=document.createElement('li');li.className='cmd-item';
+  li.innerHTML='<span class="cmd-code">'+c.cmd+'</span><span class="cmd-desc">'+c.desc+'</span>';
+  li.onclick=function(){
+    document.querySelectorAll('.cmd-item').forEach(function(el){el.classList.remove('active');});
+    li.classList.add('active');
+    detail.innerHTML='<h3>'+c.cmd+'</h3><p>'+c.detail+'</p>';
+  };
+  list.appendChild(li);
+});
+</script></body></html>`,
           challenges: ["Write a commit message for each of these changes: adding a new feature, fixing a bug, updating documentation", "Create a new branch called 'feature/dark-mode' using git checkout -b", "Explain in plain English what git merge does and what a merge conflict is", "Write the exact sequence of git commands to push your first project to GitHub"]
         },
         quiz: {
@@ -1066,7 +2088,7 @@ The GitHub workflow for team projects: fork the repo, clone your fork, create a 
           correct: 1,
           feedback: "Branches exist exactly for this: isolate work-in-progress from working code. Create a branch, make commits on it, and only merge when the feature is tested and working. The main branch should always be in a deployable state. Working directly on main without branching is how teams break each other's work."
         },
-        checklist: ["I have Git installed and configured", "I have a GitHub account with at least one project pushed", "I write descriptive commit messages", "I understand what branches are and when to use them", "I know how to view commit history with git log"]
+        checklist: ["I have Git installed, configured, and have pushed at least one project to GitHub", "I write commit messages that describe WHY, not just what files changed", "I can create a branch, make commits on it, and explain why branches matter for teams", "I can use git status and git log and read their output correctly", "I've resolved at least one merge conflict — I understand what it is and how to fix it"]
       },
       {
         id: "4-8",
@@ -1099,7 +2121,47 @@ The most important debugging habit: change one thing at a time. Change two thing
 <strong>Still stuck?</strong> Open DevTools Sources tab, find your script, and click the line number where you think the problem might be to set a breakpoint. Run the code and when it pauses, look at the Scope panel on the right — it shows every variable's current value. This is often faster than reasoning about what might be wrong.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin-bottom:16px}
+.bugs{display:grid;gap:12px;margin-bottom:20px}
+.bug{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;cursor:pointer;transition:border-color 0.15s}
+.bug:hover{border-color:#6dbf6d}
+.bug.revealed{border-color:#c8a96e}
+.bug-code{color:#ff9966;font-size:12px;margin-bottom:8px;white-space:pre-wrap}
+.bug-q{color:#888;font-size:12px}
+.bug-a{color:#c8a96e;font-size:12px;margin-top:8px;display:none;line-height:1.6}
+.bug.revealed .bug-a{display:block}
+.hint-text{color:#555;font-size:11px;margin-top:4px}
+</style></head><body>
+<h2>Debugging — Click to reveal the fix</h2>
+<div class="bugs">
+<div class="bug" onclick="this.classList.toggle('revealed')">
+<div class="bug-code">function getTotal(prices) {
+  var total = 0;
+  prices.forEach(function(p) { total + p; });
+  return total;
+}</div>
+<div class="bug-q">getTotal([10, 20, 30]) returns 0. Why?</div>
+<div class="bug-a">✓ Bug: total + p computes the sum but doesn't assign it. Fix: total += p;</div>
+</div>
+<div class="bug" onclick="this.classList.toggle('revealed')">
+<div class="bug-code">var user = { name: 'Alex' };
+console.log(user.adress.city);</div>
+<div class="bug-q">This throws "Cannot read properties of undefined". Why?</div>
+<div class="bug-a">✓ Bug: "adress" is misspelled — it should be "address". Also, user.address doesn't exist in this object, so user.address is undefined and .city throws. Fix the typo and add address to the object.</div>
+</div>
+<div class="bug" onclick="this.classList.toggle('revealed')">
+<div class="bug-code">for (var i = 0; i &lt; 5; i++) {
+  setTimeout(function() { console.log(i); }, 1000);
+}</div>
+<div class="bug-q">Logs "5" five times instead of 0,1,2,3,4. Why?</div>
+<div class="bug-a">✓ Bug: var is function-scoped. By the time the timeout fires, the loop has finished and i is 5. Fix: replace var with let (block-scoped) or use an IIFE to capture i at each iteration.</div>
+</div>
+</div>
+</body></html>`,
           challenges: ["Use the debugger to step through the code and find where the wrong value is assigned", "Fix all three bugs in the code — each bug is a different type (reference, type, logic)", "Add console.log statements to trace the exact value of the variable at each step", "Open the Network tab in DevTools, reload the page, and identify all the resources it loads"]
         },
         quiz: {
@@ -1108,7 +2170,71 @@ The most important debugging habit: change one thing at a time. Change two thing
           correct: 1,
           feedback: "If you fix a bug by changing three things simultaneously, you've learned nothing about what caused it. When a similar bug appears later, you have no basis for diagnosing it. Worse, you might have introduced subtle problems with the two changes that weren't needed. Change one thing, test, understand what changed. This habit compounds over time."
         },
-        checklist: ["I reproduce bugs reliably before trying to fix them", "I change one thing at a time when debugging", "I can set and use breakpoints in DevTools", "I read error messages in full before changing anything", "I use the Network tab to diagnose API problems"]
+        checklist: ["I can reproduce a bug reliably before attempting to fix it", "I change one thing at a time when debugging — not multiple things simultaneously", "I can set a breakpoint in DevTools and use step-over/step-into to trace execution", "I read error messages completely and identify type, message, and line before changing anything", "I use the Network tab to inspect API requests and verify what was actually sent and received"]
+      },
+      {
+        id: "4-phase2-review",
+        title: "Phase 2 Review — Storage, Error Handling, Git, and Debugging",
+        body: `Five questions covering localStorage, error handling at scale, git version control, and debugging like a developer.`,
+        quiz: {
+          questions: [
+            {
+              question: "You save an object to localStorage: localStorage.setItem('user', { name: 'Alex' }). When you retrieve it, what do you get?",
+              options: [
+                "The object { name: 'Alex' }",
+                "The string '[object Object]' — localStorage converts objects to strings automatically",
+                "undefined — localStorage only stores numbers",
+                "null — objects must be serialised differently"
+              ],
+              correct: 1,
+              feedback: "localStorage stores strings only. Passing an object directly calls .toString() on it, which produces '[object Object]' — useless. You must serialise with JSON.stringify before saving and parse with JSON.parse when reading: localStorage.setItem('user', JSON.stringify(user)); and const user = JSON.parse(localStorage.getItem('user'));"
+            },
+            {
+              question: "What is the correct way to handle an error in an async function?",
+              options: [
+                "Add a .catch() method to every line that might fail",
+                "Wrap the await calls in a try/catch block — catch receives the error if any awaited Promise rejects",
+                "Check the return value of each await — if it's undefined, an error occurred",
+                "Async functions never throw errors — they return undefined on failure"
+              ],
+              correct: 1,
+              feedback: "try/catch in async functions works exactly as it does in synchronous code. If any awaited Promise rejects, the catch block runs with the error. The pattern: try { const data = await fetch(url); ... } catch (error) { console.error(error); showErrorMessage(); } Without this, a network failure silently breaks the function with no user feedback."
+            },
+            {
+              question: "What does git commit do, and what should a commit message describe?",
+              options: [
+                "git commit saves a snapshot of all staged changes permanently in the repository. The message should describe WHY the change was made",
+                "git commit sends your code to GitHub immediately",
+                "git commit is a temporary save that can be undone at any time without consequence",
+                "git commit saves only the currently open file"
+              ],
+              correct: 0,
+              feedback: "git commit creates a permanent snapshot of everything in the staging area, with a message. The message should explain WHY — what problem this solves, what behaviour it changes, what it enables. 'Fix bug' is useless. 'Fix null pointer when user has no profile image' is useful. The what is visible in the diff. The why is only in the message."
+            },
+            {
+              question: "You're debugging: a function returns undefined when it should return a number. What is the most efficient first step?",
+              options: [
+                "Rewrite the function from scratch",
+                "Add console.log(result) at the return statement to check what the function is actually returning",
+                "Search Stack Overflow for 'JavaScript function returns undefined'",
+                "Add a try/catch to catch the error"
+              ],
+              correct: 1,
+              feedback: "When a function returns an unexpected value, log at the return statement first: does the function run? Does it reach the return? What is it returning? This immediately isolates whether the issue is (a) the function not running, (b) not reaching the return, or (c) returning the wrong value. Each case has a different fix. Random changes without this information waste time."
+            },
+            {
+              question: "What is the purpose of git branch and why do developers use branches?",
+              options: [
+                "git branch creates a copy of a file for backup purposes",
+                "git branch creates a parallel line of development — you work on a feature without affecting the main codebase. When done and tested, you merge it",
+                "git branch is used to push code to GitHub",
+                "git branch creates a tag in the repository history for marking releases"
+              ],
+              correct: 1,
+              feedback: "A branch is a parallel line of development. You create a branch for a feature or fix, make commits on it, test it, and then merge it into main when ready. This means the main branch always contains tested, working code. Multiple developers can work on different branches simultaneously without interfering. Feature branches are the standard workflow in professional teams."
+            }
+          ]
+        }
       },
       {
         id: "4-9",
@@ -1137,7 +2263,56 @@ Real APIs have real constraints: rate limits (you can only make a certain number
 <strong>Still stuck?</strong> Add console.log(data) right after you receive the API response. Look at the actual shape of what came back and compare it to what your display code expects. APIs don't always match documentation exactly.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin-bottom:20px}
+.search-row{display:flex;gap:10px;margin-bottom:20px}
+input{flex:1;background:#111;border:1px solid #333;color:#fff;padding:10px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#6dbf6d}
+button{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 18px;font-family:inherit;font-size:13px;cursor:pointer}
+button:hover{background:#8de08d}
+button:disabled{opacity:0.5}
+#result{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:20px;min-height:80px}
+.weather-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px}
+.stat{background:#1a1a2a;border-radius:6px;padding:12px}
+.stat-label{color:#555;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.stat-val{color:#c8a96e;font-size:20px;font-weight:bold}
+.ok{color:#6dbf6d}.err{color:#ff6b6b}.loading{color:#666;font-style:italic}
+</style></head><body>
+<h2>Weather App — Open-Meteo API (no key needed)</h2>
+<div class="search-row">
+<input type="text" id="city" placeholder="e.g. London — uses fixed London coordinates">
+<button id="btn" onclick="getWeather()">Get Weather</button>
+</div>
+<div id="result"><p class="loading">Click the button to fetch real weather data...</p></div>
+<script>
+async function getWeather(){
+  var btn=document.getElementById('btn');
+  var result=document.getElementById('result');
+  btn.disabled=true;
+  result.innerHTML='<p class="loading">Fetching weather for London...</p>';
+  try{
+    var url='https://api.open-meteo.com/v1/forecast?latitude=51.5085&longitude=-0.1257&current_weather=true&hourly=relative_humidity_2m,apparent_temperature&timezone=Europe/London';
+    var res=await fetch(url);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    var data=await res.json();
+    var cw=data.current_weather;
+    var wmo={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',61:'Light rain',63:'Moderate rain',71:'Light snow',80:'Rain showers'};
+    var desc=wmo[cw.weathercode]||('Code '+cw.weathercode);
+    result.innerHTML='<p class="ok">✓ Live data for London</p>'+
+      '<div class="weather-grid">'+
+      stat('Temperature',cw.temperature+'°C')+
+      stat('Wind speed',cw.windspeed+' km/h')+
+      stat('Wind dir',cw.winddirection+'°')+
+      stat('Condition',desc)+
+      '</div>';
+  }catch(e){result.innerHTML='<p class="err">Error: '+e.message+'</p>';}
+  btn.disabled=false;
+}
+function stat(label,val){return '<div class="stat"><div class="stat-label">'+label+'</div><div class="stat-val">'+val+'</div></div>';}
+</script></body></html>`,
           challenges: ["Add a 5-day forecast section below the current weather", "Add weather icons using the icon code from the API response", "Add a toggle between Celsius and Fahrenheit", "Save the last 3 searched cities to localStorage and show them as quick-access buttons"]
         },
         quiz: {
@@ -1146,7 +2321,7 @@ Real APIs have real constraints: rate limits (you can only make a certain number
           correct: 1,
           feedback: "Silent failures in network requests are almost always visible in the Network tab. It shows whether the request was sent, what URL it went to, what the response status code was, and what data came back. This is the fastest way to separate a network/API problem from a display/logic problem."
         },
-        checklist: ["I read the full scaffold before making any changes", "I understand the data structure the API returns", "I extended the app with at least one new feature", "I handle the case where the city isn't found", "The app works with different city names"]
+        checklist: ["I read the full scaffold before writing any code and understood the data structure the API returns", "I extended the app with at least one feature not in the original brief — I had to figure it out myself", "I handle the case where the city isn't found and show the user a clear message", "My loading state prevents the user from submitting duplicate requests", "The app works correctly with at least five different city names I tested"]
       },
       {
         id: "4-10",
@@ -1175,7 +2350,72 @@ The relationship between state and UI is: state is the truth, DOM is the display
 <strong>Still stuck?</strong> Log the state variables (currentIndex, score, answered) to the console at the start of every function that modifies them. If the values aren't what you expect, you'll see exactly where state is diverging from your intention.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;min-height:100vh}
+h2{color:#6dbf6d;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:24px}
+.question-card{background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:20px;margin-bottom:16px}
+.q-text{color:#fff;font-size:14px;margin-bottom:16px;line-height:1.6}
+.options{display:grid;gap:8px}
+.opt{background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:12px 16px;cursor:pointer;color:#ccc;transition:border-color 0.15s;text-align:left;font-family:inherit;font-size:12px;width:100%}
+.opt:hover:not(:disabled){border-color:#6dbf6d;color:#fff}
+.opt.correct{border-color:#6dbf6d;background:#0a2a0a;color:#6dbf6d}
+.opt.wrong{border-color:#ff6b6b;background:#2a0a0a;color:#ff6b6b}
+.score{background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:24px;text-align:center}
+.score-num{font-size:48px;color:#c8a96e;font-weight:900}
+.score-label{color:#888;font-size:12px;margin-top:8px}
+button.restart{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 24px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:16px}
+</style></head><body>
+<h2>Quiz App</h2>
+<p class="sub">JavaScript fundamentals — 4 questions</p>
+<div id="app"></div>
+<script>
+var questions=[
+  {q:'What does typeof null return in JavaScript?',opts:['null','undefined','object','boolean'],correct:2,
+   explain:'This is a known JavaScript quirk. typeof null returns "object" — a bug in the original implementation that was never fixed for backwards compatibility.'},
+  {q:'Which array method creates a new array with transformed elements?',opts:['forEach','filter','map','reduce'],correct:2,
+   explain:'map() returns a new array with each element transformed by the callback. forEach() returns undefined. filter() returns elements that pass a test.'},
+  {q:'What is the output of: console.log(0.1 + 0.2 === 0.3)?',opts:['true','false','NaN','Error'],correct:1,
+   explain:'false — floating point arithmetic is imprecise in binary. 0.1 + 0.2 = 0.30000000000000004. Compare with a tolerance instead: Math.abs(a - b) < 0.0001.'},
+  {q:'A function declared with const can be called before its declaration. True or false?',opts:['True — all functions are hoisted','False — only function declarations are hoisted','True — const is block-scoped','True — arrow functions are always hoisted'],correct:1,
+   explain:'Only function declarations (function foo(){}) are hoisted. const/let arrow functions are NOT hoisted. Calling them before their line throws a ReferenceError.'},
+];
+var current=0,score=0,answered=false;
+function render(){
+  var app=document.getElementById('app');
+  if(current>=questions.length){
+    app.innerHTML='<div class="score"><div class="score-num">'+score+' / '+questions.length+'</div>'+
+      '<div class="score-label">'+(score===questions.length?'Perfect score!':score>=3?'Great job!':'Keep practising!')+
+      '<br>Score saved to localStorage</div>'+
+      '<button class="restart" onclick="restart()">Restart</button></div>';
+    localStorage.setItem('quiz_score',score);
+    return;
+  }
+  var q=questions[current];
+  app.innerHTML='<div class="question-card">'+
+    '<div class="q-text">Q'+(current+1)+'. '+q.q+'</div>'+
+    '<div class="options">'+
+    q.opts.map(function(o,i){return '<button class="opt" onclick="answer('+i+')">'+o+'</button>';}).join('')+
+    '</div><div id="explain" style="margin-top:12px;font-size:11px;color:#555;display:none;line-height:1.7"></div></div>'+
+    '<div style="color:#555;font-size:11px">Question '+(current+1)+' of '+questions.length+' — Score: '+score+'</div>';
+}
+function answer(i){
+  if(answered)return;answered=true;
+  var q=questions[current];
+  var opts=document.querySelectorAll('.opt');
+  opts[i].className='opt '+(i===q.correct?'correct':'wrong');
+  opts[q.correct].className='opt correct';
+  opts.forEach(function(o){o.disabled=true;});
+  document.getElementById('explain').style.display='block';
+  document.getElementById('explain').textContent=q.explain;
+  if(i===q.correct)score++;
+  setTimeout(function(){current++;answered=false;render();},2200);
+}
+function restart(){current=0;score=0;answered=false;render();}
+render();
+</script></body></html>`,
           challenges: ["Add a progress bar that fills as the user progresses through questions", "Add a timer that counts down from 30 seconds per question", "Add a high score tracker using localStorage", "Add a review screen at the end showing each question and the user's answer"]
         },
         quiz: {
@@ -1184,7 +2424,7 @@ The relationship between state and UI is: state is the truth, DOM is the display
           correct: 1,
           feedback: "An 'answered' boolean (initially false, set to true when the user first clicks) is the standard guard against multiple submissions. At the start of your click handler: if (answered) return; answered = true; then process the answer. This is called a state guard — it prevents the system from entering an invalid state."
         },
-        checklist: ["I understand what application state is", "I update state before updating the DOM", "I handle the answered state to prevent multiple submissions", "The quiz shows correct feedback for right and wrong answers", "The final score is accurate"]
+        checklist: ["I understand what application state means and can point to where it lives in my code", "I update state before updating the DOM — the data and the UI stay in sync", "I prevent multiple submissions to the same question after it's been answered", "Correct and incorrect answers show distinct visual feedback immediately", "The final score is accurate and stored in localStorage — I can explain how both work"]
       },
       {
         id: "4-11",
@@ -1219,7 +2459,7 @@ The project doesn't have to be impressive. It has to be finished and working. A 
           correct: 1,
           feedback: "401 Unauthorized means the server received your request but doesn't recognise you as an authorised caller. Most public APIs require an API key to be sent in a header or as a query parameter. Check the API documentation for exactly how it expects the key to be sent — the format varies by API."
         },
-        checklist: ["I chose an API and read its documentation", "I made a working fetch call and confirmed the response shape", "I built a UI that displays the real data", "I handle loading and error states", "The project is deployed and accessible via URL"]
+        checklist: ["I chose an API and read its documentation before writing any code", "I confirmed the exact shape of the API response before building the UI", "I built a UI that renders real fetched data — not hardcoded mock data", "I handle loading state (spinner or disabled button) and error state (user-facing message)", "The project is deployed and accessible via a public URL — I can share it right now"]
       },
       {
         id: "4-12",
@@ -1247,12 +2487,65 @@ Code review is where you stop being a person who writes code and start being a p
 
 <strong>Still not sure what to improve?</strong> Apply one test to every function: cover the body and read only the name. Without reading the implementation, can you predict what it does and what it returns? If not, the name needs work.`,
         quiz: {
-          question: "You're reviewing a function called processData() that is 60 lines long and handles fetching, parsing, validating, and displaying results. What is the main problem?",
-          options: ["The function is too long — it needs to be shortened by removing some functionality", "The function has too many responsibilities — it should be split into four separate functions", "The function name is fine because it accurately describes processing data", "The function should be replaced with a class that has separate methods"],
-          correct: 1,
-          feedback: "A function that handles fetching, parsing, validating, and displaying has four responsibilities. The single responsibility principle says each function should do one thing. Split it: fetchData(), parseResponse(), validateInput(), displayResults(). Each part is now independently testable, readable, and replaceable — the name tells you exactly what it does."
+          questions: [
+            {
+              question: "You've written this code: const data = fetch('https://api.example.com/users').then(r => r.json()); — then you immediately do: console.log(data.length). What is logged?",
+              options: [
+                "The number of users returned by the API",
+                "undefined — you cannot call .length on a Promise",
+                "Error: data is not defined",
+                "0 — empty arrays have length 0"
+              ],
+              correct: 1,
+              feedback: "fetch().then() returns a Promise, not the resolved data. console.log runs synchronously before the Promise resolves. data is a Promise object and Promise objects don't have a .length property — it's undefined. To get the data: use async/await or chain another .then(data => console.log(data.length))."
+            },
+            {
+              question: "localStorage.setItem('cart', JSON.stringify(cartArray)) — why JSON.stringify?",
+              options: [
+                "JSON.stringify compresses the data to save storage space",
+                "localStorage stores strings only. JSON.stringify converts the array to a JSON string so it can be stored and later reconstructed with JSON.parse",
+                "JSON.stringify is required to trigger the browser's localStorage event",
+                "JSON.stringify adds encryption to prevent other sites from reading the cart"
+              ],
+              correct: 1,
+              feedback: "localStorage accepts only strings. Passing an array directly stores '[object Object]' or a comma-separated version — not the original data. JSON.stringify serialises the array to a JSON string ('[]' or '[{...}]'). JSON.parse converts it back. This is the only correct way to store complex data in localStorage."
+            },
+            {
+              question: "Your fetch request to a public API works in Postman but returns a CORS error in the browser. Where is the fix applied?",
+              options: [
+                "In the browser settings — enable cross-origin requests in DevTools",
+                "On the server — it must include the correct Access-Control-Allow-Origin header",
+                "In the fetch() call — add mode: 'no-cors'",
+                "On the client — use a different HTTP method"
+              ],
+              correct: 1,
+              feedback: "CORS is enforced by the browser, not Postman (which doesn't apply same-origin restrictions). The fix is always server-side: the server must include Access-Control-Allow-Origin in its response headers allowing your origin. mode: 'no-cors' prevents you from reading the response — it doesn't fix CORS. If you control the server, add the CORS middleware. If you don't, you need a proxy."
+            },
+            {
+              question: "You have a git repository with uncommitted changes. A teammate asks you to urgently fix a bug on the main branch. What is the correct git workflow?",
+              options: [
+                "Commit your incomplete work to main, fix the bug, then sort out your changes later",
+                "git stash your current changes, switch to main (or a new branch), fix and commit the bug, then git stash pop to restore your work",
+                "Delete your changes and start fresh after fixing the bug",
+                "Make the bug fix on top of your current uncommitted changes and commit everything together"
+              ],
+              correct: 1,
+              feedback: "git stash temporarily saves your working changes without committing them. You can then switch branches, fix the bug, commit and push, then return to your branch and git stash pop to restore your work exactly as it was. This is one of the most useful day-to-day git techniques for context switching without losing work."
+            },
+            {
+              question: "Your application makes a fetch request and the response data structure doesn't match what you expected. What is the fastest way to debug this?",
+              options: [
+                "Guess the correct field name based on similar APIs you've used before",
+                "Open the Network tab in DevTools, find the request, click the Response tab — the exact JSON the server returned is there",
+                "Add error handling and assume the data will eventually be correct",
+                "Re-read the API documentation until you find what changed"
+              ],
+              correct: 1,
+              feedback: "The Network tab shows the exact HTTP request and response. The Response tab shows the exact JSON. This eliminates guessing — you see exactly what the server returned. Compare that to what your code expects. The mismatch is usually immediately obvious. DevTools Network tab is the first stop for any API-related bug."
+            }
+          ]
         },
-        checklist: ["I reviewed all Floor 4 projects as if reading a colleague's code", "I identified at least one real improvement per project", "I implemented at least three improvements", "My functions have descriptive names that don't require reading the body to understand", "Error cases are handled in each project"]
+        checklist: ["I reviewed all my Floor 4 projects as if reading a colleague's code for the first time", "I identified at least one genuine improvement per project and implemented it", "My function names describe what the function does — reading the name tells you its purpose", "Error cases are explicitly handled in each project — no silent failures", "I can explain the trade-offs I made in each project if asked in an interview"]
       }
     ]
   },
@@ -1279,7 +2572,7 @@ The database is where data persists after the user leaves. Without a database, e
 
 The HTTP request cycle across the full stack: browser sends a request → server receives it, authenticates the user, queries the database, formats the response → database returns data to the server → server returns formatted response to browser → browser renders what the user sees.
 
-The separation matters for three reasons: security (you never trust the browser to validate data), scale (servers handle thousands of simultaneous users), and persistence (data survives after the user leaves).`,
+The separation matters for three reasons: security (you never trust the browser to validate data), scale (servers handle thousands of simultaneous users), and persistence (data survives after the user leaves).\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if a server keeps all user data in a JavaScript object in memory, what happens to that data when the server process restarts? What does that tell you about why databases exist?</div>`,
         callout: {
           type: "default",
           label: "Why the Separation",
@@ -1301,7 +2594,7 @@ The separation matters for three reasons: security (you never trust the browser 
           correct: 1,
           feedback: "Payment processing must happen server-side. Any JavaScript in the browser can be read, modified, and re-sent by someone with DevTools. A user could modify the price, skip validation, or steal API keys. The server is a controlled environment the user cannot modify. This applies to any security-sensitive operation: authentication, authorisation, payment, data validation."
         },
-        checklist: ["I can describe the role of frontend, backend, and database", "I understand why sensitive logic must live on the server", "I understand the full HTTP request cycle from browser to database and back", "I can give three examples of what belongs server-side vs client-side", "I understand why data persistence requires a database"]
+        checklist: ["I can describe the role of frontend, backend, and database in one sentence each", "I can explain why sensitive business logic must live on the server, not the client", "I can trace a complete user login request from browser click to database and back", "I can give three concrete examples of what belongs on the server vs the client", "I understand that data persistence requires a database — not localStorage or in-memory state"]
       },
       {
         id: "5-2",
@@ -1336,7 +2629,7 @@ Ports: a server listens on a specific port number. Port 80 is HTTP, 443 is HTTPS
           correct: 1,
           feedback: "Middleware executes in the order it's registered, before route handlers. Authentication middleware checks credentials and calls next() to pass to the route handler if valid, or sends a 401 response directly if not. The route handler only runs if middleware allows it through. This is the gatekeeper pattern — protect the resource before the handler ever runs."
         },
-        checklist: ["I understand what a server does and how routing works", "I understand what middleware is and what it's used for", "I understand the request and response objects", "I know the difference between web server, application server, and database server", "I understand what ports are"]
+        checklist: ["I can explain what a server is and what it does when it receives an HTTP request", "I can explain what routing means and give an example of a route handler", "I can explain what middleware does and give a real example of when you'd use it", "I can explain the difference between req and res in an Express route handler", "I can explain what a port is and why your local server runs on localhost:3000"]
       },
       {
         id: "5-3",
@@ -1351,7 +2644,7 @@ SQL commands you need to know: SELECT (retrieve data), INSERT (add data), UPDATE
 
 <strong>Indexes</strong> are how databases stay fast as data grows. Without an index, a query scans every row in the table. With an index on the column you're filtering by, the database finds matching rows in milliseconds. Add indexes on columns you query frequently, especially foreign keys.
 
-<strong>ACID</strong> properties guarantee data integrity: Atomicity (a transaction either fully succeeds or fully fails, never halfway), Consistency (the database stays in a valid state), Isolation (concurrent transactions don't interfere), Durability (committed data survives crashes). When a bank transfer fails halfway through, ACID properties ensure neither account is left in an inconsistent state.`,
+<strong>ACID</strong> properties guarantee data integrity: Atomicity (a transaction either fully succeeds or fully fails, never halfway), Consistency (the database stays in a valid state), Isolation (concurrent transactions don't interfere), Durability (committed data survives crashes). When a bank transfer fails halfway through, ACID properties ensure neither account is left in an inconsistent state.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you fetch 20 blog posts and then make a separate database query for each post’s author, how many total queries have you made? What is this problem called, and how would a JOIN fix it?</div>`,
         callout: {
           type: "default",
           label: "SQL vs NoSQL",
@@ -1373,7 +2666,7 @@ SQL commands you need to know: SELECT (retrieve data), INSERT (add data), UPDATE
           correct: 1,
           feedback: "Atomicity means all operations in a transaction succeed together or fail together. If the credit operation fails (or the server crashes before it), the debit is automatically rolled back. The database returns to the state before the transaction started. This is why financial applications use ACID-compliant relational databases, not eventually-consistent document stores."
         },
-        checklist: ["I understand the difference between relational and document databases", "I can write basic SELECT, INSERT, UPDATE, DELETE queries", "I understand what indexes are and when to use them", "I can explain the ACID properties", "I understand when to use SQL vs NoSQL"]
+        checklist: ["I can explain the key difference between relational and document databases with a concrete example", "I can write SELECT, INSERT, UPDATE, and DELETE queries without looking up the syntax", "I can explain what an index is and name one case where you'd add one", "I can explain ACID in plain terms — not the acronym, but what each property means in practice", "I can explain when I'd choose PostgreSQL over MongoDB for a new project"]
       },
       {
         id: "5-4",
@@ -1408,7 +2701,71 @@ OAuth: "Login with Google" delegates authentication to a trusted provider. Googl
           correct: 1,
           feedback: "JWTs are stateless — the server doesn't store them, so there's nothing to delete. Any request with a valid, unexpired JWT will be accepted, even if the token was stolen. To immediately revoke a JWT, you need a server-side blocklist of invalidated tokens, which reintroduces statefulness. This is JWT's main trade-off compared to session-based auth where you just delete the session record."
         },
-        checklist: ["I understand the difference between authentication and authorisation", "I understand session-based vs token-based authentication", "I know why passwords must be hashed and what bcrypt does", "I understand what OAuth is", "I would use an existing library rather than building auth from scratch"]
+        checklist: ["I can explain the difference between authentication and authorisation without confusing them", "I can describe the full JWT flow: login → token generation → storage → verification", "I can explain why passwords must be hashed and what bcrypt does — not just that it's 'secure'", "I can explain what OAuth does and why you'd use it instead of building your own auth", "I would use an existing auth library rather than building it myself — and I can explain why"]
+      },
+      {
+        id: "5-phase1-review",
+        title: "Phase 1 Review — Full Stack Concepts, Servers, Databases, and Auth",
+        body: `Five questions covering full stack architecture, how servers work, databases, and authentication.`,
+        quiz: {
+          questions: [
+            {
+              question: "In a full stack application, what is the correct description of the frontend's role?",
+              options: [
+                "The frontend stores all the data and handles business logic",
+                "The frontend is what the user sees and interacts with — it requests data from the backend and renders it as a user interface",
+                "The frontend runs on the server and generates HTML to send to the browser",
+                "The frontend directly accesses the database using JavaScript"
+              ],
+              correct: 1,
+              feedback: "The frontend is the client-side layer: HTML, CSS, and JavaScript that runs in the browser. It renders the UI, handles user interactions, and communicates with the backend via HTTP requests (typically fetch). It does not store persistent data or contain sensitive business logic — those belong on the backend where they're protected."
+            },
+            {
+              question: "What happens between the moment a user submits a login form and the moment they see their dashboard?",
+              options: [
+                "The browser checks a local database and loads the dashboard if credentials match",
+                "The browser sends credentials to the server, the server checks the database, if valid issues a token, the browser stores the token and redirects to the dashboard",
+                "The form data is encrypted in the browser and compared to a local hash",
+                "The server sends the user's complete profile to the browser which then validates the credentials"
+              ],
+              correct: 1,
+              feedback: "Login flow: frontend sends credentials via POST → server receives them → server queries the database to find the user → if found, compares the hashed password → if valid, generates a JWT or creates a session → returns the token to the client → client stores it (localStorage or cookie) → subsequent requests include the token → server validates it on protected routes."
+            },
+            {
+              question: "What is the difference between a relational database (PostgreSQL) and a document database (MongoDB)?",
+              options: [
+                "Relational databases are only for small projects; document databases scale to any size",
+                "Relational databases store data in structured tables with relationships enforced by schema. Document databases store data as flexible JSON documents without a strict schema",
+                "PostgreSQL is open source; MongoDB is proprietary",
+                "There is no meaningful difference — they're interchangeable for most applications"
+              ],
+              correct: 1,
+              feedback: "Relational databases organise data into tables with fixed schemas and enforce relationships via foreign keys. They excel at complex queries with joins. Document databases store data as JSON-like documents with flexible schemas — no joins, but more natural for hierarchical data. Choose relational when data is structured and relationships matter; document when data shapes vary and you need flexibility."
+            },
+            {
+              question: "A password must never be stored in plain text. Why, and what is the correct approach?",
+              options: [
+                "Plain text wastes storage — passwords should be compressed",
+                "Plain text passwords are readable if the database is breached. Passwords must be hashed with bcrypt — a one-way function that cannot be reversed",
+                "Passwords should be encrypted with AES so they can be decrypted for verification",
+                "Passwords should be stored as base64 — this provides sufficient protection"
+              ],
+              correct: 1,
+              feedback: "If your database is breached and passwords are in plain text, every account is immediately compromised. Hashing with bcrypt produces a fixed-length output that cannot be reversed. To verify: hash the submitted password and compare the hashes — the original password is never stored. Encryption is reversible (wrong — the decryption key could be stolen). Base64 is encoding, not protection."
+            },
+            {
+              question: "A server receives a GET request to /api/products. What HTTP status code should it return if the database query succeeds and returns 0 products?",
+              options: [
+                "404 Not Found — no products were found",
+                "204 No Content — the response has no body",
+                "200 OK with an empty array [] — the request succeeded, there are simply no products",
+                "500 Internal Server Error — returning 0 results indicates a server problem"
+              ],
+              correct: 2,
+              feedback: "200 OK means the request was handled correctly. An empty array is a valid successful response — there are no products, and the client should handle that. 404 means the resource itself doesn't exist (the /api/products endpoint doesn't exist). 204 is for DELETE responses where there's no body. Returning 404 for empty results is a common mistake that misleads clients into thinking the endpoint is broken."
+            }
+          ]
+        }
       },
       {
         id: "5-5",
@@ -1441,7 +2798,50 @@ GitHub's API, Stripe's API, Shopify's API — all built on frameworks equivalent
 <strong>Still stuck?</strong> Test the route directly with Postman or Thunder Client before connecting the frontend. Send the exact request you expect the frontend to send. If it works in Postman but not from the browser, the problem is in the frontend fetch call, not the server.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.server{background:#0a1a0a;border:1px solid #2a4a2a;border-radius:10px;padding:20px;margin-bottom:20px}
+.server-label{color:#6dbf6d;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.routes{display:grid;gap:8px}
+.route{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#111;border:1px solid #222;border-radius:6px;cursor:pointer;transition:border-color 0.15s}
+.route:hover{border-color:#6dbf6d}
+.method{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;min-width:44px;text-align:center}
+.GET{background:#1a3a1a;color:#6dbf6d}.POST{background:#1a2a3a;color:#7eb8c8}.DELETE{background:#3a1a1a;color:#ff6b6b}.PATCH{background:#2a2a1a;color:#c8a96e}
+.path{color:#fff;font-size:12px;min-width:140px}.route-desc{color:#666;font-size:11px;line-height:1.4}
+.response{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;min-height:60px;font-size:11px;color:#c8a96e}
+.response-label{color:#555;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+</style></head><body>
+<h2>Express Route Explorer</h2>
+<p class="sub">Click a route to see what it returns. This simulates a real Express server.</p>
+<div class="server">
+<div class="server-label">Running on localhost:3000</div>
+<div class="routes" id="routes"></div>
+</div>
+<div class="response-label">Response</div>
+<div class="response" id="response">Select a route above to see the simulated response...</div>
+<script>
+var routes=[
+  {method:'GET',path:'/api/users',desc:'List all users',response:{data:[{id:1,name:'Alex Chen'},{id:2,name:'Jordan Lee'}],total:2}},
+  {method:'GET',path:'/api/users/:id',desc:'Get user by ID (e.g. /api/users/1)',response:{id:1,name:'Alex Chen',email:'alex@example.com',role:'developer'}},
+  {method:'POST',path:'/api/users',desc:'Create a new user (body: {name, email})',response:{id:3,name:'New User',email:'new@example.com',createdAt:'2026-05-16T12:00:00Z'}},
+  {method:'PATCH',path:'/api/users/:id',desc:'Update a user field',response:{id:1,name:'Alex Chen Updated',email:'alex@example.com'}},
+  {method:'DELETE',path:'/api/users/:id',desc:'Delete a user',response:{message:'User 1 deleted successfully',deleted:true}},
+];
+var routesEl=document.getElementById('routes');
+var responseEl=document.getElementById('response');
+routes.forEach(function(r){
+  var div=document.createElement('div');div.className='route';
+  div.innerHTML='<span class="method '+r.method+'">'+r.method+'</span>'+
+    '<span class="path">'+r.path+'</span>'+
+    '<span class="route-desc">'+r.desc+'</span>';
+  div.onclick=function(){responseEl.textContent=JSON.stringify(r.response,null,2);};
+  routesEl.appendChild(div);
+});
+</script></body></html>`,
           challenges: ["Add a new GET route for /api/products that returns an array of product objects", "Add middleware that logs the request method and path for every request", "Add a POST route that reads data from req.body and returns it back", "Add a 404 handler for any route that doesn't match the defined routes"]
         },
         quiz: {
@@ -1450,7 +2850,7 @@ GitHub's API, Stripe's API, Shopify's API — all built on frameworks equivalent
           correct: 1,
           feedback: "Express doesn't parse request bodies by default. app.use(express.json()) must be registered before any route that reads req.body. It reads the raw request body, parses it as JSON, and attaches the result to req.body. Without it, req.body is undefined for all routes. Register it near the top of your app, before route definitions."
         },
-        checklist: ["I can start a basic Express server", "I can write GET and POST route handlers", "I understand req.params, req.query, req.body, and req.headers", "I can add middleware with app.use()", "I can send JSON responses with correct status codes"]
+        checklist: ["I can start an Express server and explain what each line of the basic setup does", "I can write GET and POST route handlers that read from req and write to res", "I can explain the difference between req.params, req.query, and req.body with examples", "I can add middleware with app.use() and explain why order matters", "I return appropriate status codes: 200 for success, 201 for created, 400 for bad input, 404 for not found, 500 for server errors"]
       },
       {
         id: "5-6",
@@ -1481,7 +2881,57 @@ Profile before optimising. The query that looks slow might be fast. The query th
 <strong>Still stuck?</strong> Add try/catch to every database function and log the full error including the error.code. PostgreSQL error codes are specific — 23505 means a unique constraint violation (duplicate data), 23503 means a foreign key violation (referencing a row that doesn't exist). The code tells you exactly what's wrong.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.tabs{display:flex;gap:8px;margin-bottom:16px;border-bottom:1px solid #222;padding-bottom:12px}
+.tab{background:none;border:1px solid #333;color:#888;border-radius:6px;padding:6px 14px;font-family:inherit;font-size:11px;cursor:pointer}
+.tab.active{border-color:#c87e9a;color:#c87e9a}
+.query{background:#0a1a2a;border:1px solid #2a4a6a;border-radius:8px;padding:16px;margin-bottom:16px;font-size:11px;color:#a8d5f5;white-space:pre-wrap}
+.results{background:#111;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden}
+.results table{width:100%;border-collapse:collapse}
+.results th{background:#1a1a1a;color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid #222}
+.results td{padding:10px 14px;border-bottom:1px solid #1a1a1a;color:#ccc;font-size:11px}
+.results tr:last-child td{border-bottom:none}
+.id-col{color:#c87e9a}.name-col{color:#fff}.status-col{color:#6dbf6d}
+</style></head><body>
+<h2>Database Query Explorer</h2>
+<p class="sub">Select a query pattern to see the SQL and simulated results.</p>
+<div class="tabs" id="tabs"></div>
+<div class="query" id="query"></div>
+<div class="results" id="results"></div>
+<script>
+var queries=[
+  {label:'SELECT all',sql:'SELECT * FROM users\\nORDER BY created_at DESC\\nLIMIT 10;',
+   cols:['id','name','email','role'],
+   rows:[[1,'Alex Chen','alex@example.com','admin'],[2,'Jordan Lee','jordan@example.com','developer'],[3,'Sam Park','sam@example.com','developer']]},
+  {label:'WHERE filter',sql:"SELECT id, name, email\\nFROM users\\nWHERE role = 'developer'\\nAND created_at > '2025-01-01';",
+   cols:['id','name','email'],
+   rows:[[2,'Jordan Lee','jordan@example.com'],[3,'Sam Park','sam@example.com']]},
+  {label:'JOIN query',sql:'SELECT u.name, p.title, p.published_at\\nFROM users u\\nINNER JOIN posts p ON p.author_id = u.id\\nWHERE p.status = \\'published\\'\\nORDER BY p.published_at DESC;',
+   cols:['name','title','published_at'],
+   rows:[['Alex Chen','Building REST APIs','2026-05-10'],['Jordan Lee','Async JavaScript','2026-05-08']]},
+  {label:'Transaction',sql:'BEGIN;\\nINSERT INTO orders (user_id, total)\\nVALUES (1, 99.99)\\nRETURNING id;\\nUPDATE inventory\\nSET stock = stock - 1\\nWHERE product_id = 42;\\nCOMMIT;',
+   cols:['operation','status','rows_affected'],
+   rows:[['BEGIN','OK','-'],['INSERT orders','OK','1'],['UPDATE inventory','OK','1'],['COMMIT','OK','-']]},
+];
+var tabsEl=document.getElementById('tabs');var queryEl=document.getElementById('query');var resultsEl=document.getElementById('results');
+function show(i){
+  var q=queries[i];queryEl.textContent=q.sql;
+  var th=q.cols.map(function(c){return '<th>'+c+'</th>';}).join('');
+  var tb=q.rows.map(function(r){return '<tr>'+r.map(function(v){return '<td>'+v+'</td>';}).join('')+'</tr>';}).join('');
+  resultsEl.innerHTML='<table><thead><tr>'+th+'</tr></thead><tbody>'+tb+'</tbody></table>';
+  document.querySelectorAll('.tab').forEach(function(t,j){t.className='tab'+(j===i?' active':'');});
+}
+queries.forEach(function(q,i){
+  var btn=document.createElement('button');btn.className='tab'+(i===0?' active':'');
+  btn.textContent=q.label;btn.onclick=function(){show(i);};tabsEl.appendChild(btn);
+});
+show(0);
+</script></body></html>`,
           challenges: ["Write a function that retrieves a single user by ID", "Write a function that creates a new user and returns the created record", "Add error handling for when the user is not found (return 404)", "Write a transaction that creates a post and increments the author's post count atomically"]
         },
         quiz: {
@@ -1490,7 +2940,7 @@ Profile before optimising. The query that looks slow might be fast. The query th
           correct: 1,
           feedback: "A transaction wraps multiple operations into a single atomic unit. BEGIN starts the transaction, you run both the INSERT and the UPDATE, and COMMIT applies both permanently. If any operation fails, ROLLBACK undoes everything — the database returns to its state before BEGIN. This is how all multi-step operations that must stay consistent are handled."
         },
-        checklist: ["I can connect to a database from a Node.js application", "I understand connection pooling", "I can write CRUD queries using a database client", "I understand when to use transactions", "I understand the trade-offs between ORMs and raw SQL"]
+        checklist: ["I can connect to a PostgreSQL database from Node.js and make a query", "I can explain what connection pooling is and why it matters for performance", "I can write parameterised queries — and explain why string-concatenated queries are dangerous", "I can wrap multiple related operations in a transaction and explain when that's necessary", "I can run EXPLAIN ANALYZE on a slow query and identify where the time is spent"]
       },
       {
         id: "5-7",
@@ -1523,7 +2973,63 @@ Design your API as if a developer you've never met needs to use it without docum
 <strong>Still stuck?</strong> Test your API with Postman or curl to isolate it from the frontend. If the API returns correct data in Postman but the frontend breaks, the problem is how the frontend is parsing the response — not the API itself.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.endpoint-row{display:flex;align-items:flex-start;gap:12px;padding:12px;background:#111;border:1px solid #222;border-radius:8px;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s}
+.endpoint-row:hover,.endpoint-row.active{border-color:#c87e9a}
+.badge{font-size:10px;font-weight:bold;padding:3px 8px;border-radius:4px;min-width:50px;text-align:center;flex-shrink:0}
+.GET{background:#1a3a1a;color:#6dbf6d}.POST{background:#1a2a3a;color:#7eb8c8}
+.PUT{background:#2a2a0a;color:#c8a96e}.DELETE{background:#3a0a0a;color:#ff6b6b}
+.ep-path{color:#fff;font-size:13px;min-width:180px}.ep-desc{color:#666;font-size:11px}
+.detail-panel{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;margin-top:16px;display:none}
+.detail-panel.visible{display:block}
+.section-title{color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;margin-top:12px}
+.code-block{background:#0a0a0a;border:1px solid #222;border-radius:6px;padding:12px;font-size:11px;color:#c8a96e;white-space:pre-wrap}
+</style></head><body>
+<h2>REST API Reference</h2>
+<p class="sub">Click an endpoint to see request/response shapes and status codes.</p>
+<div id="endpoints"></div>
+<div class="detail-panel" id="detail"></div>
+<script>
+var endpoints=[
+  {method:'GET',path:'/api/users',desc:'List all users',
+   request:'No body required',
+   response:'200 OK\\n{\\n  "data": [\\n    { "id": 1, "name": "Alex Chen", "email": "alex@example.com" }\\n  ],\\n  "total": 1\\n}'},
+  {method:'POST',path:'/api/users',desc:'Create a new user',
+   request:'Content-Type: application/json\\n{\\n  "name": "Alex Chen",\\n  "email": "alex@example.com"\\n}',
+   response:'201 Created\\n{\\n  "id": 2,\\n  "name": "Alex Chen",\\n  "email": "alex@example.com",\\n  "createdAt": "2026-05-16T12:00:00Z"\\n}'},
+  {method:'GET',path:'/api/users/:id',desc:'Get user by ID',
+   request:'No body required',
+   response:'200 OK\\n{\\n  "id": 1,\\n  "name": "Alex Chen",\\n  "email": "alex@example.com"\\n}\\n\\n404 Not Found\\n{\\n  "error": "User not found"\\n}'},
+  {method:'PUT',path:'/api/users/:id',desc:'Replace user record',
+   request:'Content-Type: application/json\\n{\\n  "name": "Updated Name",\\n  "email": "updated@example.com"\\n}',
+   response:'200 OK\\n{\\n  "id": 1,\\n  "name": "Updated Name",\\n  "email": "updated@example.com"\\n}'},
+  {method:'DELETE',path:'/api/users/:id',desc:'Delete user',
+   request:'No body required',
+   response:'200 OK\\n{\\n  "message": "User deleted",\\n  "deleted": true\\n}'},
+];
+var epEl=document.getElementById('endpoints');
+var detailEl=document.getElementById('detail');
+endpoints.forEach(function(ep,i){
+  var div=document.createElement('div');div.className='endpoint-row';
+  div.innerHTML='<span class="badge '+ep.method+'">'+ep.method+'</span>'+
+    '<span class="ep-path">'+ep.path+'</span>'+
+    '<span class="ep-desc">'+ep.desc+'</span>';
+  div.onclick=function(){
+    document.querySelectorAll('.endpoint-row').forEach(function(e){e.classList.remove('active');});
+    div.classList.add('active');
+    detailEl.className='detail-panel visible';
+    detailEl.innerHTML='<strong>'+ep.method+' '+ep.path+'</strong>'+
+      '<div class="section-title">Request</div><div class="code-block">'+ep.request+'</div>'+
+      '<div class="section-title">Response</div><div class="code-block">'+ep.response+'</div>';
+  };
+  epEl.appendChild(div);
+});
+</script></body></html>`,
           challenges: ["Add input validation that returns a 400 error if required fields are missing", "Add pagination to the list endpoint: accept page and limit query parameters", "Add a search endpoint that filters results by a query parameter", "Document your API endpoints in the code comments in the format: METHOD /path — description"]
         },
         quiz: {
@@ -1532,7 +3038,7 @@ Design your API as if a developer you've never met needs to use it without docum
           correct: 2,
           feedback: "400 Bad Request means the client sent something invalid. The error message should tell them exactly what's wrong: 'email is required' or 'email must be a valid email address'. Don't let invalid data reach the database — validate first and return 400 immediately. 500 is for server failures, not client mistakes. 201 with missing required data is incorrect by definition."
         },
-        checklist: ["I can build RESTful endpoints for a resource", "I validate request input before any database interaction", "I return consistent response shapes across all endpoints", "I use correct HTTP status codes", "My endpoints follow RESTful URL conventions"]
+        checklist: ["I can build RESTful CRUD endpoints for a resource following standard URL conventions", "I validate all request input before any database interaction — invalid data returns 400", "I return consistent response shapes: the same structure for every success, a clear error shape for failures", "I use correct HTTP status codes and can explain the choice for each endpoint", "I've tested my API with Postman before connecting the frontend"]
       },
       {
         id: "5-8",
@@ -1541,7 +3047,7 @@ Design your API as if a developer you've never met needs to use it without docum
 
 The dotenv package reads a .env file and loads its contents into process.env. Add .env to your .gitignore immediately when you create any project. Commit a .env.example file that shows what variables are needed with placeholder values — this is the convention for onboarding new developers without exposing secrets.
 
-SQL injection is the most common web application vulnerability. It happens when you build SQL queries with string concatenation: 'SELECT * FROM users WHERE name = ' + userInput. If userInput is ' OR '1'='1, the query returns every row in the table. The fix is parameterised queries: the query and the data are sent separately, and the database handles the escaping. Never build SQL with string concatenation.
+SQL injection is the most common web application vulnerability. It happens when you build SQL queries with string concatenation: 'SELECT * FROM users WHERE name = ' + userInput. If userInput is ' OR '1'='1, the query returns every row in the table. The fix is parameterised queries: the query and the data are sent separately, and the database handles the escaping. Never build SQL with string concatenation.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if req.body.username is the string \' OR \'1\'=\'1, what does the concatenated query look like? What does it return, and what does that mean for your users?</div>
 
 XSS (Cross-Site Scripting) happens when user input is rendered as HTML without sanitisation. If a user submits <script>steal(document.cookie)</script> as a comment and you display it directly, that script runs in every reader's browser. Sanitise or encode user content before rendering it.
 
@@ -1563,7 +3069,59 @@ CORS (Cross-Origin Resource Sharing) is the browser's mechanism for restricting 
 <strong>Prevention:</strong> Use git-secrets or pre-commit hooks that block commits containing credential patterns. The few minutes of setup prevents this conversation.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.checker{display:grid;gap:10px;margin-bottom:20px}
+.item{background:#111;border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;border:1px solid transparent}
+.item.safe{border-color:#2a4a2a}.item.unsafe{border-color:#4a2a2a}
+.icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.content{flex:1}
+.check-title{color:#fff;font-size:12px;margin-bottom:4px}
+.check-detail{color:#888;font-size:11px;line-height:1.5}
+.label{font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.unsafe-label{color:#ff6b6b}.safe-label{color:#6dbf6d}
+.code{color:#c8a96e;font-family:'IBM Plex Mono',monospace;font-size:11px;background:#0a0a0a;padding:2px 6px;border-radius:3px}
+</style></head><body>
+<h2>Security Checklist</h2>
+<p class="sub">Common security mistakes and their fixes.</p>
+<div class="label unsafe-label">These are vulnerabilities — fix them before shipping</div>
+<div class="checker">
+<div class="item unsafe"><span class="icon">🚨</span><div class="content">
+<div class="check-title">SQL Injection — String concatenation in queries</div>
+<div class="check-detail">Bad: <span class="code">"SELECT * FROM users WHERE id = " + req.params.id</span><br>
+Fix: Parameterised query — <span class="code">db.query("SELECT * FROM users WHERE id = $1", [req.params.id])</span></div>
+</div></div>
+<div class="item unsafe"><span class="icon">🚨</span><div class="content">
+<div class="check-title">Secrets in code</div>
+<div class="check-detail">Bad: <span class="code">const API_KEY = "sk_live_abc123"</span> committed to Git<br>
+Fix: Move to <span class="code">.env</span> file, add <span class="code">.env</span> to <span class="code">.gitignore</span>, use <span class="code">process.env.API_KEY</span></div>
+</div></div>
+<div class="item unsafe"><span class="icon">🚨</span><div class="content">
+<div class="check-title">Unvalidated user input</div>
+<div class="check-detail">Bad: Inserting req.body.comment directly into HTML<br>
+Fix: Sanitise with DOMPurify or escape special chars. Never trust user input.</div>
+</div></div>
+</div>
+<div class="label safe-label">These protect your application — implement them</div>
+<div class="checker">
+<div class="item safe"><span class="icon">✓</span><div class="content">
+<div class="check-title">Helmet.js middleware</div>
+<div class="check-detail"><span class="code">app.use(helmet())</span> sets secure HTTP headers in one line. Prevents clickjacking, XSS, and sniffing attacks.</div>
+</div></div>
+<div class="item safe"><span class="icon">✓</span><div class="content">
+<div class="check-title">CORS configured explicitly</div>
+<div class="check-detail"><span class="code">cors({ origin: 'https://yourapp.com' })</span> — never use <span class="code">origin: '*'</span> in production with authentication.</div>
+</div></div>
+<div class="item safe"><span class="icon">✓</span><div class="content">
+<div class="check-title">Rate limiting</div>
+<div class="check-detail"><span class="code">express-rate-limit</span> — limit each IP to 100 requests per 15 minutes. Prevents brute force and abuse.</div>
+</div></div>
+</div>
+</body></html>`,
           challenges: ["Move the hardcoded API key in the code to a .env file", "Add CORS middleware that only allows requests from http://localhost:3000", "Add rate limiting middleware that blocks IPs making more than 100 requests per minute", "Identify and fix the SQL injection vulnerability in the code"]
         },
         quiz: {
@@ -1572,7 +3130,71 @@ CORS (Cross-Origin Resource Sharing) is the browser's mechanism for restricting 
           correct: 1,
           feedback: "String-concatenated SQL is vulnerable to injection. If req.body.username is ' OR '1'='1, the query becomes: SELECT * FROM users WHERE username = '' OR '1'='1' — which returns every user. Use parameterised queries: db.query('SELECT * FROM users WHERE username = $1', [req.body.username]). The database treats $1 as data, making injection impossible."
         },
-        checklist: ["All secrets are stored in .env and never committed", ".env is in .gitignore", "I use parameterised queries for all database operations", "I understand what CORS is and have configured it explicitly", "I understand XSS and sanitise user-generated content before rendering"]
+        checklist: ["All API keys and secrets are in .env — none are in the codebase or git history", ".env is in .gitignore — I verified this before the first commit", "I use parameterised queries for every database operation — no string concatenation", "I can explain what CORS is and have configured it to allow only my frontend's origin", "I can explain what XSS is and how I prevent it when rendering user-generated content"]
+      },
+      {
+        id: "5-phase2-review",
+        title: "Phase 2 Review — Node/Express, Databases, REST APIs, and Security",
+        body: `Five questions covering Express routes, database connections, REST API design, and security fundamentals.`,
+        quiz: {
+          questions: [
+            {
+              question: "An Express route handler has req.body as undefined. What is the most likely cause?",
+              options: [
+                "POST routes do not support request bodies in Express",
+                "The request was sent with GET instead of POST",
+                "app.use(express.json()) middleware is not registered before the route",
+                "req.body is always undefined for security — you must use req.params instead"
+              ],
+              correct: 2,
+              feedback: "Express doesn't parse request bodies by default. app.use(express.json()) must be registered before routes that need req.body — it reads the raw request body and parses it as JSON, attaching the result to req.body. Register it near the top of the app, before route definitions. Missing this middleware is the most common Express beginner mistake."
+            },
+            {
+              question: "What is the N+1 query problem?",
+              options: [
+                "A SQL error caused by selecting more than N columns in a query",
+                "Fetching a list of N items and then making a separate database query for each item's related data — N+1 queries total instead of 1",
+                "An index that grows beyond the database's maximum size",
+                "A bug in connection pooling that creates extra connections"
+              ],
+              correct: 1,
+              feedback: "N+1: you fetch 10 posts (1 query), then for each post you fetch the author separately (10 queries) = 11 queries total. With 100 posts it's 101 queries. The fix: a JOIN query that fetches posts and authors together in one query. ORMs can generate N+1 silently — always check what SQL your ORM actually produces."
+            },
+            {
+              question: "A client sends POST /api/users without the required email field. What should the API return?",
+              options: [
+                "201 Created with a user record that has email set to null",
+                "400 Bad Request with a message: 'email is required'",
+                "500 Internal Server Error when the database rejects the insert",
+                "200 OK with a warning flag in the response body"
+              ],
+              correct: 1,
+              feedback: "Validate all input before touching the database. If required fields are missing or invalid, return 400 Bad Request with a specific message. 400 means the client sent a bad request. 500 means something broke on the server — letting invalid data reach the database and fail there is the wrong approach. Validate early, return clear error messages."
+            },
+            {
+              question: "Why is this dangerous: 'SELECT * FROM users WHERE name = \'' + req.body.name + '\''",
+              options: [
+                "String concatenation is slower than template literals in Node.js",
+                "It's vulnerable to SQL injection — a malicious name input can change the query logic and expose all data",
+                "Single quotes are not valid in PostgreSQL queries",
+                "The query returns too many columns and wastes bandwidth"
+              ],
+              correct: 1,
+              feedback: "SQL injection: if req.body.name is ' OR '1'='1, the query becomes SELECT * FROM users WHERE name = '' OR '1'='1' — which returns every row. Fix: parameterised queries — db.query('SELECT * FROM users WHERE name = $1', [req.body.name]). The database treats $1 as data, not SQL syntax, making injection impossible. This is non-negotiable in production code."
+            },
+            {
+              question: "What is the correct way to store API keys and database passwords in a Node.js application?",
+              options: [
+                "Hardcode them as constants at the top of the file for easy access",
+                "Store in a .env file (excluded from git via .gitignore) and access via process.env.KEY_NAME",
+                "Store in a config.json file committed to the repository for the team to share",
+                "Encode them in base64 before storing in the codebase"
+              ],
+              correct: 1,
+              feedback: ".env file + .gitignore is the standard approach. The dotenv package loads .env into process.env. Commit .env.example with placeholder values for onboarding. The actual .env file is never committed. Once a secret is committed to Git, assume it's compromised even if removed — bots scan public repos continuously. Base64 is encoding, not protection."
+            }
+          ]
+        }
       },
       {
         id: "5-9",
@@ -1607,7 +3229,71 @@ Deployment is not the end. It's where the real work begins: watching logs, respo
 <strong>Still stuck?</strong> Compare your .env file to the environment variables set in the platform dashboard. A missing variable causes the exact application startup failure that's hardest to diagnose without logs.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.pipeline{display:grid;gap:4px;margin-bottom:20px}
+.step{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:#111;border:1px solid #222;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.step.done{border-color:#2a4a2a;background:#0a1a0a}
+.step.active{border-color:#c8a96e;background:#1a1a0a}
+.step-num{width:24px;height:24px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:#fff}
+.step.done .step-num{background:#2a4a2a;color:#6dbf6d}
+.step.active .step-num{background:#3a3a0a;color:#c8a96e}
+.step-content{flex:1}
+.step-title{color:#fff;font-size:12px;margin-bottom:3px}
+.step-desc{color:#555;font-size:11px;line-height:1.5}
+.step.done .step-title{color:#6dbf6d}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:12px;cursor:pointer;margin-top:8px}
+button:hover{background:#d89ab5}
+.status{color:#555;font-size:11px;margin-top:12px}
+</style></head><body>
+<h2>Deployment Pipeline</h2>
+<p class="sub">Simulate a deploy from code push to live. Click Run Deploy.</p>
+<div class="pipeline" id="pipeline"></div>
+<button onclick="runDeploy()">Run Deploy</button>
+<div class="status" id="status"></div>
+<script>
+var steps=[
+  {title:'Push to main',desc:'git push origin main triggers the pipeline'},
+  {title:'Run tests',desc:'npm test — all tests must pass to proceed'},
+  {title:'Build application',desc:'npm run build — create optimised production bundle'},
+  {title:'Run security scan',desc:'Check dependencies for known vulnerabilities'},
+  {title:'Deploy to staging',desc:'Deploy to staging environment for final checks'},
+  {title:'Health check',desc:'GET /health must return 200 OK within 10 seconds'},
+  {title:'Deploy to production',desc:'Zero-downtime deploy — new instances before old ones stop'},
+  {title:'Smoke test',desc:'Automated check of critical user paths in production'},
+];
+var currentStep=-1;
+var pipelineEl=document.getElementById('pipeline');
+var statusEl=document.getElementById('status');
+function renderSteps(){
+  pipelineEl.innerHTML=steps.map(function(s,i){
+    var cls='step'+(i<currentStep?' done':i===currentStep?' active':'');
+    return '<div class="'+cls+'">'+
+      '<div class="step-num">'+(i<currentStep?'✓':(i+1))+'</div>'+
+      '<div class="step-content"><div class="step-title">'+s.title+'</div>'+
+      '<div class="step-desc">'+s.desc+'</div></div></div>';
+  }).join('');
+}
+function runDeploy(){
+  currentStep=0;
+  document.querySelector('button').disabled=true;
+  renderSteps();
+  statusEl.textContent='Deploying...';
+  function nextStep(){
+    currentStep++;
+    renderSteps();
+    if(currentStep>=steps.length){statusEl.textContent='✓ Deployed to production successfully';document.querySelector('button').disabled=false;currentStep=-1;return;}
+    var delay=600+Math.random()*800;
+    setTimeout(nextStep,delay);
+  }
+  setTimeout(nextStep,800);
+}
+renderSteps();
+</script></body></html>`,
           challenges: ["Write the exact sequence of commands to deploy a Node.js app to Railway", "Write a health check endpoint GET /health that returns {status: 'ok', uptime: process.uptime()}", "Add environment-specific configuration — different database URLs for development and production", "Set up a basic monitoring check: a script that hits your /health endpoint every 5 minutes and logs if it fails"]
         },
         quiz: {
@@ -1616,7 +3302,7 @@ Deployment is not the end. It's where the real work begins: watching logs, respo
           correct: 1,
           feedback: "Cloud platforms assign a dynamic port to your application via the PORT environment variable. Your app must listen on process.env.PORT. If it's hardcoded to 3000, it starts on 3000, but the platform is routing traffic to a different port — the app is running but unreachable. The fix: app.listen(process.env.PORT || 3000)."
         },
-        checklist: ["I can deploy a Node.js application to Railway or Render", "Environment variables are set in the platform dashboard, not in code", "My app listens on process.env.PORT", "I have a /health endpoint", "I check deployment logs when something breaks"]
+        checklist: ["I can deploy a Node.js application to Railway or Render from a GitHub repository", "Environment variables are set in the platform dashboard — not in code or .env files", "My app listens on process.env.PORT — not a hardcoded port number", "I have a GET /health endpoint that returns a 200 status code", "When something breaks in production, I check the deployment logs first"]
       },
       {
         id: "5-10",
@@ -1647,7 +3333,76 @@ Treat your backend API as if it belongs to a completely separate team. Test it w
 <strong>Still stuck?</strong> A CORS error only appears in browsers. If you test with curl or Postman and it works, the API is fine. The CORS error is specifically the browser blocking the cross-origin request. Configure the cors middleware with the exact origin your frontend is running on, including the port number.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-family:inherit;font-size:11px;cursor:pointer;letter-spacing:0.5px}
+button:hover{background:#d89ab5}button:disabled{opacity:0.4}
+.posts{display:grid;gap:10px;margin-bottom:16px}
+.post{background:#111;border:1px solid #222;border-radius:8px;padding:14px}
+.post-title{color:#fff;font-size:13px;margin-bottom:4px}
+.post-body{color:#777;font-size:11px;line-height:1.5}
+.post-meta{color:#555;font-size:10px;margin-top:6px}
+.loading{color:#666;font-style:italic;padding:16px 0}
+.err{color:#ff6b6b;padding:16px 0}
+.ok{color:#6dbf6d;font-size:11px;margin-bottom:8px}
+</style></head><body>
+<h2>Frontend ↔ Backend</h2>
+<p class="sub">Fetch posts from JSONPlaceholder — simulating a real backend API.</p>
+<div class="toolbar">
+<button id="load-btn" onclick="loadPosts()">Load Posts (GET)</button>
+<button id="create-btn" onclick="createPost()" disabled>Create Post (POST)</button>
+</div>
+<div id="status"></div>
+<div id="posts"></div>
+<script>
+var posts=[];
+async function loadPosts(){
+  var btn=document.getElementById('load-btn');
+  var postsEl=document.getElementById('posts');
+  var statusEl=document.getElementById('status');
+  btn.disabled=true;
+  postsEl.innerHTML='<p class="loading">Fetching from API...</p>';
+  statusEl.innerHTML='';
+  try{
+    var res=await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    posts=await res.json();
+    statusEl.innerHTML='<p class="ok">✓ Loaded '+posts.length+' posts — GET /api/posts returned 200 OK</p>';
+    renderPosts();
+    document.getElementById('create-btn').disabled=false;
+  }catch(e){postsEl.innerHTML='<p class="err">Error: '+e.message+'</p>';}
+  btn.disabled=false;
+}
+async function createPost(){
+  var btn=document.getElementById('create-btn');
+  var statusEl=document.getElementById('status');
+  btn.disabled=true;
+  try{
+    var res=await fetch('https://jsonplaceholder.typicode.com/posts',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({title:'My New Post',body:'Created by the frontend at '+new Date().toLocaleTimeString(),userId:1})
+    });
+    var created=await res.json();
+    statusEl.innerHTML='<p class="ok">✓ POST /api/posts returned 201 Created — id: '+created.id+'</p>';
+    posts.unshift(created);
+    renderPosts();
+  }catch(e){statusEl.innerHTML='<p class="err">Error: '+e.message+'</p>';}
+  btn.disabled=false;
+}
+function renderPosts(){
+  document.getElementById('posts').innerHTML=posts.map(function(p){
+    return '<div class="post"><div class="post-title">'+p.title+'</div>'+
+      '<div class="post-body">'+p.body.slice(0,100)+'...</div>'+
+      '<div class="post-meta">ID: '+p.id+' · User: '+p.userId+'</div></div>';
+  }).join('');
+}
+</script></body></html>`,
           challenges: ["Add a loading state that shows a spinner while the request is in progress", "Add error handling that shows a specific message for 401 (unauthorized) vs 404 (not found) vs 500 (server error)", "Add an Authorization header with a JWT token to the fetch request", "Implement optimistic UI: update the list immediately when a new item is added, before the server confirms"]
         },
         quiz: {
@@ -1656,7 +3411,7 @@ Treat your backend API as if it belongs to a completely separate team. Test it w
           correct: 2,
           feedback: "CORS is enforced by the browser based on what the server allows. The server must include the correct Access-Control-Allow-Origin header in its response. Adding mode: 'no-cors' to fetch doesn't solve the problem — it just hides the error while preventing you from reading the response. The fix is always server-side: configure cors middleware to explicitly allow your frontend's origin."
         },
-        checklist: ["I understand why CORS exists and how to configure it", "I can send authenticated requests with JWT headers", "I handle loading and error states for every fetch operation", "I test my API with Postman before connecting the frontend", "I understand optimistic UI and when to use it"]
+        checklist: ["I can explain why CORS exists and configure it correctly for both local and production environments", "I send JWT tokens in the Authorization header for authenticated requests", "I handle loading and error states for every fetch call — no silent failures", "I test my API endpoints with Postman before writing the frontend fetch code", "I can explain what optimistic UI is and implement a basic example"]
       },
       {
         id: "5-11",
@@ -1687,7 +3442,99 @@ The order matters. A working backend you can test with Postman before the fronte
 <strong>Still stuck?</strong> Add console.log(req.method, req.path, req.body) at the top of every route. This shows you exactly what the server receives. If the route isn't logging, the request isn't reaching Express. If it's logging but req.body is empty, body-parsing middleware is missing.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:13px;height:100vh;display:grid;grid-template-rows:auto 1fr auto}
+header{background:#111;border-bottom:1px solid #222;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:16px;color:#c87e9a}
+header span{color:#555;font-size:11px}
+main{display:grid;grid-template-columns:260px 1fr;height:100%;overflow:hidden}
+.sidebar{background:#0d0d0d;border-right:1px solid #1a1a1a;overflow-y:auto;padding:12px}
+.sidebar-label{color:#444;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:8px 8px 4px}
+.note-item{padding:10px 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;margin-bottom:2px}
+.note-item:hover{background:#111;border-color:#222}
+.note-item.active{background:#1a1a2a;border-color:#3a3a5a}
+.note-item-title{color:#fff;font-size:12px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-item-preview{color:#555;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.editor{display:flex;flex-direction:column;height:100%}
+.editor-toolbar{padding:12px 20px;border-bottom:1px solid #1a1a1a;display:flex;gap:8px}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-family:inherit;font-size:11px;cursor:pointer}
+button:hover{background:#d89ab5}
+.del-btn{background:#333;color:#888;border:1px solid #444}
+.del-btn:hover{border-color:#ff6b6b;color:#ff6b6b;background:transparent}
+#note-title{flex:1;background:#111;border:1px solid #2a2a2a;color:#fff;padding:14px 20px;font-family:inherit;font-size:16px;border-radius:0;border-left:none;border-right:none}
+#note-title:focus{outline:none}
+#note-body{flex:1;background:#0d0d0d;border:none;color:#ccc;padding:20px;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:none;line-height:1.7}
+#note-body:focus{outline:none}
+</style></head><body>
+<header><h1>Notes App</h1><span id="save-status">All changes saved</span></header>
+<main>
+<div class="sidebar">
+<div class="sidebar-label">Notes</div>
+<div id="sidebar-notes"></div>
+<button style="width:100%;margin-top:8px;background:#1a1a2a;border:1px dashed #333;color:#666" onclick="newNote()">+ New Note</button>
+</div>
+<div class="editor">
+<div class="editor-toolbar">
+<button onclick="saveNote()">Save</button>
+<button class="del-btn" onclick="deleteNote()">Delete</button>
+</div>
+<input type="text" id="note-title" placeholder="Note title...">
+<textarea id="note-body" placeholder="Start writing your note here..."></textarea>
+</div>
+</main>
+<script>
+var notes=JSON.parse(localStorage.getItem('fullstack_notes'))||[{id:1,title:'Welcome',body:'This is a full-stack style notes app. Your notes are stored in localStorage (simulating a database). Create, edit, and delete notes.',date:new Date().toISOString()}];
+var currentId=notes[0]?notes[0].id:null;
+var nextId=notes.length?Math.max.apply(null,notes.map(function(n){return n.id;}))+1:1;
+var saveTimeout=null;
+function save(){localStorage.setItem('fullstack_notes',JSON.stringify(notes));}
+function renderSidebar(){
+  var el=document.getElementById('sidebar-notes');
+  el.innerHTML=notes.map(function(n){
+    return '<div class="note-item'+(n.id===currentId?' active':'')+'\\" onclick="selectNote('+n.id+')">'+
+      '<div class="note-item-title">'+(n.title||'Untitled')+'</div>'+
+      '<div class="note-item-preview">'+(n.body||'').slice(0,40)+'</div></div>';
+  }).join('');
+}
+function selectNote(id){
+  currentId=id;
+  var n=notes.find(function(n){return n.id===id;});
+  if(!n)return;
+  document.getElementById('note-title').value=n.title;
+  document.getElementById('note-body').value=n.body;
+  renderSidebar();
+}
+function newNote(){
+  var n={id:nextId++,title:'New Note',body:'',date:new Date().toISOString()};
+  notes.unshift(n);currentId=n.id;save();selectNote(n.id);
+}
+function saveNote(){
+  var n=notes.find(function(n){return n.id===currentId;});
+  if(!n)return;
+  n.title=document.getElementById('note-title').value||'Untitled';
+  n.body=document.getElementById('note-body').value;
+  save();renderSidebar();
+  document.getElementById('save-status').textContent='Saved at '+new Date().toLocaleTimeString();
+}
+function deleteNote(){
+  if(!currentId)return;
+  notes=notes.filter(function(n){return n.id!==currentId;});
+  currentId=notes[0]?notes[0].id:null;
+  save();
+  if(currentId){selectNote(currentId);}
+  else{document.getElementById('note-title').value='';document.getElementById('note-body').value='';}
+  renderSidebar();
+}
+['note-title','note-body'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){
+    document.getElementById('save-status').textContent='Unsaved changes';
+    clearTimeout(saveTimeout);saveTimeout=setTimeout(saveNote,1500);
+  });
+});
+if(currentId)selectNote(currentId);else renderSidebar();
+</script></body></html>`,
           challenges: ["Connect the frontend fetch calls to the backend API endpoints", "Replace the in-memory array with real database queries", "Add a loading state for each async operation", "Deploy both frontend and backend and update the frontend API URL to point to the live backend"]
         },
         quiz: {
@@ -1696,7 +3543,7 @@ The order matters. A working backend you can test with Postman before the fronte
           correct: 1,
           feedback: "The Network tab shows you the exact request the browser sends and the exact response it receives. You already know the backend works (Postman proved it), so the problem is either the frontend isn't sending the right request, or isn't handling the response correctly. The Network tab shows both. This is the fastest way to find the disconnect."
         },
-        checklist: ["The frontend connects to the backend API", "Notes persist in a real database", "Loading and error states are handled", "Both frontend and backend are deployed", "The app works end-to-end on the live URL"]
+        checklist: ["The frontend makes real API calls to the backend — no hardcoded mock data", "Notes persist in a real database and survive a full server restart", "Loading and error states are handled and visible to the user", "Both frontend and backend are deployed and reachable via public URLs", "The app works end-to-end: I tested it by creating, editing, and deleting notes on the live URL"]
       },
       {
         id: "5-12",
@@ -1725,7 +3572,107 @@ Common mistakes: not hashing passwords with bcrypt before storage, not verifying
 <strong>Still stuck?</strong> Test with two different accounts in two different browser windows (or one regular, one incognito). Create a note in each. Confirm each account only sees its own notes. This test exposes data isolation bugs that unit tests often miss.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:0;font-size:13px;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.auth-container{width:100%;max-width:400px;padding:24px}
+.card{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:32px}
+.card h2{color:#c87e9a;font-size:18px;margin-bottom:4px}
+.card .sub{color:#555;font-size:11px;margin-bottom:24px}
+.tabs{display:flex;gap:0;margin-bottom:24px;border-radius:8px;overflow:hidden;border:1px solid #222}
+.tab{flex:1;background:none;border:none;color:#666;padding:10px;font-family:inherit;font-size:12px;cursor:pointer}
+.tab.active{background:#c87e9a;color:#fff}
+.field{margin-bottom:14px}
+label{display:block;color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+input{width:100%;background:#0a0a0a;border:1px solid #333;color:#fff;padding:10px 12px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#c87e9a}
+.submit-btn{width:100%;background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:12px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:8px;letter-spacing:0.5px}
+.submit-btn:hover{background:#d89ab5}
+.msg{padding:10px 12px;border-radius:6px;font-size:12px;margin-top:12px;text-align:center}
+.msg.ok{background:#0a2a0a;color:#6dbf6d;border:1px solid #2a4a2a}
+.msg.err{background:#2a0a0a;color:#ff6b6b;border:1px solid #4a2a2a}
+.token-display{background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:16px;margin-top:20px;word-break:break-all;font-size:10px;color:#c8a96e;line-height:1.6}
+.dashboard{text-align:center;padding:8px}
+.dashboard p{color:#aaa;font-size:12px;margin-bottom:16px}
+.logout-btn{background:#333;color:#888;border:1px solid #444;border-radius:6px;padding:8px 20px;font-family:inherit;font-size:12px;cursor:pointer}
+.logout-btn:hover{border-color:#c87e9a;color:#c87e9a}
+</style></head><body>
+<div class="auth-container">
+<div class="card" id="auth-card">
+<h2>Authentication</h2>
+<p class="sub">Simulation of JWT-based login flow</p>
+<div class="tabs">
+<button class="tab active" onclick="setTab('login')">Login</button>
+<button class="tab" onclick="setTab('register')">Register</button>
+</div>
+<div id="form-area"></div>
+</div>
+</div>
+<script>
+var currentTab='login';
+var fakeUsers=[{email:'demo@example.com',password:'password123',name:'Demo User'}];
+function setTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab').forEach(function(t,i){
+    t.className='tab'+(i===(tab==='login'?0:1)?' active':'');
+  });
+  renderForm();
+}
+function renderForm(){
+  var area=document.getElementById('form-area');
+  if(currentTab==='login'){
+    area.innerHTML='<div class="field"><label>Email</label><input type="email" id="email" value="demo@example.com"></div>'+
+      '<div class="field"><label>Password</label><input type="password" id="password" value="password123"></div>'+
+      '<button class="submit-btn" onclick="doLogin()">Login</button><div id="msg"></div>';
+  }else{
+    area.innerHTML='<div class="field"><label>Name</label><input type="text" id="name" placeholder="Your name"></div>'+
+      '<div class="field"><label>Email</label><input type="email" id="email" placeholder="your@email.com"></div>'+
+      '<div class="field"><label>Password</label><input type="password" id="password" placeholder="Min 8 chars"></div>'+
+      '<button class="submit-btn" onclick="doRegister()">Create Account</button><div id="msg"></div>';
+  }
+}
+function makeJWT(payload){
+  var header=btoa(JSON.stringify({alg:'HS256',typ:'JWT'}));
+  var body=btoa(JSON.stringify(payload));
+  var sig=btoa('simulated_signature_'+Date.now());
+  return header+'.'+body+'.'+sig;
+}
+function showMsg(text,type){document.getElementById('msg').innerHTML='<div class="msg '+type+'">'+text+'</div>';}
+function doLogin(){
+  var email=document.getElementById('email').value;
+  var pass=document.getElementById('password').value;
+  var user=fakeUsers.find(function(u){return u.email===email&&u.password===pass;});
+  if(!user){showMsg('Invalid email or password','err');return;}
+  var token=makeJWT({sub:1,email:user.email,name:user.name,exp:Date.now()+3600000});
+  localStorage.setItem('auth_token',token);
+  showDashboard(user,token);
+}
+function doRegister(){
+  var name=document.getElementById('name').value;
+  var email=document.getElementById('email').value;
+  var pass=document.getElementById('password').value;
+  if(!name||!email||!pass){showMsg('All fields required','err');return;}
+  if(pass.length<8){showMsg('Password must be at least 8 characters','err');return;}
+  if(fakeUsers.find(function(u){return u.email===email;})){showMsg('Email already registered','err');return;}
+  fakeUsers.push({email:email,password:pass,name:name});
+  showMsg('Account created! Logging you in...','ok');
+  setTimeout(function(){setTab('login');document.getElementById('email').value=email;},1000);
+}
+function showDashboard(user,token){
+  document.getElementById('auth-card').innerHTML='<h2>Welcome, '+user.name+'</h2>'+
+    '<div class="sub">You are authenticated</div>'+
+    '<div class="dashboard">'+
+    '<p>The JWT below would be sent in the Authorization header<br>of every subsequent API request.</p>'+
+    '<div class="token-display">Authorization: Bearer<br>'+token+'</div>'+
+    '</div>'+
+    '<button class="logout-btn" onclick="logout()" style="margin-top:16px;width:100%">Logout</button>';
+}
+function logout(){localStorage.removeItem('auth_token');document.getElementById('auth-card').innerHTML='';init();}
+function init(){document.getElementById('auth-card').innerHTML='<h2>Authentication</h2><p class="sub">Simulation of JWT-based login flow</p><div class="tabs"><button class="tab active" onclick="setTab(\\'login\\')">Login</button><button class="tab" onclick="setTab(\\'register\\')">Register</button></div><div id="form-area"></div>';renderForm();}
+var savedToken=localStorage.getItem('auth_token');
+if(savedToken){showDashboard({name:'Demo User'},savedToken);}else{renderForm();}
+</script></body></html>`,
           challenges: ["Implement the register endpoint that hashes the password and creates a user", "Implement the login endpoint that verifies the password and returns a JWT", "Add the auth middleware that verifies the JWT and attaches the user to req", "Update the notes endpoints to filter by the authenticated user's ID"]
         },
         quiz: {
@@ -1734,7 +3681,7 @@ Common mistakes: not hashing passwords with bcrypt before storage, not verifying
           correct: 1,
           feedback: "Authentication tells you who the user is. But if your SELECT query for notes doesn't include WHERE user_id = req.user.id, it returns all notes regardless of who's asking. Authentication without data scoping is incomplete. Every query that returns user-owned data must filter by the authenticated user's identifier."
         },
-        checklist: ["Users can register and log in", "Passwords are hashed with bcrypt", "JWTs are generated on login and verified on protected routes", "Notes are filtered by the authenticated user's ID", "Users cannot access other users' notes"]
+        checklist: ["Users can register with email and password — passwords are hashed with bcrypt", "JWTs are generated on login and sent to the client — I can explain each part of the token", "Protected routes verify the JWT in middleware before the handler runs", "Notes are filtered to show only the authenticated user's data", "If I log in as User A, I cannot see User B's notes — I tested this explicitly"]
       },
       {
         id: "5-13",
@@ -1769,7 +3716,7 @@ Monitor it for 24 hours after deployment. Watch the logs. Note what errors appea
           correct: 1,
           feedback: "Cloud platforms restart your server process periodically (for updates, scaling, or failure recovery). An in-memory array is wiped clean on every restart. If notes disappear periodically, the backend is storing them in memory instead of the database. This is exactly why in-memory storage is only acceptable for development — production requires a persistent database."
         },
-        checklist: ["The backend is deployed to Railway or Render", "The database is hosted on Supabase or PlanetScale", "The frontend is deployed to Netlify or Vercel", "All environment variables are set in production", "The app works end-to-end on the live URL with two different accounts"]
+        checklist: ["The backend is deployed to Railway or Render and running correctly", "The database is hosted on a managed service — not running locally", "The frontend is deployed to Netlify or Vercel and connected to the production API", "All environment variables are set in the production platforms — I can verify this without looking at code", "The complete app works end-to-end on the live URLs with two separate user accounts"]
       },
       {
         id: "5-14",
@@ -1799,12 +3746,65 @@ When it's deployed: write a README that explains what the application does, the 
 
 <strong>Still stuck?</strong> Build the most boring version first. Ignore design, ignore edge cases, ignore optimisation. Get one thing working end-to-end: create one record through the API and see it in the database. That first working vertical slice is the hardest part. Everything after it is extending something that already works.`,
         quiz: {
-          question: "You're designing a full stack app where users can create posts and comment on them. What is the minimum schema you need?",
-          options: ["One table: posts (with comments as a JSON column)", "Two tables: users and posts (comments can be added later)", "Three tables: users, posts, and comments (with foreign keys linking them)", "Four tables: users, posts, comments, and a junction table for user-post relationships"],
-          correct: 2,
-          feedback: "Users, posts, and comments are distinct entities with their own attributes and relationships. posts has a user_id foreign key (who created it). comments has both a user_id (who wrote it) and a post_id (which post it's on). A JSON column for comments breaks querying, filtering, and indexing. Start with normalised tables — you can always denormalise for performance later if needed."
+          questions: [
+            {
+              question: "A user signs up. Walk through the complete server-side flow: what happens from POST /api/auth/register to the response?",
+              options: [
+                "Receive credentials → store plain text password → create session → return user object",
+                "Receive credentials → validate input → check email isn't taken → hash password with bcrypt → insert user record → generate JWT → return token",
+                "Receive credentials → forward to auth provider → receive token → store in database → return to client",
+                "Receive credentials → create user immediately → hash password in the background after responding"
+              ],
+              correct: 1,
+              feedback: "Registration flow: validate input (required fields, email format) → check email uniqueness → hash password with bcrypt (never store plain text) → INSERT user record → generate JWT → return { token, user }. Hashing must happen before the database insert, not after. Validation must happen before everything else."
+            },
+            {
+              question: "A database query is slow. What should you do before optimising?",
+              options: [
+                "Add an index on every column — more indexes always improve performance",
+                "Run EXPLAIN ANALYZE before the query to see the execution plan and identify where time is spent",
+                "Rewrite the query in raw SQL even if you're using an ORM",
+                "Increase the connection pool size to handle more queries in parallel"
+              ],
+              correct: 1,
+              feedback: "Profile before optimising. EXPLAIN ANALYZE (in PostgreSQL) shows the execution plan: which indexes are used, where sequential scans happen, where time is spent. You might find the slow part is not what you expected. Adding indexes to the right columns often fixes performance in minutes. Adding random indexes without profiling can actually slow down writes."
+            },
+            {
+              question: "Your Express API is running on localhost:3000 and your React frontend is on localhost:5173. The fetch call fails with a CORS error. Where do you fix this?",
+              options: [
+                "In the React fetch call — add mode: 'no-cors'",
+                "In the browser — whitelist localhost:3000 in security settings",
+                "On the Express server — install the cors package and use app.use(cors({ origin: 'http://localhost:5173' }))",
+                "In package.json — add a proxy field that routes API calls"
+              ],
+              correct: 2,
+              feedback: "CORS is enforced by the browser. The fix is always server-side: the server must allow the frontend's origin in its response headers. The cors package makes this trivial: app.use(cors({ origin: 'http://localhost:5173' })). In production, replace with your deployed frontend URL. mode: 'no-cors' prevents you from reading the response — it's not a fix."
+            },
+            {
+              question: "Your Node.js app works locally but fails to start on Railway with 'address already in use'. What is the most likely cause?",
+              options: [
+                "The app is hardcoded to port 3000 instead of using process.env.PORT",
+                "Railway doesn't support Node.js",
+                "The package.json is missing a start script",
+                "The database connection string is wrong"
+              ],
+              correct: 0,
+              feedback: "Cloud platforms assign a dynamic port via the PORT environment variable. Your app must listen on process.env.PORT. If hardcoded to 3000, the platform routes traffic to a different port — the app starts but is unreachable. Fix: app.listen(process.env.PORT || 3000). This is the most common reason a Node.js app works locally but fails on a cloud platform."
+            },
+            {
+              question: "You're debugging: the frontend makes a POST request but the backend receives an empty req.body. List the debugging steps in order.",
+              options: [
+                "Restart the server → clear the browser cache → try a different browser",
+                "Check that express.json() middleware is registered → verify the fetch call sets Content-Type: application/json → verify JSON.stringify is called on the request body → check Network tab for the actual request sent",
+                "Add more console.log statements → search Stack Overflow → ask a teammate",
+                "Rewrite the endpoint to use GET instead of POST"
+              ],
+              correct: 1,
+              feedback: "Systematic debugging: (1) Is express.json() registered before the route? (2) Does the fetch call include 'Content-Type': 'application/json'? (3) Is JSON.stringify called on the body? (4) Open Network tab → find the request → check the Request Headers and Payload tabs to see exactly what was sent. Each step eliminates a possible cause. Random guessing wastes time."
+            }
+          ]
         },
-        checklist: ["I planned the data model before writing any code", "The application has a working frontend, backend, database, and authentication", "It is deployed and accessible via URL", "The README explains what it does and how I built it", "I'm proud of it and would show it to a potential employer"]
+        checklist: ["I planned the data model before writing any code — tables/collections and relationships", "The application has working frontend, backend, database, and authentication", "It is deployed and accessible via a public URL anyone can visit", "The README explains what the app does, why I built it, and how to run it locally", "I'm proud of it and would show it to a potential employer as evidence of what I can build"]
       }
     ]
   },
@@ -1821,7 +3821,7 @@ When it's deployed: write a README that explains what the application does, the 
       {
         id: "6-1",
         title: "The Fork in the Road",
-        body: `You've reached the point where "web developer" is no longer a precise enough description. The skills you have now \u2014 HTML, CSS, JavaScript, basic backend, databases \u2014 are the foundation. What you build on top of that foundation is your choice. And the choice matters more than most people tell you.\n\nSpecialisation is not about closing doors. It's about going deep enough in one direction to become genuinely valuable. Netflix doesn't hire "web developers." They hire frontend engineers who know React's reconciliation algorithm, or backend engineers who understand distributed consensus, or data engineers who can process petabytes. The title reflects the depth.\n\nThe main paths: <strong>frontend engineering</strong> (UI, browser performance, accessibility, design systems), <strong>backend engineering</strong> (APIs, databases, system design, infrastructure), <strong>mobile development</strong> (iOS, Android, or cross-platform), <strong>DevOps and cloud</strong> (infrastructure, deployment pipelines, reliability), <strong>data engineering</strong> (pipelines, warehousing, analytics), <strong>AI/ML engineering</strong> (model training, inference, deployment), and <strong>security engineering</strong> (application security, penetration testing, threat modelling).\n\nNone of these paths requires you to forget everything else. A backend engineer who understands CSS is more valuable than one who doesn't. A frontend engineer who can write a SQL query is easier to work with. What you're choosing is your primary depth \u2014 the area where you become expert rather than competent.\n\nThe practical advice: pick based on what you've enjoyed most so far, not what pays the most or what someone told you is "in demand." Demand shifts. Enjoyment is what keeps you grinding through the hard parts three years in.`,
+        body: `You've reached the point where "web developer" is no longer a precise enough description. The skills you have now \u2014 HTML, CSS, JavaScript, basic backend, databases \u2014 are the foundation. What you build on top of that foundation is your choice. And the choice matters more than most people tell you.\n\nSpecialisation is not about closing doors. It's about going deep enough in one direction to become genuinely valuable. Netflix doesn't hire "web developers." They hire frontend engineers who know React's reconciliation algorithm, or backend engineers who understand distributed consensus, or data engineers who can process petabytes. The title reflects the depth.\n\nThe main paths: <strong>frontend engineering</strong> (UI, browser performance, accessibility, design systems), <strong>backend engineering</strong> (APIs, databases, system design, infrastructure), <strong>mobile development</strong> (iOS, Android, or cross-platform), <strong>DevOps and cloud</strong> (infrastructure, deployment pipelines, reliability), <strong>data engineering</strong> (pipelines, warehousing, analytics), <strong>AI/ML engineering</strong> (model training, inference, deployment), and <strong>security engineering</strong> (application security, penetration testing, threat modelling).\n\nNone of these paths requires you to forget everything else. A backend engineer who understands CSS is more valuable than one who doesn't. A frontend engineer who can write a SQL query is easier to work with. What you're choosing is your primary depth \u2014 the area where you become expert rather than competent.\n\nThe practical advice: pick based on what you've enjoyed most so far, not what pays the most or what someone told you is "in demand." Demand shifts. Enjoyment is what keeps you grinding through the hard parts three years in.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — think back over your projects. Which parts did you find yourself wanting to improve or extend beyond what was required? That pull is real data about where your interest lies.</div>`,
         callout: {
           type: "default",
           label: "Depth vs Breadth",
@@ -1839,7 +3839,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Where you voluntarily spend extra time \u2014 beyond what's required \u2014 is one of the most reliable signals of genuine interest. Interest drives the sustained effort that turns competence into expertise. A recruiter can tell you what's in demand this year; only you can tell you what you'll still enjoy working on in five years."
         },
-        checklist: ["I understand the main specialisation paths and what each involves", "I've honestly assessed which parts of my past projects I enjoyed most", "I've chosen a primary direction to go deep on for this floor", "I understand that specialisation doesn't mean ignoring everything else", "I know that I can change direction later \u2014 this choice is not permanent"]
+        checklist: ["I can describe the main specialisation paths in two sentences each without looking anything up", "I can honestly name which parts of my past projects I found most engaging — not most impressive", "I've chosen a primary direction to focus on for this floor and can explain why", "I understand that specialisation means going deeper, not ignoring everything else", "I know I can change direction — this is a direction to explore, not a permanent identity"]
       },
       {
         id: "6-2",
@@ -1862,7 +3862,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 2,
           feedback: "Optimisation without measurement is guesswork. React DevTools Profiler and the browser's Performance tab show exactly which renders are expensive and how much time they take. React.memo is only useful if the component is actually expensive \u2014 wrapping cheap components in memo adds overhead without benefit. Measure first, then decide whether and how to optimise."
         },
-        checklist: ["I understand what React components are and how they compose", "I understand state and when to lift state up vs keep it local", "I know how to use the browser's Network tab and Lighthouse", "I understand the basics of web accessibility (ARIA, semantic HTML, keyboard navigation)", "I've built a multi-component React application with shared state"]
+        checklist: ["I understand what React components are and can explain the difference between props and state", "I can explain when to lift state up and when to keep it local", "I've used the Network tab and Lighthouse to identify a performance bottleneck", "I understand semantic HTML and ARIA well enough to make a page accessible to a screen reader", "I've built a React application with multiple components sharing state"]
       },
       {
         id: "6-3",
@@ -1885,7 +3885,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "This is the N+1 query problem. 1 query fetches the posts, then N queries (one per post) fetch the author. With 500 posts that's 501 database round trips. The fix is eager loading: one JOIN query that fetches posts and their authors together. Every ORM has a way to do this. Learning to recognise this pattern saves significant production debugging time."
         },
-        checklist: ["I understand RESTful API design principles and common conventions", "I know the difference between relational and non-relational databases and when to use each", "I understand password hashing, JWT authentication, and basic API security", "I can identify and fix the N+1 query problem", "I've built a backend API with authentication, a database, and proper error handling"]
+        checklist: ["I can design RESTful API endpoints for a new feature before writing any code", "I can explain the difference between relational and document databases and choose correctly for a scenario", "I can explain password hashing, JWT auth, and three common API security vulnerabilities", "I can identify the N+1 query problem in code I didn't write and explain the fix", "I've built a backend API with auth, a real database, and proper error handling"]
       },
       {
         id: "6-4",
@@ -1908,7 +3908,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Positioning is context-dependent. A startup with 6 engineers needs people who can contribute across the stack. 'Intermediate Node.js' is enough to be unblocked on backend work. Calling yourself a frontend specialist in that context undersells your utility. In a larger company with dedicated teams, the same developer might more accurately position as a frontend engineer."
         },
-        checklist: ["I understand the real difference between full stack and specialised roles", "I know which context I'm currently optimising for (startup vs larger org)", "I've built at least one complete feature touching both frontend and backend", "I can honestly assess where my primary depth lies", "I understand that the label is a positioning choice, not a permanent identity"]
+        checklist: ["I can explain the real trade-offs between full stack and specialised roles — not just the labels", "I know which context I'm optimising for right now and can articulate why", "I've built at least one complete feature that touched both frontend and backend", "I can honestly assess where my primary depth lies today", "I understand that 'full stack' is a positioning choice relative to team context, not a fixed definition"]
       },
       {
         id: "6-5",
@@ -1931,7 +3931,71 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "React Native has the lowest barrier for an existing React developer. The component model, state management, and JavaScript are all transferable. The mobile-specific concepts (navigation, gestures, native APIs) are learnable incrementally. Starting with native Swift and Kotlin requires learning two new languages and two new ecosystems simultaneously \u2014 a steeper ramp for the same outcome."
         },
-        checklist: ["I understand the trade-offs between native and cross-platform mobile development", "I've chosen a primary mobile path and understand why", "I've built at least one mobile app that runs on a real device", "I understand the App Store / Play Store distribution process", "I know the key mobile-specific constraints (touch targets, network variability, OS fragmentation)"]
+        checklist: ["I can explain the trade-offs between native (Swift/Kotlin) and cross-platform (React Native/Flutter) mobile development", "I've chosen a primary mobile path and can explain my reasoning", "I've built at least one mobile app that runs on a real physical device", "I understand the App Store / Play Store submission process at a conceptual level", "I know the key mobile constraints — touch targets, varied network quality, OS fragmentation — and how they affect design decisions"]
+      },
+      {
+        id: "6-phase1-review",
+        title: "Phase 1 Review — Specialisation Paths",
+        body: `Five questions covering the specialisation fork — frontend, backend, full stack, and mobile — and how to choose a direction.`,
+        quiz: {
+          questions: [
+            {
+              question: "What is the primary distinction between frontend and backend engineering?",
+              options: [
+                "Frontend engineers earn less than backend engineers",
+                "Frontend is what users see and interact with (browser/client); backend is the server, APIs, databases, and business logic users don't see",
+                "Frontend uses JavaScript; backend uses Python — they never overlap",
+                "Frontend development requires design skills; backend does not require any design knowledge"
+              ],
+              correct: 1,
+              feedback: "Frontend: everything the user interacts with — browser-rendered HTML, CSS, JavaScript, state management, performance, accessibility. Backend: server logic, APIs, databases, authentication, security, data processing. The distinction is where the code runs (client vs server) and what problems it solves (UI vs data/logic)."
+            },
+            {
+              question: "A company needs to build a new iOS and Android app. Which specialisation is most relevant?",
+              options: [
+                "Backend engineering — mobile apps just need good APIs",
+                "Frontend engineering — the skills transfer directly",
+                "Mobile development — React Native, Flutter, Swift, or Kotlin depending on requirements",
+                "DevOps — mobile apps require special deployment pipelines"
+              ],
+              correct: 2,
+              feedback: "Mobile development is its own specialisation: React Native and Flutter for cross-platform, Swift (iOS) and Kotlin (Android) for native. Frontend skills (components, state, events) transfer conceptually but the APIs, tooling, and deployment are completely different — App Store submissions, device testing, performance on constrained hardware."
+            },
+            {
+              question: "What does 'full stack' mean in practice for a developer?",
+              options: [
+                "A full stack developer has mastered both frontend and backend and can work at the same level as specialists in both",
+                "A full stack developer can work across both frontend and backend — useful for smaller teams, startups, and building complete features solo, but typically at less depth than specialists",
+                "Full stack is a job title only — it doesn't describe a real skill set",
+                "Full stack means working with all programming languages across all platforms"
+              ],
+              correct: 1,
+              feedback: "Full stack means breadth across the entire application — frontend, backend, databases, deployment. Valuable at startups and for solo projects where one person needs to build everything. At scale, specialists go deeper. The trade-off is real: full stack developers are versatile but typically less deep than dedicated specialists. Many developers start full stack and specialise over time."
+            },
+            {
+              question: "You love making interfaces feel fast, smooth, and delightful. You care deeply about what the user sees and how interactions feel. Which specialisation fits best?",
+              options: [
+                "Backend engineering — performance optimisation is primarily a server concern",
+                "Data engineering — user interfaces are driven by data",
+                "Frontend engineering — it's the specialisation focused entirely on user-facing experiences, performance, and interaction design",
+                "DevOps — page load speed is an infrastructure problem"
+              ],
+              correct: 2,
+              feedback: "Frontend engineering owns the user experience layer: rendering performance, animation, state management, accessibility, responsive design, and the feel of every interaction. If you're drawn to how interfaces look, feel, and perform — that's frontend. Backend solves different problems: data integrity, API design, concurrency, security."
+            },
+            {
+              question: "How should you decide which specialisation to pursue at this stage of your career?",
+              options: [
+                "Choose the one with the highest average salary",
+                "Build in all areas, notice which problems you find genuinely interesting rather than just tolerable, and specialise in that direction",
+                "Ask a hiring manager which specialisation has the most open roles",
+                "Choose the one that took you the least time to learn so far"
+              ],
+              correct: 1,
+              feedback: "Specialisation follows interest and aptitude — both discovered through exposure, not chosen abstractly. Build full-stack features. Notice: do you find yourself wanting to improve the UI, or do you find yourself more interested in how data flows through the system? The specialisation that fits is the one where the problems feel interesting rather than just tasks to complete."
+            }
+          ]
+        }
       },
       {
         id: "6-6",
@@ -1950,7 +4014,91 @@ When it's deployed: write a README that explains what the application does, the 
         hint: `DevOps has the highest density of acronyms and tooling in any engineering discipline. The tools are not the job \u2014 they're how the job gets done. The underlying problems (reliability, deployability, observability) existed before any of these tools.\n\n<strong>Best first project:</strong> Take an application you've already built and deploy it properly: containerise it with Docker, run it on a cloud VM, put a reverse proxy (Nginx) in front of it, and add a GitHub Actions workflow that redeploys on every push to main. That end-to-end experience teaches more than any course.\n\n<strong>Learn to read logs:</strong> Every production system generates logs. Learning to grep, tail, and query logs \u2014 in CloudWatch, Datadog, or just a terminal \u2014 is how you diagnose problems after they've already happened. This is one of the highest-leverage DevOps skills.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#7eb8c8;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.pipeline{display:flex;align-items:center;gap:4px;margin-bottom:24px;overflow-x:auto;padding-bottom:8px}
+.stage{background:#111;border:1px solid #222;border-radius:8px;padding:14px 16px;min-width:120px;flex-shrink:0;text-align:center;cursor:pointer;transition:all 0.2s}
+.stage:hover{border-color:#7eb8c8}
+.stage.active{border-color:#7eb8c8;background:#0a1a2a}
+.stage.ok{border-color:#2a4a2a;background:#0a1a0a}
+.stage.fail{border-color:#4a2a2a;background:#1a0a0a}
+.stage-icon{font-size:20px;margin-bottom:6px}
+.stage-name{color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.stage-status{font-size:10px;margin-top:4px}
+.stage.ok .stage-status{color:#6dbf6d}
+.stage.fail .stage-status{color:#ff6b6b}
+.arrow{color:#333;font-size:18px;flex-shrink:0}
+.detail{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:20px;margin-bottom:16px}
+.detail h3{color:#c8a96e;font-size:13px;margin-bottom:12px}
+.detail p{color:#aaa;line-height:1.7;font-size:12px;margin-bottom:8px}
+.detail code{color:#c8a96e;background:#0a0a0a;padding:2px 6px;border-radius:3px;font-size:11px}
+.controls{display:flex;gap:10px}
+button{background:#7eb8c8;color:#000;border:none;border-radius:6px;padding:8px 18px;font-family:inherit;font-size:12px;cursor:pointer}
+button:hover{background:#a8d8e8}
+button.secondary{background:#333;color:#fff;border:1px solid #555}
+button.secondary:hover{border-color:#7eb8c8;color:#7eb8c8}
+</style></head><body>
+<h2>CI/CD Pipeline</h2>
+<p class="sub">Click a stage to learn about it. Press Run Pipeline to simulate a deployment.</p>
+<div class="pipeline" id="pipeline"></div>
+<div class="controls" style="margin-bottom:16px">
+<button onclick="runPipeline()">▶ Run Pipeline</button>
+<button class="secondary" onclick="showFail()">Simulate Failure</button>
+</div>
+<div class="detail" id="detail">
+<h3>What is CI/CD?</h3>
+<p>Continuous Integration (CI) automatically builds and tests every code change. Continuous Deployment (CD) automatically deploys passing builds to production.</p>
+<p>The pipeline below runs on every push to main. If any stage fails, deployment stops and you get an alert. This is how professional teams ship code multiple times per day safely.</p>
+</div>
+<script>
+var stages=[
+  {icon:'📤',name:'Trigger',desc:'A git push to main triggers the pipeline via a webhook. GitHub sends a POST request to your CI server (GitHub Actions, CircleCI, Jenkins) with information about the commit.',yml:'on:\\n  push:\\n    branches: [main]'},
+  {icon:'📦',name:'Install',desc:'Dependencies are installed fresh in a clean environment: npm ci (faster and stricter than npm install — uses package-lock.json exactly). This ensures the build is reproducible.',yml:'- run: npm ci'},
+  {icon:'🔍',name:'Lint',desc:'Code is checked for style errors and potential bugs. ESLint catches issues before they reach review. If lint fails, the pipeline stops here — saving wasted test and deploy time.',yml:'- run: npm run lint'},
+  {icon:'🧪',name:'Test',desc:'All automated tests run. Unit tests, integration tests, snapshot tests. If any test fails, the pipeline stops. No failures reach production.',yml:'- run: npm test -- --coverage'},
+  {icon:'🏗️',name:'Build',desc:'The production build is created: TypeScript compiled, code minified, assets optimised. The output is a deployable artifact — the exact same build that will run in production.',yml:'- run: npm run build'},
+  {icon:'🔒',name:'Security',desc:'Dependencies are scanned for known vulnerabilities (npm audit). Container images are scanned if used. SAST (Static Application Security Testing) checks the code for security issues.',yml:'- run: npm audit --audit-level=high'},
+  {icon:'🚀',name:'Deploy',desc:'The build artifact is deployed to the target environment. Blue-green or rolling deployments mean zero downtime. Health checks confirm the new version is serving traffic before old instances are removed.',yml:'- run: railway deploy'},
+];
+var currentStage=-1;
+var pipelineEl=document.getElementById('pipeline');
+var detailEl=document.getElementById('detail');
+function renderPipeline(failAt){
+  pipelineEl.innerHTML=stages.map(function(s,i){
+    var cls='stage';
+    if(failAt!=null){if(i<failAt)cls+=' ok';else if(i===failAt)cls+=' fail';}
+    else if(currentStage>=0){if(i<currentStage)cls+=' ok';else if(i===currentStage)cls+=' active';}
+    var status='';
+    if(failAt!=null){if(i<failAt)status='<div class="stage-status">✓ passed</div>';else if(i===failAt)status='<div class="stage-status">✗ failed</div>';}
+    return '<div class="'+cls+'" onclick="showStage('+i+')">'+
+      '<div class="stage-icon">'+s.icon+'</div>'+
+      '<div class="stage-name">'+s.name+'</div>'+status+
+      '</div>'+(i<stages.length-1?'<div class="arrow">→</div>':'');
+  }).join('');
+}
+function showStage(i){
+  var s=stages[i];
+  detailEl.innerHTML='<h3>'+s.icon+' '+s.name+'</h3><p>'+s.desc+'</p>'+
+    '<p style="margin-top:12px;color:#555;font-size:10px;letter-spacing:1px">YAML CONFIG</p>'+
+    '<p><code>'+s.yml+'</code></p>';
+}
+function runPipeline(){
+  currentStage=0;renderPipeline(null);
+  detailEl.innerHTML='<h3>Pipeline running...</h3><p>Stages complete in green. Click any stage for details.</p>';
+  function next(){currentStage++;renderPipeline(null);if(currentStage<stages.length)setTimeout(next,700);else{currentStage=-1;detailEl.innerHTML='<h3>✓ Deployed to production</h3><p>All '+stages.length+' stages passed. The new version is live.</p>';}}
+  setTimeout(next,700);
+}
+function showFail(){
+  var failAt=2+Math.floor(Math.random()*3);
+  renderPipeline(failAt);
+  detailEl.innerHTML='<h3>✗ Pipeline failed at '+stages[failAt].name+'</h3><p>Deployment was stopped. The previous version remains in production. Fix the failing stage and push again to retry.</p>';
+}
+renderPipeline(null);
+</script></body></html>`,
           challenges: ["Add a step that randomly fails with a 30% chance and shows an error message in red", "Add a timer that shows total pipeline duration when complete", "Add a step counter showing '3 of 7 steps complete'", "Add a cancel button that stops the pipeline mid-run"]
         },
         quiz: {
@@ -1959,7 +4107,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "The problem is not SSH itself \u2014 it's the manual, human-dependent process. Someone can run the wrong branch, skip a migration, forget to restart a service, or deploy at the wrong time. CI/CD pipelines are automated, consistent, run only when tests pass, and produce an audit trail of every deployment. The reliability difference between the two approaches is enormous at scale."
         },
-        checklist: ["I understand what DevOps means and the problems it solves", "I can containerise an application with Docker", "I've deployed something to a cloud platform (AWS, GCP, or Azure)", "I understand what a CI/CD pipeline does and have configured one", "I know what Infrastructure as Code is and why it matters"]
+        checklist: ["I can explain what DevOps means and the core problems it exists to solve", "I can containerise an application with Docker and explain what a container is vs a virtual machine", "I've deployed something to a cloud platform and configured at least one infrastructure resource", "I can describe what a CI/CD pipeline does at each stage — from code push to production deploy", "I can explain what Infrastructure as Code means and why it matters for reliability"]
       },
       {
         id: "6-7",
@@ -1982,7 +4130,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Retroactive changes to historical data almost always indicate a pipeline overwrite problem. Pipelines that delete and recreate data on each run will reflect late-arriving data or corrected source records in historical periods. Whether that's correct depends on business requirements. Slowly Changing Dimensions (SCD) and immutable event logs are the data engineering patterns that control how historical data is handled."
         },
-        checklist: ["I understand the ETL pattern and why it exists", "I can write complex SQL including window functions and CTEs", "I understand what a data warehouse is and how it differs from a transactional database", "I know what a data pipeline orchestrator does", "I've built an end-to-end pipeline that extracts, transforms, and loads data"]
+        checklist: ["I can explain the ETL pattern and give a real example of when each step applies", "I can write a SQL query with window functions and explain what they do", "I can explain what a data warehouse is and how it differs from a transactional database", "I understand what a pipeline orchestrator does — not just the name, but the problem it solves", "I've built a pipeline that extracts data from a source, transforms it, and loads it to a destination"]
       },
       {
         id: "6-8",
@@ -2005,7 +4153,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "When model performance degrades on a subset of real-world inputs that weren't well represented in testing, this is a distribution mismatch \u2014 sometimes called model drift when it's the production environment shifting, or evaluation gap when the test suite didn't cover the real distribution. The correct response is to analyse failures, characterise the failing input types, add them to your evaluation suite, and diagnose whether the model, the prompt, or the retrieval step is the weak point."
         },
-        checklist: ["I understand the difference between AI research and AI engineering", "I can build a RAG pipeline using embeddings and a vector database", "I know what model drift is and how to monitor for it", "I've built an application using an LLM API with proper error handling and retries", "I understand why evaluations (evals) are essential before deploying AI features"]
+        checklist: ["I can explain the difference between AI research and AI engineering in one sentence each", "I can build a RAG pipeline using embeddings and a vector database — I've done it, not just read about it", "I can explain what model drift is and describe one approach to monitoring for it", "I've built an application using an LLM API with proper error handling and retry logic", "I understand why evaluations are essential before deploying AI features to production"]
       },
       {
         id: "6-9",
@@ -2028,7 +4176,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "This is SQL injection. The input \u2018 OR 1=1 -- breaks out of the quoted string context in SQL, adding a condition that is always true (OR 1=1), and comments out the rest of the query with --. The result is typically returning all rows. Parameterised queries solve this by separating SQL code from data \u2014 the database treats the parameter as literal data regardless of its contents."
         },
-        checklist: ["I understand the OWASP Top 10 and can identify each vulnerability class", "I always use parameterised queries and never build SQL by string concatenation", "I understand what XSS is and how output encoding prevents it", "I've done at least one threat model exercise on a system I built", "I understand the principle of least privilege and apply it to access control"]
+        checklist: ["I can explain five of the OWASP Top 10 vulnerabilities without looking them up", "I use parameterised queries for every database operation — no exceptions, no string concatenation", "I can explain output encoding and demonstrate how it prevents XSS in a template", "I've completed at least one threat model exercise on a system I built", "I apply least privilege in my access control design — roles only get the permissions they need"]
       },
       {
         id: "6-10",
@@ -2051,7 +4199,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Quality, originality, and deployability are what make a portfolio compelling. Tutorial clones are the most common portfolio project; they don't differentiate. Deployed original projects require independent decision-making, problem-solving, and the engineering discipline to finish \u2014 which is what hiring managers are trying to assess. Three strong projects is a better signal than eight weak ones."
         },
-        checklist: ["I have at least 2 original deployed projects (not tutorial clones)", "Each project has a clear README explaining what it does and how it was built", "My commit history tells a story of iterative development", "I've reviewed my own code as if I were the hiring reviewer", "My portfolio links all work and load within 5 seconds"]
+        checklist: ["I have at least two original deployed projects — not tutorial clones — with live URLs", "Each project has a README that explains what it does, why it exists, and how to run it", "My commit history shows iterative work — not one massive initial commit", "I've reviewed my portfolio as if I were the hiring manager and made at least three improvements", "Every link in my portfolio works and loads within five seconds on a normal connection"]
       },
       {
         id: "6-11",
@@ -2074,7 +4222,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 2,
           feedback: "The first two minutes of an algorithm interview set the tone. Restating the problem confirms you understood it correctly. Clarifying questions surface constraints that affect the solution (array size? value range? sorted?). Describing your thinking before coding shows process and gives the interviewer a chance to redirect if you're heading somewhere wrong. Silent coding or immediate coding without understanding are both antipatterns."
         },
-        checklist: ["I understand the core data structures and their time complexities", "I can solve array, hash map, and tree problems without looking up solutions", "I've practised explaining my reasoning out loud while solving problems", "I have 6-8 STAR stories ready for behavioural interviews", "I've read at least 5 system design case studies from real engineering blogs"]
+        checklist: ["I can solve array, hash map, and basic tree problems — I've practised, not just read about them", "I can explain my reasoning out loud while solving a problem — I've practised this explicitly", "I have 6-8 STAR stories ready for behavioural questions, each tied to a real project or experience", "I've read at least five system design case studies from real engineering blogs", "I've done at least two mock technical interviews — with a timer and someone watching"]
       },
       {
         id: "6-12",
@@ -2097,7 +4245,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "The belief that open source requires expert-level skill is the single biggest barrier to contribution and it is false. Documentation is frequently outdated, tests are frequently missing, and bug reports often lack reproducible examples. All of these are valuable contributions that projects depend on. The skill level required for a 'fix a typo in the docs' PR is zero. The learning that comes from navigating the codebase to find the typo and submitting a clean PR is significant."
         },
-        checklist: ["I've found at least one open source project I use that has open 'good first issue' issues", "I've read the contributing guide for a project I want to contribute to", "I've submitted at least one PR to an open source project", "I understand that documentation and test contributions are valuable", "I've read the review feedback on merged PRs in a target project to understand the code standards"]
+        checklist: ["I've found a project I use that has 'good first issue' labels — and I've read its contributing guide", "I understand the project's code standards well enough to write code that fits", "I've submitted at least one PR to an open source project — even if it's docs or tests", "I've read review feedback on merged PRs in the target project to understand what good looks like", "I can explain why documentation and test contributions are valuable — not consolation prizes"]
       },
       {
         id: "6-13",
@@ -2120,7 +4268,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Expertise is not required for public documentation of a learning process. The developer who documents their path through confusion \u2014 including corrections and updates \u2014 provides a service to every developer behind them on the same path. The fear of being wrong is better addressed by being explicit about your current understanding and inviting correction, not by staying silent."
         },
-        checklist: ["I've published at least one piece of public writing about something I built or learned", "I have a consistent place to document my work (blog, Twitter, GitHub README)", "I've written at least one post that documents a problem I solved in detail", "I understand that consistency matters more than audience size", "I've linked my public writing from my portfolio and GitHub profile"]
+        checklist: ["I've published at least one piece of public writing about something I built or learned", "I have a consistent, maintained place to document my work", "At least one post documents a specific problem I solved — not just 'I learned X'", "I understand that showing up consistently for three months matters more than one viral post", "My public writing is linked from my portfolio and GitHub profile"]
       },
       {
         id: "6-14",
@@ -2138,12 +4286,65 @@ When it's deployed: write a README that explains what the application does, the 
         },
         hint: `The pressure of getting any offer can make you accept the wrong role. Don't. If you get one offer, you'll probably get two. Evaluate each one against what you actually want to learn and who you want to work with.\n\n<strong>Red flags in interviews:</strong> Defensive responses to questions about tech stack, inability to describe how the team communicates, engineers who seem bored or disengaged during the interview, or a hiring process that feels disorganised. These reflect the culture you'd be joining.\n\n<strong>Green flags:</strong> Engineers who are genuinely enthusiastic about the technical problems they're solving, a clear answer to "what does good look like on this team," evidence of psychological safety (people admit mistakes and discuss them openly), and a hiring process that respects your time.`,
         quiz: {
-          question: "A developer receives two job offers: a well-known large company with a vague onboarding description and a specialised role on a small project, and a smaller company with a structured mentorship program, active code review culture, and a senior engineer who will directly mentor them. Which should they prioritise if their goal is to grow quickly?",
-          options: ["The large company \u2014 brand recognition opens more doors in the long run", "The smaller company with structured mentorship and code review \u2014 growth comes from feedback and challenge, not brand", "They are equivalent \u2014 both will provide similar growth trajectories", "The large company \u2014 the stability reduces risk early in a career"],
-          correct: 1,
-          feedback: "Growth early in a career comes from structured feedback (code review), mentorship from more experienced engineers, and being challenged. A company brand opens doors at the hiring stage; what you actually learned and built opens doors once you're inside. A junior engineer who receives rigorous code review and direct mentorship for two years grows faster than one who ships code in isolation at a prestigious company."
+          questions: [
+            {
+              question: "You're applying for a frontend role. Your portfolio has three projects but they all look similar — dark-themed card layouts. What does this signal to a hiring manager and what would make it stronger?",
+              options: [
+                "Nothing — consistent style signals a strong personal brand",
+                "It signals limited range. A stronger portfolio shows different domains (not just the same app type), different UI patterns, and at least one project solving a real problem — not just a tutorial clone",
+                "Three projects is too few — add 10 more projects of any type",
+                "Dark themes are professional and preferred by most companies"
+              ],
+              correct: 1,
+              feedback: "Portfolios with identical-looking projects suggest the developer only knows one pattern. Hiring managers want to see range: different problem types, different UI approaches, at least one project that demonstrates problem-solving rather than feature implementation. One genuinely useful project that solves a real problem outweighs five tutorial recreations."
+            },
+            {
+              question: "An interviewer asks: 'Tell me about a technical challenge you faced and how you solved it.' You don't have a prepared story. How should you approach this?",
+              options: [
+                "Say you haven't faced any real technical challenges yet",
+                "Make up a plausible story — interviewers can't verify it",
+                "Think of a specific debugging session or architectural decision from a real project. Describe the problem, what you tried, what you learned, and how you'd approach it differently now",
+                "Describe a challenge from the curriculum you're following"
+              ],
+              correct: 2,
+              feedback: "Behavioural questions are answered with real specifics. STAR format: Situation (what was the context), Task (what needed solving), Action (what you specifically did), Result (what happened). The challenge doesn't need to be impressive — it needs to be real. A genuine story about debugging a CORS error with clear problem-solving shows more than a vague story about building a complex feature."
+            },
+            {
+              question: "What makes a GitHub profile strong from a hiring perspective?",
+              options: [
+                "The number of repositories — more is always better",
+                "Pinned repositories with descriptive READMEs, regular commit history, and real projects that are deployed and accessible — not just tutorials",
+                "A high number of stars on repositories",
+                "Following many other developers and organisations"
+              ],
+              correct: 1,
+              feedback: "A strong GitHub profile: pinned repos with README that explains what the project does, why it exists, and how to run it; regular commit history that shows consistent work; real projects (not just tutorial clones); and ideally a live deployed version. Stars reflect popularity, not your skill. Number of repos matters less than quality of the pinned ones."
+            },
+            {
+              question: "How should you approach contributing to open source as a junior developer?",
+              options: [
+                "Start by fixing a critical performance bug in a major framework — show ambition",
+                "Clone popular repos and submit major feature additions without prior discussion",
+                "Start with documentation, tests, and good-first-issue bugs. Read contributing guidelines. Comment on issues before submitting PRs. Follow the existing code style",
+                "Wait until you're a senior developer before attempting open source contributions"
+              ],
+              correct: 2,
+              feedback: "Open source contribution is a skill in itself. Start small: docs improvements, typo fixes, test additions, good-first-issue bugs. Read CONTRIBUTING.md first. Comment on the issue before submitting a PR — maintainers need to confirm the approach before you invest time. Follow the existing code style. A small accepted contribution demonstrates you can work in a real codebase and collaborate."
+            },
+            {
+              question: "You're deciding between a junior role at a startup (full ownership, no senior mentorship) and a graduate programme at a larger company (structured mentorship, less ownership). Which factors should drive the decision?",
+              options: [
+                "Always choose the startup — you'll learn faster with more ownership",
+                "Always choose the programme — structured mentorship is essential for junior developers",
+                "Consider your learning style, the quality of the specific people you'll work with, your financial runway, and which problems you'd be working on — neither is universally better",
+                "Choose based on salary — the highest-paying role will provide the best resources"
+              ],
+              correct: 2,
+              feedback: "Both paths can produce excellent engineers. The startup gives autonomy and breadth but sink-or-swim risk without senior guidance. The programme gives mentorship and structure but potentially slower autonomy growth. The deciding factors: (1) the actual people you'd work with, (2) the problems you'd solve, (3) your financial situation (startups often pay less early), (4) your learning style. Neither path is universally correct."
+            }
+          ]
         },
-        checklist: ["I understand the real trade-offs between startups and large companies", "I've identified what I most want to learn in my first role", "I know what questions to ask to evaluate team culture in an interview", "I understand salary research tools (Levels.fyi, Glassdoor) and will use them before negotiating", "I've practised asking clarifying questions about mentorship, code review, and team culture"]
+        checklist: ["I can articulate the real trade-offs between startup and larger-company roles — not just the clichés", "I've identified what I most want from my first role: learning, ownership, mentorship, or domain", "I know what questions to ask in an interview to assess team culture and code quality", "I've researched salary benchmarks using Levels.fyi or similar before any offer conversations", "I've practised asking about mentorship, code review process, and on-call expectations in mock conversations"]
       }
     ]
   },
@@ -2178,7 +4379,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Architecture decisions have context that a new joiner doesn't have yet: historical constraints, deliberate trade-offs, failed alternatives, team capability at the time. Critiquing before understanding that context creates an impression of poor judgment even if the critique is technically valid. Describing what you observe, asking about the reasoning, and reserving judgment while you build context is the signal of a high-quality engineer."
         },
-        checklist: ["I know who to go to with questions about different parts of the system", "I can run the project locally, run the tests, and submit a PR", "I've traced a complete user request through the system from frontend to database", "I've written down things I don't understand yet as a learning list", "I've scheduled regular 1:1 time with my onboarding buddy or manager"]
+        checklist: ["I understand that the first week is for learning and building context — not proving value through output", "I can run the project locally, run the tests, and trace a request through the system", "I've documented things I don't understand yet — as a list to work through, not something to hide", "I ask questions after genuinely trying to find the answer myself first", "I've scheduled regular 1:1 time with my manager or onboarding buddy"]
       },
       {
         id: "7-2",
@@ -2201,7 +4402,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Tests are the most reliable documentation for specific behaviour. Finding the test for what you need to change tells you exactly what the current expected behaviour is (in verifiable, executable form), shows you where the code under test lives, and gives you a target to update when you make your change. Reading the entire module is almost always too broad a scope for a focused change."
         },
-        checklist: ["I can navigate a large codebase using IDE features (go to definition, find references)", "I use git blame and git log to understand why code is the way it is", "I read tests before reading implementation when exploring new code", "I can trace a complete user request through a codebase I haven't seen before", "I identify what I don't need to understand before reading broadly"]
+        checklist: ["I start reading unfamiliar code from where it's called — not from the implementation", "I can trace a request through a large codebase from HTTP handler to database and back", "I use the debugger and logging to understand code behaviour — not just reading it", "I leave code I read in a better state than I found it: a comment, a renamed variable, a removed dead path", "I can identify the architectural pattern of a codebase without someone explaining it"]
       },
       {
         id: "7-3",
@@ -2224,12 +4425,12 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 2,
           feedback: "A code review comment is the beginning of a conversation, not a directive. The author has context the reviewer may lack (current scale, benchmarks, business requirements). The right response is to provide that context, explain the trade-off, and engage with the specific concern. If the reviewer has a scenario in mind where performance would be insufficient, that's worth knowing. If they don't, the benchmarks resolve the concern."
         },
-        checklist: ["I can give code review that distinguishes blocking issues from suggestions from preferences", "I ask questions in code review rather than issuing directives", "I respond to every review comment, even if just to acknowledge it", "I review PRs within 24 hours of being requested", "I've had at least one code review conversation that resulted in a better solution than either party started with"]
+        checklist: ["I give code review feedback that is specific, explains the why, and offers a concrete alternative", "I distinguish between required changes (the code has a bug or violates a constraint) and suggestions (I'd prefer this approach)", "When I disagree with review feedback, I explain my reasoning professionally — I don't silently comply or silently ignore", "I treat code reviews as conversations, not verdicts", "I've reviewed junior code and given feedback that helped them grow — not just found errors"]
       },
       {
         id: "7-4",
         title: "Technical Debt and Refactoring",
-        body: `Technical debt is a deliberate or accidental trade-off: you write code that is faster to ship now and harder to maintain later. Ward Cunningham coined the metaphor. The "debt" is real \u2014 it accrues interest in the form of slower feature development, more frequent bugs, and higher cognitive load for every engineer who touches the affected code. Like financial debt, it's not inherently bad. Shipping fast with some debt to validate a product idea is a reasonable decision. Never paying it down is how systems become unmaintainable.\n\nThe distinction between necessary and unnecessary debt matters. Necessary debt: you shipped a feature quickly before a deadline because validating it was more important than the quality of the implementation. You knew it was debt when you made the decision. Unnecessary debt: code that is poorly structured because of lack of care, skills, or time \u2014 not a deliberate trade-off but accumulated neglect.\n\nRefactoring is the process of restructuring existing code without changing its observable behaviour. The refactoring is safe if you have good test coverage \u2014 you can change the structure and verify the behaviour hasn't changed by running the tests. The refactoring is risky without tests, because you can't verify equivalence. Before refactoring untested code, write tests for the current behaviour first. Then refactor. Then verify the tests still pass.\n\nThe Boy Scout Rule: leave the code better than you found it. Not a massive refactor on every PR \u2014 small, consistent improvements. Rename an ambiguous variable. Extract a readable function from a 60-line block. Add a comment explaining why, not what. These accumulate into healthier codebases over years.\n\nKnowing when not to refactor is as important as knowing how. Refactoring code that is rarely touched, that works correctly, and that is clearly understood is risk for no benefit. Refactoring code you're actively working on \u2014 that you need to extend and have to understand thoroughly anyway \u2014 is when the cost-benefit works. The decision is always: does the risk of change outweigh the benefit of clarity?`,
+        body: `Technical debt is a deliberate or accidental trade-off: you write code that is faster to ship now and harder to maintain later. Ward Cunningham coined the metaphor. The "debt" is real \u2014 it accrues interest in the form of slower feature development, more frequent bugs, and higher cognitive load for every engineer who touches the affected code. Like financial debt, it's not inherently bad. Shipping fast with some debt to validate a product idea is a reasonable decision. Never paying it down is how systems become unmaintainable.\n\nThe distinction between necessary and unnecessary debt matters. Necessary debt: you shipped a feature quickly before a deadline because validating it was more important than the quality of the implementation. You knew it was debt when you made the decision. Unnecessary debt: code that is poorly structured because of lack of care, skills, or time \u2014 not a deliberate trade-off but accumulated neglect.\n\nRefactoring is the process of restructuring existing code without changing its observable behaviour. The refactoring is safe if you have good test coverage \u2014 you can change the structure and verify the behaviour hasn't changed by running the tests. The refactoring is risky without tests, because you can't verify equivalence. Before refactoring untested code, write tests for the current behaviour first. Then refactor. Then verify the tests still pass.\n\nThe Boy Scout Rule: leave the code better than you found it. Not a massive refactor on every PR \u2014 small, consistent improvements. Rename an ambiguous variable. Extract a readable function from a 60-line block. Add a comment explaining why, not what. These accumulate into healthier codebases over years.\n\nKnowing when not to refactor is as important as knowing how. Refactoring code that is rarely touched, that works correctly, and that is clearly understood is risk for no benefit. Refactoring code you're actively working on \u2014 that you need to extend and have to understand thoroughly anyway \u2014 is when the cost-benefit works. The decision is always: does the risk of change outweigh the benefit of clarity?\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — think of a shortcut you took in a past project. Was it explicit (you or a comment documented it) or hidden (you moved on hoping to fix it)? What would have made it manageable?</div>`,
         callout: {
           type: "default",
           label: "Make It Work, Then Make It Right",
@@ -2247,7 +4448,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 2,
           feedback: "Refactoring payment-critical code without tests is extremely high risk. The current behaviour is undocumented, and any change that introduces a regression could process payments incorrectly. Characterisation tests document the current behaviour (including any bugs or quirks that callers depend on). With those tests in place, you can refactor incrementally with a safety net. A complete rewrite is higher risk still \u2014 it's easy to miss edge cases that the original code handled."
         },
-        checklist: ["I can distinguish between necessary technical debt (deliberate trade-off) and unnecessary debt (neglect)", "I know how to write characterisation tests before refactoring untested code", "I leave code marginally better on every PR I touch", "I can make the case for when a refactor is and isn't worth the risk", "I know that 'make it right' is not optional, just sequenced after 'make it work'"]
+        checklist: ["I can explain technical debt in one sentence without using the word 'technical'", "I can identify which existing debt in a codebase is manageable and which is genuinely blocking", "When I take a deliberate shortcut, I document it — a comment, a ticket, a decision record", "I can refactor a complex function into smaller, named functions without changing its behaviour", "I know when to fix the debt now vs ship and track it — and I make that call deliberately"]
       },
       {
         id: "7-5",
@@ -2270,7 +4471,71 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "For a read-heavy system where the data changes rarely (a URL mapping doesn't change once created), caching is the highest-leverage improvement. A Redis cache serving hot URLs from memory handles millions of reads per second with millisecond latency, while the database only receives cache misses. Adding more application servers helps with compute but doesn't reduce database load. Changing languages has minimal impact compared to eliminating database round trips."
         },
-        checklist: ["I understand the vocabulary of system design (sharding, replication, caching, load balancing)", "I understand the CAP theorem and its practical implications", "I can explain the trade-offs between monolith and microservices architectures", "I've read at least 5 real engineering architecture posts from production systems", "I can structure a system design response: requirements, estimation, components, bottlenecks, trade-offs"]
+        checklist: ["I can explain the difference between vertical and horizontal scaling with a concrete example", "I can describe where a system's bottleneck is likely to be before profiling — and verify it after", "I understand what a load balancer does and when you add one", "I can explain the trade-offs of adding a caching layer for a specific system", "I can draw a simple architecture diagram for a system I've designed and explain every component"]
+      },
+      {
+        id: "7-phase1-review",
+        title: "Phase 1 Review — Professional Engineering",
+        body: `Five questions covering your first week, reading codebases, code reviews, technical debt, and system design.`,
+        quiz: {
+          questions: [
+            {
+              question: "It's your first week as a junior developer. You've been given access to the codebase. What is the most effective approach?",
+              options: [
+                "Start making improvements immediately to demonstrate value",
+                "Ask lots of questions to show enthusiasm and initiative",
+                "Read the codebase, run it locally, fix a small bug or add a small feature to get familiar with the deployment process, and observe team workflows before suggesting changes",
+                "Wait for formal onboarding before touching anything"
+              ],
+              correct: 2,
+              feedback: "First week: understand before changing. Run the application locally. Read the main modules to understand the architecture. Identify a small, well-scoped task (a bug fix or tiny feature) and complete the full cycle from development to deployment. This builds context and shows competence without overstepping. Questions are good, but demonstrate you've tried to find the answer first."
+            },
+            {
+              question: "You're reading an unfamiliar codebase and encounter a complex function with no comments. What is the most effective approach?",
+              options: [
+                "Add a comment explaining what you think it does and move on",
+                "Rewrite it in a style you find more readable",
+                "Trace the call chain: find where it's called, what it receives, what it returns. Add console.log or a debugger to observe its behaviour with real data. Then read the implementation",
+                "Skip it and only work with parts of the codebase you already understand"
+              ],
+              correct: 2,
+              feedback: "Reading unfamiliar code: start from usage (where is it called?) not implementation (what does it do?). The call site tells you the inputs and expected outputs. Then read the function with that context. For complex logic, add temporary logging or use a debugger to observe actual values. Understanding comes from running the code, not just reading it."
+            },
+            {
+              question: "You're reviewing a colleague's pull request. You find code that works but is harder to read than it needs to be. How should you frame the comment?",
+              options: [
+                "Approve it — working code is correct code and readability is subjective",
+                "Request changes with a comment explaining the readability concern and suggesting a specific alternative: 'Could we extract this into a named function? It would make the intent clearer — something like: validateUserPermissions()'",
+                "Comment: 'This is hard to read. Please rewrite it.'",
+                "Fix it yourself and push to their branch"
+              ],
+              correct: 1,
+              feedback: "Good code review feedback is specific, explains the why, and offers a concrete alternative. 'Hard to read' is not actionable. 'Extract into a named function called X because it would make the intent clear' gives the author exactly what to do and why. Reviews are a conversation — suggest, explain, and be open to the author's perspective. Never push to someone else's branch without permission."
+            },
+            {
+              question: "What is technical debt and when is it acceptable?",
+              options: [
+                "Technical debt is code written in old programming languages — acceptable only for legacy projects",
+                "Technical debt is intentional shortcuts taken now that will need proper implementation later. Acceptable when speed matters and you plan and document the debt explicitly",
+                "Technical debt is any code written by developers who are no longer at the company",
+                "Technical debt is never acceptable — always write code correctly the first time"
+              ],
+              correct: 1,
+              feedback: "Technical debt is a deliberate trade-off: implement something quickly now (incurring debt) with the intention to implement it properly later. It's acceptable when the business genuinely needs speed and the team understands and documents the debt. The problem is debt without a plan — it accumulates interest: it takes longer to change, causes bugs, and slows down every future feature. Explicit debt is manageable; hidden debt is dangerous."
+            },
+            {
+              question: "A system must handle 100,000 concurrent users. The current single-server architecture can handle 10,000. What is the first question to ask before proposing a solution?",
+              options: [
+                "Which cloud provider should we use?",
+                "How quickly must this scale — is this a gradual growth or a sudden expected spike?",
+                "How many more servers should we buy?",
+                "Should we rewrite in a different programming language?"
+              ],
+              correct: 1,
+              feedback: "Before any solution: understand the constraint. Gradual growth → horizontal scaling with a load balancer is the standard solution. Sudden spike (e.g., a product launch) → pre-warm capacity or use auto-scaling. In both cases: profile first (is the bottleneck CPU, memory, database, or I/O?), add caching for repeated reads, optimise the database before throwing more hardware at it. The right solution depends on the specific problem."
+            }
+          ]
+        }
       },
       {
         id: "7-6",
@@ -2293,7 +4558,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 2,
           feedback: "A design doc forces both sides to articulate their position with reasoning, allows broader input from people not in the original discussion, and creates a record of the decision. Escalating to a manager removes ownership from the engineers closest to the problem. Defaulting to seniority bypasses the reasoning that should drive technical decisions. Building both in production is high cost for what is usually a resolvable trade-off."
         },
-        checklist: ["I understand what psychological safety is and how to contribute to it", "I write clear PR descriptions that explain the what and the why", "I understand the difference between productive technical disagreement and personal conflict", "I can write a basic design doc that presents a problem, options, and recommendation", "I know the 'disagree and commit' norm and can apply it"]
+        checklist: ["I can work on a feature branch, get it reviewed, and merge it without breaking the main branch", "I participate in planning and refinement — I ask clarifying questions before estimating", "I update my team proactively when I'm blocked — I don't disappear for a day then report a problem", "I can give an accurate progress update without being asked", "I understand that my velocity affects the team — I flag risks early, not late"]
       },
       {
         id: "7-7",
@@ -2316,7 +4581,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Blameless means the post-mortem investigates systems and processes, not individuals. The reasoning: if an engineer made a reasonable decision given the information available and the system's safeguards didn't prevent the outcome, the problem is the system and process, not the person. This framing encourages honest reporting of what actually happened \u2014 critical for learning. It doesn't mean engineers face no professional consequences for grossly negligent decisions; it means well-intentioned mistakes are treated as system design opportunities."
         },
-        checklist: ["I understand the three pillars of observability: metrics, logs, and traces", "I know what alert fatigue is and why alerting on symptoms beats alerting on causes", "I understand the blameless post-mortem process and its purpose", "I've read at least 3 post-mortems from real engineering teams", "I know what a runbook is and why on-call engineers need one"]
+        checklist: ["I can respond to a production incident with correct priority: restore service first, then diagnose", "I check logs before changing anything in a production incident", "I communicate status to stakeholders during an incident — even if the update is 'still investigating'", "I've written a post-mortem that identifies root cause and preventive measures — not blame", "I know when to escalate and who to escalate to"]
       },
       {
         id: "7-8",
@@ -2339,7 +4604,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Senior engineering is not a function of code quality alone. A mid-level engineer who executes assigned tasks well is meeting the mid-level bar. Senior requires demonstrating expanded scope: contributing to technical direction, mentoring others, taking ownership of ambiguous problems, and making the team more effective. These are different skills that require deliberate development alongside technical craft."
         },
-        checklist: ["I understand the levels of an engineering career ladder and what each requires", "I know what operating at the next level above mine looks like concretely", "I've had a career growth conversation with my manager about what promotion requires", "I understand that senior engineering is about team multiplier effect, not just personal output", "I actively look for opportunities to mentor more junior engineers"]
+        checklist: ["I understand the difference between individual contributor and engineering management tracks", "I can identify the skills gap between my current level and the next level above me", "I actively seek feedback — not just during reviews — and use it to direct my practice", "I've taken on at least one project that stretched me beyond my current comfortable capability", "I know what 'staff engineer' or 'principal engineer' means at real companies and what those roles require"]
       },
       {
         id: "7-9",
@@ -2362,7 +4627,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 2,
           feedback: "The IC vs management decision is fundamentally about what kind of work you find meaningful and energising. Compensation is similar at senior levels across both tracks. Prestige is not a useful criterion. Your manager's recommendation is input, not the answer. The people who make the transition successfully and stay effective are those who genuinely want to do the work of management \u2014 not those who thought it was the next logical step."
         },
-        checklist: ["I understand the difference between engineering leadership and engineering management", "I know what the Staff/Principal IC path looks like at companies I'm interested in", "I've tried leadership behaviours (mentoring, design docs, standards-setting) to get real data on what they're like", "I understand that management is a career change, not a promotion", "I can articulate which type of work I find more energising: technical leadership or people management"]
+        checklist: ["I can give clear technical context to a non-technical stakeholder without condescension or jargon", "I understand that the best technical decision sometimes isn't the one you'd make with unlimited time", "I've helped a junior engineer grow a specific skill — not just reviewed their code", "I create technical artefacts (RFCs, ADRs, runbooks) that help the team operate without me present", "I understand that engineering leadership is about multiplying team capability, not individual output"]
       },
       {
         id: "7-10",
@@ -2380,12 +4645,65 @@ When it's deployed: write a README that explains what the application does, the 
         },
         hint: `The most underrated long-game move: staying curious about the work itself. The engineers who remain excellent at 20 years are genuinely interested in the craft \u2014 they're excited about new ideas not because they need to be but because they still find them interesting. If you stop finding the work interesting, that's worth taking seriously as information, not suppressing.\n\n<strong>Career insurance:</strong> Write. Teach. Speak. Engineers with a public record of their thinking \u2014 blog posts, talks, open source, documented work \u2014 are resilient to layoffs and downturns in ways that engineers who only work internally are not. A public record is career insurance.\n\n<strong>On regrets:</strong> The most common regret engineers report late in their careers is not writing enough, not building enough in public, and not investing enough in relationships. The technical skills were fine. The artefacts and connections that would have made the work visible and durable are what was missing. Start now. Literally now.`,
         quiz: {
-          question: "A mid-career engineer has mastered their current tech stack and is trying to decide where to invest learning time next. What investment will compound most over a 20-year career?",
-          options: ["Learning the newest JavaScript framework to stay current with the ecosystem", "Deepening fundamentals (systems, networks, databases) and building communication skills that apply across all technologies", "Specialising further in their current stack to become the company expert", "Focusing purely on shipping features to build a track record of output"],
-          correct: 1,
-          feedback: "Frameworks are replaced on 3-5 year cycles. Fundamentals and communication skills compound across every technology change for an entire career. The engineer who deeply understands databases can adapt to any new database tool. The engineer who can communicate clearly can work with any team, any technology, any business context. The return on investment for fundamentals and communication massively exceeds the return on any single framework over a 20-year horizon."
+          questions: [
+            {
+              question: "A production incident is happening: users can't log in. You're on call. What is the correct order of actions?",
+              options: [
+                "Find the root cause → fix the code → deploy → notify users",
+                "Restore service first (rollback, feature flag, cache clear) → notify stakeholders → diagnose root cause → implement and test a proper fix → post-mortem",
+                "Notify users → escalate to the team → wait for someone more senior to fix it",
+                "Rewrite the authentication system to prevent future issues"
+              ],
+              correct: 1,
+              feedback: "Incident response priority: (1) Restore service — the fastest path to users being able to log in again, even if it's a rollback. (2) Communicate — stakeholders need to know. (3) Diagnose — what actually caused it? (4) Fix properly with tests. (5) Post-mortem — what process changes prevent recurrence? Never diagnose and fix while users are blocked if a faster restore path exists."
+            },
+            {
+              question: "You receive a code review comment you disagree with. The reviewer is more senior. How should you respond?",
+              options: [
+                "Accept all feedback from more senior engineers — they know better",
+                "Reject the feedback privately — implement your approach anyway",
+                "Respond with your reasoning: 'I chose this approach because [specific reason]. I'm open to [their suggestion] but I think the trade-off is [specific thing]. Can we discuss?'",
+                "Escalate immediately to the engineering manager"
+              ],
+              correct: 2,
+              feedback: "Code review is a technical discussion, not a hierarchy exercise. If you have a genuine technical reason for your approach, explain it clearly and professionally. Senior engineers can be wrong; juniors can be right. 'I disagree because X' followed by openness to discussion is professional. Silently accepting feedback you disagree with produces worse code; silently ignoring feedback is disrespectful to the process."
+            },
+            {
+              question: "What is the long-term pattern that distinguishes engineers who advance from those who plateau?",
+              options: [
+                "Working longer hours than colleagues",
+                "Specialising deeply in one technology and never leaving their comfort zone",
+                "Continuously investing in fundamentals, seeking feedback, writing and teaching, and working on increasingly complex problems",
+                "Switching companies frequently to get salary increases"
+              ],
+              correct: 2,
+              feedback: "Engineering growth compounds: fundamentals (data structures, system design, debugging) improve your ceiling. Feedback reveals blind spots you can't see yourself. Writing and teaching crystallise what you know and build your reputation. Working on harder problems is the only way to develop the skill to solve harder problems. The plateau happens when comfort replaces challenge."
+            },
+            {
+              question: "A colleague writes: 'This is a clever solution!' in a PR description. Is 'clever' code desirable in production?",
+              options: [
+                "Yes — clever code demonstrates technical skill and impresses other engineers",
+                "No — clever code is typically harder to read, debug, and maintain. The best production code is boring: clear names, obvious logic, and predictable patterns",
+                "It depends on the language — clever code is acceptable in Python but not in JavaScript",
+                "Yes — if the code is correct and passes tests, cleverness doesn't matter"
+              ],
+              correct: 1,
+              feedback: "'Clever' in code is usually a warning sign. Code is read far more often than it's written. Clever solutions optimise for impressing the author's past self at the expense of every future reader, including the author six months later. The best code reads like prose: obvious at a glance, easy to modify. When you're tempted to write something clever, ask: what would this look like if it were boring? Usually the boring version is better."
+            },
+            {
+              question: "You're three years into your engineering career. How should you measure progress?",
+              options: [
+                "Number of commits and lines of code written",
+                "Salary increases relative to peers",
+                "The complexity of problems you can solve independently, the quality of your system design decisions, and the clarity of your technical communication — not just output metrics",
+                "Number of programming languages you've learned"
+              ],
+              correct: 2,
+              feedback: "Lines of code is a vanity metric — deleting 500 lines of complexity might be more valuable than writing 500 new ones. Real progress: can you break down an ambiguous requirement into a concrete implementation plan? Can you design a system that will work at 10x current scale? Can you explain a complex technical decision to a non-technical stakeholder? These capabilities compound. Output metrics don't."
+            }
+          ]
         },
-        checklist: ["I understand that engineering is a long compounding investment, not a series of short sprints", "I have a sustainable learning approach that doesn't require heroic effort to maintain", "I'm investing in professional relationships, not just technical skills", "I know the signs of burnout and have strategies to prevent it", "I'm building public artefacts (writing, open source, documentation) that create a durable record of my work"]
+        checklist: ["I have a sustainable learning practice — regular, deliberate, not heroic-effort sprints", "I'm investing in professional relationships — people I learn from, collaborate with, and can call on", "I know the signs of burnout in myself and have concrete strategies to prevent it", "I'm building public artefacts — writing, open source, documentation — that compound over time", "I can honestly describe where I am now, where I want to be in three years, and what the path looks like"]
       }
     ]
   }
