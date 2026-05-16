@@ -8028,8 +8028,12 @@ function renderLearnHub() {
   var html = '<style id="hub-override">' +
     '.fc-header-title{color:#d0eeff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;text-shadow:0 0 40px rgba(126,184,200,0.45)!important;}' +
     '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;}' +
-    '.fc-card{min-width:160px!important;}' +
-    '.ch-overall-bar-wrap{margin:0 auto!important;}' +
+    '.fc-card{min-width:130px!important;}' +
+    '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;}' +
+    '.fc-stat{flex:1!important;text-align:center!important;}' +
+    '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
+    '.fc-hub{text-align:center!important;}' +
+    '.fc-row{justify-content:center!important;}' +
     '</style>' +
     '<div class="fc-hub">' +
     '<div class="fc-header">' +
