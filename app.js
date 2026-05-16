@@ -8009,12 +8009,12 @@ function renderLearnHub() {
     var icon       = floorIcons[fi] || '&#127760;';
     var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
-    return '<div class="' + cardClasses + '" style="--fc-color:' + color + ';--fc-glow:' + glow + '"' + clickAttr + '>' +
+    return '<div class="' + cardClasses + '" style="--fc-color:' + color + ';--fc-glow:' + glow + ';min-width:118px;flex:1;max-width:160px;"' + clickAttr + '>' +
       '<div class="fc-accent"></div>' +
       infoBtn +
       '<div class="fc-floor-badge">Floor ' + (fi + 1) + '</div>' +
       '<div class="fc-icon">' + icon + '</div>' +
-      '<div class="fc-title">' + f.title + '</div>' +
+      '<div class="fc-title" style="font-size:11px;width:100%;word-break:normal;">' + f.title + '</div>' +
       '<div class="fc-sec-count">' + floorDone + '/' + floorTotal + ' sections</div>' +
       '<span class="' + statusClass + '">' + statusText + '</span>' +
     '</div>';
@@ -8043,13 +8043,13 @@ function renderLearnHub() {
       '<div style="margin-top:16px;">' + overallBar + '</div>' +
       '<button class="hub-notes-btn" onclick="openNotesReview()">📝 Review your notes</button>' +
     '</div>' +
-    '<div class="fc-stats">' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + floorsUnlocked + '</div><div class="fc-stat-label">Floors Unlocked</div></div>' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + (state.xp || 0) + '</div><div class="fc-stat-label">XP Earned</div></div>' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + (state.streak || 0) + '</div><div class="fc-stat-label">Day Streak</div></div>' +
-      '<div class="fc-stat"><div class="fc-stat-val">' + floorsComplete + '</div><div class="fc-stat-label">Floors Complete</div></div>' +
+    '<div class="fc-stats" style="display:flex;width:100%;margin:0 auto 28px;border-top:1px solid #0a1828;border-bottom:1px solid #0a1828;padding:14px 0;">' +
+      '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Unlocked</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">XP Earned</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + (state.streak || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
     '</div>' +
-    '<div class="fc-row">' + cardsHtml + '</div>' +
+    '<div class="fc-row" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;">' + cardsHtml + '</div>' +
   '</div>' +
   '<div class="fc-modal-overlay fc-modal-hidden" id="fc-modal-overlay" onclick="closeFloorModal()">' +
     '<div class="fc-modal" id="fc-modal" onclick="event.stopPropagation()">' +
