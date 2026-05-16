@@ -305,6 +305,29 @@
         box-shadow: inset 0 1px 0 rgba(255,200,100,.1), 0 1px 2px rgba(0,0,0,.5);
         flex-shrink: 0;
       }
+
+      /* ── Responsive: small screens ───────────────────────── */
+      @media (max-width: 600px) {
+        .cpt-porthole {
+          width: clamp(200px, 78vw, 360px);
+          height: clamp(150px, 58vw, 270px);
+          top: 30%;
+        }
+        .cpt-side { width: clamp(28px, 5vw, 44px); }
+        .cpt-panel { height: 36vh; padding: 0 8px; gap: 4px; }
+        /* Hide less critical cells on small screens */
+        .cpt-cell:nth-child(6),  /* attitude */
+        .cpt-cell:nth-child(7)   /* heading */
+        { display: none; }
+        .cpt-hud { font-size: 8px; padding: 0 8px; }
+        .cpt-rivets { display: none; }
+      }
+
+      @media (max-width: 400px) {
+        .cpt-panel { height: 40vh; flex-wrap: wrap; }
+        .cpt-cell:nth-child(n+5) { display: none; }
+        .cpt-side { display: none; }
+      }
     </style>
 
     <script type="module" crossorigin src="./assets/index-QBXstnal.js"></script>

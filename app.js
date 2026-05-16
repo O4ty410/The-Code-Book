@@ -4789,22 +4789,37 @@ function loadState() {
   }  catch(e) {}
 }
 
+function pruneCodeCache() {
+  // Remove saved code for sections already marked complete to free storage space
+  Object.keys(localStorage)
+    .filter(function(k) { return k.startsWith('code_'); })
+    .forEach(function(k) {
+      var sid = k.slice(5);
+      if (state.completed && state.completed[sid]) localStorage.removeItem(k);
+    });
+}
+
 function saveState() {
+  var payload = JSON.stringify({
+    currentFloor: state.currentFloor,
+    currentSection: state.currentSection,
+    completed: state.completed,
+    quizAnswered: state.quizAnswered,
+    totalSeconds: state.totalSeconds,
+    sessionLog: state.sessionLog,
+    xp: state.xp,
+    streak: state.streak,
+    lastVisit: state.lastVisit,
+    xpAwarded: state.xpAwarded,
+    checklistDone: state.checklistDone || {}
+  });
   try {
-    localStorage.setItem('codebook_v1', JSON.stringify({
-      currentFloor: state.currentFloor,
-      currentSection: state.currentSection,
-      completed: state.completed,
-      quizAnswered: state.quizAnswered,
-      totalSeconds: state.totalSeconds,
-      sessionLog: state.sessionLog,
-      xp: state.xp,
-      streak: state.streak,
-      lastVisit: state.lastVisit,
-      xpAwarded: state.xpAwarded,
-      checklistDone: state.checklistDone || {}
-    }));
-  } catch(e) {}
+    localStorage.setItem('codebook_v1', payload);
+  } catch(e) {
+    // Quota exceeded — prune completed-section code caches and retry once
+    pruneCodeCache();
+    try { localStorage.setItem('codebook_v1', payload); } catch(e2) {}
+  }
 }
 
 

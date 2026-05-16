@@ -996,6 +996,11 @@ body.light .callout {
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  /* Expand tap target to ~24px without changing visual size */
+  padding: 8px;
+  margin: -5px;
+  background-clip: content-box;
+  box-sizing: content-box;
 }
 
 .spd-dot:hover {
@@ -1005,11 +1010,13 @@ body.light .callout {
 
 .spd-dot.spd-done {
   background: rgba(74, 222, 128, 0.35);
+  background-clip: content-box;
   border-color: rgba(74, 222, 128, 0.6);
 }
 
 .spd-dot.spd-current {
   background: var(--floor-color, var(--accent));
+  background-clip: content-box;
   border-color: var(--floor-color, var(--accent));
   transform: scale(1.4);
   box-shadow: 0 0 6px var(--floor-color, var(--accent));
