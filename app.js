@@ -8025,7 +8025,13 @@ function renderLearnHub() {
     '<span class="ch-overall-label">' + pct + '% complete</span>' +
     '</div>';
 
-  var html = '<div class="fc-hub">' +
+  var html = '<style id="hub-override">' +
+    '.fc-header-title{color:#d0eeff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;text-shadow:0 0 40px rgba(126,184,200,0.45)!important;}' +
+    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;}' +
+    '.fc-card{min-width:160px!important;}' +
+    '.ch-overall-bar-wrap{margin:0 auto!important;}' +
+    '</style>' +
+    '<div class="fc-hub">' +
     '<div class="fc-header">' +
       '<div class="fc-header-label">Your Learning Path</div>' +
       '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
