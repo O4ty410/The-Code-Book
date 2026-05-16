@@ -7589,12 +7589,14 @@ function switchTopNav(tab, btn) {
   // Show/hide panels
   document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
   var mainContent = document.getElementById('main-content');
+  var ls = document.getElementById('left-sidebar');
 
   if (tab === 'learn') {
     if (mainContent) mainContent.style.display = '';
     renderLearnHub();
   } else {
     if (mainContent) mainContent.style.display = 'none';
+    if (ls) ls.style.display = 'none';
     var panel = document.getElementById('panel-' + tab);
     if (panel) {
       panel.classList.add('active');
