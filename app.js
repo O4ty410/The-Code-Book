@@ -978,6 +978,70 @@ document.getElementById('output').innerHTML=out;
         }
       },
       {
+        id: "3-phase1-review",
+        title: "Phase 1 Review — JavaScript Foundations",
+        body: `Five questions covering what JavaScript is, variables, conditions, and functions. If any question gives you trouble, go back to that section before continuing.`,
+        quiz: {
+          questions: [
+            {
+              question: "JavaScript is event-driven. What does this mean in practice?",
+              options: [
+                "JavaScript runs all code top-to-bottom once when the page loads, then stops",
+                "JavaScript loads onto the page and then waits for events — clicks, keypresses, timers — and runs the relevant function when each event fires",
+                "JavaScript runs continuously in an infinite loop checking for changes",
+                "JavaScript only runs when the user explicitly calls it from the browser console"
+              ],
+              correct: 1,
+              feedback: "Event-driven means JavaScript sits idle after loading, responding to events as they occur rather than running once or looping constantly. An event listener registers interest in an event; when the event fires, the handler function runs. This is what lets a page stay responsive without blocking."
+            },
+            {
+              question: "What is the difference between const and let in JavaScript?",
+              options: [
+                "const is faster than let at runtime",
+                "const cannot be reassigned after declaration; let can be reassigned",
+                "let is for strings; const is for numbers",
+                "const is only available in browser environments; let works everywhere"
+              ],
+              correct: 1,
+              feedback: "const declares a binding that cannot be reassigned. let declares one that can. Use const by default — it signals that the value should not change. Only reach for let when the value genuinely needs to be updated (counters, toggles, accumulating results). This discipline prevents accidental reassignment bugs."
+            },
+            {
+              question: "Which values in JavaScript are falsy?",
+              options: [
+                "false, null, undefined, 0, NaN, and '' (empty string)",
+                "false, null, and undefined only",
+                "false, 0, null, undefined, '', [], and {}",
+                "false, 0, and '' — null and undefined are truthy"
+              ],
+              correct: 0,
+              feedback: "There are exactly six falsy values in JavaScript: false, 0, '' (empty string), null, undefined, and NaN. Everything else is truthy — including [], {}, 'false', and -1. Empty arrays and objects are truthy, which surprises many developers. Memorise the six falsy values; everything else is truthy."
+            },
+            {
+              question: "function multiply(x, y) { x * y; } — what does console.log(multiply(3, 4)) print?",
+              options: [
+                "12, because x * y is calculated inside the function",
+                "undefined, because the function performs the calculation but has no return statement",
+                "NaN, because the parameters haven't been declared with const or let",
+                "Error: x is not defined"
+              ],
+              correct: 1,
+              feedback: "Without a return statement, a function returns undefined regardless of what it calculates internally. The expression x * y computes 12 but the result is immediately discarded. To fix it: return x * y. This is one of the most common beginner mistakes — compute a value inside a function but forget to send it back."
+            },
+            {
+              question: "What is the difference between a function's parameters and its arguments?",
+              options: [
+                "Parameters are the actual values passed in; arguments are the placeholders in the definition",
+                "Parameters are the named placeholders in the function definition; arguments are the actual values passed when calling the function",
+                "They're the same thing — the terms are interchangeable",
+                "Parameters are for arrow functions; arguments are for regular function declarations"
+              ],
+              correct: 1,
+              feedback: "Parameters are defined in the function signature: function add(a, b) — a and b are parameters. Arguments are the values passed when calling: add(3, 5) — 3 and 5 are arguments. Parameters are names (placeholders). Arguments are values. The distinction matters when reading error messages and documentation."
+            }
+          ]
+        }
+      },
+      {
         id: "3-5",
         title: "Loops",
         body: `A loop runs a block of code repeatedly until a condition says to stop. Every time JavaScript renders a list \u2014 Spotify's playlist tracks, Instagram's feed posts, Airbnb's search results \u2014 it loops through an array of data and renders a component for each item. Loops are ubiquitous.\n\nThe <strong>for loop</strong> has three parts in the parentheses: initialisation (what to set up before the loop starts), condition (run the loop while this is true), and update (what to do after each iteration). <code>for (let i = 0; i < 10; i++)</code> runs ten times, with i going from 0 to 9.\n\nThe <strong>while loop</strong> is simpler but less safe for counted iterations: it runs while a condition is true, with no built-in counter. Use it when you don't know how many iterations are needed in advance \u2014 reading items from a stream until it's empty, for example.\n\n<code>forEach</code> is an array method that runs a function for each item: <code>songs.forEach(song => { render(song); })</code>. Clean and readable for arrays.\n\n<code>for...of</code> iterates over values in an iterable: <code>for (const song of songs)</code>. <code>for...in</code> iterates over the keys of an object \u2014 use it for objects, not arrays.\n\n<code>break</code> exits a loop immediately. <code>continue</code> skips the rest of the current iteration and moves to the next. Both are useful for early termination and filtering within loops.\n\nThe most common mistake: the infinite loop. A while loop whose condition never becomes false, or a for loop whose counter never reaches the stopping condition, will freeze the browser. Always double-check: will the condition eventually be false? Will the counter actually reach the limit?`,
@@ -1205,6 +1269,70 @@ document.getElementById('submit-btn').addEventListener('click',function(e){
         }
       },
       {
+        id: "3-phase2-review",
+        title: "Phase 2 Review — Loops, Arrays, DOM, and Events",
+        body: `Five questions covering loops, arrays and objects, DOM manipulation, and events. If any question gives you trouble, return to that section.`,
+        quiz: {
+          questions: [
+            {
+              question: "An array contains 100 items. You want a new array containing only items where item.price > 50. Which method is correct?",
+              options: [
+                "array.forEach() — it loops through every item and lets you select some",
+                "array.map() — it transforms every item to a new value",
+                "array.filter() — it returns a new array containing only items that pass the test",
+                "array.find() — it returns the first item that matches the condition"
+              ],
+              correct: 2,
+              feedback: "filter() creates a new array containing only elements for which the callback returns truthy. forEach() is for side effects only — it always returns undefined. map() transforms every element but always returns an array of the same length. find() returns the first match, not all matches. filter() is the right tool when you want a subset."
+            },
+            {
+              question: "What is the DOM?",
+              options: [
+                "The list of CSS rules applied to the current page",
+                "The browser's tree-like representation of the page's HTML elements as JavaScript objects that can be read and modified",
+                "The JavaScript engine that executes code in the browser",
+                "The database of all websites indexed by the browser"
+              ],
+              correct: 1,
+              feedback: "The DOM (Document Object Model) is the browser's internal representation of the page as a tree of objects. Each HTML element is a node. JavaScript can read, add, modify, or remove any node without reloading the page. When you call document.querySelector() or change element.textContent, you're working with the DOM."
+            },
+            {
+              question: "What is the difference between a for loop and a forEach loop in JavaScript?",
+              options: [
+                "for loops are faster; forEach loops are for small arrays only",
+                "for loops can break early or skip items with continue; forEach cannot use break or continue",
+                "forEach loops work on arrays; for loops only work on numbers",
+                "They are functionally identical — the syntax is just personal preference"
+              ],
+              correct: 1,
+              feedback: "The key practical difference: for loops support break (exit early) and continue (skip to next iteration). forEach does not — calling break inside a forEach callback has no effect on the outer loop. Use for (or for...of) when you might need to exit early. Use forEach when you want to process every element without exceptions."
+            },
+            {
+              question: "You call element.addEventListener('click', handler). When does the handler function run?",
+              options: [
+                "Immediately when the line of code is executed",
+                "Every 100ms while the element exists on the page",
+                "Only when the user explicitly calls handler() in the console",
+                "Each time the user clicks the element"
+              ],
+              correct: 3,
+              feedback: "addEventListener registers a callback that runs in response to the specified event. 'click' fires each time the user clicks the element. The registration happens immediately when the line runs, but the handler itself is only called when the event occurs. This is the event-driven model — register interest, respond when it happens."
+            },
+            {
+              question: "What does event.preventDefault() do?",
+              options: [
+                "Stops the event from firing again if the user clicks twice",
+                "Cancels the browser's default behaviour for the event — e.g., preventing a form submit from reloading the page",
+                "Prevents the event from bubbling up to parent elements",
+                "Removes the event listener after the first trigger"
+              ],
+              correct: 1,
+              feedback: "Each event has a default browser behaviour: click on a link navigates, submit a form reloads the page, right-click opens a context menu. preventDefault() cancels that default behaviour so you can replace it with your own. It doesn't stop the event from firing or from bubbling — for that, you'd use stopPropagation()."
+            }
+          ]
+        }
+      },
+      {
         id: "3-9",
         title: "Error Handling and Debugging",
         body: `Every developer writes broken code. The difference between a beginner and a professional isn't that professionals make fewer mistakes \u2014 it's that they find and fix mistakes faster because they have a systematic approach.\n\nJavaScript has three error types. A <strong>SyntaxError</strong> means the code isn't valid JavaScript \u2014 a missing bracket, an unclosed string, a typo in a keyword. The script doesn't execute at all. A <strong>ReferenceError</strong> means you tried to use a variable that doesn't exist \u2014 either it was never declared, or it's out of scope, or it's misspelled (JavaScript is case-sensitive). A <strong>TypeError</strong> means you performed an operation on a value of the wrong type \u2014 calling something that isn't a function, accessing a property on null or undefined.\n\nReading error messages is a skill that develops with practice. Every JavaScript error in the console tells you: the error type, a plain-English description of what went wrong, and the file name and line number where it was detected. Start there. Go to that line. The problem is usually either on that line or one line above.\n\n<code>console.log()</code> is the most-used debugging tool at every level of experience. Drop it inside a function to confirm it's being called. Log a variable to see its value at a specific moment in execution. Trace your assumptions before changing any code.\n\n<code>try { } catch (error) { }</code> wraps code that might fail and handles the error gracefully instead of crashing. The catch block receives the error object. <code>error.message</code> is the human-readable description. <code>throw new Error('Something went wrong')</code> creates a custom error with a message you choose.\n\nThe browser DevTools debugger is more powerful than console.log: click the line number in the Sources tab to set a breakpoint, run the code, and execution pauses there. You can inspect every variable's current value and step through code one line at a time. Systematic debugging \u2014 forming a hypothesis, testing it, narrowing it down \u2014 solves bugs faster than random changes.`,
@@ -1373,10 +1501,74 @@ render();
         },
         hint: `Three things to test right now, before deciding you're ready.\n\nOne: close this app, open a blank HTML file, and write a complete page with a JavaScript function that responds to a button click and modifies the DOM. No looking anything up. If you can do it, the fundamentals are there.\n\nTwo: take one of the projects you built this floor and add a feature that wasn't in the original. Something you have to figure out. If the process of figuring it out feels manageable, you're ready.\n\nThree: read someone else's short JavaScript snippet \u2014 something you didn't write. Can you explain what it does line by line? If yes, you're reading code fluently enough for Floor 4.`,
         quiz: {
-          question: "You've finished every Floor 3 section but when you try to build something from scratch you feel lost without the guided structure. What does this most accurately indicate?",
-          options: ["You're ready for Floor 4 \u2014 feeling uncertain at the start of new projects is normal for everyone", "The sections were too difficult and Floor 3 content needs to be simplified", "You've understood the concepts passively but haven't yet built the ability to apply them independently \u2014 more project practice is needed before Floor 4", "Floor 4 will teach you to build independently so it's fine to proceed"],
-          correct: 2,
-          feedback: "Passive understanding (reading, following along) and active capability (building independently) are different skills that develop at different rates. The sections built passive understanding. Independent projects build active capability. If the second is missing, more project practice \u2014 not more section reading \u2014 is what closes the gap. Floor 4 assumes active capability. It does not build it from scratch."
+          questions: [
+            {
+              question: "Without looking anything up: what is the DOM and what can JavaScript do with it?",
+              options: [
+                "The DOM is the JavaScript engine — it executes code and cannot be directly modified",
+                "The DOM is the browser's object representation of the page's HTML. JavaScript can read, modify, add, and remove elements without a page reload",
+                "The DOM is the CSS styling system — JavaScript modifies visual properties through the DOM",
+                "The DOM is a database of all elements ever created in HTML history"
+              ],
+              correct: 1,
+              feedback: "The DOM is the browser's live, object-based representation of the HTML document. Every element is a node in a tree. JavaScript accesses it through document.querySelector(), document.getElementById(), etc. and can change content (.textContent, .innerHTML), attributes, classes, and styles — all without reloading the page."
+            },
+            {
+              question: "A variable is declared as: const users = []; Then later: users = ['Alex']; What happens?",
+              options: [
+                "users now holds ['Alex'] — const allows you to change the contents of arrays",
+                "TypeError: Assignment to constant variable — const prevents reassignment of the binding",
+                "The original empty array and the new array both exist in memory",
+                "Nothing — JavaScript silently ignores reassignment of const variables"
+              ],
+              correct: 1,
+              feedback: "const prevents reassignment of the variable binding. users = ['Alex'] is reassignment and throws a TypeError. However, the array's contents can still be changed: users.push('Alex') works fine because you're mutating the array, not reassigning the binding. const means 'this variable always points to the same thing' — not 'the thing can't change internally'."
+            },
+            {
+              question: "You want to loop through an array of 10 users and stop as soon as you find a user with admin: true. Which approach is correct?",
+              options: [
+                "array.forEach(user => { if (user.admin) break; }) — break exits the forEach",
+                "array.filter(user => user.admin) — it automatically stops at the first match",
+                "A for or for...of loop with break inside the if block — forEach cannot use break",
+                "array.map(user => user.admin) and check the result"
+              ],
+              correct: 2,
+              feedback: "forEach cannot use break — break inside a forEach callback has no effect on the outer iteration. For early exit, use a for loop, for...of loop, or array.find(). Array.find() returns the first matching element and stops iterating — it's the cleanest solution for this exact case: const admin = users.find(u => u.admin);"
+            },
+            {
+              question: "Explain what happens when this code runs: const btn = document.querySelector('#submit'); btn.addEventListener('click', e => { e.preventDefault(); });",
+              options: [
+                "The button is found, a click handler is attached, and when clicked the button's default submit action is prevented",
+                "The code throws an error because arrow functions cannot be used as event handlers",
+                "The button's click event is permanently disabled — it can never fire again",
+                "The code does nothing until the button's default action fires first"
+              ],
+              correct: 0,
+              feedback: "querySelector finds the element with id='submit'. addEventListener attaches a click handler. When the button is clicked, the handler runs, e.preventDefault() cancels the browser's default action (likely submitting a form and reloading the page). The handler runs on every click unless the listener is removed. Arrow functions work perfectly as event handlers."
+            },
+            {
+              question: "A function named processOrder takes an order object and updates a total variable defined outside the function. Is this a pure function? Why does it matter?",
+              options: [
+                "Yes — it's pure because it takes a parameter and produces an output",
+                "No — it's impure because it modifies state outside itself (a side effect). Impure functions are harder to test and can cause bugs when called multiple times",
+                "Yes — modifying external variables is the standard way functions communicate results",
+                "The purity classification only applies to arrow functions, not regular function declarations"
+              ],
+              correct: 1,
+              feedback: "A pure function always returns the same output for the same inputs and has no side effects — it doesn't modify anything outside itself. Modifying total (an external variable) is a side effect, making processOrder impure. Impure functions are harder to test (you need to set up external state), harder to reason about (calling it twice has different results), and can cause hidden bugs when refactored."
+            },
+            {
+              question: "You're debugging: a button click should show a message but nothing happens. What is the correct debugging sequence?",
+              options: [
+                "Refresh the page and try clicking multiple times",
+                "Rewrite the function from scratch — the original approach is probably wrong",
+                "Open DevTools console → check for errors → add console.log inside the handler → verify the event listener is attached to the right element",
+                "Delete and re-add the event listener code"
+              ],
+              correct: 2,
+              feedback: "Systematic debugging: (1) Console first — errors tell you what broke and where. (2) Log at the entry point — does the handler even run? If no log appears, the listener isn't attached. (3) If it runs but doesn't work, log the intermediate values to find where the logic fails. Random changes waste time. Read errors, form a hypothesis, test it."
+            }
+          ]
         },
         checklist: ["I can explain the DOM to someone who has never coded, using a concrete example", "I can write a function from memory that takes parameters and returns a value", "I can debug broken JavaScript systematically, not by making random changes", "I've built at least two interactive projects without a scaffold", "I am confident I understand the material, not just that I completed the sections"]
       }
@@ -1572,6 +1764,70 @@ function field(k,v){return '<div class="field"><span class="key">'+k+'</span><sp
           feedback: "fetch() starts a network request and returns immediately with a Promise — it doesn't wait for the response. The next line of code runs before the server has responded. To wait for the data, you must either use .then() chaining or mark the function as async and use await before fetch()."
         },
         checklist: ["I understand what asynchronous code means", "I can write a fetch call using async/await", "I handle errors with try/catch in async functions", "I understand that .json() is also async and needs to be awaited", "I never try to use fetched data outside the async context without proper handling"]
+      },
+      {
+        id: "4-phase1-review",
+        title: "Phase 1 Review — Developer Mindset, APIs, and Async",
+        body: `Five questions covering how developers think, reading documentation, what APIs are, and fetch with async/await.`,
+        quiz: {
+          questions: [
+            {
+              question: "A developer is building a feature and doesn't know how to do part of it. What is the professional approach?",
+              options: [
+                "Stop working until someone more experienced can help",
+                "Skip the difficult part and implement a simpler alternative",
+                "Break the problem into the smallest possible unknown, search for that specific thing, read the documentation, try it, iterate",
+                "Copy the closest Stack Overflow answer without reading it"
+              ],
+              correct: 2,
+              feedback: "Professional developers decompose problems. They identify the specific unknown, search for exactly that, read documentation or examples, implement a minimal test, and iterate. The skill isn't knowing everything — it's knowing how to find what you don't know and integrating it quickly. This process is repeatable regardless of the technology."
+            },
+            {
+              question: "An API endpoint is documented as: GET /api/users/{id} Returns: { id, name, email }. You call fetch('/api/users/42'). What do you expect to receive?",
+              options: [
+                "An array of all users — the id in the path is ignored",
+                "A JSON object with id, name, and email for user 42",
+                "A raw HTML page with user 42's profile",
+                "A number — the user's ID as a plain integer"
+              ],
+              correct: 1,
+              feedback: "The documentation tells you: path parameter {id} identifies which user, the method is GET (read only), and the response is a JSON object with three fields. You'd get: { id: 42, name: 'Alex Chen', email: 'alex@...' }. Reading documentation before writing code prevents guessing — the documentation is the contract."
+            },
+            {
+              question: "Why must you call .json() on a fetch response AND await that call?",
+              options: [
+                ".json() is only needed for large responses to decompress them",
+                "fetch() returns a Response object, not the data. .json() reads and parses the body — and it's also async because it streams data, so it must be awaited",
+                ".json() converts the response to a JavaScript array automatically",
+                ".json() is optional — the data is already on the response object as response.data"
+              ],
+              correct: 1,
+              feedback: "fetch() gives you a Response object, not the data. The actual body hasn't been read yet — it streams from the network. .json() reads the body stream and parses it as JSON. Because reading the stream is asynchronous (it might not be fully arrived yet), .json() returns a Promise that must be awaited. Forgetting either await — for fetch or for .json() — gives you a Promise object instead of data."
+            },
+            {
+              question: "An async function contains: const data = fetch('https://api.example.com/data'); console.log(data); — what does the console show?",
+              options: [
+                "The response data from the API",
+                "undefined — fetch hasn't finished yet",
+                "A Promise object — fetch is asynchronous and returns a Promise, not the data",
+                "An error — you cannot use fetch without await"
+              ],
+              correct: 2,
+              feedback: "Without await, fetch() returns a Promise immediately. The console.log runs before the network request completes and logs the Promise object, not the data. To get the data: const response = await fetch(url); const data = await response.json(); The absence of await is one of the most common async bugs — you get a Promise where you expected data."
+            },
+            {
+              question: "How should you find information about a new JavaScript method you've never used?",
+              options: [
+                "Ask a colleague — documentation is too complex to read effectively",
+                "Trial and error — run variations until something works",
+                "Search MDN Web Docs for the method name, read the Syntax section, then look at the Examples",
+                "Search Stack Overflow for the exact question you have and use the top answer"
+              ],
+              correct: 2,
+              feedback: "MDN (Mozilla Developer Network) is the authoritative reference for all web APIs. The pattern: Syntax section shows the method signature and all parameters. Parameters section explains each option. Return value section tells you what you get back. Examples section shows real usage. Stack Overflow is useful for problems — MDN is the reference for how things work."
+            }
+          ]
+        }
       },
       {
         id: "4-5",
@@ -1917,6 +2173,70 @@ console.log(user.adress.city);</div>
         checklist: ["I reproduce bugs reliably before trying to fix them", "I change one thing at a time when debugging", "I can set and use breakpoints in DevTools", "I read error messages in full before changing anything", "I use the Network tab to diagnose API problems"]
       },
       {
+        id: "4-phase2-review",
+        title: "Phase 2 Review — Storage, Error Handling, Git, and Debugging",
+        body: `Five questions covering localStorage, error handling at scale, git version control, and debugging like a developer.`,
+        quiz: {
+          questions: [
+            {
+              question: "You save an object to localStorage: localStorage.setItem('user', { name: 'Alex' }). When you retrieve it, what do you get?",
+              options: [
+                "The object { name: 'Alex' }",
+                "The string '[object Object]' — localStorage converts objects to strings automatically",
+                "undefined — localStorage only stores numbers",
+                "null — objects must be serialised differently"
+              ],
+              correct: 1,
+              feedback: "localStorage stores strings only. Passing an object directly calls .toString() on it, which produces '[object Object]' — useless. You must serialise with JSON.stringify before saving and parse with JSON.parse when reading: localStorage.setItem('user', JSON.stringify(user)); and const user = JSON.parse(localStorage.getItem('user'));"
+            },
+            {
+              question: "What is the correct way to handle an error in an async function?",
+              options: [
+                "Add a .catch() method to every line that might fail",
+                "Wrap the await calls in a try/catch block — catch receives the error if any awaited Promise rejects",
+                "Check the return value of each await — if it's undefined, an error occurred",
+                "Async functions never throw errors — they return undefined on failure"
+              ],
+              correct: 1,
+              feedback: "try/catch in async functions works exactly as it does in synchronous code. If any awaited Promise rejects, the catch block runs with the error. The pattern: try { const data = await fetch(url); ... } catch (error) { console.error(error); showErrorMessage(); } Without this, a network failure silently breaks the function with no user feedback."
+            },
+            {
+              question: "What does git commit do, and what should a commit message describe?",
+              options: [
+                "git commit saves a snapshot of all staged changes permanently in the repository. The message should describe WHY the change was made",
+                "git commit sends your code to GitHub immediately",
+                "git commit is a temporary save that can be undone at any time without consequence",
+                "git commit saves only the currently open file"
+              ],
+              correct: 0,
+              feedback: "git commit creates a permanent snapshot of everything in the staging area, with a message. The message should explain WHY — what problem this solves, what behaviour it changes, what it enables. 'Fix bug' is useless. 'Fix null pointer when user has no profile image' is useful. The what is visible in the diff. The why is only in the message."
+            },
+            {
+              question: "You're debugging: a function returns undefined when it should return a number. What is the most efficient first step?",
+              options: [
+                "Rewrite the function from scratch",
+                "Add console.log(result) at the return statement to check what the function is actually returning",
+                "Search Stack Overflow for 'JavaScript function returns undefined'",
+                "Add a try/catch to catch the error"
+              ],
+              correct: 1,
+              feedback: "When a function returns an unexpected value, log at the return statement first: does the function run? Does it reach the return? What is it returning? This immediately isolates whether the issue is (a) the function not running, (b) not reaching the return, or (c) returning the wrong value. Each case has a different fix. Random changes without this information waste time."
+            },
+            {
+              question: "What is the purpose of git branch and why do developers use branches?",
+              options: [
+                "git branch creates a copy of a file for backup purposes",
+                "git branch creates a parallel line of development — you work on a feature without affecting the main codebase. When done and tested, you merge it",
+                "git branch is used to push code to GitHub",
+                "git branch creates a tag in the repository history for marking releases"
+              ],
+              correct: 1,
+              feedback: "A branch is a parallel line of development. You create a branch for a feature or fix, make commits on it, test it, and then merge it into main when ready. This means the main branch always contains tested, working code. Multiple developers can work on different branches simultaneously without interfering. Feature branches are the standard workflow in professional teams."
+            }
+          ]
+        }
+      },
+      {
         id: "4-9",
         title: "Weather App with Real API",
         body: `This is your first real application using a real external API. The OpenWeatherMap API is free, well-documented, and used by thousands of real applications. The scaffold connects to the API and displays current weather — your job is to extend it.
@@ -2167,10 +2487,63 @@ Code review is where you stop being a person who writes code and start being a p
 
 <strong>Still not sure what to improve?</strong> Apply one test to every function: cover the body and read only the name. Without reading the implementation, can you predict what it does and what it returns? If not, the name needs work.`,
         quiz: {
-          question: "You're reviewing a function called processData() that is 60 lines long and handles fetching, parsing, validating, and displaying results. What is the main problem?",
-          options: ["The function is too long — it needs to be shortened by removing some functionality", "The function has too many responsibilities — it should be split into four separate functions", "The function name is fine because it accurately describes processing data", "The function should be replaced with a class that has separate methods"],
-          correct: 1,
-          feedback: "A function that handles fetching, parsing, validating, and displaying has four responsibilities. The single responsibility principle says each function should do one thing. Split it: fetchData(), parseResponse(), validateInput(), displayResults(). Each part is now independently testable, readable, and replaceable — the name tells you exactly what it does."
+          questions: [
+            {
+              question: "You've written this code: const data = fetch('https://api.example.com/users').then(r => r.json()); — then you immediately do: console.log(data.length). What is logged?",
+              options: [
+                "The number of users returned by the API",
+                "undefined — you cannot call .length on a Promise",
+                "Error: data is not defined",
+                "0 — empty arrays have length 0"
+              ],
+              correct: 1,
+              feedback: "fetch().then() returns a Promise, not the resolved data. console.log runs synchronously before the Promise resolves. data is a Promise object and Promise objects don't have a .length property — it's undefined. To get the data: use async/await or chain another .then(data => console.log(data.length))."
+            },
+            {
+              question: "localStorage.setItem('cart', JSON.stringify(cartArray)) — why JSON.stringify?",
+              options: [
+                "JSON.stringify compresses the data to save storage space",
+                "localStorage stores strings only. JSON.stringify converts the array to a JSON string so it can be stored and later reconstructed with JSON.parse",
+                "JSON.stringify is required to trigger the browser's localStorage event",
+                "JSON.stringify adds encryption to prevent other sites from reading the cart"
+              ],
+              correct: 1,
+              feedback: "localStorage accepts only strings. Passing an array directly stores '[object Object]' or a comma-separated version — not the original data. JSON.stringify serialises the array to a JSON string ('[]' or '[{...}]'). JSON.parse converts it back. This is the only correct way to store complex data in localStorage."
+            },
+            {
+              question: "Your fetch request to a public API works in Postman but returns a CORS error in the browser. Where is the fix applied?",
+              options: [
+                "In the browser settings — enable cross-origin requests in DevTools",
+                "On the server — it must include the correct Access-Control-Allow-Origin header",
+                "In the fetch() call — add mode: 'no-cors'",
+                "On the client — use a different HTTP method"
+              ],
+              correct: 1,
+              feedback: "CORS is enforced by the browser, not Postman (which doesn't apply same-origin restrictions). The fix is always server-side: the server must include Access-Control-Allow-Origin in its response headers allowing your origin. mode: 'no-cors' prevents you from reading the response — it doesn't fix CORS. If you control the server, add the CORS middleware. If you don't, you need a proxy."
+            },
+            {
+              question: "You have a git repository with uncommitted changes. A teammate asks you to urgently fix a bug on the main branch. What is the correct git workflow?",
+              options: [
+                "Commit your incomplete work to main, fix the bug, then sort out your changes later",
+                "git stash your current changes, switch to main (or a new branch), fix and commit the bug, then git stash pop to restore your work",
+                "Delete your changes and start fresh after fixing the bug",
+                "Make the bug fix on top of your current uncommitted changes and commit everything together"
+              ],
+              correct: 1,
+              feedback: "git stash temporarily saves your working changes without committing them. You can then switch branches, fix the bug, commit and push, then return to your branch and git stash pop to restore your work exactly as it was. This is one of the most useful day-to-day git techniques for context switching without losing work."
+            },
+            {
+              question: "Your application makes a fetch request and the response data structure doesn't match what you expected. What is the fastest way to debug this?",
+              options: [
+                "Guess the correct field name based on similar APIs you've used before",
+                "Open the Network tab in DevTools, find the request, click the Response tab — the exact JSON the server returned is there",
+                "Add error handling and assume the data will eventually be correct",
+                "Re-read the API documentation until you find what changed"
+              ],
+              correct: 1,
+              feedback: "The Network tab shows the exact HTTP request and response. The Response tab shows the exact JSON. This eliminates guessing — you see exactly what the server returned. Compare that to what your code expects. The mismatch is usually immediately obvious. DevTools Network tab is the first stop for any API-related bug."
+            }
+          ]
         },
         checklist: ["I reviewed all Floor 4 projects as if reading a colleague's code", "I identified at least one real improvement per project", "I implemented at least three improvements", "My functions have descriptive names that don't require reading the body to understand", "Error cases are handled in each project"]
       }
@@ -2329,6 +2702,70 @@ OAuth: "Login with Google" delegates authentication to a trusted provider. Googl
           feedback: "JWTs are stateless — the server doesn't store them, so there's nothing to delete. Any request with a valid, unexpired JWT will be accepted, even if the token was stolen. To immediately revoke a JWT, you need a server-side blocklist of invalidated tokens, which reintroduces statefulness. This is JWT's main trade-off compared to session-based auth where you just delete the session record."
         },
         checklist: ["I understand the difference between authentication and authorisation", "I understand session-based vs token-based authentication", "I know why passwords must be hashed and what bcrypt does", "I understand what OAuth is", "I would use an existing library rather than building auth from scratch"]
+      },
+      {
+        id: "5-phase1-review",
+        title: "Phase 1 Review — Full Stack Concepts, Servers, Databases, and Auth",
+        body: `Five questions covering full stack architecture, how servers work, databases, and authentication.`,
+        quiz: {
+          questions: [
+            {
+              question: "In a full stack application, what is the correct description of the frontend's role?",
+              options: [
+                "The frontend stores all the data and handles business logic",
+                "The frontend is what the user sees and interacts with — it requests data from the backend and renders it as a user interface",
+                "The frontend runs on the server and generates HTML to send to the browser",
+                "The frontend directly accesses the database using JavaScript"
+              ],
+              correct: 1,
+              feedback: "The frontend is the client-side layer: HTML, CSS, and JavaScript that runs in the browser. It renders the UI, handles user interactions, and communicates with the backend via HTTP requests (typically fetch). It does not store persistent data or contain sensitive business logic — those belong on the backend where they're protected."
+            },
+            {
+              question: "What happens between the moment a user submits a login form and the moment they see their dashboard?",
+              options: [
+                "The browser checks a local database and loads the dashboard if credentials match",
+                "The browser sends credentials to the server, the server checks the database, if valid issues a token, the browser stores the token and redirects to the dashboard",
+                "The form data is encrypted in the browser and compared to a local hash",
+                "The server sends the user's complete profile to the browser which then validates the credentials"
+              ],
+              correct: 1,
+              feedback: "Login flow: frontend sends credentials via POST → server receives them → server queries the database to find the user → if found, compares the hashed password → if valid, generates a JWT or creates a session → returns the token to the client → client stores it (localStorage or cookie) → subsequent requests include the token → server validates it on protected routes."
+            },
+            {
+              question: "What is the difference between a relational database (PostgreSQL) and a document database (MongoDB)?",
+              options: [
+                "Relational databases are only for small projects; document databases scale to any size",
+                "Relational databases store data in structured tables with relationships enforced by schema. Document databases store data as flexible JSON documents without a strict schema",
+                "PostgreSQL is open source; MongoDB is proprietary",
+                "There is no meaningful difference — they're interchangeable for most applications"
+              ],
+              correct: 1,
+              feedback: "Relational databases organise data into tables with fixed schemas and enforce relationships via foreign keys. They excel at complex queries with joins. Document databases store data as JSON-like documents with flexible schemas — no joins, but more natural for hierarchical data. Choose relational when data is structured and relationships matter; document when data shapes vary and you need flexibility."
+            },
+            {
+              question: "A password must never be stored in plain text. Why, and what is the correct approach?",
+              options: [
+                "Plain text wastes storage — passwords should be compressed",
+                "Plain text passwords are readable if the database is breached. Passwords must be hashed with bcrypt — a one-way function that cannot be reversed",
+                "Passwords should be encrypted with AES so they can be decrypted for verification",
+                "Passwords should be stored as base64 — this provides sufficient protection"
+              ],
+              correct: 1,
+              feedback: "If your database is breached and passwords are in plain text, every account is immediately compromised. Hashing with bcrypt produces a fixed-length output that cannot be reversed. To verify: hash the submitted password and compare the hashes — the original password is never stored. Encryption is reversible (wrong — the decryption key could be stolen). Base64 is encoding, not protection."
+            },
+            {
+              question: "A server receives a GET request to /api/products. What HTTP status code should it return if the database query succeeds and returns 0 products?",
+              options: [
+                "404 Not Found — no products were found",
+                "204 No Content — the response has no body",
+                "200 OK with an empty array [] — the request succeeded, there are simply no products",
+                "500 Internal Server Error — returning 0 results indicates a server problem"
+              ],
+              correct: 2,
+              feedback: "200 OK means the request was handled correctly. An empty array is a valid successful response — there are no products, and the client should handle that. 404 means the resource itself doesn't exist (the /api/products endpoint doesn't exist). 204 is for DELETE responses where there's no body. Returning 404 for empty results is a common mistake that misleads clients into thinking the endpoint is broken."
+            }
+          ]
+        }
       },
       {
         id: "5-5",
@@ -2694,6 +3131,70 @@ Fix: Sanitise with DOMPurify or escape special chars. Never trust user input.</d
           feedback: "String-concatenated SQL is vulnerable to injection. If req.body.username is ' OR '1'='1, the query becomes: SELECT * FROM users WHERE username = '' OR '1'='1' — which returns every user. Use parameterised queries: db.query('SELECT * FROM users WHERE username = $1', [req.body.username]). The database treats $1 as data, making injection impossible."
         },
         checklist: ["All secrets are stored in .env and never committed", ".env is in .gitignore", "I use parameterised queries for all database operations", "I understand what CORS is and have configured it explicitly", "I understand XSS and sanitise user-generated content before rendering"]
+      },
+      {
+        id: "5-phase2-review",
+        title: "Phase 2 Review — Node/Express, Databases, REST APIs, and Security",
+        body: `Five questions covering Express routes, database connections, REST API design, and security fundamentals.`,
+        quiz: {
+          questions: [
+            {
+              question: "An Express route handler has req.body as undefined. What is the most likely cause?",
+              options: [
+                "POST routes do not support request bodies in Express",
+                "The request was sent with GET instead of POST",
+                "app.use(express.json()) middleware is not registered before the route",
+                "req.body is always undefined for security — you must use req.params instead"
+              ],
+              correct: 2,
+              feedback: "Express doesn't parse request bodies by default. app.use(express.json()) must be registered before routes that need req.body — it reads the raw request body and parses it as JSON, attaching the result to req.body. Register it near the top of the app, before route definitions. Missing this middleware is the most common Express beginner mistake."
+            },
+            {
+              question: "What is the N+1 query problem?",
+              options: [
+                "A SQL error caused by selecting more than N columns in a query",
+                "Fetching a list of N items and then making a separate database query for each item's related data — N+1 queries total instead of 1",
+                "An index that grows beyond the database's maximum size",
+                "A bug in connection pooling that creates extra connections"
+              ],
+              correct: 1,
+              feedback: "N+1: you fetch 10 posts (1 query), then for each post you fetch the author separately (10 queries) = 11 queries total. With 100 posts it's 101 queries. The fix: a JOIN query that fetches posts and authors together in one query. ORMs can generate N+1 silently — always check what SQL your ORM actually produces."
+            },
+            {
+              question: "A client sends POST /api/users without the required email field. What should the API return?",
+              options: [
+                "201 Created with a user record that has email set to null",
+                "400 Bad Request with a message: 'email is required'",
+                "500 Internal Server Error when the database rejects the insert",
+                "200 OK with a warning flag in the response body"
+              ],
+              correct: 1,
+              feedback: "Validate all input before touching the database. If required fields are missing or invalid, return 400 Bad Request with a specific message. 400 means the client sent a bad request. 500 means something broke on the server — letting invalid data reach the database and fail there is the wrong approach. Validate early, return clear error messages."
+            },
+            {
+              question: "Why is this dangerous: 'SELECT * FROM users WHERE name = \'' + req.body.name + '\''",
+              options: [
+                "String concatenation is slower than template literals in Node.js",
+                "It's vulnerable to SQL injection — a malicious name input can change the query logic and expose all data",
+                "Single quotes are not valid in PostgreSQL queries",
+                "The query returns too many columns and wastes bandwidth"
+              ],
+              correct: 1,
+              feedback: "SQL injection: if req.body.name is ' OR '1'='1, the query becomes SELECT * FROM users WHERE name = '' OR '1'='1' — which returns every row. Fix: parameterised queries — db.query('SELECT * FROM users WHERE name = $1', [req.body.name]). The database treats $1 as data, not SQL syntax, making injection impossible. This is non-negotiable in production code."
+            },
+            {
+              question: "What is the correct way to store API keys and database passwords in a Node.js application?",
+              options: [
+                "Hardcode them as constants at the top of the file for easy access",
+                "Store in a .env file (excluded from git via .gitignore) and access via process.env.KEY_NAME",
+                "Store in a config.json file committed to the repository for the team to share",
+                "Encode them in base64 before storing in the codebase"
+              ],
+              correct: 1,
+              feedback: ".env file + .gitignore is the standard approach. The dotenv package loads .env into process.env. Commit .env.example with placeholder values for onboarding. The actual .env file is never committed. Once a secret is committed to Git, assume it's compromised even if removed — bots scan public repos continuously. Base64 is encoding, not protection."
+            }
+          ]
+        }
       },
       {
         id: "5-9",
@@ -3245,10 +3746,63 @@ When it's deployed: write a README that explains what the application does, the 
 
 <strong>Still stuck?</strong> Build the most boring version first. Ignore design, ignore edge cases, ignore optimisation. Get one thing working end-to-end: create one record through the API and see it in the database. That first working vertical slice is the hardest part. Everything after it is extending something that already works.`,
         quiz: {
-          question: "You're designing a full stack app where users can create posts and comment on them. What is the minimum schema you need?",
-          options: ["One table: posts (with comments as a JSON column)", "Two tables: users and posts (comments can be added later)", "Three tables: users, posts, and comments (with foreign keys linking them)", "Four tables: users, posts, comments, and a junction table for user-post relationships"],
-          correct: 2,
-          feedback: "Users, posts, and comments are distinct entities with their own attributes and relationships. posts has a user_id foreign key (who created it). comments has both a user_id (who wrote it) and a post_id (which post it's on). A JSON column for comments breaks querying, filtering, and indexing. Start with normalised tables — you can always denormalise for performance later if needed."
+          questions: [
+            {
+              question: "A user signs up. Walk through the complete server-side flow: what happens from POST /api/auth/register to the response?",
+              options: [
+                "Receive credentials → store plain text password → create session → return user object",
+                "Receive credentials → validate input → check email isn't taken → hash password with bcrypt → insert user record → generate JWT → return token",
+                "Receive credentials → forward to auth provider → receive token → store in database → return to client",
+                "Receive credentials → create user immediately → hash password in the background after responding"
+              ],
+              correct: 1,
+              feedback: "Registration flow: validate input (required fields, email format) → check email uniqueness → hash password with bcrypt (never store plain text) → INSERT user record → generate JWT → return { token, user }. Hashing must happen before the database insert, not after. Validation must happen before everything else."
+            },
+            {
+              question: "A database query is slow. What should you do before optimising?",
+              options: [
+                "Add an index on every column — more indexes always improve performance",
+                "Run EXPLAIN ANALYZE before the query to see the execution plan and identify where time is spent",
+                "Rewrite the query in raw SQL even if you're using an ORM",
+                "Increase the connection pool size to handle more queries in parallel"
+              ],
+              correct: 1,
+              feedback: "Profile before optimising. EXPLAIN ANALYZE (in PostgreSQL) shows the execution plan: which indexes are used, where sequential scans happen, where time is spent. You might find the slow part is not what you expected. Adding indexes to the right columns often fixes performance in minutes. Adding random indexes without profiling can actually slow down writes."
+            },
+            {
+              question: "Your Express API is running on localhost:3000 and your React frontend is on localhost:5173. The fetch call fails with a CORS error. Where do you fix this?",
+              options: [
+                "In the React fetch call — add mode: 'no-cors'",
+                "In the browser — whitelist localhost:3000 in security settings",
+                "On the Express server — install the cors package and use app.use(cors({ origin: 'http://localhost:5173' }))",
+                "In package.json — add a proxy field that routes API calls"
+              ],
+              correct: 2,
+              feedback: "CORS is enforced by the browser. The fix is always server-side: the server must allow the frontend's origin in its response headers. The cors package makes this trivial: app.use(cors({ origin: 'http://localhost:5173' })). In production, replace with your deployed frontend URL. mode: 'no-cors' prevents you from reading the response — it's not a fix."
+            },
+            {
+              question: "Your Node.js app works locally but fails to start on Railway with 'address already in use'. What is the most likely cause?",
+              options: [
+                "The app is hardcoded to port 3000 instead of using process.env.PORT",
+                "Railway doesn't support Node.js",
+                "The package.json is missing a start script",
+                "The database connection string is wrong"
+              ],
+              correct: 0,
+              feedback: "Cloud platforms assign a dynamic port via the PORT environment variable. Your app must listen on process.env.PORT. If hardcoded to 3000, the platform routes traffic to a different port — the app starts but is unreachable. Fix: app.listen(process.env.PORT || 3000). This is the most common reason a Node.js app works locally but fails on a cloud platform."
+            },
+            {
+              question: "You're debugging: the frontend makes a POST request but the backend receives an empty req.body. List the debugging steps in order.",
+              options: [
+                "Restart the server → clear the browser cache → try a different browser",
+                "Check that express.json() middleware is registered → verify the fetch call sets Content-Type: application/json → verify JSON.stringify is called on the request body → check Network tab for the actual request sent",
+                "Add more console.log statements → search Stack Overflow → ask a teammate",
+                "Rewrite the endpoint to use GET instead of POST"
+              ],
+              correct: 1,
+              feedback: "Systematic debugging: (1) Is express.json() registered before the route? (2) Does the fetch call include 'Content-Type': 'application/json'? (3) Is JSON.stringify called on the body? (4) Open Network tab → find the request → check the Request Headers and Payload tabs to see exactly what was sent. Each step eliminates a possible cause. Random guessing wastes time."
+            }
+          ]
         },
         checklist: ["I planned the data model before writing any code", "The application has a working frontend, backend, database, and authentication", "It is deployed and accessible via URL", "The README explains what it does and how I built it", "I'm proud of it and would show it to a potential employer"]
       }
@@ -3378,6 +3932,70 @@ When it's deployed: write a README that explains what the application does, the 
           feedback: "React Native has the lowest barrier for an existing React developer. The component model, state management, and JavaScript are all transferable. The mobile-specific concepts (navigation, gestures, native APIs) are learnable incrementally. Starting with native Swift and Kotlin requires learning two new languages and two new ecosystems simultaneously \u2014 a steeper ramp for the same outcome."
         },
         checklist: ["I understand the trade-offs between native and cross-platform mobile development", "I've chosen a primary mobile path and understand why", "I've built at least one mobile app that runs on a real device", "I understand the App Store / Play Store distribution process", "I know the key mobile-specific constraints (touch targets, network variability, OS fragmentation)"]
+      },
+      {
+        id: "6-phase1-review",
+        title: "Phase 1 Review — Specialisation Paths",
+        body: `Five questions covering the specialisation fork — frontend, backend, full stack, and mobile — and how to choose a direction.`,
+        quiz: {
+          questions: [
+            {
+              question: "What is the primary distinction between frontend and backend engineering?",
+              options: [
+                "Frontend engineers earn less than backend engineers",
+                "Frontend is what users see and interact with (browser/client); backend is the server, APIs, databases, and business logic users don't see",
+                "Frontend uses JavaScript; backend uses Python — they never overlap",
+                "Frontend development requires design skills; backend does not require any design knowledge"
+              ],
+              correct: 1,
+              feedback: "Frontend: everything the user interacts with — browser-rendered HTML, CSS, JavaScript, state management, performance, accessibility. Backend: server logic, APIs, databases, authentication, security, data processing. The distinction is where the code runs (client vs server) and what problems it solves (UI vs data/logic)."
+            },
+            {
+              question: "A company needs to build a new iOS and Android app. Which specialisation is most relevant?",
+              options: [
+                "Backend engineering — mobile apps just need good APIs",
+                "Frontend engineering — the skills transfer directly",
+                "Mobile development — React Native, Flutter, Swift, or Kotlin depending on requirements",
+                "DevOps — mobile apps require special deployment pipelines"
+              ],
+              correct: 2,
+              feedback: "Mobile development is its own specialisation: React Native and Flutter for cross-platform, Swift (iOS) and Kotlin (Android) for native. Frontend skills (components, state, events) transfer conceptually but the APIs, tooling, and deployment are completely different — App Store submissions, device testing, performance on constrained hardware."
+            },
+            {
+              question: "What does 'full stack' mean in practice for a developer?",
+              options: [
+                "A full stack developer has mastered both frontend and backend and can work at the same level as specialists in both",
+                "A full stack developer can work across both frontend and backend — useful for smaller teams, startups, and building complete features solo, but typically at less depth than specialists",
+                "Full stack is a job title only — it doesn't describe a real skill set",
+                "Full stack means working with all programming languages across all platforms"
+              ],
+              correct: 1,
+              feedback: "Full stack means breadth across the entire application — frontend, backend, databases, deployment. Valuable at startups and for solo projects where one person needs to build everything. At scale, specialists go deeper. The trade-off is real: full stack developers are versatile but typically less deep than dedicated specialists. Many developers start full stack and specialise over time."
+            },
+            {
+              question: "You love making interfaces feel fast, smooth, and delightful. You care deeply about what the user sees and how interactions feel. Which specialisation fits best?",
+              options: [
+                "Backend engineering — performance optimisation is primarily a server concern",
+                "Data engineering — user interfaces are driven by data",
+                "Frontend engineering — it's the specialisation focused entirely on user-facing experiences, performance, and interaction design",
+                "DevOps — page load speed is an infrastructure problem"
+              ],
+              correct: 2,
+              feedback: "Frontend engineering owns the user experience layer: rendering performance, animation, state management, accessibility, responsive design, and the feel of every interaction. If you're drawn to how interfaces look, feel, and perform — that's frontend. Backend solves different problems: data integrity, API design, concurrency, security."
+            },
+            {
+              question: "How should you decide which specialisation to pursue at this stage of your career?",
+              options: [
+                "Choose the one with the highest average salary",
+                "Build in all areas, notice which problems you find genuinely interesting rather than just tolerable, and specialise in that direction",
+                "Ask a hiring manager which specialisation has the most open roles",
+                "Choose the one that took you the least time to learn so far"
+              ],
+              correct: 1,
+              feedback: "Specialisation follows interest and aptitude — both discovered through exposure, not chosen abstractly. Build full-stack features. Notice: do you find yourself wanting to improve the UI, or do you find yourself more interested in how data flows through the system? The specialisation that fits is the one where the problems feel interesting rather than just tasks to complete."
+            }
+          ]
+        }
       },
       {
         id: "6-6",
@@ -3668,10 +4286,63 @@ renderPipeline(null);
         },
         hint: `The pressure of getting any offer can make you accept the wrong role. Don't. If you get one offer, you'll probably get two. Evaluate each one against what you actually want to learn and who you want to work with.\n\n<strong>Red flags in interviews:</strong> Defensive responses to questions about tech stack, inability to describe how the team communicates, engineers who seem bored or disengaged during the interview, or a hiring process that feels disorganised. These reflect the culture you'd be joining.\n\n<strong>Green flags:</strong> Engineers who are genuinely enthusiastic about the technical problems they're solving, a clear answer to "what does good look like on this team," evidence of psychological safety (people admit mistakes and discuss them openly), and a hiring process that respects your time.`,
         quiz: {
-          question: "A developer receives two job offers: a well-known large company with a vague onboarding description and a specialised role on a small project, and a smaller company with a structured mentorship program, active code review culture, and a senior engineer who will directly mentor them. Which should they prioritise if their goal is to grow quickly?",
-          options: ["The large company \u2014 brand recognition opens more doors in the long run", "The smaller company with structured mentorship and code review \u2014 growth comes from feedback and challenge, not brand", "They are equivalent \u2014 both will provide similar growth trajectories", "The large company \u2014 the stability reduces risk early in a career"],
-          correct: 1,
-          feedback: "Growth early in a career comes from structured feedback (code review), mentorship from more experienced engineers, and being challenged. A company brand opens doors at the hiring stage; what you actually learned and built opens doors once you're inside. A junior engineer who receives rigorous code review and direct mentorship for two years grows faster than one who ships code in isolation at a prestigious company."
+          questions: [
+            {
+              question: "You're applying for a frontend role. Your portfolio has three projects but they all look similar — dark-themed card layouts. What does this signal to a hiring manager and what would make it stronger?",
+              options: [
+                "Nothing — consistent style signals a strong personal brand",
+                "It signals limited range. A stronger portfolio shows different domains (not just the same app type), different UI patterns, and at least one project solving a real problem — not just a tutorial clone",
+                "Three projects is too few — add 10 more projects of any type",
+                "Dark themes are professional and preferred by most companies"
+              ],
+              correct: 1,
+              feedback: "Portfolios with identical-looking projects suggest the developer only knows one pattern. Hiring managers want to see range: different problem types, different UI approaches, at least one project that demonstrates problem-solving rather than feature implementation. One genuinely useful project that solves a real problem outweighs five tutorial recreations."
+            },
+            {
+              question: "An interviewer asks: 'Tell me about a technical challenge you faced and how you solved it.' You don't have a prepared story. How should you approach this?",
+              options: [
+                "Say you haven't faced any real technical challenges yet",
+                "Make up a plausible story — interviewers can't verify it",
+                "Think of a specific debugging session or architectural decision from a real project. Describe the problem, what you tried, what you learned, and how you'd approach it differently now",
+                "Describe a challenge from the curriculum you're following"
+              ],
+              correct: 2,
+              feedback: "Behavioural questions are answered with real specifics. STAR format: Situation (what was the context), Task (what needed solving), Action (what you specifically did), Result (what happened). The challenge doesn't need to be impressive — it needs to be real. A genuine story about debugging a CORS error with clear problem-solving shows more than a vague story about building a complex feature."
+            },
+            {
+              question: "What makes a GitHub profile strong from a hiring perspective?",
+              options: [
+                "The number of repositories — more is always better",
+                "Pinned repositories with descriptive READMEs, regular commit history, and real projects that are deployed and accessible — not just tutorials",
+                "A high number of stars on repositories",
+                "Following many other developers and organisations"
+              ],
+              correct: 1,
+              feedback: "A strong GitHub profile: pinned repos with README that explains what the project does, why it exists, and how to run it; regular commit history that shows consistent work; real projects (not just tutorial clones); and ideally a live deployed version. Stars reflect popularity, not your skill. Number of repos matters less than quality of the pinned ones."
+            },
+            {
+              question: "How should you approach contributing to open source as a junior developer?",
+              options: [
+                "Start by fixing a critical performance bug in a major framework — show ambition",
+                "Clone popular repos and submit major feature additions without prior discussion",
+                "Start with documentation, tests, and good-first-issue bugs. Read contributing guidelines. Comment on issues before submitting PRs. Follow the existing code style",
+                "Wait until you're a senior developer before attempting open source contributions"
+              ],
+              correct: 2,
+              feedback: "Open source contribution is a skill in itself. Start small: docs improvements, typo fixes, test additions, good-first-issue bugs. Read CONTRIBUTING.md first. Comment on the issue before submitting a PR — maintainers need to confirm the approach before you invest time. Follow the existing code style. A small accepted contribution demonstrates you can work in a real codebase and collaborate."
+            },
+            {
+              question: "You're deciding between a junior role at a startup (full ownership, no senior mentorship) and a graduate programme at a larger company (structured mentorship, less ownership). Which factors should drive the decision?",
+              options: [
+                "Always choose the startup — you'll learn faster with more ownership",
+                "Always choose the programme — structured mentorship is essential for junior developers",
+                "Consider your learning style, the quality of the specific people you'll work with, your financial runway, and which problems you'd be working on — neither is universally better",
+                "Choose based on salary — the highest-paying role will provide the best resources"
+              ],
+              correct: 2,
+              feedback: "Both paths can produce excellent engineers. The startup gives autonomy and breadth but sink-or-swim risk without senior guidance. The programme gives mentorship and structure but potentially slower autonomy growth. The deciding factors: (1) the actual people you'd work with, (2) the problems you'd solve, (3) your financial situation (startups often pay less early), (4) your learning style. Neither path is universally correct."
+            }
+          ]
         },
         checklist: ["I understand the real trade-offs between startups and large companies", "I've identified what I most want to learn in my first role", "I know what questions to ask to evaluate team culture in an interview", "I understand salary research tools (Levels.fyi, Glassdoor) and will use them before negotiating", "I've practised asking clarifying questions about mentorship, code review, and team culture"]
       }
@@ -3803,6 +4474,70 @@ renderPipeline(null);
         checklist: ["I understand the vocabulary of system design (sharding, replication, caching, load balancing)", "I understand the CAP theorem and its practical implications", "I can explain the trade-offs between monolith and microservices architectures", "I've read at least 5 real engineering architecture posts from production systems", "I can structure a system design response: requirements, estimation, components, bottlenecks, trade-offs"]
       },
       {
+        id: "7-phase1-review",
+        title: "Phase 1 Review — Professional Engineering",
+        body: `Five questions covering your first week, reading codebases, code reviews, technical debt, and system design.`,
+        quiz: {
+          questions: [
+            {
+              question: "It's your first week as a junior developer. You've been given access to the codebase. What is the most effective approach?",
+              options: [
+                "Start making improvements immediately to demonstrate value",
+                "Ask lots of questions to show enthusiasm and initiative",
+                "Read the codebase, run it locally, fix a small bug or add a small feature to get familiar with the deployment process, and observe team workflows before suggesting changes",
+                "Wait for formal onboarding before touching anything"
+              ],
+              correct: 2,
+              feedback: "First week: understand before changing. Run the application locally. Read the main modules to understand the architecture. Identify a small, well-scoped task (a bug fix or tiny feature) and complete the full cycle from development to deployment. This builds context and shows competence without overstepping. Questions are good, but demonstrate you've tried to find the answer first."
+            },
+            {
+              question: "You're reading an unfamiliar codebase and encounter a complex function with no comments. What is the most effective approach?",
+              options: [
+                "Add a comment explaining what you think it does and move on",
+                "Rewrite it in a style you find more readable",
+                "Trace the call chain: find where it's called, what it receives, what it returns. Add console.log or a debugger to observe its behaviour with real data. Then read the implementation",
+                "Skip it and only work with parts of the codebase you already understand"
+              ],
+              correct: 2,
+              feedback: "Reading unfamiliar code: start from usage (where is it called?) not implementation (what does it do?). The call site tells you the inputs and expected outputs. Then read the function with that context. For complex logic, add temporary logging or use a debugger to observe actual values. Understanding comes from running the code, not just reading it."
+            },
+            {
+              question: "You're reviewing a colleague's pull request. You find code that works but is harder to read than it needs to be. How should you frame the comment?",
+              options: [
+                "Approve it — working code is correct code and readability is subjective",
+                "Request changes with a comment explaining the readability concern and suggesting a specific alternative: 'Could we extract this into a named function? It would make the intent clearer — something like: validateUserPermissions()'",
+                "Comment: 'This is hard to read. Please rewrite it.'",
+                "Fix it yourself and push to their branch"
+              ],
+              correct: 1,
+              feedback: "Good code review feedback is specific, explains the why, and offers a concrete alternative. 'Hard to read' is not actionable. 'Extract into a named function called X because it would make the intent clear' gives the author exactly what to do and why. Reviews are a conversation — suggest, explain, and be open to the author's perspective. Never push to someone else's branch without permission."
+            },
+            {
+              question: "What is technical debt and when is it acceptable?",
+              options: [
+                "Technical debt is code written in old programming languages — acceptable only for legacy projects",
+                "Technical debt is intentional shortcuts taken now that will need proper implementation later. Acceptable when speed matters and you plan and document the debt explicitly",
+                "Technical debt is any code written by developers who are no longer at the company",
+                "Technical debt is never acceptable — always write code correctly the first time"
+              ],
+              correct: 1,
+              feedback: "Technical debt is a deliberate trade-off: implement something quickly now (incurring debt) with the intention to implement it properly later. It's acceptable when the business genuinely needs speed and the team understands and documents the debt. The problem is debt without a plan — it accumulates interest: it takes longer to change, causes bugs, and slows down every future feature. Explicit debt is manageable; hidden debt is dangerous."
+            },
+            {
+              question: "A system must handle 100,000 concurrent users. The current single-server architecture can handle 10,000. What is the first question to ask before proposing a solution?",
+              options: [
+                "Which cloud provider should we use?",
+                "How quickly must this scale — is this a gradual growth or a sudden expected spike?",
+                "How many more servers should we buy?",
+                "Should we rewrite in a different programming language?"
+              ],
+              correct: 1,
+              feedback: "Before any solution: understand the constraint. Gradual growth → horizontal scaling with a load balancer is the standard solution. Sudden spike (e.g., a product launch) → pre-warm capacity or use auto-scaling. In both cases: profile first (is the bottleneck CPU, memory, database, or I/O?), add caching for repeated reads, optimise the database before throwing more hardware at it. The right solution depends on the specific problem."
+            }
+          ]
+        }
+      },
+      {
         id: "7-6",
         title: "Engineering in Teams",
         body: `Software engineering is a team sport and most of its hardest problems are human, not technical. The technical problems have known solution spaces; the human problems \u2014 communication, alignment, trust, conflict \u2014 are where engineering velocity actually lives or dies.\n\nThe daily collaboration loops that matter most: standup (what are you working on, what's blocking you), code review (how does the team maintain quality and share context), planning (how does the team decide what to build and in what order), and retrospectives (how does the team reflect on what's working and what isn't). Each of these is a ritual that compounds into culture when done consistently, and degrades into theatre when done mechanically.\n\nWritten communication is disproportionately important in engineering teams, especially distributed ones. A well-written engineering design doc \u2014 explaining the problem, the options considered, the decision made, and the rationale \u2014 replaces hours of meetings and creates a record that new team members can learn from months later. Google, Airbnb, and Stripe all have design doc cultures. The discipline of writing down architectural decisions before making them surfaces assumptions, invites feedback, and prevents revisiting settled questions.\n\nConflict is inevitable in teams where smart people care about outcomes. The productive form: technical disagreement argued with evidence, decided with data, and committed to fully once the decision is made. The dysfunctional form: personal, unresolved, and affecting code quality or team morale. "Disagree and commit" \u2014 Amazon's phrase for it \u2014 is a genuinely useful norm: you can disagree with a decision, but once it's made, you implement it fully and don't passive-aggressively undermine it.\n\nPsychological safety \u2014 the belief that you can say a wrong thing, ask a stupid question, or disagree with someone senior without punishment \u2014 is the most predictive factor in high-performing engineering teams. Google's Project Aristotle found this more important than team composition, manager quality, or any other variable. You can't control whether your team has it; you can contribute to it by modelling the behaviour: admitting mistakes openly, asking questions without self-deprecation, and responding to others' wrong answers with curiosity rather than judgment.`,
@@ -3910,10 +4645,63 @@ renderPipeline(null);
         },
         hint: `The most underrated long-game move: staying curious about the work itself. The engineers who remain excellent at 20 years are genuinely interested in the craft \u2014 they're excited about new ideas not because they need to be but because they still find them interesting. If you stop finding the work interesting, that's worth taking seriously as information, not suppressing.\n\n<strong>Career insurance:</strong> Write. Teach. Speak. Engineers with a public record of their thinking \u2014 blog posts, talks, open source, documented work \u2014 are resilient to layoffs and downturns in ways that engineers who only work internally are not. A public record is career insurance.\n\n<strong>On regrets:</strong> The most common regret engineers report late in their careers is not writing enough, not building enough in public, and not investing enough in relationships. The technical skills were fine. The artefacts and connections that would have made the work visible and durable are what was missing. Start now. Literally now.`,
         quiz: {
-          question: "A mid-career engineer has mastered their current tech stack and is trying to decide where to invest learning time next. What investment will compound most over a 20-year career?",
-          options: ["Learning the newest JavaScript framework to stay current with the ecosystem", "Deepening fundamentals (systems, networks, databases) and building communication skills that apply across all technologies", "Specialising further in their current stack to become the company expert", "Focusing purely on shipping features to build a track record of output"],
-          correct: 1,
-          feedback: "Frameworks are replaced on 3-5 year cycles. Fundamentals and communication skills compound across every technology change for an entire career. The engineer who deeply understands databases can adapt to any new database tool. The engineer who can communicate clearly can work with any team, any technology, any business context. The return on investment for fundamentals and communication massively exceeds the return on any single framework over a 20-year horizon."
+          questions: [
+            {
+              question: "A production incident is happening: users can't log in. You're on call. What is the correct order of actions?",
+              options: [
+                "Find the root cause → fix the code → deploy → notify users",
+                "Restore service first (rollback, feature flag, cache clear) → notify stakeholders → diagnose root cause → implement and test a proper fix → post-mortem",
+                "Notify users → escalate to the team → wait for someone more senior to fix it",
+                "Rewrite the authentication system to prevent future issues"
+              ],
+              correct: 1,
+              feedback: "Incident response priority: (1) Restore service — the fastest path to users being able to log in again, even if it's a rollback. (2) Communicate — stakeholders need to know. (3) Diagnose — what actually caused it? (4) Fix properly with tests. (5) Post-mortem — what process changes prevent recurrence? Never diagnose and fix while users are blocked if a faster restore path exists."
+            },
+            {
+              question: "You receive a code review comment you disagree with. The reviewer is more senior. How should you respond?",
+              options: [
+                "Accept all feedback from more senior engineers — they know better",
+                "Reject the feedback privately — implement your approach anyway",
+                "Respond with your reasoning: 'I chose this approach because [specific reason]. I'm open to [their suggestion] but I think the trade-off is [specific thing]. Can we discuss?'",
+                "Escalate immediately to the engineering manager"
+              ],
+              correct: 2,
+              feedback: "Code review is a technical discussion, not a hierarchy exercise. If you have a genuine technical reason for your approach, explain it clearly and professionally. Senior engineers can be wrong; juniors can be right. 'I disagree because X' followed by openness to discussion is professional. Silently accepting feedback you disagree with produces worse code; silently ignoring feedback is disrespectful to the process."
+            },
+            {
+              question: "What is the long-term pattern that distinguishes engineers who advance from those who plateau?",
+              options: [
+                "Working longer hours than colleagues",
+                "Specialising deeply in one technology and never leaving their comfort zone",
+                "Continuously investing in fundamentals, seeking feedback, writing and teaching, and working on increasingly complex problems",
+                "Switching companies frequently to get salary increases"
+              ],
+              correct: 2,
+              feedback: "Engineering growth compounds: fundamentals (data structures, system design, debugging) improve your ceiling. Feedback reveals blind spots you can't see yourself. Writing and teaching crystallise what you know and build your reputation. Working on harder problems is the only way to develop the skill to solve harder problems. The plateau happens when comfort replaces challenge."
+            },
+            {
+              question: "A colleague writes: 'This is a clever solution!' in a PR description. Is 'clever' code desirable in production?",
+              options: [
+                "Yes — clever code demonstrates technical skill and impresses other engineers",
+                "No — clever code is typically harder to read, debug, and maintain. The best production code is boring: clear names, obvious logic, and predictable patterns",
+                "It depends on the language — clever code is acceptable in Python but not in JavaScript",
+                "Yes — if the code is correct and passes tests, cleverness doesn't matter"
+              ],
+              correct: 1,
+              feedback: "'Clever' in code is usually a warning sign. Code is read far more often than it's written. Clever solutions optimise for impressing the author's past self at the expense of every future reader, including the author six months later. The best code reads like prose: obvious at a glance, easy to modify. When you're tempted to write something clever, ask: what would this look like if it were boring? Usually the boring version is better."
+            },
+            {
+              question: "You're three years into your engineering career. How should you measure progress?",
+              options: [
+                "Number of commits and lines of code written",
+                "Salary increases relative to peers",
+                "The complexity of problems you can solve independently, the quality of your system design decisions, and the clarity of your technical communication — not just output metrics",
+                "Number of programming languages you've learned"
+              ],
+              correct: 2,
+              feedback: "Lines of code is a vanity metric — deleting 500 lines of complexity might be more valuable than writing 500 new ones. Real progress: can you break down an ambiguous requirement into a concrete implementation plan? Can you design a system that will work at 10x current scale? Can you explain a complex technical decision to a non-technical stakeholder? These capabilities compound. Output metrics don't."
+            }
+          ]
         },
         checklist: ["I understand that engineering is a long compounding investment, not a series of short sprints", "I have a sustainable learning approach that doesn't require heroic effort to maintain", "I'm investing in professional relationships, not just technical skills", "I know the signs of burnout and have strategies to prevent it", "I'm building public artefacts (writing, open source, documentation) that create a durable record of my work"]
       }
