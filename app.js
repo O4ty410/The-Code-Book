@@ -7090,6 +7090,7 @@ if (!section) { return; }
     '<button class="section-tab-btn active" onclick="switchSectionTab(\'read\',\'' + section.id + '\',this)">Read</button>' +
     (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
     (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
+    '<button class="section-tab-btn notes-tab-btn" onclick="switchSectionTab(\'notes\',\'' + section.id + '\',this)">📝 Notes</button>' +
     '</div>' +
     dots +
     '</div>' +
@@ -7251,6 +7252,31 @@ if (!section) { return; }
   }
   q += '</div>';
 
+  // NOTES
+  var noteVal = localStorage.getItem('note_' + section.id) || '';
+  var noteWords = noteVal.trim() ? noteVal.trim().split(/\s+/).length : 0;
+  var n = '<div class="notes-panel">' +
+    '<div class="notes-header">' +
+      '<div class="notes-header-left">' +
+        '<div class="notes-icon">📝</div>' +
+        '<div>' +
+          '<div class="notes-title">Your Notes</div>' +
+          '<div class="notes-subtitle">Explain what you learned in your own words</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="notes-save-status" id="notes-saved-' + section.id + '">Saved</div>' +
+    '</div>' +
+    '<div class="notes-prompt-card">' +
+      '<div class="notes-prompt-q">What would you tell a friend about this section?</div>' +
+      '<div class="notes-prompt-hint">No jargon needed. Explain it like they\'ve never coded before.</div>' +
+    '</div>' +
+    '<textarea class="notes-textarea" id="notes-ta-' + section.id + '" placeholder="e.g. \'A function is basically a named set of instructions. You write it once, then call it whenever you need it. Like a recipe.\'" oninput="onNoteInput(\'' + section.id + '\')">' + escHtml(noteVal) + '</textarea>' +
+    '<div class="notes-footer">' +
+      '<span class="notes-wordcount" id="notes-wc-' + section.id + '">' + noteWords + ' word' + (noteWords !== 1 ? 's' : '') + '</span>' +
+      '<span class="notes-footer-hint">Auto-saved to your browser</span>' +
+    '</div>' +
+    '</div>';
+
   // GATE
   var g = '<div class="gate-box" style="margin:0 32px 32px;">' +
     '<div class="gate-label">TO COMPLETE THIS SECTION</div>' +
@@ -7282,6 +7308,7 @@ if (!isLoggedIn && !isGuest) {
     '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
     (showEditor ? '<div class="section-panel" id="spanel-code-' + section.id + '">' + c + '</div>' : '') +
     (showQuiz ? '<div class="section-panel" id="spanel-quiz-' + section.id + '">' + q + '</div>' : '') +
+    '<div class="section-panel" id="spanel-notes-' + section.id + '">' + n + '</div>' +
     g + nav;
 
   var _mc = document.getElementById('main-content');
@@ -7324,6 +7351,86 @@ function switchSectionTab(tab, sectionId, btn) {
   }
   if (tab === 'quiz') sageMessage('Take your time. The explanation after the answer matters as much as getting it right.', 'tip');
   if (tab === 'read') sageMessage('Read it like a road sign. Extract the pattern. Move on.', 'encourage');
+  if (tab === 'notes') {
+    updateNoteWordCount(sectionId);
+    sageMessage('Writing what you learned in your own words is the best revision tool there is.', 'tip');
+  }
+}
+
+function onNoteInput(sectionId) {
+  updateNoteWordCount(sectionId);
+  var ind = document.getElementById('notes-saved-' + sectionId);
+  if (ind) { ind.textContent = 'Saving…'; ind.classList.remove('saved'); }
+  clearTimeout(window._noteSaveTimer);
+  window._noteSaveTimer = setTimeout(function() { saveNote(sectionId); }, 500);
+}
+
+function saveNote(sectionId) {
+  var ta = document.getElementById('notes-ta-' + sectionId);
+  if (!ta) return;
+  localStorage.setItem('note_' + sectionId, ta.value);
+  var ind = document.getElementById('notes-saved-' + sectionId);
+  if (ind) { ind.textContent = 'Saved'; ind.classList.add('saved'); }
+}
+
+function updateNoteWordCount(sectionId) {
+  var ta = document.getElementById('notes-ta-' + sectionId);
+  var wc = document.getElementById('notes-wc-' + sectionId);
+  if (!ta || !wc) return;
+  var words = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+  wc.textContent = words + ' word' + (words !== 1 ? 's' : '');
+}
+
+function openNotesReview() {
+  var notesHtml = '';
+  var totalNotes = 0;
+  FLOORS.forEach(function(floor, fi) {
+    var floorNotes = [];
+    floor.sections.forEach(function(sec) {
+      var note = localStorage.getItem('note_' + sec.id);
+      if (note && note.trim()) {
+        floorNotes.push({ title: sec.title, note: note });
+        totalNotes++;
+      }
+    });
+    if (floorNotes.length > 0) {
+      notesHtml += '<div class="nr-floor-group">';
+      notesHtml += '<div class="nr-floor-title" style="color:' + (floor.color || '#c8a96e') + '">Floor ' + (fi + 1) + ' — ' + floor.title + '</div>';
+      floorNotes.forEach(function(item) {
+        notesHtml += '<div class="nr-note-item">' +
+          '<div class="nr-section-title">' + escHtml(item.title) + '</div>' +
+          '<div class="nr-note-text">' + escHtml(item.note).replace(/\n/g, '<br>') + '</div>' +
+          '</div>';
+      });
+      notesHtml += '</div>';
+    }
+  });
+  if (totalNotes === 0) {
+    notesHtml = '<div class="nr-empty">' +
+      '<div class="nr-empty-icon">📝</div>' +
+      '<div class="nr-empty-text">No notes yet. As you work through sections, jot down what you\'ve learned in the Notes tab — it\'ll all appear here for review.</div>' +
+      '</div>';
+  }
+  var overlay = document.getElementById('notes-review-overlay');
+  if (!overlay) return;
+  overlay.innerHTML = '<div class="nr-panel">' +
+    '<div class="nr-header">' +
+      '<div class="nr-header-left">' +
+        '<div class="nr-title">Your Notes</div>' +
+        '<div class="nr-sub">' + totalNotes + ' note' + (totalNotes !== 1 ? 's' : '') + ' across your journey</div>' +
+      '</div>' +
+      '<button class="nr-close" onclick="closeNotesReview()">&#x2715;</button>' +
+    '</div>' +
+    '<div class="nr-body">' + notesHtml + '</div>' +
+    '</div>';
+  overlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeNotesReview() {
+  var overlay = document.getElementById('notes-review-overlay');
+  if (overlay) overlay.style.display = 'none';
+  document.body.style.overflow = '';
 }
 
 function markGate(sectionId, key) {
@@ -7922,6 +8029,7 @@ function renderLearnHub() {
       '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
       '<div class="fc-header-sub">Work through each floor in order. Each one builds directly on the last.</div>' +
       '<div style="margin-top:16px;">' + overallBar + '</div>' +
+      '<button class="hub-notes-btn" onclick="openNotesReview()">📝 Review your notes</button>' +
     '</div>' +
     '<div class="fc-stats">' +
       '<div class="fc-stat"><div class="fc-stat-val">' + floorsUnlocked + '</div><div class="fc-stat-label">Floors Unlocked</div></div>' +
