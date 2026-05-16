@@ -865,7 +865,7 @@ const FLOORS = [
       {
         id: "3-1",
         title: "What JavaScript Does",
-        body: `HTML is structure. CSS is appearance. JavaScript is behaviour \u2014 what happens when you actually interact with a page.\n\nEvery programming language you'll encounter later in your career \u2014 Python, Go, Rust, Swift \u2014 lives on servers or devices. JavaScript is the only language browsers run natively. If it happens in a browser and it responds to you, JavaScript made it happen.\n\nThe mental model to internalise: JavaScript is <strong>event-driven</strong>. It doesn't run top-to-bottom once and stop. It loads onto the page, then sits waiting. Waiting for a click, a keypress, a timer firing, a network response arriving. When one of those things happens, the relevant function runs. When it's done, JavaScript goes back to waiting. This is fundamentally different from the sequential scripts you saw in Floor 1.\n\nJavaScript's view of the page is the <strong>DOM</strong> \u2014 Document Object Model. The browser represents every HTML element as a JavaScript object in a tree structure. JavaScript can find any node in that tree, read its properties, change its content or style, add new nodes, or remove existing ones \u2014 all without reloading the page. This is called DOM manipulation, and it's the core mechanism behind every interactive website.\n\nWhen Instagram shows a like animation the instant you tap the heart \u2014 no page reload, just an immediate response \u2014 JavaScript found the heart element in the DOM, changed its CSS class to the filled version, incremented the like count, and sent a network request to save the like to the server. All of that in milliseconds, without you seeing anything except the animation.\n\nThat is what you're about to learn to do.`,
+        body: `HTML is structure. CSS is appearance. JavaScript is behaviour \u2014 what happens when you actually interact with a page.\n\nEvery programming language you'll encounter later in your career \u2014 Python, Go, Rust, Swift \u2014 lives on servers or devices. JavaScript is the only language browsers run natively. If it happens in a browser and it responds to you, JavaScript made it happen.\n\nThe mental model to internalise: JavaScript is <strong>event-driven</strong>. It doesn't run top-to-bottom once and stop. It loads onto the page, then sits waiting. Waiting for a click, a keypress, a timer firing, a network response arriving. When one of those things happens, the relevant function runs. When it's done, JavaScript goes back to waiting. This is fundamentally different from the sequential scripts you saw in Floor 1.\n\nJavaScript's view of the page is the <strong>DOM</strong> \u2014 Document Object Model. The browser represents every HTML element as a JavaScript object in a tree structure. JavaScript can find any node in that tree, read its properties, change its content or style, add new nodes, or remove existing ones \u2014 all without reloading the page. This is called DOM manipulation, and it's the core mechanism behind every interactive website.\n\nWhen Instagram shows a like animation the instant you tap the heart \u2014 no page reload, just an immediate response \u2014 JavaScript found the heart element in the DOM, changed its CSS class to the filled version, incremented the like count, and sent a network request to save the like to the server. All of that in milliseconds, without you seeing anything except the animation.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — pick one interaction on a website you use daily. Can you name the event that triggers it, what changes in the DOM, and whether a network request is involved?</div>\n\nThat is what you're about to learn to do.`,
         callout: {
           type: "default",
           label: "The Third Layer",
@@ -883,7 +883,7 @@ const FLOORS = [
           correct: 1,
           feedback: "When you click Like, JavaScript is listening for that click event. An event handler function runs: it updates the heart icon's appearance in the DOM (no reload needed), updates the count display, and sends an asynchronous network request to save the like to Instagram's server. The DOM update is instant because it's local. The server request happens in the background. This is exactly how modern web applications work."
         },
-        checklist: ["I understand that JavaScript is the only language browsers run natively", "I can explain the event-driven model \u2014 JavaScript waits, then responds to events", "I understand what the DOM is and what DOM manipulation means", "I've opened the browser console and run at least one JavaScript command", "I can describe in plain terms how Instagram's Like button works"]
+        checklist: ["I can explain the event-driven model without using the word 'event' — JavaScript sits idle, then runs a function when something happens", "I can describe three specific things JavaScript can do to the DOM without looking anything up", "I've opened the browser console and changed something on a live page using JavaScript", "I can explain in plain terms how Instagram's Like button works without a page reload", "I understand why JavaScript is the only language that runs natively in browsers"]
       },
       {
         id: "3-2",
@@ -906,7 +906,7 @@ const FLOORS = [
           correct: 1,
           feedback: "When + encounters a string on either side, it concatenates \u2014 joins them together as text. '10' is a string, so '10' + 5 becomes '10' + '5' (5 is coerced to a string) which is '105'. This is why parseInt() or Number() is used to convert string inputs to numbers before doing maths, and why === catches this kind of type mismatch."
         },
-        checklist: ["I use const by default and only reach for let when values genuinely need to change", "I understand the four primitive types: string, number, boolean, undefined", "I can write template literals with embedded expressions", "I always use === instead of ==", "I understand what type coercion is and which operators trigger it"]
+        checklist: ["I default to const and can explain WHY — without looking it up", "I can name the four primitive types and give a concrete example of each", "I can write a template literal with a calculation inside \${} from memory", "I always use === and can predict the result of '5' == 5 vs '5' === 5 before running it", "I can predict what '10' + 3 returns and explain why it differs from '10' - 3"]
       },
       {
         id: "3-3",
@@ -929,7 +929,7 @@ const FLOORS = [
           correct: 2,
           feedback: "0 is one of the six falsy values in JavaScript, so if (0) evaluates to false and processInput is skipped. 'hello' is truthy. [] is truthy (empty arrays are truthy \u2014 only empty strings are falsy). 'false' is also truthy \u2014 it's a non-empty string containing the text 'false', not the boolean false."
         },
-        checklist: ["I can write if/else if/else chains and explain how they evaluate", "I know all six falsy values in JavaScript", "I understand that && and || return values, not just booleans", "I can use the ternary operator for simple conditional assignments", "I can use the || operator as a default value pattern"]
+        checklist: ["I can list all six falsy values without looking them up", "I can predict whether if ([]) runs — and explain why", "I can write a default value using || and explain what happens when the left side is falsy", "I can use the ternary operator for a simple assignment and read one written by someone else", "I can explain && short-circuit evaluation using a concrete example"]
       },
       {
         id: "3-4",
@@ -952,7 +952,7 @@ const FLOORS = [
           correct: 1,
           feedback: "The function performs the calculation x * 2 but the result is never returned. A function without a return statement returns undefined. To fix it: function double(x) { return x * 2; }. This is one of the most common early mistakes \u2014 computing a value inside a function but forgetting to send it back with return."
         },
-        checklist: ["I can write a function declaration with parameters and a return value", "I understand the difference between parameters and arguments", "I can write an arrow function and know when to prefer it", "I understand what function scope means and why it matters", "I know what a pure function is and why it's considered good practice"],
+        checklist: ["I can write a function with parameters and a return value from memory", "I can explain in one sentence the difference between parameters and arguments", "I can write an arrow function equivalent of a regular function declaration", "I can explain what happens to a variable declared inside a function when the function finishes", "I can describe what makes a function 'pure' and give an example from a real app"],
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -1062,7 +1062,7 @@ document.getElementById('output').innerHTML=out;
           correct: 0,
           feedback: "The condition is i < 5. After i increments to 5, the condition is checked: 5 < 5 is false, so the loop body does not execute and the loop ends. The body runs for i = 0, 1, 2, 3, 4 \u2014 five times total. When i becomes 5, the condition fails and the loop exits."
         },
-        checklist: ["I can write a for loop with correct initialisation, condition, and update", "I understand when to use while vs for", "I can use forEach for clean array iteration", "I know the difference between for...of and for...in", "I understand what break and continue do and can use them correctly"],
+        checklist: ["I can write a for loop from memory with correct initialisation, condition, and update", "I can explain why break doesn't work inside forEach — and what to use instead", "I can use forEach for clean array iteration without looking at examples", "I can explain the difference between for...of and for...in and when to use each", "I can write a loop that exits early when a condition is met"],
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -1114,7 +1114,7 @@ document.getElementById('output').innerHTML=out;
           correct: 0,
           feedback: "filter returns a new array containing only the items where the callback function returns true. n > 4 is true for 7 and 9. 3 is not greater than 4. 1 is not greater than 4. 4 is not greater than 4 (the condition is strictly greater than, not greater than or equal). Result: [7, 9]."
         },
-        checklist: ["I know the core array methods: push, pop, slice, splice, indexOf, includes", "I can use map, filter, and reduce to transform arrays", "I can create and navigate nested objects using both dot and bracket notation", "I understand what JSON is and can convert between JSON and JavaScript objects", "I can work with arrays of objects \u2014 the most common data structure in real applications"],
+        checklist: ["I can access a nested property in an object without looking up the syntax", "I can use filter() to get a subset of an array and explain what it returns", "I can use map() to transform an array and explain how its return value differs from forEach", "I can chain filter() and map() together and predict the result", "I can explain the difference between an array of primitives and an array of objects"],
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -1176,7 +1176,7 @@ document.getElementById('output').innerHTML=out;
           correct: 2,
           feedback: "classList.toggle adds the class if absent, removes it if present \u2014 in one call. Pair it with a CSS rule like .hidden { display: none; } and the behaviour is clean and reusable. Directly manipulating style is harder to override and mixes presentation logic into JavaScript. Setting a custom attribute requires extra code to read and act on it. Clearing innerHTML destroys the content entirely rather than hiding it."
         },
-        checklist: ["I can find elements using getElementById, querySelector, and querySelectorAll", "I know when to use textContent vs innerHTML and why innerHTML can be a security risk", "I can add, remove, and toggle CSS classes on elements", "I can create new elements with createElement and attach them with appendChild", "I understand the classList.toggle pattern for show/hide interactions"],
+        checklist: ["I can find an element with querySelector and change its text without looking up the syntax", "I can explain when to use textContent vs innerHTML — and why innerHTML carries a security risk", "I can add, remove, and toggle a CSS class on an element from memory", "I can create a new element, set its content, and append it to the DOM", "I've used classList.toggle to build a show/hide interaction"],
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -1230,7 +1230,7 @@ function toggleMessage(){
           correct: 1,
           feedback: "Form submission's default behaviour is to send the form data and reload the page. The JavaScript runs briefly but then the reload wipes everything. event.preventDefault() stops that default action, letting your JavaScript handle the submission completely without a page reload. This is one of the most common patterns in web form handling."
         },
-        checklist: ["I use addEventListener instead of inline onclick attributes", "I know the common event types and what triggers each one", "I can access and use the event object inside a handler", "I understand event.preventDefault() and know when to use it", "I understand event delegation and can implement it on a dynamic list"],
+        checklist: ["I use addEventListener instead of onclick attributes and can explain why", "I can name four common event types and describe what triggers each one", "I can access e.target inside a handler to identify what was clicked", "I can use event.preventDefault() and explain one concrete example where it's needed", "I can implement event delegation on a dynamic list and explain why it's more efficient"],
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -1353,7 +1353,7 @@ document.getElementById('submit-btn').addEventListener('click',function(e){
           correct: 1,
           feedback: "This TypeError means you wrote something like user.name where user is undefined. The object you expected to be there (user) doesn't exist at the moment your code runs \u2014 it might not have been returned yet, the variable is initialised as undefined, or a function didn't return a value. Log the variable just before the failing line to confirm what it contains."
         },
-        checklist: ["I can identify the three JavaScript error types and what each one means", "I read error messages fully before touching any code", "I use console.log systematically to trace values, not randomly to hope for clues", "I understand try/catch and know when it's appropriate to use", "I've used the DevTools debugger to set a breakpoint and step through execution"],
+        checklist: ["I can identify a TypeError, ReferenceError, and SyntaxError from their messages alone", "I read error messages completely before touching any code", "I use console.log systematically — at specific points to trace values, not randomly", "I can write a try/catch block and explain when it's appropriate vs not", "I've set a breakpoint in DevTools and stepped through execution line by line"],
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -1405,7 +1405,7 @@ el.innerHTML+=parseData('this is not valid JSON');
           correct: 1,
           feedback: "The array is the source of truth. localStorage is saved from the array. On refresh, the saved data is loaded from localStorage and the list is re-rendered from the array. If the item was removed from the DOM but not from the array, it was saved to localStorage and will reappear on refresh. Always update the source of truth (the array) first, then update the DOM to reflect it."
         },
-        checklist: ["I read all function stubs and comments before implementing anything", "The addTodo function correctly validates input, updates the array, and creates a DOM element", "The deleteTodo function removes items from both the array and the DOM", "The toggleComplete function updates both the array state and the DOM visual state", "The todos persist through page refresh using localStorage"],
+        checklist: ["I read and understood the full scaffold before writing any code", "My addTodo function validates input, updates the array, and creates a DOM element", "My deleteTodo removes the item from both the array and the DOM in sync", "My toggleComplete updates both the data state and the DOM visual state correctly", "Todos persist through a page refresh — I can explain how localStorage makes this work"],
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -1483,7 +1483,7 @@ render();
           correct: 2,
           feedback: "Code you can't explain is code you don't own. It will behave unexpectedly when conditions change, and you won't know how to modify or debug it. Read it until you understand each line. Break it intentionally \u2014 remove a line, change a value \u2014 and observe what fails. Understanding a solution is the real goal, not just having one that runs."
         },
-        checklist: ["I spent at least 30 minutes attempting the project before searching for anything", "The project responds to real user input", "I can explain every line of code I wrote or incorporated", "When I got stuck, I applied the debugging process systematically", "The project is complete enough that I'd show it to someone as an example of what I built"]
+        checklist: ["I built something without following a guide — the idea and approach were mine", "The project responds to real user input and produces meaningful output", "I can explain every line of code I wrote, including code I found online", "When I got stuck, I read the error, formed a hypothesis, and tested it before searching", "The project is complete enough that I'd show it to someone as evidence of what I can build"]
       },
       {
         id: "3-12",
@@ -1587,7 +1587,7 @@ render();
       {
         id: "4-1",
         title: "How Developers Think",
-        body: `Professional developers don't memorise — they have a process. When they face a new problem, they break it down into the smallest possible piece, solve that piece, then move to the next. The first version doesn't need to be perfect. It needs to work. Then you improve it.
+        body: `Professional developers don't memorise — they have a process. When they face a new problem, they break it down into the smallest possible piece, solve that piece, then move to the next. The first version doesn't need to be perfect. It needs to work. Then you improve it.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — think of the last time you got stuck on something for more than 20 minutes. What was the smallest piece of the problem you could have isolated and searched for specifically? What would that search query have looked like?</div>
 
 One of the most useful debugging techniques has a ridiculous name: rubber duck debugging. You explain your code, line by line, to an inanimate object. The act of explaining forces you to articulate assumptions you didn't know you were making. The bug usually reveals itself before you finish the sentence.
 
@@ -1615,7 +1615,7 @@ Reading error messages properly is a skill most beginners skip. Every error has 
           correct: 1,
           feedback: "Line 47 is where JavaScript noticed something was wrong, not necessarily where you made the mistake. If a variable is misspelled on line 12, the error might only surface when you try to use it on line 47. Start at the reported line, then trace backwards through the call stack to find the root cause."
         },
-        checklist: ["I understand the 20-minute rule", "I can read an error message and extract the type, message, and line number", "I understand what a stack trace is", "I've tried rubber duck debugging at least once", "I break problems into smaller pieces before writing code"]
+        checklist: ["I can break an unfamiliar problem into pieces small enough to search for individually", "I've used the 20-minute rule: attempted a problem genuinely before searching", "I can read an error message, identify the type and line number, and form a hypothesis before changing anything", "I've used rubber duck debugging — explained a problem out loud — and it helped", "I can identify the minimal reproducible version of a bug I'm debugging"]
       },
       {
         id: "4-2",
@@ -1650,7 +1650,7 @@ The browser console is an underused sandbox. Any line of JavaScript can be typed
           correct: 1,
           feedback: "Vote counts measure historical usefulness, not current accuracy. A JavaScript answer from 2013 may use var, callbacks, and patterns that have been superseded. Always check the date. Also verify the question actually matches your situation — similar-looking problems can have different root causes."
         },
-        checklist: ["I know how to navigate MDN Web Docs", "I understand the structure of a documentation page", "I can evaluate a Stack Overflow answer critically", "I use the browser console to test code before adding it to a file", "I read documentation examples before reading descriptions"]
+        checklist: ["I can navigate MDN to find the syntax, parameters, and return value of a method I've never used", "I can read a function signature and understand what it expects and returns", "I've successfully read API documentation and written a working fetch call from it without a tutorial", "I can distinguish between the method's description, its parameters, and its return value in docs", "I know where to look first when something isn't working: docs before Stack Overflow"]
       },
       {
         id: "4-3",
@@ -1685,7 +1685,7 @@ APIs speak in JSON — JavaScript Object Notation. It is the universal format fo
           correct: 2,
           feedback: "401 Unauthorized means the server doesn't know who you are — no valid API key, token, or credentials were included in the request. 403 Forbidden means the server knows who you are but won't let you do this specific thing. 404 means the resource doesn't exist. 500 means the server failed."
         },
-        checklist: ["I understand what an API is and why they exist", "I know the four HTTP methods and when to use each", "I can read and understand common HTTP status codes", "I understand what JSON is and what it looks like", "I understand what an API endpoint is"]
+        checklist: ["I can explain what an API is to someone non-technical using a concrete real-world analogy", "I can name the four HTTP methods and describe what each one is used for", "I can read an HTTP status code and know whether the request succeeded or failed — and why", "I can describe what JSON looks like and how it relates to JavaScript objects", "I can identify an API endpoint in a URL and explain what each part means"]
       },
       {
         id: "4-4",
@@ -1696,9 +1696,9 @@ fetch() is <strong>asynchronous</strong> — it doesn't block the rest of your c
 
 async/await is syntax that makes asynchronous code read like synchronous code. Mark a function as async, then use await before any operation that returns a Promise. The function pauses at that point, waits for the Promise to resolve, and continues. Under the hood it's still a Promise — async/await is just cleaner syntax on top.
 
-Error handling in async functions uses try/catch. Wrap your await calls in try, and handle network failures or bad responses in catch. An unhandled async error silently fails — the user sees nothing, and the bug is invisible. Always handle errors in production code.
+Error handling in async functions uses try/catch. Wrap your await calls in try, and handle network failures or bad responses in catch. An unhandled async error silently fails — the user sees nothing, and the bug is invisible. Always handle errors in production code.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you write const data = await fetch(url) and the network is down, what happens? Where does the error go if there’s no try/catch? What does the user see?</div>
 
-A critical mistake: never try to use fetched data outside the async function without properly awaiting it. The data doesn't exist yet at the point the outer code runs — the Promise hasn't resolved. This is the number one source of undefined errors in code that makes API calls.`,
+A critical mistake: never try to use fetched data outside the async function without properly awaiting it.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you write const data = await fetch(url) and the network is down, what exception is thrown? Where does it go if there is no try/catch around the await?</div> The data doesn't exist yet at the point the outer code runs — the Promise hasn't resolved. This is the number one source of undefined errors in code that makes API calls.`,
         callout: {
           type: "default",
           label: "Why Async Exists",
@@ -1763,7 +1763,7 @@ function field(k,v){return '<div class="field"><span class="key">'+k+'</span><sp
           correct: 1,
           feedback: "fetch() starts a network request and returns immediately with a Promise — it doesn't wait for the response. The next line of code runs before the server has responded. To wait for the data, you must either use .then() chaining or mark the function as async and use await before fetch()."
         },
-        checklist: ["I understand what asynchronous code means", "I can write a fetch call using async/await", "I handle errors with try/catch in async functions", "I understand that .json() is also async and needs to be awaited", "I never try to use fetched data outside the async context without proper handling"]
+        checklist: ["I can write a complete async/await fetch call with error handling from memory", "I can explain why you need to await both fetch() and .json() — and what happens if you forget", "I wrap all async operations in try/catch and show the user a meaningful error message on failure", "I never try to use fetched data outside the async function without proper awaiting", "I can explain what a Promise is in one sentence without using the word 'asynchronous'"]
       },
       {
         id: "4-phase1-review",
@@ -1916,7 +1916,7 @@ render();
           correct: 1,
           feedback: "localStorage coerces anything that isn't a string using .toString(). An array's toString() returns '[object Array]'. To save an array properly, use JSON.stringify(myArray) before saving. To retrieve it, use JSON.parse(localStorage.getItem('items')). Skipping this step is one of the most common localStorage bugs."
         },
-        checklist: ["I understand what localStorage persists and what it doesn't", "I use JSON.stringify and JSON.parse with objects and arrays", "I know the difference between localStorage and sessionStorage", "I can read and clear localStorage using DevTools", "I can name three appropriate use cases for localStorage"]
+        checklist: ["I always JSON.stringify objects before saving to localStorage — and can explain why", "I always JSON.parse when reading objects back — and handle the case where the value is null", "I can name three appropriate use cases for localStorage and one case where it's wrong", "I know the difference between localStorage and sessionStorage in terms of persistence", "I can view and clear localStorage in DevTools without looking up the steps"]
       },
       {
         id: "4-6",
@@ -2009,7 +2009,7 @@ function runRetry(){
           correct: 2,
           feedback: "Optional chaining stops the property access chain early and returns undefined if any value in the chain is null or undefined, rather than throwing a TypeError. data?.user?.name is equivalent to: data && data.user && data.user.name — but shorter and clearer. Essential when working with API data where any nested property might be absent."
         },
-        checklist: ["I use try/catch in all async functions", "I distinguish between expected and unexpected errors", "I use optional chaining when accessing nested API data", "I use nullish coalescing to provide fallback values", "My error states show users something useful, not a blank screen"]
+        checklist: ["I use try/catch in every async function that makes network requests", "I distinguish between errors the user caused (400) and errors the server caused (500) in my UI", "I use optional chaining (?.) when accessing nested API data that might be undefined", "I use nullish coalescing (??) to provide fallback values for missing data", "My error states show the user something helpful — not a blank screen or a raw error object"]
       },
       {
         id: "4-7",
@@ -2088,7 +2088,7 @@ cmds.forEach(function(c,i){
           correct: 1,
           feedback: "Branches exist exactly for this: isolate work-in-progress from working code. Create a branch, make commits on it, and only merge when the feature is tested and working. The main branch should always be in a deployable state. Working directly on main without branching is how teams break each other's work."
         },
-        checklist: ["I have Git installed and configured", "I have a GitHub account with at least one project pushed", "I write descriptive commit messages", "I understand what branches are and when to use them", "I know how to view commit history with git log"]
+        checklist: ["I have Git installed, configured, and have pushed at least one project to GitHub", "I write commit messages that describe WHY, not just what files changed", "I can create a branch, make commits on it, and explain why branches matter for teams", "I can use git status and git log and read their output correctly", "I've resolved at least one merge conflict — I understand what it is and how to fix it"]
       },
       {
         id: "4-8",
@@ -2170,7 +2170,7 @@ console.log(user.adress.city);</div>
           correct: 1,
           feedback: "If you fix a bug by changing three things simultaneously, you've learned nothing about what caused it. When a similar bug appears later, you have no basis for diagnosing it. Worse, you might have introduced subtle problems with the two changes that weren't needed. Change one thing, test, understand what changed. This habit compounds over time."
         },
-        checklist: ["I reproduce bugs reliably before trying to fix them", "I change one thing at a time when debugging", "I can set and use breakpoints in DevTools", "I read error messages in full before changing anything", "I use the Network tab to diagnose API problems"]
+        checklist: ["I can reproduce a bug reliably before attempting to fix it", "I change one thing at a time when debugging — not multiple things simultaneously", "I can set a breakpoint in DevTools and use step-over/step-into to trace execution", "I read error messages completely and identify type, message, and line before changing anything", "I use the Network tab to inspect API requests and verify what was actually sent and received"]
       },
       {
         id: "4-phase2-review",
@@ -2321,7 +2321,7 @@ function stat(label,val){return '<div class="stat"><div class="stat-label">'+lab
           correct: 1,
           feedback: "Silent failures in network requests are almost always visible in the Network tab. It shows whether the request was sent, what URL it went to, what the response status code was, and what data came back. This is the fastest way to separate a network/API problem from a display/logic problem."
         },
-        checklist: ["I read the full scaffold before making any changes", "I understand the data structure the API returns", "I extended the app with at least one new feature", "I handle the case where the city isn't found", "The app works with different city names"]
+        checklist: ["I read the full scaffold before writing any code and understood the data structure the API returns", "I extended the app with at least one feature not in the original brief — I had to figure it out myself", "I handle the case where the city isn't found and show the user a clear message", "My loading state prevents the user from submitting duplicate requests", "The app works correctly with at least five different city names I tested"]
       },
       {
         id: "4-10",
@@ -2424,7 +2424,7 @@ render();
           correct: 1,
           feedback: "An 'answered' boolean (initially false, set to true when the user first clicks) is the standard guard against multiple submissions. At the start of your click handler: if (answered) return; answered = true; then process the answer. This is called a state guard — it prevents the system from entering an invalid state."
         },
-        checklist: ["I understand what application state is", "I update state before updating the DOM", "I handle the answered state to prevent multiple submissions", "The quiz shows correct feedback for right and wrong answers", "The final score is accurate"]
+        checklist: ["I understand what application state means and can point to where it lives in my code", "I update state before updating the DOM — the data and the UI stay in sync", "I prevent multiple submissions to the same question after it's been answered", "Correct and incorrect answers show distinct visual feedback immediately", "The final score is accurate and stored in localStorage — I can explain how both work"]
       },
       {
         id: "4-11",
@@ -2459,7 +2459,7 @@ The project doesn't have to be impressive. It has to be finished and working. A 
           correct: 1,
           feedback: "401 Unauthorized means the server received your request but doesn't recognise you as an authorised caller. Most public APIs require an API key to be sent in a header or as a query parameter. Check the API documentation for exactly how it expects the key to be sent — the format varies by API."
         },
-        checklist: ["I chose an API and read its documentation", "I made a working fetch call and confirmed the response shape", "I built a UI that displays the real data", "I handle loading and error states", "The project is deployed and accessible via URL"]
+        checklist: ["I chose an API and read its documentation before writing any code", "I confirmed the exact shape of the API response before building the UI", "I built a UI that renders real fetched data — not hardcoded mock data", "I handle loading state (spinner or disabled button) and error state (user-facing message)", "The project is deployed and accessible via a public URL — I can share it right now"]
       },
       {
         id: "4-12",
@@ -2545,7 +2545,7 @@ Code review is where you stop being a person who writes code and start being a p
             }
           ]
         },
-        checklist: ["I reviewed all Floor 4 projects as if reading a colleague's code", "I identified at least one real improvement per project", "I implemented at least three improvements", "My functions have descriptive names that don't require reading the body to understand", "Error cases are handled in each project"]
+        checklist: ["I reviewed all my Floor 4 projects as if reading a colleague's code for the first time", "I identified at least one genuine improvement per project and implemented it", "My function names describe what the function does — reading the name tells you its purpose", "Error cases are explicitly handled in each project — no silent failures", "I can explain the trade-offs I made in each project if asked in an interview"]
       }
     ]
   },
@@ -2572,7 +2572,7 @@ The database is where data persists after the user leaves. Without a database, e
 
 The HTTP request cycle across the full stack: browser sends a request → server receives it, authenticates the user, queries the database, formats the response → database returns data to the server → server returns formatted response to browser → browser renders what the user sees.
 
-The separation matters for three reasons: security (you never trust the browser to validate data), scale (servers handle thousands of simultaneous users), and persistence (data survives after the user leaves).`,
+The separation matters for three reasons: security (you never trust the browser to validate data), scale (servers handle thousands of simultaneous users), and persistence (data survives after the user leaves).\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if a server keeps all user data in a JavaScript object in memory, what happens to that data when the server process restarts? What does that tell you about why databases exist?</div>`,
         callout: {
           type: "default",
           label: "Why the Separation",
@@ -2594,7 +2594,7 @@ The separation matters for three reasons: security (you never trust the browser 
           correct: 1,
           feedback: "Payment processing must happen server-side. Any JavaScript in the browser can be read, modified, and re-sent by someone with DevTools. A user could modify the price, skip validation, or steal API keys. The server is a controlled environment the user cannot modify. This applies to any security-sensitive operation: authentication, authorisation, payment, data validation."
         },
-        checklist: ["I can describe the role of frontend, backend, and database", "I understand why sensitive logic must live on the server", "I understand the full HTTP request cycle from browser to database and back", "I can give three examples of what belongs server-side vs client-side", "I understand why data persistence requires a database"]
+        checklist: ["I can describe the role of frontend, backend, and database in one sentence each", "I can explain why sensitive business logic must live on the server, not the client", "I can trace a complete user login request from browser click to database and back", "I can give three concrete examples of what belongs on the server vs the client", "I understand that data persistence requires a database — not localStorage or in-memory state"]
       },
       {
         id: "5-2",
@@ -2629,7 +2629,7 @@ Ports: a server listens on a specific port number. Port 80 is HTTP, 443 is HTTPS
           correct: 1,
           feedback: "Middleware executes in the order it's registered, before route handlers. Authentication middleware checks credentials and calls next() to pass to the route handler if valid, or sends a 401 response directly if not. The route handler only runs if middleware allows it through. This is the gatekeeper pattern — protect the resource before the handler ever runs."
         },
-        checklist: ["I understand what a server does and how routing works", "I understand what middleware is and what it's used for", "I understand the request and response objects", "I know the difference between web server, application server, and database server", "I understand what ports are"]
+        checklist: ["I can explain what a server is and what it does when it receives an HTTP request", "I can explain what routing means and give an example of a route handler", "I can explain what middleware does and give a real example of when you'd use it", "I can explain the difference between req and res in an Express route handler", "I can explain what a port is and why your local server runs on localhost:3000"]
       },
       {
         id: "5-3",
@@ -2644,7 +2644,7 @@ SQL commands you need to know: SELECT (retrieve data), INSERT (add data), UPDATE
 
 <strong>Indexes</strong> are how databases stay fast as data grows. Without an index, a query scans every row in the table. With an index on the column you're filtering by, the database finds matching rows in milliseconds. Add indexes on columns you query frequently, especially foreign keys.
 
-<strong>ACID</strong> properties guarantee data integrity: Atomicity (a transaction either fully succeeds or fully fails, never halfway), Consistency (the database stays in a valid state), Isolation (concurrent transactions don't interfere), Durability (committed data survives crashes). When a bank transfer fails halfway through, ACID properties ensure neither account is left in an inconsistent state.`,
+<strong>ACID</strong> properties guarantee data integrity: Atomicity (a transaction either fully succeeds or fully fails, never halfway), Consistency (the database stays in a valid state), Isolation (concurrent transactions don't interfere), Durability (committed data survives crashes). When a bank transfer fails halfway through, ACID properties ensure neither account is left in an inconsistent state.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you fetch 20 blog posts and then make a separate database query for each post’s author, how many total queries have you made? What is this problem called, and how would a JOIN fix it?</div>`,
         callout: {
           type: "default",
           label: "SQL vs NoSQL",
@@ -2666,7 +2666,7 @@ SQL commands you need to know: SELECT (retrieve data), INSERT (add data), UPDATE
           correct: 1,
           feedback: "Atomicity means all operations in a transaction succeed together or fail together. If the credit operation fails (or the server crashes before it), the debit is automatically rolled back. The database returns to the state before the transaction started. This is why financial applications use ACID-compliant relational databases, not eventually-consistent document stores."
         },
-        checklist: ["I understand the difference between relational and document databases", "I can write basic SELECT, INSERT, UPDATE, DELETE queries", "I understand what indexes are and when to use them", "I can explain the ACID properties", "I understand when to use SQL vs NoSQL"]
+        checklist: ["I can explain the key difference between relational and document databases with a concrete example", "I can write SELECT, INSERT, UPDATE, and DELETE queries without looking up the syntax", "I can explain what an index is and name one case where you'd add one", "I can explain ACID in plain terms — not the acronym, but what each property means in practice", "I can explain when I'd choose PostgreSQL over MongoDB for a new project"]
       },
       {
         id: "5-4",
@@ -2701,7 +2701,7 @@ OAuth: "Login with Google" delegates authentication to a trusted provider. Googl
           correct: 1,
           feedback: "JWTs are stateless — the server doesn't store them, so there's nothing to delete. Any request with a valid, unexpired JWT will be accepted, even if the token was stolen. To immediately revoke a JWT, you need a server-side blocklist of invalidated tokens, which reintroduces statefulness. This is JWT's main trade-off compared to session-based auth where you just delete the session record."
         },
-        checklist: ["I understand the difference between authentication and authorisation", "I understand session-based vs token-based authentication", "I know why passwords must be hashed and what bcrypt does", "I understand what OAuth is", "I would use an existing library rather than building auth from scratch"]
+        checklist: ["I can explain the difference between authentication and authorisation without confusing them", "I can describe the full JWT flow: login → token generation → storage → verification", "I can explain why passwords must be hashed and what bcrypt does — not just that it's 'secure'", "I can explain what OAuth does and why you'd use it instead of building your own auth", "I would use an existing auth library rather than building it myself — and I can explain why"]
       },
       {
         id: "5-phase1-review",
@@ -2850,7 +2850,7 @@ routes.forEach(function(r){
           correct: 1,
           feedback: "Express doesn't parse request bodies by default. app.use(express.json()) must be registered before any route that reads req.body. It reads the raw request body, parses it as JSON, and attaches the result to req.body. Without it, req.body is undefined for all routes. Register it near the top of your app, before route definitions."
         },
-        checklist: ["I can start a basic Express server", "I can write GET and POST route handlers", "I understand req.params, req.query, req.body, and req.headers", "I can add middleware with app.use()", "I can send JSON responses with correct status codes"]
+        checklist: ["I can start an Express server and explain what each line of the basic setup does", "I can write GET and POST route handlers that read from req and write to res", "I can explain the difference between req.params, req.query, and req.body with examples", "I can add middleware with app.use() and explain why order matters", "I return appropriate status codes: 200 for success, 201 for created, 400 for bad input, 404 for not found, 500 for server errors"]
       },
       {
         id: "5-6",
@@ -2940,7 +2940,7 @@ show(0);
           correct: 1,
           feedback: "A transaction wraps multiple operations into a single atomic unit. BEGIN starts the transaction, you run both the INSERT and the UPDATE, and COMMIT applies both permanently. If any operation fails, ROLLBACK undoes everything — the database returns to its state before BEGIN. This is how all multi-step operations that must stay consistent are handled."
         },
-        checklist: ["I can connect to a database from a Node.js application", "I understand connection pooling", "I can write CRUD queries using a database client", "I understand when to use transactions", "I understand the trade-offs between ORMs and raw SQL"]
+        checklist: ["I can connect to a PostgreSQL database from Node.js and make a query", "I can explain what connection pooling is and why it matters for performance", "I can write parameterised queries — and explain why string-concatenated queries are dangerous", "I can wrap multiple related operations in a transaction and explain when that's necessary", "I can run EXPLAIN ANALYZE on a slow query and identify where the time is spent"]
       },
       {
         id: "5-7",
@@ -3038,7 +3038,7 @@ endpoints.forEach(function(ep,i){
           correct: 2,
           feedback: "400 Bad Request means the client sent something invalid. The error message should tell them exactly what's wrong: 'email is required' or 'email must be a valid email address'. Don't let invalid data reach the database — validate first and return 400 immediately. 500 is for server failures, not client mistakes. 201 with missing required data is incorrect by definition."
         },
-        checklist: ["I can build RESTful endpoints for a resource", "I validate request input before any database interaction", "I return consistent response shapes across all endpoints", "I use correct HTTP status codes", "My endpoints follow RESTful URL conventions"]
+        checklist: ["I can build RESTful CRUD endpoints for a resource following standard URL conventions", "I validate all request input before any database interaction — invalid data returns 400", "I return consistent response shapes: the same structure for every success, a clear error shape for failures", "I use correct HTTP status codes and can explain the choice for each endpoint", "I've tested my API with Postman before connecting the frontend"]
       },
       {
         id: "5-8",
@@ -3047,7 +3047,7 @@ endpoints.forEach(function(ep,i){
 
 The dotenv package reads a .env file and loads its contents into process.env. Add .env to your .gitignore immediately when you create any project. Commit a .env.example file that shows what variables are needed with placeholder values — this is the convention for onboarding new developers without exposing secrets.
 
-SQL injection is the most common web application vulnerability. It happens when you build SQL queries with string concatenation: 'SELECT * FROM users WHERE name = ' + userInput. If userInput is ' OR '1'='1, the query returns every row in the table. The fix is parameterised queries: the query and the data are sent separately, and the database handles the escaping. Never build SQL with string concatenation.
+SQL injection is the most common web application vulnerability. It happens when you build SQL queries with string concatenation: 'SELECT * FROM users WHERE name = ' + userInput. If userInput is ' OR '1'='1, the query returns every row in the table. The fix is parameterised queries: the query and the data are sent separately, and the database handles the escaping. Never build SQL with string concatenation.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if req.body.username is the string \' OR \'1\'=\'1, what does the concatenated query look like? What does it return, and what does that mean for your users?</div>
 
 XSS (Cross-Site Scripting) happens when user input is rendered as HTML without sanitisation. If a user submits <script>steal(document.cookie)</script> as a comment and you display it directly, that script runs in every reader's browser. Sanitise or encode user content before rendering it.
 
@@ -3130,7 +3130,7 @@ Fix: Sanitise with DOMPurify or escape special chars. Never trust user input.</d
           correct: 1,
           feedback: "String-concatenated SQL is vulnerable to injection. If req.body.username is ' OR '1'='1, the query becomes: SELECT * FROM users WHERE username = '' OR '1'='1' — which returns every user. Use parameterised queries: db.query('SELECT * FROM users WHERE username = $1', [req.body.username]). The database treats $1 as data, making injection impossible."
         },
-        checklist: ["All secrets are stored in .env and never committed", ".env is in .gitignore", "I use parameterised queries for all database operations", "I understand what CORS is and have configured it explicitly", "I understand XSS and sanitise user-generated content before rendering"]
+        checklist: ["All API keys and secrets are in .env — none are in the codebase or git history", ".env is in .gitignore — I verified this before the first commit", "I use parameterised queries for every database operation — no string concatenation", "I can explain what CORS is and have configured it to allow only my frontend's origin", "I can explain what XSS is and how I prevent it when rendering user-generated content"]
       },
       {
         id: "5-phase2-review",
@@ -3302,7 +3302,7 @@ renderSteps();
           correct: 1,
           feedback: "Cloud platforms assign a dynamic port to your application via the PORT environment variable. Your app must listen on process.env.PORT. If it's hardcoded to 3000, it starts on 3000, but the platform is routing traffic to a different port — the app is running but unreachable. The fix: app.listen(process.env.PORT || 3000)."
         },
-        checklist: ["I can deploy a Node.js application to Railway or Render", "Environment variables are set in the platform dashboard, not in code", "My app listens on process.env.PORT", "I have a /health endpoint", "I check deployment logs when something breaks"]
+        checklist: ["I can deploy a Node.js application to Railway or Render from a GitHub repository", "Environment variables are set in the platform dashboard — not in code or .env files", "My app listens on process.env.PORT — not a hardcoded port number", "I have a GET /health endpoint that returns a 200 status code", "When something breaks in production, I check the deployment logs first"]
       },
       {
         id: "5-10",
@@ -3411,7 +3411,7 @@ function renderPosts(){
           correct: 2,
           feedback: "CORS is enforced by the browser based on what the server allows. The server must include the correct Access-Control-Allow-Origin header in its response. Adding mode: 'no-cors' to fetch doesn't solve the problem — it just hides the error while preventing you from reading the response. The fix is always server-side: configure cors middleware to explicitly allow your frontend's origin."
         },
-        checklist: ["I understand why CORS exists and how to configure it", "I can send authenticated requests with JWT headers", "I handle loading and error states for every fetch operation", "I test my API with Postman before connecting the frontend", "I understand optimistic UI and when to use it"]
+        checklist: ["I can explain why CORS exists and configure it correctly for both local and production environments", "I send JWT tokens in the Authorization header for authenticated requests", "I handle loading and error states for every fetch call — no silent failures", "I test my API endpoints with Postman before writing the frontend fetch code", "I can explain what optimistic UI is and implement a basic example"]
       },
       {
         id: "5-11",
@@ -3543,7 +3543,7 @@ if(currentId)selectNote(currentId);else renderSidebar();
           correct: 1,
           feedback: "The Network tab shows you the exact request the browser sends and the exact response it receives. You already know the backend works (Postman proved it), so the problem is either the frontend isn't sending the right request, or isn't handling the response correctly. The Network tab shows both. This is the fastest way to find the disconnect."
         },
-        checklist: ["The frontend connects to the backend API", "Notes persist in a real database", "Loading and error states are handled", "Both frontend and backend are deployed", "The app works end-to-end on the live URL"]
+        checklist: ["The frontend makes real API calls to the backend — no hardcoded mock data", "Notes persist in a real database and survive a full server restart", "Loading and error states are handled and visible to the user", "Both frontend and backend are deployed and reachable via public URLs", "The app works end-to-end: I tested it by creating, editing, and deleting notes on the live URL"]
       },
       {
         id: "5-12",
@@ -3681,7 +3681,7 @@ if(savedToken){showDashboard({name:'Demo User'},savedToken);}else{renderForm();}
           correct: 1,
           feedback: "Authentication tells you who the user is. But if your SELECT query for notes doesn't include WHERE user_id = req.user.id, it returns all notes regardless of who's asking. Authentication without data scoping is incomplete. Every query that returns user-owned data must filter by the authenticated user's identifier."
         },
-        checklist: ["Users can register and log in", "Passwords are hashed with bcrypt", "JWTs are generated on login and verified on protected routes", "Notes are filtered by the authenticated user's ID", "Users cannot access other users' notes"]
+        checklist: ["Users can register with email and password — passwords are hashed with bcrypt", "JWTs are generated on login and sent to the client — I can explain each part of the token", "Protected routes verify the JWT in middleware before the handler runs", "Notes are filtered to show only the authenticated user's data", "If I log in as User A, I cannot see User B's notes — I tested this explicitly"]
       },
       {
         id: "5-13",
@@ -3716,7 +3716,7 @@ Monitor it for 24 hours after deployment. Watch the logs. Note what errors appea
           correct: 1,
           feedback: "Cloud platforms restart your server process periodically (for updates, scaling, or failure recovery). An in-memory array is wiped clean on every restart. If notes disappear periodically, the backend is storing them in memory instead of the database. This is exactly why in-memory storage is only acceptable for development — production requires a persistent database."
         },
-        checklist: ["The backend is deployed to Railway or Render", "The database is hosted on Supabase or PlanetScale", "The frontend is deployed to Netlify or Vercel", "All environment variables are set in production", "The app works end-to-end on the live URL with two different accounts"]
+        checklist: ["The backend is deployed to Railway or Render and running correctly", "The database is hosted on a managed service — not running locally", "The frontend is deployed to Netlify or Vercel and connected to the production API", "All environment variables are set in the production platforms — I can verify this without looking at code", "The complete app works end-to-end on the live URLs with two separate user accounts"]
       },
       {
         id: "5-14",
@@ -3804,7 +3804,7 @@ When it's deployed: write a README that explains what the application does, the 
             }
           ]
         },
-        checklist: ["I planned the data model before writing any code", "The application has a working frontend, backend, database, and authentication", "It is deployed and accessible via URL", "The README explains what it does and how I built it", "I'm proud of it and would show it to a potential employer"]
+        checklist: ["I planned the data model before writing any code — tables/collections and relationships", "The application has working frontend, backend, database, and authentication", "It is deployed and accessible via a public URL anyone can visit", "The README explains what the app does, why I built it, and how to run it locally", "I'm proud of it and would show it to a potential employer as evidence of what I can build"]
       }
     ]
   },
@@ -3821,7 +3821,7 @@ When it's deployed: write a README that explains what the application does, the 
       {
         id: "6-1",
         title: "The Fork in the Road",
-        body: `You've reached the point where "web developer" is no longer a precise enough description. The skills you have now \u2014 HTML, CSS, JavaScript, basic backend, databases \u2014 are the foundation. What you build on top of that foundation is your choice. And the choice matters more than most people tell you.\n\nSpecialisation is not about closing doors. It's about going deep enough in one direction to become genuinely valuable. Netflix doesn't hire "web developers." They hire frontend engineers who know React's reconciliation algorithm, or backend engineers who understand distributed consensus, or data engineers who can process petabytes. The title reflects the depth.\n\nThe main paths: <strong>frontend engineering</strong> (UI, browser performance, accessibility, design systems), <strong>backend engineering</strong> (APIs, databases, system design, infrastructure), <strong>mobile development</strong> (iOS, Android, or cross-platform), <strong>DevOps and cloud</strong> (infrastructure, deployment pipelines, reliability), <strong>data engineering</strong> (pipelines, warehousing, analytics), <strong>AI/ML engineering</strong> (model training, inference, deployment), and <strong>security engineering</strong> (application security, penetration testing, threat modelling).\n\nNone of these paths requires you to forget everything else. A backend engineer who understands CSS is more valuable than one who doesn't. A frontend engineer who can write a SQL query is easier to work with. What you're choosing is your primary depth \u2014 the area where you become expert rather than competent.\n\nThe practical advice: pick based on what you've enjoyed most so far, not what pays the most or what someone told you is "in demand." Demand shifts. Enjoyment is what keeps you grinding through the hard parts three years in.`,
+        body: `You've reached the point where "web developer" is no longer a precise enough description. The skills you have now \u2014 HTML, CSS, JavaScript, basic backend, databases \u2014 are the foundation. What you build on top of that foundation is your choice. And the choice matters more than most people tell you.\n\nSpecialisation is not about closing doors. It's about going deep enough in one direction to become genuinely valuable. Netflix doesn't hire "web developers." They hire frontend engineers who know React's reconciliation algorithm, or backend engineers who understand distributed consensus, or data engineers who can process petabytes. The title reflects the depth.\n\nThe main paths: <strong>frontend engineering</strong> (UI, browser performance, accessibility, design systems), <strong>backend engineering</strong> (APIs, databases, system design, infrastructure), <strong>mobile development</strong> (iOS, Android, or cross-platform), <strong>DevOps and cloud</strong> (infrastructure, deployment pipelines, reliability), <strong>data engineering</strong> (pipelines, warehousing, analytics), <strong>AI/ML engineering</strong> (model training, inference, deployment), and <strong>security engineering</strong> (application security, penetration testing, threat modelling).\n\nNone of these paths requires you to forget everything else. A backend engineer who understands CSS is more valuable than one who doesn't. A frontend engineer who can write a SQL query is easier to work with. What you're choosing is your primary depth \u2014 the area where you become expert rather than competent.\n\nThe practical advice: pick based on what you've enjoyed most so far, not what pays the most or what someone told you is "in demand." Demand shifts. Enjoyment is what keeps you grinding through the hard parts three years in.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — think back over your projects. Which parts did you find yourself wanting to improve or extend beyond what was required? That pull is real data about where your interest lies.</div>`,
         callout: {
           type: "default",
           label: "Depth vs Breadth",
@@ -3839,7 +3839,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Where you voluntarily spend extra time \u2014 beyond what's required \u2014 is one of the most reliable signals of genuine interest. Interest drives the sustained effort that turns competence into expertise. A recruiter can tell you what's in demand this year; only you can tell you what you'll still enjoy working on in five years."
         },
-        checklist: ["I understand the main specialisation paths and what each involves", "I've honestly assessed which parts of my past projects I enjoyed most", "I've chosen a primary direction to go deep on for this floor", "I understand that specialisation doesn't mean ignoring everything else", "I know that I can change direction later \u2014 this choice is not permanent"]
+        checklist: ["I can describe the main specialisation paths in two sentences each without looking anything up", "I can honestly name which parts of my past projects I found most engaging — not most impressive", "I've chosen a primary direction to focus on for this floor and can explain why", "I understand that specialisation means going deeper, not ignoring everything else", "I know I can change direction — this is a direction to explore, not a permanent identity"]
       },
       {
         id: "6-2",
@@ -3862,7 +3862,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 2,
           feedback: "Optimisation without measurement is guesswork. React DevTools Profiler and the browser's Performance tab show exactly which renders are expensive and how much time they take. React.memo is only useful if the component is actually expensive \u2014 wrapping cheap components in memo adds overhead without benefit. Measure first, then decide whether and how to optimise."
         },
-        checklist: ["I understand what React components are and how they compose", "I understand state and when to lift state up vs keep it local", "I know how to use the browser's Network tab and Lighthouse", "I understand the basics of web accessibility (ARIA, semantic HTML, keyboard navigation)", "I've built a multi-component React application with shared state"]
+        checklist: ["I understand what React components are and can explain the difference between props and state", "I can explain when to lift state up and when to keep it local", "I've used the Network tab and Lighthouse to identify a performance bottleneck", "I understand semantic HTML and ARIA well enough to make a page accessible to a screen reader", "I've built a React application with multiple components sharing state"]
       },
       {
         id: "6-3",
@@ -3885,7 +3885,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "This is the N+1 query problem. 1 query fetches the posts, then N queries (one per post) fetch the author. With 500 posts that's 501 database round trips. The fix is eager loading: one JOIN query that fetches posts and their authors together. Every ORM has a way to do this. Learning to recognise this pattern saves significant production debugging time."
         },
-        checklist: ["I understand RESTful API design principles and common conventions", "I know the difference between relational and non-relational databases and when to use each", "I understand password hashing, JWT authentication, and basic API security", "I can identify and fix the N+1 query problem", "I've built a backend API with authentication, a database, and proper error handling"]
+        checklist: ["I can design RESTful API endpoints for a new feature before writing any code", "I can explain the difference between relational and document databases and choose correctly for a scenario", "I can explain password hashing, JWT auth, and three common API security vulnerabilities", "I can identify the N+1 query problem in code I didn't write and explain the fix", "I've built a backend API with auth, a real database, and proper error handling"]
       },
       {
         id: "6-4",
@@ -3908,7 +3908,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "Positioning is context-dependent. A startup with 6 engineers needs people who can contribute across the stack. 'Intermediate Node.js' is enough to be unblocked on backend work. Calling yourself a frontend specialist in that context undersells your utility. In a larger company with dedicated teams, the same developer might more accurately position as a frontend engineer."
         },
-        checklist: ["I understand the real difference between full stack and specialised roles", "I know which context I'm currently optimising for (startup vs larger org)", "I've built at least one complete feature touching both frontend and backend", "I can honestly assess where my primary depth lies", "I understand that the label is a positioning choice, not a permanent identity"]
+        checklist: ["I can explain the real trade-offs between full stack and specialised roles — not just the labels", "I know which context I'm optimising for right now and can articulate why", "I've built at least one complete feature that touched both frontend and backend", "I can honestly assess where my primary depth lies today", "I understand that 'full stack' is a positioning choice relative to team context, not a fixed definition"]
       },
       {
         id: "6-5",
@@ -3931,7 +3931,7 @@ When it's deployed: write a README that explains what the application does, the 
           correct: 1,
           feedback: "React Native has the lowest barrier for an existing React developer. The component model, state management, and JavaScript are all transferable. The mobile-specific concepts (navigation, gestures, native APIs) are learnable incrementally. Starting with native Swift and Kotlin requires learning two new languages and two new ecosystems simultaneously \u2014 a steeper ramp for the same outcome."
         },
-        checklist: ["I understand the trade-offs between native and cross-platform mobile development", "I've chosen a primary mobile path and understand why", "I've built at least one mobile app that runs on a real device", "I understand the App Store / Play Store distribution process", "I know the key mobile-specific constraints (touch targets, network variability, OS fragmentation)"]
+        checklist: ["I can explain the trade-offs between native (Swift/Kotlin) and cross-platform (React Native/Flutter) mobile development", "I've chosen a primary mobile path and can explain my reasoning", "I've built at least one mobile app that runs on a real physical device", "I understand the App Store / Play Store submission process at a conceptual level", "I know the key mobile constraints — touch targets, varied network quality, OS fragmentation — and how they affect design decisions"]
       },
       {
         id: "6-phase1-review",
@@ -4107,7 +4107,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "The problem is not SSH itself \u2014 it's the manual, human-dependent process. Someone can run the wrong branch, skip a migration, forget to restart a service, or deploy at the wrong time. CI/CD pipelines are automated, consistent, run only when tests pass, and produce an audit trail of every deployment. The reliability difference between the two approaches is enormous at scale."
         },
-        checklist: ["I understand what DevOps means and the problems it solves", "I can containerise an application with Docker", "I've deployed something to a cloud platform (AWS, GCP, or Azure)", "I understand what a CI/CD pipeline does and have configured one", "I know what Infrastructure as Code is and why it matters"]
+        checklist: ["I can explain what DevOps means and the core problems it exists to solve", "I can containerise an application with Docker and explain what a container is vs a virtual machine", "I've deployed something to a cloud platform and configured at least one infrastructure resource", "I can describe what a CI/CD pipeline does at each stage — from code push to production deploy", "I can explain what Infrastructure as Code means and why it matters for reliability"]
       },
       {
         id: "6-7",
@@ -4130,7 +4130,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "Retroactive changes to historical data almost always indicate a pipeline overwrite problem. Pipelines that delete and recreate data on each run will reflect late-arriving data or corrected source records in historical periods. Whether that's correct depends on business requirements. Slowly Changing Dimensions (SCD) and immutable event logs are the data engineering patterns that control how historical data is handled."
         },
-        checklist: ["I understand the ETL pattern and why it exists", "I can write complex SQL including window functions and CTEs", "I understand what a data warehouse is and how it differs from a transactional database", "I know what a data pipeline orchestrator does", "I've built an end-to-end pipeline that extracts, transforms, and loads data"]
+        checklist: ["I can explain the ETL pattern and give a real example of when each step applies", "I can write a SQL query with window functions and explain what they do", "I can explain what a data warehouse is and how it differs from a transactional database", "I understand what a pipeline orchestrator does — not just the name, but the problem it solves", "I've built a pipeline that extracts data from a source, transforms it, and loads it to a destination"]
       },
       {
         id: "6-8",
@@ -4153,7 +4153,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "When model performance degrades on a subset of real-world inputs that weren't well represented in testing, this is a distribution mismatch \u2014 sometimes called model drift when it's the production environment shifting, or evaluation gap when the test suite didn't cover the real distribution. The correct response is to analyse failures, characterise the failing input types, add them to your evaluation suite, and diagnose whether the model, the prompt, or the retrieval step is the weak point."
         },
-        checklist: ["I understand the difference between AI research and AI engineering", "I can build a RAG pipeline using embeddings and a vector database", "I know what model drift is and how to monitor for it", "I've built an application using an LLM API with proper error handling and retries", "I understand why evaluations (evals) are essential before deploying AI features"]
+        checklist: ["I can explain the difference between AI research and AI engineering in one sentence each", "I can build a RAG pipeline using embeddings and a vector database — I've done it, not just read about it", "I can explain what model drift is and describe one approach to monitoring for it", "I've built an application using an LLM API with proper error handling and retry logic", "I understand why evaluations are essential before deploying AI features to production"]
       },
       {
         id: "6-9",
@@ -4176,7 +4176,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "This is SQL injection. The input \u2018 OR 1=1 -- breaks out of the quoted string context in SQL, adding a condition that is always true (OR 1=1), and comments out the rest of the query with --. The result is typically returning all rows. Parameterised queries solve this by separating SQL code from data \u2014 the database treats the parameter as literal data regardless of its contents."
         },
-        checklist: ["I understand the OWASP Top 10 and can identify each vulnerability class", "I always use parameterised queries and never build SQL by string concatenation", "I understand what XSS is and how output encoding prevents it", "I've done at least one threat model exercise on a system I built", "I understand the principle of least privilege and apply it to access control"]
+        checklist: ["I can explain five of the OWASP Top 10 vulnerabilities without looking them up", "I use parameterised queries for every database operation — no exceptions, no string concatenation", "I can explain output encoding and demonstrate how it prevents XSS in a template", "I've completed at least one threat model exercise on a system I built", "I apply least privilege in my access control design — roles only get the permissions they need"]
       },
       {
         id: "6-10",
@@ -4199,7 +4199,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "Quality, originality, and deployability are what make a portfolio compelling. Tutorial clones are the most common portfolio project; they don't differentiate. Deployed original projects require independent decision-making, problem-solving, and the engineering discipline to finish \u2014 which is what hiring managers are trying to assess. Three strong projects is a better signal than eight weak ones."
         },
-        checklist: ["I have at least 2 original deployed projects (not tutorial clones)", "Each project has a clear README explaining what it does and how it was built", "My commit history tells a story of iterative development", "I've reviewed my own code as if I were the hiring reviewer", "My portfolio links all work and load within 5 seconds"]
+        checklist: ["I have at least two original deployed projects — not tutorial clones — with live URLs", "Each project has a README that explains what it does, why it exists, and how to run it", "My commit history shows iterative work — not one massive initial commit", "I've reviewed my portfolio as if I were the hiring manager and made at least three improvements", "Every link in my portfolio works and loads within five seconds on a normal connection"]
       },
       {
         id: "6-11",
@@ -4222,7 +4222,7 @@ renderPipeline(null);
           correct: 2,
           feedback: "The first two minutes of an algorithm interview set the tone. Restating the problem confirms you understood it correctly. Clarifying questions surface constraints that affect the solution (array size? value range? sorted?). Describing your thinking before coding shows process and gives the interviewer a chance to redirect if you're heading somewhere wrong. Silent coding or immediate coding without understanding are both antipatterns."
         },
-        checklist: ["I understand the core data structures and their time complexities", "I can solve array, hash map, and tree problems without looking up solutions", "I've practised explaining my reasoning out loud while solving problems", "I have 6-8 STAR stories ready for behavioural interviews", "I've read at least 5 system design case studies from real engineering blogs"]
+        checklist: ["I can solve array, hash map, and basic tree problems — I've practised, not just read about them", "I can explain my reasoning out loud while solving a problem — I've practised this explicitly", "I have 6-8 STAR stories ready for behavioural questions, each tied to a real project or experience", "I've read at least five system design case studies from real engineering blogs", "I've done at least two mock technical interviews — with a timer and someone watching"]
       },
       {
         id: "6-12",
@@ -4245,7 +4245,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "The belief that open source requires expert-level skill is the single biggest barrier to contribution and it is false. Documentation is frequently outdated, tests are frequently missing, and bug reports often lack reproducible examples. All of these are valuable contributions that projects depend on. The skill level required for a 'fix a typo in the docs' PR is zero. The learning that comes from navigating the codebase to find the typo and submitting a clean PR is significant."
         },
-        checklist: ["I've found at least one open source project I use that has open 'good first issue' issues", "I've read the contributing guide for a project I want to contribute to", "I've submitted at least one PR to an open source project", "I understand that documentation and test contributions are valuable", "I've read the review feedback on merged PRs in a target project to understand the code standards"]
+        checklist: ["I've found a project I use that has 'good first issue' labels — and I've read its contributing guide", "I understand the project's code standards well enough to write code that fits", "I've submitted at least one PR to an open source project — even if it's docs or tests", "I've read review feedback on merged PRs in the target project to understand what good looks like", "I can explain why documentation and test contributions are valuable — not consolation prizes"]
       },
       {
         id: "6-13",
@@ -4268,7 +4268,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "Expertise is not required for public documentation of a learning process. The developer who documents their path through confusion \u2014 including corrections and updates \u2014 provides a service to every developer behind them on the same path. The fear of being wrong is better addressed by being explicit about your current understanding and inviting correction, not by staying silent."
         },
-        checklist: ["I've published at least one piece of public writing about something I built or learned", "I have a consistent place to document my work (blog, Twitter, GitHub README)", "I've written at least one post that documents a problem I solved in detail", "I understand that consistency matters more than audience size", "I've linked my public writing from my portfolio and GitHub profile"]
+        checklist: ["I've published at least one piece of public writing about something I built or learned", "I have a consistent, maintained place to document my work", "At least one post documents a specific problem I solved — not just 'I learned X'", "I understand that showing up consistently for three months matters more than one viral post", "My public writing is linked from my portfolio and GitHub profile"]
       },
       {
         id: "6-14",
@@ -4344,7 +4344,7 @@ renderPipeline(null);
             }
           ]
         },
-        checklist: ["I understand the real trade-offs between startups and large companies", "I've identified what I most want to learn in my first role", "I know what questions to ask to evaluate team culture in an interview", "I understand salary research tools (Levels.fyi, Glassdoor) and will use them before negotiating", "I've practised asking clarifying questions about mentorship, code review, and team culture"]
+        checklist: ["I can articulate the real trade-offs between startup and larger-company roles — not just the clichés", "I've identified what I most want from my first role: learning, ownership, mentorship, or domain", "I know what questions to ask in an interview to assess team culture and code quality", "I've researched salary benchmarks using Levels.fyi or similar before any offer conversations", "I've practised asking about mentorship, code review process, and on-call expectations in mock conversations"]
       }
     ]
   },
@@ -4379,7 +4379,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "Architecture decisions have context that a new joiner doesn't have yet: historical constraints, deliberate trade-offs, failed alternatives, team capability at the time. Critiquing before understanding that context creates an impression of poor judgment even if the critique is technically valid. Describing what you observe, asking about the reasoning, and reserving judgment while you build context is the signal of a high-quality engineer."
         },
-        checklist: ["I know who to go to with questions about different parts of the system", "I can run the project locally, run the tests, and submit a PR", "I've traced a complete user request through the system from frontend to database", "I've written down things I don't understand yet as a learning list", "I've scheduled regular 1:1 time with my onboarding buddy or manager"]
+        checklist: ["I understand that the first week is for learning and building context — not proving value through output", "I can run the project locally, run the tests, and trace a request through the system", "I've documented things I don't understand yet — as a list to work through, not something to hide", "I ask questions after genuinely trying to find the answer myself first", "I've scheduled regular 1:1 time with my manager or onboarding buddy"]
       },
       {
         id: "7-2",
@@ -4402,7 +4402,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "Tests are the most reliable documentation for specific behaviour. Finding the test for what you need to change tells you exactly what the current expected behaviour is (in verifiable, executable form), shows you where the code under test lives, and gives you a target to update when you make your change. Reading the entire module is almost always too broad a scope for a focused change."
         },
-        checklist: ["I can navigate a large codebase using IDE features (go to definition, find references)", "I use git blame and git log to understand why code is the way it is", "I read tests before reading implementation when exploring new code", "I can trace a complete user request through a codebase I haven't seen before", "I identify what I don't need to understand before reading broadly"]
+        checklist: ["I start reading unfamiliar code from where it's called — not from the implementation", "I can trace a request through a large codebase from HTTP handler to database and back", "I use the debugger and logging to understand code behaviour — not just reading it", "I leave code I read in a better state than I found it: a comment, a renamed variable, a removed dead path", "I can identify the architectural pattern of a codebase without someone explaining it"]
       },
       {
         id: "7-3",
@@ -4425,12 +4425,12 @@ renderPipeline(null);
           correct: 2,
           feedback: "A code review comment is the beginning of a conversation, not a directive. The author has context the reviewer may lack (current scale, benchmarks, business requirements). The right response is to provide that context, explain the trade-off, and engage with the specific concern. If the reviewer has a scenario in mind where performance would be insufficient, that's worth knowing. If they don't, the benchmarks resolve the concern."
         },
-        checklist: ["I can give code review that distinguishes blocking issues from suggestions from preferences", "I ask questions in code review rather than issuing directives", "I respond to every review comment, even if just to acknowledge it", "I review PRs within 24 hours of being requested", "I've had at least one code review conversation that resulted in a better solution than either party started with"]
+        checklist: ["I give code review feedback that is specific, explains the why, and offers a concrete alternative", "I distinguish between required changes (the code has a bug or violates a constraint) and suggestions (I'd prefer this approach)", "When I disagree with review feedback, I explain my reasoning professionally — I don't silently comply or silently ignore", "I treat code reviews as conversations, not verdicts", "I've reviewed junior code and given feedback that helped them grow — not just found errors"]
       },
       {
         id: "7-4",
         title: "Technical Debt and Refactoring",
-        body: `Technical debt is a deliberate or accidental trade-off: you write code that is faster to ship now and harder to maintain later. Ward Cunningham coined the metaphor. The "debt" is real \u2014 it accrues interest in the form of slower feature development, more frequent bugs, and higher cognitive load for every engineer who touches the affected code. Like financial debt, it's not inherently bad. Shipping fast with some debt to validate a product idea is a reasonable decision. Never paying it down is how systems become unmaintainable.\n\nThe distinction between necessary and unnecessary debt matters. Necessary debt: you shipped a feature quickly before a deadline because validating it was more important than the quality of the implementation. You knew it was debt when you made the decision. Unnecessary debt: code that is poorly structured because of lack of care, skills, or time \u2014 not a deliberate trade-off but accumulated neglect.\n\nRefactoring is the process of restructuring existing code without changing its observable behaviour. The refactoring is safe if you have good test coverage \u2014 you can change the structure and verify the behaviour hasn't changed by running the tests. The refactoring is risky without tests, because you can't verify equivalence. Before refactoring untested code, write tests for the current behaviour first. Then refactor. Then verify the tests still pass.\n\nThe Boy Scout Rule: leave the code better than you found it. Not a massive refactor on every PR \u2014 small, consistent improvements. Rename an ambiguous variable. Extract a readable function from a 60-line block. Add a comment explaining why, not what. These accumulate into healthier codebases over years.\n\nKnowing when not to refactor is as important as knowing how. Refactoring code that is rarely touched, that works correctly, and that is clearly understood is risk for no benefit. Refactoring code you're actively working on \u2014 that you need to extend and have to understand thoroughly anyway \u2014 is when the cost-benefit works. The decision is always: does the risk of change outweigh the benefit of clarity?`,
+        body: `Technical debt is a deliberate or accidental trade-off: you write code that is faster to ship now and harder to maintain later. Ward Cunningham coined the metaphor. The "debt" is real \u2014 it accrues interest in the form of slower feature development, more frequent bugs, and higher cognitive load for every engineer who touches the affected code. Like financial debt, it's not inherently bad. Shipping fast with some debt to validate a product idea is a reasonable decision. Never paying it down is how systems become unmaintainable.\n\nThe distinction between necessary and unnecessary debt matters. Necessary debt: you shipped a feature quickly before a deadline because validating it was more important than the quality of the implementation. You knew it was debt when you made the decision. Unnecessary debt: code that is poorly structured because of lack of care, skills, or time \u2014 not a deliberate trade-off but accumulated neglect.\n\nRefactoring is the process of restructuring existing code without changing its observable behaviour. The refactoring is safe if you have good test coverage \u2014 you can change the structure and verify the behaviour hasn't changed by running the tests. The refactoring is risky without tests, because you can't verify equivalence. Before refactoring untested code, write tests for the current behaviour first. Then refactor. Then verify the tests still pass.\n\nThe Boy Scout Rule: leave the code better than you found it. Not a massive refactor on every PR \u2014 small, consistent improvements. Rename an ambiguous variable. Extract a readable function from a 60-line block. Add a comment explaining why, not what. These accumulate into healthier codebases over years.\n\nKnowing when not to refactor is as important as knowing how. Refactoring code that is rarely touched, that works correctly, and that is clearly understood is risk for no benefit. Refactoring code you're actively working on \u2014 that you need to extend and have to understand thoroughly anyway \u2014 is when the cost-benefit works. The decision is always: does the risk of change outweigh the benefit of clarity?\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — think of a shortcut you took in a past project. Was it explicit (you or a comment documented it) or hidden (you moved on hoping to fix it)? What would have made it manageable?</div>`,
         callout: {
           type: "default",
           label: "Make It Work, Then Make It Right",
@@ -4448,7 +4448,7 @@ renderPipeline(null);
           correct: 2,
           feedback: "Refactoring payment-critical code without tests is extremely high risk. The current behaviour is undocumented, and any change that introduces a regression could process payments incorrectly. Characterisation tests document the current behaviour (including any bugs or quirks that callers depend on). With those tests in place, you can refactor incrementally with a safety net. A complete rewrite is higher risk still \u2014 it's easy to miss edge cases that the original code handled."
         },
-        checklist: ["I can distinguish between necessary technical debt (deliberate trade-off) and unnecessary debt (neglect)", "I know how to write characterisation tests before refactoring untested code", "I leave code marginally better on every PR I touch", "I can make the case for when a refactor is and isn't worth the risk", "I know that 'make it right' is not optional, just sequenced after 'make it work'"]
+        checklist: ["I can explain technical debt in one sentence without using the word 'technical'", "I can identify which existing debt in a codebase is manageable and which is genuinely blocking", "When I take a deliberate shortcut, I document it — a comment, a ticket, a decision record", "I can refactor a complex function into smaller, named functions without changing its behaviour", "I know when to fix the debt now vs ship and track it — and I make that call deliberately"]
       },
       {
         id: "7-5",
@@ -4471,7 +4471,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "For a read-heavy system where the data changes rarely (a URL mapping doesn't change once created), caching is the highest-leverage improvement. A Redis cache serving hot URLs from memory handles millions of reads per second with millisecond latency, while the database only receives cache misses. Adding more application servers helps with compute but doesn't reduce database load. Changing languages has minimal impact compared to eliminating database round trips."
         },
-        checklist: ["I understand the vocabulary of system design (sharding, replication, caching, load balancing)", "I understand the CAP theorem and its practical implications", "I can explain the trade-offs between monolith and microservices architectures", "I've read at least 5 real engineering architecture posts from production systems", "I can structure a system design response: requirements, estimation, components, bottlenecks, trade-offs"]
+        checklist: ["I can explain the difference between vertical and horizontal scaling with a concrete example", "I can describe where a system's bottleneck is likely to be before profiling — and verify it after", "I understand what a load balancer does and when you add one", "I can explain the trade-offs of adding a caching layer for a specific system", "I can draw a simple architecture diagram for a system I've designed and explain every component"]
       },
       {
         id: "7-phase1-review",
@@ -4558,7 +4558,7 @@ renderPipeline(null);
           correct: 2,
           feedback: "A design doc forces both sides to articulate their position with reasoning, allows broader input from people not in the original discussion, and creates a record of the decision. Escalating to a manager removes ownership from the engineers closest to the problem. Defaulting to seniority bypasses the reasoning that should drive technical decisions. Building both in production is high cost for what is usually a resolvable trade-off."
         },
-        checklist: ["I understand what psychological safety is and how to contribute to it", "I write clear PR descriptions that explain the what and the why", "I understand the difference between productive technical disagreement and personal conflict", "I can write a basic design doc that presents a problem, options, and recommendation", "I know the 'disagree and commit' norm and can apply it"]
+        checklist: ["I can work on a feature branch, get it reviewed, and merge it without breaking the main branch", "I participate in planning and refinement — I ask clarifying questions before estimating", "I update my team proactively when I'm blocked — I don't disappear for a day then report a problem", "I can give an accurate progress update without being asked", "I understand that my velocity affects the team — I flag risks early, not late"]
       },
       {
         id: "7-7",
@@ -4581,7 +4581,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "Blameless means the post-mortem investigates systems and processes, not individuals. The reasoning: if an engineer made a reasonable decision given the information available and the system's safeguards didn't prevent the outcome, the problem is the system and process, not the person. This framing encourages honest reporting of what actually happened \u2014 critical for learning. It doesn't mean engineers face no professional consequences for grossly negligent decisions; it means well-intentioned mistakes are treated as system design opportunities."
         },
-        checklist: ["I understand the three pillars of observability: metrics, logs, and traces", "I know what alert fatigue is and why alerting on symptoms beats alerting on causes", "I understand the blameless post-mortem process and its purpose", "I've read at least 3 post-mortems from real engineering teams", "I know what a runbook is and why on-call engineers need one"]
+        checklist: ["I can respond to a production incident with correct priority: restore service first, then diagnose", "I check logs before changing anything in a production incident", "I communicate status to stakeholders during an incident — even if the update is 'still investigating'", "I've written a post-mortem that identifies root cause and preventive measures — not blame", "I know when to escalate and who to escalate to"]
       },
       {
         id: "7-8",
@@ -4604,7 +4604,7 @@ renderPipeline(null);
           correct: 1,
           feedback: "Senior engineering is not a function of code quality alone. A mid-level engineer who executes assigned tasks well is meeting the mid-level bar. Senior requires demonstrating expanded scope: contributing to technical direction, mentoring others, taking ownership of ambiguous problems, and making the team more effective. These are different skills that require deliberate development alongside technical craft."
         },
-        checklist: ["I understand the levels of an engineering career ladder and what each requires", "I know what operating at the next level above mine looks like concretely", "I've had a career growth conversation with my manager about what promotion requires", "I understand that senior engineering is about team multiplier effect, not just personal output", "I actively look for opportunities to mentor more junior engineers"]
+        checklist: ["I understand the difference between individual contributor and engineering management tracks", "I can identify the skills gap between my current level and the next level above me", "I actively seek feedback — not just during reviews — and use it to direct my practice", "I've taken on at least one project that stretched me beyond my current comfortable capability", "I know what 'staff engineer' or 'principal engineer' means at real companies and what those roles require"]
       },
       {
         id: "7-9",
@@ -4627,7 +4627,7 @@ renderPipeline(null);
           correct: 2,
           feedback: "The IC vs management decision is fundamentally about what kind of work you find meaningful and energising. Compensation is similar at senior levels across both tracks. Prestige is not a useful criterion. Your manager's recommendation is input, not the answer. The people who make the transition successfully and stay effective are those who genuinely want to do the work of management \u2014 not those who thought it was the next logical step."
         },
-        checklist: ["I understand the difference between engineering leadership and engineering management", "I know what the Staff/Principal IC path looks like at companies I'm interested in", "I've tried leadership behaviours (mentoring, design docs, standards-setting) to get real data on what they're like", "I understand that management is a career change, not a promotion", "I can articulate which type of work I find more energising: technical leadership or people management"]
+        checklist: ["I can give clear technical context to a non-technical stakeholder without condescension or jargon", "I understand that the best technical decision sometimes isn't the one you'd make with unlimited time", "I've helped a junior engineer grow a specific skill — not just reviewed their code", "I create technical artefacts (RFCs, ADRs, runbooks) that help the team operate without me present", "I understand that engineering leadership is about multiplying team capability, not individual output"]
       },
       {
         id: "7-10",
@@ -4703,7 +4703,7 @@ renderPipeline(null);
             }
           ]
         },
-        checklist: ["I understand that engineering is a long compounding investment, not a series of short sprints", "I have a sustainable learning approach that doesn't require heroic effort to maintain", "I'm investing in professional relationships, not just technical skills", "I know the signs of burnout and have strategies to prevent it", "I'm building public artefacts (writing, open source, documentation) that create a durable record of my work"]
+        checklist: ["I have a sustainable learning practice — regular, deliberate, not heroic-effort sprints", "I'm investing in professional relationships — people I learn from, collaborate with, and can call on", "I know the signs of burnout in myself and have concrete strategies to prevent it", "I'm building public artefacts — writing, open source, documentation — that compound over time", "I can honestly describe where I am now, where I want to be in three years, and what the path looks like"]
       }
     ]
   }
