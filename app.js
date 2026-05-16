@@ -6567,26 +6567,146 @@ function closeDailyChallenge() {
 
 // --- FLOOR CELEBRATION SYSTEM ---
 const FLOOR_MESSAGES = [
-  { icon: '\uD83C\uDF93', message: 'You understand how the internet works, how computers think, and the logic behind all code. That\'s the foundation everything else is built on.' },
-  { icon: '\uD83C\uDFA8', message: 'You can build real webpages that look good. HTML and CSS are yours now. The visual web is no longer a mystery.' },
-  { icon: '\u26A1', message: 'JavaScript. You made things move, respond, and think. This is where most people stop. You didn\'t.' },
-  { icon: '\uD83D\uDD28', message: 'You built alone. No hand-holding. A real brief, a real product. That\'s the developer mindset.' },
-  { icon: '\uD83C\uDF10', message: 'Frontend, backend, databases, APIs, deployment. You are a full stack developer. Let that land.' },
-  { icon: '\uD83C\uDFAF', message: 'You found your lane and went deep. This is where developers become specialists.' },
-  { icon: '\uD83C\uDFC6', message: 'Floor 7. Professional grade. You started from nothing and built your way here. That distance is yours forever.' }
+  { icon: '\uD83C\uDF93', sage: 'You now understand what the internet is, how computers read instructions, and the logic behind every program ever written. Most people who try to learn to code never properly understand these things. You do. That is not nothing.' },
+  { icon: '\uD83C\uDFA8', sage: 'HTML describes what content is. CSS controls how it looks. The browser renders both. You\'ve built real pages that look the way you intended. The visual web is no longer something that happens to you \u2014 it\'s something you make.' },
+  { icon: '\u26A1', sage: 'JavaScript. Events. The DOM. Functions that respond to the world. This is where most learners stop \u2014 it gets hard and they step back. You didn\'t. Everything from here is built on what you just proved you can do.' },
+  { icon: '\uD83D\uDD28', sage: 'No scaffold. No step-by-step. A brief and a blank editor. You produced working code. That is the developer mindset \u2014 not knowing everything, but knowing how to figure it out. That skill is permanent.' },
+  { icon: '\uD83C\uDF10', sage: 'Frontend. Backend. Database. Authentication. Deployment. You built the whole thing. Full stack is a title people throw around loosely. You\'ve now earned the right to use it precisely.' },
+  { icon: '\uD83C\uDFAF', sage: 'The fork in the road is behind you. You chose a direction and went deep enough to become genuinely valuable in it. Generalists are useful. Specialists are sought after. You know which you\'re becoming.' },
+  { icon: '\uD83C\uDFC6', sage: 'Floor 7. You started from nothing and you built your way here. Every floor, every section, every debugging session at midnight \u2014 that distance is yours. Nobody can take the understanding back out of your head.' }
 ];
 
 function showFloorCelebration(floorIndex) {
-  const floor = FLOORS[floorIndex];
-  const msg = FLOOR_MESSAGES[floorIndex];
-  const name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+  var floor = FLOORS[floorIndex];
+  var msg = FLOOR_MESSAGES[floorIndex];
+  var name = state.playerName || localStorage.getItem('codebook_player_name') || '';
+  var nextFloor = FLOORS[floorIndex + 1] || null;
+  var floorColor = floor.color || '#c8a96e';
 
-  document.getElementById('celebration-icon').textContent = msg.icon;
-  document.getElementById('celebration-floor').textContent = floor.title;
-  document.getElementById('celebration-message').textContent = msg.message;
-  document.getElementById('celebration-xp').textContent = state.xp;
-  document.getElementById('celebration-name').textContent = name ? 'Well done, ' + (name) + '.' : 'Well done.';
-  document.getElementById('floor-celebration').style.display = 'flex';
+  // Calculate floor stats
+  var sectionsTotal = floor.sections.length;
+  var sectionsCompleted = floor.sections.filter(function(s) { return state.completed[s.id]; }).length;
+  var xpOnFloor = floor.sections.reduce(function(sum, s) {
+    return sum + (state.xpAwarded['complete-' + s.id] ? getSectionXP(floorIndex) : 0);
+  }, 0) + (state.xpAwarded['floor-' + floorIndex] ? getFloorXP(floorIndex) : 0);
+  var level = getCurrentLevel().level;
+
+  var el = document.getElementById('floor-celebration');
+  el.innerHTML =
+    '<div class="fc-overlay" style="--fc-color:' + floorColor + '">' +
+      // Hero
+      '<div class="fc-hero">' +
+        '<div class="fc-hero-glow"></div>' +
+        '<div class="fc-icon" id="fc-icon">' + msg.icon + '</div>' +
+        '<div class="fc-label">FLOOR COMPLETE</div>' +
+        '<div class="fc-title" id="fc-title">' + floor.title + '</div>' +
+        '<div class="fc-tag">' + floor.tag + '</div>' +
+      '</div>' +
+      // Stats grid
+      '<div class="fc-stats">' +
+        '<div class="fc-stat">' +
+          '<div class="fc-stat-val" id="fc-stat-sections">0/' + sectionsTotal + '</div>' +
+          '<div class="fc-stat-label">Sections</div>' +
+        '</div>' +
+        '<div class="fc-stat">' +
+          '<div class="fc-stat-val" id="fc-stat-xp">0</div>' +
+          '<div class="fc-stat-label">XP this floor</div>' +
+        '</div>' +
+        '<div class="fc-stat">' +
+          '<div class="fc-stat-val">' + state.streak + '\uD83D\uDD25</div>' +
+          '<div class="fc-stat-label">Day streak</div>' +
+        '</div>' +
+        '<div class="fc-stat">' +
+          '<div class="fc-stat-val">Lvl ' + level + '</div>' +
+          '<div class="fc-stat-label">Current level</div>' +
+        '</div>' +
+      '</div>' +
+      // Sage quote
+      '<div class="fc-sage">' +
+        '<div class="fc-sage-owl">\uD83E\uDD89</div>' +
+        '<div class="fc-sage-text" id="fc-sage-text"></div>' +
+      '</div>' +
+      // Next floor preview
+      (nextFloor
+        ? '<div class="fc-next" style="border-color:' + (nextFloor.color||'#c8a96e') + '33">' +
+            '<div class="fc-next-label">NEXT UP</div>' +
+            '<div class="fc-next-title" style="color:' + (nextFloor.color||'#c8a96e') + '">Floor ' + nextFloor.id + ' \u2014 ' + nextFloor.title + '</div>' +
+            '<div class="fc-next-sub">' + nextFloor.subtitle + '</div>' +
+          '</div>'
+        : '<div class="fc-next fc-next-final">You\'ve reached the top floor. The building is complete.</div>'
+      ) +
+      // Buttons
+      '<div class="fc-actions">' +
+        '<button class="fc-btn-primary" onclick="closeCelebration()">' +
+          (nextFloor ? 'Continue to Floor ' + nextFloor.id + ' \u2192' : 'You\'re done \u2713') +
+        '</button>' +
+        '<button class="fc-btn-share" onclick="shareAchievement()">Share this achievement</button>' +
+      '</div>' +
+    '</div>';
+
+  el.style.display = 'flex';
+
+  // Animate stats counting up
+  animateCount('fc-stat-sections', 0, sectionsCompleted, sectionsTotal, 800);
+  animateCount('fc-stat-xp', 0, xpOnFloor, null, 1000);
+
+  // Typewrite Sage message
+  setTimeout(function() { typewriteText('fc-sage-text', msg.sage, 18); }, 600);
+
+  // Particle burst in floor color
+  setTimeout(function() { burstFloorParticles(floorColor); }, 200);
+  setTimeout(function() { burstFloorParticles(floorColor); }, 700);
+}
+
+function animateCount(elId, from, to, outOf, duration) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var start = Date.now();
+  var suffix = outOf !== null ? '/' + outOf : '';
+  function tick() {
+    var elapsed = Date.now() - start;
+    var progress = Math.min(elapsed / duration, 1);
+    var eased = 1 - Math.pow(1 - progress, 3);
+    var current = Math.round(from + (to - from) * eased);
+    el.textContent = current + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function typewriteText(elId, text, msPerChar) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var i = 0;
+  el.textContent = '';
+  function next() {
+    if (i < text.length) {
+      el.textContent += text[i++];
+      setTimeout(next, msPerChar);
+    }
+  }
+  next();
+}
+
+function burstFloorParticles(color) {
+  var cx = window.innerWidth / 2;
+  var cy = window.innerHeight * 0.28;
+  for (var i = 0; i < 20; i++) {
+    var p = document.createElement('div');
+    p.className = 'fc-particle';
+    var angle = (Math.PI * 2 / 20) * i + (Math.random() - 0.5);
+    var dist = 60 + Math.random() * 120;
+    var tx = Math.cos(angle) * dist;
+    var ty = Math.sin(angle) * dist - 40;
+    var size = 4 + Math.random() * 6;
+    var dur = 0.7 + Math.random() * 0.6;
+    p.style.cssText = 'left:' + cx + 'px;top:' + cy + 'px;width:' + size + 'px;height:' + size + 'px;' +
+      'background:' + color + ';border-radius:50%;position:fixed;pointer-events:none;z-index:9999;' +
+      'animation:fcParticle ' + dur + 's ease-out forwards;' +
+      '--tx:' + tx + 'px;--ty:' + ty + 'px;';
+    document.body.appendChild(p);
+    setTimeout(function(el) { el.remove(); }, dur * 1000 + 100, p);
+  }
 }
 
 function closeCelebration() {
