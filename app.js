@@ -19,7 +19,7 @@ function getAudioContext() {
 
 const FLOORS = [
   
-  {
+    {
     id: 1,
     title: "Understanding Before Touching",
     subtitle: "How code actually thinks",
@@ -27,14 +27,12 @@ const FLOORS = [
     duration: "3-4 weeks",
     sessions: "5 per week",
     length: "45-60 min",
-    tag: "Floor 01 \u2014 Foundation",
+    tag: "Floor 01 — Foundation",
     sections: [
       {
         id: "1-1",
         title: "How the Internet Actually Works",
-        body: `Before you write a single line of code, you need to understand what the internet actually is.\n\nEvery time you type a web address and press Enter, a precise sequence unfolds in under a second. Your browser sends a <strong>request</strong> \u2014 a message that says "give me this page." That request travels across the internet to a <strong>server</strong> \u2014 another computer, somewhere in the world, that is always on and waiting. The server finds the right files and sends them back. Your browser reads those files and draws the page you see.\n\nEvery webpage is made of three types of files working together:\n\n<strong>HTML</strong> \u2014 the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> \u2014 the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> \u2014 the behaviour. What happens when you click, type, or scroll.\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nThat is what a web developer does.`,
-
-
+        body: `Before you write a single line of code, you need to understand what the internet actually is.\n\nEvery time you type a web address and press Enter, a precise sequence unfolds in under a second. Your browser sends a <strong>request</strong> — a message that says "give me this page." That request travels across the internet to a <strong>server</strong> — another computer, somewhere in the world, that is always on and waiting. The server finds the right files and sends them back. Your browser reads those files and draws the page you see.\n\nEvery webpage is made of three types of files working together:\n\n<strong>HTML</strong> — the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> — the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> — the behaviour. What happens when you click, type, or scroll.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — when you loaded this very page, what do you think happened between your browser and a server?</div>\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nThat is what a web developer does.`,
         callout: {
           type: "default",
           label: "The Key Idea",
@@ -45,26 +43,31 @@ const FLOORS = [
           label: "For Your Brain",
           text: "Don't try to memorise this. Just let the idea sit. You're building a mental picture, not a fact sheet. The detail comes later through doing."
         },
-        hint: `The request-response cycle is how the entire web works. Browser asks. Server answers.\n\n<strong>Try this right now:</strong> Open any website. Right-click anywhere on the page and choose "View Page Source." What you see \u2014 all of it \u2014 is what the server sent back to your browser. Every site you've ever visited sent files that looked like that.\n\n<strong>Still fuzzy?</strong> Think of it like ordering food. You place an order (request). The kitchen prepares it (server processes). The waiter brings it to your table (response). Your browser is the waiter. You're the one eating.`,
+        hint: `The request-response cycle is how the entire web works. Browser asks. Server answers.\n\n<strong>Try this right now:</strong> Open any website. Right-click anywhere on the page and choose "View Page Source." What you see — all of it — is what the server sent back to your browser. Every site you've ever visited sent files that looked like that.\n\n<strong>Still fuzzy?</strong> Think of it like ordering food. You place an order (request). The kitchen prepares it (server processes). The waiter brings it to your table (response). Your browser is the waiter. You're the one eating.`,
         quiz: {
           question: "When you visit a website, what is your browser actually doing?",
-          options: ["Creating the website from scratch", "Requesting and displaying files from another computer", "Downloading the entire internet", "Connecting directly to the website owner"],
+          options: [
+            "Creating the website from scratch using your computer's resources",
+            "Requesting and displaying files sent from another computer called a server",
+            "Downloading the entire internet to your hard drive",
+            "Connecting directly to the website owner's personal computer"
+          ],
           correct: 1,
-          feedback: "Correct. Your browser sends a request to a server \u2014 another computer \u2014 which sends back files. Your browser reads those files and displays them. That's it. That's the web."
+          feedback: "Your browser sends a request to a server — another computer — which sends back files. Your browser reads those files and displays them. That's it. Option A is wrong because browsers don't create content — they display it. Option C is wrong because only the specific files for that page are sent. Option D is wrong because servers are dedicated machines, not personal computers."
         },
         match: {
           prompt: "Every webpage is built from three types of files. Match each to what it does:",
           pairs: [
-            { term: "HTML", def: "The structure \u2014 headings, paragraphs, buttons" },
-            { term: "CSS", def: "The visual style \u2014 colours, fonts, layout" },
-            { term: "JavaScript", def: "The behaviour \u2014 what happens when you interact" }
+            { term: "HTML", def: "The structure — headings, paragraphs, buttons" },
+            { term: "CSS", def: "The visual style — colours, fonts, layout" },
+            { term: "JavaScript", def: "The behaviour — what happens when you interact" }
           ]
         }
       },
       {
         id: "1-2",
         title: "How a Computer Reads Instructions",
-        body: `Computers are extraordinarily fast. But they are not smart. They do <strong>exactly</strong> what you tell them \u2014 nothing more, nothing less.\n\nA computer reads code <strong>line by line, top to bottom</strong>. It doesn't skip ahead. It doesn't assume. It reads instruction 1, executes it, then reads instruction 2. This is called <strong>sequential execution</strong> and it is the foundation of everything.\n\nThe order you write things in <strong>matters enormously</strong>. A recipe that says "serve the cake" before "bake the cake" produces nothing edible. Code works the same way. Ask a computer to display a result before it has calculated the result \u2014 and it has nothing to show.\n\nThis is one of the most common beginner mistakes. And now you already understand why it happens.\n\nProfessional developers spend a lot of time thinking about order. Not just what to do \u2014 but when.`,
+        body: `Computers are extraordinarily fast. But they are not smart. They do <strong>exactly</strong> what you tell them — nothing more, nothing less.\n\nA computer reads code <strong>line by line, top to bottom</strong>. It doesn't skip ahead. It doesn't assume. It reads instruction 1, executes it, then reads instruction 2. This is called <strong>sequential execution</strong> and it is the foundation of everything.\n\nThe order you write things in <strong>matters enormously</strong>. A recipe that says "serve the cake" before "bake the cake" produces nothing edible. Code works the same way. Ask a computer to display a result before it has calculated the result — and it has nothing to show.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — can you think of a real situation in your daily life where the order of steps is non-negotiable? What goes wrong if you change the order?</div>\n\nThis is one of the most common beginner mistakes. And now you already understand why it happens.\n\nProfessional developers spend a lot of time thinking about order. Not just what to do — but when.`,
         callout: {
           type: "default",
           label: "The Logical Thinker in You",
@@ -75,18 +78,23 @@ const FLOORS = [
           label: "ADHD Note",
           text: "<strong>Don't rush this section.</strong> The concept of sequential execution is small but everything else is built on top of it. Two minutes understanding this properly saves hours of confusion later."
         },
-        hint: `Think of a recipe. If it says "serve the cake" before "bake the cake" \u2014 you have a problem. Computers are the same. They do exactly what you say, in exactly the order you say it. No guessing, no common sense.\n\n<strong>Still fuzzy?</strong> Write out 5 instructions for making a cup of tea in order. That sequential thinking \u2014 that's exactly how a computer reads code.`,
+        hint: `Think of a recipe. If it says "serve the cake" before "bake the cake" — you have a problem. Computers are the same. They do exactly what you say, in exactly the order you say it. No guessing, no common sense.\n\n<strong>Still fuzzy?</strong> Write out 5 instructions for making a cup of tea in order. That sequential thinking — that's exactly how a computer reads code.`,
         quiz: {
-          question: "If your code says: Step 1: Display the result. Step 2: Calculate the result. What happens?",
-          options: ["It works fine, computers are smart enough to reorder", "It displays nothing or an error, because the result doesn't exist yet", "It calculates first anyway", "It asks you what to do"],
+          question: "Your code has two steps: Step 1 displays a discount amount, Step 2 calculates what that discount is. What happens when you run it?",
+          options: [
+            "It works fine — computers are smart enough to figure out the right order",
+            "It displays nothing or an error, because the discount hasn't been calculated yet when Step 1 runs",
+            "It automatically calculates the discount first, then displays it",
+            "It asks you which step to run first"
+          ],
           correct: 1,
-          feedback: "The computer tries to display the result before it's been calculated \u2014 so there's nothing to show. Order is everything. This is one of the most common beginner mistakes, and now you already understand why it happens."
+          feedback: "The computer tries to display the discount before it's been calculated — so there's nothing to show. Sequential execution means instructions run in the exact order written, top to bottom. Option A is wrong because computers have no 'common sense' — they follow instructions literally. Options C and D are wrong because computers never reorder or negotiate with you about steps."
         },
         code: {
           lang: "JavaScript",
-          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.7;">\n<h2 style="color:#c8a96e;margin-top:0;">Order Matters</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // Step 1: Set a price\n  var price = 40;\n  out += \'<p>1. Price set to: \u00a3\' + price + \'</p>\';\n\n  // Step 2: Calculate a 10% discount\n  var discount = price * 0.10;\n  out += \'<p>2. Discount calculated: \u00a3\' + discount.toFixed(2) + \'</p>\';\n\n  // Step 3: Apply it\n  var finalPrice = price - discount;\n  out += \'<p style="color:#c8a96e;font-size:18px;margin-top:16px;">You pay: \u00a3\' + finalPrice.toFixed(2) + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
+          starter: '<!DOCTYPE html>\n<html>\n<body style="background:#0a0a0a;color:white;font-family:\'IBM Plex Mono\',monospace;padding:24px;font-size:13px;line-height:1.7;">\n<h2 style="color:#c8a96e;margin-top:0;">Order Matters</h2>\n<div id="output"></div>\n<script>\n  var out = \'\';\n\n  // Step 1: Set a price\n  var price = 40;\n  out += \'<p>1. Price set to: £\' + price + \'</p>\';\n\n  // Step 2: Calculate a 10% discount\n  var discount = price * 0.10;\n  out += \'<p>2. Discount calculated: £\' + discount.toFixed(2) + \'</p>\';\n\n  // Step 3: Apply it\n  var finalPrice = price - discount;\n  out += \'<p style="color:#c8a96e;font-size:18px;margin-top:16px;">You pay: £\' + finalPrice.toFixed(2) + \'</p>\';\n\n  document.getElementById(\'output\').innerHTML = out;\n<\/script>\n</body>\n</html>',
           challenges: [
-            "Move Step 3 above Step 2 \u2014 what breaks and why?",
+            "Move Step 3 above Step 2 — what breaks and why?",
             "Change the price from 40 to 120",
             "Change the discount from 10% to 25%"
           ]
@@ -95,8 +103,7 @@ const FLOORS = [
       {
         id: "1-3",
         title: "The Logic Behind All Code",
-        body: `Every program ever written \u2014 from a calculator app to a social network \u2014 is built from exactly three ideas.\n\n<strong>Conditions</strong> decide which path to take. If the user is logged in, show the dashboard. If not, show the login page. Every decision in code is a condition. There are no exceptions.\n\n<strong>Loops</strong> repeat instructions until something changes. Check every item in a shopping cart and add up the total. Send a notification to every user in a list. Any time something needs to happen "for each item" or "until a condition is met" \u2014 that is a loop.\n\n<strong>Functions</strong> are named, reusable blocks of instructions. Instead of writing the same ten lines every time you need to validate a form, you write it once, give it a name, and call that name whenever you need it. Functions are how professional code stays manageable as it scales.\n\nThere is nothing in any programming language \u2014 not one thing \u2014 that is not built on some combination of these three ideas. When you are writing complex software in two years, you will still be thinking in conditions, loops and functions.`,
-
+        body: `Every program ever written — from a calculator app to a social network — is built from exactly three ideas.\n\n<strong>Conditions</strong> decide which path to take. If the user is logged in, show the dashboard. If not, show the login page. Every decision in code is a condition. There are no exceptions.\n\n<strong>Loops</strong> repeat instructions until something changes. Check every item in a shopping cart and add up the total. Send a notification to every user in a list. Any time something needs to happen "for each item" or "until a condition is met" — that is a loop.\n\n<strong>Functions</strong> are named, reusable blocks of instructions. Instead of writing the same ten lines every time you need to validate a form, you write it once, give it a name, and call that name whenever you need it. Functions are how professional code stays manageable as it scales.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — pick any app on your phone. Can you identify one decision it makes (condition), one thing it does repeatedly (loop), and one action it reuses across multiple screens (function)?</div>\n\nThere is nothing in any programming language — not one thing — that is not built on some combination of these three ideas. When you are writing complex software in two years, you will still be thinking in conditions, loops and functions.`,
         callout: {
           type: "default",
           label: "The Professional Lens",
@@ -104,10 +111,15 @@ const FLOORS = [
         },
         hint: `A <strong>condition</strong> is a fork in the road. The road splits. You go one way or the other based on what's true.\nA <strong>loop</strong> is a roundabout. You go around until you're told to exit.\nA <strong>function</strong> is a shortcut. You name a journey once. Then you can take it anytime just by saying its name.\n\n<strong>Try this:</strong> Pick any app on your phone. Describe one condition it uses, one loop it uses, and one repeated action that is probably a function. You will find all three in under a minute.`,
         quiz: {
-          question: "Which of the three core concepts means: 'Do this over and over until something stops you'?",
-          options: ["A condition", "A function", "A loop", "A variable"],
+          question: "A shopping cart calculates tax on every item in the basket. Which concept handles the 'do this for every item' part?",
+          options: [
+            "A condition — because the cart needs to decide whether tax applies",
+            "A function — because the tax calculation is reused",
+            "A loop — because it repeats the same operation for each item until all items are processed",
+            "A variable — because it stores the running total"
+          ],
           correct: 2,
-          feedback: "A loop repeats instructions until a condition tells it to stop. A condition decides which path to take. A function is a reusable block of instructions. These three are the building blocks of everything."
+          feedback: "A loop repeats instructions for each item until there are no more items left. A condition (option A) would decide whether something applies — like whether tax is applicable at all. A function (option B) would hold the tax calculation logic, but the 'do this for every item' part is still a loop calling that function. A variable (option D) stores data, not a repeated process."
         },
         code: {
           lang: "JavaScript",
@@ -130,11 +142,11 @@ const FLOORS = [
       {
         id: "1-4",
         title: "Your First Look at Real Code",
-        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Before you speak a language fluently, you learn to recognise it. Same principle applies here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\nLook at the example below. Do not panic. Do not try to memorise it. Just try to read it like a sentence \u2014 guess what each line does before you read the explanation. That act of guessing is already how developers think.`,
+        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Before you speak a language fluently, you learn to recognise it. Same principle applies here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\nLook at the example below. Do not panic. Do not try to memorise it. Just try to read it like a sentence — guess what each line does before you read the explanation. That act of guessing is already how developers think.`,
         code: {
           lang: "HTML",
           lines: [
-            '<span class="code-comment"><!-- This is a comment. The computer ignores it. It\'s just a note for humans. --></span>',
+            '<span class="code-comment">&lt;!-- This is a comment. The computer ignores it. It\'s just a note for humans. --&gt;</span>',
             '',
             '<span class="code-tag">&lt;h1&gt;</span>Hello, World<span class="code-tag">&lt;/h1&gt;</span>',
             '<span class="code-tag">&lt;p&gt;</span>This is my first piece of code.<span class="code-tag">&lt;/p&gt;</span>',
@@ -151,7 +163,7 @@ const FLOORS = [
         callout: {
           type: "default",
           label: "What You're Looking At",
-          text: "Those angle brackets \u2014 the &lt; and &gt; \u2014 are called <strong>tags</strong>. They're labels that tell the browser what each piece of content is. h1 means a big heading. p means a paragraph. button means a clickable button. Open tag, content, close tag. That's the pattern."
+          text: "Those angle brackets — the &lt; and &gt; — are called <strong>tags</strong>. They're labels that tell the browser what each piece of content is. h1 means a big heading. p means a paragraph. button means a clickable button. Open tag, content, close tag. That's the pattern."
         },
         callout2: {
           type: "focus",
@@ -160,21 +172,21 @@ const FLOORS = [
         },
         hint: `Don't read the code like a sentence. Read it like signs on a road.\n\nThe tag name tells you what type of thing it is. &lt;h1&gt; = big heading. &lt;p&gt; = paragraph. &lt;button&gt; = button. The words between the opening and closing tag are what actually appears on screen.\n\n<strong>Still fuzzy?</strong> Think of tags like labels on boxes. The label tells you what's inside. The content is the thing inside the box. Open the box (opening tag), here's what's inside (content), close the box (closing tag).`,
         quiz: {
-          question: "Looking at the code above — what does the <h1> tag tell the browser?",
+          question: "Looking at the code example — what does the &lt;p&gt; tag tell the browser about the content inside it?",
           options: [
-            "To make the text bold and underlined",
-            "That this content is a large heading",
-            "To link to another page",
-            "To ignore this line — it is a comment"
+            "That this content should be in a large, bold font",
+            "That this content is a paragraph of regular body text",
+            "That this content should be clickable like a button",
+            "That this line is a comment the browser should ignore"
           ],
           correct: 1,
-          feedback: "h1 means 'heading level 1' — the largest, most important heading on the page. Tags are labels. They tell the browser what type of content is inside them. Open tag, content, close tag. That is the entire pattern of HTML."
-        },
+          feedback: "The &lt;p&gt; tag labels its content as a paragraph — regular body text. It doesn't style it bold (that's CSS, not HTML), it doesn't make it clickable (that's &lt;button&gt;), and comments use &lt;!-- --&gt; syntax, not tags. Tags are labels: they tell the browser what type of content is inside, and the browser applies its default styling for that type."
+        }
       },
       {
         id: "1-5",
-        title: "Floor 1 Check \u2014 Explain It Back",
-        body: `You have covered the four ideas that underpin everything in web development.\n\nHow the internet works. How computers read instructions. The three building blocks of all code. And your first look at HTML.\n\nThis is not a small thing. Most people who try to learn to code never properly understand these foundations \u2014 they rush to write syntax before they understand what it is or why it works. You have not done that.\n\nBefore you move to Floor 2, do one final check. Not for us \u2014 for you. Answer the question below in your head before selecting an option. If you can explain it clearly, you are ready. If something feels shaky, go back to that one section. Not the whole floor \u2014 just that section.`,
+        title: "Floor 1 Check — Prove It Back",
+        body: `Before you move to Floor 2, do a genuine check — not for this app, but for yourself.\n\nYou have covered the four ideas that underpin everything in web development: how the internet works, how computers read instructions sequentially, the three building blocks of all code, and your first look at HTML tags.\n\nThis is not a small thing. Most people who try to learn to code never properly understand these foundations — they rush to write syntax before they understand what it is or why it works. You have not done that.\n\nThe questions below get progressively harder. They test whether you can connect and apply what you've learned — not just recall it. Answer each one honestly in your head before selecting. If something feels shaky, go back to that one section. Not the whole floor — just that section.`,
         callout: {
           type: "default",
           label: "The Foundation",
@@ -185,18 +197,77 @@ const FLOORS = [
           label: "Floor 2 Preview",
           text: `Floor 2 is where it becomes real. You will write actual HTML and CSS and see the results on screen immediately. Everything you understood here becomes something you can build.`
         },
-        hint: `If you cannot answer the question below without guessing \u2014 that is useful information, not failure. It tells you exactly which section to return to. One weak brick does not mean a broken building. It means one brick to fix.`,
+        hint: `If you cannot answer the questions below without guessing — that is useful information, not failure. It tells you exactly which section to return to. One weak brick does not mean a broken building. It means one brick to fix.`,
         quiz: {
-          question: "A developer builds a system that: checks whether a user has paid (condition), processes each item in their order one by one (loop), and uses the same discount calculation in three different places (function). Which statement is true?",
-          options: [
-            "This system uses all three core building blocks of programming",
-            "Loops and functions are the same thing \u2014 both repeat code",
-            "Conditions are not needed here \u2014 loops can make decisions",
-            "You would need a fourth concept to build this"
-          ],
-          correct: 0,
-          feedback: "Exactly right. One condition, one loop, one function \u2014 and you have described a real piece of professional software. Every system, no matter how complex, is built from combinations of these three things. You now have the lens every developer uses."
-        },
+          questions: [
+            {
+              question: "What is the correct term for what happens when a browser sends a message to a server asking for a webpage?",
+              options: [
+                "A download — because the page is saved to your computer",
+                "A request — the browser asks, the server responds with files",
+                "A render — because the browser draws the page",
+                "A compile — because the browser converts the files"
+              ],
+              correct: 1,
+              feedback: "The browser sends a request and the server sends a response containing files. This request-response cycle is the foundation of how the entire web works. 'Download' implies permanent storage. 'Render' happens after the files arrive — it's what the browser does with them. 'Compile' is a different process entirely (converting source code to machine code)."
+            },
+            {
+              question: "Code is written in this order: Line 1 displays a total. Line 2 calculates the total. What happens?",
+              options: [
+                "The total is displayed correctly because computers optimise execution order",
+                "Line 1 displays nothing or an error because the total hasn't been calculated yet",
+                "Line 2 runs first automatically because calculations must precede display",
+                "An error is thrown and the program stops before either line runs"
+              ],
+              correct: 1,
+              feedback: "Sequential execution means the computer runs Line 1 exactly as written — before Line 2. The total doesn't exist yet. Computers don't optimise or reorder instructions. They don't 'know' that a calculation should come first. This is why order is everything in code."
+            },
+            {
+              question: "Which of the three core building blocks would you use to 'send a welcome email to every new user who signed up this week'?",
+              options: [
+                "A condition — because you need to check if they signed up this week",
+                "A function — because the email-sending logic should be reusable",
+                "A loop — because you need to repeat the action for each user in the list",
+                "A combination of loop and function — the loop iterates users, the function sends each email"
+              ],
+              correct: 3,
+              feedback: "This is the most sophisticated answer — and the correct one. The loop handles 'for each new user,' and the function holds the reusable email-sending logic that the loop calls. A condition alone can't repeat. A function alone doesn't iterate. The combination is how real code works: loops call functions, and conditions live inside both."
+            },
+            {
+              question: "A developer builds a system that: checks whether a user has paid (condition), processes each item in their order one by one (loop), and uses the same discount calculation in three different places (function). Which statement is true?",
+              options: [
+                "This system uses all three core building blocks of programming",
+                "Loops and functions are the same thing — both repeat code",
+                "Conditions are not needed here — loops can make decisions",
+                "You would need a fourth concept beyond conditions, loops, and functions"
+              ],
+              correct: 0,
+              feedback: "Exactly right. One condition, one loop, one function — and you have described a real piece of professional software. Every system, no matter how complex, is built from combinations of these three things. Loops repeat but don't hold logic the way functions do. Conditions decide but don't repeat. All three serve distinct purposes."
+            },
+            {
+              question: "What does the &lt;h1&gt; tag communicate to the browser?",
+              options: [
+                "Make this text large and bold using the browser's default heading style",
+                "This content is the most important heading on the page",
+                "Both A and B — h1 instructs styling AND declares semantic importance",
+                "Ignore this line — h1 is a comment tag"
+              ],
+              correct: 2,
+              feedback: "Both are true, but for different reasons. &lt;h1&gt; semantically declares this as the page's primary heading (most important), which search engines and screen readers use. The browser also applies default styling (large, bold) to headings. The semantic meaning is HTML's job. The styling is the browser's default — and CSS can override it entirely. &lt;h1&gt; is definitely not a comment — comments use &lt;!-- --&gt;."
+            },
+            {
+              question: "You want to explain 'what a server is' to a friend who has never coded. Which explanation is most accurate?",
+              options: [
+                "A server is special software that creates websites when users visit them",
+                "A server is another computer — always on, always connected — that stores and sends files when browsers request them",
+                "A server is what a browser uses to translate HTML into visual pages",
+                "A server is a type of database that stores website passwords"
+              ],
+              correct: 1,
+              feedback: "A server is fundamentally another computer — one that is always running and connected, waiting to respond to requests. It stores files and sends them when asked. It doesn't create websites on demand (the files already exist), it doesn't translate HTML (the browser does that), and it's not specifically a database or a password store — though servers often connect to databases."
+            }
+          ]
+        }
       }
     ]
   },
@@ -208,35 +279,46 @@ const FLOORS = [
     duration: "3-4 weeks",
     sessions: "5 per week",
     length: "45-60 min",
-    tag: "Floor 02 \u2014 Structure",
+    tag: "Floor 02 — Structure",
     sections: [
       {
         id: "2-1",
         title: "What HTML Is",
-        body: `HTML is not a programming language. It has no logic, no conditions, no loops. What it has is something more fundamental: a way to describe what content <strong>is</strong>.\n\nHTML stands for HyperText Markup Language. The "markup" part is the key idea. You take a piece of content \u2014 a heading, a paragraph, an image, a button \u2014 and you wrap it in a tag that labels it. <code>&lt;h1&gt;My Title&lt;/h1&gt;</code> doesn't tell the browser to make text big and bold. It tells the browser: this is a level-one heading. The browser then applies its own default styling to that heading. CSS is what overrides those defaults.\n\nThis distinction matters. When YouTube marks up a video title with <code>&lt;h1&gt;</code>, when GitHub wraps a code block in <code>&lt;pre&gt;&lt;code&gt;</code>, when Twitter marks each post with <code>&lt;article&gt;</code> \u2014 they're not making visual decisions. They're declaring meaning. Search engines, screen readers, and other tools all use that meaning.\n\nThe tags you'll use most: <strong>h1 through h6</strong> for headings (h1 is the most important, h6 the least), <strong>p</strong> for paragraphs, <strong>a</strong> for links, <strong>img</strong> for images, <strong>ul</strong> and <strong>li</strong> for unordered lists, <strong>div</strong> for grouping content without semantic meaning, <strong>button</strong> for clickable controls, and <strong>input</strong> for form fields.\n\nBeyond those basics, HTML has semantic elements: <strong>header</strong>, <strong>main</strong>, <strong>nav</strong>, <strong>footer</strong>, <strong>section</strong>, <strong>article</strong>. These are divs with meaning attached. Use them where they fit the content. A screen reader navigating your page will thank you. So will your future self six months later trying to read your own code.`,
+        body: `HTML is not a programming language. It has no logic, no conditions, no loops. What it has is something more fundamental: a way to describe what content <strong>is</strong>.\n\nHTML stands for HyperText Markup Language. The "markup" part is the key idea. You take a piece of content — a heading, a paragraph, an image, a button — and you wrap it in a tag that labels it. <code>&lt;h1&gt;My Title&lt;/h1&gt;</code> doesn't tell the browser to make text big and bold. It tells the browser: this is a level-one heading. The browser then applies its own default styling to that heading. CSS is what overrides those defaults.\n\nThis distinction matters. When YouTube marks up a video title with <code>&lt;h1&gt;</code>, when GitHub wraps a code block in <code>&lt;pre&gt;&lt;code&gt;</code>, when Twitter marks each post with <code>&lt;article&gt;</code> — they're not making visual decisions. They're declaring meaning. Search engines, screen readers, and other tools all use that meaning.\n\nThe tags you'll use most: <strong>h1 through h6</strong> for headings (h1 is the most important, h6 the least), <strong>p</strong> for paragraphs, <strong>a</strong> for links, <strong>img</strong> for images, <strong>ul</strong> and <strong>li</strong> for unordered lists, <strong>div</strong> for grouping content without semantic meaning, <strong>button</strong> for clickable controls, and <strong>input</strong> for form fields.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if HTML describes what content IS rather than how it looks, what do you think happens when a screen reader for a blind user encounters an &lt;h1&gt; vs a &lt;div&gt; containing the same text?</div>\n\nBeyond those basics, HTML has semantic elements: <strong>header</strong>, <strong>main</strong>, <strong>nav</strong>, <strong>footer</strong>, <strong>section</strong>, <strong>article</strong>. These are divs with meaning attached. Use them where they fit the content. A screen reader navigating your page will thank you. So will your future self six months later trying to read your own code.`,
         callout: {
           type: "default",
           label: "The Key Distinction",
-          text: "HTML describes what content is, not how it looks. A heading tag doesn't mean 'make this big' \u2014 it means 'this is a heading.' Appearance is entirely CSS's job. Keeping these responsibilities separate is one of the most important ideas in web development."
+          text: "HTML describes what content is, not how it looks. A heading tag doesn't mean 'make this big' — it means 'this is a heading.' Appearance is entirely CSS's job. Keeping these responsibilities separate is one of the most important ideas in web development."
         },
         callout2: {
           type: "focus",
           label: "Why Semantic HTML Matters",
-          text: "When you use the right element for the right content \u2014 nav for navigation, article for articles, button for buttons \u2014 you're building something that works for everyone: search engines rank it better, screen readers navigate it correctly, and your code communicates its intent to every developer who reads it."
+          text: "When you use the right element for the right content — nav for navigation, article for articles, button for buttons — you're building something that works for everyone: search engines rank it better, screen readers navigate it correctly, and your code communicates its intent to every developer who reads it."
         },
-        hint: `HTML is about labelling, not styling. The easiest way to internalise this: open any major website, right-click the page, click "View Page Source." Scan for tags. You'll see h1, p, nav, div, a, img \u2014 the same handful of elements used thousands of times.\n\n<strong>Try this:</strong> Before writing any HTML, write out what your page contains in plain English. "A heading. A paragraph. A list of three items. A button." Then translate each thing into the correct tag. Structure first, appearance never \u2014 that's CSS's job.\n\n<strong>Still fuzzy on semantic elements?</strong> Think of them as named boxes. A <code>&lt;div&gt;</code> is a box with no label. A <code>&lt;nav&gt;</code> is a box with a sign that says "navigation lives here." Both behave the same visually \u2014 the label is for humans and machines, not the browser's renderer.`,
+        hint: `HTML is about labelling, not styling. The easiest way to internalise this: open any major website, right-click the page, click "View Page Source." Scan for tags. You'll see h1, p, nav, div, a, img — the same handful of elements used thousands of times.\n\n<strong>Try this:</strong> Before writing any HTML, write out what your page contains in plain English. "A heading. A paragraph. A list of three items. A button." Then translate each thing into the correct tag. Structure first, appearance never — that's CSS's job.\n\n<strong>Still fuzzy on semantic elements?</strong> Think of them as named boxes. A <code>&lt;div&gt;</code> is a box with no label. A <code>&lt;nav&gt;</code> is a box with a sign that says "navigation lives here." Both behave the same visually — the label is for humans and machines, not the browser's renderer.`,
         quiz: {
-          question: "A developer uses a <div> for their site's main navigation instead of a <nav> element. The page looks identical either way. Why does the choice still matter?",
-          options: ["It doesn't \u2014 if the page looks the same, the HTML makes no difference", "Screen readers and search engines use element semantics to understand page structure, so the wrong tag reduces accessibility and SEO", "Browsers render <div> faster than <nav>, so <div> is technically the better choice", "The <nav> element requires CSS to function, while <div> works without any styles"],
+          question: "A developer uses a &lt;div&gt; for their site's main navigation instead of a &lt;nav&gt; element. The page looks identical either way. Why does the choice still matter?",
+          options: [
+            "It doesn't — if the page looks the same, the HTML makes no difference",
+            "Screen readers and search engines use element semantics to understand page structure, so the wrong tag reduces accessibility and SEO",
+            "Browsers render &lt;div&gt; faster than &lt;nav&gt;, so &lt;div&gt; is technically the better choice",
+            "The &lt;nav&gt; element requires CSS to function, while &lt;div&gt; works without any styles"
+          ],
           correct: 1,
-          feedback: "Appearance is only one output of HTML. Screen readers use element type to help users navigate \u2014 a blind user can jump directly to the <nav> element to find links. Search engines use semantic tags to understand page structure and weight content accordingly. The <div> and <nav> look identical on screen, but one communicates meaning and one doesn't."
+          feedback: "Appearance is only one output of HTML. Screen readers use element type to help users navigate — a blind user can jump directly to the &lt;nav&gt; element to find links. Search engines use semantic tags to understand page structure and weight content accordingly. Option A ignores non-visual users entirely. Option C is false — there is no meaningful rendering speed difference. Option D is false — both work without CSS."
         },
-        checklist: ["I understand that HTML describes content structure, not visual appearance", "I can name the core tags and what each one represents", "I understand the difference between semantic elements (nav, header, main) and generic containers (div)", "I could look at a webpage and describe its HTML structure before seeing the source", "I know that the same page can look completely different with different CSS applied to identical HTML"]
+        checklist: [
+          "I can explain in my own words why HTML describes structure rather than appearance — without looking at the lesson",
+          "I could write the 10 most common HTML tags from memory right now without looking them up",
+          "I can describe the difference between a &lt;div&gt; and a &lt;nav&gt; to someone who has never coded",
+          "I understand why semantic HTML matters — not just what it is",
+          "I could look at any webpage and name the HTML elements making up its structure before seeing the source"
+        ]
       },
       {
         id: "2-2",
         title: "What CSS Is",
-        body: `CSS stands for Cascading Style Sheets. Every visual decision on every website you've ever used \u2014 every colour, every font, every spacing choice, every hover effect \u2014 is a CSS rule.\n\nThe syntax is consistent and readable once you see the pattern. You write a <strong>selector</strong> (what to target), then inside curly braces you write <strong>property: value</strong> pairs. <code>h1 { color: #1a1a1a; font-size: 32px; }</code> targets every h1 element on the page and sets two properties. That's the entire pattern.\n\nTargeting works three ways. A <strong>tag selector</strong> like <code>p { }</code> targets every paragraph. A <strong>class selector</strong> like <code>.card { }</code> targets every element with class="card" \u2014 a class can be reused across many elements. An <strong>ID selector</strong> like <code>#header { }</code> targets the single element with id="header" \u2014 IDs are unique per page. Classes are what you'll use most.\n\nThe "Cascading" in CSS is the important part that trips up beginners. When two rules target the same element, the more specific one wins. An ID selector beats a class selector. A class beats a tag name. If specificity is equal, the rule that appears last in the file wins. This hierarchy is called the <strong>cascade</strong>.\n\nSpotify's entire dark theme \u2014 the black backgrounds, the white text, the green accents \u2014 is CSS <code>background-color</code> and <code>color</code> properties applied systematically. Nothing magic. Just properties on elements.\n\nCSS can live in three places: as an inline <code>style</code> attribute on an element (avoid this except for quick tests), inside a <code>&lt;style&gt;</code> tag in the HTML head, or in a completely separate <code>.css</code> file linked with <code>&lt;link&gt;</code>. External files are the professional standard \u2014 they keep style separate from structure and let one stylesheet control an entire site.`,
+        body: `CSS stands for Cascading Style Sheets. Every visual decision on every website you've ever used — every colour, every font, every spacing choice, every hover effect — is a CSS rule.\n\nThe syntax is consistent and readable once you see the pattern. You write a <strong>selector</strong> (what to target), then inside curly braces you write <strong>property: value</strong> pairs. <code>h1 { color: #1a1a1a; font-size: 32px; }</code> targets every h1 element on the page and sets two properties. That's the entire pattern.\n\nTargeting works three ways. A <strong>tag selector</strong> like <code>p { }</code> targets every paragraph. A <strong>class selector</strong> like <code>.card { }</code> targets every element with class="card" — a class can be reused across many elements. An <strong>ID selector</strong> like <code>#header { }</code> targets the single element with id="header" — IDs are unique per page. Classes are what you'll use most.\n\nThe "Cascading" in CSS is the important part that trips up beginners. When two rules target the same element, the more specific one wins. An ID selector beats a class selector. A class beats a tag name. If specificity is equal, the rule that appears last in the file wins. This hierarchy is called the <strong>cascade</strong>.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if a tag selector, a class selector, and an ID selector all target the same element with conflicting colour values, which one do you predict wins? Why?</div>\n\nSpotify's entire dark theme — the black backgrounds, the white text, the green accents — is CSS <code>background-color</code> and <code>color</code> properties applied systematically. Nothing magic. Just properties on elements.\n\nCSS can live in three places: as an inline <code>style</code> attribute on an element (avoid this except for quick tests), inside a <code>&lt;style&gt;</code> tag in the HTML head, or in a completely separate <code>.css</code> file linked with <code>&lt;link&gt;</code>. External files are the professional standard — they keep style separate from structure and let one stylesheet control an entire site.`,
         callout: {
           type: "default",
           label: "Specificity in One Sentence",
@@ -247,42 +329,128 @@ const FLOORS = [
           label: "Why External Stylesheets",
           text: "An external CSS file linked to 50 HTML pages means one change to the stylesheet updates all 50 pages instantly. Inline styles mean changing the same thing 50 times. Professional CSS lives in separate files. Always."
         },
-        hint: `The selector is who. The property is what. The value is how much.\n\n<code>p { color: red; }</code> \u2014 who: all paragraphs, what: text colour, how much: red.\n\n<strong>Try this:</strong> Open the browser DevTools (F12), click the Elements tab, click any element on the page. The Styles panel on the right shows every CSS rule targeting that element, where it came from, and whether it's being overridden by a more specific rule. Spend five minutes just clicking around a site you know \u2014 you'll see specificity in action immediately.\n\n<strong>Still confused by classes vs IDs?</strong> Use classes for anything you might want to style more than once. Use IDs only when a thing is guaranteed to be unique on the page \u2014 and even then, many developers prefer classes because IDs have high specificity that can cause unexpected overriding.`,
+        hint: `The selector is who. The property is what. The value is how much.\n\n<code>p { color: red; }</code> — who: all paragraphs, what: text colour, how much: red.\n\n<strong>Try this:</strong> Open the browser DevTools (F12), click the Elements tab, click any element on the page. The Styles panel on the right shows every CSS rule targeting that element, where it came from, and whether it's being overridden by a more specific rule. Spend five minutes just clicking around a site you know — you'll see specificity in action immediately.\n\n<strong>Still confused by classes vs IDs?</strong> Use classes for anything you might want to style more than once. Use IDs only when a thing is guaranteed to be unique on the page — and even then, many developers prefer classes because IDs have high specificity that can cause unexpected overriding.`,
         quiz: {
-          question: "A page has two CSS rules: <code>p { color: black; }</code> and <code>.intro { color: blue; }</code>. A paragraph has class='intro'. What colour is the text?",
-          options: ["Black, because the p rule comes first in the file", "Blue, because the class selector is more specific than the tag selector", "Neither \u2014 conflicting rules cancel each other out", "Black, because tag selectors always override class selectors"],
+          question: "A page has two CSS rules: <code>p { color: black; }</code> and <code>.intro { color: blue; }</code>. A paragraph has class='intro'. What colour is the text and why?",
+          options: [
+            "Black, because the p rule appears first in the file",
+            "Blue, because the class selector (.intro) is more specific than the tag selector (p)",
+            "Neither — conflicting rules cancel each other out and the browser uses its default",
+            "Black, because tag selectors always override class selectors"
+          ],
           correct: 1,
-          feedback: "The class selector .intro is more specific than the tag selector p. When two rules target the same element, specificity determines the winner \u2014 not document order. Class beats tag. So the paragraph is blue. This is the cascade in action."
+          feedback: "The class selector .intro is more specific than the tag selector p. Specificity determines the winner, not document order — document order only breaks ties between rules of equal specificity. Option A is wrong because specificity outweighs order. Option C is wrong — rules don't cancel out. Option D is wrong — it's the opposite: class beats tag."
         },
-        checklist: ["I understand the selector-property-value syntax of CSS", "I can explain the difference between tag, class, and ID selectors", "I understand why more specific rules override less specific ones", "I know the three ways to include CSS and which one is preferred in professional code", "I could look at a CSS rule and describe in plain English what it does"]
+        checklist: [
+          "I can write a complete CSS rule from memory — selector, property, value — without looking it up",
+          "I can explain the difference between tag, class, and ID selectors to someone who has never seen CSS",
+          "I understand why more specific rules win — not just that they do, but why that makes CSS manageable",
+          "I could look at a CSS rule and describe in plain English exactly what it does and what it affects",
+          "I understand why external stylesheets are preferred over inline styles in professional projects"
+        ]
       },
       {
         id: "2-3",
         title: "How a Browser Renders Code",
-        body: `Browsers don't just display HTML files. They go through a precise sequence every time \u2014 and understanding it explains several decisions you'll make every day as a developer.\n\nWhen a browser receives an HTML file, it reads it from top to bottom and constructs the <strong>DOM</strong> \u2014 the Document Object Model. The DOM is the browser's internal tree-like representation of the page. Every element is a node. Every node has a parent, children, and siblings. When JavaScript adds, removes, or changes elements later, it's modifying this DOM tree.\n\nAs the browser parses HTML, it discovers linked resources \u2014 CSS files, images, scripts. CSS files are fetched and parsed into a structure called the <strong>CSSOM</strong>. The DOM and CSSOM are combined into a <strong>render tree</strong> \u2014 the set of elements that will actually be drawn on screen with their computed styles. Then comes <strong>layout</strong> (calculating each element's size and position) and <strong>paint</strong> (drawing pixels to screen). This full sequence is called the <strong>critical rendering path</strong>.\n\nThis explains two conventions you'll see everywhere. CSS goes in the <code>&lt;head&gt;</code>: because the browser needs styles before painting. If CSS arrives late, the page flashes unstyled content for a split second \u2014 this is called a FOUC (Flash of Unstyled Content) and it looks broken. JavaScript usually goes at the bottom of <code>&lt;body&gt;</code>, or uses the <code>defer</code> attribute: because JavaScript blocks parsing while it executes. A large JS file in the head means the user stares at a blank page while it downloads and runs.\n\nWhen you open DevTools and inspect an element, you're looking at the live DOM \u2014 not the original HTML file. If JavaScript has modified the page, the DevTools shows the current state. The "View Page Source" option shows the original HTML the server sent. They're often different, and that difference is JavaScript.`,
+        body: `Browsers don't just display HTML files. They go through a precise sequence every time — and understanding it explains several decisions you'll make every day as a developer.\n\nWhen a browser receives an HTML file, it reads it from top to bottom and constructs the <strong>DOM</strong> — the Document Object Model. The DOM is the browser's internal tree-like representation of the page. Every element is a node. Every node has a parent, children, and siblings. When JavaScript adds, removes, or changes elements later, it's modifying this DOM tree.\n\nAs the browser parses HTML, it discovers linked resources — CSS files, images, scripts. CSS files are fetched and parsed into a structure called the <strong>CSSOM</strong>. The DOM and CSSOM are combined into a <strong>render tree</strong> — the set of elements that will actually be drawn on screen with their computed styles. Then comes <strong>layout</strong> (calculating each element's size and position) and <strong>paint</strong> (drawing pixels to screen). This full sequence is called the <strong>critical rendering path</strong>.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — based on this sequence, where do you think CSS should be placed in an HTML file to prevent a flash of unstyled content? And where should JavaScript go to prevent the page appearing blank while it loads?</div>\n\nThis explains two conventions you'll see everywhere. CSS goes in the <code>&lt;head&gt;</code>: because the browser needs styles before painting. If CSS arrives late, the page flashes unstyled content for a split second — this is called a FOUC (Flash of Unstyled Content) and it looks broken. JavaScript usually goes at the bottom of <code>&lt;body&gt;</code>, or uses the <code>defer</code> attribute: because JavaScript blocks parsing while it executes. A large JS file in the head means the user stares at a blank page while it downloads and runs.\n\nWhen you open DevTools and inspect an element, you're looking at the live DOM — not the original HTML file. If JavaScript has modified the page, the DevTools shows the current state. The "View Page Source" option shows the original HTML the server sent. They're often different, and that difference is JavaScript.`,
         callout: {
           type: "default",
           label: "The DOM vs The Source",
-          text: "View Page Source shows what the server sent. DevTools shows the live DOM \u2014 what the browser is actually working with right now. On sites that use JavaScript to build the page dynamically (like React apps), the source might be nearly empty while the DOM contains hundreds of elements."
+          text: "View Page Source shows what the server sent. DevTools shows the live DOM — what the browser is actually working with right now. On sites that use JavaScript to build the page dynamically (like React apps), the source might be nearly empty while the DOM contains hundreds of elements."
         },
         callout2: {
           type: "focus",
           label: "Why This Matters Practically",
-          text: "Every time you wonder why your CSS isn't applying, or why your page loads slowly, or why a JavaScript change doesn't show up \u2014 the answer is somewhere in this rendering sequence. Understanding it turns debugging from guesswork into diagnosis."
+          text: "Every time you wonder why your CSS isn't applying, or why your page loads slowly, or why a JavaScript change doesn't show up — the answer is somewhere in this rendering sequence. Understanding it turns debugging from guesswork into diagnosis."
         },
-        hint: `The critical rendering path is HTML \u2192 DOM, CSS \u2192 CSSOM, DOM + CSSOM \u2192 Render Tree \u2192 Layout \u2192 Paint.\n\n<strong>Try this:</strong> Open any website and press F12. In the Elements tab, right-click any element and click "Edit as HTML." Change something. Watch it update instantly. You're directly editing the DOM \u2014 not the file on the server, just the browser's in-memory model. Refresh the page and your change is gone.\n\n<strong>Still unclear on render-blocking?</strong> Think of parsing HTML like reading a book. When you hit a script tag with no defer, it's like someone interrupting your reading and making you solve a puzzle before you can continue. defer says "I'll tell you what puzzle to solve after you finish the page." The reading continues uninterrupted.`,
+        hint: `The critical rendering path is HTML → DOM, CSS → CSSOM, DOM + CSSOM → Render Tree → Layout → Paint.\n\n<strong>Try this:</strong> Open any website and press F12. In the Elements tab, right-click any element and click "Edit as HTML." Change something. Watch it update instantly. You're directly editing the DOM — not the file on the server, just the browser's in-memory model. Refresh the page and your change is gone.\n\n<strong>Still unclear on render-blocking?</strong> Think of parsing HTML like reading a book. When you hit a script tag with no defer, it's like someone interrupting your reading and making you solve a puzzle before you can continue. defer says "I'll tell you what puzzle to solve after you finish the page." The reading continues uninterrupted.`,
         quiz: {
-          question: "Why do professional developers typically put <link> stylesheet tags in the <head> but <script> tags at the bottom of <body> or use the defer attribute?",
-          options: ["It's just a convention with no technical reason \u2014 browsers handle both equally", "CSS in the head prevents unstyled content flashes; scripts at the bottom or with defer prevent blocking HTML parsing", "Scripts must be at the bottom because they can only access elements that exist above them", "Browsers only read the head section for CSS and ignore styles placed elsewhere"],
+          question: "Why do professional developers typically put &lt;link&gt; stylesheet tags in the &lt;head&gt; but &lt;script&gt; tags at the bottom of &lt;body&gt; or use the defer attribute?",
+          options: [
+            "It's just a convention with no technical reason — browsers handle both equally",
+            "CSS in the head prevents unstyled content flashes; scripts at the bottom or with defer prevent blocking HTML parsing",
+            "Scripts must be at the bottom because they can only access elements that exist above them in the source",
+            "Browsers only read the head section for CSS and ignore styles placed anywhere else"
+          ],
           correct: 1,
-          feedback: "CSS must arrive before the browser paints, so it goes in the head. JavaScript blocks HTML parsing while it executes, so large scripts in the head leave users staring at a blank page. Scripts at the bottom or with defer let the HTML parse and render first, then execute JavaScript. Both decisions come directly from how the critical rendering path works."
+          feedback: "Both decisions come directly from the critical rendering path. CSS must arrive before the browser paints, so it goes in the head. JavaScript blocks HTML parsing while it executes — a large script in the head leaves users staring at a blank page. Option C is partially true for inline scripts without defer, but the primary reason is blocking. Option D is false — browsers can process CSS from the body, but the FOUC is the problem."
         },
-        checklist: ["I can describe the critical rendering path in order", "I understand what the DOM is and how it differs from the raw HTML source", "I know why CSS goes in the head and why JS often goes at the bottom", "I understand what FOUC is and why it happens", "I could open DevTools on any page and identify the DOM structure"]
+        checklist: [
+          "I can describe the critical rendering path in the correct order from memory",
+          "I can explain what the DOM is and how it differs from the raw HTML source to someone else",
+          "I understand why CSS goes in the head and can explain the technical reason, not just the rule",
+          "I know what FOUC is, why it happens, and how to prevent it",
+          "I could open DevTools on any page and point to the live DOM versus explain what View Page Source shows"
+        ]
+      },
+      {
+        id: "2-phase1-review",
+        title: "Phase 1 Review — HTML, CSS, and the Browser",
+        body: `Before moving further, test whether you can connect what you've learned across the first three sections. These questions are harder than the section quizzes — they test understanding and application, not just recall.`,
+        quiz: {
+          questions: [
+            {
+              question: "A developer wants to make a site's navigation accessible to screen reader users. They currently use &lt;div class='nav'&gt;. What is the single most impactful change they can make?",
+              options: [
+                "Add role='navigation' to the div as an ARIA attribute",
+                "Replace the div with a &lt;nav&gt; element — semantic HTML communicates meaning natively without extra attributes",
+                "Add a hidden heading inside the div that says 'Navigation'",
+                "Add tabindex='0' so keyboard users can focus on it"
+              ],
+              correct: 1,
+              feedback: "Using &lt;nav&gt; is the correct semantic approach. It communicates the element's role to screen readers natively, without needing extra ARIA attributes. ARIA role='navigation' on a div achieves a similar effect but is a workaround for when you can't change the HTML. The semantic element is always preferred when available."
+            },
+            {
+              question: "You have a CSS rule: <code>h2 { color: red; }</code> and <code>#headline { color: green; }</code>. An h2 element has id='headline'. What colour does it appear?",
+              options: [
+                "Red — the h2 tag selector applies to the element directly",
+                "Green — the ID selector is more specific than the tag selector",
+                "The last rule in the file wins regardless of specificity",
+                "Both colours apply and the element appears brown"
+              ],
+              correct: 1,
+              feedback: "ID selectors have higher specificity than tag selectors. The cascade applies the most specific matching rule. Document order only matters when specificity is equal. CSS properties don't blend — one value wins."
+            },
+            {
+              question: "A React app sends nearly empty HTML from the server. After the JavaScript loads, the DOM contains 500 elements. What would 'View Page Source' show versus what DevTools Elements panel shows?",
+              options: [
+                "Both show the same 500-element structure — browsers sync the source with the DOM",
+                "View Page Source shows the original near-empty HTML; DevTools shows the live DOM after JavaScript built it",
+                "DevTools shows the source code; View Page Source shows the rendered DOM",
+                "View Page Source shows the CSS; DevTools shows the HTML"
+              ],
+              correct: 1,
+              feedback: "View Page Source always shows the original HTML the server sent — before any JavaScript runs. DevTools shows the live DOM, which reflects all JavaScript modifications. This distinction is critical for debugging React and other JavaScript-heavy apps where the source is nearly empty but the live page is rich with content."
+            },
+            {
+              question: "Which sequence correctly describes what the browser does after receiving an HTML file?",
+              options: [
+                "Parse HTML → Paint pixels → Build DOM → Apply CSS",
+                "Parse HTML → Build DOM → Fetch and parse CSS → Build render tree → Layout → Paint",
+                "Fetch CSS → Build CSSOM → Parse HTML → Paint → Layout",
+                "Build render tree → Parse HTML → Apply CSS → Layout → Paint"
+              ],
+              correct: 1,
+              feedback: "The critical rendering path goes: parse HTML → build DOM, fetch and parse CSS → build CSSOM, combine into render tree → calculate layout → paint pixels. CSS must be parsed before the render tree can be built. Layout must happen before painting. The order is not arbitrary — each step depends on the previous one."
+            },
+            {
+              question: "A developer writes all their CSS as inline style attributes directly on each HTML element. What is the primary professional problem with this approach?",
+              options: [
+                "Inline styles cause slower page rendering because they are parsed separately",
+                "Inline styles cannot use class selectors or hover states",
+                "Inline styles mix structure and appearance, cannot be reused, and require updating every element individually when a design changes",
+                "Inline styles have lower specificity than external stylesheets and are frequently overridden"
+              ],
+              correct: 2,
+              feedback: "The main problems with inline styles are architectural: they mix HTML (structure) with CSS (appearance), they cannot be shared across elements, and changing a design means editing every single element. Option B is partially true — inline styles can't use hover. Option D is wrong — inline styles actually have the highest specificity, which can cause override problems."
+            }
+          ]
+        }
       },
       {
         id: "2-4",
         title: "Building Your First Page",
-        body: `Every HTML page starts with the same scaffold. Not as a suggestion \u2014 as a requirement. The browser needs these pieces to know what it's working with.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. This tells the browser to fetch and apply the stylesheet before rendering the page. The path in href must match the actual location of your CSS file.\n\nWhen you start writing elements, read the HTML like prose. A heading, then a paragraph, then a list \u2014 in the order a user would encounter them. HTML's logical reading order should match the visual reading order. This isn't just good practice; it's how screen readers navigate the page.\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
+        body: `Every HTML page starts with the same scaffold. Not as a suggestion — as a requirement. The browser needs these pieces to know what it's working with.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. This tells the browser to fetch and apply the stylesheet before rendering the page. The path in href must match the actual location of your CSS file.\n\nWhen you start writing elements, read the HTML like prose. A heading, then a paragraph, then a list — in the order a user would encounter them. HTML's logical reading order should match the visual reading order. This isn't just good practice; it's how screen readers navigate the page.\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
         callout: {
           type: "default",
           label: "The Scaffold Never Changes",
@@ -293,24 +461,40 @@ const FLOORS = [
           label: "Structure Before Style",
           text: "Write HTML first, CSS second. Always. When you write both at once you context-switch between two different problems and solve neither well. Finish the structure completely, then style it. Every experienced developer works this way."
         },
-        hint: `If you open an HTML file in a browser and see nothing, check the order: Did you close all your tags? Did the link tag href actually match your CSS filename exactly (case-sensitive on some systems)? Is the CSS file in the same folder?\n\n<strong>Try this:</strong> Type out the scaffold from memory without looking at this section. DOCTYPE, html, head, meta charset, title, link, body. Five minutes. If you can do it without looking, it's yours. If you can't, type it out once more with the section open, then close it and try again.\n\n<strong>Still confused about the head vs body?</strong> Head = information about the page, not displayed to users. Body = the actual content the user sees. Meta tags, titles, CSS links \u2014 head. Headings, paragraphs, images, buttons \u2014 body. If it should appear on screen, it goes in body.`,
+        hint: `If you open an HTML file in a browser and see nothing, check the order: Did you close all your tags? Did the link tag href actually match your CSS filename exactly (case-sensitive on some systems)? Is the CSS file in the same folder?\n\n<strong>Try this:</strong> Type out the scaffold from memory without looking at this section. DOCTYPE, html, head, meta charset, title, link, body. Five minutes. If you can do it without looking, it's yours. If you can't, type it out once more with the section open, then close it and try again.\n\n<strong>Still confused about the head vs body?</strong> Head = information about the page, not displayed to users. Body = the actual content the user sees. Meta tags, titles, CSS links — head. Headings, paragraphs, images, buttons — body. If it should appear on screen, it goes in body.`,
         quiz: {
-          question: "Where should a <link> tag connecting an external CSS file be placed, and why?",
-          options: ["At the bottom of the body, so HTML loads first before styles are applied", "In the head element, so styles are available before the browser paints any content", "Anywhere in the document \u2014 browsers find it regardless of placement", "Inside the body, directly above the first element that needs styling"],
+          question: "Where should a &lt;link&gt; tag connecting an external CSS file be placed, and why?",
+          options: [
+            "At the bottom of the body, so HTML loads first before styles are applied",
+            "In the head element, so styles are available before the browser paints any content",
+            "Anywhere in the document — browsers find it regardless of placement",
+            "Inside the body, directly above the first element that needs styling"
+          ],
           correct: 1,
-          feedback: "The link tag goes in the head so the browser has the stylesheet before it begins painting. If the stylesheet arrives after painting starts, users briefly see unstyled content (a FOUC). The head is specifically designed for metadata and resources the browser needs before rendering the page."
+          feedback: "The link tag goes in the head so the browser has the stylesheet before it begins painting. If the stylesheet arrives after painting starts, users briefly see unstyled content (a FOUC). The head is specifically designed for metadata and resources the browser needs before rendering. Option A would guarantee a FOUC. Option C is technically possible but breaks the rendering path. Option D is similarly problematic."
         },
-        checklist: ["I can write the HTML scaffold from memory without looking it up", "I know what each part of the scaffold does and why it's needed", "I can connect an external CSS file using a link tag", "I wrote my HTML structure completely before touching CSS", "I understand why meta charset UTF-8 matters"],
+        checklist: [
+          "I can write the full HTML scaffold from memory right now without looking it up",
+          "I can explain what each part of the scaffold does and why it's required — not just that it exists",
+          "I can connect an external CSS file using the correct link tag syntax",
+          "I completed my HTML structure entirely before writing a single line of CSS",
+          "I understand the difference between what belongs in &lt;head&gt; versus &lt;body&gt; and can explain it"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Add a second paragraph below the first", "Add an unordered list with 3 items", "Add an image element (the src can be any URL)", "Add a navigation bar using the nav element with 3 links"]
+          starter: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My First Page</title>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 32px; }\n    h1 { color: #7eb8c8; }\n    p { line-height: 1.6; color: #ccc; }\n    nav a { color: #7eb8c8; margin-right: 16px; text-decoration: none; }\n    nav a:hover { text-decoration: underline; }\n  </style>\n</head>\n<body>\n  <nav>\n    <a href="#">Home</a>\n    <a href="#">About</a>\n    <a href="#">Contact</a>\n  </nav>\n  <h1>Welcome to My Page</h1>\n  <p>This is the first paragraph of content on my page.</p>\n</body>\n</html>',
+          challenges: [
+            "Add a second paragraph below the first",
+            "Add an unordered list with 3 items below the paragraphs",
+            "Add an image element (the src can be any URL from the web)",
+            "Add a fourth navigation link"
+          ]
         }
       },
       {
         id: "2-5",
         title: "Styling Basics",
-        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. Learn those well and the rest you look up as needed.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface \u2014 stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines \u2014 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element), <strong>padding</strong> (space inside the element, between content and border). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left \u2014 clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units, <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>em</strong> is relative to the current element's font-size. <strong>rem</strong> is relative to the root (html) element's font-size \u2014 use rem for font sizes. When the user adjusts their browser's default font size for accessibility, rem scales with it. px does not.`,
+        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. Learn those well and the rest you look up as needed.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface — stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines — 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element), <strong>padding</strong> (space inside the element, between content and border). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left — clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — what's the difference between margin and padding in terms of where the space appears? If you add a background colour to an element, which one would you see the colour extend through?</div>\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units, <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>em</strong> is relative to the current element's font-size. <strong>rem</strong> is relative to the root (html) element's font-size — use rem for font sizes. When the user adjusts their browser's default font size for accessibility, rem scales with it. px does not.`,
         callout: {
           type: "default",
           label: "Why rem Over px for Fonts",
@@ -319,26 +503,42 @@ const FLOORS = [
         callout2: {
           type: "focus",
           label: "Shorthand Properties",
-          text: "margin: 16px 32px sets top and bottom to 16px, left and right to 32px. margin: 16px sets all four sides. border: 2px solid #333 sets width, style, and colour in one line. Shorthand properties are everywhere in CSS \u2014 recognise the pattern rather than memorising each one."
+          text: "margin: 16px 32px sets top and bottom to 16px, left and right to 32px. margin: 16px sets all four sides. border: 2px solid #333 sets width, style, and colour in one line. Shorthand properties are everywhere in CSS — recognise the pattern rather than memorising each one."
         },
-        hint: `When a CSS property isn't doing what you expect, open DevTools (F12), click the element, and look at the Styles panel. It shows every rule applying to that element, which rule is winning, and which rules are being crossed out (overridden). You can edit values live to experiment without touching your files.\n\n<strong>Try this:</strong> Open Spotify or any dark-themed website. In DevTools, find the body element and change background-color to white. Watch the theme collapse instantly. That's CSS in action \u2014 one property change, entire visual impact.\n\n<strong>Still confused by margin vs padding?</strong> Padding is inside the element, between the content and the edge. Margin is outside the element, pushing it away from other elements. If you add a background colour, padding sits inside the colour. Margin is transparent.`,
+        hint: `When a CSS property isn't doing what you expect, open DevTools (F12), click the element, and look at the Styles panel. It shows every rule applying to that element, which rule is winning, and which rules are being crossed out (overridden). You can edit values live to experiment without touching your files.\n\n<strong>Try this:</strong> Open Spotify or any dark-themed website. In DevTools, find the body element and change background-color to white. Watch the theme collapse instantly. That's CSS in action — one property change, entire visual impact.\n\n<strong>Still confused by margin vs padding?</strong> Padding is inside the element, between the content and the edge. Margin is outside the element, pushing it away from other elements. If you add a background colour, padding sits inside the colour. Margin is transparent.`,
         quiz: {
           question: "A developer sets font-size: 1.5rem on a paragraph. The user has set their browser's default font size to 20px. What size does the paragraph text appear at?",
-          options: ["15px, because rem is relative to the standard 10px root size", "1.5px, because rem values are very small units", "30px, because 1.5 multiplied by the 20px root size equals 30px", "20px, because rem ignores the multiplier and uses the root size directly"],
+          options: [
+            "15px, because rem is relative to the standard 10px root size",
+            "1.5px, because rem values are very small units requiring multiplication",
+            "30px, because 1.5 multiplied by the 20px root size equals 30px",
+            "20px, because rem ignores the multiplier and uses the root size directly"
+          ],
           correct: 2,
-          feedback: "1 rem equals the root (html) element's font size. If the user's browser sets that to 20px, then 1rem = 20px and 1.5rem = 30px. This is exactly why rem is preferred for font sizes \u2014 it respects the user's accessibility settings and scales proportionally."
+          feedback: "1rem equals the root element's font size. The user set it to 20px, so 1rem = 20px and 1.5rem = 30px. This is exactly why rem is preferred — it respects the user's accessibility preferences. Option A assumes a fixed 10px root (a browser default that users can override). Option D misunderstands how multiplication works with rem."
         },
-        checklist: ["I know the core CSS properties for text, spacing, and visual styling", "I understand what display: block, inline, and flex each do", "I understand the difference between px, %, em, and rem", "I can write CSS rules from scratch without copying from somewhere else", "I know why rem is preferred over px for font sizes"],
+        checklist: [
+          "I know the core text, spacing, and visual CSS properties and could write them from memory",
+          "I can explain the difference between display: block, inline, and flex in plain language",
+          "I understand why rem is preferred over px for font sizes — and I can explain the accessibility reason",
+          "I can describe the difference between margin and padding to someone who has never coded",
+          "I wrote all my CSS after fully completing the HTML structure"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Change the heading color to any hex value you choose", "Add a border-radius to the card to make it rounded", "Make the font-size of the paragraph 18px", "Add a box-shadow to the container"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { background: #0a0a0a; color: white; font-family: sans-serif; padding: 32px; }\n    .card {\n      background: #1a1a1a;\n      padding: 24px;\n      max-width: 400px;\n      margin: 0 auto;\n    }\n    .card h2 { color: #7eb8c8; font-size: 1.4rem; margin-top: 0; }\n    .card p { color: #aaa; line-height: 1.6; font-size: 1rem; }\n  </style>\n</head>\n<body>\n  <div class="card">\n    <h2>Card Title</h2>\n    <p>This card demonstrates basic CSS styling with text, spacing, and visual properties.</p>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Change the heading colour to any hex value you choose",
+            "Add a border-radius of 12px to the card to round its corners",
+            "Change the paragraph font-size to 1.1rem",
+            "Add a box-shadow to the card: try 0 4px 20px rgba(0,0,0,0.4)"
+          ]
         }
       },
       {
         id: "2-6",
         title: "The Box Model",
-        body: `Everything in CSS is a box. Every element \u2014 a heading, an image, a button, a div \u2014 is a rectangular box, and that box has four layers.\n\nFrom inside out: <strong>content</strong> (the text, image, or whatever lives inside), <strong>padding</strong> (transparent space between the content and the border), <strong>border</strong> (the edge of the element, can be visible or invisible), <strong>margin</strong> (transparent space outside the border, separating this element from its neighbours).\n\nThe box model has a quirk that causes confusion until you understand it. By default, <code>width</code> applies to the content area only. Add padding and border on top of that, and your element ends up wider than you specified. A 200px wide element with 20px padding on each side is actually 240px wide on screen.\n\nThe fix is <code>box-sizing: border-box</code>. With this property, width includes content, padding, and border. A 200px wide element with 20px padding is 200px wide \u2014 the content shrinks to accommodate the padding. This is so universally useful that Airbnb, GitHub, and essentially every professional CSS codebase starts with a global reset that applies it everywhere: <code>*, *::before, *::after { box-sizing: border-box; }</code>.\n\nMargin collapse is CSS's most confusing behaviour for beginners: when two block elements are stacked vertically, their vertical margins merge (collapse) into the larger of the two. A paragraph with 24px bottom margin and a heading with 16px top margin don't add up to 40px of space \u2014 they collapse to 24px. This doesn't happen with horizontal margins, flexbox children, or absolutely positioned elements. Knowing it exists means you won't waste an hour trying to figure out why your spacing doesn't add up.`,
+        body: `Everything in CSS is a box. Every element — a heading, an image, a button, a div — is a rectangular box, and that box has four layers.\n\nFrom inside out: <strong>content</strong> (the text, image, or whatever lives inside), <strong>padding</strong> (transparent space between the content and the border), <strong>border</strong> (the edge of the element, can be visible or invisible), <strong>margin</strong> (transparent space outside the border, separating this element from its neighbours).\n\nThe box model has a quirk that causes confusion until you understand it. By default, <code>width</code> applies to the content area only. Add padding and border on top of that, and your element ends up wider than you specified. A 200px wide element with 20px padding on each side is actually 240px wide on screen.\n\nThe fix is <code>box-sizing: border-box</code>. With this property, width includes content, padding, and border. A 200px wide element with 20px padding is 200px wide — the content shrinks to accommodate the padding. This is so universally useful that Airbnb, GitHub, and essentially every professional CSS codebase starts with a global reset that applies it everywhere: <code>*, *::before, *::after { box-sizing: border-box; }</code>.\n\nMargin collapse is CSS's most confusing behaviour for beginners: when two block elements are stacked vertically, their vertical margins merge (collapse) into the larger of the two. A paragraph with 24px bottom margin and a heading with 16px top margin don't add up to 40px of space — they collapse to 24px. This doesn't happen with horizontal margins, flexbox children, or absolutely positioned elements. Knowing it exists means you won't waste an hour trying to figure out why your spacing doesn't add up.`,
         callout: {
           type: "default",
           label: "The Professional Reset",
@@ -349,52 +549,137 @@ const FLOORS = [
           label: "DevTools for the Box Model",
           text: "In browser DevTools, click any element and scroll down in the Styles panel to find the box model diagram. It shows the exact content, padding, border, and margin values in a visual diagram. Use this constantly when layouts don't behave as expected."
         },
-        hint: `If your layout is off by a mysterious amount \u2014 an element is wider than expected, spacing doesn't add up \u2014 the box model is usually why.\n\n<strong>Try this:</strong> Open DevTools, click any block element, and look at the box model diagram in the Styles panel. You'll see the four layers as coloured rings. Hover over each one \u2014 the browser highlights that layer on the page.\n\n<strong>Still confused by margin collapse?</strong> Picture two magnets with the same pole facing each other. They don't stack their repulsion \u2014 the stronger one wins. That's vertical margin collapse. The larger margin wins; the smaller one disappears. Horizontal margins never collapse, and neither do flex or grid container children.`,
+        hint: `If your layout is off by a mysterious amount — an element is wider than expected, spacing doesn't add up — the box model is usually why.\n\n<strong>Try this:</strong> Open DevTools, click any block element, and look at the box model diagram in the Styles panel. You'll see the four layers as coloured rings. Hover over each one — the browser highlights that layer on the page.\n\n<strong>Still confused by margin collapse?</strong> Picture two magnets with the same pole facing each other. They don't stack their repulsion — the stronger one wins. That's vertical margin collapse. The larger margin wins; the smaller one disappears. Horizontal margins never collapse, and neither do flex or grid container children.`,
         quiz: {
           question: "A div has width: 300px, padding: 20px, and border: 5px solid black. With the default box-sizing: content-box, what is the total rendered width of the element?",
-          options: ["300px \u2014 the width property always controls the total width", "325px \u2014 the border adds 5px total to each side", "350px \u2014 padding (40px) and border (10px) are added to the 300px content width", "280px \u2014 padding reduces the available content area"],
+          options: [
+            "300px — the width property always controls the total width",
+            "325px — only the border adds to the width, not padding",
+            "350px — padding (40px total) and border (10px total) are added to the 300px content width",
+            "280px — padding reduces the available content area inside the width"
+          ],
           correct: 2,
-          feedback: "With box-sizing: content-box (the default), width applies only to the content area. Padding and border are added on top. 20px padding on each side = 40px. 5px border on each side = 10px. Total: 300 + 40 + 10 = 350px. This is why box-sizing: border-box exists \u2014 it makes the specified width include padding and border, so 300px actually means 300px."
+          feedback: "With box-sizing: content-box (the default), width applies only to the content area. Padding and border are added on top. 20px padding on each side = 40px total. 5px border on each side = 10px total. Total: 300 + 40 + 10 = 350px. This is why box-sizing: border-box exists — it makes the specified width include padding and border, so 300px actually means 300px."
         },
-        checklist: ["I can describe the four layers of the CSS box model in order", "I understand why box-sizing: border-box is almost always preferable", "I know what margin collapse is and when it occurs", "I can use DevTools to visually inspect the box model of any element", "I've added a global box-sizing reset to my CSS files"],
+        checklist: [
+          "I can name the four layers of the CSS box model in order from inside to outside",
+          "I understand why box-sizing: border-box changes how width is calculated — not just that it does",
+          "I can explain margin collapse to someone else without looking at the lesson",
+          "I have added a global box-sizing reset to my CSS files",
+          "I can use DevTools to visually inspect the box model of any element on a real page"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Increase the padding on the card from 16px to 32px and observe the change", "Add a 3px solid border and observe how it pushes content if box-sizing is content-box", "Add margin-top: 40px to the second card", "Make both cards use box-sizing: border-box and compare"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; padding: 32px; font-family: sans-serif; color: white; }\n    .card {\n      background: #1a1a1a;\n      width: 300px;\n      padding: 16px;\n      border: 2px solid #7eb8c8;\n      margin-bottom: 16px;\n    }\n    .card h3 { color: #7eb8c8; margin-bottom: 8px; }\n    .card p { color: #aaa; font-size: 0.9rem; }\n  </style>\n</head>\n<body>\n  <div class="card">\n    <h3>Card One</h3>\n    <p>This card uses box-sizing: border-box.</p>\n  </div>\n  <div class="card">\n    <h3>Card Two</h3>\n    <p>Both cards are exactly 300px wide.</p>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Increase the padding on both cards from 16px to 32px — note the width stays 300px with border-box",
+            "Remove the box-sizing reset and observe how the width changes",
+            "Add margin-top: 40px to the second card and observe the gap",
+            "Add a third card with a different border colour"
+          ]
         }
       },
       {
         id: "2-7",
         title: "Flexbox Layout",
-        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. Flexbox, introduced as a CSS standard in 2012 and now universally supported, solved all of this.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. The parent becomes a <strong>flex container</strong>. You control the children's arrangement by setting properties on the container.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them \u2014 now main axis runs vertically and items stack top to bottom.\n\nThe properties you'll use constantly:\n\n<strong>justify-content</strong> aligns items along the main axis. Values: <code>flex-start</code> (packed to the start), <code>flex-end</code> (packed to the end), <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced), <code>space-around</code>.\n\n<strong>align-items</strong> aligns items along the cross axis. Values: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default \u2014 fills the cross axis).\n\n<strong>gap</strong> adds consistent space between flex items without needing margins.\n\n<strong>flex-wrap: wrap</strong> allows items to wrap onto the next line when they don't fit \u2014 essential for responsive layouts.\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
+        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. Flexbox, introduced as a CSS standard in 2012 and now universally supported, solved all of this.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. The parent becomes a <strong>flex container</strong>. You control the children's arrangement by setting properties on the container.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them — now main axis runs vertically and items stack top to bottom.\n\nThe properties you'll use constantly:\n\n<strong>justify-content</strong> aligns items along the main axis. Values: <code>flex-start</code> (packed to the start), <code>flex-end</code> (packed to the end), <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced), <code>space-around</code>.\n\n<strong>align-items</strong> aligns items along the cross axis. Values: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default — fills the cross axis).\n\n<strong>gap</strong> adds consistent space between flex items without needing margins.\n\n<strong>flex-wrap: wrap</strong> allows items to wrap onto the next line when they don't fit — essential for responsive layouts.\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
         callout: {
           type: "default",
           label: "Centering With Flexbox",
-          text: "The two lines that center anything: display: flex; justify-content: center; align-items: center; on the parent element. This was notoriously difficult before flexbox. Now it's four words. Learn this combination \u2014 you'll use it hundreds of times."
+          text: "The two lines that center anything: display: flex; justify-content: center; align-items: center; on the parent element. This was notoriously difficult before flexbox. Now it's four words. Learn this combination — you'll use it hundreds of times."
         },
         callout2: {
           type: "focus",
           label: "Flexbox vs Grid",
-          text: "Flexbox is for one dimension: either a row or a column. CSS Grid is for two dimensions: rows and columns at the same time. Navigation bars, button groups, and card rows \u2014 flexbox. Full page layouts with both columns and rows \u2014 Grid. When in doubt, start with flexbox."
+          text: "Flexbox is for one dimension: either a row or a column. CSS Grid is for two dimensions: rows and columns at the same time. Navigation bars, button groups, and card rows — flexbox. Full page layouts with both columns and rows — Grid. When in doubt, start with flexbox."
         },
         hint: `The mental model: the container is a flexible box. The children are flexible items inside it. You control how items sit in that box by setting rules on the container.\n\n<strong>Try this:</strong> Add display: flex to any element in your code editor. Watch its children line up horizontally. Then add justify-content: center. Then try space-between. Each property change reshapes the layout instantly.\n\n<strong>Still confused by justify-content vs align-items?</strong> justify-content works along the direction items are flowing (the main axis). align-items works perpendicular to that. In a row layout: justify-content controls left-right positioning, align-items controls up-down. In a column layout, they flip.`,
         quiz: {
-          question: "A flex container has flex-direction: row (the default). Which property and value would you use to push the items to the right side of the container?",
-          options: ["align-items: flex-end \u2014 because flex-end pushes items to the end of the axis", "justify-content: flex-end \u2014 because justify-content controls the main axis, which is horizontal in a row", "flex-wrap: reverse \u2014 because reversing the wrap direction moves items right", "align-content: flex-end \u2014 because align-content positions groups of items"],
+          question: "A flex container has flex-direction: row (the default). Which property and value would push all items to the right side of the container?",
+          options: [
+            "align-items: flex-end — because flex-end pushes items to the end of an axis",
+            "justify-content: flex-end — because justify-content controls the main (horizontal) axis in a row",
+            "flex-wrap: reverse — because reversing the wrap direction moves items right",
+            "align-content: flex-end — because align-content positions groups of items"
+          ],
           correct: 1,
-          feedback: "In a row-direction flex container, the main axis runs horizontally. justify-content controls placement along the main axis. flex-end pushes items to the end of that axis \u2014 the right side. align-items controls the cross axis (vertical), so align-items: flex-end would push items to the bottom, not the right."
+          feedback: "In a row-direction flex container, the main axis runs horizontally. justify-content controls placement along the main axis. flex-end pushes items to the end of that axis — the right side. Option A is wrong: align-items controls the cross axis (vertical), so align-items: flex-end pushes items to the bottom. Option C doesn't exist. Option D (align-content) only works when there are multiple lines of flex items."
         },
-        checklist: ["I understand what display: flex does to a container's children", "I know the difference between the main axis and cross axis", "I can use justify-content and align-items to control item positioning", "I understand when to use flex-wrap and why", "I know when to use flexbox versus CSS Grid"],
+        checklist: [
+          "I can explain what display: flex does to a container's children in plain language",
+          "I know the difference between the main axis and cross axis — and could flip my explanation for column direction",
+          "I can use justify-content and align-items correctly without looking them up",
+          "I understand when to use flex-wrap and can explain why it matters for responsive layouts",
+          "I know when a layout problem calls for flexbox versus CSS Grid"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Change flex-direction to column and observe how items stack", "Change justify-content to space-between", "Add a fourth card and add flex-wrap: wrap to the container", "Use align-items: flex-end to align items to the bottom"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; padding: 32px; font-family: sans-serif; }\n    .container {\n      display: flex;\n      gap: 16px;\n      justify-content: flex-start;\n      align-items: stretch;\n    }\n    .card {\n      background: #1a1a1a;\n      border: 1px solid #333;\n      padding: 20px;\n      color: white;\n      flex: 1;\n    }\n    .card h3 { color: #7eb8c8; margin-bottom: 8px; }\n    .card p { color: #aaa; font-size: 0.9rem; }\n  </style>\n</head>\n<body>\n  <div class="container">\n    <div class="card"><h3>Card A</h3><p>First card in a flex row.</p></div>\n    <div class="card"><h3>Card B</h3><p>Second card, equal width.</p></div>\n    <div class="card"><h3>Card C</h3><p>Third card in the row.</p></div>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Change flex-direction to column and observe how items stack vertically",
+            "Change justify-content to space-between and observe the spacing",
+            "Add a fourth card and add flex-wrap: wrap to the container",
+            "Use align-items: flex-end to align all cards to the bottom of the container"
+          ]
+        }
+      },
+      {
+        id: "2-phase2-review",
+        title: "Phase 2 Review — Layout and the Box Model",
+        body: `Test your understanding across the layout sections before moving to building real components. These questions require connecting ideas, not just recalling individual facts.`,
+        quiz: {
+          questions: [
+            {
+              question: "An element has width: 200px, padding: 30px on all sides, and box-sizing: border-box. How wide is the content area inside the padding?",
+              options: [
+                "200px — border-box means the full element including padding is 200px",
+                "140px — the 200px total minus 30px padding on each side (60px total)",
+                "260px — width plus padding on both sides",
+                "170px — 200px minus 30px on one side only"
+              ],
+              correct: 1,
+              feedback: "With border-box, the specified width (200px) is the total element width including padding. 30px padding on each side = 60px total padding. Content area = 200 - 60 = 140px. This is the advantage of border-box: the element stays 200px wide regardless of padding."
+            },
+            {
+              question: "You have a flex container with flex-direction: column. Which property controls how items are spaced along the vertical axis?",
+              options: [
+                "align-items — it always controls the vertical axis",
+                "justify-content — it controls the main axis, which is vertical in column direction",
+                "flex-wrap — it controls how items stack when there are multiple",
+                "align-content — it always controls vertical distribution"
+              ],
+              correct: 1,
+              feedback: "justify-content always controls the main axis. In flex-direction: row, main axis is horizontal. In flex-direction: column, main axis is vertical. So in column direction, justify-content controls vertical spacing and align-items controls horizontal alignment — the opposite of row direction."
+            },
+            {
+              question: "Two paragraphs are stacked vertically. The first has margin-bottom: 32px. The second has margin-top: 16px. How much space appears between them?",
+              options: [
+                "48px — the margins add together",
+                "32px — the larger margin wins due to margin collapse",
+                "16px — the smaller margin overrides when elements are adjacent",
+                "0px — vertical margins between block elements cancel each other"
+              ],
+              correct: 1,
+              feedback: "This is margin collapse. When block elements are stacked vertically, adjacent margins merge into the larger of the two. 32px beats 16px. The gap is 32px, not 48px. This only applies to vertical margins between block elements — not to flex children, not to horizontal margins."
+            },
+            {
+              question: "A navigation bar needs to have the logo on the left and navigation links on the right, vertically centred. Which CSS layout approach and properties solve this?",
+              options: [
+                "display: block with float: right on the links",
+                "display: flex on the nav, with justify-content: space-between and align-items: center",
+                "display: grid with two columns defined",
+                "display: inline-block on both the logo and links"
+              ],
+              correct: 1,
+              feedback: "Flexbox with justify-content: space-between pushes items to opposite ends of the main axis (logo left, links right). align-items: center vertically centres all children within the flex container. This is one of the most common flexbox patterns in professional navigation bars. Float-based layouts are a legacy approach. Grid works but is more complex for this simple one-dimensional case."
+            }
+          ]
         }
       },
       {
         id: "2-8",
         title: "Building a Real Component",
-        body: `Real interfaces are made of components. A Spotify song card. A GitHub repository card. A Twitter post. A product tile on an e-commerce site. Look at any of them and you see the same anatomy: a container, an image or icon, a text hierarchy, interactive elements.\n\nBreak apart a typical card. A container div with a fixed width, background, border-radius, and box-shadow. Inside it: an image (or placeholder) that fills the top. Below the image: a title in larger text, a subtitle in smaller muted text, metadata like a date or a label. At the bottom, action elements \u2014 buttons, links, icons.\n\nNothing about this is complex individually. What makes professional work feel polished is the consistency: padding that's the same multiple throughout (8px, 16px, 24px \u2014 always multiples of 8), colours from a defined palette, font sizes that follow a logical scale.\n\nThe approach professional developers use to build a component: HTML structure first \u2014 container, then the hierarchy inside it, no CSS yet. Then CSS from outside in: style the container first, then the layout inside it (flex or grid), then individual elements. Never start styling the small details before the structure is solid.\n\nThis is the session where HTML and CSS stop feeling like separate things you're applying and start feeling like a vocabulary you're speaking. When a layout problem appears, you know which property to reach for. When something looks wrong, you know where to look.`,
+        body: `Real interfaces are made of components. A Spotify song card. A GitHub repository card. A Twitter post. A product tile on an e-commerce site. Look at any of them and you see the same anatomy: a container, an image or icon, a text hierarchy, interactive elements.\n\nBreak apart a typical card. A container div with a fixed width, background, border-radius, and box-shadow. Inside it: an image (or placeholder) that fills the top. Below the image: a title in larger text, a subtitle in smaller muted text, metadata like a date or a label. At the bottom, action elements — buttons, links, icons.\n\nNothing about this is complex individually. What makes professional work feel polished is the consistency: padding that's the same multiple throughout (8px, 16px, 24px — always multiples of 8), colours from a defined palette, font sizes that follow a logical scale.\n\nThe approach professional developers use to build a component: HTML structure first — container, then the hierarchy inside it, no CSS yet. Then CSS from outside in: style the container first, then the layout inside it (flex or grid), then individual elements. Never start styling the small details before the structure is solid.\n\nThis is the session where HTML and CSS stop feeling like separate things you're applying and start feeling like a vocabulary you're speaking. When a layout problem appears, you know which property to reach for. When something looks wrong, you know where to look.`,
         callout: {
           type: "default",
           label: "CSS From Outside In",
@@ -407,26 +692,42 @@ const FLOORS = [
         },
         hint: `If the component doesn't look right, check this order. Is the container the right size? Is the internal layout (flex/grid) working? Are the children the right sizes? Then check the individual styling.\n\n<strong>Try this:</strong> Before writing CSS, sketch the component on paper. Just boxes and labels. Container. Image area. Title. Subtitle. Button. That sketch becomes your HTML structure. The CSS then has a clear plan to follow.\n\n<strong>Hover states feel hard?</strong> Add a <code>:hover</code> selector to any element. Whatever properties you change inside it only apply when the cursor is over the element. <code>transform: translateY(-4px)</code> lifts it. <code>box-shadow</code> adds depth. <code>transition: all 0.2s ease</code> on the base element smooths the change.`,
         quiz: {
-          question: "When building a card component, you write all the HTML first and then open the CSS file. What is the main advantage of this approach over writing HTML and CSS simultaneously?",
-          options: ["It loads faster because the browser processes HTML before CSS", "It forces you to fully think through the content structure before making any visual decisions, preventing structural changes after styling has begun", "HTML cannot reference CSS classes that don't exist yet, so HTML must be written first", "Writing HTML first is only useful for beginners \u2014 professionals write both at once"],
+          question: "When building a card component, you write all the HTML first and then open the CSS file. What is the main advantage of this approach?",
+          options: [
+            "The browser loads HTML faster than CSS, so pages appear sooner",
+            "It forces you to fully think through the content structure before any visual decisions, preventing structural changes after styling has begun",
+            "HTML cannot reference CSS classes that don't exist yet, so HTML must be written first technically",
+            "Writing HTML first is only useful for beginners — professionals write both simultaneously"
+          ],
           correct: 1,
-          feedback: "Structure and style are different problems. When you write HTML first, you commit to the content structure before styling it. If you build both simultaneously, you often style elements that then need to move or change \u2014 wasting effort and creating inconsistency. Every experienced developer structures before they style."
+          feedback: "Structure and style are different problems that deserve separate focus. When you write HTML first, you commit to the content hierarchy before styling it. If you build both simultaneously, you often style elements that then need to move — wasting effort and creating inconsistency. Every experienced developer structures before styling. Option C is technically false — HTML can reference non-existent classes."
         },
-        checklist: ["I built a multi-element card component from scratch", "I wrote HTML completely before writing CSS", "I styled from outside in (container first, then inner elements)", "I added at least one hover state", "I understand the anatomy of a real-world component"],
+        checklist: [
+          "I built a multi-element card component from scratch without following a step-by-step guide",
+          "I wrote all the HTML completely before writing a single CSS rule",
+          "I styled from outside in — container first, then layout, then child elements",
+          "I added at least one hover state using the :hover selector and transition",
+          "I used spacing multiples of 8 throughout the component"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Add a 'like' button to each card with a heart icon (use \u2665)", "Add a hover state that lifts the card slightly using transform: translateY(-4px)", "Add a badge to one card (like 'NEW' or 'FEATURED')", "Make the cards responsive so they stack on small screens using flex-wrap"]
+          starter: '<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; padding: 32px; font-family: sans-serif; display: flex; gap: 16px; flex-wrap: wrap; }\n    .card {\n      background: #1a1a1a;\n      border-radius: 12px;\n      width: 280px;\n      overflow: hidden;\n      transition: transform 0.2s ease, box-shadow 0.2s ease;\n    }\n    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }\n    .card-image { background: #2a2a3a; height: 160px; display: flex; align-items: center; justify-content: center; color: #7eb8c8; font-size: 2rem; }\n    .card-body { padding: 16px; }\n    .card-body h3 { color: white; font-size: 1rem; margin-bottom: 4px; }\n    .card-body p { color: #888; font-size: 0.85rem; line-height: 1.5; margin-bottom: 16px; }\n    .card-body button { background: #7eb8c8; border: none; color: #0a0a0a; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }\n  </style>\n</head>\n<body>\n  <div class="card">\n    <div class="card-image">&#9834;</div>\n    <div class="card-body">\n      <h3>Track Title</h3>\n      <p>Artist name &mdash; Album name</p>\n      <button>Play</button>\n    </div>\n  </div>\n  <div class="card">\n    <div class="card-image">&#9835;</div>\n    <div class="card-body">\n      <h3>Another Track</h3>\n      <p>Different artist &mdash; Another album</p>\n      <button>Play</button>\n    </div>\n  </div>\n</body>\n</html>',
+          challenges: [
+            "Add a 'like' button to each card with a heart icon (use ♥)",
+            "Add a badge to one card (like a 'NEW' or 'FEATURED' label) using absolute positioning",
+            "Add a third card with different content",
+            "Make the cards responsive so they stack on narrow screens using flex-wrap"
+          ]
         }
       },
       {
         id: "2-9",
         title: "Guided Profile Page Project",
-        body: `You've seen profile pages hundreds of times: Dribbble, Behance, GitHub, LinkedIn. They all follow the same pattern because that pattern works. A header with name and role. An about section with a short bio. A skills section. A projects grid. Contact links.\n\nThe scaffold in the code editor covers that full structure: a header with your name and title, a bio section, a skills grid using flexbox, project cards, and footer links. The HTML is structured. The base CSS is styled. The layout is there.\n\nYour job is threefold. First: replace every piece of placeholder content with your actual information. Don't leave a single word of placeholder text \u2014 this is your page now. Second: change the visual design. The colour scheme, the typography choices, the spacing \u2014 make it feel like you, not the template. Third: add something the scaffold doesn't have. A section, an element, an interaction. Anything that requires you to figure it out yourself.\n\nThe third part is the most important. The first two are filling in blanks. The third is actual building.`,
+        body: `You've seen profile pages hundreds of times: Dribbble, Behance, GitHub, LinkedIn. They all follow the same pattern because that pattern works. A header with name and role. An about section with a short bio. A skills section. A projects grid. Contact links.\n\nThe scaffold in the code editor covers that full structure: a header with your name and title, a bio section, a skills grid using flexbox, project cards, and footer links. The HTML is structured. The base CSS is styled. The layout is there.\n\nYour job is threefold. First: replace every piece of placeholder content with your actual information. Don't leave a single word of placeholder text — this is your page now. Second: change the visual design. The colour scheme, the typography choices, the spacing — make it feel like you, not the template. Third: add something the scaffold doesn't have. A section, an element, an interaction. Anything that requires you to figure it out yourself.\n\nThe third part is the most important. The first two are filling in blanks. The third is actual building.`,
         callout: {
           type: "default",
           label: "What This Builds",
-          text: "By the end of this session you'll have a real, personal webpage. Not a tutorial exercise \u2014 a page that represents you, with your name, your projects, your design choices. That is the first thing you'll show people when they ask what you can do."
+          text: "By the end of this session you'll have a real, personal webpage. Not a tutorial exercise — a page that represents you, with your name, your projects, your design choices. That is the first thing you'll show people when they ask what you can do."
         },
         callout2: {
           type: "focus",
@@ -435,44 +736,123 @@ const FLOORS = [
         },
         hint: `If you don't know what to add as your original element, here are three options that require real CSS work: a horizontal scrolling skills bar, a timeline for your learning journey, or a dark/light mode toggle (research CSS custom properties and class toggling with JavaScript).\n\n<strong>Feeling stuck on the design?</strong> Open Dribbble or Behance and look at three profile pages you find visually interesting. Don't copy any of them. Instead, write down what they have in common: spacing generosity, font weight contrast, a strong accent colour. Use those patterns, not the specific designs.\n\n<strong>Testing on mobile:</strong> In DevTools (F12), click the icon that looks like a phone and tablet (Toggle Device Toolbar). This lets you simulate different screen sizes. If your page looks broken on mobile, the most common fix is adding max-width: 100% to images and checking that your flex containers have flex-wrap: wrap.`,
         quiz: {
-          question: "You've built a profile page using a scaffold. You've replaced all placeholder text but kept all the original colours and layout choices. A recruiter views it alongside the original template. What's the most accurate description of what you've built?",
-          options: ["A complete portfolio piece that demonstrates your HTML and CSS ability", "A filled-in template \u2014 it shows you can read HTML but not that you can make design decisions", "An excellent starting point that just needs to be deployed to be portfolio-ready", "A technically correct page that only needs JavaScript to be complete"],
+          question: "You've built a profile page using the scaffold. You replaced all text but kept all original colours and layout. A recruiter views it alongside the original template. What's the most accurate description of what you've built?",
+          options: [
+            "A complete portfolio piece that demonstrates your HTML and CSS ability",
+            "A filled-in template — it shows you can edit HTML but not that you can make independent design decisions",
+            "An excellent starting point that just needs to be deployed to be portfolio-ready",
+            "A technically correct page that only needs JavaScript to be professionally complete"
+          ],
           correct: 1,
-          feedback: "Replacing text in a template demonstrates that you can edit HTML. Making visual and structural decisions \u2014 the colour scheme, the layout modifications, the added section \u2014 demonstrates that you can build with CSS. A portfolio piece should show decision-making, not just content-filling. The template is a starting point, not the destination."
+          feedback: "Replacing text in a template demonstrates that you can edit HTML. Making visual and structural decisions — the colour scheme, layout modifications, added sections — demonstrates that you can build with CSS. A portfolio piece should show decision-making, not just content-filling. The template is a starting point. The destination is a page that looks like you, not the template."
         },
-        checklist: ["I replaced every piece of placeholder content with my own real information", "I changed the colour scheme to something that feels personal to me", "I added at least one section or element not included in the scaffold", "I tested the page at different window sizes", "I'm satisfied that this page represents me, not the template"],
+        checklist: [
+          "I replaced every piece of placeholder content with my own real information — nothing generic remains",
+          "I changed the colour scheme to something that feels like my personal aesthetic",
+          "I added at least one section or element not included in the scaffold that required me to figure it out",
+          "I tested the page at multiple different browser widths",
+          "I would feel comfortable showing this page to someone as something I created"
+        ],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
-          challenges: ["Replace all placeholder text with your own real information", "Change the color scheme to something that feels like you", "Add a fourth section not included in the template", "Make it work on mobile (test by resizing your browser window)"]
+          starter: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Your Name — Developer</title>\n  <style>\n    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n    body { background: #0a0a0a; color: white; font-family: sans-serif; }\n    header { padding: 64px 32px; text-align: center; border-bottom: 1px solid #222; }\n    header h1 { font-size: 2.5rem; color: #7eb8c8; margin-bottom: 8px; }\n    header p { color: #888; font-size: 1.1rem; }\n    section { padding: 48px 32px; max-width: 800px; margin: 0 auto; }\n    section h2 { color: #7eb8c8; margin-bottom: 24px; font-size: 1.4rem; }\n    .skills { display: flex; flex-wrap: wrap; gap: 8px; }\n    .skill { background: #1a1a1a; border: 1px solid #333; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; color: #ccc; }\n    .projects { display: flex; flex-wrap: wrap; gap: 16px; }\n    .project-card { background: #1a1a1a; border-radius: 8px; padding: 20px; flex: 1; min-width: 220px; border: 1px solid #2a2a2a; }\n    .project-card h3 { color: white; margin-bottom: 8px; }\n    .project-card p { color: #888; font-size: 0.9rem; line-height: 1.5; }\n    footer { padding: 32px; text-align: center; border-top: 1px solid #222; color: #555; }\n    footer a { color: #7eb8c8; text-decoration: none; margin: 0 12px; }\n  </style>\n</head>\n<body>\n  <header>\n    <h1>Your Name Here</h1>\n    <p>Junior Web Developer &mdash; Learning every day</p>\n  </header>\n  <section>\n    <h2>About</h2>\n    <p style="color:#aaa;line-height:1.7;">Replace this with a real bio. Write 2-3 sentences about who you are, what you\'re learning, and what you\'re building toward.</p>\n  </section>\n  <section>\n    <h2>Skills</h2>\n    <div class="skills">\n      <span class="skill">HTML</span>\n      <span class="skill">CSS</span>\n      <span class="skill">JavaScript</span>\n      <span class="skill">Add your own</span>\n    </div>\n  </section>\n  <section>\n    <h2>Projects</h2>\n    <div class="projects">\n      <div class="project-card"><h3>Project One</h3><p>Replace with a real project description.</p></div>\n      <div class="project-card"><h3>Project Two</h3><p>Replace with a real project description.</p></div>\n    </div>\n  </section>\n  <footer>\n    <a href="#">GitHub</a>\n    <a href="#">LinkedIn</a>\n    <a href="#">Email</a>\n  </footer>\n</body>\n</html>',
+          challenges: [
+            "Replace all placeholder text with your own real information",
+            "Change the colour scheme — replace all #7eb8c8 with a colour that feels like you",
+            "Add a fourth section not included in the scaffold (timeline, testimonials, contact form, etc.)",
+            "Make it work on mobile — test by resizing your browser to 375px wide"
+          ]
         }
       },
       {
         id: "2-10",
-        title: "Solo Project \u2014 No Template",
-        body: `No scaffold. No starter code. No template. A blank file and a brief.\n\n<strong>The brief:</strong> Build a landing page for something that doesn't exist yet. An app idea you've had. A fictional brand. A band. A game. A product. It can be anything \u2014 the subject doesn't matter. What matters is that you make every decision.\n\nThe page must have three sections minimum: a hero (the top section that communicates what the thing is, immediately, with a heading and a call-to-action), a features or about section (three or more reasons, benefits, or facts), and a footer with at minimum two links.\n\nEvery HTML element you use \u2014 your choice. Every colour \u2014 your choice. Every font, every spacing value, every layout approach \u2014 yours. When something doesn't work, you figure out why. When you want something you don't know how to do, you search for it.\n\nThis is what the work actually feels like. There's no right answer to compare yourself to. There's only: does it work, does it look intentional, and is it something you made.`,
+        title: "Floor 2 Check — No Template",
+        body: `Before you advance to Floor 3, prove to yourself you understood this floor.\n\nNo scaffold. No starter code. No template. A blank file and a brief.\n\n<strong>The brief:</strong> Build a landing page for something that doesn't exist yet. An app idea you've had. A fictional brand. A band. A game. A product. It can be anything — the subject doesn't matter. What matters is that you make every decision.\n\nThe page must have three sections minimum: a hero (the top section with a heading and a call-to-action), a features or about section (three or more benefits or facts), and a footer with at minimum two links.\n\nEvery HTML element — your choice. Every colour — your choice. Every font, every spacing value, every layout approach — yours. When something doesn't work, you figure out why. When you want something you don't know how to do, you search for it.\n\nThis is what the work actually feels like. There's no right answer to compare yourself to. There's only: does it work, does it look intentional, and is it something you made.\n\nThe questions below assess the full floor — not just this final section.`,
         callout: {
           type: "default",
           label: "The Blank Page Problem",
-          text: "The hardest part of this project is starting. The fix: open a file, write the HTML scaffold, write an h1 with your idea's name. That's it. That's the start. Once there's something on screen, the next step is always obvious. The blank page is only terrifying until you put one word on it."
+          text: "The hardest part of this project is starting. The fix: open a file, write the HTML scaffold, write an h1 with your idea's name. That's it. Once there's something on screen, the next step is always obvious. The blank page is only terrifying until you put one word on it."
         },
         callout2: {
           type: "focus",
           label: "Searching Is Part of the Work",
-          text: "If you want a feature you don't know how to build \u2014 a sticky navigation, a gradient background, a CSS animation \u2014 search for it. Searching for CSS solutions is not cheating. It's exactly what every professional developer does. The skill is knowing what to search for and evaluating what you find."
+          text: "If you want a feature you don't know how to build — a sticky navigation, a gradient background, a CSS animation — search for it. Searching for CSS solutions is not cheating. It's exactly what every professional developer does. The skill is knowing what to search for and evaluating what you find."
         },
-        hint: `If you're completely blank on an idea: don't make it about an app. Make it about something you know. A landing page for your favourite book, for a coffee shop that should exist in your city, for a service that would have helped you learn to code faster. Anything you have opinions about is easier to design than something abstract.\n\n<strong>When the design feels off but you can't say why:</strong> Look at the spacing. Inconsistent spacing makes pages feel unpolished more than almost anything else. Pick one spacing unit (like 8px) and make every margin and padding a multiple of it. The page will immediately feel more ordered.\n\n<strong>Still fuzzy on the hero section?</strong> A hero needs: a strong headline (what is this), a brief supporting line (why it matters), and a button or link (what to do next). That's the complete minimum. Everything else is enhancement.`,
+        hint: `If you're completely blank on an idea: don't make it about an app. Make it about something you know. A landing page for your favourite book, for a coffee shop that should exist in your city, for a service that would have helped you learn to code faster. Anything you have opinions about is easier to design than something abstract.\n\n<strong>When the design feels off but you can't say why:</strong> Look at the spacing. Inconsistent spacing makes pages feel unpolished more than almost anything else. Pick one spacing unit (like 8px) and make every margin and padding a multiple of it.\n\n<strong>Still fuzzy on the hero section?</strong> A hero needs: a strong headline, a brief supporting line, and a button or link. That's the complete minimum.`,
         quiz: {
-          question: "You've finished the landing page. You look at it and think the layout is fine but something feels off about the design. Which of the following is most likely to make the biggest improvement?",
-          options: ["Adding more CSS animations and transitions throughout the page", "Reviewing the spacing \u2014 inconsistent padding and margins are the most common cause of layouts that look unpolished", "Changing the font to something more distinctive", "Adding more sections to give the page more content"],
-          correct: 1,
-          feedback: "Inconsistent spacing is the most common reason a page 'feels off' even when the structure and colours are correct. When padding and margins jump between arbitrary values (13px here, 21px there, 37px elsewhere), the eye perceives disorder. Switching to a consistent spacing scale \u2014 multiples of 8 \u2014 creates visual rhythm that makes layouts feel considered even without a designer."
-        },
-        checklist: ["I built the landing page from a blank file with no starter code", "It has a hero section, a features or about section, and a footer", "I made every visual decision myself", "When I didn't know how to do something, I searched for it rather than leaving it out", "I would show this page to someone as an example of what I can build"]
+          questions: [
+            {
+              question: "You've finished your landing page but something feels visually off. The structure is correct and the colours are fine. What should you check first?",
+              options: [
+                "Add more CSS animations and transitions to make it more dynamic",
+                "Check the spacing — inconsistent padding and margins create visual disorder that is the most common cause of 'something feels off'",
+                "Change the font to something more distinctive and unusual",
+                "Add more sections to give the page more visual weight"
+              ],
+              correct: 1,
+              feedback: "Inconsistent spacing is the most common reason a page 'feels off' when structure and colours are fine. When padding jumps between arbitrary values, the eye perceives disorder. A consistent spacing scale — multiples of 8 — creates visual rhythm that makes layouts feel considered."
+            },
+            {
+              question: "A paragraph element has a tag selector rule setting color: gray and a class selector rule setting color: white. The element has the class applied. What colour does the text appear?",
+              options: [
+                "Gray — the tag selector is more fundamental to the element",
+                "White — the class selector is more specific than the tag selector",
+                "A mix of both — the browser averages conflicting colour values",
+                "Gray — the tag selector rule appears first in the stylesheet"
+              ],
+              correct: 1,
+              feedback: "Class selectors are more specific than tag selectors, so the class rule wins regardless of document order. This is the cascade: specificity determines which rule applies when multiple rules target the same element."
+            },
+            {
+              question: "You want to centre three cards in a row both horizontally and have equal spacing between them. Which CSS properties on the container achieve this?",
+              options: [
+                "text-align: center on the container",
+                "display: flex; justify-content: center; gap: 16px",
+                "display: flex; justify-content: space-between with fixed widths on cards",
+                "display: block; margin: auto on each card"
+              ],
+              correct: 1,
+              feedback: "display: flex enables the flexbox layout. justify-content: center centres the items on the main axis. gap: 16px adds consistent space between items. Space-between (option C) places items at the edges, not centred. text-align only works for inline content. margin: auto on block elements only centres horizontally when width is defined."
+            },
+            {
+              question: "A developer builds their entire landing page with inline style attributes on every element. They want to change the primary colour from blue to green. What happens?",
+              options: [
+                "They change one value in the CSS file and all blue elements update instantly",
+                "They must change the style attribute on every single element individually — potentially dozens of edits",
+                "They use a find-and-replace in their editor, which takes 30 seconds",
+                "They add a CSS class and it automatically overrides the inline styles"
+              ],
+              correct: 1,
+              feedback: "Inline styles are one of the core reasons external stylesheets exist. Changing a colour across a site with inline styles requires editing every element. An external stylesheet means one change updates everything. Option C is technically possible but fragile. Option D is wrong — inline styles have the highest specificity and override class rules."
+            },
+            {
+              question: "The browser's DevTools shows an element as 350px wide, but your CSS says width: 300px with padding: 20px. What explains the discrepancy?",
+              options: [
+                "DevTools is displaying incorrect information and the element is actually 300px",
+                "The element is using the default box-sizing: content-box, so padding (40px total) is added to the content width (300px)",
+                "The browser automatically adds 50px for accessibility reasons",
+                "The element has margin: 25px which is included in the rendered width"
+              ],
+              correct: 1,
+              feedback: "With box-sizing: content-box (the default), width applies to the content only. 20px padding on each side adds 40px. 300 + 40 = 340px — though 350 would suggest other factors like a border. The fix is box-sizing: border-box so the specified width includes padding. Margin is never included in the element's own width calculation."
+            },
+            {
+              question: "You've built a profile page from a scaffold by replacing all text but keeping the original colours and layout. You've also built a landing page from scratch with your own design choices. Which is stronger portfolio evidence of CSS ability?",
+              options: [
+                "The profile page — it's more polished because it started with a solid foundation",
+                "The landing page — it demonstrates independent decision-making across structure, layout, and visual design",
+                "They're equally strong — both demonstrate HTML and CSS knowledge",
+                "The profile page — recruiters prefer clean, recognisable layouts"
+              ],
+              correct: 1,
+              feedback: "A page built from scratch demonstrates that you can make independent design decisions: choosing layout approaches, establishing visual hierarchy, picking colour palettes, solving structural problems. A filled-in template demonstrates that you can edit HTML. Both have value, but the from-scratch project is stronger evidence of CSS engineering ability."
+            }
+          ]
+        }
       }
     ]
   },
-  {
+    {
     id: 3,
     title: "Building With Training Wheels",
     subtitle: "JavaScript \u2014 the language of the web",
@@ -575,7 +955,25 @@ const FLOORS = [
         checklist: ["I can write a function declaration with parameters and a return value", "I understand the difference between parameters and arguments", "I can write an arrow function and know when to prefer it", "I understand what function scope means and why it matters", "I know what a pure function is and why it's considered good practice"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.8}
+h2{color:#c87e9a;margin:0 0 16px}
+#output p{margin:4px 0}
+.result{color:#c8a96e;font-size:16px;margin-top:12px}
+</style></head><body>
+<h2>Functions</h2>
+<div id="output"></div>
+<script>
+var out='';
+function greet(name){return 'Hello, '+name+'! Welcome to The Code Book.';}
+function add(a,b){return a+b;}
+function applyDiscount(price,pct){return price-(price*(pct/100));}
+out+='<p>'+greet('Developer')+'</p>';
+out+='<p>3 + 7 = '+add(3,7)+'</p>';
+out+='<p class="result">After 20% discount: £'+applyDiscount(50,20).toFixed(2)+'</p>';
+document.getElementById('output').innerHTML=out;
+</script></body></html>`,
           challenges: ["Add a third parameter to the greet function for a title (Mr, Ms, Dr) and include it in the output", "Write a function called calculateDiscount(price, percent) that returns the discounted price", "Convert the function declaration to an arrow function", "Write a function that takes an array of numbers and returns the largest one"]
         }
       },
@@ -603,7 +1001,31 @@ const FLOORS = [
         checklist: ["I can write a for loop with correct initialisation, condition, and update", "I understand when to use while vs for", "I can use forEach for clean array iteration", "I know the difference between for...of and for...in", "I understand what break and continue do and can use them correctly"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px}
+.section{margin-bottom:20px}
+.label{color:#888;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+p{margin:2px 0}
+.highlight{color:#c8a96e}
+</style></head><body>
+<h2>Loops in Action</h2>
+<div id="output"></div>
+<script>
+var out='';
+out+='<div class="section"><div class="label">For Loop (1 to 5)</div>';
+for(var i=1;i<=5;i++){out+='<p>Iteration '+i+'</p>';}
+out+='</div>';
+out+='<div class="section"><div class="label">Odd numbers only (continue)</div>';
+for(var j=1;j<=10;j++){if(j%2===0)continue;out+='<p class="highlight">'+j+'</p>';}
+out+='</div>';
+var languages=['HTML','CSS','JavaScript','Python'];
+out+='<div class="section"><div class="label">forEach on array</div>';
+languages.forEach(function(lang,idx){out+='<p>'+(idx+1)+'. '+lang+'</p>';});
+out+='</div>';
+document.getElementById('output').innerHTML=out;
+</script></body></html>`,
           challenges: ["Change the for loop to count down from 10 to 1 instead of up", "Add a condition inside the loop that skips even numbers (use if (i % 2 === 0) continue)", "Rewrite the for loop as a while loop", "Write a loop that finds the first number in the array greater than 50 and stops"]
         }
       },
@@ -631,7 +1053,41 @@ const FLOORS = [
         checklist: ["I know the core array methods: push, pop, slice, splice, indexOf, includes", "I can use map, filter, and reduce to transform arrays", "I can create and navigate nested objects using both dot and bracket notation", "I understand what JSON is and can convert between JSON and JavaScript objects", "I can work with arrays of objects \u2014 the most common data structure in real applications"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px;font-size:16px}
+.card{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px;margin-bottom:10px}
+.title{color:#c8a96e;font-size:13px;margin-bottom:4px}
+.meta{color:#888;font-size:11px}
+.rating{color:#ffd700}
+.section-label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin:16px 0 8px}
+.filtered{border-color:#3a4a2a}
+.titles{color:#7eb8c8}
+</style></head><body>
+<h2>Arrays & Objects</h2>
+<div id="output"></div>
+<script>
+var movies=[
+  {title:'Interstellar',rating:8.6,genre:'Sci-Fi'},
+  {title:'The Dark Knight',rating:9.0,genre:'Action'},
+  {title:'Inception',rating:8.8,genre:'Sci-Fi'},
+  {title:'Tenet',rating:7.4,genre:'Action'},
+  {title:'Dunkirk',rating:7.9,genre:'War'}
+];
+var out='<div class="section-label">All Movies</div>';
+movies.forEach(function(m){
+  out+='<div class="card"><div class="title">'+m.title+'</div>';
+  out+='<div class="meta"><span class="rating">★ '+m.rating+'</span>  '+m.genre+'</div></div>';
+});
+var highRated=movies.filter(function(m){return m.rating>8.5;});
+out+='<div class="section-label">filter: rating > 8.5</div>';
+highRated.forEach(function(m){out+='<div class="card filtered"><div class="title">'+m.title+'</div></div>';});
+var titles=movies.map(function(m){return m.title;});
+out+='<div class="section-label">map: titles only</div>';
+out+='<div class="card"><div class="titles">'+titles.join(', ')+'</div></div>';
+document.getElementById('output').innerHTML=out;
+</script></body></html>`,
           challenges: ["Use .filter() to show only movies with a rating above 8.0", "Add a new movie to the array using .push() and re-render the list", "Use .map() to create a new array of just the movie titles", "Sort the movies by rating using .sort()"]
         }
       },
@@ -659,7 +1115,33 @@ const FLOORS = [
         checklist: ["I can find elements using getElementById, querySelector, and querySelectorAll", "I know when to use textContent vs innerHTML and why innerHTML can be a security risk", "I can add, remove, and toggle CSS classes on elements", "I can create new elements with createElement and attach them with appendChild", "I understand the classList.toggle pattern for show/hide interactions"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#c87e9a;margin:0 0 20px}
+button{font-family:inherit;font-size:12px;letter-spacing:1px;cursor:pointer;border:none;border-radius:6px;padding:10px 20px}
+#count-btn{background:#7eb8c8;color:#000;margin-right:10px}
+#count-btn:hover{background:#a8d8e8}
+#toggle-btn{background:#333;color:#fff;border:1px solid #555}
+#counter{font-size:48px;color:#c8a96e;margin:20px 0;font-weight:900}
+#message{margin-top:20px;padding:16px;border-radius:8px;background:#1a2a1a;color:#6dbf6d}
+.hidden{display:none}
+</style></head><body>
+<h2>DOM Manipulation</h2>
+<button id="count-btn" onclick="increment()">Click to Count</button>
+<button id="toggle-btn" onclick="toggleMessage()">Show Message</button>
+<div id="counter">0</div>
+<div id="message" class="hidden">JavaScript found this element and toggled its visibility using classList.toggle('hidden')</div>
+<script>
+var count=0;
+function increment(){count++;document.getElementById('counter').textContent=count;}
+function toggleMessage(){
+  var msg=document.getElementById('message');
+  var btn=document.getElementById('toggle-btn');
+  msg.classList.toggle('hidden');
+  btn.textContent=msg.classList.contains('hidden')?'Show Message':'Hide Message';
+}
+</script></body></html>`,
           challenges: ["Change the button text to 'Updated!' after clicking it", "Use classList.toggle to show/hide the message instead of changing textContent", "Add a second counter that counts how many times the button has been clicked", "Create a new paragraph element with document.createElement and append it to the page"]
         }
       },
@@ -687,7 +1169,38 @@ const FLOORS = [
         checklist: ["I use addEventListener instead of inline onclick attributes", "I know the common event types and what triggers each one", "I can access and use the event object inside a handler", "I understand event.preventDefault() and know when to use it", "I understand event delegation and can implement it on a dynamic list"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#c87e9a;margin:0 0 20px}
+.field{margin-bottom:16px}
+label{display:block;color:#888;font-size:11px;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase}
+input{background:#111;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:6px;font-family:inherit;font-size:13px;width:100%;max-width:320px}
+input:focus{outline:none;border-color:#7eb8c8}
+button{background:#7eb8c8;color:#000;border:none;border-radius:6px;padding:10px 24px;font-family:inherit;font-size:12px;cursor:pointer;letter-spacing:1px}
+button:hover{background:#a8d8e8}
+#live{color:#c8a96e;font-size:18px;margin:16px 0;min-height:28px}
+#log{margin-top:16px;color:#666;font-size:11px;line-height:1.8}
+</style></head><body>
+<h2>Events</h2>
+<div class="field">
+<label>Type something (input event fires on every key)</label>
+<input type="text" id="text-input" placeholder="Start typing...">
+</div>
+<div id="live"></div>
+<button id="submit-btn">Submit (uses preventDefault)</button>
+<div id="log"></div>
+<script>
+var log=document.getElementById('log');
+document.getElementById('text-input').addEventListener('input',function(e){
+  document.getElementById('live').textContent=e.target.value;
+});
+document.getElementById('submit-btn').addEventListener('click',function(e){
+  e.preventDefault();
+  var val=document.getElementById('text-input').value;
+  log.innerHTML+='<p>Submitted: "'+(val||'(empty)')+'" — page did NOT reload</p>';
+});
+</script></body></html>`,
           challenges: ["Add a keydown listener that fires when the user presses Enter", "Use event.preventDefault() on the form submit to prevent page reload", "Add a mouseover event that changes the button color when hovered (in JavaScript, not CSS)", "Use event delegation \u2014 attach one click listener to the list container instead of each item"]
         }
       },
@@ -715,7 +1228,31 @@ const FLOORS = [
         checklist: ["I can identify the three JavaScript error types and what each one means", "I read error messages fully before touching any code", "I use console.log systematically to trace values, not randomly to hope for clues", "I understand try/catch and know when it's appropriate to use", "I've used the DevTools debugger to set a breakpoint and step through execution"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px}
+.section{margin-bottom:24px}
+.label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.ok{color:#6dbf6d}.err{color:#ff6b6b}
+</style></head><body>
+<h2>Error Handling</h2>
+<div class="section"><div class="label">Bug #1 — Spot and fix this:</div><div id="bug1"></div></div>
+<div class="section"><div class="label">try/catch in action</div><div id="trycatch"></div></div>
+<script>
+function double(x){x*2;} // BUG: missing return
+var result=double(5);
+document.getElementById('bug1').innerHTML=
+  '<p class="err">double(5) returned: '+result+' (expected 10 — can you see the bug?)</p>';
+
+function parseData(input){
+  try{var p=JSON.parse(input);return '<p class="ok">✓ Parsed: '+JSON.stringify(p)+'</p>';}
+  catch(e){return '<p class="err">✗ Error: '+e.message+'</p>';}
+}
+var el=document.getElementById('trycatch');
+el.innerHTML=parseData('{"name":"Alex"}');
+el.innerHTML+=parseData('this is not valid JSON');
+</script></body></html>`,
           challenges: ["Fix the three intentional bugs in the code \u2014 read the error messages in the console for guidance", "Add a try/catch block around the broken function call and display the error message instead of crashing", "Add console.log statements to trace what value each variable holds", "Add input validation that throws a custom error if the input is empty"]
         }
       },
@@ -743,7 +1280,57 @@ const FLOORS = [
         checklist: ["I read all function stubs and comments before implementing anything", "The addTodo function correctly validates input, updates the array, and creates a DOM element", "The deleteTodo function removes items from both the array and the DOM", "The toggleComplete function updates both the array state and the DOM visual state", "The todos persist through page refresh using localStorage"],
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;min-height:100vh}
+h2{color:#c87e9a;margin-bottom:20px}
+.add-row{display:flex;gap:10px;margin-bottom:20px}
+input{flex:1;background:#111;border:1px solid #333;color:#fff;padding:10px 14px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#c87e9a}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:10px 18px;font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+button:hover{background:#d89ab5}
+#todo-list{list-style:none}
+.todo-item{display:flex;align-items:center;gap:12px;padding:12px;background:#111;border:1px solid #222;border-radius:6px;margin-bottom:8px}
+.todo-item.done .todo-text{text-decoration:line-through;color:#555}
+.todo-text{flex:1;cursor:pointer}
+.del-btn{background:transparent;border:1px solid #444;color:#888;border-radius:4px;padding:4px 10px;font-size:11px}
+.del-btn:hover{border-color:#ff6b6b;color:#ff6b6b;background:transparent}
+.empty{color:#555;font-size:12px;padding:16px 0}
+</style></head><body>
+<h2>To-Do List</h2>
+<div class="add-row">
+<input type="text" id="todo-input" placeholder="Add a task...">
+<button onclick="addTodo()">Add</button>
+</div>
+<ul id="todo-list"><li class="empty">No tasks yet — add one above</li></ul>
+<script>
+var todos=JSON.parse(localStorage.getItem('codebook_todos'))||[];
+var nextId=todos.length?Math.max.apply(null,todos.map(function(t){return t.id;}))+1:1;
+function render(){
+  var list=document.getElementById('todo-list');
+  if(!todos.length){list.innerHTML='<li class="empty">No tasks yet — add one above</li>';return;}
+  list.innerHTML=todos.map(function(t){
+    return '<li class="todo-item'+(t.done?' done':'')+'">'+
+      '<span class="todo-text" onclick="toggleTodo('+t.id+')">'+t.text+'</span>'+
+      '<button class="del-btn" onclick="deleteTodo('+t.id+')">Remove</button></li>';
+  }).join('');
+}
+function addTodo(){
+  var input=document.getElementById('todo-input');
+  var text=input.value.trim();if(!text)return;
+  todos.push({id:nextId++,text:text,done:false});
+  input.value='';save();render();
+}
+function deleteTodo(id){todos=todos.filter(function(t){return t.id!==id;});save();render();}
+function toggleTodo(id){
+  todos=todos.map(function(t){return t.id===id?{id:t.id,text:t.text,done:!t.done}:t;});
+  save();render();
+}
+function save(){localStorage.setItem('codebook_todos',JSON.stringify(todos));}
+document.getElementById('todo-input').addEventListener('keydown',function(e){if(e.key==='Enter')addTodo();});
+render();
+</script></body></html>`,
           challenges: ["Complete the addTodo function so new items appear in the list", "Complete the deleteTodo function so items can be removed", "Complete the toggleComplete function so items can be marked done", "Add localStorage persistence so the list survives a page refresh"]
         }
       },
@@ -937,7 +1524,45 @@ A critical mistake: never try to use fetched data outside the async function wit
 <strong>Still stuck?</strong> Open the Network tab in DevTools, find your fetch request, and look at the Response tab. That shows exactly what the API returned. Compare that structure to how you're accessing the data in your code.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin:0 0 16px}
+button{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:13px;cursor:pointer;margin-bottom:16px}
+button:hover{background:#8de08d}
+button:disabled{opacity:0.5;cursor:not-allowed}
+#result{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;min-height:80px}
+.field{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.key{color:#888;font-size:11px;min-width:100px}
+.val{color:#c8a96e}
+.loading{color:#666;font-style:italic}
+.err{color:#ff6b6b}
+.label{color:#555;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+</style></head><body>
+<h2>Fetch & Async/Await</h2>
+<button id="btn" onclick="loadUser()">Fetch User from API</button>
+<div id="result"><p class="loading">Press the button to make a real API call...</p></div>
+<script>
+async function loadUser(){
+  var btn=document.getElementById('btn');
+  var result=document.getElementById('result');
+  btn.disabled=true;
+  result.innerHTML='<p class="loading">Fetching...</p>';
+  try{
+    var response=await fetch('https://jsonplaceholder.typicode.com/users/1');
+    if(!response.ok)throw new Error('HTTP '+response.status);
+    var user=await response.json();
+    result.innerHTML='<div class="label">User fetched successfully</div>'+
+      field('name',user.name)+field('email',user.email)+
+      field('username',user.username)+field('city',user.address.city)+
+      field('company',user.company.name);
+  }catch(e){
+    result.innerHTML='<p class="err">Error: '+e.message+'</p>';
+  }
+  btn.disabled=false;
+}
+function field(k,v){return '<div class="field"><span class="key">'+k+'</span><span class="val">'+v+'</span></div>';}
+</script></body></html>`,
           challenges: ["Change the API call to fetch user ID 5 instead of 1", "Add error handling that shows a message if the fetch fails", "Display 3 more fields from the response object", "Add a loading indicator that shows while the fetch is in progress"]
         },
         quiz: {
@@ -977,7 +1602,56 @@ Common use cases: dark mode preference (so the user doesn't have to toggle it ev
 <strong>Still stuck?</strong> The most common mistake is saving an object without JSON.stringify. localStorage.setItem('user', {name: 'Alex'}) saves the string '[object Object]' — completely useless. Always stringify objects before saving.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin-bottom:20px}
+.row{display:flex;gap:10px;margin-bottom:16px}
+input{flex:1;background:#111;border:1px solid #333;color:#fff;padding:10px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#6dbf6d}
+button{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 18px;font-family:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+button:hover{background:#8de08d}
+.note{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.note-text{flex:1;line-height:1.6;color:#ccc}
+.del{background:none;border:1px solid #444;color:#888;border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;white-space:nowrap}
+.del:hover{border-color:#ff6b6b;color:#ff6b6b}
+.empty{color:#555;font-size:12px;padding:16px 0}
+.meta{color:#555;font-size:10px;margin-top:8px}
+</style></head><body>
+<h2>Local Storage Notes</h2>
+<div class="row">
+<input type="text" id="note-input" placeholder="Write a note...">
+<button onclick="addNote()">Save</button>
+</div>
+<div id="notes"></div>
+<script>
+var notes=JSON.parse(localStorage.getItem('codebook_notes'))||[];
+function render(){
+  var el=document.getElementById('notes');
+  if(!notes.length){el.innerHTML='<p class="empty">No notes yet — type one above and click Save</p>';return;}
+  el.innerHTML=notes.map(function(n,i){
+    return '<div class="note"><div><div class="note-text">'+n.text+'</div>'+
+      '<div class="meta">Saved: '+n.date+'</div></div>'+
+      '<button class="del" onclick="deleteNote('+i+')">Delete</button></div>';
+  }).join('');
+}
+function addNote(){
+  var input=document.getElementById('note-input');
+  var text=input.value.trim();if(!text)return;
+  notes.push({text:text,date:new Date().toLocaleTimeString()});
+  input.value='';
+  localStorage.setItem('codebook_notes',JSON.stringify(notes));
+  render();
+}
+function deleteNote(i){
+  notes.splice(i,1);
+  localStorage.setItem('codebook_notes',JSON.stringify(notes));
+  render();
+}
+document.getElementById('note-input').addEventListener('keydown',function(e){if(e.key==='Enter')addNote();});
+render();
+</script></body></html>`,
           challenges: ["Add a clear all button that removes all saved notes", "Add a timestamp to each saved note", "Add a character count that updates as the user types", "Make the notes list sortable by date saved"]
         },
         quiz: {
@@ -1017,7 +1691,60 @@ Production applications fail gracefully. When Spotify can't load your playlist, 
 <strong>Still stuck?</strong> Add console.log(data) before any property access to inspect the full shape of what you're working with. API responses often differ from the documentation in edge cases.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;line-height:1.7}
+h2{color:#6dbf6d;margin:0 0 20px}
+.section{margin-bottom:24px}
+.label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.ok{color:#6dbf6d}.err{color:#ff6b6b}.warn{color:#c8a96e}
+button{background:#333;color:#fff;border:1px solid #555;border-radius:6px;padding:8px 18px;font-family:inherit;font-size:12px;cursor:pointer;margin-bottom:10px}
+button:hover{border-color:#6dbf6d}
+#log{background:#111;border:1px solid #222;border-radius:8px;padding:16px;max-height:200px;overflow-y:auto}
+#log p{margin:3px 0}
+</style></head><body>
+<h2>Error Handling at Scale</h2>
+<div class="section">
+<div class="label">Retry with exponential backoff</div>
+<button onclick="runRetry()">Simulate Unstable API Call</button>
+<div id="log"><p class="warn">Click the button to run...</p></div>
+</div>
+<script>
+var logEl=document.getElementById('log');
+function log(msg,cls){var p=document.createElement('p');p.className=cls||'';p.textContent=msg;logEl.appendChild(p);logEl.scrollTop=logEl.scrollHeight;}
+
+async function fakeUnstableApi(attempt){
+  await new Promise(function(r){setTimeout(r,300);});
+  if(attempt<3)throw new Error('Network timeout (attempt '+attempt+')');
+  return {status:'ok',data:'Response received'};
+}
+
+async function fetchWithRetry(fn,maxRetries){
+  for(var i=1;i<=maxRetries;i++){
+    try{
+      log('Attempt '+i+'...','warn');
+      var result=await fn(i);
+      log('✓ Success: '+JSON.stringify(result),'ok');
+      return result;
+    }catch(e){
+      log('✗ Failed: '+e.message,'err');
+      if(i<maxRetries){
+        var delay=Math.pow(2,i)*200;
+        log('Retrying in '+delay+'ms...','warn');
+        await new Promise(function(r){setTimeout(r,delay);});
+      }else{
+        log('All retries exhausted.','err');
+        throw e;
+      }
+    }
+  }
+}
+
+function runRetry(){
+  logEl.innerHTML='';
+  fetchWithRetry(fakeUnstableApi,4).catch(function(){});
+}
+</script></body></html>`,
           challenges: ["Add a case that handles when the API returns no results", "Wrap the main function in try/catch and display a friendly error message", "Use optional chaining to safely access a nested property that might not exist", "Add a retry button that re-runs the failed operation"]
         },
         quiz: {
@@ -1057,7 +1784,46 @@ The GitHub workflow for team projects: fork the repo, clone your fork, create a 
 <strong>Still stuck?</strong> Run git log to see your commit history. Each commit has a hash (a long string like a3f9d2b). git revert <hash> undoes that specific commit. git diff <hash> shows what changed in it.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#6dbf6d;margin-bottom:20px;font-size:16px}
+.cmd-list{list-style:none;margin-bottom:24px}
+.cmd-item{display:flex;align-items:flex-start;gap:14px;padding:10px 14px;border-radius:6px;cursor:pointer;transition:background 0.15s;margin-bottom:4px;border:1px solid transparent}
+.cmd-item:hover,.cmd-item.active{background:#111;border-color:#2a2a2a}
+.cmd-code{color:#6dbf6d;min-width:200px;font-size:12px}
+.cmd-desc{color:#888;font-size:11px;line-height:1.5}
+.detail{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;min-height:60px}
+.detail h3{color:#c8a96e;font-size:12px;margin-bottom:6px}
+.detail p{color:#aaa;line-height:1.7;font-size:12px}
+</style></head><body>
+<h2>Git Cheatsheet — Click a command</h2>
+<ul class="cmd-list" id="cmd-list"></ul>
+<div class="detail" id="detail"><p style="color:#555">Select a command above to see details.</p></div>
+<script>
+var cmds=[
+  {cmd:'git init',desc:'Start a new repository',detail:'Creates a hidden .git directory. Run once per project in the project root.'},
+  {cmd:'git add .',desc:'Stage all changes',detail:'Moves changes to the staging area. Only staged files are included in the next commit. Use "git add filename" to stage specific files.'},
+  {cmd:'git commit -m "msg"',desc:'Save a snapshot',detail:'Records the staged changes permanently with a message explaining why. The message should describe what changed and why, not what files were changed.'},
+  {cmd:'git push origin main',desc:'Upload to remote',detail:'Sends your commits to the remote repository (GitHub, etc). Others can now see and pull your changes.'},
+  {cmd:'git pull',desc:'Download and merge',detail:'Fetches commits from the remote and merges them into your current branch. Do this before starting work each day.'},
+  {cmd:'git branch feature-x',desc:'Create a branch',detail:'Branches let you work on features without touching main. Work on feature-x, test it, then merge back to main when done.'},
+  {cmd:'git status',desc:'Show working tree status',detail:'Shows which files are modified, staged, or untracked. Run this frequently — it tells you exactly where you are.'},
+];
+var list=document.getElementById('cmd-list');
+var detail=document.getElementById('detail');
+cmds.forEach(function(c,i){
+  var li=document.createElement('li');li.className='cmd-item';
+  li.innerHTML='<span class="cmd-code">'+c.cmd+'</span><span class="cmd-desc">'+c.desc+'</span>';
+  li.onclick=function(){
+    document.querySelectorAll('.cmd-item').forEach(function(el){el.classList.remove('active');});
+    li.classList.add('active');
+    detail.innerHTML='<h3>'+c.cmd+'</h3><p>'+c.detail+'</p>';
+  };
+  list.appendChild(li);
+});
+</script></body></html>`,
           challenges: ["Write a commit message for each of these changes: adding a new feature, fixing a bug, updating documentation", "Create a new branch called 'feature/dark-mode' using git checkout -b", "Explain in plain English what git merge does and what a merge conflict is", "Write the exact sequence of git commands to push your first project to GitHub"]
         },
         quiz: {
@@ -1099,7 +1865,47 @@ The most important debugging habit: change one thing at a time. Change two thing
 <strong>Still stuck?</strong> Open DevTools Sources tab, find your script, and click the line number where you think the problem might be to set a breakpoint. Run the code and when it pauses, look at the Scope panel on the right — it shows every variable's current value. This is often faster than reasoning about what might be wrong.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin-bottom:16px}
+.bugs{display:grid;gap:12px;margin-bottom:20px}
+.bug{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;cursor:pointer;transition:border-color 0.15s}
+.bug:hover{border-color:#6dbf6d}
+.bug.revealed{border-color:#c8a96e}
+.bug-code{color:#ff9966;font-size:12px;margin-bottom:8px;white-space:pre-wrap}
+.bug-q{color:#888;font-size:12px}
+.bug-a{color:#c8a96e;font-size:12px;margin-top:8px;display:none;line-height:1.6}
+.bug.revealed .bug-a{display:block}
+.hint-text{color:#555;font-size:11px;margin-top:4px}
+</style></head><body>
+<h2>Debugging — Click to reveal the fix</h2>
+<div class="bugs">
+<div class="bug" onclick="this.classList.toggle('revealed')">
+<div class="bug-code">function getTotal(prices) {
+  var total = 0;
+  prices.forEach(function(p) { total + p; });
+  return total;
+}</div>
+<div class="bug-q">getTotal([10, 20, 30]) returns 0. Why?</div>
+<div class="bug-a">✓ Bug: total + p computes the sum but doesn't assign it. Fix: total += p;</div>
+</div>
+<div class="bug" onclick="this.classList.toggle('revealed')">
+<div class="bug-code">var user = { name: 'Alex' };
+console.log(user.adress.city);</div>
+<div class="bug-q">This throws "Cannot read properties of undefined". Why?</div>
+<div class="bug-a">✓ Bug: "adress" is misspelled — it should be "address". Also, user.address doesn't exist in this object, so user.address is undefined and .city throws. Fix the typo and add address to the object.</div>
+</div>
+<div class="bug" onclick="this.classList.toggle('revealed')">
+<div class="bug-code">for (var i = 0; i &lt; 5; i++) {
+  setTimeout(function() { console.log(i); }, 1000);
+}</div>
+<div class="bug-q">Logs "5" five times instead of 0,1,2,3,4. Why?</div>
+<div class="bug-a">✓ Bug: var is function-scoped. By the time the timeout fires, the loop has finished and i is 5. Fix: replace var with let (block-scoped) or use an IIFE to capture i at each iteration.</div>
+</div>
+</div>
+</body></html>`,
           challenges: ["Use the debugger to step through the code and find where the wrong value is assigned", "Fix all three bugs in the code — each bug is a different type (reference, type, logic)", "Add console.log statements to trace the exact value of the variable at each step", "Open the Network tab in DevTools, reload the page, and identify all the resources it loads"]
         },
         quiz: {
@@ -1137,7 +1943,56 @@ Real APIs have real constraints: rate limits (you can only make a certain number
 <strong>Still stuck?</strong> Add console.log(data) right after you receive the API response. Look at the actual shape of what came back and compare it to what your display code expects. APIs don't always match documentation exactly.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#6dbf6d;margin-bottom:20px}
+.search-row{display:flex;gap:10px;margin-bottom:20px}
+input{flex:1;background:#111;border:1px solid #333;color:#fff;padding:10px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#6dbf6d}
+button{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 18px;font-family:inherit;font-size:13px;cursor:pointer}
+button:hover{background:#8de08d}
+button:disabled{opacity:0.5}
+#result{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:20px;min-height:80px}
+.weather-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:8px}
+.stat{background:#1a1a2a;border-radius:6px;padding:12px}
+.stat-label{color:#555;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.stat-val{color:#c8a96e;font-size:20px;font-weight:bold}
+.ok{color:#6dbf6d}.err{color:#ff6b6b}.loading{color:#666;font-style:italic}
+</style></head><body>
+<h2>Weather App — Open-Meteo API (no key needed)</h2>
+<div class="search-row">
+<input type="text" id="city" placeholder="e.g. London — uses fixed London coordinates">
+<button id="btn" onclick="getWeather()">Get Weather</button>
+</div>
+<div id="result"><p class="loading">Click the button to fetch real weather data...</p></div>
+<script>
+async function getWeather(){
+  var btn=document.getElementById('btn');
+  var result=document.getElementById('result');
+  btn.disabled=true;
+  result.innerHTML='<p class="loading">Fetching weather for London...</p>';
+  try{
+    var url='https://api.open-meteo.com/v1/forecast?latitude=51.5085&longitude=-0.1257&current_weather=true&hourly=relative_humidity_2m,apparent_temperature&timezone=Europe/London';
+    var res=await fetch(url);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    var data=await res.json();
+    var cw=data.current_weather;
+    var wmo={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',61:'Light rain',63:'Moderate rain',71:'Light snow',80:'Rain showers'};
+    var desc=wmo[cw.weathercode]||('Code '+cw.weathercode);
+    result.innerHTML='<p class="ok">✓ Live data for London</p>'+
+      '<div class="weather-grid">'+
+      stat('Temperature',cw.temperature+'°C')+
+      stat('Wind speed',cw.windspeed+' km/h')+
+      stat('Wind dir',cw.winddirection+'°')+
+      stat('Condition',desc)+
+      '</div>';
+  }catch(e){result.innerHTML='<p class="err">Error: '+e.message+'</p>';}
+  btn.disabled=false;
+}
+function stat(label,val){return '<div class="stat"><div class="stat-label">'+label+'</div><div class="stat-val">'+val+'</div></div>';}
+</script></body></html>`,
           challenges: ["Add a 5-day forecast section below the current weather", "Add weather icons using the icon code from the API response", "Add a toggle between Celsius and Fahrenheit", "Save the last 3 searched cities to localStorage and show them as quick-access buttons"]
         },
         quiz: {
@@ -1175,7 +2030,72 @@ The relationship between state and UI is: state is the truth, DOM is the display
 <strong>Still stuck?</strong> Log the state variables (currentIndex, score, answered) to the console at the start of every function that modifies them. If the values aren't what you expect, you'll see exactly where state is diverging from your intention.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px;min-height:100vh}
+h2{color:#6dbf6d;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:24px}
+.question-card{background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:20px;margin-bottom:16px}
+.q-text{color:#fff;font-size:14px;margin-bottom:16px;line-height:1.6}
+.options{display:grid;gap:8px}
+.opt{background:#1a1a1a;border:1px solid #333;border-radius:6px;padding:12px 16px;cursor:pointer;color:#ccc;transition:border-color 0.15s;text-align:left;font-family:inherit;font-size:12px;width:100%}
+.opt:hover:not(:disabled){border-color:#6dbf6d;color:#fff}
+.opt.correct{border-color:#6dbf6d;background:#0a2a0a;color:#6dbf6d}
+.opt.wrong{border-color:#ff6b6b;background:#2a0a0a;color:#ff6b6b}
+.score{background:#111;border:1px solid #2a2a2a;border-radius:10px;padding:24px;text-align:center}
+.score-num{font-size:48px;color:#c8a96e;font-weight:900}
+.score-label{color:#888;font-size:12px;margin-top:8px}
+button.restart{background:#6dbf6d;color:#000;border:none;border-radius:6px;padding:10px 24px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:16px}
+</style></head><body>
+<h2>Quiz App</h2>
+<p class="sub">JavaScript fundamentals — 4 questions</p>
+<div id="app"></div>
+<script>
+var questions=[
+  {q:'What does typeof null return in JavaScript?',opts:['null','undefined','object','boolean'],correct:2,
+   explain:'This is a known JavaScript quirk. typeof null returns "object" — a bug in the original implementation that was never fixed for backwards compatibility.'},
+  {q:'Which array method creates a new array with transformed elements?',opts:['forEach','filter','map','reduce'],correct:2,
+   explain:'map() returns a new array with each element transformed by the callback. forEach() returns undefined. filter() returns elements that pass a test.'},
+  {q:'What is the output of: console.log(0.1 + 0.2 === 0.3)?',opts:['true','false','NaN','Error'],correct:1,
+   explain:'false — floating point arithmetic is imprecise in binary. 0.1 + 0.2 = 0.30000000000000004. Compare with a tolerance instead: Math.abs(a - b) < 0.0001.'},
+  {q:'A function declared with const can be called before its declaration. True or false?',opts:['True — all functions are hoisted','False — only function declarations are hoisted','True — const is block-scoped','True — arrow functions are always hoisted'],correct:1,
+   explain:'Only function declarations (function foo(){}) are hoisted. const/let arrow functions are NOT hoisted. Calling them before their line throws a ReferenceError.'},
+];
+var current=0,score=0,answered=false;
+function render(){
+  var app=document.getElementById('app');
+  if(current>=questions.length){
+    app.innerHTML='<div class="score"><div class="score-num">'+score+' / '+questions.length+'</div>'+
+      '<div class="score-label">'+(score===questions.length?'Perfect score!':score>=3?'Great job!':'Keep practising!')+
+      '<br>Score saved to localStorage</div>'+
+      '<button class="restart" onclick="restart()">Restart</button></div>';
+    localStorage.setItem('quiz_score',score);
+    return;
+  }
+  var q=questions[current];
+  app.innerHTML='<div class="question-card">'+
+    '<div class="q-text">Q'+(current+1)+'. '+q.q+'</div>'+
+    '<div class="options">'+
+    q.opts.map(function(o,i){return '<button class="opt" onclick="answer('+i+')">'+o+'</button>';}).join('')+
+    '</div><div id="explain" style="margin-top:12px;font-size:11px;color:#555;display:none;line-height:1.7"></div></div>'+
+    '<div style="color:#555;font-size:11px">Question '+(current+1)+' of '+questions.length+' — Score: '+score+'</div>';
+}
+function answer(i){
+  if(answered)return;answered=true;
+  var q=questions[current];
+  var opts=document.querySelectorAll('.opt');
+  opts[i].className='opt '+(i===q.correct?'correct':'wrong');
+  opts[q.correct].className='opt correct';
+  opts.forEach(function(o){o.disabled=true;});
+  document.getElementById('explain').style.display='block';
+  document.getElementById('explain').textContent=q.explain;
+  if(i===q.correct)score++;
+  setTimeout(function(){current++;answered=false;render();},2200);
+}
+function restart(){current=0;score=0;answered=false;render();}
+render();
+</script></body></html>`,
           challenges: ["Add a progress bar that fills as the user progresses through questions", "Add a timer that counts down from 30 seconds per question", "Add a high score tracker using localStorage", "Add a review screen at the end showing each question and the user's answer"]
         },
         quiz: {
@@ -1441,7 +2361,50 @@ GitHub's API, Stripe's API, Shopify's API — all built on frameworks equivalent
 <strong>Still stuck?</strong> Test the route directly with Postman or Thunder Client before connecting the frontend. Send the exact request you expect the frontend to send. If it works in Postman but not from the browser, the problem is in the frontend fetch call, not the server.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.server{background:#0a1a0a;border:1px solid #2a4a2a;border-radius:10px;padding:20px;margin-bottom:20px}
+.server-label{color:#6dbf6d;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.routes{display:grid;gap:8px}
+.route{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#111;border:1px solid #222;border-radius:6px;cursor:pointer;transition:border-color 0.15s}
+.route:hover{border-color:#6dbf6d}
+.method{padding:3px 8px;border-radius:4px;font-size:10px;font-weight:bold;min-width:44px;text-align:center}
+.GET{background:#1a3a1a;color:#6dbf6d}.POST{background:#1a2a3a;color:#7eb8c8}.DELETE{background:#3a1a1a;color:#ff6b6b}.PATCH{background:#2a2a1a;color:#c8a96e}
+.path{color:#fff;font-size:12px;min-width:140px}.route-desc{color:#666;font-size:11px;line-height:1.4}
+.response{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;min-height:60px;font-size:11px;color:#c8a96e}
+.response-label{color:#555;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+</style></head><body>
+<h2>Express Route Explorer</h2>
+<p class="sub">Click a route to see what it returns. This simulates a real Express server.</p>
+<div class="server">
+<div class="server-label">Running on localhost:3000</div>
+<div class="routes" id="routes"></div>
+</div>
+<div class="response-label">Response</div>
+<div class="response" id="response">Select a route above to see the simulated response...</div>
+<script>
+var routes=[
+  {method:'GET',path:'/api/users',desc:'List all users',response:{data:[{id:1,name:'Alex Chen'},{id:2,name:'Jordan Lee'}],total:2}},
+  {method:'GET',path:'/api/users/:id',desc:'Get user by ID (e.g. /api/users/1)',response:{id:1,name:'Alex Chen',email:'alex@example.com',role:'developer'}},
+  {method:'POST',path:'/api/users',desc:'Create a new user (body: {name, email})',response:{id:3,name:'New User',email:'new@example.com',createdAt:'2026-05-16T12:00:00Z'}},
+  {method:'PATCH',path:'/api/users/:id',desc:'Update a user field',response:{id:1,name:'Alex Chen Updated',email:'alex@example.com'}},
+  {method:'DELETE',path:'/api/users/:id',desc:'Delete a user',response:{message:'User 1 deleted successfully',deleted:true}},
+];
+var routesEl=document.getElementById('routes');
+var responseEl=document.getElementById('response');
+routes.forEach(function(r){
+  var div=document.createElement('div');div.className='route';
+  div.innerHTML='<span class="method '+r.method+'">'+r.method+'</span>'+
+    '<span class="path">'+r.path+'</span>'+
+    '<span class="route-desc">'+r.desc+'</span>';
+  div.onclick=function(){responseEl.textContent=JSON.stringify(r.response,null,2);};
+  routesEl.appendChild(div);
+});
+</script></body></html>`,
           challenges: ["Add a new GET route for /api/products that returns an array of product objects", "Add middleware that logs the request method and path for every request", "Add a POST route that reads data from req.body and returns it back", "Add a 404 handler for any route that doesn't match the defined routes"]
         },
         quiz: {
@@ -1481,7 +2444,57 @@ Profile before optimising. The query that looks slow might be fast. The query th
 <strong>Still stuck?</strong> Add try/catch to every database function and log the full error including the error.code. PostgreSQL error codes are specific — 23505 means a unique constraint violation (duplicate data), 23503 means a foreign key violation (referencing a row that doesn't exist). The code tells you exactly what's wrong.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.tabs{display:flex;gap:8px;margin-bottom:16px;border-bottom:1px solid #222;padding-bottom:12px}
+.tab{background:none;border:1px solid #333;color:#888;border-radius:6px;padding:6px 14px;font-family:inherit;font-size:11px;cursor:pointer}
+.tab.active{border-color:#c87e9a;color:#c87e9a}
+.query{background:#0a1a2a;border:1px solid #2a4a6a;border-radius:8px;padding:16px;margin-bottom:16px;font-size:11px;color:#a8d5f5;white-space:pre-wrap}
+.results{background:#111;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden}
+.results table{width:100%;border-collapse:collapse}
+.results th{background:#1a1a1a;color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid #222}
+.results td{padding:10px 14px;border-bottom:1px solid #1a1a1a;color:#ccc;font-size:11px}
+.results tr:last-child td{border-bottom:none}
+.id-col{color:#c87e9a}.name-col{color:#fff}.status-col{color:#6dbf6d}
+</style></head><body>
+<h2>Database Query Explorer</h2>
+<p class="sub">Select a query pattern to see the SQL and simulated results.</p>
+<div class="tabs" id="tabs"></div>
+<div class="query" id="query"></div>
+<div class="results" id="results"></div>
+<script>
+var queries=[
+  {label:'SELECT all',sql:'SELECT * FROM users\\nORDER BY created_at DESC\\nLIMIT 10;',
+   cols:['id','name','email','role'],
+   rows:[[1,'Alex Chen','alex@example.com','admin'],[2,'Jordan Lee','jordan@example.com','developer'],[3,'Sam Park','sam@example.com','developer']]},
+  {label:'WHERE filter',sql:"SELECT id, name, email\\nFROM users\\nWHERE role = 'developer'\\nAND created_at > '2025-01-01';",
+   cols:['id','name','email'],
+   rows:[[2,'Jordan Lee','jordan@example.com'],[3,'Sam Park','sam@example.com']]},
+  {label:'JOIN query',sql:'SELECT u.name, p.title, p.published_at\\nFROM users u\\nINNER JOIN posts p ON p.author_id = u.id\\nWHERE p.status = \\'published\\'\\nORDER BY p.published_at DESC;',
+   cols:['name','title','published_at'],
+   rows:[['Alex Chen','Building REST APIs','2026-05-10'],['Jordan Lee','Async JavaScript','2026-05-08']]},
+  {label:'Transaction',sql:'BEGIN;\\nINSERT INTO orders (user_id, total)\\nVALUES (1, 99.99)\\nRETURNING id;\\nUPDATE inventory\\nSET stock = stock - 1\\nWHERE product_id = 42;\\nCOMMIT;',
+   cols:['operation','status','rows_affected'],
+   rows:[['BEGIN','OK','-'],['INSERT orders','OK','1'],['UPDATE inventory','OK','1'],['COMMIT','OK','-']]},
+];
+var tabsEl=document.getElementById('tabs');var queryEl=document.getElementById('query');var resultsEl=document.getElementById('results');
+function show(i){
+  var q=queries[i];queryEl.textContent=q.sql;
+  var th=q.cols.map(function(c){return '<th>'+c+'</th>';}).join('');
+  var tb=q.rows.map(function(r){return '<tr>'+r.map(function(v){return '<td>'+v+'</td>';}).join('')+'</tr>';}).join('');
+  resultsEl.innerHTML='<table><thead><tr>'+th+'</tr></thead><tbody>'+tb+'</tbody></table>';
+  document.querySelectorAll('.tab').forEach(function(t,j){t.className='tab'+(j===i?' active':'');});
+}
+queries.forEach(function(q,i){
+  var btn=document.createElement('button');btn.className='tab'+(i===0?' active':'');
+  btn.textContent=q.label;btn.onclick=function(){show(i);};tabsEl.appendChild(btn);
+});
+show(0);
+</script></body></html>`,
           challenges: ["Write a function that retrieves a single user by ID", "Write a function that creates a new user and returns the created record", "Add error handling for when the user is not found (return 404)", "Write a transaction that creates a post and increments the author's post count atomically"]
         },
         quiz: {
@@ -1523,7 +2536,63 @@ Design your API as if a developer you've never met needs to use it without docum
 <strong>Still stuck?</strong> Test your API with Postman or curl to isolate it from the frontend. If the API returns correct data in Postman but the frontend breaks, the problem is how the frontend is parsing the response — not the API itself.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.endpoint-row{display:flex;align-items:flex-start;gap:12px;padding:12px;background:#111;border:1px solid #222;border-radius:8px;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s}
+.endpoint-row:hover,.endpoint-row.active{border-color:#c87e9a}
+.badge{font-size:10px;font-weight:bold;padding:3px 8px;border-radius:4px;min-width:50px;text-align:center;flex-shrink:0}
+.GET{background:#1a3a1a;color:#6dbf6d}.POST{background:#1a2a3a;color:#7eb8c8}
+.PUT{background:#2a2a0a;color:#c8a96e}.DELETE{background:#3a0a0a;color:#ff6b6b}
+.ep-path{color:#fff;font-size:13px;min-width:180px}.ep-desc{color:#666;font-size:11px}
+.detail-panel{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:16px;margin-top:16px;display:none}
+.detail-panel.visible{display:block}
+.section-title{color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;margin-top:12px}
+.code-block{background:#0a0a0a;border:1px solid #222;border-radius:6px;padding:12px;font-size:11px;color:#c8a96e;white-space:pre-wrap}
+</style></head><body>
+<h2>REST API Reference</h2>
+<p class="sub">Click an endpoint to see request/response shapes and status codes.</p>
+<div id="endpoints"></div>
+<div class="detail-panel" id="detail"></div>
+<script>
+var endpoints=[
+  {method:'GET',path:'/api/users',desc:'List all users',
+   request:'No body required',
+   response:'200 OK\\n{\\n  "data": [\\n    { "id": 1, "name": "Alex Chen", "email": "alex@example.com" }\\n  ],\\n  "total": 1\\n}'},
+  {method:'POST',path:'/api/users',desc:'Create a new user',
+   request:'Content-Type: application/json\\n{\\n  "name": "Alex Chen",\\n  "email": "alex@example.com"\\n}',
+   response:'201 Created\\n{\\n  "id": 2,\\n  "name": "Alex Chen",\\n  "email": "alex@example.com",\\n  "createdAt": "2026-05-16T12:00:00Z"\\n}'},
+  {method:'GET',path:'/api/users/:id',desc:'Get user by ID',
+   request:'No body required',
+   response:'200 OK\\n{\\n  "id": 1,\\n  "name": "Alex Chen",\\n  "email": "alex@example.com"\\n}\\n\\n404 Not Found\\n{\\n  "error": "User not found"\\n}'},
+  {method:'PUT',path:'/api/users/:id',desc:'Replace user record',
+   request:'Content-Type: application/json\\n{\\n  "name": "Updated Name",\\n  "email": "updated@example.com"\\n}',
+   response:'200 OK\\n{\\n  "id": 1,\\n  "name": "Updated Name",\\n  "email": "updated@example.com"\\n}'},
+  {method:'DELETE',path:'/api/users/:id',desc:'Delete user',
+   request:'No body required',
+   response:'200 OK\\n{\\n  "message": "User deleted",\\n  "deleted": true\\n}'},
+];
+var epEl=document.getElementById('endpoints');
+var detailEl=document.getElementById('detail');
+endpoints.forEach(function(ep,i){
+  var div=document.createElement('div');div.className='endpoint-row';
+  div.innerHTML='<span class="badge '+ep.method+'">'+ep.method+'</span>'+
+    '<span class="ep-path">'+ep.path+'</span>'+
+    '<span class="ep-desc">'+ep.desc+'</span>';
+  div.onclick=function(){
+    document.querySelectorAll('.endpoint-row').forEach(function(e){e.classList.remove('active');});
+    div.classList.add('active');
+    detailEl.className='detail-panel visible';
+    detailEl.innerHTML='<strong>'+ep.method+' '+ep.path+'</strong>'+
+      '<div class="section-title">Request</div><div class="code-block">'+ep.request+'</div>'+
+      '<div class="section-title">Response</div><div class="code-block">'+ep.response+'</div>';
+  };
+  epEl.appendChild(div);
+});
+</script></body></html>`,
           challenges: ["Add input validation that returns a 400 error if required fields are missing", "Add pagination to the list endpoint: accept page and limit query parameters", "Add a search endpoint that filters results by a query parameter", "Document your API endpoints in the code comments in the format: METHOD /path — description"]
         },
         quiz: {
@@ -1563,7 +2632,59 @@ CORS (Cross-Origin Resource Sharing) is the browser's mechanism for restricting 
 <strong>Prevention:</strong> Use git-secrets or pre-commit hooks that block commits containing credential patterns. The few minutes of setup prevents this conversation.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.checker{display:grid;gap:10px;margin-bottom:20px}
+.item{background:#111;border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;border:1px solid transparent}
+.item.safe{border-color:#2a4a2a}.item.unsafe{border-color:#4a2a2a}
+.icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.content{flex:1}
+.check-title{color:#fff;font-size:12px;margin-bottom:4px}
+.check-detail{color:#888;font-size:11px;line-height:1.5}
+.label{font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px}
+.unsafe-label{color:#ff6b6b}.safe-label{color:#6dbf6d}
+.code{color:#c8a96e;font-family:'IBM Plex Mono',monospace;font-size:11px;background:#0a0a0a;padding:2px 6px;border-radius:3px}
+</style></head><body>
+<h2>Security Checklist</h2>
+<p class="sub">Common security mistakes and their fixes.</p>
+<div class="label unsafe-label">These are vulnerabilities — fix them before shipping</div>
+<div class="checker">
+<div class="item unsafe"><span class="icon">🚨</span><div class="content">
+<div class="check-title">SQL Injection — String concatenation in queries</div>
+<div class="check-detail">Bad: <span class="code">"SELECT * FROM users WHERE id = " + req.params.id</span><br>
+Fix: Parameterised query — <span class="code">db.query("SELECT * FROM users WHERE id = $1", [req.params.id])</span></div>
+</div></div>
+<div class="item unsafe"><span class="icon">🚨</span><div class="content">
+<div class="check-title">Secrets in code</div>
+<div class="check-detail">Bad: <span class="code">const API_KEY = "sk_live_abc123"</span> committed to Git<br>
+Fix: Move to <span class="code">.env</span> file, add <span class="code">.env</span> to <span class="code">.gitignore</span>, use <span class="code">process.env.API_KEY</span></div>
+</div></div>
+<div class="item unsafe"><span class="icon">🚨</span><div class="content">
+<div class="check-title">Unvalidated user input</div>
+<div class="check-detail">Bad: Inserting req.body.comment directly into HTML<br>
+Fix: Sanitise with DOMPurify or escape special chars. Never trust user input.</div>
+</div></div>
+</div>
+<div class="label safe-label">These protect your application — implement them</div>
+<div class="checker">
+<div class="item safe"><span class="icon">✓</span><div class="content">
+<div class="check-title">Helmet.js middleware</div>
+<div class="check-detail"><span class="code">app.use(helmet())</span> sets secure HTTP headers in one line. Prevents clickjacking, XSS, and sniffing attacks.</div>
+</div></div>
+<div class="item safe"><span class="icon">✓</span><div class="content">
+<div class="check-title">CORS configured explicitly</div>
+<div class="check-detail"><span class="code">cors({ origin: 'https://yourapp.com' })</span> — never use <span class="code">origin: '*'</span> in production with authentication.</div>
+</div></div>
+<div class="item safe"><span class="icon">✓</span><div class="content">
+<div class="check-title">Rate limiting</div>
+<div class="check-detail"><span class="code">express-rate-limit</span> — limit each IP to 100 requests per 15 minutes. Prevents brute force and abuse.</div>
+</div></div>
+</div>
+</body></html>`,
           challenges: ["Move the hardcoded API key in the code to a .env file", "Add CORS middleware that only allows requests from http://localhost:3000", "Add rate limiting middleware that blocks IPs making more than 100 requests per minute", "Identify and fix the SQL injection vulnerability in the code"]
         },
         quiz: {
@@ -1607,7 +2728,71 @@ Deployment is not the end. It's where the real work begins: watching logs, respo
 <strong>Still stuck?</strong> Compare your .env file to the environment variables set in the platform dashboard. A missing variable causes the exact application startup failure that's hardest to diagnose without logs.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.pipeline{display:grid;gap:4px;margin-bottom:20px}
+.step{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:#111;border:1px solid #222;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.step.done{border-color:#2a4a2a;background:#0a1a0a}
+.step.active{border-color:#c8a96e;background:#1a1a0a}
+.step-num{width:24px;height:24px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;color:#fff}
+.step.done .step-num{background:#2a4a2a;color:#6dbf6d}
+.step.active .step-num{background:#3a3a0a;color:#c8a96e}
+.step-content{flex:1}
+.step-title{color:#fff;font-size:12px;margin-bottom:3px}
+.step-desc{color:#555;font-size:11px;line-height:1.5}
+.step.done .step-title{color:#6dbf6d}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:10px 20px;font-family:inherit;font-size:12px;cursor:pointer;margin-top:8px}
+button:hover{background:#d89ab5}
+.status{color:#555;font-size:11px;margin-top:12px}
+</style></head><body>
+<h2>Deployment Pipeline</h2>
+<p class="sub">Simulate a deploy from code push to live. Click Run Deploy.</p>
+<div class="pipeline" id="pipeline"></div>
+<button onclick="runDeploy()">Run Deploy</button>
+<div class="status" id="status"></div>
+<script>
+var steps=[
+  {title:'Push to main',desc:'git push origin main triggers the pipeline'},
+  {title:'Run tests',desc:'npm test — all tests must pass to proceed'},
+  {title:'Build application',desc:'npm run build — create optimised production bundle'},
+  {title:'Run security scan',desc:'Check dependencies for known vulnerabilities'},
+  {title:'Deploy to staging',desc:'Deploy to staging environment for final checks'},
+  {title:'Health check',desc:'GET /health must return 200 OK within 10 seconds'},
+  {title:'Deploy to production',desc:'Zero-downtime deploy — new instances before old ones stop'},
+  {title:'Smoke test',desc:'Automated check of critical user paths in production'},
+];
+var currentStep=-1;
+var pipelineEl=document.getElementById('pipeline');
+var statusEl=document.getElementById('status');
+function renderSteps(){
+  pipelineEl.innerHTML=steps.map(function(s,i){
+    var cls='step'+(i<currentStep?' done':i===currentStep?' active':'');
+    return '<div class="'+cls+'">'+
+      '<div class="step-num">'+(i<currentStep?'✓':(i+1))+'</div>'+
+      '<div class="step-content"><div class="step-title">'+s.title+'</div>'+
+      '<div class="step-desc">'+s.desc+'</div></div></div>';
+  }).join('');
+}
+function runDeploy(){
+  currentStep=0;
+  document.querySelector('button').disabled=true;
+  renderSteps();
+  statusEl.textContent='Deploying...';
+  function nextStep(){
+    currentStep++;
+    renderSteps();
+    if(currentStep>=steps.length){statusEl.textContent='✓ Deployed to production successfully';document.querySelector('button').disabled=false;currentStep=-1;return;}
+    var delay=600+Math.random()*800;
+    setTimeout(nextStep,delay);
+  }
+  setTimeout(nextStep,800);
+}
+renderSteps();
+</script></body></html>`,
           challenges: ["Write the exact sequence of commands to deploy a Node.js app to Railway", "Write a health check endpoint GET /health that returns {status: 'ok', uptime: process.uptime()}", "Add environment-specific configuration — different database URLs for development and production", "Set up a basic monitoring check: a script that hits your /health endpoint every 5 minutes and logs if it fails"]
         },
         quiz: {
@@ -1647,7 +2832,76 @@ Treat your backend API as if it belongs to a completely separate team. Test it w
 <strong>Still stuck?</strong> A CORS error only appears in browsers. If you test with curl or Postman and it works, the API is fine. The CORS error is specifically the browser blocking the cross-origin request. Configure the cors middleware with the exact origin your frontend is running on, including the port number.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#c87e9a;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.toolbar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:8px 16px;font-family:inherit;font-size:11px;cursor:pointer;letter-spacing:0.5px}
+button:hover{background:#d89ab5}button:disabled{opacity:0.4}
+.posts{display:grid;gap:10px;margin-bottom:16px}
+.post{background:#111;border:1px solid #222;border-radius:8px;padding:14px}
+.post-title{color:#fff;font-size:13px;margin-bottom:4px}
+.post-body{color:#777;font-size:11px;line-height:1.5}
+.post-meta{color:#555;font-size:10px;margin-top:6px}
+.loading{color:#666;font-style:italic;padding:16px 0}
+.err{color:#ff6b6b;padding:16px 0}
+.ok{color:#6dbf6d;font-size:11px;margin-bottom:8px}
+</style></head><body>
+<h2>Frontend ↔ Backend</h2>
+<p class="sub">Fetch posts from JSONPlaceholder — simulating a real backend API.</p>
+<div class="toolbar">
+<button id="load-btn" onclick="loadPosts()">Load Posts (GET)</button>
+<button id="create-btn" onclick="createPost()" disabled>Create Post (POST)</button>
+</div>
+<div id="status"></div>
+<div id="posts"></div>
+<script>
+var posts=[];
+async function loadPosts(){
+  var btn=document.getElementById('load-btn');
+  var postsEl=document.getElementById('posts');
+  var statusEl=document.getElementById('status');
+  btn.disabled=true;
+  postsEl.innerHTML='<p class="loading">Fetching from API...</p>';
+  statusEl.innerHTML='';
+  try{
+    var res=await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    posts=await res.json();
+    statusEl.innerHTML='<p class="ok">✓ Loaded '+posts.length+' posts — GET /api/posts returned 200 OK</p>';
+    renderPosts();
+    document.getElementById('create-btn').disabled=false;
+  }catch(e){postsEl.innerHTML='<p class="err">Error: '+e.message+'</p>';}
+  btn.disabled=false;
+}
+async function createPost(){
+  var btn=document.getElementById('create-btn');
+  var statusEl=document.getElementById('status');
+  btn.disabled=true;
+  try{
+    var res=await fetch('https://jsonplaceholder.typicode.com/posts',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({title:'My New Post',body:'Created by the frontend at '+new Date().toLocaleTimeString(),userId:1})
+    });
+    var created=await res.json();
+    statusEl.innerHTML='<p class="ok">✓ POST /api/posts returned 201 Created — id: '+created.id+'</p>';
+    posts.unshift(created);
+    renderPosts();
+  }catch(e){statusEl.innerHTML='<p class="err">Error: '+e.message+'</p>';}
+  btn.disabled=false;
+}
+function renderPosts(){
+  document.getElementById('posts').innerHTML=posts.map(function(p){
+    return '<div class="post"><div class="post-title">'+p.title+'</div>'+
+      '<div class="post-body">'+p.body.slice(0,100)+'...</div>'+
+      '<div class="post-meta">ID: '+p.id+' · User: '+p.userId+'</div></div>';
+  }).join('');
+}
+</script></body></html>`,
           challenges: ["Add a loading state that shows a spinner while the request is in progress", "Add error handling that shows a specific message for 401 (unauthorized) vs 404 (not found) vs 500 (server error)", "Add an Authorization header with a JWT token to the fetch request", "Implement optimistic UI: update the list immediately when a new item is added, before the server confirms"]
         },
         quiz: {
@@ -1687,7 +2941,99 @@ The order matters. A working backend you can test with Postman before the fronte
 <strong>Still stuck?</strong> Add console.log(req.method, req.path, req.body) at the top of every route. This shows you exactly what the server receives. If the route isn't logging, the request isn't reaching Express. If it's logging but req.body is empty, body-parsing middleware is missing.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:13px;height:100vh;display:grid;grid-template-rows:auto 1fr auto}
+header{background:#111;border-bottom:1px solid #222;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+header h1{font-size:16px;color:#c87e9a}
+header span{color:#555;font-size:11px}
+main{display:grid;grid-template-columns:260px 1fr;height:100%;overflow:hidden}
+.sidebar{background:#0d0d0d;border-right:1px solid #1a1a1a;overflow-y:auto;padding:12px}
+.sidebar-label{color:#444;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:8px 8px 4px}
+.note-item{padding:10px 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;margin-bottom:2px}
+.note-item:hover{background:#111;border-color:#222}
+.note-item.active{background:#1a1a2a;border-color:#3a3a5a}
+.note-item-title{color:#fff;font-size:12px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-item-preview{color:#555;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.editor{display:flex;flex-direction:column;height:100%}
+.editor-toolbar{padding:12px 20px;border-bottom:1px solid #1a1a1a;display:flex;gap:8px}
+button{background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-family:inherit;font-size:11px;cursor:pointer}
+button:hover{background:#d89ab5}
+.del-btn{background:#333;color:#888;border:1px solid #444}
+.del-btn:hover{border-color:#ff6b6b;color:#ff6b6b;background:transparent}
+#note-title{flex:1;background:#111;border:1px solid #2a2a2a;color:#fff;padding:14px 20px;font-family:inherit;font-size:16px;border-radius:0;border-left:none;border-right:none}
+#note-title:focus{outline:none}
+#note-body{flex:1;background:#0d0d0d;border:none;color:#ccc;padding:20px;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:none;line-height:1.7}
+#note-body:focus{outline:none}
+</style></head><body>
+<header><h1>Notes App</h1><span id="save-status">All changes saved</span></header>
+<main>
+<div class="sidebar">
+<div class="sidebar-label">Notes</div>
+<div id="sidebar-notes"></div>
+<button style="width:100%;margin-top:8px;background:#1a1a2a;border:1px dashed #333;color:#666" onclick="newNote()">+ New Note</button>
+</div>
+<div class="editor">
+<div class="editor-toolbar">
+<button onclick="saveNote()">Save</button>
+<button class="del-btn" onclick="deleteNote()">Delete</button>
+</div>
+<input type="text" id="note-title" placeholder="Note title...">
+<textarea id="note-body" placeholder="Start writing your note here..."></textarea>
+</div>
+</main>
+<script>
+var notes=JSON.parse(localStorage.getItem('fullstack_notes'))||[{id:1,title:'Welcome',body:'This is a full-stack style notes app. Your notes are stored in localStorage (simulating a database). Create, edit, and delete notes.',date:new Date().toISOString()}];
+var currentId=notes[0]?notes[0].id:null;
+var nextId=notes.length?Math.max.apply(null,notes.map(function(n){return n.id;}))+1:1;
+var saveTimeout=null;
+function save(){localStorage.setItem('fullstack_notes',JSON.stringify(notes));}
+function renderSidebar(){
+  var el=document.getElementById('sidebar-notes');
+  el.innerHTML=notes.map(function(n){
+    return '<div class="note-item'+(n.id===currentId?' active':'')+'\\" onclick="selectNote('+n.id+')">'+
+      '<div class="note-item-title">'+(n.title||'Untitled')+'</div>'+
+      '<div class="note-item-preview">'+(n.body||'').slice(0,40)+'</div></div>';
+  }).join('');
+}
+function selectNote(id){
+  currentId=id;
+  var n=notes.find(function(n){return n.id===id;});
+  if(!n)return;
+  document.getElementById('note-title').value=n.title;
+  document.getElementById('note-body').value=n.body;
+  renderSidebar();
+}
+function newNote(){
+  var n={id:nextId++,title:'New Note',body:'',date:new Date().toISOString()};
+  notes.unshift(n);currentId=n.id;save();selectNote(n.id);
+}
+function saveNote(){
+  var n=notes.find(function(n){return n.id===currentId;});
+  if(!n)return;
+  n.title=document.getElementById('note-title').value||'Untitled';
+  n.body=document.getElementById('note-body').value;
+  save();renderSidebar();
+  document.getElementById('save-status').textContent='Saved at '+new Date().toLocaleTimeString();
+}
+function deleteNote(){
+  if(!currentId)return;
+  notes=notes.filter(function(n){return n.id!==currentId;});
+  currentId=notes[0]?notes[0].id:null;
+  save();
+  if(currentId){selectNote(currentId);}
+  else{document.getElementById('note-title').value='';document.getElementById('note-body').value='';}
+  renderSidebar();
+}
+['note-title','note-body'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){
+    document.getElementById('save-status').textContent='Unsaved changes';
+    clearTimeout(saveTimeout);saveTimeout=setTimeout(saveNote,1500);
+  });
+});
+if(currentId)selectNote(currentId);else renderSidebar();
+</script></body></html>`,
           challenges: ["Connect the frontend fetch calls to the backend API endpoints", "Replace the in-memory array with real database queries", "Add a loading state for each async operation", "Deploy both frontend and backend and update the frontend API URL to point to the live backend"]
         },
         quiz: {
@@ -1725,7 +3071,107 @@ Common mistakes: not hashing passwords with bcrypt before storage, not verifying
 <strong>Still stuck?</strong> Test with two different accounts in two different browser windows (or one regular, one incognito). Create a note in each. Confirm each account only sees its own notes. This test exposes data isolation bugs that unit tests often miss.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:0;font-size:13px;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.auth-container{width:100%;max-width:400px;padding:24px}
+.card{background:#111;border:1px solid #2a2a2a;border-radius:12px;padding:32px}
+.card h2{color:#c87e9a;font-size:18px;margin-bottom:4px}
+.card .sub{color:#555;font-size:11px;margin-bottom:24px}
+.tabs{display:flex;gap:0;margin-bottom:24px;border-radius:8px;overflow:hidden;border:1px solid #222}
+.tab{flex:1;background:none;border:none;color:#666;padding:10px;font-family:inherit;font-size:12px;cursor:pointer}
+.tab.active{background:#c87e9a;color:#fff}
+.field{margin-bottom:14px}
+label{display:block;color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+input{width:100%;background:#0a0a0a;border:1px solid #333;color:#fff;padding:10px 12px;border-radius:6px;font-family:inherit;font-size:13px}
+input:focus{outline:none;border-color:#c87e9a}
+.submit-btn{width:100%;background:#c87e9a;color:#fff;border:none;border-radius:6px;padding:12px;font-family:inherit;font-size:13px;cursor:pointer;margin-top:8px;letter-spacing:0.5px}
+.submit-btn:hover{background:#d89ab5}
+.msg{padding:10px 12px;border-radius:6px;font-size:12px;margin-top:12px;text-align:center}
+.msg.ok{background:#0a2a0a;color:#6dbf6d;border:1px solid #2a4a2a}
+.msg.err{background:#2a0a0a;color:#ff6b6b;border:1px solid #4a2a2a}
+.token-display{background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:16px;margin-top:20px;word-break:break-all;font-size:10px;color:#c8a96e;line-height:1.6}
+.dashboard{text-align:center;padding:8px}
+.dashboard p{color:#aaa;font-size:12px;margin-bottom:16px}
+.logout-btn{background:#333;color:#888;border:1px solid #444;border-radius:6px;padding:8px 20px;font-family:inherit;font-size:12px;cursor:pointer}
+.logout-btn:hover{border-color:#c87e9a;color:#c87e9a}
+</style></head><body>
+<div class="auth-container">
+<div class="card" id="auth-card">
+<h2>Authentication</h2>
+<p class="sub">Simulation of JWT-based login flow</p>
+<div class="tabs">
+<button class="tab active" onclick="setTab('login')">Login</button>
+<button class="tab" onclick="setTab('register')">Register</button>
+</div>
+<div id="form-area"></div>
+</div>
+</div>
+<script>
+var currentTab='login';
+var fakeUsers=[{email:'demo@example.com',password:'password123',name:'Demo User'}];
+function setTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab').forEach(function(t,i){
+    t.className='tab'+(i===(tab==='login'?0:1)?' active':'');
+  });
+  renderForm();
+}
+function renderForm(){
+  var area=document.getElementById('form-area');
+  if(currentTab==='login'){
+    area.innerHTML='<div class="field"><label>Email</label><input type="email" id="email" value="demo@example.com"></div>'+
+      '<div class="field"><label>Password</label><input type="password" id="password" value="password123"></div>'+
+      '<button class="submit-btn" onclick="doLogin()">Login</button><div id="msg"></div>';
+  }else{
+    area.innerHTML='<div class="field"><label>Name</label><input type="text" id="name" placeholder="Your name"></div>'+
+      '<div class="field"><label>Email</label><input type="email" id="email" placeholder="your@email.com"></div>'+
+      '<div class="field"><label>Password</label><input type="password" id="password" placeholder="Min 8 chars"></div>'+
+      '<button class="submit-btn" onclick="doRegister()">Create Account</button><div id="msg"></div>';
+  }
+}
+function makeJWT(payload){
+  var header=btoa(JSON.stringify({alg:'HS256',typ:'JWT'}));
+  var body=btoa(JSON.stringify(payload));
+  var sig=btoa('simulated_signature_'+Date.now());
+  return header+'.'+body+'.'+sig;
+}
+function showMsg(text,type){document.getElementById('msg').innerHTML='<div class="msg '+type+'">'+text+'</div>';}
+function doLogin(){
+  var email=document.getElementById('email').value;
+  var pass=document.getElementById('password').value;
+  var user=fakeUsers.find(function(u){return u.email===email&&u.password===pass;});
+  if(!user){showMsg('Invalid email or password','err');return;}
+  var token=makeJWT({sub:1,email:user.email,name:user.name,exp:Date.now()+3600000});
+  localStorage.setItem('auth_token',token);
+  showDashboard(user,token);
+}
+function doRegister(){
+  var name=document.getElementById('name').value;
+  var email=document.getElementById('email').value;
+  var pass=document.getElementById('password').value;
+  if(!name||!email||!pass){showMsg('All fields required','err');return;}
+  if(pass.length<8){showMsg('Password must be at least 8 characters','err');return;}
+  if(fakeUsers.find(function(u){return u.email===email;})){showMsg('Email already registered','err');return;}
+  fakeUsers.push({email:email,password:pass,name:name});
+  showMsg('Account created! Logging you in...','ok');
+  setTimeout(function(){setTab('login');document.getElementById('email').value=email;},1000);
+}
+function showDashboard(user,token){
+  document.getElementById('auth-card').innerHTML='<h2>Welcome, '+user.name+'</h2>'+
+    '<div class="sub">You are authenticated</div>'+
+    '<div class="dashboard">'+
+    '<p>The JWT below would be sent in the Authorization header<br>of every subsequent API request.</p>'+
+    '<div class="token-display">Authorization: Bearer<br>'+token+'</div>'+
+    '</div>'+
+    '<button class="logout-btn" onclick="logout()" style="margin-top:16px;width:100%">Logout</button>';
+}
+function logout(){localStorage.removeItem('auth_token');document.getElementById('auth-card').innerHTML='';init();}
+function init(){document.getElementById('auth-card').innerHTML='<h2>Authentication</h2><p class="sub">Simulation of JWT-based login flow</p><div class="tabs"><button class="tab active" onclick="setTab(\\'login\\')">Login</button><button class="tab" onclick="setTab(\\'register\\')">Register</button></div><div id="form-area"></div>';renderForm();}
+var savedToken=localStorage.getItem('auth_token');
+if(savedToken){showDashboard({name:'Demo User'},savedToken);}else{renderForm();}
+</script></body></html>`,
           challenges: ["Implement the register endpoint that hashes the password and creates a user", "Implement the login endpoint that verifies the password and returns a JWT", "Add the auth middleware that verifies the JWT and attaches the user to req", "Update the notes endpoints to filter by the authenticated user's ID"]
         },
         quiz: {
@@ -1950,7 +3396,91 @@ When it's deployed: write a README that explains what the application does, the 
         hint: `DevOps has the highest density of acronyms and tooling in any engineering discipline. The tools are not the job \u2014 they're how the job gets done. The underlying problems (reliability, deployability, observability) existed before any of these tools.\n\n<strong>Best first project:</strong> Take an application you've already built and deploy it properly: containerise it with Docker, run it on a cloud VM, put a reverse proxy (Nginx) in front of it, and add a GitHub Actions workflow that redeploys on every push to main. That end-to-end experience teaches more than any course.\n\n<strong>Learn to read logs:</strong> Every production system generates logs. Learning to grep, tail, and query logs \u2014 in CloudWatch, Datadog, or just a terminal \u2014 is how you diagnose problems after they've already happened. This is one of the highest-leverage DevOps skills.`,
         code: {
           lang: "HTML",
-          starter: 'PLACEHOLDER',
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px}
+h2{color:#7eb8c8;margin-bottom:4px}
+.sub{color:#555;font-size:11px;margin-bottom:20px}
+.pipeline{display:flex;align-items:center;gap:4px;margin-bottom:24px;overflow-x:auto;padding-bottom:8px}
+.stage{background:#111;border:1px solid #222;border-radius:8px;padding:14px 16px;min-width:120px;flex-shrink:0;text-align:center;cursor:pointer;transition:all 0.2s}
+.stage:hover{border-color:#7eb8c8}
+.stage.active{border-color:#7eb8c8;background:#0a1a2a}
+.stage.ok{border-color:#2a4a2a;background:#0a1a0a}
+.stage.fail{border-color:#4a2a2a;background:#1a0a0a}
+.stage-icon{font-size:20px;margin-bottom:6px}
+.stage-name{color:#888;font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.stage-status{font-size:10px;margin-top:4px}
+.stage.ok .stage-status{color:#6dbf6d}
+.stage.fail .stage-status{color:#ff6b6b}
+.arrow{color:#333;font-size:18px;flex-shrink:0}
+.detail{background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:20px;margin-bottom:16px}
+.detail h3{color:#c8a96e;font-size:13px;margin-bottom:12px}
+.detail p{color:#aaa;line-height:1.7;font-size:12px;margin-bottom:8px}
+.detail code{color:#c8a96e;background:#0a0a0a;padding:2px 6px;border-radius:3px;font-size:11px}
+.controls{display:flex;gap:10px}
+button{background:#7eb8c8;color:#000;border:none;border-radius:6px;padding:8px 18px;font-family:inherit;font-size:12px;cursor:pointer}
+button:hover{background:#a8d8e8}
+button.secondary{background:#333;color:#fff;border:1px solid #555}
+button.secondary:hover{border-color:#7eb8c8;color:#7eb8c8}
+</style></head><body>
+<h2>CI/CD Pipeline</h2>
+<p class="sub">Click a stage to learn about it. Press Run Pipeline to simulate a deployment.</p>
+<div class="pipeline" id="pipeline"></div>
+<div class="controls" style="margin-bottom:16px">
+<button onclick="runPipeline()">▶ Run Pipeline</button>
+<button class="secondary" onclick="showFail()">Simulate Failure</button>
+</div>
+<div class="detail" id="detail">
+<h3>What is CI/CD?</h3>
+<p>Continuous Integration (CI) automatically builds and tests every code change. Continuous Deployment (CD) automatically deploys passing builds to production.</p>
+<p>The pipeline below runs on every push to main. If any stage fails, deployment stops and you get an alert. This is how professional teams ship code multiple times per day safely.</p>
+</div>
+<script>
+var stages=[
+  {icon:'📤',name:'Trigger',desc:'A git push to main triggers the pipeline via a webhook. GitHub sends a POST request to your CI server (GitHub Actions, CircleCI, Jenkins) with information about the commit.',yml:'on:\\n  push:\\n    branches: [main]'},
+  {icon:'📦',name:'Install',desc:'Dependencies are installed fresh in a clean environment: npm ci (faster and stricter than npm install — uses package-lock.json exactly). This ensures the build is reproducible.',yml:'- run: npm ci'},
+  {icon:'🔍',name:'Lint',desc:'Code is checked for style errors and potential bugs. ESLint catches issues before they reach review. If lint fails, the pipeline stops here — saving wasted test and deploy time.',yml:'- run: npm run lint'},
+  {icon:'🧪',name:'Test',desc:'All automated tests run. Unit tests, integration tests, snapshot tests. If any test fails, the pipeline stops. No failures reach production.',yml:'- run: npm test -- --coverage'},
+  {icon:'🏗️',name:'Build',desc:'The production build is created: TypeScript compiled, code minified, assets optimised. The output is a deployable artifact — the exact same build that will run in production.',yml:'- run: npm run build'},
+  {icon:'🔒',name:'Security',desc:'Dependencies are scanned for known vulnerabilities (npm audit). Container images are scanned if used. SAST (Static Application Security Testing) checks the code for security issues.',yml:'- run: npm audit --audit-level=high'},
+  {icon:'🚀',name:'Deploy',desc:'The build artifact is deployed to the target environment. Blue-green or rolling deployments mean zero downtime. Health checks confirm the new version is serving traffic before old instances are removed.',yml:'- run: railway deploy'},
+];
+var currentStage=-1;
+var pipelineEl=document.getElementById('pipeline');
+var detailEl=document.getElementById('detail');
+function renderPipeline(failAt){
+  pipelineEl.innerHTML=stages.map(function(s,i){
+    var cls='stage';
+    if(failAt!=null){if(i<failAt)cls+=' ok';else if(i===failAt)cls+=' fail';}
+    else if(currentStage>=0){if(i<currentStage)cls+=' ok';else if(i===currentStage)cls+=' active';}
+    var status='';
+    if(failAt!=null){if(i<failAt)status='<div class="stage-status">✓ passed</div>';else if(i===failAt)status='<div class="stage-status">✗ failed</div>';}
+    return '<div class="'+cls+'" onclick="showStage('+i+')">'+
+      '<div class="stage-icon">'+s.icon+'</div>'+
+      '<div class="stage-name">'+s.name+'</div>'+status+
+      '</div>'+(i<stages.length-1?'<div class="arrow">→</div>':'');
+  }).join('');
+}
+function showStage(i){
+  var s=stages[i];
+  detailEl.innerHTML='<h3>'+s.icon+' '+s.name+'</h3><p>'+s.desc+'</p>'+
+    '<p style="margin-top:12px;color:#555;font-size:10px;letter-spacing:1px">YAML CONFIG</p>'+
+    '<p><code>'+s.yml+'</code></p>';
+}
+function runPipeline(){
+  currentStage=0;renderPipeline(null);
+  detailEl.innerHTML='<h3>Pipeline running...</h3><p>Stages complete in green. Click any stage for details.</p>';
+  function next(){currentStage++;renderPipeline(null);if(currentStage<stages.length)setTimeout(next,700);else{currentStage=-1;detailEl.innerHTML='<h3>✓ Deployed to production</h3><p>All '+stages.length+' stages passed. The new version is live.</p>';}}
+  setTimeout(next,700);
+}
+function showFail(){
+  var failAt=2+Math.floor(Math.random()*3);
+  renderPipeline(failAt);
+  detailEl.innerHTML='<h3>✗ Pipeline failed at '+stages[failAt].name+'</h3><p>Deployment was stopped. The previous version remains in production. Fix the failing stage and push again to retry.</p>';
+}
+renderPipeline(null);
+</script></body></html>`,
           challenges: ["Add a step that randomly fails with a 30% chance and shows an error message in red", "Add a timer that shows total pipeline duration when complete", "Add a step counter showing '3 of 7 steps complete'", "Add a cancel button that stops the pipeline mid-run"]
         },
         quiz: {
