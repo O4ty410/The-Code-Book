@@ -4908,11 +4908,10 @@ function startLandingCanvas() {
   });
 
   // Schedule random spark events
-  var _sparkTimer = null;
   function spark() {
     var idx = Math.floor(Math.random() * ls.length);
     ls[idx].spark = 0.65 + Math.random() * 0.35;
-    _sparkTimer = setTimeout(spark, 60 + Math.random() * 200);
+    canvas._lcSpark = setTimeout(spark, 60 + Math.random() * 200);
   }
   spark();
 
@@ -4969,7 +4968,6 @@ function startLandingCanvas() {
   }
 
   draw();
-  canvas._lcSpark = _sparkTimer;
 }
 
 function stopLandingCanvas() {
