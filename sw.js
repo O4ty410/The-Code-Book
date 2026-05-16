@@ -5,7 +5,7 @@
    cached version when the network is unavailable.
    ============================================================ */
 
-var CACHE = 'codebook-v6';
+var CACHE = 'codebook-v7';
 
 var SHELL = [
   './',
