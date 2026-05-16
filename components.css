@@ -3066,7 +3066,7 @@ body.learn-mode #main-col {
 /* ── Individual card ── */
 .fc-card {
   flex: 1;
-  min-width: 130px;
+  min-width: 160px;
   background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
   border: 1px solid rgba(var(--fc-color-rgb, 200,169,110), 0.25);
   border-radius: 14px;
@@ -3168,8 +3168,6 @@ body.learn-mode #main-col {
   line-height: 1.35;
   margin-bottom: 5px;
   width: 100%;
-  word-break: normal;
-  overflow-wrap: break-word;
 }
 
 /* Section count */
