@@ -2891,7 +2891,7 @@ body.learn-mode #main-col {
   margin-bottom: 16px;
   font-family: 'IBM Plex Mono', monospace;
 }
-.ch-overall-bar-wrap { display: flex; align-items: center; gap: 12px; max-width: 420px; }
+.ch-overall-bar-wrap { display: flex; align-items: center; gap: 12px; max-width: 420px; margin: 0 auto; }
 .ch-overall-bar { flex: 1; height: 3px; background: #1e1e1e; border-radius: 2px; overflow: hidden; }
 .ch-overall-fill { height: 100%; background: #c8a96e; border-radius: 2px; transition: width 0.5s; }
 .ch-overall-label { font-size: 11px; color: #555; white-space: nowrap; }
@@ -3066,7 +3066,7 @@ body.learn-mode #main-col {
 /* ── Individual card ── */
 .fc-card {
   flex: 1;
-  min-width: 118px;
+  min-width: 130px;
   background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
   border: 1px solid rgba(var(--fc-color-rgb, 200,169,110), 0.25);
   border-radius: 14px;
@@ -3168,10 +3168,8 @@ body.learn-mode #main-col {
   line-height: 1.35;
   margin-bottom: 5px;
   width: 100%;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 /* Section count */
@@ -3387,7 +3385,7 @@ body.learn-mode #main-col {
 
 @media (max-width: 700px) {
   .fc-hub { padding: 24px 14px 60px; }
-  .fc-card { min-width: 100px; padding: 14px 10px 12px; }
+  .fc-card { min-width: 110px; padding: 14px 10px 12px; }
   .fc-icon { font-size: 26px; }
   .fc-header-title { font-size: 26px; }
 }
