@@ -6112,8 +6112,16 @@ if (!section) { return; }
     '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
 var fi = state.currentFloor - 1;
 
+  // Progress dots
+  var dots = '<div class="section-progress-dots" style="--floor-color:' + (floor.color||'#c8a96e') + '">';
+  floor.sections.forEach(function(sec, i) {
+    var dotCls = i === si ? 'spd-dot spd-current' : (state.completed[sec.id] ? 'spd-dot spd-done' : 'spd-dot');
+    dots += '<div class="' + dotCls + '" title="' + (i+1) + '. ' + sec.title + '" onclick="goToSection(' + fi + ',' + i + ')"></div>';
+  });
+  dots += '</div>';
+
   // READ
-   var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
+   var r = dots + '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
     '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
     '<div class="floor-title">' + floor.title + '<br><em>' + floor.subtitle + '</em></div>' +
     '<div class="floor-meta">' +
@@ -6136,8 +6144,10 @@ var fi = state.currentFloor - 1;
   r += '<div class="section-body">' + section.body.replace(/\n/g, '<br><br>') + '</div>';
 
   if (section.callout) {
+    var cIcon = section.callout.type === 'focus' ? '🎯' : section.callout.type === 'warning' ? '⚠️' : '💡';
     r += '<div class="callout ' + (section.callout.type || '') + '">' +
-      '<div class="callout-label">' + section.callout.label + '</div>' +
+      '<div class="callout-icon-row"><span class="callout-icon">' + cIcon + '</span>' +
+      '<div class="callout-label">' + section.callout.label + '</div></div>' +
       '<div class="callout-text">' + section.callout.text.replace(/\n/g, '<br>') + '</div></div>';
   }
   if (section.code && section.code.lines) {
@@ -6147,8 +6157,10 @@ var fi = state.currentFloor - 1;
       '<div class="code-body">' + section.code.lines.join('\n') + '</div></div>';
   }
   if (section.callout2) {
+    var c2Icon = section.callout2.type === 'focus' ? '🎯' : section.callout2.type === 'warning' ? '⚠️' : '💡';
     r += '<div class="callout ' + (section.callout2.type || '') + '">' +
-      '<div class="callout-label">' + section.callout2.label + '</div>' +
+      '<div class="callout-icon-row"><span class="callout-icon">' + c2Icon + '</span>' +
+      '<div class="callout-label">' + section.callout2.label + '</div></div>' +
       '<div class="callout-text">' + section.callout2.text.replace(/\n/g, '<br>') + '</div></div>';
   }
   if (section.match) {
@@ -6173,7 +6185,7 @@ var fi = state.currentFloor - 1;
   }
 
   if (section.checklist) {
-    r += '<ul class="checklist">';
+    r += '<div class="checklist-card"><div class="checklist-card-label">BEFORE YOU CONTINUE</div><ul class="checklist">';
     section.checklist.forEach(function(item, ci) {
       var key = section.id + '-' + ci;
       // Read from checklistDone, not completed, to keep section completion separate
@@ -6181,7 +6193,7 @@ var fi = state.currentFloor - 1;
       r += '<li class="' + (checked ? 'checked' : '') + '" onclick="toggleCheck(\'' + key + '\',this)">' +
         '<div class="check-box">' + (checked ? '&#10003;' : '') + '</div>' + item + '</li>';
     });
-    r += '</ul>';
+    r += '</ul></div>';
   }
   r += '</div>';
 
@@ -6231,8 +6243,9 @@ var fi = state.currentFloor - 1;
         if (oi === qz.correct) cls = 'correct';
         else if (oi === answered) cls = 'wrong';
       }
+      var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
       q += '<button class="quiz-option ' + cls + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
-        (answered !== undefined ? ' disabled' : '') + '>' + opt + '</button>';
+        (answered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
     });
     q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
       (answered !== undefined ? qz.feedback : '') + '</div></div>';
@@ -6275,6 +6288,16 @@ if (!isLoggedIn && !isGuest) {
     (showQuiz ? '<div class="section-panel" id="spanel-quiz-' + section.id + '">' + q + '</div>' : '') +
     g + nav;
 
+  var _mc = document.getElementById('main-content');
+  if (_mc) {
+    _mc.classList.remove('section-slide-out-left', 'section-slide-out-right');
+    _mc.classList.remove('section-slide-in', 'section-slide-in-left');
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        if (_mc) _mc.classList.add('section-slide-in');
+      });
+    });
+  }
   document.getElementById('main-content').scrollTop = 0;
   window.scrollTo(0, 0);
   startSectionTimer(section.id);
@@ -7140,8 +7163,12 @@ function completeSection(sectionId, fi, si) {
 }
 
 function prevSection(fi, si) {
-  if (si > 0) { state.currentSection = si - 1; saveState(); renderNav(); renderFloor(fi, si - 1); }
-  else if (fi > 0) { goToFloor(fi - 1); }
+  var mc = document.getElementById('main-content');
+  if (mc) mc.classList.add('section-slide-out-right');
+  setTimeout(function() {
+    if (si > 0) { state.currentSection = si - 1; saveState(); renderNav(); renderFloor(fi, si - 1); }
+    else if (fi > 0) { goToFloor(fi - 1); }
+  }, 220);
 }
 
 function nextSection(fi, si) {
@@ -7149,13 +7176,24 @@ function nextSection(fi, si) {
   var section = floor.sections[si];
   var gate = sectionGateState[section.id] || {};
   var hasQuiz = !!(section && section.quiz);
+  var hasChecklist = !!(section && section.checklist && section.checklist.length);
 
   if (!state.completed[section.id]) {
+    if (hasChecklist) {
+      var allChecked = section.checklist.every(function(_, ci) {
+        return !!(state.checklistDone || {})[section.id + '-' + ci];
+      });
+      if (!allChecked) {
+        sageMessage('Tick every item in the checklist before moving on.', 'warn');
+        return;
+      }
+    }
     if (hasQuiz && !gate.quiz) {
-      // Quiz exists but not answered — navigate without awarding XP
-      sageMessage('You skipped the quiz — no XP awarded for this section. You can come back to it anytime.', 'warn');
-    } else {
-      // No quiz (reading/checklist section) — auto-complete as before
+      sageMessage('Answer the quiz correctly before moving to the next section.', 'warn');
+      return;
+    }
+    if (!hasQuiz) {
+      // Auto-complete
       state.completed[section.id] = true;
       awardXP(getSectionXP(fi), 'complete-' + section.id, window.innerWidth / 2, 300);
       var isNowComplete = isFloorComplete(fi);
@@ -7166,8 +7204,12 @@ function nextSection(fi, si) {
       saveState();
     }
   }
-  if (si < floor.sections.length - 1) { state.currentSection = si + 1; saveState(); renderNav(); renderFloor(fi, si + 1); }
-  else if (fi < FLOORS.length - 1) { goToFloor(fi + 1); }
+  var mc = document.getElementById('main-content');
+  if (mc) mc.classList.add('section-slide-out-left');
+  setTimeout(function() {
+    if (si < floor.sections.length - 1) { state.currentSection = si + 1; saveState(); renderNav(); renderFloor(fi, si + 1); }
+    else if (fi < FLOORS.length - 1) { goToFloor(fi + 1); }
+  }, 220);
 }
 
 // --- VOICE NARRATION SYSTEM ---

@@ -946,6 +946,88 @@ body.light .callout {
   color: var(--text-dim);
 }
 
+/* Callout icon */
+.callout-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.callout-icon {
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.callout-icon-row + .callout-text { margin-top: 0; }
+
+/* Remove the old callout-label bottom margin since it's now in the icon-row */
+.callout-icon-row .callout-label {
+  margin-bottom: 0;
+}
+
+/* Enhanced callout card elevation */
+.callout {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 8px 32px rgba(0,0,0,0.2),
+    0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* Progress dots */
+.section-progress-dots {
+  display: flex;
+  gap: 5px;
+  padding: 16px 24px 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.spd-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.spd-dot:hover {
+  border-color: var(--floor-color, var(--accent));
+  transform: scale(1.3);
+}
+
+.spd-dot.spd-done {
+  background: rgba(74, 222, 128, 0.35);
+  border-color: rgba(74, 222, 128, 0.6);
+}
+
+.spd-dot.spd-current {
+  background: var(--floor-color, var(--accent));
+  border-color: var(--floor-color, var(--accent));
+  transform: scale(1.4);
+  box-shadow: 0 0 6px var(--floor-color, var(--accent));
+}
+
+/* Section slide transitions */
+.section-slide-in {
+  animation: sectionSlideInFromRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.section-slide-in-left {
+  animation: sectionSlideInFromLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.section-slide-out-left {
+  animation: sectionSlideOutToLeft 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+  pointer-events: none;
+}
+.section-slide-out-right {
+  animation: sectionSlideOutToRight 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+  pointer-events: none;
+}
+
 /* ============================================================
    CODE BLOCK (display only)
    ============================================================ */
@@ -988,9 +1070,36 @@ body.light .callout {
 .quiz-block {
   background: var(--surface);
   border: 1px solid var(--border);
+  border-color: var(--floor-color, var(--accent));
   border-radius: 10px;
   padding: 24px;
   margin: 28px 0;
+}
+
+/* Tick/cross icon in quiz options */
+.quiz-opt-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 10px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.quiz-option.correct .quiz-opt-icon {
+  background: var(--success);
+  color: var(--bg);
+}
+.quiz-option.wrong .quiz-opt-icon {
+  background: var(--floor4);
+  color: var(--bg);
+}
+.quiz-option:not(.correct):not(.wrong) .quiz-opt-icon {
+  display: none;
 }
 
 .quiz-label {
@@ -1063,17 +1172,45 @@ body.light .quiz-option {
   font-size: 13px;
   color: var(--text-dim);
   line-height: 1.7;
-  display: none;
-  padding: 14px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  padding: 0 14px;
   background: var(--surface2);
   border-radius: 8px;
+  transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease, margin-top 0.3s ease;
 }
-
-.quiz-feedback.visible { display: block; }
+.quiz-feedback.visible {
+  max-height: 600px;
+  opacity: 1;
+  padding: 14px;
+  margin-top: 16px;
+}
 
 /* ============================================================
    CHECKLIST
    ============================================================ */
+
+/* Checklist card */
+.checklist-card {
+  background: rgba(125, 211, 252, 0.03);
+  border: 1px solid var(--floor-color, var(--border));
+  border-radius: 12px;
+  padding: 20px 24px 16px;
+  margin: 28px 0;
+}
+
+.checklist-card-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--floor-color, var(--accent));
+  margin-bottom: 14px;
+}
+
+.checklist-card .checklist {
+  margin: 0;
+}
 
 .checklist {
   list-style: none;
@@ -1118,6 +1255,41 @@ body.light .quiz-option {
   background: var(--success);
   border-color: var(--success);
   color: var(--bg);
+}
+
+/* ============================================================
+   INLINE REFLECTIVE QUESTIONS
+   ============================================================ */
+
+/* Inline reflective questions */
+.inline-q {
+  margin: 24px 0 24px 12px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--floor-color, var(--accent));
+  font-style: italic;
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.75;
+  background: rgba(125, 125, 125, 0.04);
+  border-radius: 0 8px 8px 0;
+}
+
+.inline-q::before {
+  content: "⏸ ";
+  font-style: normal;
+  font-size: 11px;
+  opacity: 0.5;
+  margin-right: 2px;
+}
+
+.iq-label {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--floor-color, var(--accent));
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-right: 8px;
 }
 
 /* ============================================================

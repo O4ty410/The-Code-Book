@@ -131,6 +131,26 @@
   }
 }
 
+@keyframes sectionSlideInFromRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes sectionSlideOutToLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(-32px); }
+}
+
+@keyframes sectionSlideInFromLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes sectionSlideOutToRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(32px); }
+}
+
 /* --- Animation utility classes --- */
 .just-checked          { animation: checkTick 0.4s ease; }
 .elevator-up           { animation: elevator-up   0.5s cubic-bezier(0.4,0,0.2,1) forwards; }
