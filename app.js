@@ -4789,22 +4789,37 @@ function loadState() {
   }  catch(e) {}
 }
 
+function pruneCodeCache() {
+  // Remove saved code for sections already marked complete to free storage space
+  Object.keys(localStorage)
+    .filter(function(k) { return k.startsWith('code_'); })
+    .forEach(function(k) {
+      var sid = k.slice(5);
+      if (state.completed && state.completed[sid]) localStorage.removeItem(k);
+    });
+}
+
 function saveState() {
+  var payload = JSON.stringify({
+    currentFloor: state.currentFloor,
+    currentSection: state.currentSection,
+    completed: state.completed,
+    quizAnswered: state.quizAnswered,
+    totalSeconds: state.totalSeconds,
+    sessionLog: state.sessionLog,
+    xp: state.xp,
+    streak: state.streak,
+    lastVisit: state.lastVisit,
+    xpAwarded: state.xpAwarded,
+    checklistDone: state.checklistDone || {}
+  });
   try {
-    localStorage.setItem('codebook_v1', JSON.stringify({
-      currentFloor: state.currentFloor,
-      currentSection: state.currentSection,
-      completed: state.completed,
-      quizAnswered: state.quizAnswered,
-      totalSeconds: state.totalSeconds,
-      sessionLog: state.sessionLog,
-      xp: state.xp,
-      streak: state.streak,
-      lastVisit: state.lastVisit,
-      xpAwarded: state.xpAwarded,
-      checklistDone: state.checklistDone || {}
-    }));
-  } catch(e) {}
+    localStorage.setItem('codebook_v1', payload);
+  } catch(e) {
+    // Quota exceeded — prune completed-section code caches and retry once
+    pruneCodeCache();
+    try { localStorage.setItem('codebook_v1', payload); } catch(e2) {}
+  }
 }
 
 
@@ -4908,11 +4923,10 @@ function startLandingCanvas() {
   });
 
   // Schedule random spark events
-  var _sparkTimer = null;
   function spark() {
     var idx = Math.floor(Math.random() * ls.length);
     ls[idx].spark = 0.65 + Math.random() * 0.35;
-    _sparkTimer = setTimeout(spark, 60 + Math.random() * 200);
+    canvas._lcSpark = setTimeout(spark, 60 + Math.random() * 200);
   }
   spark();
 
@@ -4969,7 +4983,6 @@ function startLandingCanvas() {
   }
 
   draw();
-  canvas._lcSpark = _sparkTimer;
 }
 
 function stopLandingCanvas() {
