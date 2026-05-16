@@ -5547,6 +5547,12 @@ function matchClick(mid, side, idx) {
     }
   }
 }
+// ── SAGE API CONFIG ────────────────────────────────────────────────────────
+// To enable live AI responses, set your Anthropic API key here.
+// Leave as null to use built-in contextual guidance instead.
+const SAGE_API_KEY = null;
+const SAGE_TOTAL_USES = 10;
+
 let state = {
   currentFloor: 1,
   currentSection: 0,
@@ -5562,7 +5568,10 @@ let state = {
   timerSeconds: 25 * 60,
   timerInterval: null,
   sessionSeconds: 0,
-  sectionStartTime: null
+  sectionStartTime: null,
+  sageUsesLeft: SAGE_TOTAL_USES,
+  challengesDone: {},
+  streakProtectedToday: false
 };
 state.playerName = localStorage.getItem("codebook_player_name") || null;
 
@@ -5582,6 +5591,9 @@ function loadState() {
       state.lastVisit = s.lastVisit || null;
       state.xpAwarded = s.xpAwarded || {};
       state.checklistDone = s.checklistDone || {};
+      state.sageUsesLeft = (s.sageUsesLeft !== undefined) ? s.sageUsesLeft : SAGE_TOTAL_USES;
+      state.challengesDone = s.challengesDone || {};
+      state.streakProtectedToday = s.streakProtectedToday || false;
     }
   }  catch(e) {}
 }
@@ -5608,7 +5620,10 @@ function saveState() {
     streak: state.streak,
     lastVisit: state.lastVisit,
     xpAwarded: state.xpAwarded,
-    checklistDone: state.checklistDone || {}
+    checklistDone: state.checklistDone || {},
+    sageUsesLeft: state.sageUsesLeft,
+    challengesDone: state.challengesDone || {},
+    streakProtectedToday: state.streakProtectedToday || false
   });
   try {
     localStorage.setItem('codebook_v1', payload);
@@ -6201,16 +6216,42 @@ function updateStreak() {
   if (state.lastVisit === today) return;
   const yesterday = new Date(Date.now() - 86400000).toDateString();
   if (state.lastVisit === yesterday) {
-    // Consecutive day \u2014 extend the streak
     state.streak += 1;
+    state.streakProtectedToday = false; // reset for new day
   } else if (state.lastVisit !== null) {
-    // Gap of more than one day \u2014 reset streak
     state.streak = 0;
+    state.streakProtectedToday = false;
   }
-  // If lastVisit is null this is the first ever visit \u2014 don't award a streak yet.
-  // Streak starts properly when the user completes their first section.
   state.lastVisit = today;
   saveState();
+}
+
+function markStreakProtected() {
+  if (state.streakProtectedToday) return;
+  state.streakProtectedToday = true;
+  saveState();
+  if (state.streak >= 1) showStreakToast(state.streak);
+}
+
+function showStreakToast(days) {
+  var existing = document.getElementById('streak-toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.id = 'streak-toast';
+  var emoji = days >= 30 ? '\ud83c\udfc6' : days >= 14 ? '\u26a1' : days >= 7 ? '\ud83d\udd25' : '\ud83d\udd25';
+  var msg = days === 1 ? 'Streak started! Come back tomorrow.' :
+            days < 7  ? days + ' day streak \u2014 keep going.' :
+            days < 14 ? days + ' day streak \u2014 you\'re building a habit.' :
+            days < 30 ? days + ' day streak \u2014 exceptional consistency.' :
+                        days + ' day streak \u2014 you\'re unstoppable.';
+  toast.innerHTML =
+    '<div class="streak-toast-icon">' + emoji + '</div>' +
+    '<div class="streak-toast-text"><strong>' + msg + '</strong>' +
+    '<div class="streak-toast-sub">Streak protected for today.</div></div>' +
+    '<button class="streak-toast-close" onclick="this.parentElement.remove()">\u00d7</button>';
+  toast.className = 'streak-toast';
+  document.body.appendChild(toast);
+  setTimeout(function() { if (toast.parentElement) toast.remove(); }, 5000);
 }
 
 function startSectionTimer(sectionId) {
@@ -7002,13 +7043,26 @@ if (!section) { return; }
     r += '<div class="checklist-card"><div class="checklist-card-label">BEFORE YOU CONTINUE</div><ul class="checklist">';
     section.checklist.forEach(function(item, ci) {
       var key = section.id + '-' + ci;
-      // Read from checklistDone, not completed, to keep section completion separate
       var checked = (state.checklistDone || {})[key];
       r += '<li class="' + (checked ? 'checked' : '') + '" onclick="toggleCheck(\'' + key + '\',this)">' +
         '<div class="check-box">' + (checked ? '&#10003;' : '') + '</div>' + item + '</li>';
     });
     r += '</ul></div>';
   }
+
+  // Sage Ask button
+  var usesLeft = (state.sageUsesLeft !== undefined) ? state.sageUsesLeft : SAGE_TOTAL_USES;
+  r += '<div class="sage-ask-strip">' +
+    '<div class="sage-ask-owl">🦉</div>' +
+    '<div class="sage-ask-info">' +
+      '<div class="sage-ask-label">Stuck? Ask Sage</div>' +
+      '<div class="sage-ask-sub">' + usesLeft + ' question' + (usesLeft !== 1 ? 's' : '') + ' remaining</div>' +
+    '</div>' +
+    (usesLeft > 0
+      ? '<button class="sage-ask-btn" onclick="openSageChat(\'' + section.id + '\',' + fi + ')">Ask</button>'
+      : '<div class="sage-ask-empty">Used up — work through it yourself.</div>') +
+    '</div>';
+
   r += '</div>';
 
   // CODE EDITOR
@@ -7037,9 +7091,17 @@ if (!section) { return; }
     '<div class="editor-console" id="console-' + section.id + '">' +
     '<div class="editor-console-line">&#9658; Click Run or edit to preview</div></div></div>' +
     '<div class="editor-challenges"><div class="editor-challenge-label">TRY THESE</div>';
-  ((editorDef && editorDef.challenges) || []).forEach(function(ch) {
-    c += '<div class="editor-challenge-item">&rarr; ' + ch + '</div>';
+  var allChDone = true;
+  ((editorDef && editorDef.challenges) || []).forEach(function(ch, ci) {
+    var chKey = section.id + '-ch-' + ci;
+    var done = !!(state.challengesDone && state.challengesDone[chKey]);
+    if (!done) allChDone = false;
+    c += '<div class="editor-challenge-item ' + (done ? 'ch-done' : '') + '" id="chitem-' + chKey + '">' +
+      '<button class="ch-check-btn" onclick="toggleChallenge(\'' + chKey + '\',' + fi + ',' + si + ')" title="' + (done ? 'Mark incomplete' : 'Mark done') + '">' +
+      (done ? '✓' : '○') + '</button>' +
+      '<span class="ch-text">' + ch + '</span></div>';
   });
+  if ((editorDef && editorDef.challenges || []).length === 0) allChDone = true;
   c += '</div></div>';
 
   // QUIZ
@@ -7948,6 +8010,7 @@ function completeSection(sectionId, fi, si) {
   }
 
   state.completed[sectionId] = true;
+  markStreakProtected();
   var secXP = getSectionXP(fi);
   awardXP(secXP, 'complete-' + sectionId, window.innerWidth / 2, 300);
   playCompletionSound();
@@ -8009,6 +8072,7 @@ function nextSection(fi, si) {
     if (!hasQuiz) {
       // Auto-complete
       state.completed[section.id] = true;
+      markStreakProtected();
       awardXP(getSectionXP(fi), 'complete-' + section.id, window.innerWidth / 2, 300);
       var isNowComplete = isFloorComplete(fi);
       if (isNowComplete) {
@@ -8211,6 +8275,199 @@ const SAGE_IDLE_MESSAGES = [
   { text: "A building is only as strong as the floor you are standing on. Do not ascend until this one is solid.", mood: 'warn' },
   { text: "Stillness before understanding is not wasted time. It is the load-bearing wall of knowledge.", mood: 'encourage' }
 ];
+
+// ── CHALLENGE CHECK-OFF ───────────────────────────────────────────────────
+function toggleChallenge(chKey, fi, si) {
+  if (!state.challengesDone) state.challengesDone = {};
+  state.challengesDone[chKey] = !state.challengesDone[chKey];
+  saveState();
+  var item = document.getElementById('chitem-' + chKey);
+  if (!item) return;
+  var btn = item.querySelector('.ch-check-btn');
+  if (state.challengesDone[chKey]) {
+    item.classList.add('ch-done');
+    if (btn) btn.textContent = '✓';
+  } else {
+    item.classList.remove('ch-done');
+    if (btn) btn.textContent = '○';
+  }
+  // Update the gate if all challenges are now done
+  var section = FLOORS[fi] && FLOORS[fi].sections[si];
+  if (!section || !section.code) return;
+  var allDone = (section.code.challenges || []).every(function(_, ci) {
+    return !!(state.challengesDone[section.id + '-ch-' + ci]);
+  });
+  if (allDone) {
+    var gate = sectionGateState[section.id];
+    if (gate && !gate.code) {
+      gate.code = true;
+      var row = document.getElementById('gate-code-' + section.id);
+      if (row) { row.classList.add('done'); row.querySelector('.gate-check-dot').innerHTML = '&#10003;'; }
+    }
+  }
+}
+
+// ── SAGE CHAT PANEL ───────────────────────────────────────────────────────
+function openSageChat(sectionId, fi) {
+  var existing = document.getElementById('sage-chat-overlay');
+  if (existing) existing.remove();
+
+  var section = FLOORS[fi] && FLOORS[fi].sections.find(function(s) { return s.id === sectionId; });
+  var floorTitle = FLOORS[fi] ? FLOORS[fi].title : '';
+  var sectionTitle = section ? section.title : '';
+  var usesLeft = (state.sageUsesLeft !== undefined) ? state.sageUsesLeft : SAGE_TOTAL_USES;
+
+  var overlay = document.createElement('div');
+  overlay.id = 'sage-chat-overlay';
+  overlay.className = 'sage-chat-overlay';
+  overlay.innerHTML =
+    '<div class="sage-chat-panel">' +
+      '<div class="sage-chat-header">' +
+        '<div class="sage-chat-title"><span class="sage-chat-owl">🦉</span> Ask Sage</div>' +
+        '<div class="sage-chat-meta">Floor ' + (fi+1) + ' · ' + sectionTitle + ' · ' +
+          '<span class="sage-uses-badge">' + usesLeft + ' left</span></div>' +
+        '<button class="sage-chat-close" onclick="document.getElementById(\'sage-chat-overlay\').remove()">×</button>' +
+      '</div>' +
+      '<div class="sage-chat-warning">' +
+        '⚠️ Each question uses one of your <strong>' + SAGE_TOTAL_USES + ' lifetime questions</strong>. ' +
+        'Try reading the section hint first — Sage is for when you\'re genuinely stuck.' +
+      '</div>' +
+      '<div class="sage-chat-messages" id="sage-chat-messages">' +
+        '<div class="sage-msg sage-msg-owl">' +
+          '<span class="sage-msg-icon">🦉</span>' +
+          '<div class="sage-msg-text">What are you stuck on? Be specific — the more detail you give me, the more useful I can be.</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="sage-chat-input-row">' +
+        '<textarea class="sage-chat-input" id="sage-chat-input" placeholder="Describe what you\'re stuck on..." rows="3"></textarea>' +
+        '<button class="sage-chat-send" onclick="submitSageQuestion(\'' + sectionId + '\',' + fi + ')">Send</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+  document.getElementById('sage-chat-input').focus();
+}
+
+function submitSageQuestion(sectionId, fi) {
+  var input = document.getElementById('sage-chat-input');
+  var question = input ? input.value.trim() : '';
+  if (!question) return;
+
+  var usesLeft = (state.sageUsesLeft !== undefined) ? state.sageUsesLeft : SAGE_TOTAL_USES;
+  if (usesLeft <= 0) return;
+
+  // Deduct use
+  state.sageUsesLeft = usesLeft - 1;
+  saveState();
+
+  // Show question in chat
+  var msgs = document.getElementById('sage-chat-messages');
+  if (msgs) {
+    msgs.innerHTML += '<div class="sage-msg sage-msg-user"><div class="sage-msg-text">' + escHtml(question) + '</div></div>';
+    msgs.innerHTML += '<div class="sage-msg sage-msg-owl" id="sage-thinking"><span class="sage-msg-icon">🦉</span><div class="sage-msg-text sage-thinking-dots">Thinking<span>.</span><span>.</span><span>.</span></div></div>';
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+  if (input) { input.value = ''; input.disabled = true; }
+  var sendBtn = document.querySelector('.sage-chat-send');
+  if (sendBtn) sendBtn.disabled = true;
+
+  // Update uses badge
+  var badge = document.querySelector('.sage-uses-badge');
+  if (badge) badge.textContent = state.sageUsesLeft + ' left';
+
+  // Update the strip in READ tab
+  var strip = document.querySelector('.sage-ask-sub');
+  if (strip) strip.textContent = state.sageUsesLeft + ' question' + (state.sageUsesLeft !== 1 ? 's' : '') + ' remaining';
+
+  getSageResponse(question, sectionId, fi, function(response) {
+    var thinking = document.getElementById('sage-thinking');
+    if (thinking) thinking.remove();
+    if (msgs) {
+      msgs.innerHTML += '<div class="sage-msg sage-msg-owl"><span class="sage-msg-icon">🦉</span><div class="sage-msg-text">' + response + '</div></div>';
+      if (state.sageUsesLeft === 0) {
+        msgs.innerHTML += '<div class="sage-msg sage-msg-system">You\'ve used all your Sage questions. From here, trust your own reasoning — that\'s where real learning happens.</div>';
+      }
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+    if (input) input.disabled = state.sageUsesLeft <= 0;
+    if (sendBtn) sendBtn.disabled = state.sageUsesLeft <= 0;
+  });
+}
+
+function getSageResponse(question, sectionId, fi, callback) {
+  var section = FLOORS[fi] && FLOORS[fi].sections.find(function(s) { return s.id === sectionId; });
+  var floorTitle = FLOORS[fi] ? FLOORS[fi].title : '';
+
+  // If API key is configured, use Claude API
+  if (SAGE_API_KEY) {
+    var systemPrompt = 'You are Sage, a wise and patient coding tutor for The Code Book — a self-paced web development curriculum. ' +
+      'The learner is currently on Floor ' + (fi+1) + ' (' + floorTitle + '), section "' + (section ? section.title : '') + '". ' +
+      'Answer in 2-4 short paragraphs. Be direct and practical. Do not write code unless they specifically ask for a hint — ' +
+      'guide their thinking instead. Never give away the full answer to a coding exercise. ' +
+      'Remind them they have limited questions if the answer is something the hint section already covers.';
+
+    var sectionContext = section ? ('Section content: ' + (section.body || '').replace(/<[^>]*>/g,'').slice(0, 800)) : '';
+
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': SAGE_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-iab-override': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: sectionContext + '\n\nLearner question: ' + question }]
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'I couldn\'t reach the server. Try the hint in the section instead.';
+      callback(text);
+    })
+    .catch(function() {
+      callback(buildContextualResponse(question, section, fi));
+    });
+    return;
+  }
+
+  // No API key — use built-in contextual guidance
+  setTimeout(function() {
+    callback(buildContextualResponse(question, section, fi));
+  }, 800);
+}
+
+function buildContextualResponse(question, section, fi) {
+  var q = question.toLowerCase();
+  var floor = fi + 1;
+
+  // General debugging questions
+  if (q.includes('error') || q.includes('not work') || q.includes('broke') || q.includes('bug') || q.includes('undefined')) {
+    return 'The first thing to do with any error is read the message in full — the browser console tells you the type, a plain-English description, and the line number. Before changing anything, go to that line. The bug is usually there or one line above.\n\nIf the error says "undefined", something you\'re trying to use doesn\'t exist yet at that point in execution. Check the order of your code — is the value being set before it\'s being read?';
+  }
+  if (q.includes('console') || q.includes('log') || q.includes('debug')) {
+    return 'console.log() is your most reliable tool here. Add it right at the entry point of the function you\'re unsure about — just to confirm the function is being called at all. Then add another one after each key step to trace where the value changes unexpectedly.\n\nThe goal is to narrow down the location: is the function running? Is the variable set? Is the conditional taking the right branch? Each log eliminates a possibility.';
+  }
+
+  // Floor-specific contextual responses
+  var floorTips = {
+    1: 'At this stage, the most important thing is building the mental model — not memorising syntax. Try to explain the concept back to yourself out loud, in plain English, without looking at the section. If you can\'t, that\'s the gap. Go back to the specific paragraph that covers it.',
+    2: 'With HTML and CSS, the best debugging tool is the browser\'s DevTools. Right-click the element, inspect it, and you can see exactly which CSS rules are applying and which are being overridden. The cascade is always the reason something looks wrong.',
+    3: 'JavaScript is precise about types and order. If something is undefined, either the variable doesn\'t exist in that scope, or it hasn\'t been assigned yet at the point you\'re using it. Add a console.log right before the line that errors to see the actual value.',
+    4: 'When working with async code, the most common mistake is trying to use data before it\'s arrived. Make sure every async operation is properly awaited. Open the Network tab in DevTools — it shows you exactly what requests went out and what came back.',
+    5: 'Backend errors often live in the server logs, not the browser console. Check both. If a request returns a 500, the detailed error is on the server side. Express will log it to the terminal.',
+    6: 'At this stage, the answer to most questions is in the documentation. MDN for browser APIs, the framework\'s own docs for everything else. The skill of reading docs precisely — not scanning, reading — is what you\'re really building here.',
+    7: 'Professional-level problems rarely have one right answer. If you\'re stuck on an architectural decision, try writing down both options and what breaks if each assumption turns out to be wrong. The constraint that matters most usually reveals itself that way.'
+  };
+
+  var hint = section && section.hint ? section.hint.replace(/<[^>]*>/g,'').slice(0, 300) : '';
+
+  return (floorTips[floor] || floorTips[1]) +
+    (hint ? '\n\nThe section hint covers: ' + hint.slice(0, 200) + (hint.length > 200 ? '...' : '') + '\n\nHave you read through it carefully? Hints are written for exactly the kind of moment you\'re in.' : '');
+}
 
 function sageMessage(text, mood) {
   // Remove existing bubble
