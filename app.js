@@ -7375,7 +7375,7 @@ if (!section) { return; }
 
   // CODE EDITOR
   var savedCode = localStorage.getItem('code_' + section.id) || editorDef.code;
-  var c = '<div style="padding:24px 32px;">' +
+  var c = '<div class="section-inner-pad">' +
     '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;margin-bottom:6px;">Live Code Editor</div>' +
     '<div style="font-size:14px;color:var(--text-dim);margin-bottom:20px;">Write code on the left. See it render live on the right.</div>' +
     '<div class="editor-wrapper">' +
@@ -7414,7 +7414,7 @@ if (!section) { return; }
 
   // QUIZ
   var answered = state.quizAnswered[section.id];
-  var q = '<div style="padding:24px 32px;">' +
+  var q = '<div class="section-inner-pad">' +
     '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;margin-bottom:6px;">Knowledge Check</div>' +
     '<div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Answer to unlock the section and earn XP.</div>';
   if (section.quiz) {
@@ -7537,7 +7537,7 @@ if (!section) { return; }
     '</div>';
 
   // GATE
-  var g = '<div class="gate-box' + (isDone ? ' complete' : '') + '" style="margin:0 32px 32px;">' +
+  var g = '<div class="gate-box' + (isDone ? ' complete' : '') + '">' +
     '<div class="gate-label">TO COMPLETE THIS SECTION</div>' +
     '<div class="gate-checks">' +
     '<div class="gate-check-row done" id="gate-read-' + section.id + '"><div class="gate-check-dot">&#10003;</div>Read the section</div>' +
