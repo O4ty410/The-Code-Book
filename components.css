@@ -5391,6 +5391,8 @@ body.learn-mode #main-col {
 .rev-header {
   margin-bottom: 28px;
   text-align: center;
+  position: relative;
+  z-index: 10;
 }
 
 .rev-header-row {
