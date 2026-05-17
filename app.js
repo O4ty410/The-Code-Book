@@ -32,7 +32,7 @@ const FLOORS = [
       {
         id: "1-1",
         title: "How the Internet Actually Works",
-        body: `Before you write a single line of code, you need to understand what the internet actually is.\n\nEvery time you type a web address and press Enter, a precise sequence unfolds in under a second. Your browser sends a <strong>request</strong> — a message that says "give me this page." That request travels across the internet to a <strong>server</strong> — another computer, somewhere in the world, that is always on and waiting. The server finds the right files and sends them back. Your browser reads those files and draws the page you see.\n\nEvery webpage is made of three types of files working together:\n\n<strong>HTML</strong> — the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> — the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> — the behaviour. What happens when you click, type, or scroll.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — when you loaded this very page, what do you think happened between your browser and a server?</div>\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nThat is what a web developer does.`,
+        body: `The page you're reading right now travelled from a server to your browser in under 200 milliseconds. Here's exactly what happened.\n\nYou typed an address and pressed Enter. Your browser sent a <strong>request</strong> — a message that said "give me this page." That request travelled to a server — another computer, always on, always connected — that found the right files and sent them back. Your browser read those files and drew what you're looking at now. That entire sequence happened before you could blink.\n\nEvery webpage — Gmail, Airbnb, the BBC, this one — is the result of that same cycle. And every page is made of exactly three types of files:\n\n<strong>HTML</strong> — the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> — the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> — the behaviour. What happens when you click, type, or scroll.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — right-click anywhere on this page and choose "View Page Source." What you see is the exact file the server sent to your browser. Scan it. Can you spot the three types of files at work?</div>\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nEvery developer at Google, Stripe, and Spotify is doing exactly that. So will you.`,
         callout: {
           type: "default",
           label: "The Key Idea",
@@ -142,7 +142,7 @@ const FLOORS = [
       {
         id: "1-4",
         title: "Your First Look at Real Code",
-        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Before you speak a language fluently, you learn to recognise it. Same principle applies here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\nLook at the example below. Do not panic. Do not try to memorise it. Just try to read it like a sentence — guess what each line does before you read the explanation. That act of guessing is already how developers think.`,
+        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Every professional developer spends more time reading code than writing it. The engineers at GitHub read code written by people they've never met. The engineers at Stripe read code that was written years before they joined. Reading fluently is not a step toward writing — it is the more important skill.\n\nBefore you speak a language fluently, you learn to recognise it. Same principle here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — look at the five lines of code below without reading any explanation. Cover the hints. Just guess: what does each line tell the browser to do? Write your guesses down. Then compare. The act of guessing — even incorrectly — is already how developers think when they open an unfamiliar file.</div>\n\nLook at the example. Do not panic. Do not try to memorise it. Read it like road signs, not like a textbook.`,
         code: {
           lang: "HTML",
           lines: [
@@ -450,7 +450,7 @@ const FLOORS = [
       {
         id: "2-4",
         title: "Building Your First Page",
-        body: `Every HTML page starts with the same scaffold. Not as a suggestion — as a requirement. The browser needs these pieces to know what it's working with.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. This tells the browser to fetch and apply the stylesheet before rendering the page. The path in href must match the actual location of your CSS file.\n\nWhen you start writing elements, read the HTML like prose. A heading, then a paragraph, then a list — in the order a user would encounter them. HTML's logical reading order should match the visual reading order. This isn't just good practice; it's how screen readers navigate the page.\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
+        body: `Every HTML page on the internet starts with the same scaffold. GitHub's code viewer. The New York Times homepage. Every Airbnb listing page. The scaffold is not optional — it's the contract the browser needs before it will parse anything.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Without it, the browser switches into "quirks mode" — a compatibility layer for 1990s pages that breaks modern CSS in subtle, maddening ways. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. The path in href must exactly match your CSS file's location — it's case-sensitive on most servers.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — the head element contains information the browser needs but the user never sees. The body contains everything the user sees. What does that tell you about where to put: a page title, a paragraph of text, a link to a CSS file, a button?</div>\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
         callout: {
           type: "default",
           label: "The Scaffold Never Changes",
@@ -494,7 +494,7 @@ const FLOORS = [
       {
         id: "2-5",
         title: "Styling Basics",
-        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. Learn those well and the rest you look up as needed.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface — stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines — 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element), <strong>padding</strong> (space inside the element, between content and border). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left — clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — what's the difference between margin and padding in terms of where the space appears? If you add a background colour to an element, which one would you see the colour extend through?</div>\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units, <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>em</strong> is relative to the current element's font-size. <strong>rem</strong> is relative to the root (html) element's font-size — use rem for font sizes. When the user adjusts their browser's default font size for accessibility, rem scales with it. px does not.`,
+        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. The engineers building Spotify's interface, Notion's editor, and Stripe's dashboard are reaching for the same small set of properties you're about to learn. Learn those well and look up the rest as you need it.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface — stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines — 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element — transparent, pushes other elements away), <strong>padding</strong> (space inside the element, between the content and the border — background colour fills through it). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left — clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners — border-radius: 50% makes a circle), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units: <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>rem</strong> is relative to the root (html) element's font-size. Use rem for font sizes. Here's why it matters: some users increase their browser's default font size because small text is hard for them to read. If you set font-size in px, that preference is silently ignored. If you use rem, your text scales with it. Stripe's design system, GitHub's design system, and GOV.UK's design system all specify font sizes in rem for exactly this reason. It's one line of reasoning that changes a habit permanently.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — open Spotify or any site you use regularly in DevTools (F12). Click any text element. In the Styles panel, find the font-size property. Is it in px or rem? What does that tell you about how that team handles accessibility?</div>`,
         callout: {
           type: "default",
           label: "Why rem Over px for Fonts",
@@ -582,7 +582,7 @@ const FLOORS = [
       {
         id: "2-7",
         title: "Flexbox Layout",
-        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. Flexbox, introduced as a CSS standard in 2012 and now universally supported, solved all of this.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. The parent becomes a <strong>flex container</strong>. You control the children's arrangement by setting properties on the container.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them — now main axis runs vertically and items stack top to bottom.\n\nThe properties you'll use constantly:\n\n<strong>justify-content</strong> aligns items along the main axis. Values: <code>flex-start</code> (packed to the start), <code>flex-end</code> (packed to the end), <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced), <code>space-around</code>.\n\n<strong>align-items</strong> aligns items along the cross axis. Values: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default — fills the cross axis).\n\n<strong>gap</strong> adds consistent space between flex items without needing margins.\n\n<strong>flex-wrap: wrap</strong> allows items to wrap onto the next line when they don't fit — essential for responsive layouts.\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
+        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. If you've ever seen old CSS with <code>clear: both</code> and a mysterious empty div — that's what layout looked like before 2012.\n\nFlexbox solved all of it. It's now universally supported and is the layout tool you'll reach for most often as a professional.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. You control their arrangement by setting properties on the container — not on the children.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them — main axis runs vertically, items stack top to bottom.\n\nThe four properties you'll use in almost every layout:\n\n<strong>justify-content</strong> — positions items along the main axis: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced).\n\n<strong>align-items</strong> — positions items along the cross axis: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default).\n\n<strong>gap</strong> — consistent space between items, no margin hacks needed.\n\n<strong>flex-wrap: wrap</strong> — allows items to wrap to the next line when they don't fit.\n\nAirbnb's listing card grid, Spotify's top navigation bar, GitHub's file explorer toolbar, the action buttons at the bottom of this panel — all built with exactly these four properties in combination. The same tool, applied to different problems.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — open any site you use and inspect a navigation bar in DevTools. Look for <code>display: flex</code> on the nav element. When you find it, look at which justify-content and align-items values they've set. What problem is each one solving?</div>\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
         callout: {
           type: "default",
           label: "Centering With Flexbox",
@@ -5558,6 +5558,7 @@ let state = {
   currentSection: 0,
   completed: {},
   quizAnswered: {},
+  quizMultiState: {},
   totalSeconds: 0,
   sessionLog: [],
   xp: 0,
@@ -5584,6 +5585,7 @@ function loadState() {
       state.currentSection = parseInt(s.currentSection) || 0;
       state.completed = s.completed || {};
       state.quizAnswered = s.quizAnswered || {};
+      state.quizMultiState = s.quizMultiState || {};
       state.totalSeconds = s.totalSeconds || 0;
       state.sessionLog = s.sessionLog || [];
       state.xp = s.xp || 0;
@@ -5614,6 +5616,7 @@ function saveState() {
     currentSection: state.currentSection,
     completed: state.completed,
     quizAnswered: state.quizAnswered,
+    quizMultiState: state.quizMultiState || {},
     totalSeconds: state.totalSeconds,
     sessionLog: state.sessionLog,
     xp: state.xp,
@@ -7270,7 +7273,17 @@ if (!section) { return; }
   var editorDef = getEditorDefaults(section);
 
   if (!sectionGateState[section.id]) {
-    sectionGateState[section.id] = { read: true, code: false, quiz: isDone || !section.quiz };
+    var quizGateDone = isDone || !section.quiz;
+    if (!quizGateDone && section.quiz && section.quiz.questions) {
+      var _ms = state.quizMultiState && state.quizMultiState[section.id];
+      if (_ms && _ms.done) {
+        var _total = section.quiz.questions.length;
+        var _score = 0;
+        section.quiz.questions.forEach(function(q, qi) { if (_ms.answers[qi] === q.correct) _score++; });
+        if (_score >= Math.ceil(_total * 0.7)) quizGateDone = true;
+      }
+    }
+    sectionGateState[section.id] = { read: true, code: false, quiz: quizGateDone };
   }
   var gate = sectionGateState[section.id];
   var allDone = gate.read && gate.code && gate.quiz;
@@ -7435,20 +7448,72 @@ if (!section) { return; }
     '<div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Answer to unlock the section and earn XP.</div>';
   if (section.quiz) {
     var qz = section.quiz;
-    q += '<div class="quiz-block"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
-      '<div class="quiz-question">' + qz.question + '</div><div class="quiz-options">';
-    ((qz && qz.options) || []).forEach(function(opt, oi) {
-      var cls = '';
-      if (answered !== undefined) {
-        if (oi === qz.correct) cls = 'correct';
-        else if (oi === answered) cls = 'wrong';
+    if (qz.questions && Array.isArray(qz.questions)) {
+      // Multi-question quiz
+      var ms = (state.quizMultiState && state.quizMultiState[section.id]) || { current: 0, answers: {}, done: false };
+      var totalQs = qz.questions.length;
+      if (ms.done) {
+        var msScore = 0;
+        qz.questions.forEach(function(ques, qi) { if (ms.answers[qi] === ques.correct) msScore++; });
+        var msPassed = msScore >= Math.ceil(totalQs * 0.7);
+        q += '<div class="quiz-block">' +
+          '<div class="quiz-label">KNOWLEDGE CHECK COMPLETE</div>' +
+          '<div class="quiz-multi-results">' +
+          '<div class="quiz-results-score">' + msScore + '<span> / ' + totalQs + '</span></div>' +
+          '<div class="quiz-results-label">' + (msPassed ? 'Nicely done.' : 'Keep studying.') + '</div>' +
+          '<div class="quiz-results-msg">' + (msPassed ? 'Section unlocked — mark it complete when ready.' : 'Review the material above, then try again.') + '</div>' +
+          (!msPassed ? '<button class="quiz-retry-btn" onclick="retryMultiQuiz(\'' + section.id + '\',' + fi + ',' + si + ')">Retry Quiz</button>' : '') +
+          '</div></div>';
+      } else {
+        var cur = ms.current;
+        var curQ = qz.questions[cur];
+        var curAnswered = ms.answers && ms.answers[cur] !== undefined ? ms.answers[cur] : undefined;
+        var pct = Math.round(cur / totalQs * 100);
+        q += '<div class="quiz-block">' +
+          '<div class="quiz-multi-header">' +
+          '<div class="quiz-label">KNOWLEDGE CHECK</div>' +
+          '<div class="quiz-multi-progress-label">Question ' + (cur + 1) + ' of ' + totalQs + '</div>' +
+          '</div>' +
+          '<div class="quiz-multi-bar"><div class="quiz-multi-bar-fill" style="width:' + pct + '%"></div></div>' +
+          '<div class="quiz-question">' + curQ.question + '</div>' +
+          '<div class="quiz-options">';
+        curQ.options.forEach(function(opt, oi) {
+          var cls = '';
+          if (curAnswered !== undefined) {
+            if (oi === curQ.correct) cls = 'correct';
+            else if (oi === curAnswered) cls = 'wrong';
+          }
+          var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
+          q += '<button class="quiz-option ' + cls + '" onclick="answerMultiQuiz(\'' + section.id + '\',' + cur + ',' + oi + ',' + fi + ',' + si + ')"' +
+            (curAnswered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
+        });
+        q += '</div>' +
+          '<div class="quiz-feedback ' + (curAnswered !== undefined ? 'visible' : '') + '">' +
+          (curAnswered !== undefined ? curQ.feedback : '') + '</div>';
+        if (curAnswered !== undefined) {
+          var isLast = cur === totalQs - 1;
+          q += '<button class="quiz-next-btn" onclick="' + (isLast ? 'finishMultiQuiz' : 'nextMultiQuiz') + '(\'' + section.id + '\',' + fi + ',' + si + ')">' +
+            (isLast ? 'See Results' : 'Next Question →') + '</button>';
+        }
+        q += '</div>';
       }
-      var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
-      q += '<button class="quiz-option ' + cls + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
-        (answered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
-    });
-    q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
-      (answered !== undefined ? qz.feedback : '') + '</div></div>';
+    } else {
+      // Single-question quiz
+      q += '<div class="quiz-block"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
+        '<div class="quiz-question">' + qz.question + '</div><div class="quiz-options">';
+      ((qz && qz.options) || []).forEach(function(opt, oi) {
+        var cls = '';
+        if (answered !== undefined) {
+          if (oi === qz.correct) cls = 'correct';
+          else if (oi === answered) cls = 'wrong';
+        }
+        var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
+        q += '<button class="quiz-option ' + cls + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
+          (answered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
+      });
+      q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
+        (answered !== undefined ? qz.feedback : '') + '</div></div>';
+    }
   } else {
     q += '<div class="quiz-block"><div class="quiz-label">READING SECTION</div>' +
       '<div style="font-size:14px;color:var(--text-dim);margin-top:8px;">Complete the reading, then mark as done below.</div></div>';
@@ -7672,6 +7737,65 @@ function answerQuizTabbed(sectionId, chosen, correct, fi, si) {
       quizPanel.classList.add('active');
     }
   }, 50);
+}
+
+function _focusQuizPanel(sectionId) {
+  setTimeout(function() {
+    var quizPanel = document.getElementById('spanel-quiz-' + sectionId);
+    if (quizPanel) {
+      document.querySelectorAll('.section-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.section-panel').forEach(function(p){ p.classList.remove('active'); });
+      document.querySelectorAll('.section-tab-btn').forEach(function(b){ if (b.textContent === 'Quiz') b.classList.add('active'); });
+      quizPanel.classList.add('active');
+    }
+  }, 50);
+}
+
+function answerMultiQuiz(sectionId, qIndex, chosen, fi, si) {
+  if (!state.quizMultiState) state.quizMultiState = {};
+  if (!state.quizMultiState[sectionId]) state.quizMultiState[sectionId] = { current: 0, answers: {}, done: false };
+  var ms = state.quizMultiState[sectionId];
+  if (ms.answers[qIndex] !== undefined) return;
+  ms.answers[qIndex] = chosen;
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
+}
+
+function nextMultiQuiz(sectionId, fi, si) {
+  if (!state.quizMultiState || !state.quizMultiState[sectionId]) return;
+  state.quizMultiState[sectionId].current++;
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
+}
+
+function finishMultiQuiz(sectionId, fi, si) {
+  if (!state.quizMultiState || !state.quizMultiState[sectionId]) return;
+  var ms = state.quizMultiState[sectionId];
+  ms.done = true;
+  var section = FLOORS[fi] && FLOORS[fi].sections[si];
+  if (section && section.quiz && section.quiz.questions) {
+    var total = section.quiz.questions.length;
+    var score = 0;
+    section.quiz.questions.forEach(function(ques, qi) { if (ms.answers[qi] === ques.correct) score++; });
+    if (score >= Math.ceil(total * 0.7)) {
+      awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+      markGate(sectionId, 'quiz');
+      logActivity('quiz', 'Quiz: ' + section.title, 15);
+    }
+  }
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
+}
+
+function retryMultiQuiz(sectionId, fi, si) {
+  if (!state.quizMultiState) state.quizMultiState = {};
+  state.quizMultiState[sectionId] = { current: 0, answers: {}, done: false };
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
 }
 
 var editorTimers = {};
