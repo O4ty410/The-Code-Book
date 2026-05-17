@@ -5506,6 +5506,18 @@ var REVISION_CARDS = [
 var _revDealtSession = false;
 var _revModalIndex = null;
 
+var REV_CARD_RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+var REV_CODE_SYMS = [
+  // Syntax (cards 0-12)
+  '{}','()','[]','<>','//','/**/','""',"''",'`','#!','@',';',',',
+  // Operators (cards 13-25)
+  '=','!=','==','===','>=','<=','=>','&&','||','!','?','??','...',
+  // Math (cards 26-38)
+  '+','-','*','/','%','**','++','--','+=','-=','*=','/=','^',
+  // Keywords (cards 39-51)
+  'fn','if','for','try','new','let','var','$','_','~','|>','::',':='
+];
+
 function renderRevisionPanel() {
   var panel = document.getElementById('panel-revision');
   if (!panel) return;
@@ -5529,9 +5541,11 @@ function _renderRevDeck(panel) {
         '<div class="rev-deck-slab rev-deck-s3"></div>' +
         '<div class="rev-deck-slab rev-deck-s2"></div>' +
         '<div class="rev-deck-slab rev-deck-s1">' +
+          '<div class="rev-cc rev-cc-tl"><span class="rev-cc-rank">A</span><span class="rev-cc-sym">{}</span></div>' +
           '<div class="rev-deck-owl">' + sageOwlSVG(72, 79) + '</div>' +
           '<div class="rev-deck-book-title">THE CODE BOOK</div>' +
           '<div class="rev-deck-guide">Your Revision Guide</div>' +
+          '<div class="rev-cc rev-cc-br"><span class="rev-cc-rank">A</span><span class="rev-cc-sym">{}</span></div>' +
         '</div>' +
       '</div>' +
       '<div class="rev-deal-hint">Tap to deal your cards</div>' +
@@ -5572,11 +5586,17 @@ function _renderRevGrid(panel, animate) {
     var shimmerDelay = ((i % 11) * 0.45).toFixed(2);
     var cardStyle = '--shimmer-delay:' + shimmerDelay + 's';
     if (animate) cardStyle += ';--rev-sx:' + sx + 'px;--rev-sy:' + sy + 'px;--rev-sr:' + sr + 'deg;animation-delay:' + delay + 'ms';
+    var rank = REV_CARD_RANKS[i % 13];
+    var sym = REV_CODE_SYMS[i];
+    var corner = '<div class="rev-cc rev-cc-tl"><span class="rev-cc-rank">' + rank + '</span><span class="rev-cc-sym">' + sym + '</span></div>';
+    var cornerBr = '<div class="rev-cc rev-cc-br"><span class="rev-cc-rank">' + rank + '</span><span class="rev-cc-sym">' + sym + '</span></div>';
     html += '<div class="rev-card' + (isKnown ? ' rev-card-known' : '') + (animate ? ' rev-card-dealing' : '') + '" style="' + cardStyle + '" onclick="openRevCard(' + i + ')">' +
+      corner +
       '<div class="rev-card-owl">' + sageOwlSVG(36, 40) + '</div>' +
       '<div class="rev-card-bookname">THE CODE<br>BOOK</div>' +
       '<div class="rev-card-floorlabel">F' + card.floor + '</div>' +
       (isKnown ? '<div class="rev-card-tick">&#10003;</div>' : '') +
+      cornerBr +
     '</div>';
   }
 
@@ -5591,26 +5611,30 @@ function openRevCard(i) {
   var box = document.getElementById('rev-modal-box');
   if (!bg || !box) return;
   var card = REVISION_CARDS[i];
+  var mRank = REV_CARD_RANKS[i % 13];
+  var mSym = REV_CODE_SYMS[i];
+  var mCornerTL = '<div class="rev-cc rev-cc-tl rev-cc-lg"><span class="rev-cc-rank">' + mRank + '</span><span class="rev-cc-sym">' + mSym + '</span></div>';
+  var mCornerBR = '<div class="rev-cc rev-cc-br rev-cc-lg"><span class="rev-cc-rank">' + mRank + '</span><span class="rev-cc-sym">' + mSym + '</span></div>';
   box.innerHTML =
     '<div class="rev-mc-wrap">' +
       '<div class="rev-mc-scene" id="rev-mc-scene">' +
         '<div class="rev-mc-inner" id="rev-mc-inner">' +
           '<div class="rev-mc-face rev-mc-front">' +
-            '<div class="hq-corner hq-corner-tl"><span class="hq-ace">A</span><span class="hq-suit">♠</span></div>' +
+            mCornerTL +
             '<div class="rev-mc-floor">Floor ' + card.floor + '</div>' +
             '<div class="rev-mc-term">' + card.term + '</div>' +
             '<div class="rev-mc-prompt">What does this mean?</div>' +
-            '<div class="hq-corner hq-corner-br"><span class="hq-ace">A</span><span class="hq-suit">♠</span></div>' +
+            mCornerBR +
           '</div>' +
           '<div class="rev-mc-face rev-mc-back">' +
-            '<div class="hq-corner hq-corner-tl"><span class="hq-ace">A</span><span class="hq-suit">♠</span></div>' +
+            mCornerTL +
             '<div class="rev-mc-term-sm">' + card.term + '</div>' +
             '<div class="rev-mc-def">' + card.def + '</div>' +
             '<div class="rev-mc-actions">' +
               '<button class="rev-gotit-btn" onclick="markRevCard(' + i + ',true)">Got it &#10003;</button>' +
               '<button class="rev-review-btn" onclick="markRevCard(' + i + ',false)">Review Again &#8635;</button>' +
             '</div>' +
-            '<div class="hq-corner hq-corner-br"><span class="hq-ace">A</span><span class="hq-suit">♠</span></div>' +
+            mCornerBR +
           '</div>' +
         '</div>' +
       '</div>' +
