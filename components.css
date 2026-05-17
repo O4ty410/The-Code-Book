@@ -1531,6 +1531,26 @@ body.light .quiz-option {
   border: 1px solid rgba(212,170,106,0.1);
   border-radius: 10px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 4px 20px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+.gate-box.complete {
+  border-color: rgba(74,222,128,0.22);
+  box-shadow: inset 0 1px 0 rgba(74,222,128,0.04), 0 4px 20px rgba(0,0,0,0.15);
+}
+@keyframes gateShimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(250%); }
+}
+.gate-box.gate-completing::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(74,222,128,0.06) 50%, transparent 100%);
+  animation: gateShimmer 0.9s ease forwards;
+  pointer-events: none;
 }
 
 .gate-label {
@@ -1610,9 +1630,23 @@ body.light .quiz-option {
 }
 
 .complete-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  cursor: default;
+  pointer-events: none;
   transform: none;
+  background: transparent;
+  border: 1px solid rgba(74,222,128,0.3);
+  color: var(--success);
+  opacity: 1;
+  box-shadow: none;
+}
+@keyframes completeBtnPress {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.97); }
+  75%  { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+.complete-btn.pressing {
+  animation: completeBtnPress 0.2s ease forwards;
 }
 
 /* ============================================================
