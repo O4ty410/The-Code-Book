@@ -2016,9 +2016,25 @@ if (!section) { return; }
 
   // QUIZ
   var answered = state.quizAnswered[section.id];
-  var q = '<div class="section-inner-pad">' +
-    '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;margin-bottom:6px;">Knowledge Check</div>' +
-    '<div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Answer to unlock the section and earn XP.</div>';
+  var _msCheck = (state.quizMultiState && state.quizMultiState[section.id]) || null;
+  var _quizAnswered = (answered !== undefined) ||
+    (_msCheck && (_msCheck.done || Object.keys(_msCheck.answers || {}).length > 0));
+  var _holoCard = (fi === 0);
+  var q = '<div class="section-inner-pad">';
+  if (!_holoCard) {
+    q += '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;margin-bottom:6px;">Knowledge Check</div>' +
+      '<div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Answer to unlock the section and earn XP.</div>';
+  }
+  if (_holoCard) {
+    q += '<div class="holo-quiz-card">' +
+      '<div class="holo-quiz-inner' + (_quizAnswered ? ' holo-answered' : '') + '">' +
+      '<div class="holo-quiz-back">' +
+      sageOwlSVG(80, 88) +
+      '<div class="holo-quiz-back-label">SAGE</div>' +
+      '<div class="holo-quiz-back-sublabel">QUIZ</div>' +
+      '</div>' +
+      '<div class="holo-quiz-front">';
+  }
   if (section.quiz) {
     var qz = section.quiz;
     if (qz.questions && Array.isArray(qz.questions)) {
@@ -2108,6 +2124,9 @@ if (!section) { return; }
   } else {
     q += '<div class="quiz-block"><div class="quiz-label">READING SECTION</div>' +
       '<div style="font-size:14px;color:var(--text-dim);margin-top:8px;">Complete the reading, then mark as done below.</div></div>';
+  }
+  if (_holoCard) {
+    q += '</div></div></div>'; // close holo-quiz-front, holo-quiz-inner, holo-quiz-card
   }
   q += '</div>';
 
