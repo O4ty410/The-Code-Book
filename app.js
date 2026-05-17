@@ -6363,7 +6363,6 @@ function awardXP(amount, key, x, y) {
   saveState();
   updateXPPanel();
   showFloatingXP('+' + (earned) + ' XP', x, y);
-  spawnGoldenDust(x || window.innerWidth / 2, y || 200);
   const newLevel = getCurrentLevel().level;
   if (newLevel > prevLevel) showLevelUp(newLevel);
 }
@@ -7564,7 +7563,7 @@ if (!section) { return; }
     '</div>';
 
   // GATE
-  var g = '<div class="gate-box" style="margin:0 32px 32px;">' +
+  var g = '<div class="gate-box' + (isDone ? ' complete' : '') + '" style="margin:0 32px 32px;">' +
     '<div class="gate-label">TO COMPLETE THIS SECTION</div>' +
     '<div class="gate-checks">' +
     '<div class="gate-check-row done" id="gate-read-' + section.id + '"><div class="gate-check-dot">&#10003;</div>Read the section</div>' +
@@ -7727,7 +7726,11 @@ function markGate(sectionId, key) {
   if (el) {
     el.classList.add('done');
     var dot = el.querySelector('.gate-check-dot');
-    if (dot) dot.innerHTML = '&#10003;';
+    if (dot) {
+      dot.innerHTML = '&#10003;';
+      dot.style.animation = 'none';
+      requestAnimationFrame(function() { dot.style.animation = 'checkTick 0.3s ease'; });
+    }
   }
   var gate = sectionGateState[sectionId];
   if (gate.read && gate.code && gate.quiz) {
@@ -8710,7 +8713,6 @@ function renderFloor1(si) {
 }
 
 function completeSection(sectionId, fi, si) {
-  // Check gates before allowing completion
   var gate = sectionGateState[sectionId] || {};
   var section = FLOORS[fi].sections[si];
   var needsQuiz = !!(section && section.quiz);
@@ -8719,34 +8721,50 @@ function completeSection(sectionId, fi, si) {
     return;
   }
 
+  // Capture button position before DOM rebuild so XP float lands on it
+  var btn = document.getElementById('complete-btn-' + sectionId);
+  var bx = window.innerWidth / 2, by = 300;
+  if (btn) {
+    var r = btn.getBoundingClientRect();
+    bx = r.left + r.width / 2;
+    by = r.top + r.height / 2;
+    btn.classList.add('pressing');
+  }
+
   state.completed[sectionId] = true;
   markStreakProtected();
   var secXP = getSectionXP(fi);
-  awardXP(secXP, 'complete-' + sectionId, window.innerWidth / 2, 300);
+  awardXP(secXP, 'complete-' + sectionId, bx, by);
   playCompletionSound();
   trackDailySection();
 
-  // Log to activity feed
   var secName = FLOORS[fi] && FLOORS[fi].sections[si] ? FLOORS[fi].sections[si].title : sectionId;
   logActivity('section', 'Completed: ' + secName, secXP);
 
   const isNowComplete = isFloorComplete(fi);
   if (isNowComplete) {
     awardXP(getFloorXP(fi), 'floor-' + fi, window.innerWidth / 2, 250);
-    setTimeout(() => showFloorCelebration(fi), 600);
+    setTimeout(() => showFloorCelebration(fi), 700);
   }
   saveState();
   checkGuestSavePrompt();
-  const content = document.querySelector('.section-content');
-  if (content) {
-    content.classList.add('section-complete-flash');
-    setTimeout(() => content.classList.remove('section-complete-flash'), 1000);
-  }
   updateAchievements();
   updateDailyGoalBar();
   updateTopChips();
   renderNav();
-  renderFloor(fi, si);
+
+  // Brief pause so button press animation is visible, then rebuild
+  setTimeout(function() {
+    renderFloor(fi, si);
+    // After DOM rebuild trigger gate box shimmer
+    setTimeout(function() {
+      var gateBox = document.querySelector('.gate-box');
+      if (gateBox) {
+        gateBox.classList.add('gate-completing');
+        setTimeout(function() { gateBox.classList.remove('gate-completing'); }, 950);
+      }
+    }, 40);
+  }, 180);
 }
 
 function prevSection(fi, si) {
