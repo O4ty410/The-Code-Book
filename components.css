@@ -1343,6 +1343,16 @@
 }
 .quiz-retry-btn:hover { border-color: var(--floor-color, var(--accent)); color: var(--text); }
 
+.quiz-retry-inline {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+  border-color: rgba(192, 132, 252, 0.35);
+  color: #c084fc;
+}
+.quiz-retry-inline:hover { border-color: #c084fc; color: #fff; }
+
 /* ============================================================
    CHECKLIST
    ============================================================ */
