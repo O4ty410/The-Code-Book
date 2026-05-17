@@ -10191,7 +10191,6 @@ function renderProfilePanel() {
 
   var currentTheme = getProfTheme();
   var name = state.playerName || localStorage.getItem('codebook_player_name') || 'Learner';
-  var initials = name.split(' ').map(function(w){ return w[0]; }).join('').toUpperCase().substring(0, 2) || '?';
   var cur = getCurrentLevel();
   var next = getNextLevel();
   var levelName = LEVEL_NAMES[cur.level] || 'Level ' + cur.level;
@@ -10263,20 +10262,25 @@ function renderProfilePanel() {
     }).join('') +
     '</div>';
 
-  var achieveHtml = ACHIEVEMENTS.map(function(a) {
-    var earned = a.check();
-    return '<div class="prof-badge' + (earned ? ' prof-badge-earned' : '') + '">' +
-      '<div class="prof-badge-sym">' + a.sym + '</div>' +
-      '<div class="prof-badge-label">' + a.label + '</div>' +
-      '<div class="prof-badge-desc">' + a.desc + '</div>' +
-      '</div>';
-  }).join('');
+  var achieveHtml = '<div class="prof-ach-list">' +
+    ACHIEVEMENTS.map(function(a) {
+      var earned = a.check();
+      return '<div class="prof-ach-row' + (earned ? ' earned' : '') + '">' +
+        '<span class="prof-ach-check">' + (earned ? '&#10003;' : '&#9633;') + '</span>' +
+        '<span class="prof-ach-sym">' + a.sym + '</span>' +
+        '<div class="prof-ach-meta">' +
+        '<span class="prof-ach-name">' + a.label + '</span>' +
+        '<span class="prof-ach-desc">' + a.desc + '</span>' +
+        '</div>' +
+        '</div>';
+    }).join('') +
+    '</div>';
 
   var heroSwatchesHtml = '<div class="prof-hero-swatches">' +
     PROF_THEMES.map(function(t) {
       var isActive = t.id === currentTheme;
       return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '"' +
-        ' title="' + t.name + ' — ' + t.mood + '"' +
+        ' title="' + t.name + '"' +
         ' onclick="switchProfTheme(\'' + t.id + '\')"' +
         ' style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '">' +
         '</button>';
@@ -10284,45 +10288,48 @@ function renderProfilePanel() {
     '</div>';
 
   var selectedAv = AVATARS.find(function(a) { return a.id === getSelectedAvatar(); }) || null;
-  var avatarInner = selectedAv
-    ? '<span style="font-size:32px;line-height:1;color:' + selectedAv.color + ';filter:drop-shadow(0 0 8px ' + selectedAv.glow + ')">' + selectedAv.icon + '</span>'
-    : initials;
-  var avatarStyle = selectedAv
-    ? ' style="background:' + selectedAv.grad + ';box-shadow:0 0 0 3px ' + selectedAv.border + ',0 4px 16px rgba(0,0,0,0.4)"'
+  var archetypeHtml = selectedAv
+    ? '<div class="prof-archetype-frame" style="--av-color:' + selectedAv.color + ';--av-glow:' + selectedAv.glow + '">' +
+      '<span class="prof-archetype-icon">' + selectedAv.icon + '</span>' +
+      '<span class="prof-archetype-name">' + selectedAv.name + '</span>' +
+      '</div>'
     : '';
+
+  var timeDisplay = totalMinutes >= 60
+    ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
+    : totalMinutes + 'm';
 
   panel.innerHTML =
     '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
 
-    // Header
+    // Hero
     '<div class="prof-hero">' +
-    '<div class="prof-avatar-wrap">' +
-    '<div class="prof-avatar"' + avatarStyle + '>' + avatarInner + '</div>' +
-    '<button class="prof-avatar-plus" onclick="showAvatarPicker()" title="Choose archetype">+</button>' +
-    '</div>' +
-    '<div class="prof-hero-info">' +
+    '<div class="prof-hero-left">' +
+    '<div class="prof-id-tag">// OPERATOR</div>' +
     '<div class="prof-name">' + name + '</div>' +
     '<div class="prof-level-name">Level ' + cur.level + ' &mdash; ' + levelName + '</div>' +
     heroSwatchesHtml +
     '</div>' +
+    '<div class="prof-hero-right">' +
+    archetypeHtml +
+    '<button class="prof-avatar-plus" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'PICK ARCHETYPE') + '</button>' +
+    '</div>' +
     '</div>' +
 
-    // Stats row
-    (function() {
-      var timeDisplay = totalMinutes >= 60
-        ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
-        : totalMinutes + 'm';
-      return '<div class="prof-stats-row">' +
-        '<div class="prof-stat-card"><div class="prof-stat-val">' + state.xp + '</div><div class="prof-stat-lbl">Total XP</div></div>' +
-        '<div class="prof-stat-card"><div class="prof-stat-val">' + state.streak + '</div><div class="prof-stat-lbl">Day Streak</div></div>' +
-        '<div class="prof-stat-card"><div class="prof-stat-val">' + doneSecs + '</div><div class="prof-stat-lbl">Sections Done</div></div>' +
-        '<div class="prof-stat-card"><div class="prof-stat-val">' + timeDisplay + '</div><div class="prof-stat-lbl">Time Spent</div></div>' +
-        '</div>';
-    })() +
+    // HUD strip
+    '<div class="prof-hud">' +
+    '<div class="prof-hud-stat"><span class="prof-hud-val">' + state.xp + '</span><span class="prof-hud-lbl">XP</span></div>' +
+    '<div class="prof-hud-div"></div>' +
+    '<div class="prof-hud-stat"><span class="prof-hud-val">' + state.streak + '</span><span class="prof-hud-lbl">Streak</span></div>' +
+    '<div class="prof-hud-div"></div>' +
+    '<div class="prof-hud-stat"><span class="prof-hud-val">' + doneSecs + '</span><span class="prof-hud-lbl">Sections</span></div>' +
+    '<div class="prof-hud-div"></div>' +
+    '<div class="prof-hud-stat"><span class="prof-hud-val">' + timeDisplay + '</span><span class="prof-hud-lbl">Time</span></div>' +
+    '</div>' +
 
     // Level progress
     '<div class="prof-section">' +
-    '<div class="prof-section-title">Level Progress</div>' +
+    '<div class="prof-section-title">// Level Progress</div>' +
     '<div class="prof-level-bar-wrap">' +
     '<span class="prof-level-tag">' + levelName + '</span>' +
     '<div class="prof-level-track"><div class="prof-level-fill" style="width:' + levelPct + '%"></div></div>' +
@@ -10331,21 +10338,21 @@ function renderProfilePanel() {
     '<div class="prof-level-sub">' + state.xp + ' XP' + (next ? ' &mdash; ' + (next.xp - state.xp) + ' XP to ' + nextName : ' &mdash; Max level reached') + '</div>' +
     '</div>' +
 
-    // Activity calendar
+    // Two-column: activity + achievements
+    '<div class="prof-two-col">' +
     '<div class="prof-section">' +
-    '<div class="prof-section-title">Activity — Last 28 Days</div>' +
+    '<div class="prof-section-title">// Activity &mdash; Last 28 Days</div>' +
     calHtml +
     '</div>' +
-
-    // Achievements
     '<div class="prof-section">' +
-    '<div class="prof-section-title">Achievements</div>' +
-    '<div class="prof-badges">' + achieveHtml + '</div>' +
+    '<div class="prof-section-title">// Achievements</div>' +
+    achieveHtml +
+    '</div>' +
     '</div>' +
 
     // Floor progress
     '<div class="prof-section">' +
-    '<div class="prof-section-title">Floor Progress</div>' +
+    '<div class="prof-section-title">// Floor Progress</div>' +
     '<div class="prof-floors">' + floorRows + '</div>' +
     '</div>' +
 
