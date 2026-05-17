@@ -318,7 +318,7 @@
   margin-bottom: 8px;
 }
 
-.sage-avatar-sm { font-size: 20px; }
+.sage-avatar-sm { width: 20px; height: 22px; display: inline-block; }
 
 .sage-card-name {
   font-family: 'IBM Plex Mono', monospace;
@@ -1491,7 +1491,7 @@
 .hint-text { font-size: 14px; color: var(--text-dim); line-height: 1.8; }
 
 .owl-wrap { display: flex; gap: 12px; align-items: flex-start; }
-.owl-avatar { font-size: 28px; flex-shrink: 0; }
+.owl-avatar { width: 30px; height: 33px; flex-shrink: 0; display: inline-block; }
 .owl-bubble { flex: 1; }
 .owl-name {
   font-family: 'IBM Plex Mono', monospace;
@@ -1995,7 +1995,7 @@
   margin-bottom: 8px;
 }
 
-.sage-bubble-icon { font-size: 18px; }
+.sage-bubble-icon { width: 18px; height: 20px; display: inline-block; vertical-align: middle; }
 
 .sage-bubble-name {
   font-family: 'IBM Plex Mono', monospace;
@@ -3489,9 +3489,10 @@ body.learn-mode #main-col {
 }
 
 .fc-sage-owl {
-  font-size: 38px;
-  line-height: 1;
+  width: 38px;
+  height: 42px;
   display: inline-block;
+  vertical-align: middle;
   filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.55));
 }
 
@@ -3611,17 +3612,19 @@ body.learn-mode #main-col {
 }
 
 .sfi-owl {
-  font-size: 56px;
-  line-height: 1;
-  margin-bottom: 10px;
+  width: 64px;
+  height: 70px;
+  margin: 0 auto 10px;
   filter: drop-shadow(0 0 16px rgba(0, 200, 255, 0.50));
 }
 
 .sfi-sage-label {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 5px;
-  color: #00c8ff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #00ff88;
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.70);
   text-transform: uppercase;
   margin-bottom: 18px;
 }
@@ -4713,7 +4716,7 @@ body.learn-mode #main-col {
   border: 1px solid var(--border);
   border-radius: 10px;
 }
-.sage-ask-owl { font-size: 24px; flex-shrink: 0; }
+.sage-ask-owl { width: 24px; height: 26px; flex-shrink: 0; display: flex; align-items: center; }
 .sage-ask-info { flex: 1; }
 .sage-ask-label { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 0.5px; }
 .sage-ask-sub { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.5px; }
@@ -4781,7 +4784,7 @@ body.learn-mode #main-col {
   display: flex; align-items: center; gap: 8px;
   flex: 1;
 }
-.sage-chat-owl { font-size: 20px; }
+.sage-chat-owl { width: 20px; height: 22px; display: inline-block; vertical-align: middle; }
 .sage-chat-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; }
 .sage-uses-badge {
   display: inline-block;
@@ -4820,7 +4823,7 @@ body.learn-mode #main-col {
 .sage-msg { display: flex; gap: 10px; align-items: flex-start; }
 .sage-msg-owl { flex-direction: row; }
 .sage-msg-user { flex-direction: row-reverse; }
-.sage-msg-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.sage-msg-icon { width: 20px; height: 22px; flex-shrink: 0; margin-top: 2px; display: inline-block; }
 .sage-msg-text {
   background: var(--surface2);
   border-radius: 10px;

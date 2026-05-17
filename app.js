@@ -17,7 +17,68 @@ function getAudioContext() {
   return _sharedAudioCtx;
 }
 
-
+var _sageOwlId = 0;
+function sageOwlSVG(w, h) {
+  var id = ++_sageOwlId;
+  w = w || 60; h = h || 66;
+  var B = 'M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z';
+  return (
+    '<svg viewBox="0 0 100 110" width="' + w + '" height="' + h + '" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible">' +
+    '<defs>' +
+      '<radialGradient id="sob' + id + '" cx="44" cy="34" r="62" gradientUnits="userSpaceOnUse">' +
+        '<stop offset="0%" stop-color="#22eeff"/>' +
+        '<stop offset="38%" stop-color="#0070cc"/>' +
+        '<stop offset="72%" stop-color="#002c68"/>' +
+        '<stop offset="100%" stop-color="#000d22"/>' +
+      '</radialGradient>' +
+      '<filter id="sgf' + id + '" x="-25%" y="-25%" width="150%" height="150%">' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="4" result="bl"/>' +
+        '<feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter>' +
+      '<filter id="sef' + id + '" x="-80%" y="-80%" width="260%" height="260%">' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="bl"/>' +
+        '<feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter>' +
+    '</defs>' +
+    '<path d="' + B + '" fill="url(#sob' + id + ')"/>' +
+    '<path d="' + B + '" fill="rgba(160,60,255,0.09)"/>' +
+    '<path d="' + B + '" fill="none" stroke="rgba(0,210,255,0.65)" stroke-width="2.5" filter="url(#sgf' + id + ')"/>' +
+    '<path d="' + B + '" fill="none" stroke="rgba(0,220,255,0.5)" stroke-width="1"/>' +
+    '<ellipse cx="50" cy="47" rx="24" ry="22" fill="rgba(0,10,36,0.52)" stroke="rgba(0,150,255,0.15)" stroke-width="0.8"/>' +
+    '<circle cx="36" cy="43" r="11" fill="#000800"/>' +
+    '<g filter="url(#sef' + id + ')">' +
+      '<circle cx="36" cy="43" r="11" fill="none" stroke="#00ff88" stroke-width="1.6"/>' +
+      '<circle cx="36" cy="43" r="7.5" fill="none" stroke="#00dd66" stroke-width="1"/>' +
+      '<circle cx="36" cy="43" r="4.2" fill="#00cc55"/>' +
+    '</g>' +
+    '<circle cx="36" cy="43" r="2" fill="#000800"/>' +
+    '<circle cx="38.5" cy="40.5" r="1.3" fill="rgba(255,255,255,0.88)"/>' +
+    '<circle cx="64" cy="43" r="11" fill="#000800"/>' +
+    '<g filter="url(#sef' + id + ')">' +
+      '<circle cx="64" cy="43" r="11" fill="none" stroke="#00ff88" stroke-width="1.6"/>' +
+      '<circle cx="64" cy="43" r="7.5" fill="none" stroke="#00dd66" stroke-width="1"/>' +
+      '<circle cx="64" cy="43" r="4.2" fill="#00cc55"/>' +
+    '</g>' +
+    '<circle cx="64" cy="43" r="2" fill="#000800"/>' +
+    '<circle cx="66.5" cy="40.5" r="1.3" fill="rgba(255,255,255,0.88)"/>' +
+    '<polygon points="50,55 44,63 56,63" fill="#cce6f4" stroke="rgba(0,130,200,0.3)" stroke-width="0.5"/>' +
+    '<line x1="50" y1="68" x2="50" y2="84" stroke="#00ff88" stroke-width="1.2" stroke-opacity="0.72"/>' +
+    '<line x1="50" y1="72" x2="38" y2="72" stroke="#00ff88" stroke-width="1" stroke-opacity="0.62"/>' +
+    '<line x1="38" y1="72" x2="33" y2="77" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/>' +
+    '<line x1="50" y1="72" x2="62" y2="72" stroke="#00ff88" stroke-width="1" stroke-opacity="0.62"/>' +
+    '<line x1="62" y1="72" x2="67" y2="77" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/>' +
+    '<line x1="50" y1="79" x2="41" y2="79" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/>' +
+    '<line x1="50" y1="79" x2="59" y2="79" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/>' +
+    '<circle cx="50" cy="72" r="2" fill="#00ff88" fill-opacity="0.85"/>' +
+    '<circle cx="38" cy="72" r="1.5" fill="#00ff88" fill-opacity="0.72"/>' +
+    '<circle cx="62" cy="72" r="1.5" fill="#00ff88" fill-opacity="0.72"/>' +
+    '<circle cx="50" cy="79" r="2" fill="#00ff88" fill-opacity="0.85"/>' +
+    '<circle cx="41" cy="79" r="1.2" fill="#00ff88" fill-opacity="0.62"/>' +
+    '<circle cx="59" cy="79" r="1.2" fill="#00ff88" fill-opacity="0.62"/>' +
+    '<circle cx="50" cy="84" r="1.5" fill="#00ff88" fill-opacity="0.72"/>' +
+    '</svg>'
+  );
+}
 
 var sectionGateState = {};
 var matchSelected = {};
@@ -1341,7 +1402,7 @@ function showFloorCelebration(floorIndex) {
       '</div>' +
       // Sage quote
       '<div class="fc-sage">' +
-        '<div class="fc-sage-owl">\uD83E\uDD89</div>' +
+        '<div class="fc-sage-owl">' + sageOwlSVG(38, 42) + '</div>' +
         '<div class="fc-sage-text" id="fc-sage-text"></div>' +
       '</div>' +
       // Next floor preview
@@ -1486,7 +1547,7 @@ function showProgressNudge(fi, si) {
   const nudge = document.createElement('div');
   nudge.style.cssText = `position:fixed;bottom:80px;right:16px;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:16px 20px;z-index:5000;max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeUp 0.4s ease;`;
   nudge.innerHTML = `
-    <div style="font-size:20px;margin-bottom:8px;">\uD83E\uDD89</div>
+    <div style="margin-bottom:8px;">${sageOwlSVG(22, 24)}</div>
     <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:13px;margin-bottom:6px;">${name ? 'Halfway there, ' + (name) + '!' : 'Halfway there!'}</div>
     <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">You\'re halfway through this floor. The hard part is behind you.</div>
     <button onclick="this.parentElement.remove()" style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 14px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;">Keep going</button>
@@ -1575,7 +1636,7 @@ function showGuestSavePrompt() {
   prompt.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;`;
   prompt.innerHTML = `
     <div style="background:var(--surface);border:1px solid var(--accent);border-radius:16px;padding:32px;max-width:340px;text-align:center;">
-      <div style="font-size:40px;margin-bottom:16px;">\uD83E\uDD89</div>
+      <div style="margin-bottom:16px;display:flex;justify-content:center;">${sageOwlSVG(46, 51)}</div>
       <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:12px;">Save your progress?</div>
       <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;">You\'ve completed 3 sections. Create a free account to make sure you never lose your progress.</div>
       <button onclick="this.closest('div[style*=fixed]').remove();document.getElementById('auth-screen').style.display='flex';switchTab('signup');" style="width:100%;padding:16px;background:var(--accent);border:none;border-radius:8px;color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;">CREATE FREE ACCOUNT</button>
@@ -1643,7 +1704,7 @@ function showSageFloorIntro(fi) {
   el.id = 'sage-floor-intro-overlay';
   el.innerHTML = [
     '<div class="sfi-card">',
-      '<div class="sfi-owl">🦉</div>',
+      '<div class="sfi-owl">' + sageOwlSVG(64, 70) + '</div>',
       '<div class="sfi-sage-label">SAGE</div>',
       '<div class="sfi-floor-badge">FLOOR ' + (fi + 1) + ' — ' + floor.title.toUpperCase() + '</div>',
       '<p class="sfi-message">' + text + '</p>',
@@ -1840,7 +1901,7 @@ if (!section) { return; }
 
   if (section.hint) {
     r += '<div class="hint-box" id="hint-' + section.id + '">' +
-      '<div class="owl-wrap"><div class="owl-avatar">&#x1F989;</div>' +
+      '<div class="owl-wrap"><div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
       '<div class="owl-bubble"><div class="owl-name">SAGE &mdash; YOUR GUIDE</div>' +
       '<div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div></div></div></div>';
   }
@@ -1902,7 +1963,7 @@ if (!section) { return; }
   // Sage Ask button
   var usesLeft = (state.sageUsesLeft !== undefined) ? state.sageUsesLeft : SAGE_TOTAL_USES;
   r += '<div class="sage-ask-strip">' +
-    '<div class="sage-ask-owl">🦉</div>' +
+    '<div class="sage-ask-owl">' + sageOwlSVG(24, 26) + '</div>' +
     '<div class="sage-ask-info">' +
       '<div class="sage-ask-label">Stuck? Ask Sage</div>' +
       '<div class="sage-ask-sub">' + usesLeft + ' question' + (usesLeft !== 1 ? 's' : '') + ' remaining</div>' +
@@ -2813,7 +2874,7 @@ function toggleFloorInfo(fi) {
   if (sageEl) {
     sageEl.innerHTML =
       '<div class="fc-sage-figure">' +
-        '<span class="fc-sage-owl" style="transform:scaleX(' + pose.flip + ')">🦉</span>' +
+        '<span class="fc-sage-owl" style="transform:scaleX(' + pose.flip + ')">' + sageOwlSVG(38, 42) + '</span>' +
         '<div class="fc-sage-cane" style="transform:rotate(' + pose.angle + 'deg)"></div>' +
       '</div>' +
       '<div class="fc-sage-quote">' + pose.quote + '</div>';
@@ -3515,10 +3576,10 @@ let sageIdleTimeout = null;
 
 
 const SAGE_MOODS = {
-  encourage: { icon: '\uD83E\uDD89', color: 'var(--accent)' },
-  tip:       { icon: '\uD83E\uDD89', color: 'var(--accent2)' },
-  warn:      { icon: '\uD83E\uDD89', color: 'var(--floor3)' },
-  celebrate: { icon: '\uD83E\uDD89', color: 'var(--success)' }
+  encourage: { icon: sageOwlSVG(18, 20), color: 'var(--accent)' },
+  tip:       { icon: sageOwlSVG(18, 20), color: 'var(--accent2)' },
+  warn:      { icon: sageOwlSVG(18, 20), color: 'var(--floor3)' },
+  celebrate: { icon: sageOwlSVG(18, 20), color: 'var(--success)' }
 };
 
 const SAGE_IDLE_MESSAGES = [
@@ -3577,7 +3638,7 @@ function openSageChat(sectionId, fi) {
   overlay.innerHTML =
     '<div class="sage-chat-panel">' +
       '<div class="sage-chat-header">' +
-        '<div class="sage-chat-title"><span class="sage-chat-owl">🦉</span> Ask Sage</div>' +
+        '<div class="sage-chat-title"><span class="sage-chat-owl">' + sageOwlSVG(20, 22) + '</span> Ask Sage</div>' +
         '<div class="sage-chat-meta">Floor ' + (fi+1) + ' · ' + sectionTitle + ' · ' +
           '<span class="sage-uses-badge">' + usesLeft + ' left</span></div>' +
         '<button class="sage-chat-close" onclick="document.getElementById(\'sage-chat-overlay\').remove()">×</button>' +
@@ -3588,7 +3649,7 @@ function openSageChat(sectionId, fi) {
       '</div>' +
       '<div class="sage-chat-messages" id="sage-chat-messages">' +
         '<div class="sage-msg sage-msg-owl">' +
-          '<span class="sage-msg-icon">🦉</span>' +
+          '<span class="sage-msg-icon">' + sageOwlSVG(20, 22) + '</span>' +
           '<div class="sage-msg-text">What are you stuck on? Be specific — the more detail you give me, the more useful I can be.</div>' +
         '</div>' +
       '</div>' +
@@ -3618,7 +3679,7 @@ function submitSageQuestion(sectionId, fi) {
   var msgs = document.getElementById('sage-chat-messages');
   if (msgs) {
     msgs.innerHTML += '<div class="sage-msg sage-msg-user"><div class="sage-msg-text">' + escHtml(question) + '</div></div>';
-    msgs.innerHTML += '<div class="sage-msg sage-msg-owl" id="sage-thinking"><span class="sage-msg-icon">🦉</span><div class="sage-msg-text sage-thinking-dots">Thinking<span>.</span><span>.</span><span>.</span></div></div>';
+    msgs.innerHTML += '<div class="sage-msg sage-msg-owl" id="sage-thinking"><span class="sage-msg-icon">' + sageOwlSVG(20, 22) + '</span><div class="sage-msg-text sage-thinking-dots">Thinking<span>.</span><span>.</span><span>.</span></div></div>';
     msgs.scrollTop = msgs.scrollHeight;
   }
   if (input) { input.value = ''; input.disabled = true; }
@@ -3637,7 +3698,7 @@ function submitSageQuestion(sectionId, fi) {
     var thinking = document.getElementById('sage-thinking');
     if (thinking) thinking.remove();
     if (msgs) {
-      msgs.innerHTML += '<div class="sage-msg sage-msg-owl"><span class="sage-msg-icon">🦉</span><div class="sage-msg-text">' + response + '</div></div>';
+      msgs.innerHTML += '<div class="sage-msg sage-msg-owl"><span class="sage-msg-icon">' + sageOwlSVG(20, 22) + '</span><div class="sage-msg-text">' + response + '</div></div>';
       if (state.sageUsesLeft === 0) {
         msgs.innerHTML += '<div class="sage-msg sage-msg-system">You\'ve used all your Sage questions. From here, trust your own reasoning — that\'s where real learning happens.</div>';
       }

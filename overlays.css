@@ -221,9 +221,11 @@
    ============================================================ */
 
 .onboarding-owl {
-  font-size: 52px;
-  margin-bottom: 16px;
+  width: 56px;
+  height: 62px;
+  margin: 0 auto 16px;
   animation: owlBob 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 14px rgba(0, 200, 255, 0.50));
 }
 
 .onboarding-title {
@@ -603,7 +605,7 @@
   margin: 0 24px 24px;
   animation: fcSlideIn 0.5s 1s both;
 }
-.fc-sage-owl { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+.fc-sage-owl { flex-shrink: 0; margin-top: 2px; }
 .fc-sage-text {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
