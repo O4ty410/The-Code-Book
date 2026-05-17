@@ -30,9 +30,9 @@
   <link rel="stylesheet" href="animations.min.css?v=20260517m">
   <link rel="stylesheet" href="layout.min.css?v=20260517m">
   <link rel="stylesheet" href="cover.min.css?v=20260517m">
-  <link rel="stylesheet" href="components.min.css?v=20260517m">
+  <link rel="stylesheet" href="components.min.css?v=20260517n">
   <link rel="stylesheet" href="panels.min.css?v=20260517m">
-  <link rel="stylesheet" href="overlays.min.css?v=20260517m">
+  <link rel="stylesheet" href="overlays.min.css?v=20260517n">
 
   
 </head>
@@ -418,6 +418,7 @@
     <button class="top-nav-tab" id="tnav-premium" onclick="switchTopNav('premium',this)">♛ Premium</button>
     <button class="top-nav-tab" id="tnav-profile" onclick="switchTopNav('profile',this)">👤 Profile</button>
     <button class="top-nav-tab" id="tnav-game" onclick="switchTopNav('game',this)">🎮 Game Hub</button>
+    <button class="top-nav-tab" id="tnav-revision" onclick="switchTopNav('revision',this)">🃏 Revision</button>
   </div>
   <div class="top-right">
     <div class="top-xp-chip" id="top-xp-chip">⚡ 0 XP</div>
@@ -465,6 +466,9 @@
 
   <!-- GAME PANEL -->
   <div class="top-panel" id="panel-game"></div>
+
+  <!-- REVISION PANEL -->
+  <div class="top-panel" id="panel-revision"></div>
 
   </div>
 
@@ -566,13 +570,16 @@
   <button class="mob-nav-btn" id="mob-profile" onclick="switchTopNav('profile',this);setMobActive(this)">
     👤<span>Profile</span>
   </button>
+  <button class="mob-nav-btn" id="mob-revision" onclick="switchTopNav('revision',this);setMobActive(this)">
+    🃏<span>Revision</span>
+  </button>
 </div>
 
 </div>
 <!-- END APP -->
 
 <script src="curriculum.js?v=20260517" defer></script>
-<script src="app.js?v=20260517m" defer></script>
+<script src="app.js?v=20260517n" defer></script>
 </body>
 </html>
 
