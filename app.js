@@ -3846,9 +3846,8 @@ function playCompletionSound() {
   setTimeout(() => playTone(784, 0.6, 0.2), 600);
 }
 
-// --- THEME SYSTEM ---
-function toggleTheme() { /* light mode removed */ }
-function applyTheme() { /* light mode removed */ }
+function toggleTheme() {}
+function applyTheme() {}
 function toggleTimer() {
   if (state.timerRunning) {
     clearInterval(state.timerInterval);
