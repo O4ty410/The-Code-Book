@@ -140,8 +140,9 @@
 }
 
 @media (max-width: 600px) {
-  .cover-title { font-size: clamp(40px, 14vw, 80px); }
-  .start-btn   { padding: 16px 32px; font-size: 11px; }
+  .cover-title        { font-size: clamp(40px, 14vw, 80px); }
+  .start-btn          { padding: 16px 32px; font-size: 11px; }
+  .landing-begin-btn  { padding: 16px 40px; font-size: 12px; letter-spacing: 4px; }
 }
 
 /* ============================================================
