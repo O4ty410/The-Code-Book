@@ -5806,6 +5806,159 @@ function stopLandingCanvas() {
   }
 }
 
+// ── Hub canvas: twinkling code background (theme-coloured) ─────────────────
+
+var _hubRAF = null;
+
+function getHubThemeRGB() {
+  var id = getProfTheme();
+  var map = {
+    'cosmic-blue':   [0, 180, 255],
+    'aurora-teal':   [0, 220, 160],
+    'royal-violet':  [168, 85, 247],
+    'ember-crimson': [255, 80, 80],
+    'obsidian-gold': [200, 169, 110],
+  };
+  return map[id] || [0, 180, 255];
+}
+
+function startHubCanvas() {
+  stopHubCanvas();
+  var canvas = document.getElementById('hub-canvas');
+  if (!canvas) return;
+
+  var rgb = getHubThemeRGB();
+  var cr = rgb[0], cg = rgb[1], cb = rgb[2];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  canvas._hcResize = resize;
+  window.addEventListener('resize', resize);
+
+  var lines = [
+    [0.01, 0.04, 'function fetchData(url) {'],
+    [0.01, 0.07, '  return fetch(url)'],
+    [0.01, 0.09, '    .then(r => r.json())'],
+    [0.01, 0.11, '    .catch(err => null);'],
+    [0.01, 0.13, '}'],
+    [0.01, 0.22, 'const state = { user: null, xp: 0 };'],
+    [0.01, 0.25, 'localStorage.setItem(key,'],
+    [0.01, 0.27, '  JSON.stringify(state));'],
+    [0.01, 0.35, 'try {'],
+    [0.01, 0.37, '  const v = JSON.parse(raw);'],
+    [0.01, 0.39, '  setState(v);'],
+    [0.01, 0.41, '} catch(e) { return false; }'],
+    [0.01, 0.50, 'for (let i = 0; i < n; i++) {'],
+    [0.01, 0.52, '  if (arr[i] > max) max = arr[i];'],
+    [0.01, 0.54, '}'],
+    [0.01, 0.63, 'const lerp = (a, b, t) =>'],
+    [0.01, 0.65, '  a + (b - a) * Math.max(0,'],
+    [0.01, 0.67, '    Math.min(1, t));'],
+    [0.01, 0.76, 'return false;'],
+    [0.01, 0.80, 'export { lerp, clamp, round };'],
+    [0.01, 0.87, 'returnValue = setStateValue(key, v);'],
+    [0.72, 0.03, 'const main = async () => {'],
+    [0.72, 0.05, '  const n = parseInt(input);'],
+    [0.72, 0.07, '  for (let i=2; i<=n; i++) {'],
+    [0.72, 0.09, '    fib[i] = fib[i-1]+fib[i-2];'],
+    [0.72, 0.11, '  }'],
+    [0.72, 0.13, '  return fib[n];'],
+    [0.72, 0.15, '};'],
+    [0.72, 0.24, 'SELECT id, username, email,'],
+    [0.72, 0.26, '       created_at'],
+    [0.72, 0.28, 'FROM users'],
+    [0.72, 0.30, 'WHERE active = 1'],
+    [0.72, 0.32, 'ORDER BY created_at DESC'],
+    [0.72, 0.34, 'LIMIT 50;'],
+    [0.72, 0.43, 'const cloneDeep = (obj) => {'],
+    [0.72, 0.45, '  if (typeof obj !== "object")'],
+    [0.72, 0.47, '    return obj;'],
+    [0.72, 0.49, '  return JSON.parse('],
+    [0.72, 0.51, '    JSON.stringify(obj)'],
+    [0.72, 0.53, '  );'],
+    [0.72, 0.55, '};'],
+    [0.72, 0.64, 'function quickSort(arr) {'],
+    [0.72, 0.66, '  if (!arr.length) return arr;'],
+    [0.72, 0.68, '  const pivot = arr[Math.floor('],
+    [0.72, 0.70, '    arr.length / 2)];'],
+    [0.72, 0.72, '  const left  = arr.filter(x => x < pivot);'],
+    [0.72, 0.74, '  const right = arr.filter(x => x > pivot);'],
+    [0.72, 0.76, '  return [...quickSort(left),'],
+    [0.72, 0.78, '    pivot, ...quickSort(right)];'],
+    [0.72, 0.80, '}'],
+  ];
+
+  var ls = lines.map(function() {
+    return {
+      phase:      Math.random() * Math.PI * 2,
+      speed:      0.25 + Math.random() * 0.9,
+      baseAlpha:  0.09 + Math.random() * 0.07,
+      spark:      0,
+      sparkDecay: 1.2 + Math.random() * 1.4,
+    };
+  });
+
+  function scheduleSpark() {
+    var idx = Math.floor(Math.random() * ls.length);
+    ls[idx].spark = 0.55 + Math.random() * 0.35;
+    canvas._hcSpark = setTimeout(scheduleSpark, 80 + Math.random() * 300);
+  }
+  scheduleSpark();
+
+  var t0 = performance.now() / 1000;
+  var lastT = t0;
+
+  function draw() {
+    var now = performance.now() / 1000;
+    var dt  = Math.min(0.05, now - lastT);
+    lastT   = now;
+    var t   = now - t0;
+    var W = canvas.width, H = canvas.height;
+    var ctx = canvas.getContext('2d');
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.font = '11px "IBM Plex Mono",Consolas,monospace';
+    ctx.textBaseline = 'top';
+
+    lines.forEach(function(line, i) {
+      var s = ls[i];
+      var twinkle = 0.5 + 0.5 * Math.sin(s.phase + t * s.speed);
+      var a = s.baseAlpha * (0.35 + 0.65 * twinkle);
+      if (s.spark > 0) s.spark = Math.max(0, s.spark - dt * s.sparkDecay);
+      var glowing = s.spark > 0.05;
+      var fa = Math.min(0.95, a + s.spark * 0.6);
+
+      ctx.save();
+      if (glowing) {
+        ctx.shadowColor = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (s.spark * 0.9).toFixed(2) + ')';
+        ctx.shadowBlur  = 12 + s.spark * 20;
+      } else {
+        ctx.shadowColor = 'rgba(' + cr + ',' + cg + ',' + cb + ',0.20)';
+        ctx.shadowBlur  = 3;
+      }
+      ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + fa.toFixed(3) + ')';
+      ctx.fillText(line[2], line[0] * W, line[1] * H);
+      ctx.restore();
+    });
+
+    _hubRAF = requestAnimationFrame(draw);
+  }
+
+  draw();
+}
+
+function stopHubCanvas() {
+  if (_hubRAF) { cancelAnimationFrame(_hubRAF); _hubRAF = null; }
+  var canvas = document.getElementById('hub-canvas');
+  if (canvas) {
+    if (canvas._hcResize) { window.removeEventListener('resize', canvas._hcResize); canvas._hcResize = null; }
+    if (canvas._hcSpark)  { clearTimeout(canvas._hcSpark); canvas._hcSpark = null; }
+  }
+}
+
 function showAuthFromLanding() {
   // Check if user has already started \u2014 skip auth and go straight in
   const sectionIds = new Set();
@@ -7595,6 +7748,7 @@ function switchTopNav(tab, btn) {
     if (mainContent) mainContent.style.display = '';
     renderLearnHub();
   } else {
+    stopHubCanvas();
     if (mainContent) mainContent.style.display = 'none';
     if (ls) ls.style.display = 'none';
     var panel = document.getElementById('panel-' + tab);
@@ -8034,9 +8188,10 @@ function renderLearnHub() {
     '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;}' +
     '.fc-stat{flex:1!important;text-align:center!important;}' +
     '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
-    '.fc-hub{text-align:center!important;}' +
+    '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
     '.fc-row{justify-content:center!important;}' +
     '</style>' +
+    '<canvas id="hub-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>' +
     '<div class="fc-hub">' +
     '<div class="fc-header">' +
       '<div class="fc-header-label">Your Learning Path</div>' +
@@ -8067,6 +8222,7 @@ function renderLearnHub() {
 
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
+  startHubCanvas();
 }
 function renderFloor1(si) {
   var ls = document.getElementById('left-sidebar');
@@ -8467,6 +8623,7 @@ function f2Ascend() {
 // ============================================
 let lastFloorIndex = 0;
 function renderFloor(fi, si) {
+  stopHubCanvas();
   var ls = document.getElementById('left-sidebar');
   if (ls) ls.style.display = 'flex';
   var floor = FLOORS[fi];
