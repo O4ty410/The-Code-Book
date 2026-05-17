@@ -2560,6 +2560,9 @@ function switchTopNav(tab, btn) {
     document.body.classList.remove('game-mode');
   }
 
+  // Reset revision deck when navigating away
+  if (tab !== 'revision') _revDealtSession = false;
+
   // Show/hide panels
   document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
   var mainContent = document.getElementById('main-content');
