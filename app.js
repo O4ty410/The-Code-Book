@@ -2095,6 +2095,10 @@ if (!section) { return; }
           mFbHeader + '</div>';
         if (curAnswered !== undefined) {
           var isLast = cur === totalQs - 1;
+          var mCurWrong = curAnswered !== curQ.correct;
+          if (mCurWrong) {
+            q += '<button class="quiz-retry-btn quiz-retry-inline" onclick="retryMultiQuiz(\'' + section.id + '\',' + fi + ',' + si + ')">&#8635; Try Again</button>';
+          }
           q += '<button class="quiz-next-btn" onclick="' + (isLast ? 'finishMultiQuiz' : 'nextMultiQuiz') + '(\'' + section.id + '\',' + fi + ',' + si + ')">' +
             (isLast ? 'See Results' : 'Next Question →') + '</button>';
         }
@@ -2124,7 +2128,11 @@ if (!section) { return; }
           '</div><div class="quiz-feedback-body">' + qz.feedback + '</div>';
       }
       q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
-        fbHeader + '</div></div>';
+        fbHeader + '</div>' +
+        (answered !== undefined && answered !== qz.correct
+          ? '<button class="quiz-retry-btn quiz-retry-inline" onclick="retrySingleQuiz(\'' + section.id + '\',' + fi + ',' + si + ')">&#8635; Try Again</button>'
+          : '') +
+        '</div>';
     }
   } else {
     q += '<div class="quiz-block"><div class="quiz-label">READING SECTION</div>' +
@@ -2422,6 +2430,13 @@ function finishMultiQuiz(sectionId, fi, si) {
 function retryMultiQuiz(sectionId, fi, si) {
   if (!state.quizMultiState) state.quizMultiState = {};
   state.quizMultiState[sectionId] = { current: 0, answers: {}, done: false };
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
+}
+
+function retrySingleQuiz(sectionId, fi, si) {
+  delete state.quizAnswered[sectionId];
   saveState();
   renderFloor(fi, si);
   _focusQuizPanel(sectionId);
