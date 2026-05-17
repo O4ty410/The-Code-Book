@@ -9306,28 +9306,8 @@ function playCompletionSound() {
 }
 
 // --- THEME SYSTEM ---
-function toggleTheme() {
-  var isLight = document.body.classList.toggle('light');
-  document.body.classList.toggle('light-mode', isLight);
-  localStorage.setItem('codebook_theme', isLight ? 'light' : 'dark');
-  // Update all theme toggle buttons
-  var emoji = isLight ? '\u2600\uFE0F' : '\uD83C\uDF19';
-  ['theme-toggle', 'theme-toggle-real'].forEach(function(id) {
-    var btn = document.getElementById(id);
-    if (btn) btn.textContent = emoji;
-  });
-}
-function applyTheme() {
-  var saved = localStorage.getItem('codebook_theme');
-  if (saved === 'light') {
-    document.body.classList.add('light');
-    document.body.classList.add('light-mode');
-    ['theme-toggle', 'theme-toggle-real'].forEach(function(id) {
-      var btn = document.getElementById(id);
-      if (btn) btn.textContent = '\u2600\uFE0F';
-    });
-  }
-}
+function toggleTheme() { /* light mode removed */ }
+function applyTheme() { /* light mode removed */ }
 function toggleTimer() {
   if (state.timerRunning) {
     clearInterval(state.timerInterval);
