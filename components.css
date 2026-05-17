@@ -1197,6 +1197,95 @@ body.light .quiz-option {
   margin-top: 16px;
 }
 
+/* Multi-question quiz */
+.quiz-multi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.quiz-multi-header .quiz-label { margin-bottom: 0; }
+.quiz-multi-progress-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+.quiz-multi-bar {
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.quiz-multi-bar-fill {
+  height: 100%;
+  background: var(--floor-color, var(--accent));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.quiz-next-btn {
+  margin-top: 18px;
+  padding: 12px 24px;
+  background: var(--floor-color, var(--accent));
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+.quiz-next-btn:hover { opacity: 0.85; transform: translateX(2px); }
+
+/* Results screen */
+.quiz-multi-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+  text-align: center;
+  gap: 10px;
+}
+.quiz-results-score {
+  font-family: 'Playfair Display', serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--floor-color, var(--accent));
+  line-height: 1;
+}
+.quiz-results-score span {
+  font-size: 28px;
+  color: var(--text-dim);
+}
+.quiz-results-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 4px;
+}
+.quiz-results-msg {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  max-width: 320px;
+}
+.quiz-retry-btn {
+  margin-top: 12px;
+  padding: 10px 22px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.quiz-retry-btn:hover { border-color: var(--floor-color, var(--accent)); color: var(--text); }
+
 /* ============================================================
    CHECKLIST
    ============================================================ */

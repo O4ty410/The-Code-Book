@@ -5558,6 +5558,7 @@ let state = {
   currentSection: 0,
   completed: {},
   quizAnswered: {},
+  quizMultiState: {},
   totalSeconds: 0,
   sessionLog: [],
   xp: 0,
@@ -5584,6 +5585,7 @@ function loadState() {
       state.currentSection = parseInt(s.currentSection) || 0;
       state.completed = s.completed || {};
       state.quizAnswered = s.quizAnswered || {};
+      state.quizMultiState = s.quizMultiState || {};
       state.totalSeconds = s.totalSeconds || 0;
       state.sessionLog = s.sessionLog || [];
       state.xp = s.xp || 0;
@@ -5614,6 +5616,7 @@ function saveState() {
     currentSection: state.currentSection,
     completed: state.completed,
     quizAnswered: state.quizAnswered,
+    quizMultiState: state.quizMultiState || {},
     totalSeconds: state.totalSeconds,
     sessionLog: state.sessionLog,
     xp: state.xp,
@@ -7270,7 +7273,17 @@ if (!section) { return; }
   var editorDef = getEditorDefaults(section);
 
   if (!sectionGateState[section.id]) {
-    sectionGateState[section.id] = { read: true, code: false, quiz: isDone || !section.quiz };
+    var quizGateDone = isDone || !section.quiz;
+    if (!quizGateDone && section.quiz && section.quiz.questions) {
+      var _ms = state.quizMultiState && state.quizMultiState[section.id];
+      if (_ms && _ms.done) {
+        var _total = section.quiz.questions.length;
+        var _score = 0;
+        section.quiz.questions.forEach(function(q, qi) { if (_ms.answers[qi] === q.correct) _score++; });
+        if (_score >= Math.ceil(_total * 0.7)) quizGateDone = true;
+      }
+    }
+    sectionGateState[section.id] = { read: true, code: false, quiz: quizGateDone };
   }
   var gate = sectionGateState[section.id];
   var allDone = gate.read && gate.code && gate.quiz;
@@ -7435,20 +7448,72 @@ if (!section) { return; }
     '<div style="font-size:14px;color:var(--text-dim);margin-bottom:24px;">Answer to unlock the section and earn XP.</div>';
   if (section.quiz) {
     var qz = section.quiz;
-    q += '<div class="quiz-block"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
-      '<div class="quiz-question">' + qz.question + '</div><div class="quiz-options">';
-    ((qz && qz.options) || []).forEach(function(opt, oi) {
-      var cls = '';
-      if (answered !== undefined) {
-        if (oi === qz.correct) cls = 'correct';
-        else if (oi === answered) cls = 'wrong';
+    if (qz.questions && Array.isArray(qz.questions)) {
+      // Multi-question quiz
+      var ms = (state.quizMultiState && state.quizMultiState[section.id]) || { current: 0, answers: {}, done: false };
+      var totalQs = qz.questions.length;
+      if (ms.done) {
+        var msScore = 0;
+        qz.questions.forEach(function(ques, qi) { if (ms.answers[qi] === ques.correct) msScore++; });
+        var msPassed = msScore >= Math.ceil(totalQs * 0.7);
+        q += '<div class="quiz-block">' +
+          '<div class="quiz-label">KNOWLEDGE CHECK COMPLETE</div>' +
+          '<div class="quiz-multi-results">' +
+          '<div class="quiz-results-score">' + msScore + '<span> / ' + totalQs + '</span></div>' +
+          '<div class="quiz-results-label">' + (msPassed ? 'Nicely done.' : 'Keep studying.') + '</div>' +
+          '<div class="quiz-results-msg">' + (msPassed ? 'Section unlocked — mark it complete when ready.' : 'Review the material above, then try again.') + '</div>' +
+          (!msPassed ? '<button class="quiz-retry-btn" onclick="retryMultiQuiz(\'' + section.id + '\',' + fi + ',' + si + ')">Retry Quiz</button>' : '') +
+          '</div></div>';
+      } else {
+        var cur = ms.current;
+        var curQ = qz.questions[cur];
+        var curAnswered = ms.answers && ms.answers[cur] !== undefined ? ms.answers[cur] : undefined;
+        var pct = Math.round(cur / totalQs * 100);
+        q += '<div class="quiz-block">' +
+          '<div class="quiz-multi-header">' +
+          '<div class="quiz-label">KNOWLEDGE CHECK</div>' +
+          '<div class="quiz-multi-progress-label">Question ' + (cur + 1) + ' of ' + totalQs + '</div>' +
+          '</div>' +
+          '<div class="quiz-multi-bar"><div class="quiz-multi-bar-fill" style="width:' + pct + '%"></div></div>' +
+          '<div class="quiz-question">' + curQ.question + '</div>' +
+          '<div class="quiz-options">';
+        curQ.options.forEach(function(opt, oi) {
+          var cls = '';
+          if (curAnswered !== undefined) {
+            if (oi === curQ.correct) cls = 'correct';
+            else if (oi === curAnswered) cls = 'wrong';
+          }
+          var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
+          q += '<button class="quiz-option ' + cls + '" onclick="answerMultiQuiz(\'' + section.id + '\',' + cur + ',' + oi + ',' + fi + ',' + si + ')"' +
+            (curAnswered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
+        });
+        q += '</div>' +
+          '<div class="quiz-feedback ' + (curAnswered !== undefined ? 'visible' : '') + '">' +
+          (curAnswered !== undefined ? curQ.feedback : '') + '</div>';
+        if (curAnswered !== undefined) {
+          var isLast = cur === totalQs - 1;
+          q += '<button class="quiz-next-btn" onclick="' + (isLast ? 'finishMultiQuiz' : 'nextMultiQuiz') + '(\'' + section.id + '\',' + fi + ',' + si + ')">' +
+            (isLast ? 'See Results' : 'Next Question →') + '</button>';
+        }
+        q += '</div>';
       }
-      var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
-      q += '<button class="quiz-option ' + cls + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
-        (answered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
-    });
-    q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
-      (answered !== undefined ? qz.feedback : '') + '</div></div>';
+    } else {
+      // Single-question quiz
+      q += '<div class="quiz-block"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
+        '<div class="quiz-question">' + qz.question + '</div><div class="quiz-options">';
+      ((qz && qz.options) || []).forEach(function(opt, oi) {
+        var cls = '';
+        if (answered !== undefined) {
+          if (oi === qz.correct) cls = 'correct';
+          else if (oi === answered) cls = 'wrong';
+        }
+        var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
+        q += '<button class="quiz-option ' + cls + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
+          (answered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
+      });
+      q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
+        (answered !== undefined ? qz.feedback : '') + '</div></div>';
+    }
   } else {
     q += '<div class="quiz-block"><div class="quiz-label">READING SECTION</div>' +
       '<div style="font-size:14px;color:var(--text-dim);margin-top:8px;">Complete the reading, then mark as done below.</div></div>';
@@ -7672,6 +7737,65 @@ function answerQuizTabbed(sectionId, chosen, correct, fi, si) {
       quizPanel.classList.add('active');
     }
   }, 50);
+}
+
+function _focusQuizPanel(sectionId) {
+  setTimeout(function() {
+    var quizPanel = document.getElementById('spanel-quiz-' + sectionId);
+    if (quizPanel) {
+      document.querySelectorAll('.section-tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.section-panel').forEach(function(p){ p.classList.remove('active'); });
+      document.querySelectorAll('.section-tab-btn').forEach(function(b){ if (b.textContent === 'Quiz') b.classList.add('active'); });
+      quizPanel.classList.add('active');
+    }
+  }, 50);
+}
+
+function answerMultiQuiz(sectionId, qIndex, chosen, fi, si) {
+  if (!state.quizMultiState) state.quizMultiState = {};
+  if (!state.quizMultiState[sectionId]) state.quizMultiState[sectionId] = { current: 0, answers: {}, done: false };
+  var ms = state.quizMultiState[sectionId];
+  if (ms.answers[qIndex] !== undefined) return;
+  ms.answers[qIndex] = chosen;
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
+}
+
+function nextMultiQuiz(sectionId, fi, si) {
+  if (!state.quizMultiState || !state.quizMultiState[sectionId]) return;
+  state.quizMultiState[sectionId].current++;
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
+}
+
+function finishMultiQuiz(sectionId, fi, si) {
+  if (!state.quizMultiState || !state.quizMultiState[sectionId]) return;
+  var ms = state.quizMultiState[sectionId];
+  ms.done = true;
+  var section = FLOORS[fi] && FLOORS[fi].sections[si];
+  if (section && section.quiz && section.quiz.questions) {
+    var total = section.quiz.questions.length;
+    var score = 0;
+    section.quiz.questions.forEach(function(ques, qi) { if (ms.answers[qi] === ques.correct) score++; });
+    if (score >= Math.ceil(total * 0.7)) {
+      awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+      markGate(sectionId, 'quiz');
+      logActivity('quiz', 'Quiz: ' + section.title, 15);
+    }
+  }
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
+}
+
+function retryMultiQuiz(sectionId, fi, si) {
+  if (!state.quizMultiState) state.quizMultiState = {};
+  state.quizMultiState[sectionId] = { current: 0, answers: {}, done: false };
+  saveState();
+  renderFloor(fi, si);
+  _focusQuizPanel(sectionId);
 }
 
 var editorTimers = {};
