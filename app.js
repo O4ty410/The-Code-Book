@@ -10225,15 +10225,15 @@ function renderProfilePanel() {
 
   // Achievements
   var ACHIEVEMENTS = [
-    { id: 'first_section', icon: '🎯', label: 'First Step',    desc: 'Complete your first section',  check: function(){ return doneSecs >= 1; } },
-    { id: 'five_sections', icon: '📚', label: 'On A Roll',     desc: 'Complete 5 sections',           check: function(){ return doneSecs >= 5; } },
-    { id: 'floor_1_done',  icon: '🏗️', label: 'Foundation',    desc: 'Complete Floor 1',              check: function(){ return isFloorComplete(0); } },
-    { id: 'floor_any',     icon: '🏆', label: 'Floor Cleared', desc: 'Complete any floor',            check: function(){ return floorsComplete >= 1; } },
-    { id: 'streak_3',      icon: '🔥', label: 'On Fire',       desc: '3-day streak',                  check: function(){ return state.streak >= 3; } },
-    { id: 'streak_7',      icon: '💪', label: 'Dedicated',     desc: '7-day streak',                  check: function(){ return state.streak >= 7; } },
-    { id: 'xp_100',        icon: '⭐', label: 'XP Hunter',     desc: 'Earn 100 XP',                  check: function(){ return state.xp >= 100; } },
-    { id: 'xp_500',        icon: '🌟', label: 'XP Master',     desc: 'Earn 500 XP',                  check: function(){ return state.xp >= 500; } },
-    { id: 'all_floors',    icon: '🎓', label: 'Graduate',      desc: 'Complete all 7 floors',         check: function(){ return floorsComplete === 7; } },
+    { id: 'first_section', sym: '→',   label: 'First Step',    desc: 'Complete your first section',  check: function(){ return doneSecs >= 1; } },
+    { id: 'five_sections', sym: '×5',  label: 'On A Roll',     desc: 'Complete 5 sections',           check: function(){ return doneSecs >= 5; } },
+    { id: 'floor_1_done',  sym: 'F1',  label: 'Foundation',    desc: 'Complete Floor 1',              check: function(){ return isFloorComplete(0); } },
+    { id: 'floor_any',     sym: '◆',   label: 'Floor Cleared', desc: 'Complete any floor',            check: function(){ return floorsComplete >= 1; } },
+    { id: 'streak_3',      sym: '3↑',  label: 'On Fire',       desc: '3-day streak',                  check: function(){ return state.streak >= 3; } },
+    { id: 'streak_7',      sym: '7↑',  label: 'Dedicated',     desc: '7-day streak',                  check: function(){ return state.streak >= 7; } },
+    { id: 'xp_100',        sym: '100', label: 'XP Hunter',     desc: 'Earn 100 XP',                  check: function(){ return state.xp >= 100; } },
+    { id: 'xp_500',        sym: '500', label: 'XP Master',     desc: 'Earn 500 XP',                  check: function(){ return state.xp >= 500; } },
+    { id: 'all_floors',    sym: '7/7', label: 'Graduate',      desc: 'Complete all 7 floors',         check: function(){ return floorsComplete === 7; } },
   ];
 
   // Floor progress rows
@@ -10266,7 +10266,7 @@ function renderProfilePanel() {
   var achieveHtml = ACHIEVEMENTS.map(function(a) {
     var earned = a.check();
     return '<div class="prof-badge' + (earned ? ' prof-badge-earned' : '') + '">' +
-      '<div class="prof-badge-icon">' + a.icon + '</div>' +
+      '<div class="prof-badge-sym">' + a.sym + '</div>' +
       '<div class="prof-badge-label">' + a.label + '</div>' +
       '<div class="prof-badge-desc">' + a.desc + '</div>' +
       '</div>';
@@ -10308,12 +10308,17 @@ function renderProfilePanel() {
     '</div>' +
 
     // Stats row
-    '<div class="prof-stats-row">' +
-    '<div class="prof-stat-card"><div class="prof-stat-val">' + state.xp + '</div><div class="prof-stat-lbl">Total XP</div></div>' +
-    '<div class="prof-stat-card"><div class="prof-stat-val">' + state.streak + '</div><div class="prof-stat-lbl">Day Streak</div></div>' +
-    '<div class="prof-stat-card"><div class="prof-stat-val">' + floorsComplete + '</div><div class="prof-stat-lbl">Floors Done</div></div>' +
-    '<div class="prof-stat-card"><div class="prof-stat-val">' + doneSecs + '</div><div class="prof-stat-lbl">Sections Done</div></div>' +
-    '</div>' +
+    (function() {
+      var timeDisplay = totalMinutes >= 60
+        ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
+        : totalMinutes + 'm';
+      return '<div class="prof-stats-row">' +
+        '<div class="prof-stat-card"><div class="prof-stat-val">' + state.xp + '</div><div class="prof-stat-lbl">Total XP</div></div>' +
+        '<div class="prof-stat-card"><div class="prof-stat-val">' + state.streak + '</div><div class="prof-stat-lbl">Day Streak</div></div>' +
+        '<div class="prof-stat-card"><div class="prof-stat-val">' + doneSecs + '</div><div class="prof-stat-lbl">Sections Done</div></div>' +
+        '<div class="prof-stat-card"><div class="prof-stat-val">' + timeDisplay + '</div><div class="prof-stat-lbl">Time Spent</div></div>' +
+        '</div>';
+    })() +
 
     // Level progress
     '<div class="prof-section">' +
@@ -10324,6 +10329,12 @@ function renderProfilePanel() {
     '<span class="prof-level-tag">' + nextName + '</span>' +
     '</div>' +
     '<div class="prof-level-sub">' + state.xp + ' XP' + (next ? ' &mdash; ' + (next.xp - state.xp) + ' XP to ' + nextName : ' &mdash; Max level reached') + '</div>' +
+    '</div>' +
+
+    // Activity calendar
+    '<div class="prof-section">' +
+    '<div class="prof-section-title">Activity — Last 28 Days</div>' +
+    calHtml +
     '</div>' +
 
     // Achievements
