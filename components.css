@@ -1307,7 +1307,7 @@
   gap: 10px;
 }
 .quiz-results-score {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 56px;
   font-weight: 700;
   color: var(--floor-color, var(--accent));
@@ -3342,7 +3342,7 @@ body.learn-mode #main-col {
   border: 1px solid rgba(20,60,120,0.50);
   color: rgba(40,120,200,0.60);
   font-size: 11px;
-  font-family: serif;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -4933,7 +4933,7 @@ body.learn-mode #main-col {
 }
 
 .notes-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 20px;
   font-weight: 700;
   color: var(--text);
@@ -5097,7 +5097,7 @@ body.learn-mode #main-col {
 }
 
 .nr-title {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Inter', sans-serif;
   font-size: 28px;
   font-weight: 700;
   color: var(--text);
