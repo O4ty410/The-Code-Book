@@ -4315,7 +4315,21 @@ body.light .lh-badge-locked { background: rgba(0,0,0,0.03); border-color: rgba(0
   border-color: var(--pth-border);
 }
 
-.prof-badge-icon { font-size: 24px; }
+.prof-badge-sym {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: rgba(255,255,255,0.15);
+  line-height: 1;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prof-badge-earned .prof-badge-sym {
+  color: var(--pth-accent, var(--accent));
+}
 
 .prof-badge-label {
   font-family: 'IBM Plex Mono', monospace;
