@@ -5007,11 +5007,6 @@ body.light .prof-theme-swatch:hover { background: rgba(0,0,0,0.04); }
   gap: 14px;
 }
 
-.notes-icon {
-  font-size: 28px;
-  line-height: 1;
-}
-
 .notes-title {
   font-family: 'Playfair Display', serif;
   font-size: 20px;
@@ -5051,6 +5046,12 @@ body.light .prof-theme-swatch:hover { background: rgba(0,0,0,0.04); }
   font-weight: 600;
   color: var(--text);
   margin-bottom: 4px;
+  font-style: normal;
+}
+.notes-prompt-q em {
+  font-style: italic;
+  color: var(--floor-color, var(--accent));
+  font-weight: 600;
 }
 
 .notes-prompt-hint {
@@ -5098,9 +5099,31 @@ body.light .prof-theme-swatch:hover { background: rgba(0,0,0,0.04); }
   color: var(--text-dim);
 }
 
+.notes-wc-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .notes-wordcount {
   font-weight: 600;
   letter-spacing: 0.3px;
+  transition: color 0.4s ease;
+}
+.notes-wordcount.notes-wc-active {
+  color: var(--floor-color, var(--accent));
+}
+
+.notes-wc-check {
+  font-size: 11px;
+  color: var(--floor-color, var(--accent));
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.notes-wc-check.visible {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .notes-footer-hint { opacity: 0.55; }

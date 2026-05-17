@@ -7543,7 +7543,6 @@ if (!section) { return; }
   var n = '<div class="notes-panel">' +
     '<div class="notes-header">' +
       '<div class="notes-header-left">' +
-        '<div class="notes-icon">📝</div>' +
         '<div>' +
           '<div class="notes-title">Your Notes</div>' +
           '<div class="notes-subtitle">Explain what you learned in your own words</div>' +
@@ -7552,12 +7551,15 @@ if (!section) { return; }
       '<div class="notes-save-status" id="notes-saved-' + section.id + '">Saved</div>' +
     '</div>' +
     '<div class="notes-prompt-card">' +
-      '<div class="notes-prompt-q">What would you tell a friend about this section?</div>' +
-      '<div class="notes-prompt-hint">No jargon needed. Explain it like they\'ve never coded before.</div>' +
+      '<div class="notes-prompt-q">What\'s the one thing to remember about <em>' + escHtml(section.title) + '</em>?</div>' +
+      '<div class="notes-prompt-hint">No jargon. If you can explain it simply, you understand it.</div>' +
     '</div>' +
-    '<textarea class="notes-textarea" id="notes-ta-' + section.id + '" placeholder="e.g. \'A function is basically a named set of instructions. You write it once, then call it whenever you need it. Like a recipe.\'" oninput="onNoteInput(\'' + section.id + '\')">' + escHtml(noteVal) + '</textarea>' +
+    '<textarea class="notes-textarea" id="notes-ta-' + section.id + '" placeholder="Start with the main idea, then say why it matters..." oninput="onNoteInput(\'' + section.id + '\')">' + escHtml(noteVal) + '</textarea>' +
     '<div class="notes-footer">' +
-      '<span class="notes-wordcount" id="notes-wc-' + section.id + '">' + noteWords + ' word' + (noteWords !== 1 ? 's' : '') + '</span>' +
+      '<span class="notes-wc-wrap">' +
+        '<span class="notes-wordcount' + (noteWords >= 30 ? ' notes-wc-active' : '') + '" id="notes-wc-' + section.id + '">' + noteWords + ' word' + (noteWords !== 1 ? 's' : '') + '</span>' +
+        '<span class="notes-wc-check' + (noteWords >= 30 ? ' visible' : '') + '" id="notes-wc-check-' + section.id + '">&#10003;</span>' +
+      '</span>' +
       '<span class="notes-footer-hint">Auto-saved to your browser</span>' +
     '</div>' +
     '</div>';
@@ -7661,9 +7663,17 @@ function saveNote(sectionId) {
 function updateNoteWordCount(sectionId) {
   var ta = document.getElementById('notes-ta-' + sectionId);
   var wc = document.getElementById('notes-wc-' + sectionId);
+  var check = document.getElementById('notes-wc-check-' + sectionId);
   if (!ta || !wc) return;
   var words = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
   wc.textContent = words + ' word' + (words !== 1 ? 's' : '');
+  if (words >= 30) {
+    wc.classList.add('notes-wc-active');
+    if (check) check.classList.add('visible');
+  } else {
+    wc.classList.remove('notes-wc-active');
+    if (check) check.classList.remove('visible');
+  }
 }
 
 function openNotesReview() {
