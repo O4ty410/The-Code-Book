@@ -8160,6 +8160,115 @@ function closeFloorModal() {
   document.body.style.overflow = '';
 }
 
+function getFloorIcon(fi) {
+  var fid = 'hfi' + fi;
+  var flt = '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter></defs>';
+  var open = '<svg viewBox="0 0 48 48" width="44" height="44" class="holo-icon" style="display:block;margin:0 auto;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
+  var close = '</g></svg>';
+  var s  = ';fill:none;stroke:var(--fc-color)';
+  var sf = 'fill:var(--fc-color)';
+  var d  = ';opacity:0.4';
+
+  var icons = [
+    // 0 — Neural Core: hexagonal neural lattice with nodes
+    open +
+    '<polygon points="24,4 41,14 41,34 24,44 7,34 7,14" style="stroke-width:1.2' + s + '"/>' +
+    '<line x1="24" y1="4" x2="24" y2="44" style="stroke-width:0.6' + s + d + '"/>' +
+    '<line x1="7" y1="14" x2="41" y2="34" style="stroke-width:0.6' + s + d + '"/>' +
+    '<line x1="41" y1="14" x2="7" y2="34" style="stroke-width:0.6' + s + d + '"/>' +
+    '<circle cx="24" cy="4" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="41" cy="14" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="41" cy="34" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="24" cy="44" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="7" cy="34" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="7" cy="14" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="24" cy="24" r="5" style="stroke-width:1.2' + s + '"/>' +
+    '<circle cx="24" cy="24" r="2" style="' + sf + '"/>' +
+    close,
+
+    // 1 — Digital Network Sphere: wireframe globe
+    open +
+    '<circle cx="24" cy="24" r="20" style="stroke-width:1.5' + s + '"/>' +
+    '<ellipse cx="24" cy="24" rx="20" ry="7" style="stroke-width:0.9' + s + '"/>' +
+    '<ellipse cx="24" cy="24" rx="7" ry="20" style="stroke-width:0.9' + s + '"/>' +
+    '<line x1="4" y1="24" x2="44" y2="24" style="stroke-width:0.5' + s + d + '"/>' +
+    '<line x1="24" y1="4" x2="24" y2="44" style="stroke-width:0.5' + s + d + '"/>' +
+    '<circle cx="24" cy="4" r="2" style="' + sf + '"/>' +
+    '<circle cx="24" cy="44" r="2" style="' + sf + '"/>' +
+    '<circle cx="4" cy="24" r="2" style="' + sf + '"/>' +
+    '<circle cx="44" cy="24" r="2" style="' + sf + '"/>' +
+    '<circle cx="24" cy="24" r="2.5" style="' + sf + '"/>' +
+    close,
+
+    // 2 — Energy Surge: crystalline lightning bolt
+    open +
+    '<polygon points="29,3 14,26 22,26 18,45 34,22 26,22" style="stroke-width:1.8;stroke-linejoin:miter' + s + '"/>' +
+    '<line x1="27" y1="9" x2="22" y2="26" style="stroke-width:0.7' + s + d + '"/>' +
+    '<line x1="26" y1="22" x2="21" y2="40" style="stroke-width:0.7' + s + d + '"/>' +
+    '<circle cx="29" cy="3" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="18" cy="45" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="22" cy="26" r="1.5" style="' + sf + ';opacity:0.75"/>' +
+    '<circle cx="26" cy="22" r="1.5" style="' + sf + ';opacity:0.75"/>' +
+    close,
+
+    // 3 — Innovation Crystal: cut-gem wireframe (diamond)
+    open +
+    '<polygon points="24,4 42,24 24,44 6,24" style="stroke-width:1.5' + s + '"/>' +
+    '<polygon points="24,14 34,24 24,34 14,24" style="stroke-width:1' + s + '"/>' +
+    '<line x1="24" y1="4" x2="24" y2="14" style="stroke-width:0.8' + s + d + '"/>' +
+    '<line x1="42" y1="24" x2="34" y2="24" style="stroke-width:0.8' + s + d + '"/>' +
+    '<line x1="24" y1="44" x2="24" y2="34" style="stroke-width:0.8' + s + d + '"/>' +
+    '<line x1="6" y1="24" x2="14" y2="24" style="stroke-width:0.8' + s + d + '"/>' +
+    '<circle cx="24" cy="4" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="42" cy="24" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="24" cy="44" r="2.2" style="' + sf + '"/>' +
+    '<circle cx="6" cy="24" r="2.2" style="' + sf + '"/>' +
+    close,
+
+    // 4 — Engineering Glyph: hexagon + circuit ring
+    open +
+    '<polygon points="24,4 41,14 41,34 24,44 7,34 7,14" style="stroke-width:1.5' + s + '"/>' +
+    '<circle cx="24" cy="24" r="9" style="stroke-width:1.2' + s + '"/>' +
+    '<line x1="24" y1="15" x2="24" y2="4" style="stroke-width:0.9' + s + d + '"/>' +
+    '<line x1="24" y1="33" x2="24" y2="44" style="stroke-width:0.9' + s + d + '"/>' +
+    '<line x1="32" y1="19" x2="41" y2="14" style="stroke-width:0.9' + s + d + '"/>' +
+    '<line x1="32" y1="29" x2="41" y2="34" style="stroke-width:0.9' + s + d + '"/>' +
+    '<line x1="16" y1="19" x2="7" y2="14" style="stroke-width:0.9' + s + d + '"/>' +
+    '<line x1="16" y1="29" x2="7" y2="34" style="stroke-width:0.9' + s + d + '"/>' +
+    '<circle cx="24" cy="24" r="2.5" style="' + sf + '"/>' +
+    close,
+
+    // 5 — Starship Launch: delta-wing fuselage
+    open +
+    '<polygon points="24,3 32,22 29,22 29,38 19,38 19,22 16,22" style="stroke-width:1.5;stroke-linejoin:round' + s + '"/>' +
+    '<polygon points="19,28 10,40 19,40" style="stroke-width:1' + s + '"/>' +
+    '<polygon points="29,28 38,40 29,40" style="stroke-width:1' + s + '"/>' +
+    '<circle cx="24" cy="17" r="3.5" style="stroke-width:1' + s + '"/>' +
+    '<line x1="21" y1="39" x2="19" y2="46" style="stroke-width:1.2' + s + d + '"/>' +
+    '<line x1="24" y1="39" x2="24" y2="47" style="stroke-width:1.5' + s + ';opacity:0.55"/>' +
+    '<line x1="27" y1="39" x2="29" y2="46" style="stroke-width:1.2' + s + d + '"/>' +
+    '<circle cx="24" cy="3" r="2" style="' + sf + '"/>' +
+    close,
+
+    // 6 — Mastery Crest: shield + geometric star + crown points
+    open +
+    '<path d="M24,4 L38,10 L38,27 Q38,40 24,46 Q10,40 10,27 L10,10 Z" style="stroke-width:1.5' + s + '"/>' +
+    '<polygon points="24,13 26,20 33,20 27.5,24.5 29.5,32 24,27.5 18.5,32 20.5,24.5 15,20 22,20" style="stroke-width:0.9' + s + '"/>' +
+    '<line x1="18" y1="10" x2="18" y2="5" style="stroke-width:1' + s + ';opacity:0.7"/>' +
+    '<line x1="24" y1="10" x2="24" y2="4" style="stroke-width:1.2' + s + ';opacity:0.85"/>' +
+    '<line x1="30" y1="10" x2="30" y2="5" style="stroke-width:1' + s + ';opacity:0.7"/>' +
+    '<circle cx="18" cy="4.5" r="1.5" style="' + sf + '"/>' +
+    '<circle cx="24" cy="3" r="2" style="' + sf + '"/>' +
+    '<circle cx="30" cy="4.5" r="1.5" style="' + sf + '"/>' +
+    '<circle cx="24" cy="27.5" r="2" style="' + sf + '"/>' +
+    close,
+  ];
+  return icons[fi] || icons[0];
+}
+
 function renderLearnHub() {
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
@@ -8177,7 +8286,6 @@ function renderLearnHub() {
   var floorsUnlocked = FLOORS.length; // all floors unlocked
   var currentFloorIdx = state.currentFloor - 1;
 
-  var floorIcons = ['&#129504;', '&#127760;', '&#9889;', '&#128161;', '&#128295;', '&#128640;', '&#127942;'];
 
 
   function hexGlow(hex) {
@@ -8212,7 +8320,7 @@ function renderLearnHub() {
       (!unlocked ? ' fc-card-locked' : '') +
       (isActive  ? ' fc-card-active' : '');
     var clickAttr  = unlocked ? ' onclick="' + (fi === 0 ? 'showSageFloorIntro(0)' : 'goToFloor(' + fi + ')') + '"' : '';
-    var icon       = floorIcons[fi] || '&#127760;';
+    var icon       = getFloorIcon(fi);
     var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
     return '<div class="' + cardClasses + '" style="--fc-color:' + color + ';--fc-glow:' + glow + ';min-width:118px;flex:1;max-width:160px;"' + clickAttr + '>' +
@@ -8240,6 +8348,16 @@ function renderLearnHub() {
     '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
     '.fc-row{justify-content:center!important;}' +
+    '.fc-icon{font-size:0!important;line-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;height:52px!important;}' +
+    '@keyframes holo-pulse{0%,100%{opacity:0.78;}50%{opacity:1;}}' +
+    '.holo-icon{animation:holo-pulse 2.8s ease-in-out infinite;}' +
+    '.fc-card:nth-child(1) .holo-icon{animation-duration:2.6s;}' +
+    '.fc-card:nth-child(2) .holo-icon{animation-duration:2.9s;}' +
+    '.fc-card:nth-child(3) .holo-icon{animation-duration:3.1s;}' +
+    '.fc-card:nth-child(4) .holo-icon{animation-duration:2.7s;}' +
+    '.fc-card:nth-child(5) .holo-icon{animation-duration:3.0s;}' +
+    '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
+    '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
     '</style>' +
     '<canvas id="hub-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>' +
     '<div class="fc-hub">' +
