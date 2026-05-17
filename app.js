@@ -5648,5 +5648,5 @@ function resetRevisionCards() {
   state.revKnown = {};
   saveState();
   var panel = document.getElementById('panel-revision');
-  if (panel) _renderRevGrid(panel, false);
+  if (panel) _renderRevGrid(panel, true);
 }
