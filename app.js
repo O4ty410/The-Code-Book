@@ -2029,9 +2029,14 @@ if (!section) { return; }
     q += '<div class="holo-quiz-card">' +
       '<div class="holo-quiz-inner' + (_quizAnswered ? ' holo-answered' : '') + '">' +
       '<div class="holo-quiz-back">' +
-      sageOwlSVG(80, 88) +
+      '<div class="hq-corner hq-corner-tl"><span class="hq-ace">A</span><span class="hq-suit">♠</span></div>' +
+      '<div class="hq-center">' +
+      sageOwlSVG(90, 99) +
       '<div class="holo-quiz-back-label">SAGE</div>' +
       '<div class="holo-quiz-back-sublabel">QUIZ</div>' +
+      '</div>' +
+      '<div class="holo-quiz-back-tagline">KNOWLEDGE IS POWER</div>' +
+      '<div class="hq-corner hq-corner-br"><span class="hq-ace">A</span><span class="hq-suit">♠</span></div>' +
       '</div>' +
       '<div class="holo-quiz-front">';
   }
