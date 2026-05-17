@@ -2019,7 +2019,7 @@ if (!section) { return; }
   var _msCheck = (state.quizMultiState && state.quizMultiState[section.id]) || null;
   var _quizAnswered = (answered !== undefined) ||
     (_msCheck && (_msCheck.done || Object.keys(_msCheck.answers || {}).length > 0));
-  var _holoCard = (fi === 0);
+  var _holoCard = true;
   var q = '<div class="section-inner-pad">';
   if (!_holoCard) {
     q += '<div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;margin-bottom:6px;">Knowledge Check</div>' +
