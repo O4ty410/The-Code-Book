@@ -5179,3 +5179,156 @@ body.learn-mode #main-col {
   .prof-hud-val { font-size: 18px; }
   .prof-layout { padding: 24px 20px 48px; }
 }
+
+
+/* ══════════════════════════════════════════════════
+   HOLOGRAPHIC QUIZ CARD  (Floor 1)
+   ══════════════════════════════════════════════════ */
+
+.holo-quiz-card {
+  perspective: 1400px;
+  margin: 28px 0;
+}
+
+.holo-quiz-inner {
+  display: grid;
+  transform-style: preserve-3d;
+  animation: holoCardFlip 1.5s cubic-bezier(0.4, 0.2, 0.2, 1) 0.5s both;
+}
+
+.holo-quiz-inner.holo-answered {
+  animation: none;
+  transform: rotateY(180deg);
+}
+
+@keyframes holoCardFlip {
+  0%, 40% { transform: rotateY(0deg); }
+  100%     { transform: rotateY(180deg); }
+}
+
+.holo-quiz-back,
+.holo-quiz-front {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  background: linear-gradient(145deg, #020e20 0%, #000912 100%);
+  border: 1px solid rgba(0, 180, 255, 0.20);
+  border-left: 3px solid var(--floor-color, #c8a96e);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(0, 180, 255, 0.08),
+    0 8px 40px rgba(0, 100, 255, 0.14),
+    0 2px 10px rgba(0, 0, 0, 0.50);
+  animation: holoGlowPulse 4s ease-in-out infinite;
+}
+
+@keyframes holoGlowPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(0, 180, 255, 0.08),
+      0 8px 40px rgba(0, 100, 255, 0.14),
+      0 2px 10px rgba(0, 0, 0, 0.50);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(0, 220, 255, 0.22),
+      0 8px 50px rgba(0, 150, 255, 0.22),
+      0 2px 10px rgba(0, 0, 0, 0.50);
+  }
+}
+
+/* Iridescent shimmer layer */
+.holo-quiz-back::before,
+.holo-quiz-front::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 200, 0.05) 0%,
+    rgba(0, 200, 255, 0.06) 30%,
+    rgba(100, 255, 180, 0.04) 60%,
+    rgba(180, 80, 255, 0.05) 100%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* ── Back face ── */
+.holo-quiz-back {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 32px 44px;
+  gap: 10px;
+  min-height: 300px;
+}
+
+.holo-quiz-back > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Corner circuit brackets */
+.holo-quiz-back::after {
+  content: '';
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  width: 52px;
+  height: 52px;
+  border-right: 1.5px solid rgba(0, 255, 136, 0.25);
+  border-bottom: 1.5px solid rgba(0, 255, 136, 0.25);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.holo-quiz-back-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: #00ff88;
+  letter-spacing: 6px;
+  text-shadow: 0 0 18px rgba(0, 255, 136, 0.75), 0 0 40px rgba(0, 255, 136, 0.30);
+}
+
+.holo-quiz-back-sublabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 6px;
+  color: rgba(0, 200, 255, 0.55);
+  text-transform: uppercase;
+}
+
+/* ── Front face ── */
+.holo-quiz-front {
+  transform: rotateY(180deg);
+  padding: 0;
+}
+
+.holo-quiz-front > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Override quiz-block inside card — card is the visual container */
+.holo-quiz-front .quiz-block {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  animation: none;
+}
+
+.holo-quiz-front .quiz-block[data-quiz-state="correct"] {
+  background: rgba(0, 255, 120, 0.04);
+}
+
+.holo-quiz-front .quiz-block[data-quiz-state="wrong"] {
+  background: rgba(255, 80, 80, 0.04);
+}
