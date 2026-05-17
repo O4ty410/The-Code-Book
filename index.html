@@ -26,13 +26,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 
-  <link rel="stylesheet" href="variables.css?v=20260517f">
-  <link rel="stylesheet" href="animations.css?v=20260517f">
-  <link rel="stylesheet" href="layout.css?v=20260517f">
-  <link rel="stylesheet" href="cover.css?v=20260517f">
-  <link rel="stylesheet" href="components.css?v=20260517f">
-  <link rel="stylesheet" href="panels.css?v=20260517f">
-  <link rel="stylesheet" href="overlays.css?v=20260517f">
+  <link rel="stylesheet" href="variables.css?v=20260517g">
+  <link rel="stylesheet" href="animations.css?v=20260517g">
+  <link rel="stylesheet" href="layout.css?v=20260517g">
+  <link rel="stylesheet" href="cover.css?v=20260517g">
+  <link rel="stylesheet" href="components.css?v=20260517g">
+  <link rel="stylesheet" href="panels.css?v=20260517g">
+  <link rel="stylesheet" href="overlays.css?v=20260517g">
 
   
 </head>
@@ -430,52 +430,16 @@
 <!-- SIDEBAR OVERLAY (mobile) -->
 <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
+<!-- Sidebar stubs — permanently hidden, IDs kept so JS doesn't error -->
+<div id="left-sidebar" style="display:none!important;position:absolute;pointer-events:none;visibility:hidden;">
+  <div id="vb-building"></div>
+  <span id="ls-level"></span><span id="ls-xp-bar"></span>
+  <span id="ls-streak"></span><span id="ls-progress"></span>
+  <div id="left-floor-nav"></div>
+</div>
+
 <!-- THREE COLUMN GRID -->
 <div class="app-grid">
-
-  <!-- LEFT SIDEBAR -->
-  <div class="left-sidebar" id="left-sidebar">
-
-    <!-- VISUAL BUILDING -->
-    <div class="visual-building-wrap">
-      <div class="vb-label">YOUR BUILDING</div>
-      <div class="vb-building" id="vb-building">
-        <div class="vb-roof"></div>
-        <!-- floors injected by JS -->
-      </div>
-    </div>
-
-    <!-- STATS -->
-    <div class="left-stats">
-      <div class="stat-row">
-        <span class="stat-label">LEVEL</span>
-        <span class="stat-val" id="ls-level">1</span>
-      </div>
-      <div class="level-bar-track">
-        <div class="level-bar-fill" id="ls-xp-bar" style="width:0%"></div>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">STREAK</span>
-        <span class="stat-val" id="ls-streak">🔥 0 days</span>
-      </div>
-      <div class="stat-row">
-        <span class="stat-label">OVERALL</span>
-        <span class="stat-val" id="ls-progress">0%</span>
-      </div>
-    </div>
-
-    <!-- FLOOR / SECTION NAV -->
-    <div class="left-floor-nav" id="left-floor-nav">
-      <!-- injected by renderLeftNav() -->
-    </div>
-
-    <!-- OFFLINE BADGE -->
-    <div class="sidebar-offline">
-      <div class="sidebar-offline-dot"></div>
-      AVAILABLE OFFLINE
-    </div>
-
-  </div>
 
   <!-- MAIN CONTENT -->
   <div class="main-col" id="main-col">
@@ -609,7 +573,7 @@
 </div>
 <!-- END APP -->
 
-<script src="app.js?v=20260517f"></script>
+<script src="app.js?v=20260517g"></script>
 </body>
 </html>
 
