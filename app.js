@@ -7469,7 +7469,8 @@ if (!section) { return; }
         var curQ = qz.questions[cur];
         var curAnswered = ms.answers && ms.answers[cur] !== undefined ? ms.answers[cur] : undefined;
         var pct = Math.round(cur / totalQs * 100);
-        q += '<div class="quiz-block">' +
+        var mQzState = curAnswered !== undefined ? (curAnswered === curQ.correct ? 'correct' : 'wrong') : 'unanswered';
+        q += '<div class="quiz-block" data-quiz-state="' + mQzState + '">' +
           '<div class="quiz-multi-header">' +
           '<div class="quiz-label">KNOWLEDGE CHECK</div>' +
           '<div class="quiz-multi-progress-label">Question ' + (cur + 1) + ' of ' + totalQs + '</div>' +
@@ -7484,12 +7485,20 @@ if (!section) { return; }
             else if (oi === curAnswered) cls = 'wrong';
           }
           var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
-          q += '<button class="quiz-option ' + cls + '" onclick="answerMultiQuiz(\'' + section.id + '\',' + cur + ',' + oi + ',' + fi + ',' + si + ')"' +
+          q += '<button class="quiz-option ' + cls + '" style="--i:' + oi + '" onclick="answerMultiQuiz(\'' + section.id + '\',' + cur + ',' + oi + ',' + fi + ',' + si + ')"' +
             (curAnswered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
         });
+        var mFbHeader = '';
+        if (curAnswered !== undefined) {
+          var mFbCorrect = curAnswered === curQ.correct;
+          mFbHeader = '<div class="quiz-feedback-header ' + (mFbCorrect ? 'correct' : 'wrong') + '">' +
+            '<span class="quiz-feedback-icon">' + (mFbCorrect ? '✓' : '✗') + '</span>' +
+            '<span class="quiz-feedback-title">' + (mFbCorrect ? 'Correct!' : 'Not quite.') + '</span>' +
+            '</div><div class="quiz-feedback-body">' + curQ.feedback + '</div>';
+        }
         q += '</div>' +
           '<div class="quiz-feedback ' + (curAnswered !== undefined ? 'visible' : '') + '">' +
-          (curAnswered !== undefined ? curQ.feedback : '') + '</div>';
+          mFbHeader + '</div>';
         if (curAnswered !== undefined) {
           var isLast = cur === totalQs - 1;
           q += '<button class="quiz-next-btn" onclick="' + (isLast ? 'finishMultiQuiz' : 'nextMultiQuiz') + '(\'' + section.id + '\',' + fi + ',' + si + ')">' +
@@ -7499,7 +7508,8 @@ if (!section) { return; }
       }
     } else {
       // Single-question quiz
-      q += '<div class="quiz-block"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
+      var qzState = answered !== undefined ? (answered === qz.correct ? 'correct' : 'wrong') : 'unanswered';
+      q += '<div class="quiz-block" data-quiz-state="' + qzState + '"><div class="quiz-label">KNOWLEDGE CHECK</div>' +
         '<div class="quiz-question">' + qz.question + '</div><div class="quiz-options">';
       ((qz && qz.options) || []).forEach(function(opt, oi) {
         var cls = '';
@@ -7508,11 +7518,19 @@ if (!section) { return; }
           else if (oi === answered) cls = 'wrong';
         }
         var icon = '<span class="quiz-opt-icon">' + (cls === 'correct' ? '✓' : cls === 'wrong' ? '✗' : '') + '</span>';
-        q += '<button class="quiz-option ' + cls + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
+        q += '<button class="quiz-option ' + cls + '" style="--i:' + oi + '" onclick="answerQuizTabbed(\'' + section.id + '\',' + oi + ',' + qz.correct + ',' + fi + ',' + si + ')"' +
           (answered !== undefined ? ' disabled' : '') + '>' + icon + opt + '</button>';
       });
+      var fbHeader = '';
+      if (answered !== undefined) {
+        var fbCorrect = answered === qz.correct;
+        fbHeader = '<div class="quiz-feedback-header ' + (fbCorrect ? 'correct' : 'wrong') + '">' +
+          '<span class="quiz-feedback-icon">' + (fbCorrect ? '✓' : '✗') + '</span>' +
+          '<span class="quiz-feedback-title">' + (fbCorrect ? 'Correct!' : 'Not quite.') + '</span>' +
+          '</div><div class="quiz-feedback-body">' + qz.feedback + '</div>';
+      }
       q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
-        (answered !== undefined ? qz.feedback : '') + '</div></div>';
+        fbHeader + '</div></div>';
     }
   } else {
     q += '<div class="quiz-block"><div class="quiz-label">READING SECTION</div>' +
