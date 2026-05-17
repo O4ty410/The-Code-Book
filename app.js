@@ -2560,6 +2560,9 @@ function switchTopNav(tab, btn) {
     document.body.classList.remove('game-mode');
   }
 
+  // Reset revision deck when navigating away
+  if (tab !== 'revision') _revDealtSession = false;
+
   // Show/hide panels
   document.querySelectorAll('.top-panel').forEach(function(p){ p.classList.remove('active'); });
   var mainContent = document.getElementById('main-content');
@@ -5566,11 +5569,10 @@ function _renderRevGrid(panel, animate) {
     var sx = animate ? (Math.round((Math.random() - 0.5) * 700)) : 0;
     var sy = animate ? (Math.round((Math.random() - 0.5) * 500)) : 0;
     var sr = animate ? (Math.round((Math.random() - 0.5) * 70)) : 0;
-    var animStyle = animate
-      ? ' style="--rev-sx:' + sx + 'px;--rev-sy:' + sy + 'px;--rev-sr:' + sr + 'deg;animation-delay:' + delay + 'ms"'
-      : '';
-    html += '<div class="rev-card' + (isKnown ? ' rev-card-known' : '') + (animate ? ' rev-card-dealing' : '') + '"' +
-      animStyle + ' onclick="openRevCard(' + i + ')">' +
+    var shimmerDelay = ((i % 11) * 0.45).toFixed(2);
+    var cardStyle = '--shimmer-delay:' + shimmerDelay + 's';
+    if (animate) cardStyle += ';--rev-sx:' + sx + 'px;--rev-sy:' + sy + 'px;--rev-sr:' + sr + 'deg;animation-delay:' + delay + 'ms';
+    html += '<div class="rev-card' + (isKnown ? ' rev-card-known' : '') + (animate ? ' rev-card-dealing' : '') + '" style="' + cardStyle + '" onclick="openRevCard(' + i + ')">' +
       '<div class="rev-card-owl">' + sageOwlSVG(36, 40) + '</div>' +
       '<div class="rev-card-bookname">THE CODE<br>BOOK</div>' +
       '<div class="rev-card-floorlabel">F' + card.floor + '</div>' +
