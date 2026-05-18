@@ -5820,6 +5820,8 @@ function _endFloorBoss() {
   var xpEarned = _bossScore === _bossTotal ? 100 : _bossScore * 15;
   var today = new Date().toDateString();
   awardXP(xpEarned, 'floor-boss-' + fi + '-' + today, window.innerWidth / 2, 200);
+  checkAndUnlockBadges();
+  renderChallengePanel();
   document.getElementById('challenge-title').textContent = 'Floor Boss Complete!';
   document.getElementById('challenge-body').textContent = _bossScore + ' of ' + _bossTotal + ' correct. +' + xpEarned + ' XP earned.';
   document.getElementById('challenge-question').textContent = _bossScore === _bossTotal ? '\uD83C\uDFC6 Perfect \u2014 Floor ' + state.currentFloor + ' mastered!' : _bossScore >= 3 ? '\uD83D\uDC4D Solid knowledge!' : '\uD83D\uDCD6 Revisit this floor.';
