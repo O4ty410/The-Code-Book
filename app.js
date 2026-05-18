@@ -107,7 +107,7 @@ function matchClick(mid, side, idx) {
       if (remaining.length === 0) {
         var done = document.getElementById('match-done-' + mid);
         if (done) done.style.display = 'block';
-        awardXP(15, 'match-' + mid, window.innerWidth / 2, 300);
+        awardXP(10, 'match-' + mid, window.innerWidth / 2, 300);
       }
     } else {
       rightEl.classList.add('wrong');
@@ -832,6 +832,9 @@ function continueAsGuest() {
 async function handleAuth() {
   loadState();
   updateStreak();
+  if (authMode === 'signup') {
+    awardXP(50, 'account-created', window.innerWidth / 2, window.innerHeight / 2);
+  }
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('cover').style.display = 'none';
   stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
@@ -934,13 +937,13 @@ function getNextLevel() {
 }
 
 function getSectionXP(fi) {
-  var byFloor = [25, 35, 50, 65, 80, 100, 125];
-  return byFloor[fi] !== undefined ? byFloor[fi] : 25;
+  var byFloor = [20, 28, 40, 50, 65, 80, 100];
+  return byFloor[fi] !== undefined ? byFloor[fi] : 20;
 }
 
 function getFloorXP(fi) {
-  var byFloor = [150, 200, 300, 400, 500, 600, 750];
-  return byFloor[fi] !== undefined ? byFloor[fi] : 250;
+  var byFloor = [100, 150, 225, 300, 375, 475, 600];
+  return byFloor[fi] !== undefined ? byFloor[fi] : 100;
 }
 
 function awardXP(amount, key, x, y) {
@@ -1083,12 +1086,6 @@ function showStreakWelcome(days) {
 
 function startSectionTimer(sectionId) {
   state.sectionStartTime = Date.now();
-  setTimeout(() => {
-    const key = 'read-' + (sectionId) + '';
-    if (!state.xpAwarded[key]) {
-      awardXP(10, key, window.innerWidth - 100, 100);
-    }
-  }, 20000);
 }
 
 function formatTime(secs) {
@@ -2504,7 +2501,7 @@ function _quizFeedbackHtml(correct, feedbackText) {
 function answerQuizTabbed(sectionId, chosen, correct, fi, si) {
   state.quizAnswered[sectionId] = chosen;
   if (chosen === correct) {
-    awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+    awardXP(10, 'quiz-' + sectionId, window.innerWidth / 2, 300);
     markGate(sectionId, 'quiz');
     var secName = FLOORS[fi] && FLOORS[fi].sections[si] ? FLOORS[fi].sections[si].title : sectionId;
     logActivity('quiz', 'Quiz: ' + secName, 15);
@@ -2562,7 +2559,7 @@ function finishMultiQuiz(sectionId, fi, si) {
     var score = 0;
     section.quiz.questions.forEach(function(ques, qi) { if (ms.answers[qi] === ques.correct) score++; });
     if (score >= Math.ceil(total * 0.7)) {
-      awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+      awardXP(10, 'quiz-' + sectionId, window.innerWidth / 2, 300);
       markGate(sectionId, 'quiz');
       logActivity('quiz', 'Quiz: ' + section.title, 15);
     }
@@ -2999,7 +2996,7 @@ function patchRenderNav() {
 function answerQuiz(sectionId, chosen, correct) {
   state.quizAnswered[sectionId] = chosen;
   if (chosen === correct) {
-    awardXP(15, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+    awardXP(10, 'quiz-' + sectionId, window.innerWidth / 2, 300);
   }
   const fi = state.currentFloor - 1;
   const si = state.currentSection;
@@ -3017,7 +3014,6 @@ function toggleCheck(key, el) {
     el.classList.add('just-checked');
     setTimeout(() => el.classList.remove('just-checked'), 400);
     const rect = el.getBoundingClientRect();
-    awardXP(30, 'check-' + key, rect.left + rect.width / 2, rect.top);
   }
   saveState();
 }
@@ -3720,7 +3716,7 @@ function f2SelectValue(value) {
 
     // Award XP
     setTimeout(() => {
-      awardXP(50, 'f2-variable-task', window.innerWidth / 2, 200);
+      awardXP(15, 'f2-variable-task', window.innerWidth / 2, 200);
       sageMessage('Variable assigned. The system is online. Floor 3 is now accessible.', 'celebrate');
     }, 400);
 
@@ -4189,7 +4185,6 @@ function toggleTimer() {
         state.timerRunning = false;
         state.totalSeconds += 25 * 60;
         state.sessionLog.push({ date: new Date().toDateString(), seconds: 25 * 60 });
-        awardXP(40, null, window.innerWidth - 100, 60);
         playCompletionSound();
         saveState();
         updateTimeLog();
@@ -4537,7 +4532,7 @@ function renderBuildPanel() {
 
 function markBuildDone(floorNum) {
   state.completed['build-' + floorNum] = true;
-  awardXP(100, 'build-project-' + floorNum, window.innerWidth / 2, 300);
+  awardXP(75, 'build-project-' + floorNum, window.innerWidth / 2, 300);
   saveState();
   renderBuildPanel();
 }
@@ -4804,7 +4799,6 @@ function markToolSetUp(toolId, xp) {
   if (state.completed[stateKey]) return;
   state.completed[stateKey] = true;
   saveState();
-  awardXP(xp || 25, stateKey, window.innerWidth / 2, 300);
   var card = document.getElementById('tool-card-' + toolId);
   if (card) card.classList.add('done');
   var btn = document.getElementById('tool-btn-' + toolId);
@@ -5554,7 +5548,7 @@ function startSpeedRound() {
     sageMessage('Speed Round already completed today. Come back tomorrow!', 'tip');
     return;
   }
-  if (state.xp < 100) return;
+  if (state.xp < 100) { sageMessage('Earn 100 XP to unlock the Speed Round — complete more sections to get there.', 'tip'); return; }
   showChallengeIntro('speed', function() {
     _speedRoundScore = 0;
     _speedRoundCurrent = 0;
@@ -5670,7 +5664,7 @@ var _streakFailed = false;
 var _streakAnswered = false;
 
 function startStreakChallenge() {
-  if (state.xp < 200) return;
+  if (state.xp < 200) { sageMessage('Earn 200 XP to unlock the Streak Challenge — keep completing sections.', 'tip'); return; }
   var today = new Date().toDateString();
   if (localStorage.getItem('codebook_streak_done_' + today)) {
     sageMessage('Streak Challenge already completed today. Come back tomorrow!', 'tip');
