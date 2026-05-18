@@ -1850,13 +1850,20 @@ if (!section) { return; }
 
   if (!sectionGateState[section.id]) {
     var quizGateDone = isDone || !section.quiz;
-    if (!quizGateDone && section.quiz && section.quiz.questions) {
-      var _ms = state.quizMultiState && state.quizMultiState[section.id];
-      if (_ms && _ms.done) {
-        var _total = section.quiz.questions.length;
-        var _score = 0;
-        section.quiz.questions.forEach(function(q, qi) { if (_ms.answers[qi] === q.correct) _score++; });
-        if (_score >= Math.ceil(_total * 0.7)) quizGateDone = true;
+    if (!quizGateDone && section.quiz) {
+      if (section.quiz.questions) {
+        // Multi-question quiz — check quizMultiState
+        var _ms = state.quizMultiState && state.quizMultiState[section.id];
+        if (_ms && _ms.done) {
+          var _total = section.quiz.questions.length;
+          var _score = 0;
+          section.quiz.questions.forEach(function(q, qi) { if (_ms.answers[qi] === q.correct) _score++; });
+          if (_score >= Math.ceil(_total * 0.7)) quizGateDone = true;
+        }
+      } else {
+        // Single-question quiz — check quizAnswered
+        var _sq = state.quizAnswered && state.quizAnswered[section.id];
+        if (_sq !== undefined && _sq === section.quiz.correct) quizGateDone = true;
       }
     }
     sectionGateState[section.id] = { read: true, code: false, quiz: quizGateDone };
@@ -3383,17 +3390,30 @@ function completeSection(sectionId, fi, si) {
   updateTopChips();
   renderNav();
 
-  // Brief pause so button press animation is visible, then rebuild
+  // Brief pause so button press animation is visible, then advance
   setTimeout(function() {
-    renderFloor(fi, si);
-    // After DOM rebuild trigger gate box shimmer
-    setTimeout(function() {
-      var gateBox = document.querySelector('.gate-box');
-      if (gateBox) {
-        gateBox.classList.add('gate-completing');
-        setTimeout(function() { gateBox.classList.remove('gate-completing'); }, 950);
-      }
-    }, 40);
+    var floor = FLOORS[fi];
+    if (!isNowComplete && floor && si < floor.sections.length - 1) {
+      // Auto-advance to the next section with slide animation
+      var mc = document.getElementById('main-content');
+      if (mc) mc.classList.add('section-slide-out-left');
+      setTimeout(function() {
+        state.currentSection = si + 1;
+        saveState();
+        renderNav();
+        renderFloor(fi, si + 1);
+      }, 220);
+    } else {
+      // Last section of floor or floor just completed — stay and show completion state
+      renderFloor(fi, si);
+      setTimeout(function() {
+        var gateBox = document.querySelector('.gate-box');
+        if (gateBox) {
+          gateBox.classList.add('gate-completing');
+          setTimeout(function() { gateBox.classList.remove('gate-completing'); }, 950);
+        }
+      }, 40);
+    }
   }, 180);
 }
 
