@@ -1906,8 +1906,20 @@ if (!section) { return; }
     '</div>' +
     '<div class="floor-section-title">' + section.title + '</div>' +
     '</div>' +
-    '<div class="section-content">' +
-    (section.hint ? '<button class="hint-btn" onclick="toggleHint(\'hint-' + section.id + '\')" title="Need help?">?</button>' : '');
+    '<div class="section-content">';
+
+  var _tldr = sectionTldr(section);
+  if (_tldr) {
+    r += '<div class="tldr-box">' +
+      '<div class="owl-wrap">' +
+      '<div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
+      '<div class="owl-bubble">' +
+      '<div class="owl-name">SAGE &mdash; TL;DR</div>' +
+      '<div class="hint-text">' + escHtml(_tldr) + '</div>' +
+      '</div></div></div>';
+  }
+
+  r += (section.hint ? '<button class="hint-btn" onclick="toggleHint(\'hint-' + section.id + '\')" title="Need help?">?</button>' : '');
 
   if (section.hint) {
     r += '<div class="hint-box" id="hint-' + section.id + '">' +
@@ -5699,6 +5711,17 @@ function resetRevisionCards() {
   saveState();
   var panel = document.getElementById('panel-revision');
   if (panel) _renderRevGrid(panel, true);
+}
+
+// ============================================
+// TL;DR SAGE SUMMARY
+// ============================================
+function sectionTldr(section) {
+  if (!section || !section.body) return '';
+  var raw = section.body.replace(/<[^>]+>/g, '').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+  var m = raw.match(/^.{20,160}?[.!?](?=\s|$)/);
+  var text = m ? m[0] : (raw.length > 130 ? raw.slice(0, 130) + '…' : raw);
+  return text;
 }
 
 // ============================================
