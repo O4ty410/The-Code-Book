@@ -3556,7 +3556,6 @@ function completeSection(sectionId, fi, si) {
   const isNowComplete = isFloorComplete(fi);
   if (isNowComplete) {
     awardXP(getFloorXP(fi), 'floor-' + fi, window.innerWidth / 2, 250);
-    setTimeout(() => showFloorCelebration(fi), 700);
   }
   saveState();
   checkGuestSavePrompt();
@@ -3565,31 +3564,37 @@ function completeSection(sectionId, fi, si) {
   updateTopChips();
   renderNav();
 
-  // Brief pause so button press animation is visible, then advance
-  setTimeout(function() {
-    var floor = FLOORS[fi];
-    if (!isNowComplete && floor && si < floor.sections.length - 1) {
-      // Auto-advance to the next section with slide animation
-      var mc = document.getElementById('main-content');
-      if (mc) mc.classList.add('section-slide-out-left');
-      setTimeout(function() {
-        state.currentSection = si + 1;
-        saveState();
-        renderNav();
-        renderFloor(fi, si + 1);
-      }, 220);
-    } else {
-      // Last section of floor or floor just completed — stay and show completion state
-      renderFloor(fi, si);
-      setTimeout(function() {
-        var gateBox = document.querySelector('.gate-box');
-        if (gateBox) {
-          gateBox.classList.add('gate-completing');
-          setTimeout(function() { gateBox.classList.remove('gate-completing'); }, 950);
-        }
-      }, 40);
-    }
-  }, 180);
+  // Show section recap (terms covered), then advance
+  showSectionRecap(section, function() {
+    // Brief pause so button press animation is visible, then advance
+    setTimeout(function() {
+      var floor = FLOORS[fi];
+      if (!isNowComplete && floor && si < floor.sections.length - 1) {
+        // Auto-advance to the next section with slide animation
+        var mc = document.getElementById('main-content');
+        if (mc) mc.classList.add('section-slide-out-left');
+        setTimeout(function() {
+          state.currentSection = si + 1;
+          saveState();
+          renderNav();
+          renderFloor(fi, si + 1);
+        }, 220);
+      } else {
+        // Last section of floor or floor just completed — stay and show completion state
+        renderFloor(fi, si);
+        setTimeout(function() {
+          var gateBox = document.querySelector('.gate-box');
+          if (gateBox) {
+            gateBox.classList.add('gate-completing');
+            setTimeout(function() { gateBox.classList.remove('gate-completing'); }, 950);
+          }
+        }, 40);
+      }
+      if (isNowComplete) {
+        setTimeout(function() { showFloorCelebration(fi); }, 700);
+      }
+    }, 180);
+  });
 }
 
 function prevSection(fi, si) {
@@ -5426,6 +5431,49 @@ function _ciClose() {
 function skipChallengeIntro() {
   clearTimeout(_ciTimer);
   _ciClose();
+}
+
+// ── SECTION RECAP ────────────────────────────────────────────────
+var _srDoneCallback = null;
+
+function _dismissSectionRecap() {
+  var el = document.getElementById('section-recap');
+  if (el) el.remove();
+  if (_srDoneCallback) { var cb = _srDoneCallback; _srDoneCallback = null; cb(); }
+}
+
+function showSectionRecap(section, onComplete) {
+  // Strip HTML tags to get plain text for term matching
+  var bodyText = ((section && section.body) || '').replace(/<[^>]+>/g, ' ').toLowerCase();
+  var map = getTermMap();
+  var matched = [];
+  if (typeof REVISION_CARDS !== 'undefined') {
+    REVISION_CARDS.forEach(function(c) {
+      var t = c.term.toLowerCase();
+      var re = new RegExp('(?<![a-z])' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![a-z])');
+      if (re.test(bodyText)) matched.push(c);
+    });
+  }
+
+  if (!matched.length) { onComplete(); return; }
+
+  _srDoneCallback = onComplete;
+
+  var termsHtml = matched.map(function(c) {
+    return '<span class="sr-term">' + c.term + '</span>';
+  }).join('');
+
+  var el = document.createElement('div');
+  el.id = 'section-recap';
+  el.innerHTML =
+    '<div class="sr-card">' +
+    '<div class="sr-owl">&#x1F989;</div>' +
+    '<div class="sr-heading">Section Complete</div>' +
+    '<div class="sr-sub">Key terms you encountered</div>' +
+    '<div class="sr-terms">' + termsHtml + '</div>' +
+    '<button class="sr-btn" onclick="_dismissSectionRecap()">Continue &nbsp;&rarr;</button>' +
+    '</div>';
+  document.body.appendChild(el);
 }
 
 function renderChallengePanel() {
