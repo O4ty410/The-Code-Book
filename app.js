@@ -143,6 +143,92 @@ function controllerSVG(w, h) {
   );
 }
 
+function toolIconSVG(id, color, w, h) {
+  var fid = 'tif' + (++_sageOwlId);
+  w = w || 56; h = h || 56;
+  var flt = '<defs><filter id="' + fid + '" x="-40%" y="-40%" width="180%" height="180%">' +
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="b"/>' +
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter></defs>';
+  var g  = ' filter="url(#' + fid + ')"';
+  var sw = ' stroke="' + color + '" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  var st = ' stroke="' + color + '" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  var fc = ' fill="' + color + '"';
+  var dk = ' fill="#07101a"';
+  var inner = '';
+
+  if (id === 'vscode') {
+    inner =
+      '<rect x="10" y="14" width="80" height="68" rx="5"' + sw + g + '/>' +
+      '<line x1="10" y1="27" x2="90" y2="27"' + st + g + '/>' +
+      '<circle cx="20" cy="20.5" r="2.5"' + fc + g + '/>' +
+      '<circle cx="28" cy="20.5" r="2.5"' + fc + ' fill-opacity="0.4"' + g + '/>' +
+      '<polyline points="37,42 26,52 37,62"' + sw + g + '/>' +
+      '<line x1="56" y1="39" x2="44" y2="65"' + st + g + '/>' +
+      '<polyline points="63,42 74,52 63,62"' + sw + g + '/>';
+  } else if (id === 'git') {
+    inner =
+      '<line x1="34" y1="25" x2="34" y2="75"' + sw + g + '/>' +
+      '<circle cx="34" cy="20" r="7" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<circle cx="34" cy="56" r="7" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<circle cx="34" cy="80" r="7" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<circle cx="70" cy="36" r="7" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<path d="M34,27 Q34,18 52,18 Q70,18 70,29"' + st + g + '/>' +
+      '<path d="M70,43 Q70,56 52,56 Q34,56 34,56"' + st + g + '/>';
+  } else if (id === 'github') {
+    inner =
+      '<circle cx="50" cy="38" r="22" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<path d="M36,22 Q33,13 39,11"' + st + g + '/>' +
+      '<path d="M64,22 Q67,13 61,11"' + st + g + '/>' +
+      '<path d="M36,58 Q30,68 27,78"' + sw + g + '/>' +
+      '<path d="M43,62 Q41,71 39,80"' + sw + g + '/>' +
+      '<line x1="50" y1="62" x2="50" y2="80"' + sw + g + '/>' +
+      '<path d="M57,62 Q59,71 61,80"' + sw + g + '/>' +
+      '<path d="M64,58 Q70,68 73,78"' + sw + g + '/>';
+  } else if (id === 'devtools') {
+    inner =
+      '<circle cx="42" cy="42" r="26" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<line x1="61" y1="61" x2="83" y2="83" stroke="' + color + '" stroke-width="5" stroke-linecap="round"' + g + '/>' +
+      '<line x1="42" y1="24" x2="42" y2="60"' + st + g + '/>' +
+      '<line x1="24" y1="42" x2="60" y2="42"' + st + g + '/>' +
+      '<circle cx="42" cy="42" r="9" stroke="' + color + '" stroke-width="1.5" fill="none"' + g + '/>';
+  } else if (id === 'nodejs') {
+    inner =
+      '<polygon points="50,8 84,27 84,65 50,84 16,65 16,27" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<polygon points="50,22 72,34 72,58 50,70 28,58 28,34" stroke="' + color + '" stroke-width="1.5" fill="none"' + g + '/>' +
+      '<circle cx="50" cy="46" r="9" stroke="' + color + '" stroke-width="2" fill="' + color + '" fill-opacity="0.25"' + g + '/>';
+  } else if (id === 'netlify') {
+    inner =
+      '<polygon points="50,8 88,80 12,80" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<line x1="50" y1="28" x2="50" y2="63"' + st + g + '/>' +
+      '<line x1="37" y1="57" x2="63" y2="57"' + st + g + '/>';
+  } else if (id === 'figma') {
+    inner =
+      '<rect x="26" y="10" width="22" height="22" rx="4"  stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<circle cx="60" cy="21" r="11" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<rect x="26" y="34" width="22" height="22" rx="4" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<circle cx="60" cy="45" r="11" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<rect x="26" y="58" width="22" height="22" rx="4" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>';
+  } else if (id === 'postman') {
+    inner =
+      '<circle cx="50" cy="50" r="34" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<line x1="26" y1="50" x2="66" y2="50" stroke="' + color + '" stroke-width="2.5" stroke-linecap="round"' + g + '/>' +
+      '<polyline points="57,40 67,50 57,60" stroke="' + color + '" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"' + g + '/>' +
+      '<circle cx="32" cy="50" r="3.5"' + fc + g + '/>';
+  } else if (id === 'davinci') {
+    inner =
+      '<rect x="12" y="28" width="76" height="54" rx="4" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<rect x="12" y="16" width="76" height="16" rx="4" stroke="' + color + '" stroke-width="2.5"' + dk + g + '/>' +
+      '<line x1="30" y1="16" x2="26" y2="32"' + st + g + '/>' +
+      '<line x1="46" y1="16" x2="42" y2="32"' + st + g + '/>' +
+      '<line x1="62" y1="16" x2="58" y2="32"' + st + g + '/>' +
+      '<polygon points="40,40 40,68 68,54" fill="' + color + '" fill-opacity="0.55" stroke="' + color + '" stroke-width="2" stroke-linejoin="round"' + g + '/>';
+  }
+
+  return '<svg viewBox="0 0 100 100" width="' + w + '" height="' + h + '" xmlns="http://www.w3.org/2000/svg" style="display:block">' +
+    flt + inner + '</svg>';
+}
+
 var sectionGateState = {};
 var matchSelected = {};
 
@@ -4761,7 +4847,7 @@ function renderToolsPanel() {
   var tools = [
     {
       id: 'vscode',
-      icon: '&lt;/&gt;',
+      color: '#60a5fa',
       name: 'VS Code',
       desc: 'The code editor used by most professional developers worldwide.',
       difficulty: 'Beginner',
@@ -4780,7 +4866,7 @@ function renderToolsPanel() {
     },
     {
       id: 'git',
-      icon: '⎇',
+      color: '#34d399',
       name: 'Git',
       desc: 'Version control that tracks every change you make to your code.',
       difficulty: 'Beginner',
@@ -4799,7 +4885,7 @@ function renderToolsPanel() {
     },
     {
       id: 'github',
-      icon: '◉',
+      color: '#a855f7',
       name: 'GitHub',
       desc: 'Cloud hosting for your Git repositories — and where developers share work.',
       difficulty: 'Beginner',
@@ -4818,7 +4904,7 @@ function renderToolsPanel() {
     },
     {
       id: 'devtools',
-      icon: '⊕',
+      color: '#00c8ff',
       name: 'Chrome DevTools',
       desc: 'Built into your browser — inspect, debug, and tweak any webpage in real time.',
       difficulty: 'Beginner',
@@ -4837,7 +4923,7 @@ function renderToolsPanel() {
     },
     {
       id: 'nodejs',
-      icon: '⬡',
+      color: '#fb923c',
       name: 'Node.js',
       desc: 'Runs JavaScript outside the browser — powers servers, build tools, and npm.',
       difficulty: 'Intermediate',
@@ -4856,7 +4942,7 @@ function renderToolsPanel() {
     },
     {
       id: 'netlify',
-      icon: '▲',
+      color: '#00e5b0',
       name: 'Netlify',
       desc: 'Deploy your HTML/CSS/JS projects live on the internet for free in under a minute.',
       difficulty: 'Beginner',
@@ -4875,7 +4961,7 @@ function renderToolsPanel() {
     },
     {
       id: 'figma',
-      icon: '◈',
+      color: '#f472b6',
       name: 'Figma',
       desc: 'Design and prototype interfaces in the browser before writing a single line of code.',
       difficulty: 'Beginner',
@@ -4894,7 +4980,7 @@ function renderToolsPanel() {
     },
     {
       id: 'postman',
-      icon: '↻',
+      color: '#f97316',
       name: 'Postman',
       desc: 'Test and explore APIs without writing any code — essential for backend and full-stack work.',
       difficulty: 'Intermediate',
@@ -4913,7 +4999,7 @@ function renderToolsPanel() {
     },
     {
       id: 'davinci',
-      icon: '▶',
+      color: '#ef4444',
       name: 'DaVinci Resolve',
       desc: 'Professional video editor — free and industry-standard. Use it to create portfolio walkthrough videos.',
       difficulty: 'Intermediate',
@@ -4954,7 +5040,7 @@ function renderToolsPanel() {
       '</div>';
 
     html += '<div class="build-card' + (isDone ? ' done' : '') + '" id="tool-card-' + t.id + '" onclick="toggleToolSteps(\'' + stepsId + '\',this)">' +
-      '<div class="build-card-icon"><span class="tool-icon-sym">' + t.icon + '</span></div>' +
+      '<div class="build-card-icon">' + toolIconSVG(t.id, t.color, 56, 56) + '</div>' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">' +
       '<div class="build-card-tag" style="margin-bottom:0;">' + t.category.toUpperCase() + '</div>' +
       '<span class="build-meta-pill ' + diffClass + '">' + t.difficulty + '</span>' +

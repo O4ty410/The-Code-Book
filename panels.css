@@ -483,16 +483,7 @@ body.light .build-card:hover {
 .build-card.locked { opacity: 0.4; cursor: not-allowed; }
 .build-card.done { border-color: rgba(74,222,128,0.2); }
 
-.build-card-icon { font-size: 32px; margin-bottom: 12px; }
-
-.tool-icon-sym {
-  font-family: 'Space Mono', monospace;
-  font-size: 28px;
-  line-height: 1;
-  color: var(--accent);
-  text-shadow: 0 0 18px var(--accent);
-  display: inline-block;
-}
+.build-card-icon { margin-bottom: 12px; display: flex; }
 
 .build-card-tag {
   font-family: 'Space Mono', monospace;
