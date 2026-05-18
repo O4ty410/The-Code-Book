@@ -600,12 +600,15 @@ function showAuthFromLanding() {
   if (hasStarted) {
     // Returning user — go straight into the app
     loadState();
-    updateStreak();
+    var _streakExtended = updateStreak();
     stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
     document.body.style.overflow = '';
     document.getElementById('app').style.display = 'block';
     applyTheme();
     launchApp();
+    if (_streakExtended && state.streak >= 2) {
+      setTimeout(function() { showStreakWelcome(state.streak); }, 1400);
+    }
   } else {
     // New user — show onboarding or auth
     stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
@@ -995,17 +998,20 @@ function updateXPPanel() {
 }
 function updateStreak() {
   const today = new Date().toDateString();
-  if (state.lastVisit === today) return;
+  if (state.lastVisit === today) return false;
   const yesterday = new Date(Date.now() - 86400000).toDateString();
+  var extended = false;
   if (state.lastVisit === yesterday) {
     state.streak += 1;
     state.streakProtectedToday = false; // reset for new day
+    extended = true;
   } else if (state.lastVisit !== null) {
     state.streak = 0;
     state.streakProtectedToday = false;
   }
   state.lastVisit = today;
   saveState();
+  return extended;
 }
 
 function markStreakProtected() {
@@ -1034,6 +1040,35 @@ function showStreakToast(days) {
   toast.className = 'streak-toast';
   document.body.appendChild(toast);
   setTimeout(function() { if (toast.parentElement) toast.remove(); }, 5000);
+}
+
+function showStreakWelcome(days) {
+  var existing = document.getElementById('streak-toast');
+  if (existing) existing.remove();
+  var isMilestone = days === 7 || days === 14 || days === 30 || days === 50 || days === 100;
+  var emoji = days >= 30 ? '🏆' : days >= 14 ? '⚡' : days >= 7 ? '🔥' : '🔥';
+  var msg = days < 7   ? days + ' day streak — welcome back!' :
+            days < 14  ? days + ' day streak — you\'re building a habit!' :
+            days < 30  ? days + ' day streak — exceptional consistency!' :
+                         days + ' day streak — you\'re unstoppable!';
+  var toast = document.createElement('div');
+  toast.id = 'streak-toast';
+  toast.className = 'streak-toast' + (isMilestone ? ' streak-toast--milestone' : '');
+  toast.innerHTML =
+    '<div class="streak-toast-icon">' + emoji + '</div>' +
+    '<div class="streak-toast-text"><strong>' + msg + '</strong>' +
+    '<div class="streak-toast-sub">Keep the momentum going today.</div></div>' +
+    '<button class="streak-toast-close" onclick="this.parentElement.remove()">×</button>';
+  document.body.appendChild(toast);
+  // Pulse the sidebar streak counter
+  var sc = document.getElementById('streak-count');
+  if (sc) {
+    sc.classList.remove('streak-pulse');
+    void sc.offsetWidth;
+    sc.classList.add('streak-pulse');
+    setTimeout(function() { sc.classList.remove('streak-pulse'); }, 1200);
+  }
+  setTimeout(function() { if (toast.parentElement) toast.remove(); }, 6000);
 }
 
 function startSectionTimer(sectionId) {
