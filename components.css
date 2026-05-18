@@ -6134,3 +6134,171 @@ body.learn-mode #main-col {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%       { opacity: 0.6; transform: scale(1.3); }
 }
+
+/* =============================================
+   CHALLENGE INTRO ANIMATION
+   ============================================= */
+#challenge-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 8, 16, 0.97);
+  animation: ciOverlayIn 0.3s ease forwards;
+}
+
+#challenge-intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,0.011) 3px,
+    rgba(255,255,255,0.011) 4px
+  );
+  pointer-events: none;
+}
+
+#challenge-intro::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 35%;
+  background: linear-gradient(to bottom, transparent, rgba(125,211,252,0.025), transparent);
+  animation: ciSweep 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes ciOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ciSweep { from { transform: translateY(-40vh); } to { transform: translateY(140vh); } }
+
+#challenge-intro.ci-leaving {
+  animation: ciOverlayOut 0.35s ease forwards;
+}
+
+#challenge-intro.ci-leaving .ci-card {
+  animation: ciCardOut 0.3s ease forwards;
+}
+
+@keyframes ciOverlayOut { to { opacity: 0; } }
+@keyframes ciCardOut    { to { opacity: 0; transform: scale(1.05); } }
+
+.ci-card {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 28px;
+  max-width: 400px;
+  width: 90%;
+  animation: ciCardIn 0.45s cubic-bezier(0.34,1.2,0.64,1) 0.1s both;
+}
+
+@keyframes ciCardIn {
+  from { opacity: 0; transform: scale(0.9) translateY(18px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ci-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--ci-accent, #7dd3fc);
+  opacity: 0.65;
+  margin-bottom: 22px;
+}
+
+.ci-icon {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 0 24px var(--ci-accent, #7dd3fc));
+}
+
+.ci-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  letter-spacing: 5px;
+  color: var(--ci-accent, #7dd3fc);
+  margin-bottom: 14px;
+  min-height: 1.5em;
+}
+
+.ci-divider {
+  height: 1px;
+  background: var(--ci-accent, #7dd3fc);
+  opacity: 0.35;
+  margin: 0 auto 14px;
+  transform-origin: left;
+  animation: ciDivIn 0.5s ease 0.45s both;
+}
+
+@keyframes ciDivIn {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 0.35; }
+}
+
+.ci-rule {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(148,163,184,0.65);
+  margin-bottom: 40px;
+  animation: ciRuleIn 0.4s ease 0.65s both;
+}
+
+@keyframes ciRuleIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ci-countdown {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 84px;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1;
+  margin-bottom: 36px;
+  min-height: 84px;
+  letter-spacing: -3px;
+}
+
+.ci-countdown.ci-go {
+  color: var(--ci-accent, #7dd3fc);
+  text-shadow: 0 0 48px var(--ci-accent, #7dd3fc);
+  font-size: 60px;
+  letter-spacing: 8px;
+}
+
+@keyframes ciTick {
+  0%   { opacity: 0; transform: scale(1.45); }
+  20%  { opacity: 1; transform: scale(1); }
+  75%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.65); }
+}
+
+.ci-countdown.ci-ticking {
+  animation: ciTick 0.75s ease forwards;
+}
+
+.ci-skip {
+  display: inline-block;
+  background: none;
+  border: 1px solid rgba(148,163,184,0.18);
+  border-radius: 6px;
+  color: rgba(148,163,184,0.45);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.ci-skip:hover {
+  border-color: rgba(148,163,184,0.4);
+  color: rgba(148,163,184,0.8);
+}

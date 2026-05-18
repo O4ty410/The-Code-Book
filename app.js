@@ -1352,17 +1352,19 @@ function _dailyChallengeResetsIn() {
 
 // Advances one question per calendar day. Deterministic but changes daily.
 function showDailyChallenge() {
-  var today = new Date().toDateString();
-  var epoch = new Date('2025-01-01').getTime();
-  var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
-  var challenge = DAILY_CHALLENGES[daysSinceEpoch % DAILY_CHALLENGES.length];
-  _openChallengeModal(
-    challenge,
-    challenge.title,
-    "Complete today's challenge and earn +" + challenge.xp + ' bonus XP.',
-    'challenge-' + today
-  );
   _dailyChallengeShownThisSession = true;
+  showChallengeIntro('daily', function() {
+    var today = new Date().toDateString();
+    var epoch = new Date('2025-01-01').getTime();
+    var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
+    var challenge = DAILY_CHALLENGES[daysSinceEpoch % DAILY_CHALLENGES.length];
+    _openChallengeModal(
+      challenge,
+      challenge.title,
+      "Complete today's challenge and earn +" + challenge.xp + ' bonus XP.',
+      'challenge-' + today
+    );
+  });
 }
 
 function answerChallenge(chosen, correct, xp, explanation, xpKey) {
@@ -5345,6 +5347,87 @@ function togglePremiumTooltip(card) {
   if (!isOpen) card.classList.add('tooltip-open');
 }
 
+// ── CHALLENGE INTRO SYSTEM ────────────────────────────────────────────
+var CHALLENGE_INTROS = {
+  daily:  { emoji: '⚡', name: 'KNOWLEDGE CHECK',   rule: 'ONE QUESTION · EARN BONUS XP',       accent: '#7dd3fc' },
+  recall: { emoji: '🧠', name: 'SPACED RECALL',     rule: 'REINFORCE · STRENGTHEN · RETAIN',    accent: '#a78bfa' },
+  speed:  { emoji: '⏱',  name: 'SPEED ROUND',       rule: '10 QUESTIONS · 10 SECONDS EACH',     accent: '#f87171' },
+  streak: { emoji: '🔥', name: 'STREAK CHALLENGE',  rule: 'FIVE IN A ROW · NO MISTAKES',        accent: '#fb923c' },
+  boss:   { emoji: '🏆', name: 'FLOOR BOSS',        rule: 'COMPREHENSIVE KNOWLEDGE ASSESSMENT', accent: '#fbbf24' }
+};
+
+var _ciCallback = null;
+var _ciTimer = null;
+
+function showChallengeIntro(key, callback) {
+  var cfg = CHALLENGE_INTROS[key];
+  if (!cfg) { callback(); return; }
+  _ciCallback = callback;
+
+  var overlay = document.getElementById('challenge-intro');
+  if (!overlay) { callback(); return; }
+
+  overlay.style.setProperty('--ci-accent', cfg.accent);
+  document.getElementById('ci-icon').textContent = cfg.emoji;
+  document.getElementById('ci-rule').textContent = cfg.rule;
+
+  var nameEl = document.getElementById('ci-name');
+  nameEl.textContent = '';
+  var cd = document.getElementById('ci-countdown');
+  cd.textContent = '';
+  cd.className = 'ci-countdown';
+
+  overlay.classList.remove('ci-leaving');
+  overlay.style.display = 'flex';
+
+  setTimeout(function() { _ciScramble(nameEl, cfg.name, 650); }, 180);
+  setTimeout(function() { _ciCountdown(3); }, 1100);
+}
+
+function _ciScramble(el, text, duration) {
+  var pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]()<>/\\_-';
+  var start = Date.now();
+  var frame = setInterval(function() {
+    var p = Math.min((Date.now() - start) / duration, 1);
+    var out = '';
+    for (var i = 0; i < text.length; i++) {
+      if (text[i] === ' ' || text[i] === '·' || text[i] === '-') { out += text[i]; continue; }
+      out += (i / text.length < p) ? text[i] : pool[Math.floor(Math.random() * pool.length)];
+    }
+    el.textContent = out;
+    if (p >= 1) clearInterval(frame);
+  }, 40);
+}
+
+function _ciCountdown(n) {
+  var cd = document.getElementById('ci-countdown');
+  if (!cd) return;
+  cd.className = 'ci-countdown' + (n === 0 ? ' ci-go' : '');
+  cd.textContent = n === 0 ? 'GO' : (n < 10 ? '0' + n : String(n));
+  void cd.offsetWidth;
+  cd.classList.add('ci-ticking');
+  _ciTimer = setTimeout(function() {
+    if (n > 0) _ciCountdown(n - 1);
+    else _ciClose();
+  }, n === 0 ? 680 : 760);
+}
+
+function _ciClose() {
+  var overlay = document.getElementById('challenge-intro');
+  if (!overlay) return;
+  overlay.classList.add('ci-leaving');
+  setTimeout(function() {
+    overlay.style.display = 'none';
+    overlay.classList.remove('ci-leaving');
+    if (_ciCallback) { var cb = _ciCallback; _ciCallback = null; cb(); }
+  }, 350);
+}
+
+function skipChallengeIntro() {
+  clearTimeout(_ciTimer);
+  _ciClose();
+}
+
 function renderChallengePanel() {
   var panel = document.getElementById('panel-challenge');
   if (!panel) return;
@@ -5391,20 +5474,20 @@ function startRecallQuiz() {
     sageMessage('Complete some sections first to unlock recall quizzes.', 'tip');
     return;
   }
-  // Pick a question not already used as today's daily challenge
-  var today = new Date().toDateString();
-  var epoch = new Date('2025-01-01').getTime();
-  var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
-  var dailyIdx = daysSinceEpoch % DAILY_CHALLENGES.length;
-  // Offset by 1 from the daily so it is always a different question
-  var recallIdx = (dailyIdx + 1) % DAILY_CHALLENGES.length;
-  var challenge = DAILY_CHALLENGES[recallIdx];
-  _openChallengeModal(
-    challenge,
-    'Spaced Repetition',
-    'Reinforce what you already know. +' + challenge.xp + ' XP for a correct answer.',
-    'recall-' + today + '-' + recallIdx
-  );
+  showChallengeIntro('recall', function() {
+    var today = new Date().toDateString();
+    var epoch = new Date('2025-01-01').getTime();
+    var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
+    var dailyIdx = daysSinceEpoch % DAILY_CHALLENGES.length;
+    var recallIdx = (dailyIdx + 1) % DAILY_CHALLENGES.length;
+    var challenge = DAILY_CHALLENGES[recallIdx];
+    _openChallengeModal(
+      challenge,
+      'Spaced Repetition',
+      'Reinforce what you already know. +' + challenge.xp + ' XP for a correct answer.',
+      'recall-' + today + '-' + recallIdx
+    );
+  });
 }
 
 // \u2500\u2500 SPEED ROUND \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
@@ -5424,9 +5507,11 @@ function startSpeedRound() {
     return;
   }
   if (state.xp < 100) return;
-  _speedRoundScore = 0;
-  _speedRoundCurrent = 0;
-  _nextSpeedQuestion();
+  showChallengeIntro('speed', function() {
+    _speedRoundScore = 0;
+    _speedRoundCurrent = 0;
+    _nextSpeedQuestion();
+  });
 }
 
 function _nextSpeedQuestion() {
@@ -5537,10 +5622,12 @@ var _streakFailed = false;
 
 function startStreakChallenge() {
   if (state.xp < 200) return;
-  _streakCorrect = 0;
-  _streakCurrent = 0;
-  _streakFailed = false;
-  _nextStreakQuestion();
+  showChallengeIntro('streak', function() {
+    _streakCorrect = 0;
+    _streakCurrent = 0;
+    _streakFailed = false;
+    _nextStreakQuestion();
+  });
 }
 
 function _nextStreakQuestion() {
@@ -5612,9 +5699,11 @@ var _bossCurrent = 0;
 function startFloorBoss() {
   var fi = state.currentFloor - 1;
   if (!isFloorComplete(fi)) return;
-  _bossScore = 0;
-  _bossCurrent = 0;
-  _nextBossQuestion();
+  showChallengeIntro('boss', function() {
+    _bossScore = 0;
+    _bossCurrent = 0;
+    _nextBossQuestion();
+  });
 }
 
 function _nextBossQuestion() {

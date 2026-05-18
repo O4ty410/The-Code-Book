@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="animations.min.css?v=20260517m">
   <link rel="stylesheet" href="layout.min.css?v=20260517m">
   <link rel="stylesheet" href="cover.min.css?v=20260517m">
-  <link rel="stylesheet" href="components.min.css?v=20260518a">
+  <link rel="stylesheet" href="components.min.css?v=20260518d">
   <link rel="stylesheet" href="panels.min.css?v=20260517m">
   <link rel="stylesheet" href="overlays.min.css?v=20260517t">
 
@@ -300,6 +300,19 @@
   </div>
 </div>
 
+<!-- CHALLENGE INTRO ANIMATION -->
+<div id="challenge-intro" style="display:none">
+  <div class="ci-card">
+    <div class="ci-label">CHALLENGE INITIATED</div>
+    <div class="ci-icon" id="ci-icon">⚡</div>
+    <div class="ci-name" id="ci-name"></div>
+    <div class="ci-divider"></div>
+    <div class="ci-rule" id="ci-rule"></div>
+    <div class="ci-countdown" id="ci-countdown"></div>
+    <button class="ci-skip" onclick="skipChallengeIntro()">TAP TO BEGIN</button>
+  </div>
+</div>
+
 <!-- DAILY CHALLENGE OVERLAY -->
 <div id="daily-challenge" class="overlay-base scrollable" style="z-index:9990;">
   <div class="overlay-inner-lg">
@@ -555,7 +568,7 @@
 <!-- END APP -->
 
 <script src="curriculum.js?v=20260517" defer></script>
-<script src="app.js?v=20260518c" defer></script>
+<script src="app.js?v=20260518d" defer></script>
 </body>
 </html>
 
