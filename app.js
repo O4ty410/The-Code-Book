@@ -1348,7 +1348,27 @@ function _dailyChallengeResetsIn() {
 }
 
 // Advances one question per calendar day. Deterministic but changes daily.
+function _showChallengeLockPopup(resetsIn) {
+  var el = document.getElementById('challenge-lock-popup');
+  if (el) el.remove();
+  el = document.createElement('div');
+  el.id = 'challenge-lock-popup';
+  el.innerHTML =
+    '<div class="clp-card">' +
+    '<div class="clp-owl">🦉</div>' +
+    '<div class="clp-title">Already completed today</div>' +
+    '<div class="clp-timer">Resets in <strong>' + resetsIn + '</strong></div>' +
+    '<button class="clp-btn" onclick="document.getElementById(\'challenge-lock-popup\').remove()">Got it</button>' +
+    '</div>';
+  el.addEventListener('click', function(e) { if (e.target === el) el.remove(); });
+  document.body.appendChild(el);
+}
+
 function showDailyChallenge() {
+  if (!_isDailyChallengeAvailable()) {
+    _showChallengeLockPopup(_dailyChallengeResetsIn());
+    return;
+  }
   _dailyChallengeShownThisSession = true;
   showChallengeIntro('daily', function() {
     var today = new Date().toDateString();
