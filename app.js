@@ -614,8 +614,7 @@ function showAuthFromLanding() {
       setTimeout(function() { showStreakWelcome(state.streak); }, 1400);
     }
     (function() {
-      var _today = new Date().toDateString();
-      if (!localStorage.getItem('codebook_challenge_done_' + _today)) {
+      if (_isDailyChallengeAvailable() && !_dailyChallengeShownThisSession) {
         setTimeout(showDailyChallenge, _streakExtended ? 3200 : 1200);
       }
       updateChallengeDot();
@@ -1126,8 +1125,7 @@ function startBook() {
   document.getElementById('app').style.display = 'block';
   applyTheme();
   launchApp();
-  const challengeDone = localStorage.getItem('codebook_challenge_done_' + today);
-  if (!challengeDone) {
+  if (_isDailyChallengeAvailable()) {
     setTimeout(() => showDailyChallenge(), 800);
   }
 }
@@ -1330,6 +1328,28 @@ function _openChallengeModal(challenge, headingText, subText, xpKey) {
 }
 
 // \u2500\u2500 DAILY CHALLENGE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// ── DAILY CHALLENGE HELPERS ──────────────────────────────────────────
+var _dailyChallengeShownThisSession = false;
+
+function _isDailyChallengeAvailable() {
+  var ts = parseInt(localStorage.getItem('codebook_challenge_ts') || '0');
+  return !ts || (Date.now() - ts >= 86400000);
+}
+
+function _markDailyChallengeComplete() {
+  localStorage.setItem('codebook_challenge_ts', String(Date.now()));
+}
+
+function _dailyChallengeResetsIn() {
+  var ts = parseInt(localStorage.getItem('codebook_challenge_ts') || '0');
+  if (!ts) return null;
+  var msLeft = 86400000 - (Date.now() - ts);
+  if (msLeft <= 0) return null;
+  var h = Math.floor(msLeft / 3600000);
+  var m = Math.floor((msLeft % 3600000) / 60000);
+  return h > 0 ? h + 'h ' + m + 'm' : m + 'm';
+}
+
 // Advances one question per calendar day. Deterministic but changes daily.
 function showDailyChallenge() {
   var today = new Date().toDateString();
@@ -1342,7 +1362,7 @@ function showDailyChallenge() {
     "Complete today's challenge and earn +" + challenge.xp + ' bonus XP.',
     'challenge-' + today
   );
-  localStorage.setItem('codebook_challenge_done_' + today, 'true');
+  _dailyChallengeShownThisSession = true;
 }
 
 function answerChallenge(chosen, correct, xp, explanation, xpKey) {
@@ -1375,7 +1395,7 @@ function answerChallenge(chosen, correct, xp, explanation, xpKey) {
 
   // Mark daily challenge done in localStorage only for the daily mode
   if (!xpKey || xpKey.indexOf('challenge-') === 0) {
-    localStorage.setItem('codebook_challenge_done_' + today, 'true');
+    _markDailyChallengeComplete();
     updateChallengeDot();
     checkAndUnlockBadges();
   }
@@ -1400,7 +1420,7 @@ function closeDailyChallenge() {
 function updateChallengeDot() {
   var btn = document.getElementById('tnav-challenge');
   if (!btn) return;
-  var done = !!localStorage.getItem('codebook_challenge_done_' + new Date().toDateString());
+  var done = !_isDailyChallengeAvailable();
   var dot = btn.querySelector('.ch-notif-dot');
   if (!done) {
     if (!dot) {
@@ -5330,7 +5350,7 @@ function renderChallengePanel() {
   if (!panel) return;
 
   var challenges = [
-    { icon: '\u26A1', type: 'DAILY', title: "Today's Knowledge Check", desc: 'One question. Earn bonus XP. Resets every day.', xp: '+20 XP', action: 'showDailyChallenge()', done: !!localStorage.getItem('codebook_challenge_done_' + new Date().toDateString()) },
+    (function() { var _dd = !_isDailyChallengeAvailable(); var _dr = _dd ? _dailyChallengeResetsIn() : null; return { icon: '\u26A1', type: 'DAILY', title: "Today's Knowledge Check", desc: _dd && _dr ? 'Resets in ' + _dr + '.' : 'One question. Earn bonus XP. Returns 24 hours after completion.', xp: '+20 XP', action: 'showDailyChallenge()', done: _dd }; })(),
     { icon: '\uD83E\uDDE0', type: 'RECALL', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
     { icon: '\u23F1\uFE0F', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 10 seconds each. Auto-advances every answer. Resets daily.', xp: '+50 XP', action: 'startSpeedRound()', done: !!localStorage.getItem('codebook_speed_done_' + new Date().toDateString()), locked: state.xp < 100 },
     { icon: '\uD83D\uDD25', type: 'STREAK', title: 'Streak Challenge', desc: 'Answer 5 questions in a row without getting one wrong.', xp: '+75 XP', action: 'startStreakChallenge()', done: false, locked: state.xp < 200 },
