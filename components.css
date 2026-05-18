@@ -6891,7 +6891,7 @@ body.learn-mode #main-col {
   gap: 9px;
 }
 
-.pf-sage-owl-wrap { flex-shrink: 0; display: flex; align-items: center; font-size: 18px; line-height: 1; filter: grayscale(1) brightness(1.3); }
+.pf-sage-owl-wrap { flex-shrink: 0; display: flex; }
 
 .pf-sage-label {
   font-family: 'Space Mono', monospace;

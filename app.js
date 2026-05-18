@@ -80,6 +80,69 @@ function sageOwlSVG(w, h) {
   );
 }
 
+function controllerSVG(w, h) {
+  var id = ++_sageOwlId;
+  w = w || 64; h = h || 48;
+  var B = 'M15,50 Q8,36 10,22 Q13,10 26,8 L74,8 Q87,10 90,22 Q92,36 85,50 Q79,62 70,63 L60,60 L55,58 L45,58 L40,60 L30,63 Q21,62 15,50 Z';
+  return (
+    '<svg viewBox="0 0 100 72" width="' + w + '" height="' + h + '" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible">' +
+    '<defs>' +
+      '<radialGradient id="cob' + id + '" cx="44" cy="28" r="62" gradientUnits="userSpaceOnUse">' +
+        '<stop offset="0%" stop-color="#22eeff"/>' +
+        '<stop offset="38%" stop-color="#0070cc"/>' +
+        '<stop offset="72%" stop-color="#002c68"/>' +
+        '<stop offset="100%" stop-color="#000d22"/>' +
+      '</radialGradient>' +
+      '<filter id="cgf' + id + '" x="-25%" y="-25%" width="150%" height="150%">' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="4" result="bl"/>' +
+        '<feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter>' +
+      '<filter id="cef' + id + '" x="-80%" y="-80%" width="260%" height="260%">' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="bl"/>' +
+        '<feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter>' +
+    '</defs>' +
+    '<path d="' + B + '" fill="url(#cob' + id + ')"/>' +
+    '<path d="' + B + '" fill="rgba(160,60,255,0.09)"/>' +
+    '<path d="' + B + '" fill="none" stroke="rgba(0,210,255,0.65)" stroke-width="2.5" filter="url(#cgf' + id + ')"/>' +
+    '<path d="' + B + '" fill="none" stroke="rgba(0,220,255,0.5)" stroke-width="1"/>' +
+    // Left thumbstick — same green eye treatment as owl
+    '<circle cx="30" cy="38" r="9" fill="#000800"/>' +
+    '<g filter="url(#cef' + id + ')">' +
+      '<circle cx="30" cy="38" r="9" fill="none" stroke="#00ff88" stroke-width="1.6"/>' +
+      '<circle cx="30" cy="38" r="6.2" fill="none" stroke="#00dd66" stroke-width="1"/>' +
+      '<circle cx="30" cy="38" r="3.5" fill="#00cc55"/>' +
+    '</g>' +
+    '<circle cx="30" cy="38" r="1.6" fill="#000800"/>' +
+    '<circle cx="32.2" cy="35.8" r="1.2" fill="rgba(255,255,255,0.88)"/>' +
+    // Right thumbstick
+    '<circle cx="64" cy="42" r="9" fill="#000800"/>' +
+    '<g filter="url(#cef' + id + ')">' +
+      '<circle cx="64" cy="42" r="9" fill="none" stroke="#00ff88" stroke-width="1.6"/>' +
+      '<circle cx="64" cy="42" r="6.2" fill="none" stroke="#00dd66" stroke-width="1"/>' +
+      '<circle cx="64" cy="42" r="3.5" fill="#00cc55"/>' +
+    '</g>' +
+    '<circle cx="64" cy="42" r="1.6" fill="#000800"/>' +
+    '<circle cx="66.2" cy="39.8" r="1.2" fill="rgba(255,255,255,0.88)"/>' +
+    // D-pad — cyan cross
+    '<rect x="17" y="22.5" width="11" height="4" rx="1.2" fill="rgba(0,210,255,0.75)"/>' +
+    '<rect x="20.5" y="19" width="4" height="11" rx="1.2" fill="rgba(0,210,255,0.75)"/>' +
+    // Face buttons — 4 small circles
+    '<circle cx="72" cy="22" r="3.2" fill="none" stroke="rgba(0,220,255,0.8)" stroke-width="1.2"/>' +
+    '<circle cx="78.5" cy="28" r="3.2" fill="none" stroke="rgba(0,220,255,0.8)" stroke-width="1.2"/>' +
+    '<circle cx="72" cy="34" r="3.2" fill="none" stroke="rgba(0,220,255,0.8)" stroke-width="1.2"/>' +
+    '<circle cx="65.5" cy="28" r="3.2" fill="none" stroke="rgba(0,220,255,0.8)" stroke-width="1.2"/>' +
+    // Center dots — like owl circuit lines
+    '<circle cx="44" cy="28" r="2.2" fill="#00ff88" fill-opacity="0.82"/>' +
+    '<circle cx="56" cy="28" r="2.2" fill="#00ff88" fill-opacity="0.82"/>' +
+    '<line x1="46.2" y1="28" x2="53.8" y2="28" stroke="#00ff88" stroke-width="1" stroke-opacity="0.6"/>' +
+    // Shoulder bumpers
+    '<ellipse cx="24" cy="9.5" rx="11" ry="3.5" fill="rgba(0,80,180,0.5)" stroke="rgba(0,210,255,0.45)" stroke-width="0.8"/>' +
+    '<ellipse cx="76" cy="9.5" rx="11" ry="3.5" fill="rgba(0,80,180,0.5)" stroke="rgba(0,210,255,0.45)" stroke-width="0.8"/>' +
+    '</svg>'
+  );
+}
+
 var sectionGateState = {};
 var matchSelected = {};
 
@@ -5056,7 +5119,7 @@ function renderGamePanel() {
 
       '<div class="gh-dark-overlay" id="gh-dark-overlay">' +
         '<div class="gh-sage-dark">' +
-          '<div class="gh-sage-owl">&#129417;</div>' +
+          '<div class="gh-sage-owl">' + controllerSVG(64, 48) + '</div>' +
           '<div class="gh-sage-msg">Switch on the light to reveal the room.</div>' +
         '</div>' +
       '</div>' +
@@ -5284,7 +5347,7 @@ function renderProfilePanel() {
 
     // Sage field notes
     '<div class="pf-sage-card">' +
-      '<div class="pf-sage-hdr"><span class="pf-sage-owl-wrap">🎮</span><span class="pf-sage-label">// FIELD NOTES</span></div>' +
+      '<div class="pf-sage-hdr"><span class="pf-sage-owl-wrap">' + sageOwlSVG(20, 22) + '</span><span class="pf-sage-label">// FIELD NOTES</span></div>' +
       '<div class="pf-sage-text">' + sageNote + '</div>' +
     '</div>' +
 
