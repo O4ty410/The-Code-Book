@@ -5332,7 +5332,7 @@ function renderChallengePanel() {
   var challenges = [
     { icon: '\u26A1', type: 'DAILY', title: "Today's Knowledge Check", desc: 'One question. Earn bonus XP. Resets every day.', xp: '+20 XP', action: 'showDailyChallenge()', done: !!localStorage.getItem('codebook_challenge_done_' + new Date().toDateString()) },
     { icon: '\uD83E\uDDE0', type: 'RECALL', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
-    { icon: '\u23F1\uFE0F', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 30 seconds each. How fast can you go?', xp: '+50 XP', action: 'startSpeedRound()', done: false, locked: state.xp < 100 },
+    { icon: '\u23F1\uFE0F', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 10 seconds each. Auto-advances every answer. Resets daily.', xp: '+50 XP', action: 'startSpeedRound()', done: !!localStorage.getItem('codebook_speed_done_' + new Date().toDateString()), locked: state.xp < 100 },
     { icon: '\uD83D\uDD25', type: 'STREAK', title: 'Streak Challenge', desc: 'Answer 5 questions in a row without getting one wrong.', xp: '+75 XP', action: 'startStreakChallenge()', done: false, locked: state.xp < 200 },
     { icon: '\uD83C\uDFC6', type: 'FLOOR', title: 'Floor Boss', desc: 'A comprehensive quiz on everything in the floor you just completed.', xp: '+100 XP', action: 'startFloorBoss()', done: false, locked: !isFloorComplete(state.currentFloor - 1) },
   ];
@@ -5388,86 +5388,124 @@ function startRecallQuiz() {
 }
 
 // \u2500\u2500 SPEED ROUND \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-// Picks a question offset by 2 from the daily so it is always different.
-var _speedRoundIndex = 0;
-// \u2500\u2500 SPEED ROUND \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-// 10 questions, one per round. Tracks score across the session.
-var _speedRoundIndex = 0;
+// 10 questions, 10 seconds each. Auto-advances on any answer or timeout.
+// Locked for the rest of the day once completed; resets at midnight.
 var _speedRoundScore = 0;
 var _speedRoundTotal = 10;
 var _speedRoundCurrent = 0;
 var _speedRoundTimer = null;
-var _speedRoundTimeLeft = 30;
+var _speedRoundTimeLeft = 10;
+var _speedRoundAnswered = false;
 
 function startSpeedRound() {
+  var today = new Date().toDateString();
+  if (localStorage.getItem('codebook_speed_done_' + today)) {
+    sageMessage('Speed Round already completed today. Come back tomorrow!', 'tip');
+    return;
+  }
   if (state.xp < 100) return;
   _speedRoundScore = 0;
   _speedRoundCurrent = 0;
-  _speedRoundTimeLeft = 30;
   _nextSpeedQuestion();
 }
 
 function _nextSpeedQuestion() {
-  if (_speedRoundCurrent >= _speedRoundTotal) {
-    _endSpeedRound();
-    return;
-  }
+  if (_speedRoundCurrent >= _speedRoundTotal) { _endSpeedRound(); return; }
+  clearInterval(_speedRoundTimer);
+  _speedRoundAnswered = false;
+
   var epoch = new Date('2025-01-01').getTime();
   var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
   var idx = (daysSinceEpoch + _speedRoundCurrent + 2) % DAILY_CHALLENGES.length;
   var challenge = DAILY_CHALLENGES[idx];
-  var today = new Date().toDateString();
   var questionNum = _speedRoundCurrent + 1;
 
-  _openChallengeModal(
-    challenge,
-    'Speed Round \u2014 ' + questionNum + ' of ' + _speedRoundTotal,
-    '30 seconds. Score: ' + _speedRoundScore + ' correct.',
-    'speed-' + today + '-' + idx
-  );
+  document.getElementById('daily-challenge').style.display = 'flex';
+  document.getElementById('challenge-title').textContent = 'Speed Round — ' + questionNum + ' of ' + _speedRoundTotal;
+  document.getElementById('challenge-body').textContent = 'Score: ' + _speedRoundScore + ' correct';
+  document.getElementById('challenge-question').textContent = challenge.question;
+  document.getElementById('challenge-result').style.display = 'none';
+  document.querySelectorAll('#daily-challenge .auth-btn').forEach(function(b) { b.remove(); });
 
-  // Inject the timer bar into the modal
-  var existingTimer = document.getElementById('speed-timer-bar');
-  if (existingTimer) existingTimer.parentNode.removeChild(existingTimer);
+  var existingBar = document.getElementById('speed-timer-bar');
+  if (existingBar) existingBar.remove();
   var timerWrap = document.createElement('div');
   timerWrap.id = 'speed-timer-bar';
   timerWrap.style.cssText = 'height:4px;background:var(--border);border-radius:4px;margin-bottom:16px;overflow:hidden;';
   var timerFill = document.createElement('div');
+  timerFill.id = 'speed-timer-fill';
   timerFill.style.cssText = 'height:100%;background:var(--accent);border-radius:4px;width:100%;transition:width 1s linear;';
   timerWrap.appendChild(timerFill);
   var questionEl = document.getElementById('challenge-question');
   questionEl.parentNode.insertBefore(timerWrap, questionEl);
 
-  _speedRoundTimeLeft = 30;
-  clearInterval(_speedRoundTimer);
+  var optionsEl = document.getElementById('challenge-options');
+  optionsEl.innerHTML = '';
+  challenge.options.forEach(function(opt, i) {
+    var btn = document.createElement('button');
+    btn.style.cssText = 'padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;cursor:pointer;text-align:left;transition:border-color 0.2s ease;width:100%;';
+    btn.textContent = opt;
+    btn.addEventListener('click', function() { _answerSpeedQuestion(i, challenge.correct); });
+    optionsEl.appendChild(btn);
+  });
+
+  _speedRoundTimeLeft = 10;
   _speedRoundTimer = setInterval(function() {
     _speedRoundTimeLeft--;
-    timerFill.style.width = ((_speedRoundTimeLeft / 30) * 100) + '%';
+    var fill = document.getElementById('speed-timer-fill');
+    if (fill) fill.style.width = ((_speedRoundTimeLeft / 10) * 100) + '%';
     if (_speedRoundTimeLeft <= 0) {
       clearInterval(_speedRoundTimer);
-      _speedRoundCurrent++;
-      setTimeout(_nextSpeedQuestion, 600);
+      if (!_speedRoundAnswered) _answerSpeedQuestion(-1, challenge.correct);
     }
   }, 1000);
 }
 
-function _endSpeedRound() {
+function _answerSpeedQuestion(chosen, correct) {
+  if (_speedRoundAnswered) return;
+  _speedRoundAnswered = true;
   clearInterval(_speedRoundTimer);
-  var total = _speedRoundTotal;
-  var score = _speedRoundScore;
-  var xpEarned = score * 5;
-  var today = new Date().toDateString();
-  awardXP(xpEarned, 'speed-round-' + today, window.innerWidth / 2, 200);
-  document.getElementById('challenge-title').textContent = 'Speed Round Complete!';
-  document.getElementById('challenge-body').textContent = score + ' of ' + total + ' correct. +' + xpEarned + ' XP earned.';
-  document.getElementById('challenge-question').textContent = score >= 8 ? '\uD83C\uDFC6 Excellent!' : score >= 5 ? '\uD83D\uDC4D Good effort!' : '\uD83D\uDCAA Keep practising!';
-  document.getElementById('challenge-options').innerHTML = '<button class="auth-btn" onclick="closeDailyChallenge()" style="margin-top:8px;">Done</button>';
-  document.getElementById('challenge-result').style.display = 'none';
+  if (chosen === correct) _speedRoundScore++;
+
+  var buttons = document.querySelectorAll('#challenge-options button');
+  buttons.forEach(function(btn, i) {
+    btn.disabled = true;
+    if (i === correct) btn.style.borderColor = 'var(--success)';
+    else if (i === chosen) btn.style.borderColor = 'var(--floor3)';
+  });
+  var fill = document.getElementById('speed-timer-fill');
+  if (fill) { fill.style.transition = 'none'; fill.style.width = '0%'; }
+
+  _speedRoundCurrent++;
+  setTimeout(_nextSpeedQuestion, 700);
 }
 
-// Override answerChallenge to track speed round score
-var _inSpeedRound = false;
-var _origAnswerChallenge = null;
+function _endSpeedRound() {
+  clearInterval(_speedRoundTimer);
+  var today = new Date().toDateString();
+  localStorage.setItem('codebook_speed_done_' + today, 'true');
+  var bar = document.getElementById('speed-timer-bar');
+  if (bar) bar.remove();
+
+  var score = _speedRoundScore;
+  var xpEarned = score * 5;
+  awardXP(xpEarned, 'speed-round-' + today, window.innerWidth / 2, 200);
+  checkAndUnlockBadges();
+  renderChallengePanel();
+
+  document.getElementById('challenge-title').textContent = 'Speed Round Complete!';
+  document.getElementById('challenge-body').textContent = score + ' of ' + _speedRoundTotal + ' correct — +' + xpEarned + ' XP earned.';
+  document.getElementById('challenge-question').textContent = score >= 8 ? '🏆 Excellent!' : score >= 5 ? '👍 Good effort!' : '💪 Keep practising!';
+  document.getElementById('challenge-options').innerHTML = '';
+  document.getElementById('challenge-result').style.display = 'none';
+  var doneBtn = document.createElement('button');
+  doneBtn.className = 'auth-btn';
+  doneBtn.textContent = 'Done →';
+  doneBtn.style.marginTop = '16px';
+  doneBtn.onclick = closeDailyChallenge;
+  document.getElementById('challenge-options').appendChild(doneBtn);
+}
+
 
 // \u2500\u2500 STREAK CHALLENGE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 // 5 questions in a row. One wrong answer ends the run.
