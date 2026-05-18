@@ -1187,6 +1187,7 @@ function onboardingNext(step) {
     document.getElementById('onboarding-step-2').style.display = 'block';
     document.getElementById('onboarding-title').textContent = 'Nice to meet you, ' + (name) + '.';
     document.getElementById('onboarding-body').textContent = 'Let me understand where you\'re starting from.';
+    var _obp = document.getElementById('ob-progress'); if (_obp) _obp.textContent = '02 / 03';
   }
 }
 
@@ -1197,12 +1198,14 @@ function onboardingSelect(field, value) {
     document.getElementById('onboarding-step-3').style.display = 'block';
     document.getElementById('onboarding-title').textContent = 'Almost there.';
     document.getElementById('onboarding-body').textContent = 'Last question \u2014 and then we begin.';
+    var _obp2 = document.getElementById('ob-progress'); if (_obp2) _obp2.textContent = '03 / 03';
   } else if (field === 'goal') {
     onboardingData.goal = value;
     localStorage.setItem('codebook_goal', value);
 
     document.getElementById('onboarding-step-3').style.display = 'none';
     document.getElementById('onboarding-step-4').style.display = 'block';
+    var _obp3 = document.getElementById('ob-progress'); if (_obp3) _obp3.style.visibility = 'hidden';
 
     const messages = {
       never: { title: 'You\'re in the right place, ' + onboardingData.name + '.', msg: 'Starting from zero is actually an advantage. No bad habits to unlearn. We\'ll build everything from the ground up, one clear step at a time.' },
@@ -1698,6 +1701,7 @@ function confirmGuestName() {
   document.getElementById('onboarding-step-2').style.display = 'block';
   document.getElementById('onboarding-title').textContent = 'Welcome, ' + name + '.';
   document.getElementById('onboarding-body').textContent = 'A few quick questions before we begin.';
+  var _obpg = document.getElementById('ob-progress'); if (_obpg) _obpg.textContent = '02 / 03';
   document.getElementById('onboarding').style.display = 'flex';
 }
 
