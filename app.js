@@ -5126,6 +5126,34 @@ function launchGame(gameId) {
       'style="width:100%;height:calc(100% - 44px);border:none;display:block;"></iframe>';
 }
 
+
+function getProfileRank(fi) {
+  if (fi >= 6) return 'DIRECTOR';
+  if (fi >= 5) return 'SENIOR AGENT';
+  if (fi >= 4) return 'FIELD AGENT';
+  if (fi >= 3) return 'SPECIALIST';
+  if (fi >= 2) return 'OPERATIVE';
+  if (fi >= 1) return 'INITIATE';
+  return 'RECRUIT';
+}
+
+function getSageFieldNote(st, name) {
+  var floor  = st.currentFloor || 1;
+  var streak = st.streak || 0;
+  var earned = (st.earnedBadges || []).length;
+  var done   = Object.keys(st.completed || {}).filter(function(k){ return st.completed[k]; }).length;
+  if (streak >= 30) return name + ' has shown up 30 days straight. That\'s not habit — that\'s identity.';
+  if (streak >= 14) return 'Two weeks without missing a single day. Most people quit in week one. ' + name + ' hasn\'t.';
+  if (streak >= 7)  return 'Seven consecutive days. This is exactly where the gap between those who make it and those who don\'t starts to open.';
+  if (earned >= 6)  return name + ' has earned ' + earned + ' clearance badges. That kind of record says more than any CV.';
+  if (floor >= 6)   return 'Floor ' + floor + '. The operators who reach this far have already filtered themselves into a different category.';
+  if (floor >= 4)   return 'Past the halfway mark. Most learners never see Floor ' + floor + '. ' + name + ' does.';
+  if (floor >= 3)   return 'You\'ve crossed the threshold that filters out the majority. What comes next defines the rest.';
+  if (floor >= 2)   return 'The foundations are in. What gets built on top of them is entirely up to ' + name + '.';
+  if (done >= 5)    return 'Early days, but ' + name + ' showed up — and that already puts them ahead of most.';
+  return 'Every journey starts somewhere. ' + name + '\'s starts here.';
+}
+
 function renderProfilePanel() {
   var panel = document.getElementById('panel-profile');
   if (!panel) return;
@@ -5135,16 +5163,30 @@ function renderProfilePanel() {
   var cur = getCurrentLevel();
   var next = getNextLevel();
   var levelName = LEVEL_NAMES[cur.level] || 'Level ' + cur.level;
-  var nextName = next ? (LEVEL_NAMES[next.level] || 'Level ' + next.level) : 'MAX';
   var xpIntoLevel = state.xp - cur.xp;
   var xpForNextLevel = next ? (next.xp - cur.xp) : 1;
   var levelPct = next ? Math.min(100, Math.round((xpIntoLevel / xpForNextLevel) * 100)) : 100;
+  var floorIndex = Math.max(0, (state.currentFloor || 1) - 1);
 
-  var doneSecs = Object.keys(state.completed).filter(function(k){
+  var doneSecs = Object.keys(state.completed || {}).filter(function(k) {
     return state.completed[k] && FLOORS.some(function(f){ return f.sections.some(function(s){ return s.id === k; }); });
   }).length;
   var totalMinutes = Math.round((state.totalSeconds || 0) / 60);
+  var timeDisplay = totalMinutes >= 60
+    ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
+    : (totalMinutes || 0) + 'm';
 
+  var rank     = getProfileRank(floorIndex);
+  var sageNote = getSageFieldNote(state, name);
+  var selectedAv = AVATARS.find(function(a){ return a.id === getSelectedAvatar(); }) || null;
+
+  var floorsDone = FLOORS.filter(function(f, fi){ return isFloorComplete(fi); }).length;
+  var curFloorTitle = FLOORS[floorIndex] ? FLOORS[floorIndex].title : '';
+  var missionLine = floorsDone >= 7
+    ? 'All 7 floors complete. Mission accomplished.'
+    : 'Floor ' + (state.currentFloor || 1) + ' — ' + curFloorTitle + '. ' + doneSecs + ' section' + (doneSecs === 1 ? '' : 's') + ' complete.';
+
+  // Activity calendar — last 28 days
   var actLog = getActivityLog();
   var actMap = {};
   actLog.forEach(function(a) {
@@ -5153,106 +5195,117 @@ function renderProfilePanel() {
   });
   var today = new Date(); today.setHours(0,0,0,0);
   var calDays = [];
-  for (var i = 27; i >= 0; i--) {
-    var d = new Date(today); d.setDate(d.getDate() - i);
-    calDays.push({ label: d.toDateString(), count: actMap[d.toDateString()] || 0, isToday: i === 0 });
+  for (var ci = 27; ci >= 0; ci--) {
+    var cd = new Date(today); cd.setDate(cd.getDate() - ci);
+    calDays.push({ label: cd.toDateString(), count: actMap[cd.toDateString()] || 0, isToday: ci === 0 });
   }
-
-  var selectedAv = AVATARS.find(function(a) { return a.id === getSelectedAvatar(); }) || null;
-  var archetype = selectedAv ? selectedAv.name.toUpperCase() : 'OPERATOR';
-  var timeDisplay = totalMinutes >= 60
-    ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
-    : totalMinutes + 'm';
-
-  var towerSegsHtml = FLOORS.map(function(f, fi) {
-    var color = f.color || '#c8a96e';
-    var isComplete = isFloorComplete(fi);
-    var isCurrent = (fi === state.currentFloor - 1);
-    var done = f.sections.filter(function(s){ return state.completed[s.id]; }).length;
-    var cls = isComplete ? 'tf-done' : isCurrent ? 'tf-active' : (done > 0 ? 'tf-partial' : 'tf-locked');
-    var winsHtml = f.sections.map(function(s) {
-      return '<i class="prof-tw' + (state.completed[s.id] ? ' tw-lit' : '') + '"></i>';
-    }).join('');
-    return '<div class="prof-tower-seg ' + cls + '" style="--tf-color:' + color + '">' +
-      '<span class="prof-tf-fnum">F' + (fi + 1) + '</span>' +
-      '<div class="prof-tw-grid">' + winsHtml + '</div>' +
-      (isCurrent ? '<span class="prof-tf-pulse"></span>' : '') +
-      '</div>';
-  }).join('');
-
   var calHtml = '<div class="prof-cal-grid">' +
     calDays.map(function(day) {
       var intensity = day.count === 0 ? 'empty' : day.count >= 3 ? 'high' : day.count >= 2 ? 'mid' : 'low';
       return '<div class="prof-cal-day prof-cal-' + intensity + (day.isToday ? ' prof-cal-today' : '') + '" title="' + day.label + '"></div>';
     }).join('') + '</div>';
 
-  var heroSwatchesHtml = PROF_THEMES.map(function(t) {
-    var isActive = t.id === currentTheme;
-    return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '" title="' + t.name + '" onclick="switchProfTheme(\'' + t.id + '\')" style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '"></button>';
-  }).join('');
+  // Journey map
+  var journeyHtml = '<div class="pf-journey"><div class="pf-journey-scroll"><div class="pf-journey-track">';
+  FLOORS.forEach(function(f, fi) {
+    var isComplete = isFloorComplete(fi);
+    var isCurrent  = (fi === floorIndex);
+    var nodeCls    = isComplete ? 'pf-nd-done' : isCurrent ? 'pf-nd-active' : 'pf-nd-locked';
+    if (fi > 0) journeyHtml += '<div class="pf-nd-line' + (isFloorComplete(fi - 1) ? ' pf-nd-lit' : '') + '"></div>';
+    journeyHtml +=
+      '<div class="pf-node ' + nodeCls + '" style="--nd-col:' + (f.color || 'var(--accent)') + '">' +
+        '<div class="pf-node-ring">' + getFloorIcon(fi, 30) + '</div>' +
+        '<span class="pf-node-lbl">F' + (fi + 1) + '</span>' +
+      '</div>';
+  });
+  journeyHtml += '</div></div></div>';
 
-  var badgeGridHtml = '<div class="prof-badge-grid">' +
+  // Theme selector
+  var themesHtml = '<div class="pf-themes">' +
+    PROF_THEMES.map(function(t) {
+      var isActive = t.id === currentTheme;
+      return '<button class="pf-theme-btn' + (isActive ? ' pf-theme-active' : '') + '" title="' + t.name + '" onclick="switchProfTheme(\'' + t.id + '\')" style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '">' +
+        '<div class="pf-theme-orb"></div>' +
+        '<span class="pf-theme-name">' + t.name.split(' ')[0].toUpperCase() + '</span>' +
+      '</button>';
+    }).join('') +
+  '</div>';
+
+  // Badge grid
+  var badgesHtml = '<div class="pf-badge-grid">' +
     BADGES.map(function(b) {
       var earned = state.earnedBadges && state.earnedBadges.indexOf(b.id) > -1;
-      return '<div class="prof-badge-card' + (earned ? ' prof-badge-earned' : '') + '">' +
-        '<span class="prof-badge-card-icon">' + b.emoji + '</span>' +
-        '<div class="prof-badge-card-info">' +
-          '<span class="prof-badge-card-name">' + b.name + '</span>' +
-          (earned ? '<span class="prof-badge-card-star">★</span>' : '') +
-        '</div>' +
-        '</div>';
-    }).join('') + '</div>';
+      return '<div class="pf-badge' + (earned ? ' pf-badge-earned' : ' pf-badge-locked') + '">' +
+        '<span class="pf-badge-icon">' + b.emoji + '</span>' +
+        '<span class="pf-badge-name">' + b.name.toUpperCase() + '</span>' +
+      '</div>';
+    }).join('') +
+  '</div>';
 
   panel.innerHTML =
-    '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
-    '<div class="prof-outer-grid">' +
+    '<div class="prof-layout pf-v2" data-prof-theme="' + currentTheme + '">' +
 
-    '<div class="prof-left-col">' +
-      '<div class="prof-tower-building">' +
-        '<div class="prof-tower-archtype">' + archetype + '</div>' +
-        '<div class="prof-tower-spire"></div>' +
-        '<div class="prof-tower-body">' + towerSegsHtml + '</div>' +
+    // Header
+    '<div class="pf-header">' +
+      '<div class="pf-hdr-main">' +
+        '<div class="pf-header-status"><span class="pf-status-dot"></span>ACTIVE OPERATOR</div>' +
+        '<div class="pf-header-name">' + name + '</div>' +
+        '<div class="pf-header-rank">' + rank + ' · LEVEL ' + cur.level + ' — ' + levelName.toUpperCase() + '</div>' +
+        '<div class="pf-header-mission">' + missionLine + '</div>' +
       '</div>' +
-      '<div class="prof-xp-summary">' +
-        '<div class="prof-xp-main">' + state.xp + ' XP</div>' +
-        (next ? '<div class="prof-xp-sub">— ' + (next.xp - state.xp) + ' XP TO ' + nextName.toUpperCase() + ' CLEARANCE</div>' : '<div class="prof-xp-sub">MAX CLEARANCE REACHED</div>') +
-      '</div>' +
-    '</div>' +
-
-    '<div class="prof-right-col">' +
-      '<div class="prof-dossier-hdr"><span class="prof-dossier-title">// OPERATOR DOSSIER</span></div>' +
-
-      '<div class="prof-identity">' +
-        '<div class="prof-identity-data">' +
-          '<div class="prof-id-field"><span class="prof-id-key">CALLSIGN</span><span class="prof-id-val">' + name + '</span></div>' +
-          '<div class="prof-id-field"><span class="prof-id-key">RANK</span></div>' +
-          '<div class="prof-id-level">LEVEL ' + cur.level + ' — ' + levelName.toUpperCase() + '</div>' +
-        '</div>' +
-        '<div class="prof-identity-portrait">' +
-          '<div class="prof-avatar-portrait">' + (selectedAv ? '<span style="font-size:36px">' + selectedAv.icon + '</span>' : '<div class="prof-av-silhouette"></div>') + '</div>' +
-          '<button class="prof-avatar-btn" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'SELECT') + '</button>' +
-        '</div>' +
-        '<div class="prof-identity-skills">' +
-          '<span class="prof-skills-label">SKILLS ▼</span>' +
-          '<div class="prof-hero-swatches">' + heroSwatchesHtml + '</div>' +
-          '<div class="prof-xp-bar-wrap"><div class="prof-xp-bar-fill" style="width:' + levelPct + '%"></div></div>' +
-        '</div>' +
-      '</div>' +
-
-      '<div class="prof-stats-row">' +
-        '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.xp + '</span><span class="prof-stat-key">XP</span></div>' +
-        '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.streak + ' 🔥</span><span class="prof-stat-key">DAY STREAK</span></div>' +
-        '<div class="prof-stat-cell"><span class="prof-stat-val">' + doneSecs + '</span><span class="prof-stat-key">SECTIONS</span></div>' +
-        '<div class="prof-stat-cell"><span class="prof-stat-val">' + timeDisplay + '</span><span class="prof-stat-key">ACTIVE TIME</span></div>' +
-      '</div>' +
-
-      '<div class="prof-lower-grid">' +
-        '<div class="prof-section"><div class="prof-section-title">// Activity Log — Last 28 Days</div>' + calHtml + '</div>' +
-        '<div class="prof-section"><div class="prof-section-title">// Service Record</div>' + badgeGridHtml + '</div>' +
+      '<div class="pf-hdr-avatar">' +
+        '<div class="pf-avatar-frame">' + (selectedAv ? '<span style="font-size:28px;line-height:1">' + selectedAv.icon + '</span>' : '<div class="prof-av-silhouette" style="width:26px;height:38px"></div>') + '</div>' +
+        '<button class="pf-avatar-btn" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'SELECT') + '</button>' +
       '</div>' +
     '</div>' +
 
+    // XP bar
+    '<div class="pf-xp-strip">' +
+      '<div class="pf-xp-row">' +
+        '<span class="pf-xp-num">' + state.xp + ' XP</span>' +
+        (next ? '<span class="pf-xp-next">' + (next.xp - state.xp) + ' to ' + (LEVEL_NAMES[next.level] || 'Level ' + next.level).toUpperCase() + '</span>' : '<span class="pf-xp-next">MAX CLEARANCE</span>') +
+      '</div>' +
+      '<div class="pf-xp-bar"><div class="pf-xp-fill" style="width:' + levelPct + '%"></div></div>' +
     '</div>' +
+
+    // Journey map
+    journeyHtml +
+
+    // Stats
+    '<div class="pf-stats-strip">' +
+      '<div class="pf-stat-cell"><div class="pf-stat-n">' + state.xp + '</div><div class="pf-stat-k">XP</div></div>' +
+      '<div class="pf-stat-div"></div>' +
+      '<div class="pf-stat-cell"><div class="pf-stat-n">' + (state.streak || 0) + '</div><div class="pf-stat-k">DAY STREAK</div></div>' +
+      '<div class="pf-stat-div"></div>' +
+      '<div class="pf-stat-cell"><div class="pf-stat-n">' + doneSecs + '</div><div class="pf-stat-k">SECTIONS</div></div>' +
+      '<div class="pf-stat-div"></div>' +
+      '<div class="pf-stat-cell"><div class="pf-stat-n">' + timeDisplay + '</div><div class="pf-stat-k">FOCUS</div></div>' +
+    '</div>' +
+
+    // Sage field notes
+    '<div class="pf-sage-card">' +
+      '<div class="pf-sage-hdr"><span class="pf-sage-owl-wrap">' + sageOwlSVG(20, 22) + '</span><span class="pf-sage-label">// FIELD NOTES</span></div>' +
+      '<div class="pf-sage-text">' + sageNote + '</div>' +
+    '</div>' +
+
+    // Theme
+    '<div class="pf-section">' +
+      '<div class="pf-section-hdr">// OPERATIVE COLOUR</div>' +
+      themesHtml +
+    '</div>' +
+
+    // Badges
+    '<div class="pf-section">' +
+      '<div class="pf-section-hdr pf-section-hdr-row">// CLEARANCE BADGES <span class="pf-badge-count">' + (state.earnedBadges || []).length + ' / ' + BADGES.length + '</span></div>' +
+      badgesHtml +
+    '</div>' +
+
+    // Activity
+    '<div class="pf-section pf-section-last">' +
+      '<div class="pf-section-hdr">// ACTIVITY — LAST 28 DAYS</div>' +
+      calHtml +
+    '</div>' +
+
     '</div>';
 }
 

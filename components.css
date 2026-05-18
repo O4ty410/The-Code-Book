@@ -6566,3 +6566,483 @@ body.learn-mode #main-col {
   transition: opacity 0.15s;
 }
 .clp-btn:hover { opacity: 0.85; }
+
+/* ============================================================
+   PROFILE v2  —  pf-* classes
+   Full redesign: personal operator dossier
+   ============================================================ */
+
+/* The outer container reuses prof-layout theme vars */
+.pf-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+}
+
+/* ── Header ── */
+.pf-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.pf-hdr-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.pf-header-status {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--pth-accent);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 6px;
+}
+
+.pf-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pth-accent);
+  box-shadow: 0 0 8px var(--pth-glow);
+  flex-shrink: 0;
+  animation: pfDotPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pfDotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.pf-header-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(26px, 5.5vw, 46px);
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  line-height: 1.05;
+  text-shadow: 0 0 36px var(--pth-glow);
+  word-break: break-word;
+}
+
+.pf-header-rank {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--pth-accent);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.pf-header-mission {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-top: 8px;
+}
+
+/* Avatar side */
+.pf-hdr-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pf-avatar-frame {
+  width: 56px;
+  height: 68px;
+  border: 1px solid var(--pth-border);
+  border-radius: 8px;
+  background: var(--pth-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 18px var(--pth-glow);
+  overflow: hidden;
+  transition: box-shadow 0.4s, border-color 0.4s;
+}
+
+.pf-avatar-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.pf-avatar-btn:hover { color: var(--pth-accent); border-color: var(--pth-border); }
+
+/* ── XP strip ── */
+.pf-xp-strip {
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pf-xp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.pf-xp-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--pth-accent);
+  letter-spacing: 1px;
+}
+
+.pf-xp-next {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pf-xp-bar {
+  height: 4px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pf-xp-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(to right, var(--pth-accent), var(--pth-glow));
+  box-shadow: 0 0 8px var(--pth-glow);
+  transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ── Journey map ── */
+.pf-journey {
+  padding: 24px 0 8px;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.pf-journey-scroll {
+  overflow-x: auto;
+  padding: 0 24px 12px;
+  scrollbar-width: none;
+}
+
+.pf-journey-scroll::-webkit-scrollbar { display: none; }
+
+.pf-journey-track {
+  display: flex;
+  align-items: flex-end;
+  min-width: 380px;
+  padding-bottom: 4px;
+}
+
+.pf-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pf-node-ring {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+}
+
+.pf-nd-done .pf-node-ring {
+  border-color: var(--nd-col);
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 0 14px rgba(200,169,110,0.2), inset 0 0 10px rgba(0,0,0,0.3);
+}
+
+.pf-nd-active .pf-node-ring {
+  border-color: var(--nd-col);
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.06), 0 0 22px var(--nd-col);
+  animation: pfNodePulse 2.2s ease-in-out infinite;
+}
+
+.pf-nd-locked .pf-node-ring {
+  opacity: 0.22;
+}
+
+@keyframes pfNodePulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255,255,255,0.05), 0 0 14px var(--nd-col); }
+  50%       { box-shadow: 0 0 0 6px rgba(255,255,255,0.08), 0 0 26px var(--nd-col); }
+}
+
+.pf-node-lbl {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.pf-nd-done .pf-node-lbl   { color: var(--nd-col); opacity: 0.85; }
+.pf-nd-active .pf-node-lbl { color: var(--nd-col); }
+
+.pf-nd-line {
+  flex: 1;
+  height: 2px;
+  background: rgba(255,255,255,0.07);
+  min-width: 10px;
+  align-self: center;
+  margin-bottom: 22px;
+  border-radius: 2px;
+}
+
+.pf-nd-lit {
+  background: rgba(200,169,110,0.28);
+  box-shadow: 0 0 6px rgba(200,169,110,0.15);
+}
+
+/* ── Stats strip ── */
+.pf-stats-strip {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.pf-stat-cell {
+  flex: 1;
+  padding: 20px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.pf-stat-div {
+  width: 1px;
+  background: rgba(255,255,255,0.06);
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.pf-stat-n {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(18px, 4.5vw, 28px);
+  font-weight: 700;
+  color: var(--pth-accent);
+  text-shadow: 0 0 12px var(--pth-glow);
+  transition: color 0.4s, text-shadow 0.4s;
+  line-height: 1;
+}
+
+.pf-stat-k {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── Sage card ── */
+.pf-sage-card {
+  margin: 20px 24px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-left: 3px solid var(--pth-accent);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.4s;
+}
+
+.pf-sage-hdr {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.pf-sage-owl-wrap { flex-shrink: 0; display: flex; }
+
+.pf-sage-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.pf-sage-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-dim);
+}
+
+/* ── Section wrapper ── */
+.pf-section {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.pf-section-last { padding-bottom: 40px; }
+
+.pf-section-hdr {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.pf-section-hdr-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pf-badge-count {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--pth-accent);
+}
+
+/* ── Theme selector ── */
+.pf-themes {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.pf-theme-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.pf-theme-btn:hover { background: rgba(255,255,255,0.04); }
+
+.pf-theme-orb {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--sw-dot);
+  border: 2px solid rgba(255,255,255,0.15);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.pf-theme-active .pf-theme-orb {
+  border-color: var(--sw-border);
+  box-shadow: 0 0 22px var(--sw-glow), 0 0 0 3px rgba(255,255,255,0.08);
+  transform: scale(1.14);
+}
+
+.pf-theme-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.pf-theme-active .pf-theme-name { color: var(--pth-accent); }
+
+/* ── Badge grid ── */
+.pf-badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.pf-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.pf-badge-earned {
+  border-color: var(--pth-border);
+  background: var(--pth-bg);
+  box-shadow: 0 0 14px var(--pth-glow);
+}
+
+.pf-badge-locked {
+  opacity: 0.28;
+  filter: grayscale(1);
+}
+
+.pf-badge-icon { font-size: 24px; line-height: 1; }
+
+.pf-badge-name {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.pf-badge-earned .pf-badge-name { color: var(--text); }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .pf-header   { padding: 20px 18px 16px; gap: 12px; }
+  .pf-xp-strip { padding: 12px 18px; }
+  .pf-sage-card { margin: 16px 18px; }
+  .pf-section  { padding: 16px 18px; }
+  .pf-badge-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+}
+
+@media (max-width: 420px) {
+  .pf-header-name { font-size: 24px; }
+  .pf-stat-n      { font-size: 16px; }
+  .pf-badge-grid  { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .pf-badge       { padding: 10px 4px; }
+  .pf-badge-icon  { font-size: 20px; }
+  .pf-theme-orb   { width: 40px; height: 40px; }
+}
