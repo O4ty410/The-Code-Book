@@ -1466,7 +1466,8 @@ const FLOOR_MESSAGES = [
   { icon: '\uD83C\uDFC6', sage: 'Floor 7. You started from nothing and you built your way here. Every floor, every section, every debugging session at midnight \u2014 that distance is yours. Nobody can take the understanding back out of your head.' }
 ];
 
-function showFloorCelebration(floorIndex) {
+function showFloorCelebration(floorIndex, newBadges) {
+  newBadges = newBadges || [];
   var floor = FLOORS[floorIndex];
   var msg = FLOOR_MESSAGES[floorIndex];
   var name = state.playerName || localStorage.getItem('codebook_player_name') || '';
@@ -1516,6 +1517,20 @@ function showFloorCelebration(floorIndex) {
         '<div class="fc-sage-owl">' + sageOwlSVG(38, 42) + '</div>' +
         '<div class="fc-sage-text" id="fc-sage-text"></div>' +
       '</div>' +
+      // Badge reveal
+      (newBadges.length > 0
+        ? '<div class="fc-badge-reveal">' +
+            '<div class="fc-badge-reveal-label">// Badge Unlocked</div>' +
+            '<div class="fc-badge-items">' +
+              newBadges.map(function(b) {
+                return '<div class="fc-badge-item">' +
+                  '<span class="fc-badge-emoji">' + b.emoji + '</span>' +
+                  '<span class="fc-badge-name">' + b.name + '</span>' +
+                '</div>';
+              }).join('') +
+            '</div>' +
+          '</div>'
+        : '') +
       // Next floor preview
       (nextFloor
         ? '<div class="fc-next" style="border-color:' + (nextFloor.color||'#c8a96e') + '33">' +
@@ -3579,7 +3594,9 @@ function completeSection(sectionId, fi, si) {
   }
   saveState();
   checkGuestSavePrompt();
+  var _prevBadges = (state.earnedBadges || []).slice();
   updateAchievements();
+  var _newBadges = (state.earnedBadges || []).filter(function(id) { return _prevBadges.indexOf(id) === -1; }).map(function(id) { return BADGES.find(function(b) { return b.id === id; }); }).filter(Boolean);
   updateDailyGoalBar();
   updateTopChips();
   renderNav();
@@ -3611,7 +3628,7 @@ function completeSection(sectionId, fi, si) {
         }, 40);
       }
       if (isNowComplete) {
-        setTimeout(function() { showFloorCelebration(fi); }, 700);
+        setTimeout(function() { showFloorCelebration(fi, _newBadges); }, 700);
       }
     }, 180);
   });
@@ -3655,7 +3672,10 @@ function nextSection(fi, si) {
       var isNowComplete = isFloorComplete(fi);
       if (isNowComplete) {
         awardXP(getFloorXP(fi), 'floor-' + fi, window.innerWidth / 2, 250);
-        setTimeout(function() { showFloorCelebration(fi); }, 600);
+        var _prevB = (state.earnedBadges || []).slice();
+        checkAndUnlockBadges();
+        var _newB = (state.earnedBadges || []).filter(function(id) { return _prevB.indexOf(id) === -1; }).map(function(id) { return BADGES.find(function(b) { return b.id === id; }); }).filter(Boolean);
+        setTimeout(function() { showFloorCelebration(fi, _newB); }, 600);
       }
       saveState();
     }
