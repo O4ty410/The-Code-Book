@@ -5035,21 +5035,16 @@ function renderProfilePanel() {
   var cur = getCurrentLevel();
   var next = getNextLevel();
   var levelName = LEVEL_NAMES[cur.level] || 'Level ' + cur.level;
-  var nextName = next ? (LEVEL_NAMES[next.level] || 'Level ' + next.level) : 'Max';
+  var nextName = next ? (LEVEL_NAMES[next.level] || 'Level ' + next.level) : 'MAX';
   var xpIntoLevel = state.xp - cur.xp;
   var xpForNextLevel = next ? (next.xp - cur.xp) : 1;
   var levelPct = next ? Math.min(100, Math.round((xpIntoLevel / xpForNextLevel) * 100)) : 100;
 
-  // Totals
-  var totalSecs = 0;
-  FLOORS.forEach(function(f) { totalSecs += f.sections.length; });
   var doneSecs = Object.keys(state.completed).filter(function(k){
     return state.completed[k] && FLOORS.some(function(f){ return f.sections.some(function(s){ return s.id === k; }); });
   }).length;
-  var floorsComplete = FLOORS.filter(function(f, fi){ return isFloorComplete(fi); }).length;
   var totalMinutes = Math.round((state.totalSeconds || 0) / 60);
 
-  // 28-day activity grid (4 weeks)
   var actLog = getActivityLog();
   var actMap = {};
   actLog.forEach(function(a) {
@@ -5064,24 +5059,24 @@ function renderProfilePanel() {
   }
 
   var selectedAv = AVATARS.find(function(a) { return a.id === getSelectedAvatar(); }) || null;
-
+  var archetype = selectedAv ? selectedAv.name.toUpperCase() : 'OPERATOR';
   var timeDisplay = totalMinutes >= 60
     ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
     : totalMinutes + 'm';
 
-  // Tower bars (F1 at bottom via column-reverse in CSS)
-  var towerHtml = FLOORS.map(function(f, fi) {
-    var done = f.sections.filter(function(s){ return state.completed[s.id]; }).length;
-    var total = f.sections.length;
-    var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  var towerSegsHtml = FLOORS.map(function(f, fi) {
     var color = f.color || '#c8a96e';
     var isComplete = isFloorComplete(fi);
     var isCurrent = (fi === state.currentFloor - 1);
+    var done = f.sections.filter(function(s){ return state.completed[s.id]; }).length;
     var cls = isComplete ? 'tf-done' : isCurrent ? 'tf-active' : (done > 0 ? 'tf-partial' : 'tf-locked');
-    return '<div class="prof-tower-floor ' + cls + '" style="--tf-color:' + color + '">' +
-      '<span class="prof-tf-label">F' + (fi + 1) + '</span>' +
-      '<div class="prof-tf-track"><div class="prof-tf-fill" style="width:' + pct + '%"></div></div>' +
-      '<span class="prof-tf-pct">' + pct + '%</span>' +
+    var winsHtml = f.sections.map(function(s) {
+      return '<i class="prof-tw' + (state.completed[s.id] ? ' tw-lit' : '') + '"></i>';
+    }).join('');
+    return '<div class="prof-tower-seg ' + cls + '" style="--tf-color:' + color + '">' +
+      '<span class="prof-tf-fnum">F' + (fi + 1) + '</span>' +
+      '<div class="prof-tw-grid">' + winsHtml + '</div>' +
+      (isCurrent ? '<span class="prof-tf-pulse"></span>' : '') +
       '</div>';
   }).join('');
 
@@ -5089,73 +5084,76 @@ function renderProfilePanel() {
     calDays.map(function(day) {
       var intensity = day.count === 0 ? 'empty' : day.count >= 3 ? 'high' : day.count >= 2 ? 'mid' : 'low';
       return '<div class="prof-cal-day prof-cal-' + intensity + (day.isToday ? ' prof-cal-today' : '') + '" title="' + day.label + '"></div>';
-    }).join('') +
-    '</div>';
+    }).join('') + '</div>';
 
-  var heroSwatchesHtml_inner = PROF_THEMES.map(function(t) {
+  var heroSwatchesHtml = PROF_THEMES.map(function(t) {
     var isActive = t.id === currentTheme;
-    return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '" title="' + t.name + '" onclick="switchProfTheme(\'' + t.id + '\')" style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '"></button>';
+    return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '" title="' + t.name + '" onclick="switchProfTheme('' + t.id + '')" style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '"></button>';
   }).join('');
 
-  var badgePillsHtml = '<div class="prof-badge-pills">' +
+  var badgeGridHtml = '<div class="prof-badge-grid">' +
     BADGES.map(function(b) {
       var earned = state.earnedBadges && state.earnedBadges.indexOf(b.id) > -1;
-      return '<div class="prof-badge-pill' + (earned ? ' prof-badge-earned' : '') + '">' +
-        '<span class="prof-badge-pill-icon">' + b.emoji + '</span>' +
-        '<span class="prof-badge-pill-name">' + b.name + '</span>' +
+      return '<div class="prof-badge-card' + (earned ? ' prof-badge-earned' : '') + '">' +
+        '<span class="prof-badge-card-icon">' + b.emoji + '</span>' +
+        '<div class="prof-badge-card-info">' +
+          '<span class="prof-badge-card-name">' + b.name + '</span>' +
+          (earned ? '<span class="prof-badge-card-star">★</span>' : '') +
+        '</div>' +
         '</div>';
-    }).join('') +
-    '</div>';
+    }).join('') + '</div>';
 
   panel.innerHTML =
     '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
+    '<div class="prof-outer-grid">' +
 
-    // Header
-    '<div class="prof-dossier-hdr"><span class="prof-dossier-title">// OPERATOR DOSSIER</span></div>' +
-
-    // Main grid: left tower + right column
-    '<div class="prof-main-grid">' +
-
-    // Left: tower
     '<div class="prof-left-col">' +
-    '<div class="prof-tower">' + towerHtml + '</div>' +
-    '<div class="prof-xp-summary">' +
-      '<div class="prof-xp-main">' + state.xp + ' XP</div>' +
-      (next ? '<div class="prof-xp-sub">— ' + (next.xp - state.xp) + ' XP to ' + nextName + ' Clearance</div>' : '') +
-    '</div>' +
+      '<div class="prof-tower-building">' +
+        '<div class="prof-tower-archtype">' + archetype + '</div>' +
+        '<div class="prof-tower-spire"></div>' +
+        '<div class="prof-tower-body">' + towerSegsHtml + '</div>' +
+      '</div>' +
+      '<div class="prof-xp-summary">' +
+        '<div class="prof-xp-main">' + state.xp + ' XP</div>' +
+        (next ? '<div class="prof-xp-sub">— ' + (next.xp - state.xp) + ' XP TO ' + nextName.toUpperCase() + ' CLEARANCE</div>' : '<div class="prof-xp-sub">MAX CLEARANCE REACHED</div>') +
+      '</div>' +
     '</div>' +
 
-    // Right: identity card + stats row
     '<div class="prof-right-col">' +
-    '<div class="prof-identity">' +
-      '<div class="prof-identity-left">' +
-        '<div class="prof-id-field"><span class="prof-id-key">CALLSIGN</span><span class="prof-id-val">' + name + '</span></div>' +
-        '<div class="prof-id-field"><span class="prof-id-key">RANK</span><span class="prof-id-rank-val">LEVEL ' + cur.level + ' — ' + levelName + '</span></div>' +
-        (selectedAv ? '<div class="prof-id-archetype" style="--av-color:' + selectedAv.color + '"><span class="prof-id-arch-icon">' + selectedAv.icon + '</span><span class="prof-id-arch-name">' + selectedAv.name + '</span></div>' : '') +
+      '<div class="prof-dossier-hdr"><span class="prof-dossier-title">// OPERATOR DOSSIER</span></div>' +
+
+      '<div class="prof-identity">' +
+        '<div class="prof-identity-data">' +
+          '<div class="prof-id-field"><span class="prof-id-key">CALLSIGN</span><span class="prof-id-val">' + name + '</span></div>' +
+          '<div class="prof-id-field"><span class="prof-id-key">RANK</span></div>' +
+          '<div class="prof-id-level">LEVEL ' + cur.level + ' — ' + levelName.toUpperCase() + '</div>' +
+        '</div>' +
+        '<div class="prof-identity-portrait">' +
+          '<div class="prof-avatar-portrait">' + (selectedAv ? '<span style="font-size:36px">' + selectedAv.icon + '</span>' : '<div class="prof-av-silhouette"></div>') + '</div>' +
+          '<button class="prof-avatar-btn" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'SELECT') + '</button>' +
+        '</div>' +
+        '<div class="prof-identity-skills">' +
+          '<span class="prof-skills-label">SKILLS ▼</span>' +
+          '<div class="prof-hero-swatches">' + heroSwatchesHtml + '</div>' +
+          '<div class="prof-xp-bar-wrap"><div class="prof-xp-bar-fill" style="width:' + levelPct + '%"></div></div>' +
+        '</div>' +
       '</div>' +
-      '<div class="prof-identity-right">' +
-        '<div class="prof-avatar-frame">' + (selectedAv ? '<span style="font-size:28px">' + selectedAv.icon + '</span>' : '<span class="prof-av-empty">?</span>') + '</div>' +
-        '<button class="prof-avatar-btn" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'SELECT') + '</button>' +
-        '<div class="prof-hero-swatches">' + heroSwatchesHtml_inner + '</div>' +
+
+      '<div class="prof-stats-row">' +
+        '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.xp + '</span><span class="prof-stat-key">XP</span></div>' +
+        '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.streak + ' 🔥</span><span class="prof-stat-key">DAY STREAK</span></div>' +
+        '<div class="prof-stat-cell"><span class="prof-stat-val">' + doneSecs + '</span><span class="prof-stat-key">SECTIONS</span></div>' +
+        '<div class="prof-stat-cell"><span class="prof-stat-val">' + timeDisplay + '</span><span class="prof-stat-key">ACTIVE TIME</span></div>' +
+      '</div>' +
+
+      '<div class="prof-lower-grid">' +
+        '<div class="prof-section"><div class="prof-section-title">// Activity Log — Last 28 Days</div>' + calHtml + '</div>' +
+        '<div class="prof-section"><div class="prof-section-title">// Service Record</div>' + badgeGridHtml + '</div>' +
       '</div>' +
     '</div>' +
-    '<div class="prof-stats-row">' +
-      '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.xp + '</span><span class="prof-stat-key">XP</span></div>' +
-      '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.streak + '</span><span class="prof-stat-key">DAY STREAK</span></div>' +
-      '<div class="prof-stat-cell"><span class="prof-stat-val">' + doneSecs + '</span><span class="prof-stat-key">SECTIONS</span></div>' +
-      '<div class="prof-stat-cell"><span class="prof-stat-val">' + timeDisplay + '</span><span class="prof-stat-key">ACTIVE TIME</span></div>' +
+
     '</div>' +
-    '</div>' + // end right col
-
-    '</div>' + // end main grid
-
-    // Lower grid
-    '<div class="prof-lower-grid">' +
-    '<div class="prof-section"><div class="prof-section-title">// Activity Log — Last 28 Days</div>' + calHtml + '</div>' +
-    '<div class="prof-section"><div class="prof-section-title">// Service Record</div>' + badgePillsHtml + '</div>' +
-    '</div>' +
-
-    '</div>'; // end prof-layout
+    '</div>';
 }
 
 function renderPremiumPanel() {
