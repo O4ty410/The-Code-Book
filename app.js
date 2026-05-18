@@ -1896,13 +1896,17 @@ if (!section) { return; }
     '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
 
   // READ
-   var r = '<div class="floor-hero" data-floor="' + (fi+1) + '">' +
+   var _readWords = (section.body || '').replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length;
+  var _readMins = Math.max(1, Math.round(_readWords / 200));
+
+  var r = '<div id="read-progress-bar"></div><div class="floor-hero" data-floor="' + (fi+1) + '">' +
     '<div class="floor-tag" style="color:' + floor.color + '">' + floor.tag + '</div>' +
     '<div class="floor-title">' + floor.title + '<br><em>' + floor.subtitle + '</em></div>' +
     '<div class="floor-meta">' +
     '<div class="floor-meta-item"><div class="floor-meta-label">SECTION</div><div class="floor-meta-value">' + (si+1) + ' of ' + floor.sections.length + '</div></div>' +
     '<div class="floor-meta-item floor-meta-listen"><button class="listen-btn" id="listen-btn-' + section.id + '" onclick="toggleNarration(\'' + section.id + '\')"><span class="listen-dot"></span>&#9654; Listen</button></div>' +
     '<div class="floor-meta-item"><div class="floor-meta-label">OFFLINE</div><div class="floor-meta-value floor-meta-offline"><span class="offline-dot-pulse"></span>Available</div></div>' +
+    '<div class="floor-meta-item"><div class="floor-meta-label">READ TIME</div><div class="floor-meta-value">~' + _readMins + ' min</div></div>' +
     '</div>' +
     '<div class="floor-section-title">' + section.title + '</div>' +
     '</div>' +
@@ -2246,6 +2250,19 @@ if (!isLoggedIn && !isGuest) {
     var rp = document.getElementById('spanel-read-' + section.id);
     if (rp) highlightKeyTerms(rp);
   }, 50);
+  (function() {
+    var mc = document.getElementById('main-content');
+    if (!mc) return;
+    if (mc._readProgressFn) mc.removeEventListener('scroll', mc._readProgressFn);
+    mc._readProgressFn = function() {
+      var bar = document.getElementById('read-progress-bar');
+      if (!bar) return;
+      var total = mc.scrollHeight - mc.clientHeight;
+      var pct = total > 0 ? Math.min(100, (mc.scrollTop / total) * 100) : 100;
+      bar.style.width = pct + '%';
+    };
+    mc.addEventListener('scroll', mc._readProgressFn);
+  })();
 }
 
 function escHtml(str) {
