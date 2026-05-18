@@ -5088,7 +5088,7 @@ function renderProfilePanel() {
 
   var heroSwatchesHtml = PROF_THEMES.map(function(t) {
     var isActive = t.id === currentTheme;
-    return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '" title="' + t.name + '" onclick="switchProfTheme('' + t.id + '')" style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '"></button>';
+    return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '" title="' + t.name + '" onclick="switchProfTheme(\'' + t.id + '\')" style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '"></button>';
   }).join('');
 
   var badgeGridHtml = '<div class="prof-badge-grid">' +
