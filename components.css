@@ -7031,18 +7031,46 @@ body.learn-mode #main-col {
 
 /* ── Responsive ── */
 @media (max-width: 600px) {
-  .pf-header   { padding: 20px 18px 16px; gap: 12px; }
-  .pf-xp-strip { padding: 12px 18px; }
-  .pf-sage-card { margin: 16px 18px; }
-  .pf-section  { padding: 16px 18px; }
-  .pf-badge-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 8px; }
+  .pf-header        { padding: 14px 18px 12px; gap: 10px; }
+  .pf-header-name   { font-size: clamp(20px, 5vw, 30px); }
+  .pf-header-status { margin-bottom: 3px; }
+  .pf-header-mission { font-size: 12px; line-height: 1.4; margin-top: 4px; }
+  .pf-xp-strip      { padding: 8px 18px; gap: 5px; }
+  .pf-journey       { padding: 10px 0 4px; }
+  .pf-journey-scroll { padding: 0 18px 8px; }
+  .pf-node-ring     { width: 42px; height: 42px; }
+  .pf-nd-line       { margin-bottom: 16px; }
+  .pf-stat-cell     { padding: 12px 6px; }
+  .pf-sage-card     { margin: 10px 18px; padding: 10px 14px; gap: 6px; }
+  .pf-sage-text     { font-size: 12px; line-height: 1.5; }
+  .pf-section       { padding: 12px 18px; }
+  .pf-section-hdr   { margin-bottom: 10px; }
+  .pf-section-last  { padding-bottom: 16px; }
+  .pf-theme-orb     { width: 36px; height: 36px; }
+  .pf-themes        { gap: 6px; }
+  .pf-badge-grid    { grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .pf-badge         { padding: 8px 4px; gap: 4px; }
+  .pf-badge-icon    { font-size: 20px; }
 }
 
 @media (max-width: 420px) {
-  .pf-header-name { font-size: 24px; }
-  .pf-stat-n      { font-size: 16px; }
-  .pf-badge-grid  { grid-template-columns: repeat(3, 1fr); gap: 7px; }
-  .pf-badge       { padding: 10px 4px; }
-  .pf-badge-icon  { font-size: 20px; }
-  .pf-theme-orb   { width: 40px; height: 40px; }
+  .pf-header        { padding: 12px 14px 10px; }
+  .pf-header-name   { font-size: 22px; }
+  .pf-header-rank   { font-size: 9px; }
+  .pf-xp-strip      { padding: 6px 14px; }
+  .pf-journey-scroll { padding: 0 14px 6px; }
+  .pf-node-ring     { width: 36px; height: 36px; }
+  .pf-stat-n        { font-size: 15px; }
+  .pf-stat-k        { font-size: 6px; }
+  .pf-stat-cell     { padding: 10px 4px; }
+  .pf-sage-card     { margin: 8px 14px; padding: 8px 12px; }
+  .pf-sage-text     { font-size: 11px; }
+  .pf-section       { padding: 10px 14px; }
+  .pf-section-hdr   { margin-bottom: 8px; font-size: 8px; }
+  .pf-badge-grid    { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .pf-badge         { padding: 7px 3px; border-radius: 8px; }
+  .pf-badge-icon    { font-size: 18px; }
+  .pf-badge-name    { font-size: 6px; }
+  .pf-theme-orb     { width: 32px; height: 32px; }
+  .pf-theme-btn     { gap: 5px; padding: 4px; }
 }
