@@ -2146,10 +2146,7 @@ if (!section) { return; }
         var mFbHeader = '';
         if (curAnswered !== undefined) {
           var mFbCorrect = curAnswered === curQ.correct;
-          mFbHeader = '<div class="quiz-feedback-header ' + (mFbCorrect ? 'correct' : 'wrong') + '">' +
-            '<span class="quiz-feedback-icon">' + (mFbCorrect ? '✓' : '✗') + '</span>' +
-            '<span class="quiz-feedback-title">' + (mFbCorrect ? 'Correct!' : 'Not quite.') + '</span>' +
-            '</div><div class="quiz-feedback-body">' + curQ.feedback + '</div>';
+          mFbHeader = _quizFeedbackHtml(mFbCorrect, curQ.feedback);
         }
         q += '</div>' +
           '<div class="quiz-feedback ' + (curAnswered !== undefined ? 'visible' : '') + '">' +
@@ -2183,10 +2180,7 @@ if (!section) { return; }
       var fbHeader = '';
       if (answered !== undefined) {
         var fbCorrect = answered === qz.correct;
-        fbHeader = '<div class="quiz-feedback-header ' + (fbCorrect ? 'correct' : 'wrong') + '">' +
-          '<span class="quiz-feedback-icon">' + (fbCorrect ? '✓' : '✗') + '</span>' +
-          '<span class="quiz-feedback-title">' + (fbCorrect ? 'Correct!' : 'Not quite.') + '</span>' +
-          '</div><div class="quiz-feedback-body">' + qz.feedback + '</div>';
+        fbHeader = _quizFeedbackHtml(fbCorrect, qz.feedback);
       }
       q += '</div><div class="quiz-feedback ' + (answered !== undefined ? 'visible' : '') + '" id="qf-' + section.id + '">' +
         fbHeader + '</div>' +
@@ -2432,6 +2426,26 @@ function markGate(sectionId, key) {
     if (btn && !btn.disabled) btn.textContent = 'Mark as Complete \u2192 +' + getSectionXP(state.currentFloor - 1) + ' XP';
     sageMessage('All gates cleared. Mark this section complete when ready.', 'celebrate');
   }
+}
+
+function _quizFeedbackHtml(correct, feedbackText) {
+  var header = '<div class="quiz-feedback-header ' + (correct ? 'correct' : 'wrong') + '">' +
+    '<span class="quiz-feedback-icon">' + (correct ? '✓' : '✗') + '</span>' +
+    '<span class="quiz-feedback-title">' + (correct ? 'Correct!' : 'Not quite.') + '</span>' +
+    '</div>';
+  var body;
+  if (correct) {
+    body = '<div class="quiz-feedback-body">' + feedbackText + '</div>';
+  } else {
+    body = '<div class="quiz-feedback-body">' +
+      '<div class="owl-wrap">' +
+      '<div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
+      '<div class="owl-bubble">' +
+      '<div class="owl-name">SAGE &mdash; WHY THIS MATTERS</div>' +
+      '<div class="hint-text">' + feedbackText + '</div>' +
+      '</div></div></div>';
+  }
+  return header + body;
 }
 
 function answerQuizTabbed(sectionId, chosen, correct, fi, si) {
