@@ -1002,11 +1002,20 @@
   .session-complete-title     { font-size: 22px; }
   .challenge-title            { font-size: 20px; }
 
-  /* Floor celebration: tighten margins so cards don't get clipped */
-  .fc-hero                    { padding: 40px 16px 32px; }
+  /* Floor celebration: compact layout for small phones */
+  .fc-hero                    { padding: 24px 16px 16px; }
+  .fc-icon                    { width: 64px; height: 64px; margin-bottom: 14px; }
+  .fc-label                   { font-size: 10px; margin-bottom: 10px; }
+  .fc-title                   { font-size: clamp(18px, 5vw, 26px); }
   .fc-stats, .fc-sage, .fc-badge-reveal, .fc-next { margin-left: 16px; margin-right: 16px; }
-  .fc-actions                 { padding: 0 16px; }
-  .fc-stat-val                { font-size: 16px; }
+  .fc-stats                   { gap: 8px; margin-bottom: 12px; }
+  .fc-stat                    { padding: 10px 8px; }
+  .fc-stat-val                { font-size: 15px; }
+  .fc-stat-label              { font-size: 9px; }
+  .fc-sage                    { padding: 14px 16px; gap: 10px; }
+  .fc-sage-text               { font-size: 13px; }
+  .fc-actions                 { padding: 0 16px; gap: 10px; }
+  .fc-btn-primary             { padding: 14px 24px; font-size: 13px; }
 
   /* Onboarding step counter + clearance badge */
   .ob-clearance-ring          { width: 52px; height: 52px; font-size: 22px; }
