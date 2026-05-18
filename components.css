@@ -6021,3 +6021,19 @@ body.learn-mode #main-col {
     inset 0 1px 0 rgba(255,255,255,0.03),
     0 4px 20px rgba(0,0,0,0.18);
 }
+
+/* =============================================
+   READING SCROLL PROGRESS BAR
+   ============================================= */
+#read-progress-bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--floor-color, #c8a96e), rgba(200,169,110,0.4));
+  z-index: 60;
+  transition: width 0.12s linear;
+  margin-bottom: -3px;
+  pointer-events: none;
+}
