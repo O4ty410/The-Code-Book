@@ -612,3 +612,9 @@ body.game-mode #main-col {
     }
   }
 }
+
+/* Hide nav bars while floor celebration is open */
+body.celebrating .top-bar,
+body.celebrating .mobile-bottom-bar {
+  display: none !important;
+}

@@ -1829,6 +1829,7 @@ function showFloorCelebration(floorIndex, newBadges) {
     '</div>';
 
   el.style.display = 'flex';
+  document.body.classList.add('celebrating');
 
   // Animate stats counting up
   animateCount('fc-stat-sections', 0, sectionsCompleted, sectionsTotal, 800);
@@ -1895,6 +1896,7 @@ function burstFloorParticles(color) {
 
 function closeCelebration() {
   document.getElementById('floor-celebration').style.display = 'none';
+  document.body.classList.remove('celebrating');
 }
 
 function shareAchievement() {
