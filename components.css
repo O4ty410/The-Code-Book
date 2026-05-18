@@ -747,6 +747,10 @@
   gap: 12px;
 }
 
+@media (max-width: 420px) {
+  .match-cols { grid-template-columns: 1fr; }
+}
+
 .match-item {
   padding: 10px 14px;
   border: 1px solid var(--border);
@@ -1866,7 +1870,7 @@
 
 .auth-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(38px, 7vw, 54px);
+  font-size: clamp(28px, 8vw, 54px);
   font-weight: 900;
   color: var(--accent);
   margin-bottom: 10px;
@@ -4569,6 +4573,8 @@ body.learn-mode #main-col {
   .prof-outer-grid { grid-template-columns: 1fr; }
   .prof-lower-grid { grid-template-columns: 1fr; }
   .prof-layout { padding: 20px 18px 48px; }
+  /* Keep the tower building narrow + centred when stacked */
+  .prof-left-col { max-width: 220px; margin: 0 auto; }
 }
 
 @media (max-width: 520px) {
@@ -4576,6 +4582,18 @@ body.learn-mode #main-col {
   .prof-stat-val { font-size: 20px; }
   .prof-identity { grid-template-columns: 1fr auto; grid-template-rows: auto auto; }
   .prof-identity-skills { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
+}
+
+@media (max-width: 420px) {
+  .prof-layout { padding: 16px 12px 40px; }
+  .prof-identity { padding: 14px; gap: 12px; }
+  .prof-section  { padding: 14px 14px; }
+  .prof-stat-val { font-size: 18px; }
+  .prof-stat-key { font-size: 7px; letter-spacing: 1px; }
+  /* Collapse identity to single column on very small phones */
+  .prof-identity { grid-template-columns: 1fr; }
+  .prof-identity-portrait { flex-direction: row; align-items: center; gap: 12px; }
+  .prof-identity-skills   { flex-direction: row; flex-wrap: wrap; }
 }
 
 /* ============================================================

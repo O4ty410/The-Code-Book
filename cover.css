@@ -279,6 +279,18 @@
 .landing-begin-sub   { display: none; }
 
 /* ============================================================
+   LANDING — SMALL PHONE (≤ 420px)
+   Samsung Galaxy A series, iPhone SE / mini
+   ============================================================ */
+
+@media (max-width: 420px) {
+  .landing-title       { font-size: clamp(32px, 9.5vw, 42px); }
+  .landing-tagline     { font-size: 13px; margin-bottom: 28px; }
+  .landing-begin-btn   { max-width: 100%; padding: 16px 20px; font-size: 12px; letter-spacing: 4px; }
+  .landing-human       { font-size: 11px; }
+}
+
+/* ============================================================
    AUTH SCREEN COLOUR THEME ORBS
    Independent from the in-app profile theme.
    ============================================================ */
