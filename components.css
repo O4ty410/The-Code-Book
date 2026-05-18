@@ -5974,3 +5974,34 @@ body.learn-mode #main-col {
 
 .rev-cc-lg.rev-cc-tl { top: 14px; left: 18px; }
 .rev-cc-lg.rev-cc-br { bottom: 14px; right: 18px; }
+
+/* =============================================
+   KEY-TERM TOOLTIP SYSTEM
+   ============================================= */
+.kt-hl {
+  text-decoration: underline dotted rgba(125,211,252,0.45);
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+#kt-tooltip {
+  position: fixed;
+  z-index: 99999;
+  max-width: 280px;
+  padding: 8px 12px;
+  background: rgba(15,23,42,0.96);
+  border: 1px solid rgba(125,211,252,0.28);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+#kt-tooltip.kt-visible {
+  opacity: 1;
+}
