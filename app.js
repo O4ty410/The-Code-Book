@@ -5284,7 +5284,7 @@ function renderProfilePanel() {
 
     // Sage field notes
     '<div class="pf-sage-card">' +
-      '<div class="pf-sage-hdr"><span class="pf-sage-owl-wrap">' + sageOwlSVG(20, 22) + '</span><span class="pf-sage-label">// FIELD NOTES</span></div>' +
+      '<div class="pf-sage-hdr"><span class="pf-sage-owl-wrap">🎮</span><span class="pf-sage-label">// FIELD NOTES</span></div>' +
       '<div class="pf-sage-text">' + sageNote + '</div>' +
     '</div>' +
 

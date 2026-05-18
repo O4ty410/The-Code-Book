@@ -484,7 +484,7 @@ body.light .build-card:hover {
 .build-card.locked { opacity: 0.4; cursor: not-allowed; }
 .build-card.done { border-color: rgba(74,222,128,0.2); }
 
-.build-card-icon { font-size: 32px; margin-bottom: 12px; }
+.build-card-icon { font-size: 32px; margin-bottom: 12px; filter: grayscale(1) brightness(1.3); }
 
 .build-card-tag {
   font-family: 'Space Mono', monospace;
