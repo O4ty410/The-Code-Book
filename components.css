@@ -6215,7 +6215,7 @@ body.learn-mode #main-col {
   font-size: 48px;
   line-height: 1;
   margin-bottom: 18px;
-  filter: drop-shadow(0 0 24px var(--ci-accent, #7dd3fc));
+  filter: grayscale(1) brightness(2.8) drop-shadow(0 0 20px var(--ci-accent, #7dd3fc));
 }
 
 .ci-name {

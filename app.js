@@ -5481,11 +5481,11 @@ function renderChallengePanel() {
   if (!panel) return;
 
   var challenges = [
-    (function() { var _dd = !_isDailyChallengeAvailable(); var _dr = _dd ? _dailyChallengeResetsIn() : null; return { icon: '\u26A1', type: 'DAILY', title: "Today's Knowledge Check", desc: _dd && _dr ? 'Resets in ' + _dr + '.' : 'One question. Earn bonus XP. Returns 24 hours after completion.', xp: '+20 XP', action: 'showDailyChallenge()', done: _dd }; })(),
-    { icon: '\uD83E\uDDE0', type: 'RECALL', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
-    { icon: '\u23F1\uFE0F', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 10 seconds each. Auto-advances every answer. Resets daily.', xp: '+50 XP', action: 'startSpeedRound()', done: !!localStorage.getItem('codebook_speed_done_' + new Date().toDateString()), locked: state.xp < 100 },
-    { icon: '\uD83D\uDD25', type: 'STREAK', title: 'Streak Challenge', desc: '5 questions in a row. One wrong answer ends it. Resets daily.', xp: '+75 XP', action: 'startStreakChallenge()', done: !!localStorage.getItem('codebook_streak_done_' + new Date().toDateString()), locked: state.xp < 200 },
-    { icon: '\uD83C\uDFC6', type: 'FLOOR', title: 'Floor Boss', desc: 'A comprehensive quiz on everything in the floor you just completed.', xp: '+100 XP', action: 'startFloorBoss()', done: false, locked: !isFloorComplete(state.currentFloor - 1) },
+    (function() { var _dd = !_isDailyChallengeAvailable(); var _dr = _dd ? _dailyChallengeResetsIn() : null; return { icon: '⚡', type: 'DAILY', title: "Today's Knowledge Check", desc: _dd && _dr ? 'Resets in ' + _dr + '.' : 'One question. Earn bonus XP. Returns 24 hours after completion.', xp: '+20 XP', action: 'showDailyChallenge()', done: _dd }; })(),
+    { icon: '🧠', type: 'RECALL', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
+    { icon: '⏱️', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 10 seconds each. Auto-advances every answer. Resets daily.', xp: '+50 XP', action: 'startSpeedRound()', done: !!localStorage.getItem('codebook_speed_done_' + new Date().toDateString()), locked: state.xp < 100 },
+    { icon: '🔥', type: 'STREAK', title: 'Streak Challenge', desc: '5 questions in a row. One wrong answer ends it. Resets daily.', xp: '+75 XP', action: 'startStreakChallenge()', done: !!localStorage.getItem('codebook_streak_done_' + new Date().toDateString()), locked: state.xp < 200 },
+    { icon: '🏆', type: 'FLOOR', title: 'Floor Boss', desc: 'A comprehensive quiz on everything in the floor you just completed.', xp: '+100 XP', action: 'startFloorBoss()', done: false, locked: !isFloorComplete(state.currentFloor - 1) },
   ];
 
   var html = '<div class="panel-hero">' +
