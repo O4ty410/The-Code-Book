@@ -172,6 +172,8 @@ function loadState() {
       state.challengesDone = s.challengesDone || {};
       state.streakProtectedToday = s.streakProtectedToday || false;
       state.revKnown = s.revKnown || {};
+      state.earnedBadges = s.earnedBadges || [];
+      state.badgeFlags = s.badgeFlags || {};
     }
   }  catch(e) {}
 }
@@ -203,7 +205,9 @@ function saveState() {
     sageUsesLeft: state.sageUsesLeft,
     challengesDone: state.challengesDone || {},
     streakProtectedToday: state.streakProtectedToday || false,
-    revKnown: state.revKnown || {}
+    revKnown: state.revKnown || {},
+    earnedBadges: state.earnedBadges || [],
+    badgeFlags: state.badgeFlags || {}
   });
   try {
     localStorage.setItem('codebook_v1', payload);
@@ -2674,7 +2678,7 @@ function switchTopNav(tab, btn) {
       if (tab === 'premium') renderPremiumPanel();
       if (tab === 'profile') renderProfilePanel();
       if (tab === 'game') renderGamePanel();
-      if (tab === 'revision') renderRevisionPanel();
+      if (tab === 'revision') { renderRevisionPanel(); if (!state.badgeFlags.revVisited) { state.badgeFlags.revVisited = true; saveState(); checkAndUnlockBadges(); } }
     }
   }
 
@@ -2845,19 +2849,59 @@ function updateDailyGoalBar() {
 }
 
 function updateAchievements() {
-  var items = document.querySelectorAll('.ach-item');
-  var checks = [
-    isFloorComplete(0),
-    (state.streak || 0) >= 7,
-    Object.keys(localStorage).some(function(k){ return k.indexOf('code_') === 0; }),
-    isFloorComplete(1),
-    isFloorComplete(6),
-    (state.streak || 0) >= 30
-  ];
-  items.forEach(function(item, i) {
-    if (checks[i]) item.classList.remove('ach-locked');
-    else item.classList.add('ach-locked');
+  checkAndUnlockBadges();
+  renderAchievementGrid();
+}
+
+function renderAchievementGrid() {
+  var grid = document.getElementById('rs-achievements');
+  if (!grid || typeof BADGES === 'undefined') return;
+  var earned = state.earnedBadges || [];
+  grid.innerHTML = BADGES.map(function(b) {
+    var unlocked = earned.indexOf(b.id) !== -1;
+    return '<div class="ach-item' + (unlocked ? '' : ' ach-locked') + '" title="' + b.desc + '">' +
+      '<div class="ach-icon">' + b.emoji + '</div>' +
+      '<div class="ach-label">' + b.name + '</div>' +
+      '</div>';
+  }).join('');
+}
+
+function checkAndUnlockBadges() {
+  if (typeof BADGES === 'undefined') return;
+  if (!state.earnedBadges) state.earnedBadges = [];
+  var newly = [];
+  BADGES.forEach(function(b) {
+    if (state.earnedBadges.indexOf(b.id) === -1 && b.check()) {
+      state.earnedBadges.push(b.id);
+      newly.push(b);
+    }
   });
+  if (newly.length) {
+    saveState();
+    renderAchievementGrid();
+    newly.forEach(function(b, i) {
+      setTimeout(function() { showBadgeUnlockToast(b); }, i * 1800);
+    });
+  }
+}
+
+function showBadgeUnlockToast(badge) {
+  var existing = document.getElementById('badge-unlock-toast');
+  if (existing) existing.remove();
+  var toast = document.createElement('div');
+  toast.id = 'badge-unlock-toast';
+  toast.className = 'badge-unlock-toast';
+  toast.innerHTML =
+    '<div class="badge-unlock-top">BADGE UNLOCKED</div>' +
+    '<div class="badge-unlock-emoji">' + badge.emoji + '</div>' +
+    '<div class="badge-unlock-name">' + badge.name + '</div>' +
+    '<div class="badge-unlock-desc">' + badge.desc + '</div>';
+  document.body.appendChild(toast);
+  setTimeout(function() { toast.classList.add('badge-unlock-toast--visible'); }, 30);
+  setTimeout(function() {
+    toast.classList.remove('badge-unlock-toast--visible');
+    setTimeout(function() { if (toast.parentElement) toast.remove(); }, 400);
+  }, 4000);
 }
 
 function updateSageSidebar(text) {
@@ -5891,3 +5935,33 @@ function highlightKeyTerms(containerEl) {
   }
   walk(containerEl);
 }
+
+// ============================================
+// BADGE DEFINITIONS
+// ============================================
+var BADGES = [
+  { id: 'first-steps',  emoji: '🌟', name: 'First Steps',  desc: 'Complete your first section',
+    check: function() { return Object.keys(state.completed || {}).some(function(k){ return state.completed[k]; }); } },
+  { id: 'quiz-taker',   emoji: '🧪', name: 'Quiz Taker',   desc: 'Answer your first quiz question',
+    check: function() { return Object.keys(state.quizAnswered || {}).length > 0 || Object.keys(state.quizMultiState || {}).length > 0; } },
+  { id: 'first-code',   emoji: '⌨️', name: 'First Code',   desc: 'Submit code in the editor',
+    check: function() { return Object.keys(localStorage).some(function(k){ return k.indexOf('code_') === 0; }); } },
+  { id: 'card-sharp',   emoji: '🃏', name: 'Card Sharp',   desc: 'Open the Revision Centre',
+    check: function() { return !!(state.badgeFlags && state.badgeFlags.revVisited); } },
+  { id: 'bookworm',     emoji: '📚', name: 'Bookworm',     desc: 'Complete 5 sections',
+    check: function() { return Object.keys(state.completed || {}).filter(function(k){ return state.completed[k]; }).length >= 5; } },
+  { id: 'consistent',   emoji: '🔥', name: 'Consistent',   desc: '3-day learning streak',
+    check: function() { return (state.streak || 0) >= 3; } },
+  { id: 'first-floor',  emoji: '🧱', name: 'First Floor',  desc: 'Complete Floor 1',
+    check: function() { return isFloorComplete(0); } },
+  { id: 'deep-learner', emoji: '💡', name: 'Deep Learner', desc: 'Complete 10 sections',
+    check: function() { return Object.keys(state.completed || {}).filter(function(k){ return state.completed[k]; }).length >= 10; } },
+  { id: 'on-fire',      emoji: '⚡', name: 'On Fire',      desc: '7-day streak',
+    check: function() { return (state.streak || 0) >= 7; } },
+  { id: 'builder',      emoji: '🏗️', name: 'Builder',      desc: 'Complete Floor 2',
+    check: function() { return isFloorComplete(1); } },
+  { id: 'unstoppable',  emoji: '🏆', name: 'Unstoppable',  desc: '30-day streak',
+    check: function() { return (state.streak || 0) >= 30; } },
+  { id: 'graduate',     emoji: '🎓', name: 'Graduate',     desc: 'Complete all floors',
+    check: function() { return FLOORS.every(function(f, fi){ return isFloorComplete(fi); }); } }
+];
