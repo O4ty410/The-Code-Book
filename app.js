@@ -5063,36 +5063,25 @@ function renderProfilePanel() {
     calDays.push({ label: d.toDateString(), count: actMap[d.toDateString()] || 0, isToday: i === 0 });
   }
 
-  // Achievements
-  var ACHIEVEMENTS = [
-    { id: 'first_section', sym: '→',   label: 'First Step',    desc: 'Complete your first section',  check: function(){ return doneSecs >= 1; } },
-    { id: 'five_sections', sym: '×5',  label: 'On A Roll',     desc: 'Complete 5 sections',           check: function(){ return doneSecs >= 5; } },
-    { id: 'floor_1_done',  sym: 'F1',  label: 'Foundation',    desc: 'Complete Floor 1',              check: function(){ return isFloorComplete(0); } },
-    { id: 'floor_any',     sym: '◆',   label: 'Floor Cleared', desc: 'Complete any floor',            check: function(){ return floorsComplete >= 1; } },
-    { id: 'streak_3',      sym: '3↑',  label: 'On Fire',       desc: '3-day streak',                  check: function(){ return state.streak >= 3; } },
-    { id: 'streak_7',      sym: '7↑',  label: 'Dedicated',     desc: '7-day streak',                  check: function(){ return state.streak >= 7; } },
-    { id: 'xp_100',        sym: '100', label: 'XP Hunter',     desc: 'Earn 100 XP',                  check: function(){ return state.xp >= 100; } },
-    { id: 'xp_500',        sym: '500', label: 'XP Master',     desc: 'Earn 500 XP',                  check: function(){ return state.xp >= 500; } },
-    { id: 'all_floors',    sym: '7/7', label: 'Graduate',      desc: 'Complete all 7 floors',         check: function(){ return floorsComplete === 7; } },
-  ];
+  var selectedAv = AVATARS.find(function(a) { return a.id === getSelectedAvatar(); }) || null;
 
-  // Floor progress rows
-  var floorRows = FLOORS.map(function(f, fi) {
+  var timeDisplay = totalMinutes >= 60
+    ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
+    : totalMinutes + 'm';
+
+  // Tower bars (F1 at bottom via column-reverse in CSS)
+  var towerHtml = FLOORS.map(function(f, fi) {
     var done = f.sections.filter(function(s){ return state.completed[s.id]; }).length;
     var total = f.sections.length;
     var pct = total > 0 ? Math.round((done / total) * 100) : 0;
-    var isUnlocked = true; // all floors unlocked
     var color = f.color || '#c8a96e';
-    var status = isFloorComplete(fi) ? 'Complete' : (done > 0 ? 'In Progress' : (isUnlocked ? 'Not Started' : 'Locked'));
-    return '<div class="prof-floor-row">' +
-      '<div class="prof-floor-num" style="color:' + color + '">F' + (fi + 1) + '</div>' +
-      '<div class="prof-floor-info">' +
-      '<div class="prof-floor-name">' + f.title + '</div>' +
-      '<div class="prof-floor-bar-wrap">' +
-      '<div class="prof-floor-track"><div class="prof-floor-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
-      '<span class="prof-floor-stat">' + done + '/' + total + '</span>' +
-      '</div></div>' +
-      '<div class="prof-floor-status prof-status-' + (isFloorComplete(fi) ? 'done' : (done > 0 ? 'active' : 'locked')) + '">' + status + '</div>' +
+    var isComplete = isFloorComplete(fi);
+    var isCurrent = (fi === state.currentFloor - 1);
+    var cls = isComplete ? 'tf-done' : isCurrent ? 'tf-active' : (done > 0 ? 'tf-partial' : 'tf-locked');
+    return '<div class="prof-tower-floor ' + cls + '" style="--tf-color:' + color + '">' +
+      '<span class="prof-tf-label">F' + (fi + 1) + '</span>' +
+      '<div class="prof-tf-track"><div class="prof-tf-fill" style="width:' + pct + '%"></div></div>' +
+      '<span class="prof-tf-pct">' + pct + '%</span>' +
       '</div>';
   }).join('');
 
@@ -5103,101 +5092,70 @@ function renderProfilePanel() {
     }).join('') +
     '</div>';
 
-  var achieveHtml = '<div class="prof-ach-list">' +
-    ACHIEVEMENTS.map(function(a) {
-      var earned = a.check();
-      return '<div class="prof-ach-row' + (earned ? ' earned' : '') + '">' +
-        '<span class="prof-ach-check">' + (earned ? '&#10003;' : '&#9633;') + '</span>' +
-        '<span class="prof-ach-sym">' + a.sym + '</span>' +
-        '<div class="prof-ach-meta">' +
-        '<span class="prof-ach-name">' + a.label + '</span>' +
-        '<span class="prof-ach-desc">' + a.desc + '</span>' +
-        '</div>' +
+  var heroSwatchesHtml_inner = PROF_THEMES.map(function(t) {
+    var isActive = t.id === currentTheme;
+    return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '" title="' + t.name + '" onclick="switchProfTheme(\'' + t.id + '\')" style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '"></button>';
+  }).join('');
+
+  var badgePillsHtml = '<div class="prof-badge-pills">' +
+    BADGES.map(function(b) {
+      var earned = state.earnedBadges && state.earnedBadges.indexOf(b.id) > -1;
+      return '<div class="prof-badge-pill' + (earned ? ' prof-badge-earned' : '') + '">' +
+        '<span class="prof-badge-pill-icon">' + b.emoji + '</span>' +
+        '<span class="prof-badge-pill-name">' + b.name + '</span>' +
         '</div>';
     }).join('') +
     '</div>';
 
-  var heroSwatchesHtml = '<div class="prof-hero-swatches">' +
-    PROF_THEMES.map(function(t) {
-      var isActive = t.id === currentTheme;
-      return '<button class="prof-hswatch' + (isActive ? ' active' : '') + '"' +
-        ' title="' + t.name + '"' +
-        ' onclick="switchProfTheme(\'' + t.id + '\')"' +
-        ' style="--sw-dot:' + t.dot + ';--sw-glow:' + t.glow + ';--sw-border:' + t.border + '">' +
-        '</button>';
-    }).join('') +
-    '</div>';
-
-  var selectedAv = AVATARS.find(function(a) { return a.id === getSelectedAvatar(); }) || null;
-  var archetypeHtml = selectedAv
-    ? '<div class="prof-archetype-frame" style="--av-color:' + selectedAv.color + ';--av-glow:' + selectedAv.glow + '">' +
-      '<span class="prof-archetype-icon">' + selectedAv.icon + '</span>' +
-      '<span class="prof-archetype-name">' + selectedAv.name + '</span>' +
-      '</div>'
-    : '';
-
-  var timeDisplay = totalMinutes >= 60
-    ? Math.floor(totalMinutes / 60) + 'h ' + (totalMinutes % 60) + 'm'
-    : totalMinutes + 'm';
-
   panel.innerHTML =
     '<div class="prof-layout" data-prof-theme="' + currentTheme + '">' +
 
-    // Hero
-    '<div class="prof-hero">' +
-    '<div class="prof-hero-left">' +
-    '<div class="prof-id-tag">// OPERATOR</div>' +
-    '<div class="prof-name">' + name + '</div>' +
-    '<div class="prof-level-name">Level ' + cur.level + ' &mdash; ' + levelName + '</div>' +
-    heroSwatchesHtml +
-    '</div>' +
-    '<div class="prof-hero-right">' +
-    archetypeHtml +
-    '<button class="prof-avatar-plus" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'PICK ARCHETYPE') + '</button>' +
+    // Header
+    '<div class="prof-dossier-hdr"><span class="prof-dossier-title">// OPERATOR DOSSIER</span></div>' +
+
+    // Main grid: left tower + right column
+    '<div class="prof-main-grid">' +
+
+    // Left: tower
+    '<div class="prof-left-col">' +
+    '<div class="prof-tower">' + towerHtml + '</div>' +
+    '<div class="prof-xp-summary">' +
+      '<div class="prof-xp-main">' + state.xp + ' XP</div>' +
+      (next ? '<div class="prof-xp-sub">— ' + (next.xp - state.xp) + ' XP to ' + nextName + ' Clearance</div>' : '') +
     '</div>' +
     '</div>' +
 
-    // HUD strip
-    '<div class="prof-hud">' +
-    '<div class="prof-hud-stat"><span class="prof-hud-val">' + state.xp + '</span><span class="prof-hud-lbl">XP</span></div>' +
-    '<div class="prof-hud-div"></div>' +
-    '<div class="prof-hud-stat"><span class="prof-hud-val">' + state.streak + '</span><span class="prof-hud-lbl">Streak</span></div>' +
-    '<div class="prof-hud-div"></div>' +
-    '<div class="prof-hud-stat"><span class="prof-hud-val">' + doneSecs + '</span><span class="prof-hud-lbl">Sections</span></div>' +
-    '<div class="prof-hud-div"></div>' +
-    '<div class="prof-hud-stat"><span class="prof-hud-val">' + timeDisplay + '</span><span class="prof-hud-lbl">Time</span></div>' +
+    // Right: identity card + stats row
+    '<div class="prof-right-col">' +
+    '<div class="prof-identity">' +
+      '<div class="prof-identity-left">' +
+        '<div class="prof-id-field"><span class="prof-id-key">CALLSIGN</span><span class="prof-id-val">' + name + '</span></div>' +
+        '<div class="prof-id-field"><span class="prof-id-key">RANK</span><span class="prof-id-rank-val">LEVEL ' + cur.level + ' — ' + levelName + '</span></div>' +
+        (selectedAv ? '<div class="prof-id-archetype" style="--av-color:' + selectedAv.color + '"><span class="prof-id-arch-icon">' + selectedAv.icon + '</span><span class="prof-id-arch-name">' + selectedAv.name + '</span></div>' : '') +
+      '</div>' +
+      '<div class="prof-identity-right">' +
+        '<div class="prof-avatar-frame">' + (selectedAv ? '<span style="font-size:28px">' + selectedAv.icon + '</span>' : '<span class="prof-av-empty">?</span>') + '</div>' +
+        '<button class="prof-avatar-btn" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'SELECT') + '</button>' +
+        '<div class="prof-hero-swatches">' + heroSwatchesHtml_inner + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="prof-stats-row">' +
+      '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.xp + '</span><span class="prof-stat-key">XP</span></div>' +
+      '<div class="prof-stat-cell"><span class="prof-stat-val">' + state.streak + '</span><span class="prof-stat-key">DAY STREAK</span></div>' +
+      '<div class="prof-stat-cell"><span class="prof-stat-val">' + doneSecs + '</span><span class="prof-stat-key">SECTIONS</span></div>' +
+      '<div class="prof-stat-cell"><span class="prof-stat-val">' + timeDisplay + '</span><span class="prof-stat-key">ACTIVE TIME</span></div>' +
+    '</div>' +
+    '</div>' + // end right col
+
+    '</div>' + // end main grid
+
+    // Lower grid
+    '<div class="prof-lower-grid">' +
+    '<div class="prof-section"><div class="prof-section-title">// Activity Log — Last 28 Days</div>' + calHtml + '</div>' +
+    '<div class="prof-section"><div class="prof-section-title">// Service Record</div>' + badgePillsHtml + '</div>' +
     '</div>' +
 
-    // Level progress
-    '<div class="prof-section">' +
-    '<div class="prof-section-title">// Level Progress</div>' +
-    '<div class="prof-level-bar-wrap">' +
-    '<span class="prof-level-tag">' + levelName + '</span>' +
-    '<div class="prof-level-track"><div class="prof-level-fill" style="width:' + levelPct + '%"></div></div>' +
-    '<span class="prof-level-tag">' + nextName + '</span>' +
-    '</div>' +
-    '<div class="prof-level-sub">' + state.xp + ' XP' + (next ? ' &mdash; ' + (next.xp - state.xp) + ' XP to ' + nextName : ' &mdash; Max level reached') + '</div>' +
-    '</div>' +
-
-    // Two-column: activity + achievements
-    '<div class="prof-two-col">' +
-    '<div class="prof-section">' +
-    '<div class="prof-section-title">// Activity &mdash; Last 28 Days</div>' +
-    calHtml +
-    '</div>' +
-    '<div class="prof-section">' +
-    '<div class="prof-section-title">// Achievements</div>' +
-    achieveHtml +
-    '</div>' +
-    '</div>' +
-
-    // Floor progress
-    '<div class="prof-section">' +
-    '<div class="prof-section-title">// Floor Progress</div>' +
-    '<div class="prof-floors">' + floorRows + '</div>' +
-    '</div>' +
-
-    '</div>';
+    '</div>'; // end prof-layout
 }
 
 function renderPremiumPanel() {
