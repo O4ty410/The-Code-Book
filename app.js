@@ -2271,7 +2271,7 @@ if (!section) { return; }
         if (_sq !== undefined && _sq === section.quiz.correct) quizGateDone = true;
       }
     }
-    sectionGateState[section.id] = { read: true, code: false, quiz: quizGateDone };
+    sectionGateState[section.id] = { read: true, code: !section.code, quiz: quizGateDone };
   }
   var gate = sectionGateState[section.id];
   var allDone = gate.read && gate.code && gate.quiz;
@@ -2597,24 +2597,19 @@ if (!section) { return; }
 
   // GATE
   var g = '<div class="gate-box' + (isDone ? ' complete' : '') + '">' +
-    '<div class="gate-label">TO COMPLETE THIS SECTION</div>' +
+    '<div class="gate-label">' + (isDone ? '&#10003; SECTION COMPLETE' : 'TO COMPLETE THIS SECTION') + '</div>' +
     '<div class="gate-checks">' +
     '<div class="gate-check-row done" id="gate-read-' + section.id + '"><div class="gate-check-dot">&#10003;</div>Read the section</div>' +
-    '<div class="gate-check-row ' + (gate.code ? 'done' : '') + '" id="gate-code-' + section.id + '"><div class="gate-check-dot">' + (gate.code ? '&#10003;' : '') + '</div>Try the code editor</div>' +
-    '<div class="gate-check-row ' + (gate.quiz ? 'done' : '') + '" id="gate-quiz-' + section.id + '"><div class="gate-check-dot">' + (gate.quiz ? '&#10003;' : '') + '</div>' + (section.quiz ? 'Pass the knowledge check' : 'Complete the checklist') + '</div>' +
-    '</div>' +
-    '<button class="complete-btn" id="complete-btn-' + section.id + '" onclick="completeSection(\'' + section.id + '\',' + fi + ',' + si + ')"' + (isDone ? ' disabled' : '') + '>' +
-    (isDone ? '&#10003; Section Complete' : 'Mark as Complete \u2192 +' + getSectionXP(fi) + ' XP') +
-    '</button></div>';
+    (showEditor ? '<div class="gate-check-row ' + (gate.code ? 'done' : '') + '" id="gate-code-' + section.id + '"><div class="gate-check-dot">' + (gate.code ? '&#10003;' : '') + '</div>Try the code editor</div>' : '') +
+    (showQuiz ? '<div class="gate-check-row ' + (gate.quiz ? 'done' : '') + '" id="gate-quiz-' + section.id + '"><div class="gate-check-dot">' + (gate.quiz ? '&#10003;' : '') + '</div>' + (section.quiz ? 'Pass the knowledge check' : 'Complete the checklist') + '</div>' : '') +
+    '</div></div>';
 
-  // NAV
+  // NAV \u2014 for done sections show both buttons; for in-progress show only Previous (popup handles Next/Complete)
+  var _isLastSec = fi === FLOORS.length - 1 && si === floor.sections.length - 1;
   var nav = '<div class="section-nav">' +
     '<button class="nav-btn" onclick="prevSection(' + fi + ',' + si + ')"' + ((fi === 0 && si === 0) ? ' disabled' : '')  + '>&#8592; Previous</button>' +
-    '<button class="nav-btn primary" onclick="nextSection(' + fi + ',' + si + ')">' +
-  ((fi === FLOORS.length - 1 && si === floor.sections.length - 1)
-  ? (fi < FLOORS.length - 1 ? 'Next Floor \u2192' : 'Complete')
-  : 'Next \u2192') +
-    '</button></div>';
+    (isDone && !_isLastSec ? '<button class="nav-btn primary" onclick="nextSection(' + fi + ',' + si + ')">Next \u2192</button>' : '') +
+    '</div>';
 
 if (!isLoggedIn && !isGuest) {
   document.getElementById('auth-screen').style.display = 'flex';
@@ -2644,6 +2639,8 @@ if (!isLoggedIn && !isGuest) {
   startSectionTimer(section.id);
   checkProgressNudge(fi, si);
   checkStreakProtection();
+  closeSectionCompletePopup();
+  if (allDone && !isDone) setTimeout(function() { showSectionCompletePopup(section.id, fi, si); }, 400);
   if (showEditor) setTimeout(function() { initEditor(section.id, editorDef.code); }, 100);
   setTimeout(function() {
     var rp = document.getElementById('spanel-read-' + section.id);
@@ -2792,10 +2789,54 @@ function markGate(sectionId, key) {
   }
   var gate = sectionGateState[sectionId];
   if (gate.read && gate.code && gate.quiz) {
-    var btn = document.getElementById('complete-btn-' + sectionId);
-    if (btn && !btn.disabled) btn.textContent = 'Mark as Complete \u2192 +' + getSectionXP(state.currentFloor - 1) + ' XP';
-    sageMessage('All gates cleared. Mark this section complete when ready.', 'celebrate');
+    var _fi = state.currentFloor - 1;
+    var _floor = FLOORS[_fi];
+    var _si = 0;
+    if (_floor) {
+      for (var _i = 0; _i < _floor.sections.length; _i++) {
+        if (_floor.sections[_i].id === sectionId) { _si = _i; break; }
+      }
+    }
+    setTimeout(function() { showSectionCompletePopup(sectionId, _fi, _si); }, 300);
   }
+}
+
+function showSectionCompletePopup(sectionId, fi, si) {
+  closeSectionCompletePopup();
+  var isDone = !!state.completed[sectionId];
+  var floor = FLOORS[fi];
+  var isLast = fi === FLOORS.length - 1 && floor && si === floor.sections.length - 1;
+  var pop = document.createElement('div');
+  pop.id = 'sec-complete-pop';
+  pop.className = 'sec-complete-pop';
+  var html = '<div class="scp-inner">';
+  if (!isDone) {
+    html += '<div class="scp-label">' + sageOwlSVG(20, 22) + '<span>All gates cleared!</span></div>';
+    html += '<div class="scp-btns">';
+    html += '<button class="scp-btn scp-complete" onclick="closeSectionCompletePopup(); completeSection(\'' + sectionId + '\',' + fi + ',' + si + ');">&#10003; Mark Complete &nbsp;<span class="scp-xp">+' + getSectionXP(fi) + ' XP</span></button>';
+    if (!isLast) {
+      html += '<button class="scp-btn scp-next" onclick="closeSectionCompletePopup(); nextSection(' + fi + ',' + si + ');">Next &#8594;</button>';
+    }
+    html += '</div>';
+  } else {
+    html += '<div class="scp-label"><span>&#10003; Section Complete</span></div>';
+    if (!isLast) {
+      html += '<button class="scp-btn scp-next scp-solo" onclick="closeSectionCompletePopup(); nextSection(' + fi + ',' + si + ');">Continue &#8594;</button>';
+    }
+  }
+  html += '</div>';
+  pop.innerHTML = html;
+  document.body.appendChild(pop);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { pop.classList.add('scp-visible'); });
+  });
+}
+
+function closeSectionCompletePopup() {
+  var pop = document.getElementById('sec-complete-pop');
+  if (!pop) return;
+  pop.classList.remove('scp-visible');
+  setTimeout(function() { if (pop && pop.parentNode) pop.parentNode.removeChild(pop); }, 300);
 }
 
 function _quizFeedbackHtml(correct, feedbackText) {
@@ -3917,6 +3958,7 @@ function renderFloor1(si) {
 }
 
 function completeSection(sectionId, fi, si) {
+  closeSectionCompletePopup();
   var gate = sectionGateState[sectionId] || {};
   var section = FLOORS[fi].sections[si];
   var needsQuiz = !!(section && section.quiz);
@@ -3992,6 +4034,7 @@ function completeSection(sectionId, fi, si) {
 }
 
 function prevSection(fi, si) {
+  closeSectionCompletePopup();
   var mc = document.getElementById('main-content');
   if (mc) mc.classList.add('section-slide-out-right');
   setTimeout(function() {
@@ -4001,6 +4044,7 @@ function prevSection(fi, si) {
 }
 
 function nextSection(fi, si) {
+  closeSectionCompletePopup();
   var floor = FLOORS[fi];
   var section = floor.sections[si];
   var gate = sectionGateState[section.id] || {};
