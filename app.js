@@ -613,6 +613,13 @@ function showAuthFromLanding() {
     if (_streakExtended && state.streak >= 2) {
       setTimeout(function() { showStreakWelcome(state.streak); }, 1400);
     }
+    (function() {
+      var _today = new Date().toDateString();
+      if (!localStorage.getItem('codebook_challenge_done_' + _today)) {
+        setTimeout(showDailyChallenge, _streakExtended ? 3200 : 1200);
+      }
+      updateChallengeDot();
+    })();
   } else {
     // New user — show onboarding or auth
     stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
@@ -1162,6 +1169,7 @@ function launchApp() {
     initSageSidebarSync();
     patchRenderNav();
     updateAchievements();
+    updateChallengeDot();
     updateDailyGoalBar();
     updateLeftStats();
     updateTopChips();
@@ -1368,6 +1376,8 @@ function answerChallenge(chosen, correct, xp, explanation, xpKey) {
   // Mark daily challenge done in localStorage only for the daily mode
   if (!xpKey || xpKey.indexOf('challenge-') === 0) {
     localStorage.setItem('codebook_challenge_done_' + today, 'true');
+    updateChallengeDot();
+    checkAndUnlockBadges();
   }
 
   setTimeout(function() {
@@ -1384,6 +1394,23 @@ function answerChallenge(chosen, correct, xp, explanation, xpKey) {
 
 function closeDailyChallenge() {
   document.getElementById('daily-challenge').style.display = 'none';
+  updateChallengeDot();
+}
+
+function updateChallengeDot() {
+  var btn = document.getElementById('tnav-challenge');
+  if (!btn) return;
+  var done = !!localStorage.getItem('codebook_challenge_done_' + new Date().toDateString());
+  var dot = btn.querySelector('.ch-notif-dot');
+  if (!done) {
+    if (!dot) {
+      dot = document.createElement('span');
+      dot.className = 'ch-notif-dot';
+      btn.appendChild(dot);
+    }
+  } else {
+    if (dot) dot.remove();
+  }
 }
 
 // --- FLOOR CELEBRATION SYSTEM ---
