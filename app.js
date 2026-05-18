@@ -4761,7 +4761,7 @@ function renderToolsPanel() {
   var tools = [
     {
       id: 'vscode',
-      icon: '🖥️',
+      icon: '&lt;/&gt;',
       name: 'VS Code',
       desc: 'The code editor used by most professional developers worldwide.',
       difficulty: 'Beginner',
@@ -4780,7 +4780,7 @@ function renderToolsPanel() {
     },
     {
       id: 'git',
-      icon: '🌿',
+      icon: '⎇',
       name: 'Git',
       desc: 'Version control that tracks every change you make to your code.',
       difficulty: 'Beginner',
@@ -4799,7 +4799,7 @@ function renderToolsPanel() {
     },
     {
       id: 'github',
-      icon: '🐙',
+      icon: '◉',
       name: 'GitHub',
       desc: 'Cloud hosting for your Git repositories — and where developers share work.',
       difficulty: 'Beginner',
@@ -4818,7 +4818,7 @@ function renderToolsPanel() {
     },
     {
       id: 'devtools',
-      icon: '🔍',
+      icon: '⊕',
       name: 'Chrome DevTools',
       desc: 'Built into your browser — inspect, debug, and tweak any webpage in real time.',
       difficulty: 'Beginner',
@@ -4856,7 +4856,7 @@ function renderToolsPanel() {
     },
     {
       id: 'netlify',
-      icon: '🚀',
+      icon: '▲',
       name: 'Netlify',
       desc: 'Deploy your HTML/CSS/JS projects live on the internet for free in under a minute.',
       difficulty: 'Beginner',
@@ -4875,7 +4875,7 @@ function renderToolsPanel() {
     },
     {
       id: 'figma',
-      icon: '🎨',
+      icon: '◈',
       name: 'Figma',
       desc: 'Design and prototype interfaces in the browser before writing a single line of code.',
       difficulty: 'Beginner',
@@ -4894,7 +4894,7 @@ function renderToolsPanel() {
     },
     {
       id: 'postman',
-      icon: '📮',
+      icon: '↻',
       name: 'Postman',
       desc: 'Test and explore APIs without writing any code — essential for backend and full-stack work.',
       difficulty: 'Intermediate',
@@ -4913,7 +4913,7 @@ function renderToolsPanel() {
     },
     {
       id: 'davinci',
-      icon: '🎬',
+      icon: '▶',
       name: 'DaVinci Resolve',
       desc: 'Professional video editor — free and industry-standard. Use it to create portfolio walkthrough videos.',
       difficulty: 'Intermediate',
@@ -4954,7 +4954,7 @@ function renderToolsPanel() {
       '</div>';
 
     html += '<div class="build-card' + (isDone ? ' done' : '') + '" id="tool-card-' + t.id + '" onclick="toggleToolSteps(\'' + stepsId + '\',this)">' +
-      '<div class="build-card-icon">' + t.icon + '</div>' +
+      '<div class="build-card-icon"><span class="tool-icon-sym">' + t.icon + '</span></div>' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">' +
       '<div class="build-card-tag" style="margin-bottom:0;">' + t.category.toUpperCase() + '</div>' +
       '<span class="build-meta-pill ' + diffClass + '">' + t.difficulty + '</span>' +
