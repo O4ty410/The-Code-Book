@@ -43,7 +43,7 @@
 .overlay-header-spaced { margin-bottom: 32px; }
 
 .overlay-close-btn {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 12px;
   color: var(--text-muted);
   background: transparent;
@@ -64,7 +64,7 @@
 .overlay-title-sm  { font-size: 22px; }
 
 .overlay-mono-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   color: var(--text-muted);
   letter-spacing: 2px;
@@ -82,7 +82,7 @@
 }
 
 .leaderboard-loading {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 12px;
   color: var(--text-muted);
   text-align: center;
@@ -101,7 +101,7 @@
 }
 
 .auth-link-btn {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -118,11 +118,11 @@
 .auth-start-wrap { margin-top: 16px; }
 
 .auth-start-btn {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
 }
 
 .forgot-link {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-dim);
@@ -142,7 +142,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 15px;
   line-height: 1.8;
   color: var(--text-dim);
@@ -203,7 +203,7 @@
 }
 
 .reset-sub {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 2px;
   color: var(--text-muted);
@@ -244,7 +244,7 @@
 }
 
 .onboarding-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 2px;
   color: var(--text-muted);
@@ -295,7 +295,7 @@
 }
 
 .session-complete-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   letter-spacing: 3px;
   color: var(--success);
@@ -330,7 +330,7 @@
 .session-stat { text-align: center; }
 
 .session-stat-value {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 22px;
   font-weight: 700;
   color: var(--accent);
@@ -340,7 +340,7 @@
 .session-stat-value.sections { color: var(--accent2); }
 
 .session-stat-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 9px;
   color: var(--text-muted);
   letter-spacing: 1px;
@@ -361,7 +361,7 @@
 }
 
 .session-tomorrow-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   letter-spacing: 2px;
   color: var(--text-muted);
@@ -375,7 +375,7 @@
 }
 
 .session-done-btn {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   color: var(--text-muted);
   background: transparent;
@@ -389,7 +389,7 @@
    ============================================================ */
 
 .challenge-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   letter-spacing: 3px;
   color: var(--accent);
@@ -417,7 +417,7 @@
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 20px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 13px;
   color: var(--accent);
   letter-spacing: 1px;
@@ -446,7 +446,7 @@
 }
 
 .challenge-skip-btn {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 2px;
   color: var(--text-muted);
@@ -521,7 +521,7 @@
   z-index: 1;
 }
 .fc-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   letter-spacing: 4px;
   color: var(--fc-color, var(--accent));
@@ -543,7 +543,7 @@
   z-index: 1;
 }
 .fc-tag {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   color: var(--text-muted);
   letter-spacing: 2px;
@@ -583,7 +583,7 @@
   line-height: 1;
 }
 .fc-stat-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 9px;
   letter-spacing: 1.5px;
   color: var(--text-muted);
@@ -607,7 +607,7 @@
 }
 .fc-sage-owl { flex-shrink: 0; margin-top: 2px; }
 .fc-sage-text {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 12px;
   line-height: 1.8;
   color: var(--text-dim);
@@ -627,13 +627,13 @@
 }
 .fc-next-final {
   text-align: center;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 13px;
   color: var(--text-muted);
   font-style: italic;
 }
 .fc-next-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 9px;
   letter-spacing: 2px;
   color: var(--text-muted);
@@ -647,7 +647,7 @@
   margin-bottom: 4px;
 }
 .fc-next-sub {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   color: var(--text-muted);
 }
@@ -670,7 +670,7 @@
   border: none;
   border-radius: 10px;
   padding: 16px 24px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.5px;
@@ -681,7 +681,7 @@
 .fc-btn-share {
   background: none;
   border: none;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   color: var(--text-muted);
   cursor: pointer;
@@ -715,7 +715,7 @@
 }
 
 .dashboard-level-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   letter-spacing: 2px;
   color: var(--accent);
@@ -723,7 +723,7 @@
 }
 
 .dashboard-xp {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 13px;
   color: var(--text-muted);
   margin-top: 2px;
@@ -747,7 +747,7 @@
 .dashboard-streak-icon { font-size: 32px; line-height: 1; }
 
 .dashboard-streak-text {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   color: var(--text);
   font-size: 15px;
@@ -767,7 +767,7 @@
 }
 
 .dashboard-goal-label {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   letter-spacing: 2px;
   color: var(--text-muted);
@@ -800,7 +800,7 @@
 .dashboard-signout-wrap { text-align: center; }
 
 .dashboard-signout {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 10px;
   color: var(--text-muted);
   cursor: pointer;
@@ -814,7 +814,7 @@
 .cover-user-badge {
   display: none;
   margin-top: 20px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Mono', monospace;
   font-size: 11px;
   color: var(--text-muted);
   letter-spacing: 1px;
