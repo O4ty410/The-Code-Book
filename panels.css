@@ -941,6 +941,37 @@ body.light .premium-card-tooltip {
 }
 
 /* ============================================================
+   PANELS — MOBILE (≤ 600px)
+   Samsung Galaxy A / iPhone range
+   ============================================================ */
+
+@media (max-width: 600px) {
+  /* Hero sections */
+  .panel-hero           { padding: 28px 16px 24px; }
+  .panel-hero-sub       { font-size: 13px; }
+
+  /* Challenge panel */
+  .challenge-list       { padding: 16px; }
+  .challenge-item       { padding: 14px 16px; gap: 12px; }
+  .ch-title             { font-size: 14px; }
+  .ch-desc              { font-size: 11px; }
+
+  /* Build panel */
+  .build-grid           { padding: 16px; }
+  .build-card           { padding: 18px 16px; }
+
+  /* Map panel */
+  .map-panel-grid       { padding: 16px; }
+  .map-floor-card       { padding: 14px 16px; }
+  .map-floor-title      { font-size: 15px; }
+
+  /* Game Hub */
+  .game-hub             { padding: 32px 16px; }
+  .gh-grid              { gap: 16px; }
+  .gh-card              { padding: 28px 18px 20px; }
+}
+
+/* ============================================================
    PREMIUM PANEL — SPACE THEME
    All selectors scoped to #panel-premium so nothing bleeds
    into the rest of the app.

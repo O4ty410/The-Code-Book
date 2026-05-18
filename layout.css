@@ -593,3 +593,22 @@ body.game-mode #main-col {
   .main-content { max-width: 100%; }
   .main-col { max-height: none; }
 }
+
+/* ============================================================
+   iOS SAFE AREA — Notch / home indicator support
+   Ensures the mobile bottom bar doesn't overlap the iPhone
+   home indicator bar on notched devices.
+   ============================================================ */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .mobile-bottom-bar {
+    padding-bottom: env(safe-area-inset-bottom);
+    height: calc(56px + env(safe-area-inset-bottom));
+  }
+
+  @media (max-width: 900px) {
+    .main-col {
+      max-height: calc(100vh - 52px - 56px - env(safe-area-inset-bottom));
+    }
+  }
+}

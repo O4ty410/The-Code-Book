@@ -989,3 +989,25 @@
   min-height: 100vh;
   z-index: 10;
 }
+
+/* ============================================================
+   OVERLAYS — SMALL PHONE (≤ 420px)
+   Samsung Galaxy A series, iPhone SE / mini
+   ============================================================ */
+
+@media (max-width: 420px) {
+  .overlay-base               { padding: 24px 16px; }
+  .onboarding-title           { font-size: 22px; }
+  .onboarding-body            { font-size: 14px; margin-bottom: 20px; }
+  .session-complete-title     { font-size: 22px; }
+  .challenge-title            { font-size: 20px; }
+
+  /* Floor celebration: tighten margins so cards don't get clipped */
+  .fc-hero                    { padding: 40px 16px 32px; }
+  .fc-stats, .fc-sage, .fc-badge-reveal, .fc-next { margin-left: 16px; margin-right: 16px; }
+  .fc-actions                 { padding: 0 16px; }
+  .fc-stat-val                { font-size: 16px; }
+
+  /* Onboarding step counter + clearance badge */
+  .ob-clearance-ring          { width: 52px; height: 52px; font-size: 22px; }
+}
