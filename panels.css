@@ -874,7 +874,7 @@ body.light .premium-feature-card {
   opacity: 0.8;
 }
 
-.premium-card-icon { font-size: 28px; margin-bottom: 12px; }
+.premium-card-icon { margin-bottom: 12px; display: flex; }
 
 .premium-card-name {
   font-family: 'Orbitron', sans-serif;

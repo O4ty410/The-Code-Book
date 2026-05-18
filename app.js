@@ -229,6 +229,136 @@ function toolIconSVG(id, color, w, h) {
     flt + inner + '</svg>';
 }
 
+function premiumIconSVG(id, w, h) {
+  var fid = 'pmf' + (++_sageOwlId);
+  var c = '#d4aa6a';
+  w = w || 52; h = h || 52;
+  var flt = '<defs><filter id="' + fid + '" x="-40%" y="-40%" width="180%" height="180%">' +
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>' +
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter></defs>';
+  var g   = ' filter="url(#' + fid + ')"';
+  var sw  = ' stroke="' + c + '" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  var st  = ' stroke="' + c + '" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"';
+  var dk  = ' fill="#07101a"';
+  var fa  = ' fill="' + c + '" fill-opacity="0.22"';
+  var fs  = ' fill="' + c + '"';
+  var inner = '';
+
+  if (id === 'floors') {
+    inner =
+      '<circle cx="36" cy="36" r="20"' + sw + dk + g + '/>' +
+      '<circle cx="36" cy="36" r="10"' + st + ' fill="none"' + g + '/>' +
+      '<line x1="51" y1="51" x2="78" y2="78" stroke="' + c + '" stroke-width="3.5" stroke-linecap="round"' + g + '/>' +
+      '<line x1="63" y1="66" x2="70" y2="59" stroke="' + c + '" stroke-width="2" stroke-linecap="round"' + g + '/>' +
+      '<line x1="72" y1="75" x2="79" y2="68" stroke="' + c + '" stroke-width="2" stroke-linecap="round"' + g + '/>';
+  } else if (id === 'mentorship') {
+    inner =
+      '<circle cx="34" cy="26" r="13"' + sw + dk + g + '/>' +
+      '<path d="M16,68 Q16,50 34,50 Q52,50 52,68"' + sw + g + '/>' +
+      '<circle cx="70" cy="34" r="9"' + sw + dk + g + '/>' +
+      '<path d="M58,72 Q58,58 70,58 Q82,58 82,72"' + st + g + '/>' +
+      '<line x1="52" y1="34" x2="61" y2="34"' + st + g + '/>';
+  } else if (id === 'reviews') {
+    inner =
+      '<rect x="18" y="22" width="58" height="64" rx="4"' + sw + dk + g + '/>' +
+      '<rect x="36" y="14" width="22" height="14" rx="3"' + sw + dk + g + '/>' +
+      '<line x1="30" y1="44" x2="64" y2="44"' + st + g + '/>' +
+      '<line x1="30" y1="54" x2="64" y2="54"' + st + g + '/>' +
+      '<line x1="30" y1="64" x2="50" y2="64"' + st + g + '/>' +
+      '<polyline points="36,74 42,81 58,66" stroke="' + c + '" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"' + g + '/>';
+  } else if (id === 'certificate') {
+    inner =
+      '<circle cx="50" cy="46" r="28"' + sw + dk + g + '/>' +
+      '<circle cx="50" cy="46" r="18"' + st + ' fill="none"' + g + '/>' +
+      '<polygon points="50,32 53,42 64,42 55,49 58,59 50,53 42,59 45,49 36,42 47,42" stroke="' + c + '" stroke-width="1.2" stroke-linejoin="round"' + fa + g + '/>' +
+      '<line x1="32" y1="80" x2="42" y2="74"' + st + g + '/>' +
+      '<line x1="68" y1="80" x2="58" y2="74"' + st + g + '/>' +
+      '<path d="M42,74 Q50,84 58,74"' + sw + g + '/>';
+  } else if (id === 'community') {
+    inner =
+      '<path d="M10,12 Q10,6 16,6 L84,6 Q90,6 90,12 L90,56 Q90,62 84,62 L40,62 L26,76 L26,62 L16,62 Q10,62 10,56 Z"' + sw + dk + g + '/>' +
+      '<circle cx="32" cy="34" r="4"' + fs + g + '/>' +
+      '<circle cx="50" cy="34" r="4"' + fs + g + '/>' +
+      '<circle cx="68" cy="34" r="4"' + fs + ' fill-opacity="0.5"' + g + '/>';
+  } else if (id === 'career') {
+    inner =
+      '<circle cx="50" cy="50" r="40"' + sw + dk + g + '/>' +
+      '<circle cx="50" cy="50" r="27"' + st + ' fill="none"' + g + '/>' +
+      '<circle cx="50" cy="50" r="13"' + st + fa + g + '/>' +
+      '<circle cx="50" cy="50" r="3.5"' + fs + g + '/>' +
+      '<line x1="10" y1="50" x2="37" y2="50"' + st + g + '/>' +
+      '<line x1="63" y1="50" x2="90" y2="50"' + st + g + '/>' +
+      '<line x1="50" y1="10" x2="50" y2="37"' + st + g + '/>' +
+      '<line x1="50" y1="63" x2="50" y2="90"' + st + g + '/>';
+  } else if (id === 'support') {
+    inner =
+      '<polygon points="57,8 28,50 50,50 43,92 72,42 50,42" stroke="' + c + '" stroke-width="2.5" stroke-linejoin="round"' + fa + g + '/>';
+  } else if (id === 'resources') {
+    inner =
+      '<polygon points="50,10 84,28 84,72 50,90 16,72 16,28"' + sw + dk + g + '/>' +
+      '<polygon points="50,10 84,28 50,46 16,28"' + st + fa + g + '/>' +
+      '<line x1="50" y1="46" x2="50" y2="90"' + st + g + '/>' +
+      '<line x1="16" y1="28" x2="50" y2="46"' + st + g + '/>' +
+      '<line x1="84" y1="28" x2="50" y2="46"' + st + g + '/>';
+  } else if (id === 'paths') {
+    inner =
+      '<circle cx="50" cy="50" r="40"' + sw + dk + g + '/>' +
+      '<circle cx="50" cy="50" r="30"' + st + ' fill="none"' + g + '/>' +
+      '<polygon points="50,20 44,50 50,56 56,50"' + sw + fs + g + '/>' +
+      '<polygon points="50,80 44,50 50,44 56,50" stroke="' + c + '" stroke-width="1.5"' + fa + g + '/>' +
+      '<line x1="12" y1="50" x2="20" y2="50"' + st + g + '/>' +
+      '<line x1="80" y1="50" x2="88" y2="50"' + st + g + '/>';
+  } else if (id === 'deepwork') {
+    inner =
+      '<path d="M18,54 Q18,14 50,14 Q82,14 82,54"' + sw + ' fill="none"' + g + '/>' +
+      '<rect x="8" y="50" width="18" height="28" rx="9"' + sw + dk + g + '/>' +
+      '<rect x="74" y="50" width="18" height="28" rx="9"' + sw + dk + g + '/>' +
+      '<rect x="10" y="56" width="14" height="16" rx="7"' + st + fa + g + '/>' +
+      '<rect x="76" y="56" width="14" height="16" rx="7"' + st + fa + g + '/>';
+  } else if (id === 'projects') {
+    inner =
+      '<rect x="22" y="34" width="56" height="52" rx="3"' + sw + dk + g + '/>' +
+      '<polygon points="50,10 14,34 86,34"' + sw + dk + g + '/>' +
+      '<rect x="30" y="50" width="14" height="12" rx="2"' + st + ' fill="none"' + g + '/>' +
+      '<rect x="56" y="50" width="14" height="12" rx="2"' + st + ' fill="none"' + g + '/>' +
+      '<rect x="40" y="68" width="20" height="18" rx="2"' + st + fa + g + '/>';
+  } else if (id === 'benchmarking') {
+    inner =
+      '<line x1="8" y1="84" x2="92" y2="84" stroke="' + c + '" stroke-width="2" stroke-linecap="round"' + g + '/>' +
+      '<rect x="12" y="62" width="18" height="22" rx="2"' + sw + fa + g + '/>' +
+      '<rect x="38" y="42" width="18" height="42" rx="2"' + sw + fa + g + '/>' +
+      '<rect x="64" y="20" width="18" height="64" rx="2"' + sw + fa + g + '/>';
+  } else if (id === 'ai') {
+    inner =
+      '<rect x="20" y="28" width="60" height="50" rx="6"' + sw + dk + g + '/>' +
+      '<circle cx="36" cy="47" r="7"' + st + ' fill="none"' + g + '/>' +
+      '<circle cx="64" cy="47" r="7"' + st + ' fill="none"' + g + '/>' +
+      '<circle cx="36" cy="47" r="3"' + fs + ' fill-opacity="0.7"' + g + '/>' +
+      '<circle cx="64" cy="47" r="3"' + fs + ' fill-opacity="0.7"' + g + '/>' +
+      '<rect x="36" y="63" width="28" height="5" rx="2.5"' + st + fa + g + '/>' +
+      '<line x1="50" y1="28" x2="50" y2="16"' + sw + g + '/>' +
+      '<circle cx="50" cy="12" r="4"' + sw + fa + g + '/>' +
+      '<line x1="20" y1="44" x2="10" y2="44"' + st + g + '/>' +
+      '<circle cx="7" cy="44" r="2.5"' + fs + ' fill-opacity="0.6"' + g + '/>' +
+      '<line x1="80" y1="44" x2="90" y2="44"' + st + g + '/>' +
+      '<circle cx="93" cy="44" r="2.5"' + fs + ' fill-opacity="0.6"' + g + '/>';
+  } else if (id === 'momentum') {
+    inner =
+      '<circle cx="50" cy="50" r="40"' + sw + dk + g + '/>' +
+      '<polygon points="56,16 32,52 50,52 44,84 68,48 50,48" stroke="' + c + '" stroke-width="2.5" stroke-linejoin="round"' + fa + g + '/>';
+  } else if (id === 'opportunities') {
+    inner =
+      '<rect x="10" y="38" width="80" height="50" rx="5"' + sw + dk + g + '/>' +
+      '<path d="M36,38 Q36,22 50,22 Q64,22 64,38"' + sw + ' fill="none"' + g + '/>' +
+      '<line x1="10" y1="60" x2="90" y2="60"' + st + g + '/>' +
+      '<rect x="42" y="54" width="16" height="12" rx="3"' + st + fa + g + '/>';
+  }
+
+  return '<svg viewBox="0 0 100 100" width="' + w + '" height="' + h + '" xmlns="http://www.w3.org/2000/svg" style="display:block">' +
+    flt + inner + '</svg>';
+}
+
 var sectionGateState = {};
 var matchSelected = {};
 
@@ -5466,91 +5596,91 @@ function renderPremiumPanel() {
 
   var features = [
     {
-      icon: '🔑', name: 'All 7 Floors Unlocked',
+      id: 'floors', name: 'All 7 Floors Unlocked',
       desc: 'Every floor available from day one — no waiting, no gates.',
       fullDesc: 'Free users access Floors 1 and 2. Premium unlocks all seven immediately so you move at your own pace without hitting walls. No floor is hidden from you on day one.',
       problem: 'Solves: hitting a paywall mid-momentum.'
     },
     {
-      icon: '🧑‍💻', name: 'Mentorship Sessions',
+      id: 'mentorship', name: 'Mentorship Sessions',
       desc: 'Live 1-on-1 calls with an experienced developer, booked on your schedule.',
       fullDesc: 'Book a 45-minute video call with a working developer whenever you need a second opinion. Bring a project, a problem, or just questions — we\'ll talk through it. Included every month.',
       problem: 'Solves: learning alone with no one to ask.'
     },
     {
-      icon: '📋', name: 'Code Reviews',
+      id: 'reviews', name: 'Code Reviews',
       desc: 'Submit any project and get written, line-by-line feedback within 48 hours.',
       fullDesc: 'Submit any project you\'ve built and receive written feedback within 48 hours. Comments are specific and actionable — not generic. Real code, real notes, real improvement.',
       problem: 'Solves: never knowing if your code is actually good.'
     },
     {
-      icon: '📜', name: 'Completion Certificate',
+      id: 'certificate', name: 'Completion Certificate',
       desc: 'A verifiable certificate issued when you finish all seven floors.',
       fullDesc: 'Finishing all seven floors earns you a certificate with a unique verification link. Share it on your CV or LinkedIn. Employers can confirm it is genuine with one click.',
       problem: 'Solves: having no credential to show for your effort.'
     },
     {
-      icon: '💬', name: 'Private Community',
+      id: 'community', name: 'Private Community',
       desc: 'Access to a members-only space for questions, accountability, and feedback.',
       fullDesc: 'A members-only space where premium learners share progress, ask questions, and give each other feedback. No noise — just people doing the same work as you.',
       problem: 'Solves: learning in isolation with no peers to compare notes with.'
     },
     {
-      icon: '🎯', name: 'Career Coaching',
+      id: 'career', name: 'Career Coaching',
       desc: 'CV review, portfolio feedback, and mock interview prep included.',
       fullDesc: 'One session focused entirely on your job search: CV review, portfolio critique, and a mock technical interview. Practical, specific, and honest.',
       problem: 'Solves: not knowing if you\'re actually ready to apply.'
     },
     {
-      icon: '⚡', name: 'Priority Support',
+      id: 'support', name: 'Priority Support',
       desc: 'Any question answered by a human within 24 hours, guaranteed.',
       fullDesc: 'Post any question — about the curriculum, your code, or your career — and a human responds within 24 hours. Not a bot. Not a forum. A person.',
       problem: 'Solves: getting stuck with nowhere to turn.'
     },
     {
-      icon: '📦', name: 'Resource Packs',
+      id: 'resources', name: 'Resource Packs',
       desc: 'Cheat sheets, starter templates, and reference guides for every floor.',
       fullDesc: 'Floor-by-floor cheat sheets, reusable HTML/CSS/JS starter templates, and quick-reference cards for every major concept. Download them, keep them, use them forever.',
       problem: 'Solves: rebuilding from scratch every time you start something new.'
     },
     {
-      icon: '🧭', name: 'Adaptive Paths',
+      id: 'paths', name: 'Adaptive Paths',
       desc: 'Personalized learning paths that adjust based on performance.',
       fullDesc: 'Dynamically adjusts what you learn next based on your strengths, weaknesses, and completed tools. Keeps you in an optimal challenge zone and removes wasted time.',
       problem: 'Solves: following a fixed path that doesn\'t match where you actually are.'
     },
     {
-      icon: '🎧', name: 'Deep Work Mode',
+      id: 'deepwork', name: 'Deep Work Mode',
       desc: 'Distraction-free learning sessions with focus tracking.',
       fullDesc: 'Locks the interface into a clean, minimal mode, tracks uninterrupted focus time, and rewards longer deep work sessions with bonus XP.',
       problem: 'Solves: short, scattered sessions that never build momentum.'
     },
     {
-      icon: '🏗️', name: 'Project Builder',
+      id: 'projects', name: 'Project Builder',
       desc: 'Guided real-world projects to apply your skills.',
       fullDesc: 'Step-by-step project workflows that turn your knowledge into portfolio-ready work. Includes milestones, checkpoints, and completion validation.',
       problem: 'Solves: knowing the theory but not knowing how to build something real.'
     },
     {
-      icon: '📊', name: 'Skill Benchmarking',
+      id: 'benchmarking', name: 'Skill Benchmarking',
       desc: 'Compare your progress against real-world standards.',
       fullDesc: 'Shows how your current skill level compares to industry expectations. Highlights gaps and suggests what to improve next.',
       problem: 'Solves: not knowing if you\'re actually job-ready.'
     },
     {
-      icon: '🤖', name: 'AI Code Review',
+      id: 'ai', name: 'AI Code Review',
       desc: 'Instant feedback on your code and projects.',
       fullDesc: 'Analyzes your work and gives actionable feedback on structure, readability, and best practices — like having a senior developer review your code.',
       problem: 'Solves: submitting work with no idea if it\'s any good.'
     },
     {
-      icon: '⚡', name: 'Momentum Boost',
+      id: 'momentum', name: 'Momentum Boost',
       desc: 'Temporary XP boosts for consistent progress.',
       fullDesc: 'Rewards streaks and consistent activity with short-term XP multipliers, encouraging daily engagement and habit building.',
       problem: 'Solves: losing motivation between sessions.'
     },
     {
-      icon: '💼', name: 'Opportunity Board',
+      id: 'opportunities', name: 'Opportunity Board',
       desc: 'Unlock real opportunities as you progress.',
       fullDesc: 'Access curated internships, freelance gigs, and job leads once you reach certain milestones, turning learning into real-world outcomes.',
       problem: 'Solves: finishing the curriculum with no idea what to do next.'
@@ -5575,7 +5705,7 @@ function renderPremiumPanel() {
   features.forEach(function(f) {
     html += '<div class="premium-feature-card" onclick="togglePremiumTooltip(this)">' +
       '<div class="premium-card-lock">♛</div>' +
-      '<div class="premium-card-icon">' + f.icon + '</div>' +
+      '<div class="premium-card-icon">' + premiumIconSVG(f.id, 52, 52) + '</div>' +
       '<div class="premium-card-name">' + f.name + '</div>' +
       '<div class="premium-card-desc">' + f.desc + '</div>' +
       '<div class="premium-card-tooltip">' +
