@@ -1488,7 +1488,7 @@ function showFloorCelebration(floorIndex, newBadges) {
       // Hero
       '<div class="fc-hero">' +
         '<div class="fc-hero-glow"></div>' +
-        '<div class="fc-icon" id="fc-icon">' + msg.icon + '</div>' +
+        '<div class="fc-icon" id="fc-icon">' + getFloorIcon(floorIndex, 88) + '</div>' +
         '<div class="fc-label">FLOOR COMPLETE</div>' +
         '<div class="fc-title" id="fc-title">' + floor.title + '</div>' +
         '<div class="fc-tag">' + floor.tag + '</div>' +
@@ -3152,13 +3152,14 @@ function closeFloorModal() {
   document.body.style.overflow = '';
 }
 
-function getFloorIcon(fi) {
+function getFloorIcon(fi, sz) {
+  sz = sz || 44;
   var fid = 'hfi' + fi;
   var flt = '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
     '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
     '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
     '</filter></defs>';
-  var open = '<svg viewBox="0 0 48 48" width="44" height="44" class="holo-icon" style="display:block;margin:0 auto;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
+  var open = '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" class="holo-icon" style="display:block;margin:0 auto;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
   var close = '</g></svg>';
   var s  = ';fill:none;stroke:var(--fc-color)';
   var sf = 'fill:var(--fc-color)';
@@ -3259,6 +3260,81 @@ function getFloorIcon(fi) {
     close,
   ];
   return icons[fi] || icons[0];
+}
+
+function getChallengeIcon(type, color, sz) {
+  sz = sz || 36;
+  var c = color || 'var(--accent)';
+  var cid = 'chi' + type.toLowerCase();
+  var flt = '<defs><filter id="' + cid + '" x="-60%" y="-60%" width="220%" height="220%">' +
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter></defs>';
+  var open = '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" style="display:block;overflow:visible">' + flt + '<g filter="url(#' + cid + ')" stroke="' + c + '" fill="none">';
+  var close = '</g></svg>';
+  var sf = 'fill:' + c + ';stroke:none';
+  switch (type) {
+    case 'DAILY':
+      return open +
+        '<circle cx="24" cy="24" r="19" stroke-width="1.5"/>' +
+        '<polygon points="27,8 15,27 23,27 21,40 33,21 25,21" stroke-width="1.8" stroke-linejoin="miter"/>' +
+        '<circle cx="27" cy="8" r="2.2" style="' + sf + '"/>' +
+        '<circle cx="21" cy="40" r="2.2" style="' + sf + '"/>' +
+        close;
+    case 'RECALL':
+      return open +
+        '<circle cx="24" cy="24" r="19" stroke-width="1.2"/>' +
+        '<circle cx="24" cy="24" r="8" stroke-width="1"/>' +
+        '<line x1="24" y1="5" x2="24" y2="16" stroke-width="0.8"/>' +
+        '<line x1="24" y1="32" x2="24" y2="43" stroke-width="0.8"/>' +
+        '<line x1="5" y1="24" x2="16" y2="24" stroke-width="0.8"/>' +
+        '<line x1="32" y1="24" x2="43" y2="24" stroke-width="0.8"/>' +
+        '<line x1="10" y1="10" x2="18" y2="18" stroke-width="0.6" opacity="0.45"/>' +
+        '<line x1="38" y1="10" x2="30" y2="18" stroke-width="0.6" opacity="0.45"/>' +
+        '<line x1="10" y1="38" x2="18" y2="30" stroke-width="0.6" opacity="0.45"/>' +
+        '<line x1="38" y1="38" x2="30" y2="30" stroke-width="0.6" opacity="0.45"/>' +
+        '<circle cx="24" cy="24" r="2.5" style="' + sf + '"/>' +
+        '<circle cx="24" cy="5" r="1.8" style="' + sf + '"/>' +
+        '<circle cx="24" cy="43" r="1.8" style="' + sf + '"/>' +
+        '<circle cx="5" cy="24" r="1.8" style="' + sf + '"/>' +
+        '<circle cx="43" cy="24" r="1.8" style="' + sf + '"/>' +
+        close;
+    case 'SPEED':
+      return open +
+        '<circle cx="24" cy="26" r="18" stroke-width="1.5"/>' +
+        '<line x1="24" y1="8" x2="24" y2="14" stroke-width="1.2"/>' +
+        '<line x1="42" y1="26" x2="36" y2="26" stroke-width="0.8" opacity="0.5"/>' +
+        '<line x1="6" y1="26" x2="12" y2="26" stroke-width="0.8" opacity="0.5"/>' +
+        '<line x1="24" y1="44" x2="24" y2="38" stroke-width="0.8" opacity="0.5"/>' +
+        '<line x1="24" y1="26" x2="24" y2="14" stroke-width="2" stroke-linecap="round"/>' +
+        '<line x1="24" y1="26" x2="35" y2="26" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<line x1="19" y1="7" x2="29" y2="7" stroke-width="1.5" stroke-linecap="round"/>' +
+        '<circle cx="24" cy="26" r="2.5" style="' + sf + '"/>' +
+        close;
+    case 'STREAK':
+      return open +
+        '<polygon points="24,4 36,20 31,20 34,35 24,42 14,35 17,20 12,20" stroke-width="1.5" stroke-linejoin="round"/>' +
+        '<ellipse cx="24" cy="29" rx="5" ry="7" stroke-width="1" opacity="0.55"/>' +
+        '<circle cx="24" cy="4" r="2.2" style="' + sf + '"/>' +
+        '<circle cx="36" cy="20" r="1.5" style="' + sf + '"/>' +
+        '<circle cx="12" cy="20" r="1.5" style="' + sf + '"/>' +
+        close;
+    case 'FLOOR':
+      return open +
+        '<path d="M14,6 L34,6 L34,20 Q34,32 24,36 Q14,32 14,20 Z" stroke-width="1.5"/>' +
+        '<path d="M14,10 Q8,10 8,18 Q8,26 14,26" stroke-width="1.2"/>' +
+        '<path d="M34,10 Q40,10 40,18 Q40,26 34,26" stroke-width="1.2"/>' +
+        '<line x1="24" y1="36" x2="24" y2="42" stroke-width="1.5"/>' +
+        '<line x1="16" y1="42" x2="32" y2="42" stroke-width="2" stroke-linecap="round"/>' +
+        '<circle cx="24" cy="20" r="6" stroke-width="1"/>' +
+        '<circle cx="24" cy="20" r="2.5" style="' + sf + '"/>' +
+        close;
+    default:
+      return open +
+        '<circle cx="24" cy="24" r="19" stroke-width="1.5"/>' +
+        '<circle cx="24" cy="24" r="3" style="' + sf + '"/>' +
+        close;
+  }
 }
 
 function renderLearnHub() {
@@ -5367,7 +5443,8 @@ function showChallengeIntro(key, callback) {
   if (!overlay) { callback(); return; }
 
   overlay.style.setProperty('--ci-accent', cfg.accent);
-  document.getElementById('ci-icon').textContent = cfg.emoji;
+  var _ciType = key === 'boss' ? 'FLOOR' : key.toUpperCase();
+  document.getElementById('ci-icon').innerHTML = getChallengeIcon(_ciType, cfg.accent, 80);
   document.getElementById('ci-rule').textContent = cfg.rule;
 
   var nameEl = document.getElementById('ci-name');
@@ -5475,11 +5552,11 @@ function renderChallengePanel() {
   if (!panel) return;
 
   var challenges = [
-    (function() { var _dd = !_isDailyChallengeAvailable(); var _dr = _dd ? _dailyChallengeResetsIn() : null; return { icon: '⚡', type: 'DAILY', title: "Today's Knowledge Check", desc: _dd && _dr ? 'Resets in ' + _dr + '.' : 'One question. Earn bonus XP. Returns 24 hours after completion.', xp: '+20 XP', action: 'showDailyChallenge()', done: _dd }; })(),
-    { icon: '🧠', type: 'RECALL', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
-    { icon: '⏱️', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 10 seconds each. Auto-advances every answer. Resets daily.', xp: '+50 XP', action: 'startSpeedRound()', done: !!localStorage.getItem('codebook_speed_done_' + new Date().toDateString()), locked: state.xp < 100 },
-    { icon: '🔥', type: 'STREAK', title: 'Streak Challenge', desc: '5 questions in a row. One wrong answer ends it. Resets daily.', xp: '+75 XP', action: 'startStreakChallenge()', done: !!localStorage.getItem('codebook_streak_done_' + new Date().toDateString()), locked: state.xp < 200 },
-    { icon: '🏆', type: 'FLOOR', title: 'Floor Boss', desc: 'A comprehensive quiz on everything in the floor you just completed.', xp: '+100 XP', action: 'startFloorBoss()', done: false, locked: !isFloorComplete(state.currentFloor - 1) },
+    (function() { var _dd = !_isDailyChallengeAvailable(); var _dr = _dd ? _dailyChallengeResetsIn() : null; return { type: 'DAILY', color: '#7dd3fc', title: "Today's Knowledge Check", desc: _dd && _dr ? 'Resets in ' + _dr + '.' : 'One question. Earn bonus XP. Returns 24 hours after completion.', xp: '+20 XP', action: 'showDailyChallenge()', done: _dd }; })(),
+    { type: 'RECALL', color: '#a78bfa', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
+    { type: 'SPEED', color: '#f87171', title: 'Speed Round', desc: '10 questions. 10 seconds each. Auto-advances every answer. Resets daily.', xp: '+50 XP', action: 'startSpeedRound()', done: !!localStorage.getItem('codebook_speed_done_' + new Date().toDateString()), locked: state.xp < 100 },
+    { type: 'STREAK', color: '#fb923c', title: 'Streak Challenge', desc: '5 questions in a row. One wrong answer ends it. Resets daily.', xp: '+75 XP', action: 'startStreakChallenge()', done: !!localStorage.getItem('codebook_streak_done_' + new Date().toDateString()), locked: state.xp < 200 },
+    { type: 'FLOOR', color: '#fbbf24', title: 'Floor Boss', desc: 'A comprehensive quiz on everything in the floor you just completed.', xp: '+100 XP', action: 'startFloorBoss()', done: false, locked: !isFloorComplete(state.currentFloor - 1) },
   ];
 
   var html = '<div class="panel-hero">' +
@@ -5494,7 +5571,7 @@ function renderChallengePanel() {
     var isDone = ch.done;
     html += '<div class="challenge-item' + (isLocked ? ' ch-locked' : '') + (isDone ? ' ch-done' : '') + '"' +
       (!isLocked ? ' onclick="' + ch.action + '"' : '') + '>' +
-      '<div class="ch-icon">' + ch.icon + '</div>' +
+      '<div class="ch-icon">' + getChallengeIcon(ch.type, ch.color) + '</div>' +
       '<div class="ch-body">' +
       '<div class="ch-tag">' + ch.type + (isDone ? ' \u2014 DONE TODAY' : isLocked ? ' \u2014 LOCKED' : '') + '</div>' +
       '<div class="ch-title">' + ch.title + '</div>' +
