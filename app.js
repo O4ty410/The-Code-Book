@@ -5484,7 +5484,7 @@ function renderChallengePanel() {
     (function() { var _dd = !_isDailyChallengeAvailable(); var _dr = _dd ? _dailyChallengeResetsIn() : null; return { icon: '\u26A1', type: 'DAILY', title: "Today's Knowledge Check", desc: _dd && _dr ? 'Resets in ' + _dr + '.' : 'One question. Earn bonus XP. Returns 24 hours after completion.', xp: '+20 XP', action: 'showDailyChallenge()', done: _dd }; })(),
     { icon: '\uD83E\uDDE0', type: 'RECALL', title: 'Spaced Repetition Quiz', desc: 'Questions from sections you completed. Reinforce what you know.', xp: '+15 XP each', action: 'startRecallQuiz()', done: false },
     { icon: '\u23F1\uFE0F', type: 'SPEED', title: 'Speed Round', desc: '10 questions. 10 seconds each. Auto-advances every answer. Resets daily.', xp: '+50 XP', action: 'startSpeedRound()', done: !!localStorage.getItem('codebook_speed_done_' + new Date().toDateString()), locked: state.xp < 100 },
-    { icon: '\uD83D\uDD25', type: 'STREAK', title: 'Streak Challenge', desc: 'Answer 5 questions in a row without getting one wrong.', xp: '+75 XP', action: 'startStreakChallenge()', done: false, locked: state.xp < 200 },
+    { icon: '\uD83D\uDD25', type: 'STREAK', title: 'Streak Challenge', desc: '5 questions in a row. One wrong answer ends it. Resets daily.', xp: '+75 XP', action: 'startStreakChallenge()', done: !!localStorage.getItem('codebook_streak_done_' + new Date().toDateString()), locked: state.xp < 200 },
     { icon: '\uD83C\uDFC6', type: 'FLOOR', title: 'Floor Boss', desc: 'A comprehensive quiz on everything in the floor you just completed.', xp: '+100 XP', action: 'startFloorBoss()', done: false, locked: !isFloorComplete(state.currentFloor - 1) },
   ];
 
@@ -5660,19 +5660,25 @@ function _endSpeedRound() {
 }
 
 
-// \u2500\u2500 STREAK CHALLENGE \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-// 5 questions in a row. One wrong answer ends the run.
-var _streakIndex = 0;
-var _streakCorrect = 0;
+
+// ── STREAK CHALLENGE ─────────────────────────────────────────────
+// 5 questions in a row. One wrong answer ends the run. Resets daily.
 var _streakTotal = 5;
 var _streakCurrent = 0;
+var _streakCorrect = 0;
 var _streakFailed = false;
+var _streakAnswered = false;
 
 function startStreakChallenge() {
   if (state.xp < 200) return;
+  var today = new Date().toDateString();
+  if (localStorage.getItem('codebook_streak_done_' + today)) {
+    sageMessage('Streak Challenge already completed today. Come back tomorrow!', 'tip');
+    return;
+  }
   showChallengeIntro('streak', function() {
-    _streakCorrect = 0;
     _streakCurrent = 0;
+    _streakCorrect = 0;
     _streakFailed = false;
     _nextStreakQuestion();
   });
@@ -5687,56 +5693,70 @@ function _nextStreakQuestion() {
   var daysSinceEpoch = Math.floor((Date.now() - epoch) / 86400000);
   var idx = (daysSinceEpoch + 3 + _streakCurrent) % DAILY_CHALLENGES.length;
   var challenge = DAILY_CHALLENGES[idx];
-  var today = new Date().toDateString();
-
-  // Wrap challenge to detect wrong answers
-  var wrappedChallenge = Object.assign({}, challenge);
-  var originalCorrect = challenge.correct;
   var qNum = _streakCurrent + 1;
 
-  _openChallengeModal(
-    challenge,
-    'Streak Challenge \u2014 ' + qNum + ' of ' + _streakTotal,
-    'Answer correctly to keep your streak alive. ' + _streakCorrect + ' correct so far.',
-    'streak-' + today + '-' + idx
-  );
+  document.getElementById('daily-challenge').style.display = 'flex';
+  document.getElementById('challenge-title').textContent = 'Streak Challenge — ' + qNum + ' of ' + _streakTotal;
+  document.getElementById('challenge-body').innerHTML = '🔥 Streak: <strong>' + _streakCorrect + '</strong>' + (_streakCorrect > 0 ? ' &nbsp;•&nbsp; Keep it going!' : ' &nbsp;•&nbsp; One wrong ends it.');
+  document.getElementById('challenge-question').textContent = challenge.question;
+  document.getElementById('challenge-result').style.display = 'none';
+  document.querySelectorAll('#daily-challenge .auth-btn').forEach(function(b) { b.remove(); });
+  _streakAnswered = false;
 
-  // Patch the option buttons to intercept streak logic
   var optionsEl = document.getElementById('challenge-options');
-  var buttons = optionsEl.querySelectorAll('button');
+  optionsEl.innerHTML = '';
+  challenge.options.forEach(function(opt, i) {
+    var btn = document.createElement('button');
+    btn.style.cssText = 'padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:14px;cursor:pointer;text-align:left;transition:border-color 0.2s ease;width:100%;';
+    btn.textContent = opt;
+    btn.addEventListener('click', function() { _answerStreakQuestion(i, challenge.correct); });
+    optionsEl.appendChild(btn);
+  });
+}
+
+function _answerStreakQuestion(chosen, correct) {
+  if (_streakAnswered) return;
+  _streakAnswered = true;
+  var isCorrect = chosen === correct;
+  var buttons = document.querySelectorAll('#challenge-options button');
   buttons.forEach(function(btn, i) {
-    btn.replaceWith(btn.cloneNode(true)); // strip old listeners
+    btn.disabled = true;
+    if (i === correct) btn.style.borderColor = 'var(--success)';
+    else if (i === chosen) btn.style.borderColor = 'var(--floor3)';
   });
-  optionsEl.querySelectorAll('button').forEach(function(btn, i) {
-    btn.addEventListener('click', function() {
-      answerChallenge(i, originalCorrect, challenge.xp, challenge.explanation, 'streak-' + today + '-' + idx);
-      if (i !== originalCorrect) {
-        _streakFailed = true;
-      } else {
-        _streakCorrect++;
-        _streakCurrent++;
-      }
-      setTimeout(function() {
-        if (_streakFailed || _streakCurrent >= _streakTotal) {
-          _endStreakChallenge();
-        } else {
-          _nextStreakQuestion();
-        }
-      }, 1800);
-    });
-  });
+  if (isCorrect) {
+    _streakCorrect++;
+    _streakCurrent++;
+    setTimeout(_nextStreakQuestion, 700);
+  } else {
+    _streakFailed = true;
+    _streakCurrent++;
+    setTimeout(_endStreakChallenge, 1200);
+  }
 }
 
 function _endStreakChallenge() {
-  var xpEarned = _streakFailed ? _streakCorrect * 10 : 75;
   var today = new Date().toDateString();
+  localStorage.setItem('codebook_streak_done_' + today, 'true');
+  var xpEarned = (_streakFailed ? _streakCorrect * 10 : 75);
   awardXP(xpEarned, 'streak-challenge-' + today, window.innerWidth / 2, 200);
-  document.getElementById('challenge-title').textContent = _streakFailed ? 'Streak Broken!' : 'Perfect Streak!';
-  document.getElementById('challenge-body').textContent = _streakCorrect + ' of ' + _streakTotal + ' correct. +' + xpEarned + ' XP earned.';
-  document.getElementById('challenge-question').textContent = !_streakFailed ? '\uD83D\uDD25 Flawless!' : _streakCorrect >= 3 ? '\uD83D\uDC4D Good run!' : '\uD83D\uDCAA Try again!';
-  document.getElementById('challenge-options').innerHTML = '<button class="auth-btn" onclick="closeDailyChallenge()" style="margin-top:8px;">Done</button>';
+  checkAndUnlockBadges();
+  renderChallengePanel();
+
+  var perfect = !_streakFailed;
+  document.getElementById('challenge-title').textContent = perfect ? 'Perfect Streak! 🔥' : 'Streak Broken!';
+  document.getElementById('challenge-body').textContent = _streakCorrect + ' of ' + _streakTotal + ' correct — +' + xpEarned + ' XP earned.';
+  document.getElementById('challenge-question').textContent = perfect ? '🌟 Flawless run!' : _streakCorrect >= 3 ? '👍 Good run — so close!' : '💪 Keep practising!';
+  document.getElementById('challenge-options').innerHTML = '';
   document.getElementById('challenge-result').style.display = 'none';
+  var doneBtn = document.createElement('button');
+  doneBtn.className = 'auth-btn';
+  doneBtn.textContent = 'Done →';
+  doneBtn.style.marginTop = '16px';
+  doneBtn.onclick = closeDailyChallenge;
+  document.getElementById('challenge-options').appendChild(doneBtn);
 }
+
 
 // \u2500\u2500 FLOOR BOSS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 // 5 questions drawn from the current floor. All must be answered.
