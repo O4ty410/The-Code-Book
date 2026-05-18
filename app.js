@@ -5511,25 +5511,6 @@ function renderProfilePanel() {
     ? 'All 7 floors complete. Mission accomplished.'
     : 'Floor ' + (state.currentFloor || 1) + ' — ' + curFloorTitle + '. ' + doneSecs + ' section' + (doneSecs === 1 ? '' : 's') + ' complete.';
 
-  // Activity calendar — last 28 days
-  var actLog = getActivityLog();
-  var actMap = {};
-  actLog.forEach(function(a) {
-    var d = new Date(a.time); d.setHours(0,0,0,0);
-    actMap[d.toDateString()] = (actMap[d.toDateString()] || 0) + 1;
-  });
-  var today = new Date(); today.setHours(0,0,0,0);
-  var calDays = [];
-  for (var ci = 27; ci >= 0; ci--) {
-    var cd = new Date(today); cd.setDate(cd.getDate() - ci);
-    calDays.push({ label: cd.toDateString(), count: actMap[cd.toDateString()] || 0, isToday: ci === 0 });
-  }
-  var calHtml = '<div class="prof-cal-grid">' +
-    calDays.map(function(day) {
-      var intensity = day.count === 0 ? 'empty' : day.count >= 3 ? 'high' : day.count >= 2 ? 'mid' : 'low';
-      return '<div class="prof-cal-day prof-cal-' + intensity + (day.isToday ? ' prof-cal-today' : '') + '" title="' + day.label + '"></div>';
-    }).join('') + '</div>';
-
   // Journey map
   var journeyHtml = '<div class="pf-journey"><div class="pf-journey-scroll"><div class="pf-journey-track">';
   FLOORS.forEach(function(f, fi) {
@@ -5623,12 +5604,6 @@ function renderProfilePanel() {
     '<div class="pf-section">' +
       '<div class="pf-section-hdr pf-section-hdr-row">// CLEARANCE BADGES <span class="pf-badge-count">' + (state.earnedBadges || []).length + ' / ' + BADGES.length + '</span></div>' +
       badgesHtml +
-    '</div>' +
-
-    // Activity
-    '<div class="pf-section pf-section-last">' +
-      '<div class="pf-section-hdr">// ACTIVITY — LAST 28 DAYS</div>' +
-      calHtml +
     '</div>' +
 
     '</div>';
