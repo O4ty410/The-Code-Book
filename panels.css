@@ -612,7 +612,9 @@ body.light .challenge-item {
 .challenge-item.ch-done { border-color: rgba(110,200,126,0.2); background: rgba(110,200,126,0.03); }
 .challenge-item.ch-locked { opacity: 0.35; cursor: not-allowed; }
 
-.ch-icon { font-size: 26px; flex-shrink: 0; filter: grayscale(1) brightness(1.9); }
+.ch-icon { width: 36px; height: 36px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.ch-locked .ch-icon { opacity: 0.3; }
+.ch-done .ch-icon { opacity: 0.45; }
 .ch-body { flex: 1; }
 
 .ch-tag {

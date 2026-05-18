@@ -6312,10 +6312,13 @@ body.learn-mode #main-col {
 }
 
 .ci-icon {
-  font-size: 48px;
-  line-height: 1;
-  margin-bottom: 18px;
-  filter: grayscale(1) brightness(2.8) drop-shadow(0 0 20px var(--ci-accent, #7dd3fc));
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 20px var(--ci-accent, #7dd3fc));
 }
 
 .ci-name {
