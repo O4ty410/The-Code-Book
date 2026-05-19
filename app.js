@@ -1116,6 +1116,158 @@ function shareAchievement() {
   }
 }
 
+function generateProgressCard() {
+  var W = 1200, H = 630;
+  var canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+
+  function hexRgba(hex, a) {
+    var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
+
+  document.fonts.ready.then(function() {
+    var name = state.playerName || localStorage.getItem('codebook_player_name') || 'Learner';
+    var streak = state.streak || 0;
+    var xp = state.xp || 0;
+    var floorsDone = FLOORS.filter(function(f, fi){ return isFloorComplete(fi); }).length;
+    var totalSecs = 0, doneSecs = 0;
+    FLOORS.forEach(function(f){ f.sections.forEach(function(s){ totalSecs++; if (state.completed[s.id]) doneSecs++; }); });
+    var masteredCards = Object.values(state.srsData || {}).filter(function(d){ return d && d.interval >= 21; }).length;
+    var cur = getCurrentLevel();
+    var levelName = LEVEL_NAMES[cur.level] || ('Level ' + cur.level);
+
+    // Background
+    ctx.fillStyle = '#05070a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtle warm radial
+    var rg = ctx.createRadialGradient(W*0.5, H*0.5, 0, W*0.5, H*0.5, W*0.65);
+    rg.addColorStop(0, 'rgba(200,169,110,0.07)');
+    rg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Left accent bar
+    ctx.fillStyle = '#c8a96e';
+    ctx.fillRect(0, 0, 6, H);
+
+    // Branding
+    ctx.font = '700 13px "Space Mono", monospace';
+    ctx.fillStyle = 'rgba(200,169,110,0.55)';
+    ctx.letterSpacing = '3px';
+    ctx.fillText('T H E   C O D E   B O O K', 40, 52);
+
+    // Level badge top-right
+    ctx.font = '700 11px "Space Mono", monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.textAlign = 'right';
+    ctx.fillText('LEVEL ' + cur.level + ' — ' + levelName.toUpperCase(), W - 40, 52);
+    ctx.textAlign = 'left';
+
+    // Top rule
+    ctx.strokeStyle = 'rgba(200,169,110,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(40, 68); ctx.lineTo(W - 40, 68); ctx.stroke();
+
+    // Player name
+    var maxNameW = W - 80;
+    var nameSize = 72;
+    ctx.font = '300 ' + nameSize + 'px "Inter", sans-serif';
+    while (ctx.measureText(name).width > maxNameW && nameSize > 32) {
+      nameSize -= 4;
+      ctx.font = '300 ' + nameSize + 'px "Inter", sans-serif';
+    }
+    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+    ctx.fillText(name, 40, 160);
+
+    // Tagline
+    ctx.font = '400 16px "Space Mono", monospace';
+    ctx.fillStyle = 'rgba(200,169,110,0.7)';
+    ctx.fillText('LEARNING TO CODE — ONE FLOOR AT A TIME', 40, 195);
+
+    // Mid rule
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    ctx.beginPath(); ctx.moveTo(40, 220); ctx.lineTo(W - 40, 220); ctx.stroke();
+
+    // Stats row
+    var stats = [
+      { n: xp, k: 'XP EARNED' },
+      { n: streak + (streak === 1 ? ' day' : ' days'), k: 'STREAK' },
+      { n: doneSecs + '/' + totalSecs, k: 'SECTIONS' },
+      { n: masteredCards, k: 'CARDS MASTERED' },
+      { n: floorsDone + '/7', k: 'FLOORS DONE' }
+    ];
+    var colW = (W - 80) / stats.length;
+    stats.forEach(function(s, i) {
+      var cx = 40 + colW * i;
+      ctx.font = '700 32px "Space Mono", monospace';
+      ctx.fillStyle = 'rgba(200,169,110,0.9)';
+      ctx.fillText(s.n + '', cx, 295);
+      ctx.font = '400 10px "Space Mono", monospace';
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fillText(s.k, cx, 315);
+    });
+
+    // Floor dots
+    var dotY = 390, dotR = 22, dotGap = 20;
+    var totalDotW = FLOORS.length * (dotR * 2) + (FLOORS.length - 1) * dotGap;
+    var dotStartX = 40;
+    ctx.font = '700 11px "Space Mono", monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.fillText('FLOORS', 40, dotY - dotR - 14);
+    FLOORS.forEach(function(f, fi) {
+      var cx = dotStartX + fi * (dotR * 2 + dotGap) + dotR;
+      var done = isFloorComplete(fi);
+      var isCurrent = fi === (state.currentFloor - 1);
+      var col = f.color || '#c8a96e';
+      ctx.beginPath();
+      ctx.arc(cx, dotY, dotR, 0, Math.PI * 2);
+      if (done) {
+        ctx.fillStyle = col;
+        ctx.fill();
+      } else if (isCurrent) {
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.fillStyle = hexRgba(col, 0.12);
+        ctx.fill();
+      } else {
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+      ctx.font = '700 10px "Space Mono", monospace';
+      ctx.fillStyle = done ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.3)';
+      ctx.textAlign = 'center';
+      ctx.fillText(fi + 1, cx, dotY + 4);
+      ctx.textAlign = 'left';
+    });
+
+    // Bottom rule
+    ctx.strokeStyle = 'rgba(200,169,110,0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(40, H - 60); ctx.lineTo(W - 40, H - 60); ctx.stroke();
+
+    // Date
+    ctx.font = '400 11px "Space Mono", monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.fillText(new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), 40, H - 36);
+    ctx.textAlign = 'right';
+    ctx.fillText('the-code-book', W - 40, H - 36);
+    ctx.textAlign = 'left';
+
+    // Download
+    var a = document.createElement('a');
+    a.download = 'the-code-book-progress.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  });
+}
+
 // --- STREAK PROTECTION ---
 function checkStreakProtection() {
   const today = new Date().toDateString();
@@ -5645,6 +5797,11 @@ function renderProfilePanel() {
     '<div class="pf-section">' +
       '<div class="pf-section-hdr pf-section-hdr-row">// CLEARANCE BADGES <span class="pf-badge-count">' + (state.earnedBadges || []).length + ' / ' + BADGES.length + '</span></div>' +
       badgesHtml +
+    '</div>' +
+
+    // Export
+    '<div class="pf-section">' +
+      '<button class="pf-export-btn" onclick="generateProgressCard()">&#8681; Download Progress Card</button>' +
     '</div>' +
 
     '</div>';
