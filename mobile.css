@@ -27,7 +27,7 @@
   min-height: 100%;
 }
 
-/* ── "Seven Floors. One Goal." header ── */
+/* ── "Seven Floors. One Goal." header (used in floor list) ── */
 .mob-hub-hero-hdr {
   padding: 24px 16px 20px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -128,10 +128,6 @@
 /* ============================================================
    GRID TILES — match desktop fc-card aesthetic
    ============================================================ */
-.mob-grid-hero-row {
-  padding: 0 12px 10px;
-}
-
 .mob-grid-cells {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -142,7 +138,7 @@
 .mob-grid-tile {
   position: relative;
   background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--mg-color, rgba(255,255,255,0.1));
   border-radius: 14px;
   padding: 18px 14px 16px;
   cursor: pointer;
@@ -157,17 +153,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.mob-grid-tile-hero {
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 20px 18px 18px;
-}
-
 .mob-grid-tile:active {
   transform: scale(0.97);
-  border-color: var(--mg-color, #c8a96e);
   box-shadow:
-    0 0 26px var(--mg-glow-h, rgba(200,169,110,0.4)),
+    0 0 20px var(--mg-glow, rgba(200,169,110,0.35)),
     0 4px 20px rgba(0,0,0,0.55);
 }
 
@@ -181,43 +170,6 @@
   opacity: 0.82;
 }
 
-.mg-icon {
-  font-size: 28px;
-  line-height: 1;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.mob-grid-tile-hero .mg-icon {
-  font-size: 0;   /* SVG icon — sized by width/height attrs */
-  line-height: 0;
-  height: 42px;
-  margin-bottom: 12px;
-}
-
-.mg-badge {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  opacity: 0.8;
-  margin-bottom: 6px;
-}
-
-.mg-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.3;
-  margin-bottom: 4px;
-}
-
-.mob-grid-tile-hero .mg-title {
-  font-size: 17px;
-}
-
 .mg-hint {
   font-family: 'Space Mono', monospace;
   font-size: 10px;
@@ -226,23 +178,133 @@
   letter-spacing: 0.2px;
 }
 
-.mg-cta {
-  margin-top: 14px;
-  background: transparent;
+/* Hero card */
+.mob-hero-card {
+  margin: 16px 12px 12px;
+  background: linear-gradient(160deg, #060f20 0%, #040b18 100%);
   border: 1px solid var(--mg-color, #c8a96e);
-  border-radius: 8px;
-  padding: 9px 18px;
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  font-weight: 700;
+  border-radius: 16px;
+  padding: 22px 18px 20px;
   cursor: pointer;
-  letter-spacing: 0.3px;
-  transition: background 0.15s;
-  align-self: flex-start;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 24px var(--mg-glow, rgba(200,169,110,0.3)),
+    0 0 60px var(--mg-glow, rgba(200,169,110,0.1)),
+    inset 0 0 30px rgba(0,0,0,0.4);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.mg-cta:active {
-  background: rgba(200,169,110,0.1);
+.mob-hero-floor-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--mg-color, #c8a96e);
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+
+.mob-hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text, #fff);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.mob-hero-icon {
+  font-size: 0;
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  height: 58px;
+  align-items: center;
+}
+
+.mob-hero-count {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 10px;
+  letter-spacing: 0.3px;
+}
+
+.mob-hero-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.mob-hero-bar {
+  flex: 1;
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mob-hero-bar-fill {
+  height: 100%;
+  background: var(--mg-color, #c8a96e);
+  border-radius: 3px;
+  box-shadow: 0 0 8px var(--mg-glow, rgba(200,169,110,0.5));
+  transition: width 0.7s ease;
+}
+
+.mob-hero-pct {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--mg-color, #c8a96e);
+  white-space: nowrap;
+}
+
+.mob-hero-cta {
+  width: 100%;
+  padding: 13px 20px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #000;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.mob-hero-cta:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+/* Grid tiles — cleaner, bigger icons */
+.mg-icon-lg {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mg-title-lg {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text, #fff);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+/* Floor list hero header */
+.mob-fl-hero-hdr {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 8px;
 }
 
 /* ============================================================
