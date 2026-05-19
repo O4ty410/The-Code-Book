@@ -4634,7 +4634,16 @@ function startAutoScroll() {
   if (!state.autoScroll) return;
   var col = document.getElementById('main-col') || document.querySelector('.main-col');
   if (!col) return;
-  _autoScrollInterval = setInterval(function() { col.scrollTop += 1; }, 38);
+  var lastTop = col.scrollTop;
+  _autoScrollInterval = setInterval(function() {
+    // If the user scrolled manually (scrollTop moved more than 4px vs expected), stop
+    if (Math.abs(col.scrollTop - lastTop) > 4) {
+      stopAutoScroll();
+      return;
+    }
+    col.scrollTop += 1;
+    lastTop = col.scrollTop;
+  }, 38);
 }
 
 function stopAutoScroll() {
@@ -5151,6 +5160,18 @@ function resetSageIdleTimer() {
 // Reset idle timer on user activity
 ['click', 'scroll', 'keydown', 'touchstart'].forEach(evt => {
   document.addEventListener(evt, resetSageIdleTimer, { passive: true });
+});
+
+// Space bar: pause narration + stop auto-scroll (desktop only)
+document.addEventListener('keydown', function(e) {
+  if (e.code !== 'Space') return;
+  if (!currentNarrationId) return;
+  // Don't intercept if focus is inside a text input or textarea
+  var tag = document.activeElement && document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  e.preventDefault();
+  stopAutoScroll();
+  toggleNarration(currentNarrationId);
 });
 
 // ============================================
