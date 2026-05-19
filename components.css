@@ -5503,6 +5503,31 @@ body.learn-mode #main-col {
   border-radius: 16px;
 }
 
+/* ── Landscape layout on wider screens ── */
+@media (min-width: 600px) {
+  .holo-quiz-card {
+    max-width: 700px;
+  }
+  .holo-quiz-front .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .holo-quiz-front .quiz-question {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  .holo-quiz-back {
+    flex-direction: row;
+    justify-content: center;
+    gap: 32px;
+    padding: 22px 40px;
+  }
+  .hq-center {
+    align-items: flex-start;
+  }
+}
+
 /* ══════════════════════════════════════════════════════════
    REVISION CENTRE
    ══════════════════════════════════════════════════════════ */
