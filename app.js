@@ -426,7 +426,8 @@ let state = {
   sageUsesLeft: SAGE_TOTAL_USES,
   challengesDone: {},
   streakProtectedToday: false,
-  revKnown: {}
+  revKnown: {},
+  currentTrack: null
 };
 state.playerName = localStorage.getItem("codebook_player_name") || null;
 
@@ -453,6 +454,7 @@ function loadState() {
       state.revKnown = s.revKnown || {};
       state.earnedBadges = s.earnedBadges || [];
       state.badgeFlags = s.badgeFlags || {};
+      state.currentTrack = s.currentTrack || null;
     }
   }  catch(e) {}
 }
@@ -2789,15 +2791,19 @@ function markGate(sectionId, key) {
   }
   var gate = sectionGateState[sectionId];
   if (gate.read && gate.code && gate.quiz) {
-    var _fi = state.currentFloor - 1;
-    var _floor = FLOORS[_fi];
-    var _si = 0;
-    if (_floor) {
-      for (var _i = 0; _i < _floor.sections.length; _i++) {
-        if (_floor.sections[_i].id === sectionId) { _si = _i; break; }
+    if (sectionId.indexOf('tr-') === 0) {
+      setTimeout(function() { showTrackCompletePopup(sectionId); }, 300);
+    } else {
+      var _fi = state.currentFloor - 1;
+      var _floor = FLOORS[_fi];
+      var _si = 0;
+      if (_floor) {
+        for (var _i = 0; _i < _floor.sections.length; _i++) {
+          if (_floor.sections[_i].id === sectionId) { _si = _i; break; }
+        }
       }
+      setTimeout(function() { showSectionCompletePopup(sectionId, _fi, _si); }, 300);
     }
-    setTimeout(function() { showSectionCompletePopup(sectionId, _fi, _si); }, 300);
   }
 }
 
@@ -2837,6 +2843,415 @@ function closeSectionCompletePopup() {
   if (!pop) return;
   pop.classList.remove('scp-visible');
   setTimeout(function() { if (pop && pop.parentNode) pop.parentNode.removeChild(pop); }, 300);
+}
+
+// ─────────────────────────────────────────────────────────────────
+//  SPECIALISATION TRACKS
+// ─────────────────────────────────────────────────────────────────
+
+function isTrackUnlocked() {
+  return isFloorComplete(FLOORS.length - 1);
+}
+
+function getTrack(trackId) {
+  return (typeof TRACKS !== 'undefined' ? TRACKS : []).find(function(t) { return t.id === trackId; });
+}
+
+function isTrackComplete(trackId) {
+  var track = getTrack(trackId);
+  if (!track) return false;
+  return track.sections.every(function(s) { return !!state.completed[s.id]; });
+}
+
+function renderTrackHub(trackId) {
+  var track = getTrack(trackId);
+  if (!track) return;
+  var firstIncomplete = 0;
+  for (var i = 0; i < track.sections.length; i++) {
+    if (!state.completed[track.sections[i].id]) { firstIncomplete = i; break; }
+    if (i === track.sections.length - 1) firstIncomplete = i;
+  }
+  loadTrackSection(trackId, firstIncomplete);
+}
+
+function showTrackCompletePopup(sectionId) {
+  var ct = state.currentTrack;
+  if (!ct) return;
+  var trackId = ct.trackId, si = ct.si;
+  closeSectionCompletePopup();
+  var track = getTrack(trackId);
+  var isDone = !!state.completed[sectionId];
+  var isLast = track && si === track.sections.length - 1;
+  var pop = document.createElement('div');
+  pop.id = 'sec-complete-pop';
+  pop.className = 'sec-complete-pop';
+  var html = '<div class="scp-inner">';
+  if (!isDone) {
+    html += '<div class="scp-label">' + sageOwlSVG(20, 22) + '<span>All gates cleared!</span></div>';
+    html += '<div class="scp-btns">';
+    html += '<button class="scp-btn scp-complete" onclick="closeSectionCompletePopup(); completeTrackSection(\'' + sectionId + '\',\'' + trackId + '\',' + si + ');">&#10003; Mark Complete &nbsp;<span class="scp-xp">+120 XP</span></button>';
+    if (!isLast) {
+      html += '<button class="scp-btn scp-next" onclick="closeSectionCompletePopup(); nextTrackSection(\'' + trackId + '\',' + si + ');">Next &#8594;</button>';
+    }
+    html += '</div>';
+  } else {
+    html += '<div class="scp-label"><span>&#10003; Section Complete</span></div>';
+    if (!isLast) {
+      html += '<button class="scp-btn scp-next scp-solo" onclick="closeSectionCompletePopup(); nextTrackSection(\'' + trackId + '\',' + si + ');">Continue &#8594;</button>';
+    }
+  }
+  html += '</div>';
+  pop.innerHTML = html;
+  document.body.appendChild(pop);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { pop.classList.add('scp-visible'); });
+  });
+}
+
+function completeTrackSection(sectionId, trackId, si) {
+  closeSectionCompletePopup();
+  var track = getTrack(trackId);
+  if (!track) return;
+  var section = track.sections[si];
+  if (!section) return;
+  var btn = document.getElementById('complete-btn-' + sectionId);
+  var bx = window.innerWidth / 2, by = 300;
+  if (btn) { var br = btn.getBoundingClientRect(); bx = br.left + br.width / 2; by = br.top + br.height / 2; }
+  state.completed[sectionId] = true;
+  markStreakProtected();
+  awardXP(120, 'track-' + sectionId, bx, by);
+  playCompletionSound();
+  trackDailySection();
+  var secName = section.title;
+  logActivity('section', 'Completed: ' + secName + ' [' + track.title + ' Track]', 120);
+  var _prevBadges = (state.earnedBadges || []).slice();
+  updateAchievements();
+  updateDailyGoalBar();
+  updateTopChips();
+  renderNav();
+  saveState();
+  showSectionRecap(section, function() {
+    setTimeout(function() {
+      if (si < track.sections.length - 1) {
+        var mc = document.getElementById('main-content');
+        if (mc) mc.classList.add('section-slide-out-left');
+        setTimeout(function() { loadTrackSection(trackId, si + 1); }, 220);
+      } else {
+        loadTrackSection(trackId, si);
+        sageMessage('Track complete. You\'ve finished the ' + track.title + ' track.', 'celebrate');
+      }
+    }, 180);
+  });
+}
+
+function nextTrackSection(trackId, si) {
+  closeSectionCompletePopup();
+  var track = getTrack(trackId);
+  if (!track) return;
+  var mc = document.getElementById('main-content');
+  if (mc) mc.classList.add('section-slide-out-left');
+  setTimeout(function() {
+    if (si < track.sections.length - 1) { loadTrackSection(trackId, si + 1); }
+    else { renderLearnHub(); }
+  }, 220);
+}
+
+function prevTrackSection(trackId, si) {
+  closeSectionCompletePopup();
+  var mc = document.getElementById('main-content');
+  if (mc) mc.classList.add('section-slide-out-right');
+  setTimeout(function() {
+    if (si > 0) { loadTrackSection(trackId, si - 1); }
+    else { renderLearnHub(); }
+  }, 220);
+}
+
+function loadTrackSection(trackId, si) {
+  var track = getTrack(trackId);
+  if (!track) return;
+  si = parseInt(si) || 0;
+  var section = track.sections[si];
+  if (!section) return;
+  state.currentTrack = { trackId: trackId, si: si };
+  saveState();
+
+  var isDone = !!state.completed[section.id];
+  var editorDef = getEditorDefaults(section);
+
+  if (!sectionGateState[section.id]) {
+    var quizGateDone = isDone || !section.quiz;
+    if (!quizGateDone && section.quiz) {
+      if (section.quiz.questions) {
+        var _ms = state.quizMultiState && state.quizMultiState[section.id];
+        if (_ms && _ms.done) {
+          var _total = section.quiz.questions.length;
+          var _score = 0;
+          section.quiz.questions.forEach(function(q, qi) { if (_ms.answers[qi] === q.correct) _score++; });
+          if (_score >= Math.ceil(_total * 0.7)) quizGateDone = true;
+        }
+      } else {
+        var _sq = state.quizAnswered && state.quizAnswered[section.id];
+        if (_sq !== undefined && _sq === section.quiz.correct) quizGateDone = true;
+      }
+    }
+    sectionGateState[section.id] = { read: true, code: !section.code, quiz: quizGateDone };
+  }
+  var gate = sectionGateState[section.id];
+  var allDone = gate.read && gate.code && gate.quiz;
+  var showEditor = !!(section.code);
+  var showQuiz = !!(section.quiz || section.checklist);
+  var color = track.color || '#c8a96e';
+
+  // Tabs
+  var dots = '<div class="section-progress-dots" style="--floor-color:' + color + '">';
+  track.sections.forEach(function(sec, i) {
+    var dotCls = i === si ? 'spd-dot spd-current' : (state.completed[sec.id] ? 'spd-dot spd-done' : 'spd-dot');
+    dots += '<div class="' + dotCls + '" title="' + (i+1) + '. ' + sec.title + '" onclick="loadTrackSection(\'' + trackId + '\',' + i + ')"></div>';
+  });
+  dots += '</div>';
+
+  var tabs = '<div class="section-sticky-header">' +
+    '<div class="section-tabs-bar">' +
+    '<button class="section-tab-btn active" onclick="switchSectionTab(\'read\',\'' + section.id + '\',this)">Read</button>' +
+    (showEditor ? '<button class="section-tab-btn" onclick="switchSectionTab(\'code\',\'' + section.id + '\',this)">Code Editor</button>' : '') +
+    (showQuiz ? '<button class="section-tab-btn" onclick="switchSectionTab(\'quiz\',\'' + section.id + '\',this)">Quiz</button>' : '') +
+    '<button class="section-tab-btn notes-tab-btn" onclick="switchSectionTab(\'notes\',\'' + section.id + '\',this)">&#128221; Notes</button>' +
+    '</div>' + dots +
+    '</div>' +
+    '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
+
+  // READ
+  var _readWords = (section.body || '').replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length;
+  var _readMins = Math.max(1, Math.round(_readWords / 200));
+  var r = '<div id="read-progress-bar"></div><div class="floor-hero" style="--floor-color:' + color + '">' +
+    '<div class="floor-tag" style="color:' + color + '">' + track.tag + '</div>' +
+    '<div class="floor-title">' + track.title + '<br><em>' + track.subtitle + '</em></div>' +
+    '<div class="floor-meta">' +
+    '<div class="floor-meta-item"><div class="floor-meta-label">SECTION</div><div class="floor-meta-value">' + (si+1) + ' of ' + track.sections.length + '</div></div>' +
+    '<div class="floor-meta-item floor-meta-listen"><button class="listen-btn" id="listen-btn-' + section.id + '" onclick="toggleNarration(\'' + section.id + '\')"><span class="listen-dot"></span>&#9654; Listen</button></div>' +
+    '<div class="floor-meta-item"><div class="floor-meta-label">READ TIME</div><div class="floor-meta-value">~' + _readMins + ' min</div></div>' +
+    '</div>' +
+    '<div class="floor-section-title">' + section.title + '</div>' +
+    '</div>' +
+    '<div class="section-content">';
+
+  var _tldr = sectionTldr(section);
+  if (_tldr) {
+    r += '<div class="tldr-box"><div class="owl-wrap"><div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
+      '<div class="owl-bubble"><div class="owl-name">SAGE &mdash; TL;DR</div><div class="hint-text">' + escHtml(_tldr) + '</div></div></div></div>';
+  }
+
+  r += (section.hint ? '<button class="hint-btn" onclick="toggleHint(\'hint-' + section.id + '\')" title="Need help?">?</button>' : '');
+  if (section.hint) {
+    r += '<div class="hint-box" id="hint-' + section.id + '"><div class="owl-wrap"><div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
+      '<div class="owl-bubble"><div class="owl-name">SAGE &mdash; YOUR GUIDE</div><div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div></div></div></div>';
+  }
+  r += '<div class="section-body">' + section.body.replace(/\n/g, '<br><br>') + '</div>';
+  if (section.callout) {
+    var cIcon = section.callout.type === 'focus' ? '&#127919;' : section.callout.type === 'warning' ? '&#9888;&#65039;' : '&#128161;';
+    r += '<div class="callout ' + (section.callout.type || '') + '"><div class="callout-icon-row"><span class="callout-icon">' + cIcon + '</span><div class="callout-label">' + section.callout.label + '</div></div><div class="callout-text">' + section.callout.text.replace(/\n/g, '<br>') + '</div></div>';
+  }
+  if (section.callout2) {
+    var c2Icon = section.callout2.type === 'focus' ? '&#127919;' : '&#128161;';
+    r += '<div class="callout ' + (section.callout2.type || '') + '"><div class="callout-icon-row"><span class="callout-icon">' + c2Icon + '</span><div class="callout-label">' + section.callout2.label + '</div></div><div class="callout-text">' + section.callout2.text.replace(/\n/g, '<br>') + '</div></div>';
+  }
+  if (section.checklist) {
+    r += '<div class="checklist-card"><div class="checklist-card-label">BEFORE YOU CONTINUE</div><ul class="checklist">';
+    section.checklist.forEach(function(item, ci) {
+      var key = section.id + '-' + ci;
+      var checked = (state.checklistDone || {})[key];
+      r += '<li class="' + (checked ? 'checked' : '') + '" onclick="toggleCheck(\'' + key + '\',this)"><div class="check-box">' + (checked ? '&#10003;' : '') + '</div>' + item + '</li>';
+    });
+    r += '</ul></div>';
+  }
+  var usesLeft = (state.sageUsesLeft !== undefined) ? state.sageUsesLeft : SAGE_TOTAL_USES;
+  r += '<div class="sage-ask-strip"><div class="sage-ask-owl">' + sageOwlSVG(24, 26) + '</div>' +
+    '<div class="sage-ask-info"><div class="sage-ask-label">Stuck? Ask Sage</div><div class="sage-ask-sub">' + usesLeft + ' question' + (usesLeft !== 1 ? 's' : '') + ' remaining</div></div>' +
+    (usesLeft > 0 ? '<button class="sage-ask-btn" onclick="openSageChat(\'' + section.id + '\',0)">Ask</button>' : '<div class="sage-ask-empty">Used up — work through it yourself.</div>') +
+    '</div>';
+  r += '</div>';
+
+  // CODE EDITOR
+  var savedCode = localStorage.getItem('code_' + section.id) || editorDef.code;
+  var c = '<div class="section-inner-pad">' +
+    '<div style="font-family:\'Inter\',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;">Live Code Editor</div>' +
+    '<div style="font-size:14px;color:var(--text-dim);margin-bottom:20px;">Write code on the left. See it render live on the right.</div>' +
+    '<div class="editor-wrapper"><div class="editor-topbar">' +
+    '<div class="editor-mac-dots"><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div></div>' +
+    '<div class="editor-filename">' + editorDef.filename + '</div>' +
+    '<div class="editor-action-row"><button class="editor-reset-btn" onclick="resetEditor(\'' + section.id + '\')">&#8634; Reset</button>' +
+    '<button class="editor-run-btn" onclick="runEditor(\'' + section.id + '\')">&#9654; Run</button></div></div>' +
+    '<div class="editor-split"><div class="editor-code-pane"><div class="editor-line-nums" id="lines-' + section.id + '">1</div>' +
+    '<textarea class="editor-textarea" id="editor-' + section.id + '" spellcheck="false" oninput="editorInput(\'' + section.id + '\')" onkeydown="handleEditorTab(event)">' + escHtml(savedCode) + '</textarea></div>' +
+    '<div class="editor-preview-pane"><div class="editor-preview-label">PREVIEW</div>' +
+    '<iframe class="editor-preview-iframe" id="preview-' + section.id + '"></iframe></div></div>' +
+    '<div class="editor-console" id="console-' + section.id + '"><div class="editor-console-line">&#9658; Click Run or edit to preview</div></div></div>' +
+    '<div class="editor-challenges"><div class="editor-challenge-label">TRY THESE</div>';
+  ((editorDef && editorDef.challenges) || []).forEach(function(ch, ci) {
+    var chKey = section.id + '-ch-' + ci;
+    var done = !!(state.challengesDone && state.challengesDone[chKey]);
+    c += '<div class="editor-challenge-item ' + (done ? 'ch-done' : '') + '" id="chitem-' + chKey + '">' +
+      '<button class="ch-check-btn" onclick="toggleChallenge(\'' + chKey + '\',0,' + si + ')" title="' + (done ? 'Mark incomplete' : 'Mark done') + '">' + (done ? '&#10003;' : '&#9675;') + '</button>' +
+      '<span class="ch-text">' + ch + '</span></div>';
+  });
+  c += '</div></div>';
+
+  // QUIZ
+  var answered = state.quizAnswered[section.id];
+  var _msCheck = (state.quizMultiState && state.quizMultiState[section.id]) || null;
+  var _quizAnswered = (answered !== undefined) || (_msCheck && (_msCheck.done || Object.keys(_msCheck.answers || {}).length > 0));
+  var q = '<div class="section-inner-pad"><div class="holo-quiz-card"><div class="holo-quiz-inner' + (_quizAnswered ? ' holo-answered' : '') + '">' +
+    '<div class="holo-quiz-back"><div class="hq-corner hq-corner-tl"><span class="hq-ace">A</span><span class="hq-suit">&#9824;</span></div>' +
+    '<div class="hq-center">' + sageOwlSVG(90, 99) + '<div class="holo-quiz-back-label">SAGE</div><div class="holo-quiz-back-sublabel">QUIZ</div></div>' +
+    '<div class="hq-corner hq-corner-br"><span class="hq-ace">A</span><span class="hq-suit">&#9824;</span></div></div>';
+
+  if (section.quiz && section.quiz.questions) {
+    // multi-question
+    var _mState = (state.quizMultiState && state.quizMultiState[section.id]) || { answers: {}, done: false };
+    q += '<div class="holo-quiz-front hq-multi">';
+    section.quiz.questions.forEach(function(qItem, qi) {
+      var _ans = _mState.answers[qi];
+      var _answered = _ans !== undefined;
+      q += '<div class="hq-multi-q' + (_answered ? ' hq-answered' : '') + '">' +
+        '<div class="hq-question">' + (qi + 1) + '. ' + qItem.question + '</div>' +
+        '<div class="hq-options">';
+      qItem.options.forEach(function(opt, oi) {
+        var cls = 'hq-opt';
+        if (_answered) { cls += oi === qItem.correct ? ' hq-correct' : (oi === _ans ? ' hq-wrong' : ' hq-dim'); }
+        q += '<button class="' + cls + '"' + (_answered ? ' disabled' : '') + ' onclick="answerMultiQuiz(\'' + section.id + '\',' + qi + ',' + oi + ',' + qItem.correct + ',\'' + trackId + '\',' + si + ')">' + opt + '</button>';
+      });
+      q += '</div>';
+      if (_answered) q += '<div class="hq-feedback">' + (_ans === qItem.correct ? '&#10003; ' : '&#10007; ') + qItem.feedback + '</div>';
+      q += '</div>';
+    });
+    q += '</div>';
+  } else if (section.quiz) {
+    q += '<div class="holo-quiz-front">' +
+      '<div class="hq-question">' + section.quiz.question + '</div>' +
+      '<div class="hq-options">';
+    section.quiz.options.forEach(function(opt, oi) {
+      var cls = 'hq-opt';
+      if (answered !== undefined) { cls += oi === section.quiz.correct ? ' hq-correct' : (oi === answered ? ' hq-wrong' : ' hq-dim'); }
+      q += '<button class="' + cls + '"' + (answered !== undefined ? ' disabled' : '') + ' onclick="answerTrackQuiz(\'' + section.id + '\',' + oi + ',' + section.quiz.correct + ',\'' + trackId + '\',' + si + ')">' + opt + '</button>';
+    });
+    q += '</div>';
+    if (answered !== undefined) {
+      q += _quizFeedbackHtml(answered === section.quiz.correct, section.quiz.feedback);
+    }
+    q += '</div>';
+  }
+  q += '</div></div></div>';
+
+  // NOTES
+  var noteVal = (state.notes && state.notes[section.id]) || '';
+  var noteWords = noteVal.trim().split(/\s+/).filter(Boolean).length;
+  var n = '<div class="section-inner-pad"><div class="notes-panel">' +
+    '<div class="notes-header"><div class="notes-title">Your Notes</div>' +
+    '<div class="notes-save-status" id="notes-saved-' + section.id + '">Saved</div></div>' +
+    '<div class="notes-prompt-card"><div class="notes-prompt-q">What\'s the one thing to remember about <em>' + escHtml(section.title) + '</em>?</div>' +
+    '<div class="notes-prompt-hint">No jargon. If you can explain it simply, you understand it.</div></div>' +
+    '<textarea class="notes-textarea" id="notes-ta-' + section.id + '" placeholder="Start with the main idea, then say why it matters..." oninput="onNoteInput(\'' + section.id + '\')">' + escHtml(noteVal) + '</textarea>' +
+    '<div class="notes-footer"><span class="notes-wc-wrap"><span class="notes-wordcount' + (noteWords >= 30 ? ' notes-wc-active' : '') + '" id="notes-wc-' + section.id + '">' + noteWords + ' word' + (noteWords !== 1 ? 's' : '') + '</span>' +
+    '<span class="notes-wc-check' + (noteWords >= 30 ? ' visible' : '') + '" id="notes-wc-check-' + section.id + '">&#10003;</span></span>' +
+    '<span class="notes-footer-hint">Auto-saved to your browser</span></div></div></div>';
+
+  // GATE
+  var g = '<div class="gate-box' + (isDone ? ' complete' : '') + '">' +
+    '<div class="gate-label">' + (isDone ? '&#10003; SECTION COMPLETE' : 'TO COMPLETE THIS SECTION') + '</div>' +
+    '<div class="gate-checks">' +
+    '<div class="gate-check-row done" id="gate-read-' + section.id + '"><div class="gate-check-dot">&#10003;</div>Read the section</div>' +
+    (showEditor ? '<div class="gate-check-row ' + (gate.code ? 'done' : '') + '" id="gate-code-' + section.id + '"><div class="gate-check-dot">' + (gate.code ? '&#10003;' : '') + '</div>Try the code editor</div>' : '') +
+    (showQuiz ? '<div class="gate-check-row ' + (gate.quiz ? 'done' : '') + '" id="gate-quiz-' + section.id + '"><div class="gate-check-dot">' + (gate.quiz ? '&#10003;' : '') + '</div>' + (section.quiz ? 'Pass the knowledge check' : 'Complete the checklist') + '</div>' : '') +
+    '</div></div>';
+
+  // NAV
+  var nav = '<div class="section-nav">' +
+    '<button class="nav-btn" onclick="prevTrackSection(\'' + trackId + '\',' + si + ')"' + (si === 0 ? ' disabled' : '') + '>&#8592; Previous</button>' +
+    (isDone && si < track.sections.length - 1 ? '<button class="nav-btn primary" onclick="nextTrackSection(\'' + trackId + '\',' + si + ')">Next &#8594;</button>' : '') +
+    '</div>';
+
+  var rs = document.getElementById('right-sidebar');
+  if (rs) rs.style.display = 'none';
+  var ls = document.getElementById('left-sidebar');
+  if (ls) ls.style.display = 'none';
+  var grid = document.querySelector('.app-grid');
+  if (grid) grid.style.gridTemplateColumns = '1fr';
+
+  if (!isLoggedIn && !isGuest) {
+    document.getElementById('auth-screen').style.display = 'flex';
+    document.getElementById('cover').style.display = 'none';
+    document.body.style.overflow = 'hidden';
+    return;
+  }
+
+  document.getElementById('main-content').innerHTML = tabs +
+    '<div class="section-panel active" id="spanel-read-' + section.id + '">' + r + '</div>' +
+    (showEditor ? '<div class="section-panel" id="spanel-code-' + section.id + '">' + c + '</div>' : '') +
+    (showQuiz ? '<div class="section-panel" id="spanel-quiz-' + section.id + '">' + q + '</div>' : '') +
+    '<div class="section-panel" id="spanel-notes-' + section.id + '">' + n + '</div>' +
+    g + nav;
+
+  var _mc = document.getElementById('main-content');
+  if (_mc) {
+    _mc.classList.remove('section-slide-out-left', 'section-slide-out-right', 'section-slide-in', 'section-slide-in-left');
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() { if (_mc) _mc.classList.add('section-slide-in'); });
+    });
+  }
+  document.getElementById('main-content').scrollTop = 0;
+  window.scrollTo(0, 0);
+  startSectionTimer(section.id);
+  closeSectionCompletePopup();
+  if (allDone && !isDone) setTimeout(function() { showTrackCompletePopup(section.id); }, 400);
+  if (showEditor) setTimeout(function() { initEditor(section.id, editorDef.code); }, 100);
+  setTimeout(function() {
+    var rp = document.getElementById('spanel-read-' + section.id);
+    if (rp) highlightKeyTerms(rp);
+  }, 50);
+  (function() {
+    var mc = document.getElementById('main-content');
+    if (!mc) return;
+    if (mc._readProgressFn) mc.removeEventListener('scroll', mc._readProgressFn);
+    mc._readProgressFn = function() {
+      var bar = document.getElementById('read-progress-bar');
+      if (!bar) return;
+      var total = mc.scrollHeight - mc.clientHeight;
+      var pct = total > 0 ? Math.min(100, (mc.scrollTop / total) * 100) : 100;
+      bar.style.width = pct + '%';
+    };
+    mc.addEventListener('scroll', mc._readProgressFn);
+  })();
+}
+
+function answerTrackQuiz(sectionId, chosen, correct, trackId, si) {
+  state.quizAnswered[sectionId] = chosen;
+  if (chosen === correct) {
+    awardXP(10, 'quiz-' + sectionId, window.innerWidth / 2, 300);
+    markGate(sectionId, 'quiz');
+    logActivity('quiz', 'Quiz: ' + (getTrack(trackId) && getTrack(trackId).sections[si] ? getTrack(trackId).sections[si].title : sectionId), 15);
+  }
+  loadTrackSection(trackId, si);
+}
+
+function answerMultiQuiz(sectionId, qi, chosen, correct, trackId, si) {
+  if (!state.quizMultiState) state.quizMultiState = {};
+  if (!state.quizMultiState[sectionId]) state.quizMultiState[sectionId] = { answers: {}, done: false };
+  state.quizMultiState[sectionId].answers[qi] = chosen;
+  var track = getTrack(trackId);
+  if (!track) return;
+  var section = track.sections[si];
+  if (section && section.quiz && section.quiz.questions) {
+    var total = section.quiz.questions.length;
+    var answered = Object.keys(state.quizMultiState[sectionId].answers).length;
+    if (answered >= total) {
+      state.quizMultiState[sectionId].done = true;
+      var score = 0;
+      section.quiz.questions.forEach(function(q, qIdx) { if (state.quizMultiState[sectionId].answers[qIdx] === q.correct) score++; });
+      if (score >= Math.ceil(total * 0.7)) markGate(sectionId, 'quiz');
+    }
+  }
+  saveState();
+  loadTrackSection(trackId, si);
 }
 
 function _quizFeedbackHtml(correct, feedbackText) {
@@ -3765,6 +4180,31 @@ function renderLearnHub() {
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
     '</div>' +
     '<div class="fc-row" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;">' + cardsHtml + '</div>' +
+    (function() {
+      var unlocked = isTrackUnlocked();
+      var tracksHtml = (typeof TRACKS !== 'undefined' ? TRACKS : []).map(function(t) {
+        var done = isTrackComplete(t.id);
+        var doneSecs = t.sections.filter(function(s) { return !!state.completed[s.id]; }).length;
+        var r = parseInt(t.color.slice(1,3),16), g = parseInt(t.color.slice(3,5),16), b = parseInt(t.color.slice(5,7),16);
+        var glow = 'rgba(' + r + ',' + g + ',' + b + ',0.30)';
+        return '<div class="trk-card' + (!unlocked ? ' trk-locked' : '') + (done ? ' trk-done' : '') + '"' +
+          ' style="--trk-color:' + t.color + ';--trk-glow:' + glow + '"' +
+          (unlocked ? ' onclick="renderTrackHub(\'' + t.id + '\')"' : '') + '>' +
+          '<div class="trk-card-tag">' + t.tag + (done ? ' &#10003;' : '') + '</div>' +
+          '<div class="trk-card-title">' + t.title + '</div>' +
+          '<div class="trk-card-sub">' + t.subtitle + '</div>' +
+          '<div class="trk-card-prog">' + doneSecs + '/' + t.sections.length + ' sections</div>' +
+          (!unlocked ? '<div class="trk-lock-badge">&#128274; Floor 7 Required</div>' : '') +
+          '</div>';
+      }).join('');
+      return '<div class="hub-tracks-section">' +
+        '<div class="hub-tracks-hdr">' +
+          '<div class="hub-tracks-title">// SPECIALISATION TRACKS</div>' +
+          '<div class="hub-tracks-sub">' + (unlocked ? 'Choose your path.' : 'Complete all 7 floors to unlock.') + '</div>' +
+        '</div>' +
+        '<div class="hub-tracks-row">' + tracksHtml + '</div>' +
+        '</div>';
+    })() +
   '</div>' +
   '<div class="fc-modal-overlay fc-modal-hidden" id="fc-modal-overlay" onclick="closeFloorModal()">' +
     '<div class="fc-modal" id="fc-modal" onclick="event.stopPropagation()">' +
