@@ -2186,7 +2186,6 @@ function goToFloor(fi) {
   }
 }
 function goToSection(fi, si) {
-  destroySageTorch();
   stopNarration();
   if (isRestLocked(fi, si)) {
     var b = getFloorBreakState(fi);
@@ -2703,8 +2702,6 @@ if (!isLoggedIn && !isGuest) {
     };
     mc.addEventListener('scroll', mc._readProgressFn);
   })();
-  // Sage torch guide — desktop reading companion
-  setTimeout(initSageTorch, 400);
 }
 
 function escHtml(str) {
@@ -4211,120 +4208,7 @@ function getChallengeIcon(type, color, sz) {
   }
 }
 
-// ============================================
-// SAGE TORCH GUIDE — scroll-linked reading companion
-// ============================================
-var _sageTorchRAF = null;
-var _sageTorchActive = false;
-
-function sageTorchOwlSVG() {
-  return '<svg width="62" height="90" viewBox="0 0 62 90" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-    // Torch handle
-    '<rect x="46" y="44" width="5" height="30" rx="2.5" fill="#7c5a1e"/>' +
-    // Wrap rings on handle
-    '<rect x="45" y="49" width="7" height="2.5" rx="1.2" fill="#a07830"/>' +
-    '<rect x="45" y="56" width="7" height="2.5" rx="1.2" fill="#a07830"/>' +
-    // Flame outer glow
-    '<ellipse cx="48.5" cy="34" rx="9" ry="12" fill="#ff6a00" opacity="0.35" class="stf-flicker"/>' +
-    // Flame layers
-    '<g class="stf-flicker">' +
-      '<ellipse cx="48.5" cy="31" rx="6" ry="9" fill="#ff8c00"/>' +
-      '<ellipse cx="48.5" cy="28" rx="4" ry="6.5" fill="#ffa500"/>' +
-      '<ellipse cx="48.5" cy="25.5" rx="2.5" ry="4" fill="#ffd600"/>' +
-      '<ellipse cx="48.5" cy="23.5" rx="1.5" ry="2.5" fill="#fff8dc" opacity="0.9"/>' +
-    '</g>' +
-    // Soft halo from torch
-    '<ellipse cx="48.5" cy="30" rx="18" ry="14" fill="#ffaa00" opacity="0.06"/>' +
-    // Body
-    '<ellipse cx="26" cy="61" rx="17" ry="19" fill="#1a2744"/>' +
-    '<ellipse cx="26" cy="64" rx="10" ry="12" fill="#212f54"/>' +
-    // Head
-    '<ellipse cx="26" cy="38" rx="14" ry="14" fill="#1a2744"/>' +
-    // Ear tufts
-    '<path d="M16 27 L13 16 L21 24Z" fill="#1a2744"/>' +
-    '<path d="M36 27 L39 16 L31 24Z" fill="#1a2744"/>' +
-    // Eyes
-    '<circle cx="20" cy="37" r="5.5" fill="#0f172a"/>' +
-    '<circle cx="32" cy="37" r="5.5" fill="#0f172a"/>' +
-    '<circle cx="20" cy="37" r="3.8" fill="#7dd3fc"/>' +
-    '<circle cx="32" cy="37" r="3.8" fill="#7dd3fc"/>' +
-    '<circle cx="21" cy="36" r="1.6" fill="#fff"/>' +
-    '<circle cx="33" cy="36" r="1.6" fill="#fff"/>' +
-    // Beak
-    '<path d="M26 43 L23 47 L29 47Z" fill="#f59e0b"/>' +
-    // Right wing (raised, holding torch)
-    '<path d="M39 52 C46 46 54 44 54 53 C54 61 45 63 39 60Z" fill="#2d3f6a"/>' +
-    // Left wing
-    '<path d="M13 52 C6 47 0 50 2 57 C4 63 12 63 14 59Z" fill="#2d3f6a"/>' +
-    // Feet
-    '<line x1="20" y1="77" x2="15" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="20" y1="77" x2="20" y2="87" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="20" y1="77" x2="25" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="32" y1="77" x2="27" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="32" y1="77" x2="32" y2="87" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="32" y1="77" x2="37" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '</svg>';
-}
-
-function initSageTorch() {
-  if (window.innerWidth < 960) return;
-  destroySageTorch();
-
-  var mc = document.getElementById('main-content');
-  if (!mc) return;
-
-  // Owl guide
-  var guide = document.createElement('div');
-  guide.id = 'sage-torch-guide';
-  guide.className = 'sage-torch-guide';
-  guide.innerHTML = sageTorchOwlSVG();
-
-  // Torch light cone
-  var light = document.createElement('div');
-  light.id = 'sage-torch-light';
-  light.className = 'sage-torch-light';
-
-  document.body.appendChild(light);
-  document.body.appendChild(guide);
-  _sageTorchActive = true;
-
-  // After fly-in, switch to float animation
-  setTimeout(function() {
-    if (document.getElementById('sage-torch-guide')) {
-      guide.classList.add('sage-torch-floating');
-    }
-  }, 650);
-
-  function tick() {
-    if (!_sageTorchActive) return;
-    var rect = mc.getBoundingClientRect();
-    // Owl sits just outside the right edge of the content column
-    var owlLeft = rect.right + 14;
-    var owlTop  = window.innerHeight * 0.40;
-
-    guide.style.left = owlLeft + 'px';
-    guide.style.top  = owlTop  + 'px';
-
-    // Light cone emanates leftward from the torch flame (top of owl)
-    light.style.left = (owlLeft - 460) + 'px';
-    light.style.top  = (owlTop - 20)   + 'px';
-
-    _sageTorchRAF = requestAnimationFrame(tick);
-  }
-  tick();
-}
-
-function destroySageTorch() {
-  _sageTorchActive = false;
-  if (_sageTorchRAF) { cancelAnimationFrame(_sageTorchRAF); _sageTorchRAF = null; }
-  var g = document.getElementById('sage-torch-guide');
-  var l = document.getElementById('sage-torch-light');
-  if (g) g.remove();
-  if (l) l.remove();
-}
-
 function renderLearnHub() {
-  destroySageTorch();
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
   var ls = document.getElementById('left-sidebar');
