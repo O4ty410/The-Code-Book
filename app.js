@@ -428,6 +428,7 @@ let state = {
   codeCanvasOpacity: 100,
   narratorGender: 'female',
   autoScroll: false,
+  floorRestBreak: null,
   challengesDone: {},
   streakProtectedToday: false,
   revKnown: {},
@@ -457,6 +458,7 @@ function loadState() {
       state.codeCanvasOpacity = (s.codeCanvasOpacity !== undefined) ? s.codeCanvasOpacity : 100;
       state.narratorGender = s.narratorGender || 'female';
       state.autoScroll = !!s.autoScroll;
+      state.floorRestBreak = s.floorRestBreak || null;
       state.challengesDone = s.challengesDone || {};
       state.streakProtectedToday = s.streakProtectedToday || false;
       state.revKnown = s.revKnown || {};
@@ -496,6 +498,7 @@ function saveState() {
     codeCanvasOpacity: state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100,
     narratorGender: state.narratorGender || 'female',
     autoScroll: !!state.autoScroll,
+    floorRestBreak: state.floorRestBreak || null,
     challengesDone: state.challengesDone || {},
     streakProtectedToday: state.streakProtectedToday || false,
     revKnown: state.revKnown || {},
@@ -2184,6 +2187,10 @@ function goToFloor(fi) {
 }
 function goToSection(fi, si) {
   stopNarration();
+  if (isRestLocked(fi, si)) {
+    var b = getFloorBreakState(fi);
+    if (b) { showRestBreakPopup(fi, FLOORS[fi].sections.length - getBreakMidpoint(fi)); return; }
+  }
   state.currentFloor = fi + 1;
   state.currentSection = si;
   saveState();
@@ -2238,22 +2245,36 @@ function renderSectionStrip(fi, si) {
   var floor = FLOORS[fi];
   if (!floor) return '';
   var color = floor.color || '#c8a96e';
+  var breakState = getFloorBreakState(fi);
+  var mid = getBreakMidpoint(fi);
   var html = '<div class="section-strip">';
   floor.sections.forEach(function(sec, i) {
     var isDone = !!state.completed[sec.id];
     var isCurrent = i === si;
+    var restLocked = breakState && mid >= 0 && i >= mid;
     var cls = 'section-strip-item' +
       (isCurrent ? ' ss-active' : '') +
-      (isDone && !isCurrent ? ' ss-done' : '');
-    var style = isCurrent
-      ? ' style="color:' + color + ';border-color:' + color + '"'
-      : '';
+      (isDone && !isCurrent ? ' ss-done' : '') +
+      (restLocked ? ' ss-rest-locked' : '');
+    var style = isCurrent ? ' style="color:' + color + ';border-color:' + color + '"' : '';
     html += '<div class="' + cls + '"' + style +
       ' onclick="goToSection(' + fi + ',' + i + ')">' +
-      (isDone && !isCurrent ? '✓ ' : '') +
+      (restLocked ? '🔒 ' : isDone && !isCurrent ? '✓ ' : '') +
       (i + 1) + '. ' + sec.title +
       '</div>';
   });
+  if (breakState) {
+    html += '<div class="ss-break-notice">🔒 Rest break active — unlocks in <span id="ss-countdown">' + formatBreakCountdown(breakState.unlocksAt) + '</span></div>';
+    setTimeout(function() {
+      var tick = setInterval(function() {
+        var el = document.getElementById('ss-countdown');
+        if (!el) { clearInterval(tick); return; }
+        var rem = Math.max(0, breakState.unlocksAt - Date.now());
+        el.textContent = formatBreakCountdown(breakState.unlocksAt);
+        if (rem <= 0) { clearInterval(tick); getFloorBreakState(fi); renderFloor(fi, si); }
+      }, 1000);
+    }, 0);
+  }
   html += '</div>';
   return html;
 }
@@ -4506,6 +4527,18 @@ function completeSection(sectionId, fi, si) {
   showSectionRecap(section, function() {
     // Brief pause so button press animation is visible, then advance
     setTimeout(function() {
+      // Fatigue break: if we just finished the midpoint section, lock the rest
+      var mid = getBreakMidpoint(fi);
+      if (mid > 0 && si === mid - 1 && !isNowComplete) {
+        if (!getFloorBreakState(fi)) {
+          state.floorRestBreak = { fi: fi, unlocksAt: Date.now() + REST_BREAK_MS };
+          saveState();
+        }
+        var remaining = FLOORS[fi].sections.length - mid;
+        renderFloor(fi, si);
+        showRestBreakPopup(fi, remaining);
+        return;
+      }
       var floor = FLOORS[fi];
       if (!isNowComplete && floor && si < floor.sections.length - 1) {
         // Auto-advance to the next section with slide animation
@@ -4589,6 +4622,75 @@ function nextSection(fi, si) {
     if (si < floor.sections.length - 1) { state.currentSection = si + 1; saveState(); renderNav(); renderFloor(fi, si + 1); }
     else if (fi < FLOORS.length - 1) { goToFloor(fi + 1); }
   }, 220);
+}
+
+// ── FATIGUE BREAK SYSTEM ──────────────────────────────────────────────────
+var REST_BREAK_MS = 30 * 60 * 1000; // 30 minutes
+var REST_BREAK_MIN_SECTIONS = 5;    // only trigger for floors with >5 sections
+
+function getBreakMidpoint(fi) {
+  var floor = FLOORS[fi];
+  if (!floor || floor.sections.length <= REST_BREAK_MIN_SECTIONS) return -1;
+  return Math.ceil(floor.sections.length / 2);
+}
+
+function getFloorBreakState(fi) {
+  var b = state.floorRestBreak;
+  if (!b || b.fi !== fi) return null;
+  if (Date.now() >= b.unlocksAt) {
+    state.floorRestBreak = null;
+    saveState();
+    return null;
+  }
+  return b;
+}
+
+function isRestLocked(fi, si) {
+  var mid = getBreakMidpoint(fi);
+  if (mid < 0) return false;
+  return !!getFloorBreakState(fi) && si >= mid;
+}
+
+function formatBreakCountdown(unlocksAt) {
+  var ms = Math.max(0, unlocksAt - Date.now());
+  var m = Math.floor(ms / 60000);
+  var s = Math.floor((ms % 60000) / 1000);
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function showRestBreakPopup(fi, sectionsRemaining) {
+  var existing = document.getElementById('rest-break-overlay');
+  if (existing) existing.remove();
+
+  var overlay = document.createElement('div');
+  overlay.id = 'rest-break-overlay';
+  overlay.className = 'rest-break-overlay';
+
+  var unlocksAt = state.floorRestBreak ? state.floorRestBreak.unlocksAt : Date.now() + REST_BREAK_MS;
+
+  overlay.innerHTML =
+    '<div class="rest-break-panel">' +
+      '<div class="rest-break-owl">' + sageOwlSVG(56, 62) + '</div>' +
+      '<div class="rest-break-title">Time for a rest.</div>' +
+      '<div class="rest-break-body">You\'ve cleared the first half of this floor. ' +
+        'Your brain needs time to consolidate what you\'ve learned — ' +
+        'that\'s not a suggestion, it\'s how memory works.<br><br>' +
+        'Step away. Get some water. Come back fresh.' +
+      '</div>' +
+      '<div class="rest-break-timer-label">The next ' + sectionsRemaining + ' section' + (sectionsRemaining !== 1 ? 's' : '') + ' unlock in</div>' +
+      '<div class="rest-break-timer" id="rest-break-countdown">' + formatBreakCountdown(unlocksAt) + '</div>' +
+      '<button class="rest-break-btn" onclick="document.getElementById(\'rest-break-overlay\').remove()">Got it — I\'ll be back</button>' +
+    '</div>';
+
+  document.body.appendChild(overlay);
+
+  var tick = setInterval(function() {
+    var el = document.getElementById('rest-break-countdown');
+    if (!el) { clearInterval(tick); return; }
+    var remaining = Math.max(0, unlocksAt - Date.now());
+    el.textContent = formatBreakCountdown(unlocksAt);
+    if (remaining <= 0) clearInterval(tick);
+  }, 1000);
 }
 
 // --- VOICE NARRATION SYSTEM ---
