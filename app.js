@@ -2827,7 +2827,6 @@ function markGate(sectionId, key) {
     setTimeout(function() { showCodeEditorPromptPopup(sectionId); }, 300);
   }
 }
-}
 
 function showSectionCompletePopup(sectionId, fi, si) {
   closeSectionCompletePopup();
