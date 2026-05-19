@@ -6069,21 +6069,6 @@ function renderProfilePanel() {
     ? 'All 7 floors complete. Mission accomplished.'
     : 'Floor ' + (state.currentFloor || 1) + ' — ' + curFloorTitle + '. ' + doneSecs + ' section' + (doneSecs === 1 ? '' : 's') + ' complete.';
 
-  // Journey map
-  var journeyHtml = '<div class="pf-journey"><div class="pf-journey-scroll"><div class="pf-journey-track">';
-  FLOORS.forEach(function(f, fi) {
-    var isComplete = isFloorComplete(fi);
-    var isCurrent  = (fi === floorIndex);
-    var nodeCls    = isComplete ? 'pf-nd-done' : isCurrent ? 'pf-nd-active' : 'pf-nd-locked';
-    if (fi > 0) journeyHtml += '<div class="pf-nd-line' + (isFloorComplete(fi - 1) ? ' pf-nd-lit' : '') + '"></div>';
-    journeyHtml +=
-      '<div class="pf-node ' + nodeCls + '" style="--nd-col:' + (f.color || 'var(--accent)') + '">' +
-        '<div class="pf-node-ring">' + getFloorIcon(fi, 30) + '</div>' +
-        '<span class="pf-node-lbl">F' + (fi + 1) + '</span>' +
-      '</div>';
-  });
-  journeyHtml += '</div></div></div>';
-
   // Theme selector
   var themesHtml = '<div class="pf-themes">' +
     PROF_THEMES.map(function(t) {
@@ -6109,10 +6094,9 @@ function renderProfilePanel() {
   panel.innerHTML =
     '<div class="prof-layout pf-v2" data-prof-theme="' + currentTheme + '">' +
 
-    // Header
+    // Header — name, rank, current mission
     '<div class="pf-header">' +
       '<div class="pf-hdr-main">' +
-        '<div class="pf-header-status"><span class="pf-status-dot"></span>ACTIVE OPERATOR</div>' +
         '<div class="pf-header-name">' + escHtml(name) + '</div>' +
         '<div class="pf-header-rank">' + rank + ' · LEVEL ' + cur.level + ' — ' + levelName.toUpperCase() + '</div>' +
         '<div class="pf-header-mission">' + missionLine + '</div>' +
@@ -6132,13 +6116,8 @@ function renderProfilePanel() {
       '<div class="pf-xp-bar"><div class="pf-xp-fill" style="width:' + levelPct + '%"></div></div>' +
     '</div>' +
 
-    // Journey map
-    journeyHtml +
-
-    // Stats
+    // Stats — streak / sections / focus
     '<div class="pf-stats-strip">' +
-      '<div class="pf-stat-cell"><div class="pf-stat-n">' + state.xp + '</div><div class="pf-stat-k">XP</div></div>' +
-      '<div class="pf-stat-div"></div>' +
       '<div class="pf-stat-cell"><div class="pf-stat-n">' + (state.streak || 0) + '</div><div class="pf-stat-k">DAY STREAK</div></div>' +
       '<div class="pf-stat-div"></div>' +
       '<div class="pf-stat-cell"><div class="pf-stat-n">' + doneSecs + '</div><div class="pf-stat-k">SECTIONS</div></div>' +
@@ -6146,11 +6125,10 @@ function renderProfilePanel() {
       '<div class="pf-stat-cell"><div class="pf-stat-n">' + timeDisplay + '</div><div class="pf-stat-k">FOCUS</div></div>' +
     '</div>' +
 
-    // Streak calendar
+    // Last 7 days streak calendar
     (function() {
       var days = ['M','T','W','T','F','S','S'];
       var now = new Date();
-      var todayDow = (now.getDay() + 6) % 7; // Mon=0
       var dots = '';
       for (var d = 6; d >= 0; d--) {
         var dt = new Date(now); dt.setDate(now.getDate() - d);
@@ -6175,7 +6153,7 @@ function renderProfilePanel() {
       '<div class="pf-sage-text">' + sageNote + '</div>' +
     '</div>' +
 
-    // Theme
+    // Operative colour
     '<div class="pf-section">' +
       '<div class="pf-section-hdr">// OPERATIVE COLOUR</div>' +
       themesHtml +
@@ -6208,91 +6186,16 @@ function renderProfilePanel() {
       '</div>' +
     '</div>' +
 
-    // Badges
+    // Clearance badges
     '<div class="pf-section">' +
       '<div class="pf-section-hdr pf-section-hdr-row">// CLEARANCE BADGES <span class="pf-badge-count">' + (state.earnedBadges || []).length + ' / ' + BADGES.length + '</span></div>' +
       badgesHtml +
     '</div>' +
 
-    // Insights
-    (function() {
-      // 7-day bar chart
-      var days = [], dayLabels = [];
-      var maxSecs = 1;
-      for (var d = 6; d >= 0; d--) {
-        var dt = new Date(); dt.setDate(dt.getDate() - d);
-        var n = parseInt(localStorage.getItem('daily_sections_' + dt.toDateString()) || '0');
-        days.push(n);
-        if (n > maxSecs) maxSecs = n;
-        var dow = dt.getDay();
-        dayLabels.push(['Su','Mo','Tu','We','Th','Fr','Sa'][dow]);
-      }
-      var barHtml = '<div class="ins-chart">' +
-        days.map(function(n, i) {
-          var h = maxSecs > 0 ? Math.max(4, Math.round((n / maxSecs) * 52)) : 4;
-          var isToday = i === 6;
-          return '<div class="ins-bar-col">' +
-            '<div class="ins-bar-wrap"><div class="ins-bar' + (isToday ? ' ins-bar-today' : '') + (n === 0 ? ' ins-bar-empty' : '') + '" style="height:' + h + 'px"></div></div>' +
-            '<div class="ins-bar-lbl' + (isToday ? ' ins-lbl-today' : '') + '">' + dayLabels[i] + '</div>' +
-            (n > 0 ? '<div class="ins-bar-val">' + n + '</div>' : '') +
-          '</div>';
-        }).join('') +
-      '</div>';
-
-      // Quiz accuracy per floor
-      var accHtml = '<div class="ins-accuracy">';
-      FLOORS.forEach(function(f, fi) {
-        var total = 0, correct = 0;
-        f.sections.forEach(function(s) {
-          if (!s.quiz) return;
-          if (s.quiz.questions) {
-            var ms = state.quizMultiState && state.quizMultiState[s.id];
-            if (ms && ms.done) {
-              s.quiz.questions.forEach(function(q, qi) { total++; if (ms.answers[qi] === q.correct) correct++; });
-            }
-          } else {
-            var ans = state.quizAnswered && state.quizAnswered[s.id];
-            if (ans !== undefined) { total++; if (ans === s.quiz.correct) correct++; }
-          }
-        });
-        var pct = total > 0 ? Math.round(correct / total * 100) : null;
-        var color = f.color || '#c8a96e';
-        accHtml += '<div class="ins-acc-row">' +
-          '<span class="ins-acc-floor" style="color:' + color + '">F' + (fi + 1) + '</span>' +
-          '<div class="ins-acc-bar-wrap">' +
-            (pct !== null
-              ? '<div class="ins-acc-bar" style="width:' + pct + '%;background:' + color + '"></div>'
-              : '<div class="ins-acc-bar ins-acc-none" style="width:100%"></div>') +
-          '</div>' +
-          '<span class="ins-acc-pct">' + (pct !== null ? pct + '%' : '—') + '</span>' +
-        '</div>';
-      });
-      accHtml += '</div>';
-
-      // SRS breakdown
-      var counts = typeof srsCounts === 'function' ? srsCounts() : { mastered: 0, due: 0, upcoming: 0, new: 0 };
-      var srsHtml = '<div class="ins-srs-row">' +
-        '<div class="ins-srs-cell ins-srs-mastered"><div class="ins-srs-n">' + counts.mastered + '</div><div class="ins-srs-k">Mastered</div></div>' +
-        '<div class="ins-srs-cell ins-srs-due"><div class="ins-srs-n">' + counts.due + '</div><div class="ins-srs-k">Due</div></div>' +
-        '<div class="ins-srs-cell ins-srs-upcoming"><div class="ins-srs-n">' + counts.upcoming + '</div><div class="ins-srs-k">Upcoming</div></div>' +
-        '<div class="ins-srs-cell ins-srs-new"><div class="ins-srs-n">' + counts.new + '</div><div class="ins-srs-k">New</div></div>' +
-      '</div>';
-
-      return '<div class="pf-section">' +
-        '<div class="pf-section-hdr">// LEARNING INSIGHTS</div>' +
-        '<div class="ins-sub-hdr">Sections completed — last 7 days</div>' +
-        barHtml +
-        '<div class="ins-sub-hdr" style="margin-top:18px">Quiz accuracy by floor</div>' +
-        accHtml +
-        '<div class="ins-sub-hdr" style="margin-top:18px">Revision cards</div>' +
-        srsHtml +
-      '</div>';
-    })() +
-
     // Export
     '<div class="pf-section">' +
       '<button class="pf-export-btn" onclick="generateProgressCard()">&#8681; Download Progress Card</button>' +
-      '<button class="pf-export-btn pf-export-notes-btn" onclick="exportNotes()">&#128203; Export Notes</button>' +
+      '<button class="pf-export-btn" onclick="exportNotes()">&#128203; Export Notes</button>' +
     '</div>' +
 
     '</div>';
