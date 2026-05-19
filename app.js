@@ -3981,6 +3981,7 @@ function completeSection(sectionId, fi, si) {
 
   state.completed[sectionId] = true;
   markStreakProtected();
+  _cancelStreakReminder();
   var secXP = getSectionXP(fi);
   awardXP(secXP, 'complete-' + sectionId, bx, by);
   playCompletionSound();
@@ -5150,8 +5151,98 @@ function updateTimerDisplay() {
 })();
 
 // \u2500\u2500\u2500 SERVICE WORKER \u2500\u2500\u2500
-// Registered from sw.js \u2014 Blob URLs are not supported for service workers
-// in modern browsers due to same-origin scope requirements.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      console.log('[SW] registered, scope:', reg.scope);
+      initStreakReminder(reg);
+    }).catch(function(err) {
+      console.warn('[SW] registration failed:', err);
+    });
+  });
+}
+
+// \u2500\u2500\u2500 STREAK REMINDER \u2500\u2500\u2500
+function initStreakReminder(swReg) {
+  if (!swReg || !('Notification' in window)) return;
+
+  var today = new Date().toDateString();
+  var todayKey = 'daily_sections_' + today;
+  var todaySecs = parseInt(localStorage.getItem(todayKey) || '0');
+  var streak = (typeof state !== 'undefined' && state.streak) || 0;
+
+  // Only offer reminders if the user has an active streak but hasn't studied yet today
+  if (streak < 1 || todaySecs > 0) return;
+
+  if (Notification.permission === 'default') {
+    // Offer a gentle opt-in prompt after a short delay (not on first visit)
+    var onboarded = localStorage.getItem('codebook_onboarded');
+    if (!onboarded) return;
+    setTimeout(_offerReminderPermission, 8000);
+  } else if (Notification.permission === 'granted') {
+    _scheduleStreakReminder(swReg);
+  }
+}
+
+function _offerReminderPermission() {
+  if (document.getElementById('notif-banner')) return;
+  var banner = document.createElement('div');
+  banner.id = 'notif-banner';
+  banner.className = 'notif-banner';
+  banner.innerHTML =
+    '<div class="notif-banner-icon">&#128293;</div>' +
+    '<div class="notif-banner-text">' +
+      '<div class="notif-banner-title">Streak reminders</div>' +
+      '<div class="notif-banner-sub">Get a nudge if you haven\'t studied by evening</div>' +
+    '</div>' +
+    '<div class="notif-banner-actions">' +
+      '<button class="notif-banner-yes" onclick="_requestReminderPermission()">Enable</button>' +
+      '<button class="notif-banner-no" onclick="_dismissReminderBanner()">No thanks</button>' +
+    '</div>';
+  document.body.appendChild(banner);
+  requestAnimationFrame(function() { banner.classList.add('notif-banner-in'); });
+}
+
+function _requestReminderPermission() {
+  _dismissReminderBanner();
+  Notification.requestPermission().then(function(perm) {
+    if (perm === 'granted') {
+      navigator.serviceWorker.ready.then(function(reg) { _scheduleStreakReminder(reg); });
+    }
+  });
+}
+
+function _dismissReminderBanner() {
+  var b = document.getElementById('notif-banner');
+  if (!b) return;
+  b.classList.remove('notif-banner-in');
+  setTimeout(function() { if (b.parentNode) b.remove(); }, 300);
+  localStorage.setItem('notif_banner_dismissed', new Date().toDateString());
+}
+
+function _scheduleStreakReminder(swReg) {
+  // Schedule for 8 PM today if it's before 8 PM, else skip
+  var now = new Date();
+  var eight = new Date();
+  eight.setHours(20, 0, 0, 0);
+  var delay = eight - now;
+  if (delay <= 0) return;
+
+  var streak = (typeof state !== 'undefined' && state.streak) || 0;
+  swReg.active && swReg.active.postMessage({
+    type: 'SCHEDULE_REMINDER',
+    delayMs: delay,
+    body: 'You have a ' + streak + '-day streak \u2014 keep it alive! Learn one section today.'
+  });
+}
+
+// Cancel reminder once a section is completed today
+function _cancelStreakReminder() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.ready.then(function(reg) {
+    reg.active && reg.active.postMessage({ type: 'CANCEL_REMINDER' });
+  });
+}
 
 // \u2500\u2500\u2500 INSTALL PROMPT \u2500\u2500\u2500
 var deferredInstallPrompt = null;
