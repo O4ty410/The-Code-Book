@@ -4765,6 +4765,13 @@ function resetSageIdleTimer() {
 
 // Space bar: pause narration + stop auto-scroll (desktop only)
 document.addEventListener('keydown', function(e) {
+  // ⌘K / Ctrl+K — search (intercept before other modifier-key guard)
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearchModal();
+    return;
+  }
+
   // Don't intercept when typing in inputs, textareas, or contenteditable
   var tag = document.activeElement && document.activeElement.tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
@@ -4814,6 +4821,8 @@ document.addEventListener('keydown', function(e) {
 
     case 'Escape':
       // Close any open overlay / modal / sheet
+      var searchModal = document.getElementById('search-modal');
+      if (searchModal) { closeSearchModal(); return; }
       var tourOverlay = document.getElementById('app-tour-overlay');
       if (tourOverlay && tourOverlay.classList.contains('app-tour-visible')) { dismissAppTour(); return; }
       var kbHelp = document.getElementById('kb-help-overlay');
@@ -4841,6 +4850,7 @@ function showKeyboardHelp() {
     '<div class="kb-help-card">' +
       '<div class="kb-help-hdr">Keyboard Shortcuts <button class="kb-help-close" onclick="document.getElementById(\'kb-help-overlay\').remove()">&#215;</button></div>' +
       '<div class="kb-help-grid">' +
+        _kbRow('⌘K / Ctrl+K', 'Search sections') +
         _kbRow('→ / ↓', 'Next section') +
         _kbRow('← / ↑', 'Previous section') +
         _kbRow('Space', 'Pause / resume narration') +
@@ -4856,6 +4866,174 @@ function showKeyboardHelp() {
 
 function _kbRow(key, desc) {
   return '<div class="kb-row"><kbd class="kb-key">' + escHtml(key) + '</kbd><span class="kb-desc">' + escHtml(desc) + '</span></div>';
+}
+
+// ============================================================
+// SEARCH MODAL (\u2318K / Ctrl+K)
+// ============================================================
+var _searchResults = [];
+var _searchCursor = -1;
+
+function openSearchModal() {
+  if (document.getElementById('search-modal')) { closeSearchModal(); return; }
+
+  var backdrop = document.createElement('div');
+  backdrop.id = 'search-backdrop';
+  backdrop.className = 'search-backdrop';
+  backdrop.onclick = closeSearchModal;
+  document.body.appendChild(backdrop);
+
+  var modal = document.createElement('div');
+  modal.id = 'search-modal';
+  modal.className = 'search-modal';
+  modal.innerHTML =
+    '<div class="search-input-wrap">' +
+      '<span class="search-icon">&#128269;</span>' +
+      '<input id="search-input" class="search-input" type="text" placeholder="Search sections, topics\u2026" autocomplete="off" spellcheck="false">' +
+      '<kbd class="search-esc-hint">Esc</kbd>' +
+    '</div>' +
+    '<div id="search-results" class="search-results"></div>';
+  document.body.appendChild(modal);
+
+  requestAnimationFrame(function() {
+    backdrop.classList.add('search-backdrop-open');
+    modal.classList.add('search-modal-open');
+  });
+
+  var input = document.getElementById('search-input');
+  input.focus();
+  _searchResults = [];
+  _searchCursor = -1;
+  _renderSearchPlaceholder();
+
+  input.addEventListener('input', function() {
+    _runSearch(input.value.trim());
+  });
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); _moveCursor(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); _moveCursor(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); _selectSearchResult(_searchCursor); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeSearchModal(); }
+  });
+}
+
+function closeSearchModal() {
+  var modal = document.getElementById('search-modal');
+  var backdrop = document.getElementById('search-backdrop');
+  if (modal) {
+    modal.classList.remove('search-modal-open');
+    setTimeout(function() { if (modal.parentNode) modal.remove(); }, 220);
+  }
+  if (backdrop) {
+    backdrop.classList.remove('search-backdrop-open');
+    setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 220);
+  }
+}
+
+function _renderSearchPlaceholder() {
+  var res = document.getElementById('search-results');
+  if (!res) return;
+  res.innerHTML = '<div class="search-empty">Type to search across all ' + _countAllSections() + ' sections</div>';
+}
+
+function _countAllSections() {
+  var n = 0;
+  if (typeof FLOORS !== 'undefined') FLOORS.forEach(function(f) { n += f.sections.length; });
+  return n;
+}
+
+function _runSearch(q) {
+  var res = document.getElementById('search-results');
+  if (!res) return;
+  if (!q) { _searchResults = []; _searchCursor = -1; _renderSearchPlaceholder(); return; }
+
+  var ql = q.toLowerCase();
+  var matches = [];
+
+  if (typeof FLOORS !== 'undefined') {
+    FLOORS.forEach(function(f, fi) {
+      f.sections.forEach(function(s, si) {
+        var score = 0;
+        var titleL = (s.title || '').toLowerCase();
+        var bodyL = (s.body || '').replace(/<[^>]+>/g, '').toLowerCase();
+        var hintL = (s.hint || '').replace(/<[^>]+>/g, '').toLowerCase();
+
+        if (titleL.includes(ql)) score += titleL.startsWith(ql) ? 20 : 10;
+        if (bodyL.includes(ql)) score += 3;
+        if (hintL.includes(ql)) score += 2;
+
+        if (score > 0) {
+          var snippet = '';
+          var bodyPlain = (s.body || '').replace(/<[^>]+>/g, '');
+          var idx = bodyPlain.toLowerCase().indexOf(ql);
+          if (idx !== -1) {
+            var start = Math.max(0, idx - 40);
+            var end = Math.min(bodyPlain.length, idx + ql.length + 60);
+            snippet = (start > 0 ? '\u2026' : '') + bodyPlain.slice(start, end).trim() + (end < bodyPlain.length ? '\u2026' : '');
+          }
+          matches.push({ fi: fi, si: si, title: s.title, floor: f.title, color: f.color || '#c8a96e', score: score, snippet: snippet });
+        }
+      });
+    });
+  }
+
+  matches.sort(function(a, b) { return b.score - a.score; });
+  _searchResults = matches.slice(0, 12);
+  _searchCursor = _searchResults.length > 0 ? 0 : -1;
+  _renderSearchResults(ql);
+}
+
+function _renderSearchResults(ql) {
+  var res = document.getElementById('search-results');
+  if (!res) return;
+
+  if (_searchResults.length === 0) {
+    res.innerHTML = '<div class="search-empty">No sections found</div>';
+    return;
+  }
+
+  var html = _searchResults.map(function(r, i) {
+    var active = i === _searchCursor ? ' search-result-active' : '';
+    var titleHl = _hlMatch(escHtml(r.title), escHtml(ql));
+    var snippetHl = r.snippet ? _hlMatch(escHtml(r.snippet), escHtml(ql)) : '';
+    return '<button class="search-result' + active + '" data-idx="' + i + '" onclick="searchGoTo(event,' + i + ')">' +
+      '<span class="sr-dot" style="background:' + r.color + '"></span>' +
+      '<span class="sr-body">' +
+        '<span class="sr-floor">Floor ' + (r.fi + 1) + ' \u2014 ' + escHtml(r.floor) + '</span>' +
+        '<span class="sr-title">' + titleHl + '</span>' +
+        (snippetHl ? '<span class="sr-snippet">' + snippetHl + '</span>' : '') +
+      '</span>' +
+      '<span class="sr-arrow">&#8594;</span>' +
+    '</button>';
+  }).join('');
+
+  res.innerHTML = html;
+}
+
+function _hlMatch(text, ql) {
+  if (!ql) return text;
+  return text.replace(new RegExp('(' + ql.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<mark class="search-hl">$1</mark>');
+}
+
+function _moveCursor(dir) {
+  if (_searchResults.length === 0) return;
+  _searchCursor = (_searchCursor + dir + _searchResults.length) % _searchResults.length;
+  var ql = (document.getElementById('search-input') || {}).value || '';
+  _renderSearchResults(ql.trim().toLowerCase());
+  var active = document.querySelector('.search-result-active');
+  if (active) active.scrollIntoView({ block: 'nearest' });
+}
+
+function _selectSearchResult(idx) {
+  if (idx < 0 || idx >= _searchResults.length) return;
+  searchGoTo(null, idx);
+}
+
+function searchGoTo(e, idx) {
+  var r = _searchResults[idx];
+  if (!r) return;
+  closeSearchModal();
+  goToSection(r.fi, r.si);
 }
 
 
