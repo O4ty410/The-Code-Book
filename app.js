@@ -2642,7 +2642,6 @@ if (!isLoggedIn && !isGuest) {
   checkProgressNudge(fi, si);
   checkStreakProtection();
   closeSectionCompletePopup();
-  if (allDone && !isDone) setTimeout(function() { showSectionCompletePopup(section.id, fi, si); }, 400);
   if (showEditor) setTimeout(function() { initEditor(section.id, editorDef.code); }, 100);
   setTimeout(function() {
     var rp = document.getElementById('spanel-read-' + section.id);
@@ -2775,6 +2774,22 @@ function closeNotesReview() {
   document.body.style.overflow = '';
 }
 
+function findSectionById(sectionId) {
+  for (var _fi2 = 0; _fi2 < FLOORS.length; _fi2++) {
+    for (var _si2 = 0; _si2 < FLOORS[_fi2].sections.length; _si2++) {
+      if (FLOORS[_fi2].sections[_si2].id === sectionId) return { section: FLOORS[_fi2].sections[_si2], fi: _fi2, si: _si2, type: 'floor' };
+    }
+  }
+  if (typeof TRACKS !== 'undefined') {
+    for (var _ti = 0; _ti < TRACKS.length; _ti++) {
+      for (var _si3 = 0; _si3 < TRACKS[_ti].sections.length; _si3++) {
+        if (TRACKS[_ti].sections[_si3].id === sectionId) return { section: TRACKS[_ti].sections[_si3], trackId: TRACKS[_ti].id, si: _si3, type: 'track' };
+      }
+    }
+  }
+  return null;
+}
+
 function markGate(sectionId, key) {
   if (!sectionGateState[sectionId]) sectionGateState[sectionId] = { read: true, code: false, quiz: false };
   if (sectionGateState[sectionId][key]) return;
@@ -2791,20 +2806,20 @@ function markGate(sectionId, key) {
   }
   var gate = sectionGateState[sectionId];
   if (gate.read && gate.code && gate.quiz) {
+    // All gates cleared — show completion popup
     if (sectionId.indexOf('tr-') === 0) {
       setTimeout(function() { showTrackCompletePopup(sectionId); }, 300);
     } else {
-      var _fi = state.currentFloor - 1;
-      var _floor = FLOORS[_fi];
-      var _si = 0;
-      if (_floor) {
-        for (var _i = 0; _i < _floor.sections.length; _i++) {
-          if (_floor.sections[_i].id === sectionId) { _si = _i; break; }
-        }
-      }
+      var _found = findSectionById(sectionId);
+      var _fi = _found ? _found.fi : state.currentFloor - 1;
+      var _si = _found ? _found.si : 0;
       setTimeout(function() { showSectionCompletePopup(sectionId, _fi, _si); }, 300);
     }
+  } else if (gate.read && gate.quiz && !gate.code) {
+    // Quiz cleared but code editor still pending — prompt user to open it
+    setTimeout(function() { showCodeEditorPromptPopup(sectionId); }, 300);
   }
+}
 }
 
 function showSectionCompletePopup(sectionId, fi, si) {
@@ -2843,6 +2858,29 @@ function closeSectionCompletePopup() {
   if (!pop) return;
   pop.classList.remove('scp-visible');
   setTimeout(function() { if (pop && pop.parentNode) pop.parentNode.removeChild(pop); }, 300);
+}
+
+function showCodeEditorPromptPopup(sectionId) {
+  closeSectionCompletePopup();
+  var pop = document.createElement('div');
+  pop.id = 'sec-complete-pop';
+  pop.className = 'sec-complete-pop';
+  pop.innerHTML = '<div class="scp-inner">' +
+    '<div class="scp-label">' + sageOwlSVG(20, 22) + '<span>Quiz cleared. Now try the code editor.</span></div>' +
+    '<button class="scp-btn scp-next scp-solo" onclick="closeSectionCompletePopup(); openCodeEditorFromPopup(\'' + sectionId + '\')">Open Code Editor &#8594;</button>' +
+    '</div>';
+  document.body.appendChild(pop);
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() { pop.classList.add('scp-visible'); });
+  });
+}
+
+function openCodeEditorFromPopup(sectionId) {
+  var codeBtn = null;
+  document.querySelectorAll('.section-tab-btn').forEach(function(b) {
+    if (b.textContent.trim() === 'Code Editor') codeBtn = b;
+  });
+  if (codeBtn) switchSectionTab('code', sectionId, codeBtn);
 }
 
 // ─────────────────────────────────────────────────────────────────
