@@ -1862,12 +1862,30 @@ if (!section) { return; }
         var msScore = 0;
         qz.questions.forEach(function(ques, qi) { if (ms.answers[qi] === ques.correct) msScore++; });
         var msPassed = msScore >= Math.ceil(totalQs * 0.7);
+        var wrongReviewHtml = '';
+        var wrongQs = qz.questions.filter(function(ques, qi) { return ms.answers[qi] !== ques.correct; });
+        if (wrongQs.length > 0) {
+          wrongReviewHtml = '<div class="quiz-wrong-review">' +
+            '<div class="quiz-wrong-review-hdr">Review your mistakes</div>' +
+            wrongQs.map(function(ques, _) {
+              var qi = qz.questions.indexOf(ques);
+              var userAns = ms.answers[qi];
+              return '<div class="qwr-item">' +
+                '<div class="qwr-question">' + escHtml(ques.question) + '</div>' +
+                (userAns !== undefined ? '<div class="qwr-row qwr-wrong"><span class="qwr-icon">✗</span>' + escHtml(ques.options[userAns]) + '</div>' : '') +
+                '<div class="qwr-row qwr-correct"><span class="qwr-icon">✓</span>' + escHtml(ques.options[ques.correct]) + '</div>' +
+                (ques.feedback ? '<div class="qwr-feedback">' + escHtml(ques.feedback) + '</div>' : '') +
+              '</div>';
+            }).join('') +
+          '</div>';
+        }
         q += '<div class="quiz-block">' +
           '<div class="quiz-label">KNOWLEDGE CHECK COMPLETE</div>' +
           '<div class="quiz-multi-results">' +
           '<div class="quiz-results-score">' + msScore + '<span> / ' + totalQs + '</span></div>' +
           '<div class="quiz-results-label">' + (msPassed ? 'Nicely done.' : 'Keep studying.') + '</div>' +
           '<div class="quiz-results-msg">' + (msPassed ? 'Section unlocked — mark it complete when ready.' : 'Review the material above, then try again.') + '</div>' +
+          wrongReviewHtml +
           (!msPassed ? '<button class="quiz-retry-btn" onclick="retryMultiQuiz(\'' + section.id + '\',' + fi + ',' + si + ')">Retry Quiz</button>' : '') +
           '</div></div>';
       } else {

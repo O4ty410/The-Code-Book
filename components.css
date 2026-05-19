@@ -7476,3 +7476,61 @@ body.learn-mode #main-col {
   transition: opacity 0.2s;
 }
 .checklist-sage-btn:hover { opacity: 0.85; }
+
+/* ============================================================
+   QUIZ WRONG-ANSWER REVIEW
+   ============================================================ */
+.quiz-wrong-review {
+  width: 100%;
+  margin-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 14px;
+  text-align: left;
+}
+.quiz-wrong-review-hdr {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted, rgba(255,255,255,0.4));
+  margin-bottom: 12px;
+}
+.qwr-item {
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-left: 3px solid rgba(255,80,80,0.4);
+}
+.qwr-question {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.qwr-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 4px;
+}
+.qwr-icon {
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.qwr-wrong { color: rgba(255,100,100,0.85); }
+.qwr-wrong .qwr-icon { color: rgba(255,80,80,0.9); }
+.qwr-correct { color: rgba(120,210,120,0.9); }
+.qwr-correct .qwr-icon { color: rgba(100,200,100,0.9); }
+.qwr-feedback {
+  font-size: 11px;
+  color: var(--text-muted, rgba(255,255,255,0.4));
+  margin-top: 6px;
+  font-style: italic;
+  line-height: 1.5;
+}
