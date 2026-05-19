@@ -425,6 +425,7 @@ let state = {
   sectionStartTime: null,
   sageUsesLeft: SAGE_TOTAL_USES,
   sageLastUsedAt: null,
+  codeCanvasOpacity: 100,
   challengesDone: {},
   streakProtectedToday: false,
   revKnown: {},
@@ -451,6 +452,7 @@ function loadState() {
       state.checklistDone = s.checklistDone || {};
       state.sageUsesLeft = (s.sageUsesLeft !== undefined) ? s.sageUsesLeft : SAGE_TOTAL_USES;
       state.sageLastUsedAt = s.sageLastUsedAt || null;
+      state.codeCanvasOpacity = (s.codeCanvasOpacity !== undefined) ? s.codeCanvasOpacity : 100;
       state.challengesDone = s.challengesDone || {};
       state.streakProtectedToday = s.streakProtectedToday || false;
       state.revKnown = s.revKnown || {};
@@ -487,6 +489,7 @@ function saveState() {
     checklistDone: state.checklistDone || {},
     sageUsesLeft: state.sageUsesLeft,
     sageLastUsedAt: state.sageLastUsedAt || null,
+    codeCanvasOpacity: state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100,
     challengesDone: state.challengesDone || {},
     streakProtectedToday: state.streakProtectedToday || false,
     revKnown: state.revKnown || {},
@@ -677,6 +680,7 @@ function stopLandingCanvas() {
 // ── Hub canvas: twinkling code background (theme-coloured) ─────────────────
 
 var _hubRAF = null;
+var _hubCanvasOpacity = 1.0;
 
 function getHubThemeRGB() {
   var id = getProfTheme();
@@ -844,10 +848,10 @@ function startHubCanvas() {
     lines.forEach(function(line, i) {
       var s = ls[i];
       var twinkle = 0.5 + 0.5 * Math.sin(s.phase + t * s.speed);
-      var a = s.baseAlpha * (0.35 + 0.65 * twinkle);
+      var a = s.baseAlpha * (0.35 + 0.65 * twinkle) * _hubCanvasOpacity;
       if (s.spark > 0) s.spark = Math.max(0, s.spark - dt * s.sparkDecay);
       var glowing = s.spark > 0.05;
-      var fa = Math.min(0.95, a + s.spark * 0.6);
+      var fa = Math.min(0.95, a + s.spark * 0.6 * _hubCanvasOpacity);
 
       ctx.save();
       if (glowing) {
@@ -1434,6 +1438,9 @@ function launchApp() {
   // Show mobile bottom bar
   var mobileBar = document.getElementById('mobile-bottom-bar');
   if (mobileBar) mobileBar.style.display = '';
+
+  // Apply saved canvas opacity
+  _hubCanvasOpacity = (state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100) / 100;
 
   // Render content
   renderNav();
@@ -5870,6 +5877,15 @@ function selectAvatar(id) {
   renderProfilePanel();
 }
 
+function setCodeCanvasOpacity(val) {
+  var v = Math.max(0, Math.min(100, parseInt(val, 10)));
+  state.codeCanvasOpacity = v;
+  _hubCanvasOpacity = v / 100;
+  saveState();
+  var label = document.getElementById('canvas-opacity-val');
+  if (label) label.textContent = v + '%';
+}
+
 function showAvatarPicker() {
   var existing = document.getElementById('avatar-picker');
   if (existing) existing.remove();
@@ -6140,6 +6156,17 @@ function renderProfilePanel() {
     '<div class="pf-section">' +
       '<div class="pf-section-hdr">// OPERATIVE COLOUR</div>' +
       themesHtml +
+    '</div>' +
+
+    // Display settings
+    '<div class="pf-section">' +
+      '<div class="pf-section-hdr">// DISPLAY</div>' +
+      '<div class="pf-display-row">' +
+        '<span class="pf-display-label">Code Background</span>' +
+        '<span class="pf-display-val" id="canvas-opacity-val">' + (state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100) + '%</span>' +
+      '</div>' +
+      '<input type="range" class="pf-opacity-slider" min="0" max="100" value="' + (state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100) + '" oninput="setCodeCanvasOpacity(this.value)">' +
+      '<div class="pf-display-hints"><span>Off</span><span>Full</span></div>' +
     '</div>' +
 
     // Badges
