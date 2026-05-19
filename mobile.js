@@ -141,12 +141,19 @@ function mobNavTo(tab) {
   if (typeof switchTopNav === 'function') {
     switchTopNav(tab, document.getElementById('tnav-' + tab));
   }
-  // Scroll everything to top immediately
-  var mainCol = document.getElementById('main-col');
-  if (mainCol) mainCol.scrollTop = 0;
-  var panel = document.getElementById('panel-' + tab);
-  if (panel) panel.scrollTop = 0;
-  window.scrollTo(0, 0);
+
+  function resetScroll() {
+    var mainCol = document.getElementById('main-col');
+    if (mainCol) mainCol.scrollTop = 0;
+    var panel = document.getElementById('panel-' + tab);
+    if (panel) panel.scrollTop = 0;
+    window.scrollTo(0, 0);
+  }
+
+  // Reset immediately and again after render completes
+  resetScroll();
+  setTimeout(resetScroll, 60);
+  setTimeout(resetScroll, 180);
 
   // Inject back-to-hub bar
   setTimeout(function() {
