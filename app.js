@@ -756,6 +756,7 @@ function launchApp() {
     updateDailyGoalBar();
     updateLeftStats();
     updateTopChips();
+    if (!localStorage.getItem('codebook_tour_done')) setTimeout(showAppTour, 1200);
   }, 80);
 }
 // --- ONBOARDING SYSTEM ---
@@ -821,10 +822,75 @@ function finishOnboarding() {
   document.getElementById('onboarding').style.display = 'none';
   if (localStorage.getItem('codebook_guest')) {
     startAsGuest();
+    setTimeout(showAppTour, 800);
   } else {
     document.getElementById('auth-screen').style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
+}
+
+var _tourSteps = [
+  {
+    icon: '🏗️',
+    title: 'Seven floors. Zero to professional.',
+    body: 'Each floor builds on the last — from how computers think, all the way to building full-stack apps. You unlock the next floor when the current one is complete.'
+  },
+  {
+    icon: '🔊',
+    title: 'Let Sage read it to you.',
+    body: 'Every section has a Listen button. Tap it and Sage narrates the material — great for when you\'d rather absorb than read. You can pause and resume at any time.'
+  },
+  {
+    icon: '🃏',
+    title: 'Revision cards that remember for you.',
+    body: 'After each floor, revision cards test what you learned. The app tracks which concepts are shaky and brings them back at the right time — so you actually retain what you study.'
+  },
+  {
+    icon: '🔥',
+    title: 'Build a daily habit.',
+    body: 'Complete sections each day to keep your streak. Set your daily goal in the sidebar — even one section a day compounds into real understanding over time.'
+  }
+];
+
+function showAppTour() {
+  if (localStorage.getItem('codebook_tour_done')) return;
+  var step = 0;
+  function render() {
+    var existing = document.getElementById('app-tour-overlay');
+    if (existing) existing.remove();
+    var s = _tourSteps[step];
+    var isLast = step === _tourSteps.length - 1;
+    var el = document.createElement('div');
+    el.id = 'app-tour-overlay';
+    el.className = 'app-tour-overlay';
+    el.innerHTML =
+      '<div class="app-tour-card">' +
+        '<button class="app-tour-skip" onclick="dismissAppTour()">Skip tour</button>' +
+        '<div class="app-tour-icon">' + s.icon + '</div>' +
+        '<div class="app-tour-step">' + (step + 1) + ' of ' + _tourSteps.length + '</div>' +
+        '<div class="app-tour-title">' + escHtml(s.title) + '</div>' +
+        '<div class="app-tour-body">' + escHtml(s.body) + '</div>' +
+        '<div class="app-tour-dots">' +
+          _tourSteps.map(function(_, i) { return '<div class="app-tour-dot' + (i === step ? ' active' : '') + '"></div>'; }).join('') +
+        '</div>' +
+        '<button class="app-tour-next" onclick="appTourNext()">' + (isLast ? 'Start learning →' : 'Next →') + '</button>' +
+      '</div>';
+    document.body.appendChild(el);
+    requestAnimationFrame(function() { el.classList.add('app-tour-visible'); });
+  }
+  window.appTourNext = function() {
+    step++;
+    if (step >= _tourSteps.length) { dismissAppTour(); return; }
+    var card = document.querySelector('.app-tour-card');
+    if (card) { card.classList.add('app-tour-slide-out'); setTimeout(render, 220); }
+    else render();
+  };
+  window.dismissAppTour = function() {
+    localStorage.setItem('codebook_tour_done', '1');
+    var el = document.getElementById('app-tour-overlay');
+    if (el) { el.classList.remove('app-tour-visible'); setTimeout(function() { if (el.parentNode) el.remove(); }, 300); }
+  };
+  render();
 }
 
 const FLOOR_MESSAGES = [
