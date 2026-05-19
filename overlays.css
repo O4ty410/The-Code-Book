@@ -1139,3 +1139,120 @@
   .scp-inner { padding: 20px 16px 18px; gap: 12px; }
   .scp-btn { padding: 13px 14px; font-size: 13px; }
 }
+
+/* ============================================================
+   APP FEATURE TOUR
+   ============================================================ */
+.app-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5,7,10,0.72);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.app-tour-overlay.app-tour-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.app-tour-card {
+  position: relative;
+  background: var(--surface, #0c111d);
+  border: 1px solid rgba(200,169,110,0.25);
+  border-radius: 20px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.75);
+  padding: 36px 32px 28px;
+  width: min(420px, 92vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  animation: popIn 0.32s cubic-bezier(0.34,1.56,0.64,1);
+}
+.app-tour-card.app-tour-slide-out {
+  animation: none;
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.app-tour-skip {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted, rgba(255,255,255,0.35));
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  padding: 4px;
+}
+.app-tour-skip:hover { color: var(--text-dim); }
+.app-tour-icon {
+  font-size: 44px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.app-tour-step {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: rgba(200,169,110,0.55);
+  text-transform: uppercase;
+}
+.app-tour-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+.app-tour-body {
+  font-size: 14px;
+  color: var(--text-dim, rgba(255,255,255,0.6));
+  line-height: 1.7;
+  max-width: 340px;
+}
+.app-tour-dots {
+  display: flex;
+  gap: 6px;
+  margin: 4px 0;
+}
+.app-tour-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: background 0.2s;
+}
+.app-tour-dot.active {
+  background: var(--accent, #c8a96e);
+}
+.app-tour-next {
+  width: 100%;
+  background: var(--accent, #c8a96e);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.app-tour-next:hover { opacity: 0.88; transform: scale(1.01); }
+
+@media (max-width: 420px) {
+  .app-tour-card { padding: 28px 20px 22px; }
+  .app-tour-title { font-size: 17px; }
+  .app-tour-body { font-size: 13px; }
+}

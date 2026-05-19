@@ -1375,3 +1375,100 @@ body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-sh
   .trk-card-title { font-size: 17px; }
   .trk-card-sub { font-size: 9px; }
 }
+
+/* ============================================================
+   DAILY GOAL SELECTOR
+   ============================================================ */
+.goal-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.goal-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.goal-btn:hover { border-color: var(--accent); color: var(--accent); }
+.goal-btn-active {
+  background: rgba(200,169,110,0.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.goal-btn-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
+/* ============================================================
+   STREAK CALENDAR (PROFILE PANEL)
+   ============================================================ */
+.pf-streak-cal { margin-top: 0; }
+.sc-week {
+  display: flex;
+  gap: 6px;
+  padding: 4px 0 2px;
+}
+.sc-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  flex: 1;
+}
+.sc-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  transition: background 0.2s, border-color 0.2s;
+}
+.sc-day-on .sc-dot {
+  background: var(--accent, #c8a96e);
+  border-color: var(--accent, #c8a96e);
+  box-shadow: 0 0 8px rgba(200,169,110,0.4);
+}
+.sc-day-today .sc-dot {
+  border-color: rgba(200,169,110,0.6);
+}
+.sc-lbl {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+.sc-day-today .sc-lbl { color: var(--accent); }
+
+/* ============================================================
+   PROFILE EXPORT BUTTON
+   ============================================================ */
+.pf-export-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(200,169,110,0.3);
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(200,169,110,0.8);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.pf-export-btn:hover {
+  background: rgba(200,169,110,0.08);
+  border-color: rgba(200,169,110,0.55);
+}
