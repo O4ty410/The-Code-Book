@@ -4796,18 +4796,43 @@ document.addEventListener('keydown', function(e) {
       break;
 
     case 'ArrowRight':
-    case 'ArrowDown':
       if (!inSection) return;
       e.preventDefault();
       nextSection(fi, si);
       break;
 
     case 'ArrowLeft':
-    case 'ArrowUp':
       if (!inSection) return;
       e.preventDefault();
       prevSection(fi, si);
       break;
+
+    case 'ArrowDown': {
+      e.preventDefault();
+      var scrollEl = document.getElementById('main-content') || document.documentElement;
+      scrollEl.scrollBy({ top: 220, behavior: 'smooth' });
+      break;
+    }
+
+    case 'ArrowUp': {
+      e.preventDefault();
+      var scrollEl = document.getElementById('main-content') || document.documentElement;
+      scrollEl.scrollBy({ top: -220, behavior: 'smooth' });
+      break;
+    }
+
+    case 'Enter': {
+      // Floor celebration primary button
+      var celebBtn = document.querySelector('.fc-btn-primary');
+      if (celebBtn) { e.preventDefault(); celebBtn.click(); break; }
+      // Section complete / next popup
+      var pop = document.getElementById('sec-complete-pop');
+      if (pop) {
+        var primary = pop.querySelector('.scp-complete') || pop.querySelector('.scp-next');
+        if (primary) { e.preventDefault(); primary.click(); }
+      }
+      break;
+    }
 
     case 'l':
     case 'L':
@@ -4855,10 +4880,12 @@ function showKeyboardHelp() {
       '<div class="kb-help-hdr">Keyboard Shortcuts <button class="kb-help-close" onclick="document.getElementById(\'kb-help-overlay\').remove()">&#215;</button></div>' +
       '<div class="kb-help-grid">' +
         _kbRow('⌘K / Ctrl+K', 'Search sections') +
-        _kbRow('→ / ↓', 'Next section') +
-        _kbRow('← / ↑', 'Previous section') +
+        _kbRow('→', 'Next section') +
+        _kbRow('←', 'Previous section') +
+        _kbRow('↓ / ↑', 'Scroll down / up') +
+        _kbRow('Enter', 'Mark complete / next floor') +
         _kbRow('Space', 'Pause / resume narration') +
-        _kbRow('L', 'Toggle listen (narrate section)') +
+        _kbRow('L', 'Toggle narration') +
         _kbRow('R', 'Open Revision Centre') +
         _kbRow('Esc', 'Close overlay / modal') +
         _kbRow('?', 'Show / hide this help') +
