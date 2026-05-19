@@ -3981,6 +3981,7 @@ function completeSection(sectionId, fi, si) {
 
   state.completed[sectionId] = true;
   markStreakProtected();
+  _cancelStreakReminder();
   var secXP = getSectionXP(fi);
   awardXP(secXP, 'complete-' + sectionId, bx, by);
   playCompletionSound();
@@ -4765,15 +4766,276 @@ function resetSageIdleTimer() {
 
 // Space bar: pause narration + stop auto-scroll (desktop only)
 document.addEventListener('keydown', function(e) {
-  if (e.code !== 'Space') return;
-  if (!currentNarrationId) return;
-  // Don't intercept if focus is inside a text input or textarea
+  // ⌘K / Ctrl+K — search (intercept before other modifier-key guard)
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearchModal();
+    return;
+  }
+
+  // Don't intercept when typing in inputs, textareas, or contenteditable
   var tag = document.activeElement && document.activeElement.tagName;
-  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-  e.preventDefault();
-  stopAutoScroll();
-  toggleNarration(currentNarrationId);
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  if (document.activeElement && document.activeElement.isContentEditable) return;
+  // Don't intercept if a modifier key is held (browser shortcuts)
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+  var fi = state.currentFloor - 1;
+  var si = state.currentSection || 0;
+  var inSection = !!FLOORS[fi];
+
+  switch (e.key) {
+    case ' ':
+      if (!currentNarrationId) return;
+      e.preventDefault();
+      stopAutoScroll();
+      toggleNarration(currentNarrationId);
+      break;
+
+    case 'ArrowRight':
+    case 'ArrowDown':
+      if (!inSection) return;
+      e.preventDefault();
+      nextSection(fi, si);
+      break;
+
+    case 'ArrowLeft':
+    case 'ArrowUp':
+      if (!inSection) return;
+      e.preventDefault();
+      prevSection(fi, si);
+      break;
+
+    case 'l':
+    case 'L':
+      if (!inSection) return;
+      e.preventDefault();
+      var section = FLOORS[fi].sections[si];
+      if (section) toggleNarration(section.id);
+      break;
+
+    case 'r':
+    case 'R':
+      e.preventDefault();
+      switchTopNav('revision', document.getElementById('mob-revision'));
+      break;
+
+    case 'Escape':
+      // Close any open overlay / modal / sheet
+      var searchModal = document.getElementById('search-modal');
+      if (searchModal) { closeSearchModal(); return; }
+      var tourOverlay = document.getElementById('app-tour-overlay');
+      if (tourOverlay && tourOverlay.classList.contains('app-tour-visible')) { dismissAppTour(); return; }
+      var kbHelp = document.getElementById('kb-help-overlay');
+      if (kbHelp) { kbHelp.remove(); return; }
+      if (typeof closeSectionSheet === 'function') closeSectionSheet();
+      if (typeof closeCelebration === 'function') {
+        var cel = document.querySelector('.fc-overlay.fc-visible');
+        if (cel) closeCelebration();
+      }
+      break;
+
+    case '?':
+      e.preventDefault();
+      showKeyboardHelp();
+      break;
+  }
 });
+
+function showKeyboardHelp() {
+  if (document.getElementById('kb-help-overlay')) { document.getElementById('kb-help-overlay').remove(); return; }
+  var el = document.createElement('div');
+  el.id = 'kb-help-overlay';
+  el.className = 'kb-help-overlay';
+  el.innerHTML =
+    '<div class="kb-help-card">' +
+      '<div class="kb-help-hdr">Keyboard Shortcuts <button class="kb-help-close" onclick="document.getElementById(\'kb-help-overlay\').remove()">&#215;</button></div>' +
+      '<div class="kb-help-grid">' +
+        _kbRow('⌘K / Ctrl+K', 'Search sections') +
+        _kbRow('→ / ↓', 'Next section') +
+        _kbRow('← / ↑', 'Previous section') +
+        _kbRow('Space', 'Pause / resume narration') +
+        _kbRow('L', 'Toggle listen (narrate section)') +
+        _kbRow('R', 'Open Revision Centre') +
+        _kbRow('Esc', 'Close overlay / modal') +
+        _kbRow('?', 'Show / hide this help') +
+      '</div>' +
+    '</div>';
+  el.addEventListener('click', function(e) { if (e.target === el) el.remove(); });
+  document.body.appendChild(el);
+}
+
+function _kbRow(key, desc) {
+  return '<div class="kb-row"><kbd class="kb-key">' + escHtml(key) + '</kbd><span class="kb-desc">' + escHtml(desc) + '</span></div>';
+}
+
+// ============================================================
+// SEARCH MODAL (\u2318K / Ctrl+K)
+// ============================================================
+var _searchResults = [];
+var _searchCursor = -1;
+
+function openSearchModal() {
+  if (document.getElementById('search-modal')) { closeSearchModal(); return; }
+
+  var backdrop = document.createElement('div');
+  backdrop.id = 'search-backdrop';
+  backdrop.className = 'search-backdrop';
+  backdrop.onclick = closeSearchModal;
+  document.body.appendChild(backdrop);
+
+  var modal = document.createElement('div');
+  modal.id = 'search-modal';
+  modal.className = 'search-modal';
+  modal.innerHTML =
+    '<div class="search-input-wrap">' +
+      '<span class="search-icon">&#128269;</span>' +
+      '<input id="search-input" class="search-input" type="text" placeholder="Search sections, topics\u2026" autocomplete="off" spellcheck="false">' +
+      '<kbd class="search-esc-hint">Esc</kbd>' +
+    '</div>' +
+    '<div id="search-results" class="search-results"></div>';
+  document.body.appendChild(modal);
+
+  requestAnimationFrame(function() {
+    backdrop.classList.add('search-backdrop-open');
+    modal.classList.add('search-modal-open');
+  });
+
+  var input = document.getElementById('search-input');
+  input.focus();
+  _searchResults = [];
+  _searchCursor = -1;
+  _renderSearchPlaceholder();
+
+  input.addEventListener('input', function() {
+    _runSearch(input.value.trim());
+  });
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); _moveCursor(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); _moveCursor(-1); }
+    else if (e.key === 'Enter') { e.preventDefault(); _selectSearchResult(_searchCursor); }
+    else if (e.key === 'Escape') { e.preventDefault(); closeSearchModal(); }
+  });
+}
+
+function closeSearchModal() {
+  var modal = document.getElementById('search-modal');
+  var backdrop = document.getElementById('search-backdrop');
+  if (modal) {
+    modal.classList.remove('search-modal-open');
+    setTimeout(function() { if (modal.parentNode) modal.remove(); }, 220);
+  }
+  if (backdrop) {
+    backdrop.classList.remove('search-backdrop-open');
+    setTimeout(function() { if (backdrop.parentNode) backdrop.remove(); }, 220);
+  }
+}
+
+function _renderSearchPlaceholder() {
+  var res = document.getElementById('search-results');
+  if (!res) return;
+  res.innerHTML = '<div class="search-empty">Type to search across all ' + _countAllSections() + ' sections</div>';
+}
+
+function _countAllSections() {
+  var n = 0;
+  if (typeof FLOORS !== 'undefined') FLOORS.forEach(function(f) { n += f.sections.length; });
+  return n;
+}
+
+function _runSearch(q) {
+  var res = document.getElementById('search-results');
+  if (!res) return;
+  if (!q) { _searchResults = []; _searchCursor = -1; _renderSearchPlaceholder(); return; }
+
+  var ql = q.toLowerCase();
+  var matches = [];
+
+  if (typeof FLOORS !== 'undefined') {
+    FLOORS.forEach(function(f, fi) {
+      f.sections.forEach(function(s, si) {
+        var score = 0;
+        var titleL = (s.title || '').toLowerCase();
+        var bodyL = (s.body || '').replace(/<[^>]+>/g, '').toLowerCase();
+        var hintL = (s.hint || '').replace(/<[^>]+>/g, '').toLowerCase();
+
+        if (titleL.includes(ql)) score += titleL.startsWith(ql) ? 20 : 10;
+        if (bodyL.includes(ql)) score += 3;
+        if (hintL.includes(ql)) score += 2;
+
+        if (score > 0) {
+          var snippet = '';
+          var bodyPlain = (s.body || '').replace(/<[^>]+>/g, '');
+          var idx = bodyPlain.toLowerCase().indexOf(ql);
+          if (idx !== -1) {
+            var start = Math.max(0, idx - 40);
+            var end = Math.min(bodyPlain.length, idx + ql.length + 60);
+            snippet = (start > 0 ? '\u2026' : '') + bodyPlain.slice(start, end).trim() + (end < bodyPlain.length ? '\u2026' : '');
+          }
+          matches.push({ fi: fi, si: si, title: s.title, floor: f.title, color: f.color || '#c8a96e', score: score, snippet: snippet });
+        }
+      });
+    });
+  }
+
+  matches.sort(function(a, b) { return b.score - a.score; });
+  _searchResults = matches.slice(0, 12);
+  _searchCursor = _searchResults.length > 0 ? 0 : -1;
+  _renderSearchResults(ql);
+}
+
+function _renderSearchResults(ql) {
+  var res = document.getElementById('search-results');
+  if (!res) return;
+
+  if (_searchResults.length === 0) {
+    res.innerHTML = '<div class="search-empty">No sections found</div>';
+    return;
+  }
+
+  var html = _searchResults.map(function(r, i) {
+    var active = i === _searchCursor ? ' search-result-active' : '';
+    var titleHl = _hlMatch(escHtml(r.title), escHtml(ql));
+    var snippetHl = r.snippet ? _hlMatch(escHtml(r.snippet), escHtml(ql)) : '';
+    return '<button class="search-result' + active + '" data-idx="' + i + '" onclick="searchGoTo(event,' + i + ')">' +
+      '<span class="sr-dot" style="background:' + r.color + '"></span>' +
+      '<span class="sr-body">' +
+        '<span class="sr-floor">Floor ' + (r.fi + 1) + ' \u2014 ' + escHtml(r.floor) + '</span>' +
+        '<span class="sr-title">' + titleHl + '</span>' +
+        (snippetHl ? '<span class="sr-snippet">' + snippetHl + '</span>' : '') +
+      '</span>' +
+      '<span class="sr-arrow">&#8594;</span>' +
+    '</button>';
+  }).join('');
+
+  res.innerHTML = html;
+}
+
+function _hlMatch(text, ql) {
+  if (!ql) return text;
+  return text.replace(new RegExp('(' + ql.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<mark class="search-hl">$1</mark>');
+}
+
+function _moveCursor(dir) {
+  if (_searchResults.length === 0) return;
+  _searchCursor = (_searchCursor + dir + _searchResults.length) % _searchResults.length;
+  var ql = (document.getElementById('search-input') || {}).value || '';
+  _renderSearchResults(ql.trim().toLowerCase());
+  var active = document.querySelector('.search-result-active');
+  if (active) active.scrollIntoView({ block: 'nearest' });
+}
+
+function _selectSearchResult(idx) {
+  if (idx < 0 || idx >= _searchResults.length) return;
+  searchGoTo(null, idx);
+}
+
+function searchGoTo(e, idx) {
+  var r = _searchResults[idx];
+  if (!r) return;
+  closeSearchModal();
+  goToSection(r.fi, r.si);
+}
 
 
 // ============================================
@@ -4889,8 +5151,98 @@ function updateTimerDisplay() {
 })();
 
 // \u2500\u2500\u2500 SERVICE WORKER \u2500\u2500\u2500
-// Registered from sw.js \u2014 Blob URLs are not supported for service workers
-// in modern browsers due to same-origin scope requirements.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      console.log('[SW] registered, scope:', reg.scope);
+      initStreakReminder(reg);
+    }).catch(function(err) {
+      console.warn('[SW] registration failed:', err);
+    });
+  });
+}
+
+// \u2500\u2500\u2500 STREAK REMINDER \u2500\u2500\u2500
+function initStreakReminder(swReg) {
+  if (!swReg || !('Notification' in window)) return;
+
+  var today = new Date().toDateString();
+  var todayKey = 'daily_sections_' + today;
+  var todaySecs = parseInt(localStorage.getItem(todayKey) || '0');
+  var streak = (typeof state !== 'undefined' && state.streak) || 0;
+
+  // Only offer reminders if the user has an active streak but hasn't studied yet today
+  if (streak < 1 || todaySecs > 0) return;
+
+  if (Notification.permission === 'default') {
+    // Offer a gentle opt-in prompt after a short delay (not on first visit)
+    var onboarded = localStorage.getItem('codebook_onboarded');
+    if (!onboarded) return;
+    setTimeout(_offerReminderPermission, 8000);
+  } else if (Notification.permission === 'granted') {
+    _scheduleStreakReminder(swReg);
+  }
+}
+
+function _offerReminderPermission() {
+  if (document.getElementById('notif-banner')) return;
+  var banner = document.createElement('div');
+  banner.id = 'notif-banner';
+  banner.className = 'notif-banner';
+  banner.innerHTML =
+    '<div class="notif-banner-icon">&#128293;</div>' +
+    '<div class="notif-banner-text">' +
+      '<div class="notif-banner-title">Streak reminders</div>' +
+      '<div class="notif-banner-sub">Get a nudge if you haven\'t studied by evening</div>' +
+    '</div>' +
+    '<div class="notif-banner-actions">' +
+      '<button class="notif-banner-yes" onclick="_requestReminderPermission()">Enable</button>' +
+      '<button class="notif-banner-no" onclick="_dismissReminderBanner()">No thanks</button>' +
+    '</div>';
+  document.body.appendChild(banner);
+  requestAnimationFrame(function() { banner.classList.add('notif-banner-in'); });
+}
+
+function _requestReminderPermission() {
+  _dismissReminderBanner();
+  Notification.requestPermission().then(function(perm) {
+    if (perm === 'granted') {
+      navigator.serviceWorker.ready.then(function(reg) { _scheduleStreakReminder(reg); });
+    }
+  });
+}
+
+function _dismissReminderBanner() {
+  var b = document.getElementById('notif-banner');
+  if (!b) return;
+  b.classList.remove('notif-banner-in');
+  setTimeout(function() { if (b.parentNode) b.remove(); }, 300);
+  localStorage.setItem('notif_banner_dismissed', new Date().toDateString());
+}
+
+function _scheduleStreakReminder(swReg) {
+  // Schedule for 8 PM today if it's before 8 PM, else skip
+  var now = new Date();
+  var eight = new Date();
+  eight.setHours(20, 0, 0, 0);
+  var delay = eight - now;
+  if (delay <= 0) return;
+
+  var streak = (typeof state !== 'undefined' && state.streak) || 0;
+  swReg.active && swReg.active.postMessage({
+    type: 'SCHEDULE_REMINDER',
+    delayMs: delay,
+    body: 'You have a ' + streak + '-day streak \u2014 keep it alive! Learn one section today.'
+  });
+}
+
+// Cancel reminder once a section is completed today
+function _cancelStreakReminder() {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.ready.then(function(reg) {
+    reg.active && reg.active.postMessage({ type: 'CANCEL_REMINDER' });
+  });
+}
 
 // \u2500\u2500\u2500 INSTALL PROMPT \u2500\u2500\u2500
 var deferredInstallPrompt = null;
@@ -5889,12 +6241,144 @@ function renderProfilePanel() {
       badgesHtml +
     '</div>' +
 
+    // Insights
+    (function() {
+      // 7-day bar chart
+      var days = [], dayLabels = [];
+      var maxSecs = 1;
+      for (var d = 6; d >= 0; d--) {
+        var dt = new Date(); dt.setDate(dt.getDate() - d);
+        var n = parseInt(localStorage.getItem('daily_sections_' + dt.toDateString()) || '0');
+        days.push(n);
+        if (n > maxSecs) maxSecs = n;
+        var dow = dt.getDay();
+        dayLabels.push(['Su','Mo','Tu','We','Th','Fr','Sa'][dow]);
+      }
+      var barHtml = '<div class="ins-chart">' +
+        days.map(function(n, i) {
+          var h = maxSecs > 0 ? Math.max(4, Math.round((n / maxSecs) * 52)) : 4;
+          var isToday = i === 6;
+          return '<div class="ins-bar-col">' +
+            '<div class="ins-bar-wrap"><div class="ins-bar' + (isToday ? ' ins-bar-today' : '') + (n === 0 ? ' ins-bar-empty' : '') + '" style="height:' + h + 'px"></div></div>' +
+            '<div class="ins-bar-lbl' + (isToday ? ' ins-lbl-today' : '') + '">' + dayLabels[i] + '</div>' +
+            (n > 0 ? '<div class="ins-bar-val">' + n + '</div>' : '') +
+          '</div>';
+        }).join('') +
+      '</div>';
+
+      // Quiz accuracy per floor
+      var accHtml = '<div class="ins-accuracy">';
+      FLOORS.forEach(function(f, fi) {
+        var total = 0, correct = 0;
+        f.sections.forEach(function(s) {
+          if (!s.quiz) return;
+          if (s.quiz.questions) {
+            var ms = state.quizMultiState && state.quizMultiState[s.id];
+            if (ms && ms.done) {
+              s.quiz.questions.forEach(function(q, qi) { total++; if (ms.answers[qi] === q.correct) correct++; });
+            }
+          } else {
+            var ans = state.quizAnswered && state.quizAnswered[s.id];
+            if (ans !== undefined) { total++; if (ans === s.quiz.correct) correct++; }
+          }
+        });
+        var pct = total > 0 ? Math.round(correct / total * 100) : null;
+        var color = f.color || '#c8a96e';
+        accHtml += '<div class="ins-acc-row">' +
+          '<span class="ins-acc-floor" style="color:' + color + '">F' + (fi + 1) + '</span>' +
+          '<div class="ins-acc-bar-wrap">' +
+            (pct !== null
+              ? '<div class="ins-acc-bar" style="width:' + pct + '%;background:' + color + '"></div>'
+              : '<div class="ins-acc-bar ins-acc-none" style="width:100%"></div>') +
+          '</div>' +
+          '<span class="ins-acc-pct">' + (pct !== null ? pct + '%' : '—') + '</span>' +
+        '</div>';
+      });
+      accHtml += '</div>';
+
+      // SRS breakdown
+      var counts = typeof srsCounts === 'function' ? srsCounts() : { mastered: 0, due: 0, upcoming: 0, new: 0 };
+      var srsHtml = '<div class="ins-srs-row">' +
+        '<div class="ins-srs-cell ins-srs-mastered"><div class="ins-srs-n">' + counts.mastered + '</div><div class="ins-srs-k">Mastered</div></div>' +
+        '<div class="ins-srs-cell ins-srs-due"><div class="ins-srs-n">' + counts.due + '</div><div class="ins-srs-k">Due</div></div>' +
+        '<div class="ins-srs-cell ins-srs-upcoming"><div class="ins-srs-n">' + counts.upcoming + '</div><div class="ins-srs-k">Upcoming</div></div>' +
+        '<div class="ins-srs-cell ins-srs-new"><div class="ins-srs-n">' + counts.new + '</div><div class="ins-srs-k">New</div></div>' +
+      '</div>';
+
+      return '<div class="pf-section">' +
+        '<div class="pf-section-hdr">// LEARNING INSIGHTS</div>' +
+        '<div class="ins-sub-hdr">Sections completed — last 7 days</div>' +
+        barHtml +
+        '<div class="ins-sub-hdr" style="margin-top:18px">Quiz accuracy by floor</div>' +
+        accHtml +
+        '<div class="ins-sub-hdr" style="margin-top:18px">Revision cards</div>' +
+        srsHtml +
+      '</div>';
+    })() +
+
     // Export
     '<div class="pf-section">' +
       '<button class="pf-export-btn" onclick="generateProgressCard()">&#8681; Download Progress Card</button>' +
+      '<button class="pf-export-btn pf-export-notes-btn" onclick="exportNotes()">&#128203; Export Notes</button>' +
     '</div>' +
 
     '</div>';
+}
+
+// ============================================================
+// NOTES EXPORT
+// ============================================================
+function exportNotes() {
+  var name = (typeof state !== 'undefined' && state.playerName) ||
+             localStorage.getItem('codebook_player_name') || 'Learner';
+  var date = new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  var lines = [
+    '# The Code Book — My Notes',
+    'Exported by: ' + name,
+    'Date: ' + date,
+    '',
+  ];
+
+  var hasAny = false;
+
+  if (typeof FLOORS !== 'undefined') {
+    FLOORS.forEach(function(f, fi) {
+      var floorNotes = [];
+      f.sections.forEach(function(s, si) {
+        var note = localStorage.getItem('note_' + s.id);
+        if (note && note.trim()) {
+          floorNotes.push({ title: s.title, note: note.trim() });
+          hasAny = true;
+        }
+      });
+      if (floorNotes.length > 0) {
+        lines.push('## Floor ' + (fi + 1) + ': ' + f.title);
+        lines.push('');
+        floorNotes.forEach(function(n) {
+          lines.push('### ' + n.title);
+          lines.push('');
+          lines.push(n.note);
+          lines.push('');
+        });
+      }
+    });
+  }
+
+  if (!hasAny) {
+    sageMessage('No notes to export yet — write some notes in the Notes tab of any section.', 'info');
+    return;
+  }
+
+  var md = lines.join('\n');
+  var blob = new Blob([md], { type: 'text/markdown; charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'codebook-notes-' + new Date().toISOString().slice(0, 10) + '.md';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
 }
 
 function renderPremiumPanel() {

@@ -1256,3 +1256,304 @@
   .app-tour-title { font-size: 17px; }
   .app-tour-body { font-size: 13px; }
 }
+
+/* ============================================================
+   KEYBOARD SHORTCUT HELP
+   ============================================================ */
+.kb-help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5,7,10,0.65);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.15s ease;
+}
+@keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+.kb-help-card {
+  background: var(--surface, #0c111d);
+  border: 1px solid rgba(200,169,110,0.22);
+  border-radius: 16px;
+  padding: 24px 28px 20px;
+  width: min(380px, 92vw);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+  animation: popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.kb-help-hdr {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: rgba(200,169,110,0.7);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.kb-help-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+.kb-help-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.kb-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.kb-key {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 4px 10px;
+  color: var(--text);
+  white-space: nowrap;
+  min-width: 80px;
+  text-align: center;
+  display: inline-block;
+}
+.kb-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* ============================================================
+   SEARCH MODAL (⌘K / Ctrl+K)
+   ============================================================ */
+.search-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 800;
+  background: transparent;
+  transition: background 0.2s ease;
+}
+.search-backdrop-open {
+  background: rgba(0,0,0,0.6);
+}
+.search-modal {
+  position: fixed;
+  top: 15vh;
+  left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+  z-index: 900;
+  width: min(640px, calc(100vw - 32px));
+  background: var(--surface, #0c111d);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  opacity: 0;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  overflow: hidden;
+}
+.search-modal-open {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.search-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+.search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  color: var(--text);
+  caret-color: var(--accent, #c8a96e);
+}
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+.search-esc-hint {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 4px;
+  padding: 3px 7px;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+.search-results {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 6px 0 8px;
+}
+.search-empty {
+  padding: 24px 20px;
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.4px;
+}
+.search-result {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-radius: 0;
+}
+.search-result:hover,
+.search-result-active {
+  background: rgba(255,255,255,0.05);
+}
+.sr-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.sr-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sr-floor {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.sr-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sr-snippet {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.sr-arrow {
+  font-size: 14px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+  opacity: 0.5;
+}
+.search-result-active .sr-arrow {
+  color: var(--accent, #c8a96e);
+  opacity: 1;
+}
+.search-hl {
+  background: rgba(200,169,110,0.25);
+  color: var(--accent, #c8a96e);
+  border-radius: 2px;
+  font-style: normal;
+}
+
+/* ============================================================
+   STREAK REMINDER NOTIFICATION BANNER
+   ============================================================ */
+.notif-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface, #0c111d);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+  width: min(440px, calc(100vw - 32px));
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.notif-banner-in {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.notif-banner-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.notif-banner-text {
+  flex: 1;
+  min-width: 0;
+}
+.notif-banner-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.notif-banner-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.notif-banner-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.notif-banner-yes {
+  background: var(--accent, #c8a96e);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+}
+.notif-banner-no {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
