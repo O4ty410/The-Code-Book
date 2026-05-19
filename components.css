@@ -7347,3 +7347,56 @@ body.learn-mode #main-col {
   color: var(--accent);
   letter-spacing: 0.03em;
 }
+
+/* ── Checklist Sage Celebration Box ── */
+.checklist-sage-box {
+  margin-top: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(125, 211, 252, 0.2);
+  background: rgba(125, 211, 252, 0.05);
+  animation: fadeIn 0.35s ease;
+  overflow: hidden;
+}
+.checklist-sage-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px 20px 20px 18px;
+}
+.checklist-sage-owl {
+  flex-shrink: 0;
+  padding-top: 2px;
+  opacity: 0.9;
+}
+.checklist-sage-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+.checklist-sage-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.checklist-sage-body {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.checklist-sage-btn {
+  margin-top: 6px;
+  align-self: flex-start;
+  background: var(--accent);
+  color: var(--bg);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.checklist-sage-btn:hover { opacity: 0.85; }
