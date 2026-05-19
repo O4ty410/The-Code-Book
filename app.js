@@ -4811,14 +4811,14 @@ document.addEventListener('keydown', function(e) {
 
     case 'ArrowDown': {
       e.preventDefault();
-      var scrollEl = document.getElementById('main-content') || document.documentElement;
+      var scrollEl = document.getElementById('main-col') || document.getElementById('main-content') || document.documentElement;
       scrollEl.scrollBy({ top: 220, behavior: 'smooth' });
       break;
     }
 
     case 'ArrowUp': {
       e.preventDefault();
-      var scrollEl = document.getElementById('main-content') || document.documentElement;
+      var scrollEl = document.getElementById('main-col') || document.getElementById('main-content') || document.documentElement;
       scrollEl.scrollBy({ top: -220, behavior: 'smooth' });
       break;
     }
