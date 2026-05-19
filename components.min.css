@@ -2078,6 +2078,7 @@
   border: 1px solid var(--border);
   color: var(--text-muted);
 }
+.editor-hint-btn{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 14px;border-radius:4px;cursor:pointer;transition:all 0.2s ease;background:transparent;border:1px solid rgba(200,169,110,0.35);color:rgba(200,169,110,0.85)}.editor-hint-btn:hover{background:rgba(200,169,110,0.08);border-color:rgba(200,169,110,0.6);color:#c8a96e}.editor-hint-box{margin:12px 0 4px;display:none}.editor-hint-box.visible{display:block}
 
 .editor-split {
   display: grid;
