@@ -5,192 +5,411 @@
    ============================================================ */
 
 /* ============================================================
-   MOBILE HUB
+   MOBILE HOME GRID
    ============================================================ */
-.mob-hub {
+.mob-grid-wrap {
   display: flex;
   flex-direction: column;
+  gap: 0;
+  padding: 0 0 100px;
   min-height: 100%;
-  padding-bottom: 24px;
 }
 
-.mob-hub-header {
-  padding: 20px 16px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  margin-bottom: 4px;
+.mob-grid-header {
+  padding: 20px 14px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 14px;
 }
 
-.mob-hub-greeting {
+.mob-grid-greeting {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   line-height: 1.2;
 }
 
-.mob-hub-meta {
-  margin-bottom: 10px;
-}
-
-.mob-hub-bar {
-  height: 4px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 2px;
-  margin-bottom: 6px;
-  overflow: hidden;
-}
-
-.mob-hub-bar-fill {
-  height: 100%;
-  background: var(--accent, #c8a96e);
-  border-radius: 2px;
-  transition: width 0.7s ease;
-}
-
-.mob-hub-pct {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--text-muted);
-  letter-spacing: 0.5px;
-}
-
-.mob-hub-stats {
+.mob-grid-chips {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
-.mob-hub-chip {
+.mob-grid-chip {
   font-family: 'Space Mono', monospace;
   font-size: 11px;
   background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.09);
   border-radius: 20px;
   padding: 5px 12px;
   color: var(--text-dim);
 }
 
 /* ============================================================
-   FLOOR CARDS
+   GRID TILES — match desktop fc-card aesthetic
    ============================================================ */
-.mob-floor-card {
-  margin: 8px 12px 0;
+.mob-grid-hero-row {
+  padding: 0 12px 10px;
+}
+
+.mob-grid-cells {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 12px;
+}
+
+.mob-grid-tile {
+  position: relative;
+  background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 14px;
-  padding: 18px 16px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-left: 3px solid var(--fc-color, var(--accent));
-  transition: background 0.15s;
+  padding: 18px 14px 16px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+  transition: border-color 0.22s, box-shadow 0.22s, transform 0.18s;
+  box-shadow:
+    0 0 12px var(--mg-glow, rgba(200,169,110,0.14)),
+    0 2px 14px rgba(0,0,0,0.45);
+  -webkit-tap-highlight-color: transparent;
 }
 
-.mob-floor-card:first-of-type { margin-top: 12px; }
-
-.mob-floor-active {
-  background: rgba(255,255,255,0.05);
-  border-color: rgba(255,255,255,0.1);
+.mob-grid-tile-hero {
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 18px 18px;
 }
 
-.mob-floor-done {
+.mob-grid-tile:active {
+  transform: scale(0.97);
+  border-color: var(--mg-color, #c8a96e);
+  box-shadow:
+    0 0 26px var(--mg-glow-h, rgba(200,169,110,0.4)),
+    0 4px 20px rgba(0,0,0,0.55);
+}
+
+/* Top accent line — identical to desktop .fc-accent */
+.mg-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 14px 14px 0 0;
+  background: var(--mg-color, #c8a96e);
+  opacity: 0.82;
+}
+
+.mg-icon {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.mob-grid-tile-hero .mg-icon {
+  font-size: 0;   /* SVG icon — sized by width/height attrs */
+  line-height: 0;
+  height: 42px;
+  margin-bottom: 12px;
+}
+
+.mg-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.mg-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.mob-grid-tile-hero .mg-title {
+  font-size: 17px;
+}
+
+.mg-hint {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+}
+
+.mg-cta {
+  margin-top: 14px;
+  background: transparent;
+  border: 1px solid var(--mg-color, #c8a96e);
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+
+.mg-cta:active {
+  background: rgba(200,169,110,0.1);
+}
+
+/* ============================================================
+   PANEL BACK BAR (non-Learn panels)
+   ============================================================ */
+.mob-panel-back {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 490;
+  padding: 10px 12px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  background: rgba(5,7,10,0.93);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.mob-panel-back-btn {
+  background: none;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--accent, #c8a96e);
+  cursor: pointer;
+  padding: 6px 4px;
+  letter-spacing: 0.3px;
+}
+
+.is-mobile:has(.mob-panel-back) #main-content,
+.is-mobile:has(.mob-panel-back) .main-col {
+  padding-top: calc(48px + env(safe-area-inset-top, 0px));
+}
+
+/* ============================================================
+   MOBILE FLOOR LIST
+   ============================================================ */
+.mob-fl-list {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding-bottom: 100px;
+}
+
+/* Sticky back bar */
+.mob-fl-back-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  background: rgba(5,7,10,0.93);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 10px;
+}
+
+.mob-fl-back-btn {
+  background: none;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--accent, #c8a96e);
+  cursor: pointer;
+  padding: 6px 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+
+.mob-fl-back-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Floor cards — same DNA as desktop .fc-card */
+.mob-fl-card {
+  position: relative;
+  margin: 0 12px 10px;
+  background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 18px 16px 16px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.22s, box-shadow 0.22s, transform 0.18s;
+  box-shadow:
+    0 0 10px var(--fc-glow, rgba(200,169,110,0.12)),
+    0 2px 12px rgba(0,0,0,0.45);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mob-fl-card-active {
+  border-color: var(--fc-color, #c8a96e) !important;
+  box-shadow:
+    0 0 18px var(--fc-glow, rgba(200,169,110,0.28)),
+    0 4px 20px rgba(0,0,0,0.5) !important;
+}
+
+.mob-fl-card-done {
   opacity: 0.72;
 }
 
-.mob-floor-top {
+.mob-fl-card:active {
+  transform: scale(0.985);
+}
+
+/* Top accent line */
+.mob-fl-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 14px 14px 0 0;
+  background: var(--fc-color, #c8a96e);
+  opacity: 0.82;
+}
+
+.mob-fl-top {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 7px;
-}
-
-.mob-floor-num {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  color: var(--fc-color, var(--accent));
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
-.mob-floor-badge {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.5px;
-  padding: 3px 9px;
-  border-radius: 10px;
-}
-
-.mob-badge-done {
-  background: rgba(100,200,100,0.12);
-  color: rgba(120,220,120,0.85);
-}
-
-.mob-badge-active {
-  background: rgba(200,169,110,0.12);
-  color: var(--accent, #c8a96e);
-}
-
-.mob-badge-idle {
-  background: rgba(255,255,255,0.05);
-  color: var(--text-muted);
-}
-
-.mob-floor-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 3px;
-  line-height: 1.25;
-}
-
-.mob-floor-sub {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-bottom: 13px;
-  line-height: 1.5;
-}
-
-.mob-floor-progress {
+  align-items: flex-start;
+  gap: 12px;
   margin-bottom: 14px;
 }
 
-.mob-floor-bar {
+.mob-fl-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.mob-fl-icon {
+  font-size: 0;
+  line-height: 0;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mob-fl-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.mob-fl-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.mob-fl-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--fc-color, #c8a96e);
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.mob-fl-status {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+.mob-fl-status-done   { background: #061206; color: #4cb84c; border: 1px solid #0c2a0c; }
+.mob-fl-status-active { background: #06100a; color: #00d4aa; border: 1px solid #0a2818; }
+.mob-fl-status-open   { background: #04080e; color: #2a5080; border: 1px solid #081828; }
+
+.mob-fl-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+  margin-bottom: 3px;
+}
+
+.mob-fl-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Progress row */
+.mob-fl-prog-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.mob-fl-bar {
+  flex: 1;
   height: 3px;
   background: rgba(255,255,255,0.08);
   border-radius: 2px;
-  margin-bottom: 6px;
   overflow: hidden;
 }
 
-.mob-floor-bar-fill {
+.mob-fl-bar-fill {
   height: 100%;
-  background: var(--fc-color, var(--accent));
+  background: var(--fc-color, #c8a96e);
   border-radius: 2px;
   transition: width 0.7s ease;
 }
 
-.mob-floor-pct {
+.mob-fl-pct {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
-.mob-floor-btn {
+/* CTA button — same feel as desktop */
+.mob-fl-btn {
   width: 100%;
-  padding: 12px 16px;
+  padding: 11px 16px;
   background: transparent;
-  border: 1px solid var(--fc-color, var(--accent));
+  border: 1px solid var(--fc-color, #c8a96e);
   border-radius: 9px;
   font-family: 'Space Mono', monospace;
   font-size: 12px;
   font-weight: 700;
-  color: var(--fc-color, var(--accent));
+  color: var(--fc-color, #c8a96e);
   cursor: pointer;
   transition: background 0.15s;
   letter-spacing: 0.3px;
+  text-align: center;
 }
 
-.mob-floor-btn:active {
+.mob-fl-btn:active {
   background: rgba(200,169,110,0.1);
 }
 

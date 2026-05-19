@@ -27,7 +27,7 @@ function _checkMobileClass() {
 }
 
 // ============================================================
-// MOBILE HUB
+// MOBILE HOME GRID
 // ============================================================
 function renderMobileHub() {
   if (!isMobile()) return;
@@ -37,69 +37,221 @@ function renderMobileHub() {
   _removeMobileSectionChrome();
   document.body.classList.remove('mob-in-section');
 
+  var name   = (typeof state !== 'undefined' && state.playerName) ||
+               localStorage.getItem('codebook_player_name') || '';
+  var xp     = (typeof state !== 'undefined' && state.xp)     || 0;
+  var streak = (typeof state !== 'undefined' && state.streak)  || 0;
+
   var totalDone = 0, totalSecs = 0;
   if (typeof FLOORS !== 'undefined') {
     FLOORS.forEach(function(f) {
       f.sections.forEach(function(s) {
         totalSecs++;
-        if (state.completed && state.completed[s.id]) totalDone++;
+        if (state && state.completed && state.completed[s.id]) totalDone++;
       });
     });
   }
   var overallPct = totalSecs > 0 ? Math.round(totalDone / totalSecs * 100) : 0;
-  var name = (typeof state !== 'undefined' && state.playerName) ||
-             localStorage.getItem('codebook_player_name') || '';
-  var xp = (typeof state !== 'undefined' && state.xp) || 0;
-  var streak = (typeof state !== 'undefined' && state.streak) || 0;
 
-  var html = '<div class="mob-hub">';
+  // Current floor info for Learn tile
+  var fi = (state && state.currentFloor) ? state.currentFloor - 1 : 0;
+  var currentFloor = (typeof FLOORS !== 'undefined' && FLOORS[fi]) ? FLOORS[fi] : null;
+  var currentDone = 0, currentTotal = 0;
+  if (currentFloor) {
+    currentTotal = currentFloor.sections.length;
+    currentFloor.sections.forEach(function(s) {
+      if (state && state.completed && state.completed[s.id]) currentDone++;
+    });
+  }
+  var learnColor = (currentFloor && currentFloor.color) ? currentFloor.color : '#c8a96e';
+  var learnHint  = currentFloor
+    ? ('Floor ' + (fi + 1) + ' · ' + currentDone + '/' + currentTotal + ' sections · ' + overallPct + '% overall')
+    : 'Start your learning journey';
+  var learnBtn   = currentDone > 0 ? 'Continue' : 'Begin';
 
-  // Header
-  html += '<div class="mob-hub-header">' +
-    '<div class="mob-hub-greeting">Hey' + (name ? ', ' + (typeof escHtml === 'function' ? escHtml(name) : name) : '') + '.</div>' +
-    '<div class="mob-hub-meta">' +
-      '<div class="mob-hub-bar"><div class="mob-hub-bar-fill" style="width:' + overallPct + '%"></div></div>' +
-      '<span class="mob-hub-pct">' + overallPct + '% complete</span>' +
-    '</div>' +
-    '<div class="mob-hub-stats">' +
-      '<span class="mob-hub-chip">⚡ ' + xp + ' XP</span>' +
-      '<span class="mob-hub-chip">🔥 ' + streak + (streak === 1 ? ' day' : ' days') + '</span>' +
-    '</div>' +
+  // SRS due count for Revision tile
+  var revDue = 0;
+  if (typeof srsCounts === 'function') {
+    var counts = srsCounts();
+    revDue = (counts.due || 0) + (counts.new || 0);
+  }
+
+  // Challenges today
+  var chalDone = false;
+  if (typeof state !== 'undefined' && state.dailyChallengeDate) {
+    chalDone = state.dailyChallengeDate === new Date().toDateString();
+  }
+
+  function _hexGlow(hex, a) {
+    if (!hex || hex[0] !== '#') return 'rgba(200,169,110,' + (a || 0.28) + ')';
+    var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + (a || 0.28) + ')';
+  }
+
+  function _tile(opts) {
+    // opts: { id, color, icon, badge, title, hint, action, hero, status }
+    var glow = _hexGlow(opts.color, 0.26);
+    var glowHover = _hexGlow(opts.color, 0.45);
+    var cls = 'mob-grid-tile' + (opts.hero ? ' mob-grid-tile-hero' : '');
+    return '<div class="' + cls + '" style="--mg-color:' + opts.color + ';--mg-glow:' + glow + ';--mg-glow-h:' + glowHover + '" onclick="' + opts.action + '">' +
+      '<div class="mg-accent"></div>' +
+      '<div class="mg-icon">' + opts.icon + '</div>' +
+      '<div class="mg-badge" style="color:' + opts.color + '">' + opts.badge + '</div>' +
+      '<div class="mg-title">' + opts.title + '</div>' +
+      '<div class="mg-hint">' + opts.hint + '</div>' +
+      (opts.hero ? '<button class="mg-cta" style="border-color:' + opts.color + ';color:' + opts.color + '">' + opts.status + ' →</button>' : '') +
+    '</div>';
+  }
+
+  var html = '<div class="mob-grid-wrap">';
+
+  // Greeting header
+  html +=
+    '<div class="mob-grid-header">' +
+      '<div class="mob-grid-greeting">Hey' + (name ? ', ' + (typeof escHtml === 'function' ? escHtml(name) : name) : '') + '.</div>' +
+      '<div class="mob-grid-chips">' +
+        '<span class="mob-grid-chip">⚡ ' + xp + ' XP</span>' +
+        '<span class="mob-grid-chip">🔥 ' + streak + (streak === 1 ? ' day' : ' days') + '</span>' +
+        '<span class="mob-grid-chip">📖 ' + overallPct + '%</span>' +
+      '</div>' +
+    '</div>';
+
+  // Hero Learn tile (full width)
+  html += '<div class="mob-grid-hero-row">' +
+    _tile({
+      hero:   true,
+      color:  learnColor,
+      icon:   (typeof getFloorIcon === 'function' && currentFloor) ? getFloorIcon(fi, 40) : '📖',
+      badge:  'LEARN',
+      title:  currentFloor ? (typeof escHtml === 'function' ? escHtml(currentFloor.title) : currentFloor.title) : 'Seven Floors',
+      hint:   learnHint,
+      action: 'renderMobileFloorList()',
+      status: learnBtn,
+    }) +
+  '</div>';
+
+  // 2-col grid for remaining 6 tiles
+  var tiles = [
+    { color: '#f0a832', icon: '⚡', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
+    { color: '#64c8a0', icon: '🃏', badge: 'REVISION',   title: 'Revision Centre', hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',     action: 'mobNavTo(\'revision\')' },
+    { color: '#7eb8c8', icon: '⚙', badge: 'TOOLS',      title: 'Tools',           hint: 'Speed round & more',                                       action: 'mobNavTo(\'tools\')' },
+    { color: '#d46eb8', icon: '🎮', badge: 'GAME HUB',  title: 'Game Hub',        hint: 'Play & practice',                                          action: 'mobNavTo(\'game\')' },
+    { color: '#8888ff', icon: '👤', badge: 'PROFILE',   title: 'Profile',         hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
+    { color: '#e0c060', icon: '♛', badge: 'PREMIUM',   title: 'Premium',         hint: 'Unlock everything',                                        action: 'mobNavTo(\'premium\')' },
+  ];
+
+  html += '<div class="mob-grid-cells">';
+  tiles.forEach(function(t) { html += _tile(t); });
+  html += '</div>';
+
+  html += '</div>'; // .mob-grid-wrap
+  panel.innerHTML = html;
+}
+
+// ============================================================
+// NAV HELPER — tap non-Learn tile
+// ============================================================
+function mobNavTo(tab) {
+  if (typeof switchTopNav === 'function') {
+    switchTopNav(tab, document.getElementById('tnav-' + tab));
+  }
+  // Inject a lightweight back-to-hub header
+  setTimeout(function() {
+    if (document.getElementById('mob-panel-back')) return;
+    var bar = document.createElement('div');
+    bar.id = 'mob-panel-back';
+    bar.className = 'mob-panel-back';
+    bar.innerHTML = '<button class="mob-panel-back-btn" onclick="mobBackToHub()">&#8592; Home</button>';
+    document.body.appendChild(bar);
+  }, 60);
+}
+
+function mobBackToHub() {
+  var bar = document.getElementById('mob-panel-back');
+  if (bar) bar.remove();
+  if (typeof switchTopNav === 'function') {
+    switchTopNav('learn', document.getElementById('tnav-learn'));
+  }
+  renderMobileHub();
+}
+
+// ============================================================
+// MOBILE FLOOR LIST (tapped from Learn tile)
+// ============================================================
+function renderMobileFloorList() {
+  if (!isMobile()) return;
+  var panel = document.getElementById('panel-learn');
+  if (!panel) return;
+
+  function _hexGlow(hex, a) {
+    if (!hex || hex[0] !== '#') return 'rgba(200,169,110,' + (a || 0.28) + ')';
+    var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + (a || 0.28) + ')';
+  }
+
+  var html = '<div class="mob-fl-list">';
+
+  // Sticky back bar
+  html += '<div class="mob-fl-back-bar">' +
+    '<button class="mob-fl-back-btn" onclick="renderMobileHub()">&#8592; Home</button>' +
+    '<div class="mob-fl-back-title">Your Learning Path</div>' +
   '</div>';
 
   // Floor cards
   if (typeof FLOORS !== 'undefined') {
-    FLOORS.forEach(function(f, fi) {
-      var isComplete = typeof isFloorComplete === 'function' && isFloorComplete(fi);
-      var isCurrent = fi === ((state && state.currentFloor || 1) - 1);
-      var done = 0;
-      f.sections.forEach(function(s) { if (state && state.completed && state.completed[s.id]) done++; });
-      var pct = Math.round(done / f.sections.length * 100);
+    FLOORS.forEach(function(f, floorIdx) {
       var color = f.color || '#c8a96e';
+      var glow  = _hexGlow(color, 0.24);
+      var done  = typeof isFloorComplete === 'function' && isFloorComplete(floorIdx);
+      var fi    = (state && state.currentFloor) ? state.currentFloor - 1 : 0;
+      var isActive = !done && floorIdx === fi;
 
-      var statusLabel = isComplete ? 'Complete' : isCurrent && done > 0 ? 'In progress' : done > 0 ? 'Started' : 'Available';
-      var badgeCls = isComplete ? 'mob-badge-done' : isCurrent ? 'mob-badge-active' : 'mob-badge-idle';
-      var btnText = isComplete ? 'Review' : done > 0 ? 'Continue' : 'Start';
-      var cardCls = 'mob-floor-card' + (isCurrent ? ' mob-floor-active' : '') + (isComplete ? ' mob-floor-done' : '');
+      var secDone  = 0;
+      f.sections.forEach(function(s) {
+        if (state && state.completed && state.completed[s.id]) secDone++;
+      });
+      var pct = Math.round(secDone / f.sections.length * 100);
 
-      html += '<div class="' + cardCls + '" style="--fc-color:' + color + '">' +
-        '<div class="mob-floor-top">' +
-          '<span class="mob-floor-num">Floor ' + (fi + 1) + '</span>' +
-          '<span class="mob-floor-badge ' + badgeCls + '">' + statusLabel + '</span>' +
-        '</div>' +
-        '<div class="mob-floor-title">' + (typeof escHtml === 'function' ? escHtml(f.title) : f.title) + '</div>' +
-        (f.subtitle ? '<div class="mob-floor-sub">' + (typeof escHtml === 'function' ? escHtml(f.subtitle) : f.subtitle) + '</div>' : '') +
-        '<div class="mob-floor-progress">' +
-          '<div class="mob-floor-bar"><div class="mob-floor-bar-fill" style="width:' + pct + '%"></div></div>' +
-          '<span class="mob-floor-pct">' + done + ' / ' + f.sections.length + ' sections</span>' +
-        '</div>' +
-        '<button class="mob-floor-btn" onclick="goToFloor(' + fi + ')">' + btnText + ' →</button>' +
-      '</div>';
+      var statusText, statusCls;
+      if (done)     { statusText = '&#10003; Complete'; statusCls = 'mob-fl-status-done';   }
+      else if (isActive && secDone > 0) { statusText = 'In Progress'; statusCls = 'mob-fl-status-active'; }
+      else          { statusText = 'Available';    statusCls = 'mob-fl-status-open';   }
+
+      var btnText = done ? 'Review' : secDone > 0 ? 'Continue' : 'Start';
+      var cardCls = 'mob-fl-card' + (isActive ? ' mob-fl-card-active' : '') + (done ? ' mob-fl-card-done' : '');
+
+      var icon = (typeof getFloorIcon === 'function') ? getFloorIcon(floorIdx, 38) : '';
+
+      html +=
+        '<div class="' + cardCls + '" style="--fc-color:' + color + ';--fc-glow:' + glow + '">' +
+          '<div class="mob-fl-accent"></div>' +
+          '<div class="mob-fl-top">' +
+            '<div class="mob-fl-left">' +
+              '<div class="mob-fl-icon">' + icon + '</div>' +
+              '<div class="mob-fl-meta">' +
+                '<div class="mob-fl-badge-row">' +
+                  '<span class="mob-fl-num">Floor ' + (floorIdx + 1) + '</span>' +
+                  '<span class="mob-fl-status ' + statusCls + '">' + statusText + '</span>' +
+                '</div>' +
+                '<div class="mob-fl-title">' + (typeof escHtml === 'function' ? escHtml(f.title) : f.title) + '</div>' +
+                (f.subtitle ? '<div class="mob-fl-sub">' + (typeof escHtml === 'function' ? escHtml(f.subtitle) : f.subtitle) + '</div>' : '') +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mob-fl-prog-row">' +
+            '<div class="mob-fl-bar"><div class="mob-fl-bar-fill" style="width:' + pct + '%"></div></div>' +
+            '<span class="mob-fl-pct">' + secDone + ' / ' + f.sections.length + ' sections</span>' +
+          '</div>' +
+          '<button class="mob-fl-btn" onclick="goToFloor(' + floorIdx + ')">' + btnText + ' &#8594;</button>' +
+        '</div>';
     });
   }
 
   html += '</div>';
   panel.innerHTML = html;
+
+  // Scroll to top
+  panel.scrollTop = 0;
 }
 
 // ============================================================
@@ -124,7 +276,7 @@ function renderMobileSectionChrome() {
   header.id = 'mob-section-header';
   header.className = 'mob-section-header';
   header.innerHTML =
-    '<button class="mob-section-back" onclick="mobGoToHub()">&#8592; Floor ' + (fi + 1) + '</button>' +
+    '<button class="mob-section-back" onclick="mobGoToFloorList()">&#8592; Learn</button>' +
     '<div class="mob-section-title">' + (typeof escHtml === 'function' ? escHtml(section.title) : section.title) + '</div>' +
     '<button class="mob-section-listen" id="listen-btn-' + section.id + '" onclick="toggleNarration(\'' + section.id + '\')">&#128266;</button>';
 
@@ -143,7 +295,7 @@ function renderMobileSectionChrome() {
   footer.innerHTML =
     '<button class="mob-nav-prev" onclick="prevSection(' + fi + ',' + si + ')"' + (si === 0 ? ' disabled' : '') + '>&#8592;</button>' +
     '<button class="mob-sec-dots-btn" onclick="showSectionSheet(' + fi + ',' + si + ')" title="All sections">' + dots + '</button>' +
-    '<button class="mob-nav-next" onclick="' + (isLast ? 'nextSection(' + fi + ',' + si + ')' : 'nextSection(' + fi + ',' + si + ')') + '">' + (isLast ? 'Finish &#10003;' : '&#8594;') + '</button>';
+    '<button class="mob-nav-next" onclick="nextSection(' + fi + ',' + si + ')">' + (isLast ? 'Finish &#10003;' : '&#8594;') + '</button>';
 
   document.body.appendChild(header);
   document.body.appendChild(footer);
@@ -167,13 +319,23 @@ function _removeMobileSectionChrome() {
   if (f) f.remove();
 }
 
+// Back from section → floor list
+function mobGoToFloorList() {
+  closeSectionSheet();
+  _removeMobileSectionChrome();
+  document.body.classList.remove('mob-in-section');
+  if (typeof stopNarration === 'function') stopNarration();
+  renderMobileFloorList();
+}
+
+// Back from anywhere → home grid
 function mobGoToHub() {
   closeSectionSheet();
   _removeMobileSectionChrome();
   document.body.classList.remove('mob-in-section');
-  if (typeof renderMobileHub === 'function') renderMobileHub();
   if (typeof stopNarration === 'function') stopNarration();
   if (typeof stopHubCanvas === 'function') stopHubCanvas();
+  renderMobileHub();
 }
 
 // ============================================================
