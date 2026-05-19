@@ -36,8 +36,6 @@ function renderMobileHub() {
 
   _removeMobileSectionChrome();
   document.body.classList.remove('mob-in-section');
-
-  // Stop any desktop canvas that may have started
   if (typeof stopHubCanvas === 'function') stopHubCanvas();
 
   var xp     = (typeof state !== 'undefined' && state.xp)     || 0;
@@ -56,7 +54,6 @@ function renderMobileHub() {
   }
   var overallPct = totalSecs > 0 ? Math.round(totalDone / totalSecs * 100) : 0;
 
-  // Current floor info for Learn hero tile
   var fi = (state && state.currentFloor) ? state.currentFloor - 1 : 0;
   var currentFloor = (typeof FLOORS !== 'undefined' && FLOORS[fi]) ? FLOORS[fi] : null;
   var currentDone = 0, currentTotal = 0;
@@ -67,19 +64,14 @@ function renderMobileHub() {
     });
   }
   var learnColor = (currentFloor && currentFloor.color) ? currentFloor.color : '#c8a96e';
-  var learnHint  = currentFloor
-    ? ('Floor ' + (fi + 1) + ' · ' + currentDone + '/' + currentTotal + ' sections · ' + overallPct + '% overall')
-    : 'Start your learning journey';
   var learnBtn = currentDone > 0 ? 'Continue' : 'Begin';
+  var floorPct = currentTotal > 0 ? Math.round(currentDone / currentTotal * 100) : 0;
 
-  // SRS due count
   var revDue = 0;
   if (typeof srsCounts === 'function') {
     var counts = srsCounts();
     revDue = (counts.due || 0) + (counts.new || 0);
   }
-
-  // Challenges today
   var chalDone = false;
   if (typeof state !== 'undefined' && state.dailyChallengeDate) {
     chalDone = state.dailyChallengeDate === new Date().toDateString();
@@ -91,73 +83,53 @@ function renderMobileHub() {
     return 'rgba(' + r + ',' + g + ',' + b + ',' + (a || 0.28) + ')';
   }
 
-  function _tile(opts) {
-    var glow = _hexGlow(opts.color, 0.26);
-    var cls = 'mob-grid-tile' + (opts.hero ? ' mob-grid-tile-hero' : '');
-    return '<div class="' + cls + '" style="--mg-color:' + opts.color + ';--mg-glow:' + glow + '" onclick="' + opts.action + '">' +
-      '<div class="mg-accent"></div>' +
-      '<div class="mg-icon">' + opts.icon + '</div>' +
-      '<div class="mg-badge" style="color:' + opts.color + '">' + opts.badge + '</div>' +
-      '<div class="mg-title">' + opts.title + '</div>' +
-      '<div class="mg-hint">' + opts.hint + '</div>' +
-      (opts.hero ? '<button class="mg-cta" style="border-color:' + opts.color + ';color:' + opts.color + '">' + opts.status + ' →</button>' : '') +
-    '</div>';
-  }
+  var glow = _hexGlow(learnColor, 0.35);
+  var icon = (typeof getFloorIcon === 'function' && currentFloor) ? getFloorIcon(fi, 56) : '';
 
   var html = '<div class="mob-grid-wrap">';
 
-  // ── Hero header: "Seven Floors. One Goal." ──
+  // Hero card
   html +=
-    '<div class="mob-hub-hero-hdr">' +
-      '<div class="mob-hub-path-label">YOUR LEARNING PATH</div>' +
-      '<div class="mob-hub-headline">Seven Floors.<br>One Goal.</div>' +
-      '<div class="mob-hub-subline">Work through each floor in order. Each one builds directly on the last.</div>' +
-      '<div class="mob-hub-prog-row">' +
-        '<div class="mob-hub-prog-bar"><div class="mob-hub-prog-fill" style="width:' + overallPct + '%"></div></div>' +
-        '<span class="mob-hub-prog-pct">' + overallPct + '% complete</span>' +
+    '<div class="mob-hero-card" style="--mg-color:' + learnColor + ';--mg-glow:' + glow + '" onclick="renderMobileFloorList()">' +
+      '<div class="mob-hero-floor-label">FLOOR ' + (fi + 1) + '</div>' +
+      '<div class="mob-hero-title">' + (currentFloor ? (typeof escHtml === 'function' ? escHtml(currentFloor.title) : currentFloor.title) : 'Start Learning') + '</div>' +
+      '<div class="mob-hero-icon">' + icon + '</div>' +
+      '<div class="mob-hero-count">' + currentDone + '/' + currentTotal + ' Sections Complete</div>' +
+      '<div class="mob-hero-bar-wrap">' +
+        '<div class="mob-hero-bar"><div class="mob-hero-bar-fill" style="width:' + floorPct + '%"></div></div>' +
+        '<span class="mob-hero-pct">' + floorPct + '%</span>' +
       '</div>' +
+      '<button class="mob-hero-cta" style="background:' + learnColor + '">' + learnBtn + ' →</button>' +
     '</div>';
 
-  // ── Stats strip ──
-  html +=
-    '<div class="mob-hub-stats-strip">' +
-      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + (typeof FLOORS !== 'undefined' ? FLOORS.length : 7) + '</div><div class="mob-hub-stat-lbl">FLOORS<br>UNLOCKED</div></div>' +
-      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + xp + '</div><div class="mob-hub-stat-lbl">XP<br>EARNED</div></div>' +
-      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + streak + '</div><div class="mob-hub-stat-lbl">DAY<br>STREAK</div></div>' +
-      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + floorsComplete + '</div><div class="mob-hub-stat-lbl">FLOORS<br>COMPLETE</div></div>' +
-    '</div>';
-
-  // ── Learn hero tile (full width) ──
-  html += '<div class="mob-grid-hero-row">' +
-    _tile({
-      hero:   true,
-      color:  learnColor,
-      icon:   (typeof getFloorIcon === 'function' && currentFloor) ? getFloorIcon(fi, 40) : '📖',
-      badge:  'LEARN',
-      title:  currentFloor ? (typeof escHtml === 'function' ? escHtml(currentFloor.title) : currentFloor.title) : 'Seven Floors',
-      hint:   learnHint,
-      action: 'renderMobileFloorList()',
-      status: learnBtn,
-    }) +
-  '</div>';
-
-  // ── 2-col grid ──
+  // 2-col grid
   var tiles = [
-    { color: '#f0a832', icon: '⚡', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
-    { color: '#64c8a0', icon: '🃏', badge: 'REVISION',   title: 'Revision Centre', hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',       action: 'mobNavTo(\'revision\')' },
-    { color: '#7eb8c8', icon: '⚙',  badge: 'TOOLS',     title: 'Tools',            hint: 'Speed round & more',                                        action: 'mobNavTo(\'tools\')' },
-    { color: '#d46eb8', icon: '🎮', badge: 'GAME HUB',  title: 'Game Hub',         hint: 'Play & practice',                                           action: 'mobNavTo(\'game\')' },
-    { color: '#8888ff', icon: '👤', badge: 'PROFILE',   title: 'Profile',          hint: 'Stats, notes & badges',                                     action: 'mobNavTo(\'profile\')' },
-    { color: '#e0c060', icon: '♛',  badge: 'PREMIUM',  title: 'Premium',           hint: 'Unlock everything',                                         action: 'mobNavTo(\'premium\')' },
+    { color: '#f0a832', icon: '&#9889;', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
+    { color: '#64c8a0', icon: '&#127183;', badge: 'REVISION',   title: 'Revision Centre', hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',       action: 'mobNavTo(\'revision\')' },
+    { color: '#7eb8c8', icon: '&#9881;',  badge: 'TOOLS',      title: 'Tools',            hint: 'Speed round & more',                                        action: 'mobNavTo(\'tools\')' },
+    { color: '#d46eb8', icon: '&#127918;', badge: 'GAME HUB',  title: 'Game Hub',         hint: 'Play & practice',                                           action: 'mobNavTo(\'game\')' },
+    { color: '#8888ff', icon: '&#128100;', badge: 'PROFILE',   title: 'Profile',          hint: 'Stats, notes & badges',                                     action: 'mobNavTo(\'profile\')' },
+    { color: '#e0c060', icon: '&#9813;',  badge: 'PREMIUM',   title: 'Premium',           hint: 'Unlock everything',                                         action: 'mobNavTo(\'premium\')' },
   ];
 
   html += '<div class="mob-grid-cells">';
-  tiles.forEach(function(t) { html += _tile(t); });
+  tiles.forEach(function(t) {
+    var tglow = _hexGlow(t.color, 0.22);
+    html +=
+      '<div class="mob-grid-tile" style="--mg-color:' + t.color + ';--mg-glow:' + tglow + '" onclick="' + t.action + '">' +
+        '<div class="mg-accent"></div>' +
+        '<div class="mg-icon-lg">' + t.icon + '</div>' +
+        '<div class="mg-title-lg">' + t.title + '</div>' +
+        '<div class="mg-hint">' + t.hint + '</div>' +
+      '</div>';
+  });
   html += '</div>';
 
   html += '</div>';
   panel.innerHTML = html;
   panel.scrollTop = 0;
+  var mainCol = document.getElementById('main-col');
+  if (mainCol) mainCol.scrollTop = 0;
 }
 
 // ============================================================
@@ -167,7 +139,14 @@ function mobNavTo(tab) {
   if (typeof switchTopNav === 'function') {
     switchTopNav(tab, document.getElementById('tnav-' + tab));
   }
-  // Inject a lightweight back-to-hub header
+  // Scroll everything to top immediately
+  var mainCol = document.getElementById('main-col');
+  if (mainCol) mainCol.scrollTop = 0;
+  var panel = document.getElementById('panel-' + tab);
+  if (panel) panel.scrollTop = 0;
+  window.scrollTo(0, 0);
+
+  // Inject back-to-hub bar
   setTimeout(function() {
     if (document.getElementById('mob-panel-back')) return;
     var bar = document.createElement('div');
@@ -184,6 +163,9 @@ function mobBackToHub() {
   if (typeof switchTopNav === 'function') {
     switchTopNav('learn', document.getElementById('tnav-learn'));
   }
+  var mainCol = document.getElementById('main-col');
+  if (mainCol) mainCol.scrollTop = 0;
+  window.scrollTo(0, 0);
   renderMobileHub();
 }
 
@@ -208,6 +190,25 @@ function renderMobileFloorList() {
     '<button class="mob-fl-back-btn" onclick="renderMobileHub()">&#8592; Home</button>' +
     '<div class="mob-fl-back-title">Your Learning Path</div>' +
   '</div>';
+
+  html +=
+    '<div class="mob-fl-hero-hdr">' +
+      '<div class="mob-hub-path-label">YOUR LEARNING PATH</div>' +
+      '<div class="mob-hub-headline">Seven Floors.<br>One Goal.</div>' +
+      '<div class="mob-hub-subline">Work through each floor in order. Each one builds directly on the last.</div>' +
+      '<div class="mob-hub-prog-row">' +
+        '<div class="mob-hub-prog-bar"><div class="mob-hub-prog-fill" style="width:' + (function(){
+          var td=0,ts=0;
+          if(typeof FLOORS!=='undefined')FLOORS.forEach(function(f){f.sections.forEach(function(s){ts++;if(state&&state.completed&&state.completed[s.id])td++;});});
+          return ts>0?Math.round(td/ts*100):0;
+        })() + '%"></div></div>' +
+        '<span class="mob-hub-prog-pct">' + (function(){
+          var td=0,ts=0;
+          if(typeof FLOORS!=='undefined')FLOORS.forEach(function(f){f.sections.forEach(function(s){ts++;if(state&&state.completed&&state.completed[s.id])td++;});});
+          return ts>0?Math.round(td/ts*100):0;
+        })() + '% complete</span>' +
+      '</div>' +
+    '</div>';
 
   // Floor cards
   if (typeof FLOORS !== 'undefined') {
