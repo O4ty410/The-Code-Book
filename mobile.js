@@ -37,23 +37,26 @@ function renderMobileHub() {
   _removeMobileSectionChrome();
   document.body.classList.remove('mob-in-section');
 
-  var name   = (typeof state !== 'undefined' && state.playerName) ||
-               localStorage.getItem('codebook_player_name') || '';
+  // Stop any desktop canvas that may have started
+  if (typeof stopHubCanvas === 'function') stopHubCanvas();
+
   var xp     = (typeof state !== 'undefined' && state.xp)     || 0;
   var streak = (typeof state !== 'undefined' && state.streak)  || 0;
-
+  var floorsComplete = 0;
   var totalDone = 0, totalSecs = 0;
+
   if (typeof FLOORS !== 'undefined') {
-    FLOORS.forEach(function(f) {
+    FLOORS.forEach(function(f, fi) {
       f.sections.forEach(function(s) {
         totalSecs++;
         if (state && state.completed && state.completed[s.id]) totalDone++;
       });
+      if (typeof isFloorComplete === 'function' && isFloorComplete(fi)) floorsComplete++;
     });
   }
   var overallPct = totalSecs > 0 ? Math.round(totalDone / totalSecs * 100) : 0;
 
-  // Current floor info for Learn tile
+  // Current floor info for Learn hero tile
   var fi = (state && state.currentFloor) ? state.currentFloor - 1 : 0;
   var currentFloor = (typeof FLOORS !== 'undefined' && FLOORS[fi]) ? FLOORS[fi] : null;
   var currentDone = 0, currentTotal = 0;
@@ -67,9 +70,9 @@ function renderMobileHub() {
   var learnHint  = currentFloor
     ? ('Floor ' + (fi + 1) + ' · ' + currentDone + '/' + currentTotal + ' sections · ' + overallPct + '% overall')
     : 'Start your learning journey';
-  var learnBtn   = currentDone > 0 ? 'Continue' : 'Begin';
+  var learnBtn = currentDone > 0 ? 'Continue' : 'Begin';
 
-  // SRS due count for Revision tile
+  // SRS due count
   var revDue = 0;
   if (typeof srsCounts === 'function') {
     var counts = srsCounts();
@@ -89,11 +92,9 @@ function renderMobileHub() {
   }
 
   function _tile(opts) {
-    // opts: { id, color, icon, badge, title, hint, action, hero, status }
     var glow = _hexGlow(opts.color, 0.26);
-    var glowHover = _hexGlow(opts.color, 0.45);
     var cls = 'mob-grid-tile' + (opts.hero ? ' mob-grid-tile-hero' : '');
-    return '<div class="' + cls + '" style="--mg-color:' + opts.color + ';--mg-glow:' + glow + ';--mg-glow-h:' + glowHover + '" onclick="' + opts.action + '">' +
+    return '<div class="' + cls + '" style="--mg-color:' + opts.color + ';--mg-glow:' + glow + '" onclick="' + opts.action + '">' +
       '<div class="mg-accent"></div>' +
       '<div class="mg-icon">' + opts.icon + '</div>' +
       '<div class="mg-badge" style="color:' + opts.color + '">' + opts.badge + '</div>' +
@@ -105,18 +106,28 @@ function renderMobileHub() {
 
   var html = '<div class="mob-grid-wrap">';
 
-  // Greeting header
+  // ── Hero header: "Seven Floors. One Goal." ──
   html +=
-    '<div class="mob-grid-header">' +
-      '<div class="mob-grid-greeting">Hey' + (name ? ', ' + (typeof escHtml === 'function' ? escHtml(name) : name) : '') + '.</div>' +
-      '<div class="mob-grid-chips">' +
-        '<span class="mob-grid-chip">⚡ ' + xp + ' XP</span>' +
-        '<span class="mob-grid-chip">🔥 ' + streak + (streak === 1 ? ' day' : ' days') + '</span>' +
-        '<span class="mob-grid-chip">📖 ' + overallPct + '%</span>' +
+    '<div class="mob-hub-hero-hdr">' +
+      '<div class="mob-hub-path-label">YOUR LEARNING PATH</div>' +
+      '<div class="mob-hub-headline">Seven Floors.<br>One Goal.</div>' +
+      '<div class="mob-hub-subline">Work through each floor in order. Each one builds directly on the last.</div>' +
+      '<div class="mob-hub-prog-row">' +
+        '<div class="mob-hub-prog-bar"><div class="mob-hub-prog-fill" style="width:' + overallPct + '%"></div></div>' +
+        '<span class="mob-hub-prog-pct">' + overallPct + '% complete</span>' +
       '</div>' +
     '</div>';
 
-  // Hero Learn tile (full width)
+  // ── Stats strip ──
+  html +=
+    '<div class="mob-hub-stats-strip">' +
+      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + (typeof FLOORS !== 'undefined' ? FLOORS.length : 7) + '</div><div class="mob-hub-stat-lbl">FLOORS<br>UNLOCKED</div></div>' +
+      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + xp + '</div><div class="mob-hub-stat-lbl">XP<br>EARNED</div></div>' +
+      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + streak + '</div><div class="mob-hub-stat-lbl">DAY<br>STREAK</div></div>' +
+      '<div class="mob-hub-stat"><div class="mob-hub-stat-val">' + floorsComplete + '</div><div class="mob-hub-stat-lbl">FLOORS<br>COMPLETE</div></div>' +
+    '</div>';
+
+  // ── Learn hero tile (full width) ──
   html += '<div class="mob-grid-hero-row">' +
     _tile({
       hero:   true,
@@ -130,22 +141,23 @@ function renderMobileHub() {
     }) +
   '</div>';
 
-  // 2-col grid for remaining 6 tiles
+  // ── 2-col grid ──
   var tiles = [
     { color: '#f0a832', icon: '⚡', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
-    { color: '#64c8a0', icon: '🃏', badge: 'REVISION',   title: 'Revision Centre', hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',     action: 'mobNavTo(\'revision\')' },
-    { color: '#7eb8c8', icon: '⚙', badge: 'TOOLS',      title: 'Tools',           hint: 'Speed round & more',                                       action: 'mobNavTo(\'tools\')' },
-    { color: '#d46eb8', icon: '🎮', badge: 'GAME HUB',  title: 'Game Hub',        hint: 'Play & practice',                                          action: 'mobNavTo(\'game\')' },
-    { color: '#8888ff', icon: '👤', badge: 'PROFILE',   title: 'Profile',         hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
-    { color: '#e0c060', icon: '♛', badge: 'PREMIUM',   title: 'Premium',         hint: 'Unlock everything',                                        action: 'mobNavTo(\'premium\')' },
+    { color: '#64c8a0', icon: '🃏', badge: 'REVISION',   title: 'Revision Centre', hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',       action: 'mobNavTo(\'revision\')' },
+    { color: '#7eb8c8', icon: '⚙',  badge: 'TOOLS',     title: 'Tools',            hint: 'Speed round & more',                                        action: 'mobNavTo(\'tools\')' },
+    { color: '#d46eb8', icon: '🎮', badge: 'GAME HUB',  title: 'Game Hub',         hint: 'Play & practice',                                           action: 'mobNavTo(\'game\')' },
+    { color: '#8888ff', icon: '👤', badge: 'PROFILE',   title: 'Profile',          hint: 'Stats, notes & badges',                                     action: 'mobNavTo(\'profile\')' },
+    { color: '#e0c060', icon: '♛',  badge: 'PREMIUM',  title: 'Premium',           hint: 'Unlock everything',                                         action: 'mobNavTo(\'premium\')' },
   ];
 
   html += '<div class="mob-grid-cells">';
   tiles.forEach(function(t) { html += _tile(t); });
   html += '</div>';
 
-  html += '</div>'; // .mob-grid-wrap
+  html += '</div>';
   panel.innerHTML = html;
+  panel.scrollTop = 0;
 }
 
 // ============================================================

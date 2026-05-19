@@ -2989,9 +2989,11 @@ function switchTopNav(tab, btn) {
     var panelBackBar = document.getElementById('mob-panel-back');
     if (panelBackBar) panelBackBar.remove();
     if (mainContent) mainContent.style.display = '';
-    renderLearnHub();
-    if (typeof renderMobileHub === 'function' && typeof isMobile === 'function' && isMobile()) {
-      renderMobileHub();
+    if (typeof isMobile === 'function' && isMobile()) {
+      // Mobile: skip the desktop hub entirely — render the grid hub only
+      if (typeof renderMobileHub === 'function') renderMobileHub();
+    } else {
+      renderLearnHub();
     }
   } else {
     stopHubCanvas();
