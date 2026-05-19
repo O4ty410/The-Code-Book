@@ -340,7 +340,7 @@ function trackDailySection() {
   const newCount = current + 1;
   localStorage.setItem(todayKey, newCount);
 
-  const dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal') || '1');
+  const dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal') || '2');
   if (newCount === dailyGoal) {
     setTimeout(() => showSessionComplete(newCount), 1200);
   }
@@ -2922,7 +2922,7 @@ function updateDailyGoalBar() {
   var today = new Date().toDateString();
   var todayKey = 'daily_sections_' + today;
   var todaySecs = parseInt(localStorage.getItem(todayKey) || '0');
-  var goal = parseInt(localStorage.getItem('codebook_daily_goal') || '1');
+  var goal = parseInt(localStorage.getItem('codebook_daily_goal') || '2');
   var pct = Math.min(100, Math.round((todaySecs / goal) * 100));
   var remaining = Math.max(0, goal - todaySecs);
   var bar = document.getElementById('rs-goal-bar');
@@ -2933,6 +2933,13 @@ function updateDailyGoalBar() {
   if (txt) txt.textContent = todaySecs + ' of ' + goal + ' sections';
   if (pctEl) pctEl.textContent = pct + '%';
   if (sub) sub.textContent = remaining > 0 ? remaining + ' more to hit your daily goal' : 'Daily goal complete! \uD83C\uDF89';
+  var goalBtns = document.querySelectorAll('.goal-btn[data-goal]');
+  goalBtns.forEach(function(b) { b.classList.toggle('goal-btn-active', parseInt(b.dataset.goal) === goal); });
+}
+
+function setDailyGoal(n) {
+  localStorage.setItem('codebook_daily_goal', n);
+  updateDailyGoalBar();
 }
 
 function updateAchievements() {
@@ -3573,8 +3580,8 @@ function renderFloor1(si) {
   }).join('') : '<div class="f1-activity-empty">No activity yet. Start your first section!</div>';
 
   // Today\'s goal
-  var dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal')) || 3;
-  var todayKey = 'codebook_daily_' + new Date().toDateString();
+  var dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal')) || 2;
+  var todayKey = 'daily_sections_' + new Date().toDateString();
   var todayDone = parseInt(localStorage.getItem(todayKey)) || 0;
   var goalPct = Math.min(100, Math.round((todayDone / dailyGoal) * 100));
   var circumference = 2 * Math.PI * 28;
@@ -5571,6 +5578,29 @@ function renderProfilePanel() {
       '<div class="pf-stat-div"></div>' +
       '<div class="pf-stat-cell"><div class="pf-stat-n">' + timeDisplay + '</div><div class="pf-stat-k">FOCUS</div></div>' +
     '</div>' +
+
+    // Streak calendar
+    (function() {
+      var days = ['M','T','W','T','F','S','S'];
+      var now = new Date();
+      var todayDow = (now.getDay() + 6) % 7; // Mon=0
+      var dots = '';
+      for (var d = 6; d >= 0; d--) {
+        var dt = new Date(now); dt.setDate(now.getDate() - d);
+        var key = 'daily_sections_' + dt.toDateString();
+        var done = parseInt(localStorage.getItem(key) || '0') > 0;
+        var isToday = d === 0;
+        var dow = (dt.getDay() + 6) % 7;
+        dots += '<div class="sc-day' + (done ? ' sc-day-on' : '') + (isToday ? ' sc-day-today' : '') + '">' +
+          '<div class="sc-dot"></div>' +
+          '<div class="sc-lbl">' + days[dow] + '</div>' +
+        '</div>';
+      }
+      return '<div class="pf-section pf-streak-cal">' +
+        '<div class="pf-section-hdr">// LAST 7 DAYS</div>' +
+        '<div class="sc-week">' + dots + '</div>' +
+      '</div>';
+    })() +
 
     // Sage field notes
     '<div class="pf-sage-card">' +
