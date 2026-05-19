@@ -2987,6 +2987,9 @@ function switchTopNav(tab, btn) {
   if (tab === 'learn') {
     if (mainContent) mainContent.style.display = '';
     renderLearnHub();
+    if (typeof renderMobileHub === 'function' && typeof isMobile === 'function' && isMobile()) {
+      renderMobileHub();
+    }
   } else {
     stopHubCanvas();
     if (mainContent) mainContent.style.display = 'none';
@@ -4389,7 +4392,7 @@ let lastFloorIndex = 0;
 function renderFloor(fi, si) {
   stopHubCanvas();
   var ls = document.getElementById('left-sidebar');
-  if (ls) ls.style.display = 'flex';
+  if (ls) ls.style.display = typeof isMobile === 'function' && isMobile() ? 'none' : 'flex';
   var floor = FLOORS[fi];
   var color = floor ? (floor.color || '#c8a96e') : '#c8a96e';
   var r = parseInt(color.slice(1,3),16), g = parseInt(color.slice(3,5),16), b = parseInt(color.slice(5,7),16);
@@ -4405,6 +4408,9 @@ function renderFloor(fi, si) {
     el.style.setProperty('--floor-hero-subtle',  subtle);
   });
   loadSection(fi, si);
+  if (typeof renderMobileSectionChrome === 'function' && typeof isMobile === 'function' && isMobile()) {
+    setTimeout(renderMobileSectionChrome, 60);
+  }
 }
 function renderFloorWithElevator(fi, si) {
   const direction = fi > lastFloorIndex ? 'up' : fi < lastFloorIndex ? 'down' : null;
