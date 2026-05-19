@@ -5,45 +5,124 @@
    ============================================================ */
 
 /* ============================================================
+   HIDE BOTTOM TAB BAR ON MOBILE (grid tiles replace it)
+   ============================================================ */
+.is-mobile .mobile-bottom-bar {
+  display: none !important;
+}
+
+/* Reclaim the space the bar was using */
+.is-mobile .main-col {
+  max-height: calc(100vh - 52px) !important;
+}
+
+/* ============================================================
    MOBILE HOME GRID
    ============================================================ */
 .mob-grid-wrap {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 0 0 100px;
+  padding: 0 0 40px;
   min-height: 100%;
 }
 
-.mob-grid-header {
-  padding: 20px 14px 14px;
+/* ── "Seven Floors. One Goal." header ── */
+.mob-hub-hero-hdr {
+  padding: 24px 16px 20px;
   border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 0;
+}
+
+.mob-hub-path-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #7eb8c8;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.mob-hub-headline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.mob-hub-subline {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.mob-hub-prog-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mob-hub-prog-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mob-hub-prog-fill {
+  height: 100%;
+  background: #7eb8c8;
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(126,184,200,0.6);
+  transition: width 0.7s ease;
+}
+
+.mob-hub-prog-pct {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: #7eb8c8;
+  white-space: nowrap;
+}
+
+/* ── Stats strip ── */
+.mob-hub-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
   margin-bottom: 14px;
 }
 
-.mob-grid-greeting {
+.mob-hub-stat {
+  padding: 14px 8px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+
+.mob-hub-stat:last-child {
+  border-right: none;
+}
+
+.mob-hub-stat-val {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 22px;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 10px;
-  line-height: 1.2;
+  line-height: 1;
+  margin-bottom: 5px;
 }
 
-.mob-grid-chips {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.mob-grid-chip {
+.mob-hub-stat-lbl {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 20px;
-  padding: 5px 12px;
-  color: var(--text-dim);
+  font-size: 8px;
+  letter-spacing: 0.5px;
+  color: rgba(200,220,255,0.55);
+  text-transform: uppercase;
+  line-height: 1.4;
 }
 
 /* ============================================================
@@ -197,6 +276,7 @@
 .is-mobile:has(.mob-panel-back) #main-content,
 .is-mobile:has(.mob-panel-back) .main-col {
   padding-top: calc(48px + env(safe-area-inset-top, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 /* ============================================================
@@ -479,7 +559,7 @@
    ============================================================ */
 .mob-section-footer {
   position: fixed;
-  bottom: 56px;
+  bottom: 0;
   left: 0;
   right: 0;
   z-index: 490;
@@ -563,7 +643,7 @@
 .is-mobile.mob-in-section #main-content,
 .is-mobile.mob-in-section .main-col {
   padding-top: calc(52px + env(safe-area-inset-top, 0px));
-  padding-bottom: calc(56px + 56px);
+  padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
 }
 
 /* ============================================================
