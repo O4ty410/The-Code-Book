@@ -432,6 +432,7 @@ let state = {
   challengesDone: {},
   streakProtectedToday: false,
   revKnown: {},
+  srsData: {},
   currentTrack: null
 };
 state.playerName = localStorage.getItem("codebook_player_name") || null;
@@ -462,6 +463,7 @@ function loadState() {
       state.challengesDone = s.challengesDone || {};
       state.streakProtectedToday = s.streakProtectedToday || false;
       state.revKnown = s.revKnown || {};
+      state.srsData  = s.srsData  || {};
       state.earnedBadges = s.earnedBadges || [];
       state.badgeFlags = s.badgeFlags || {};
       state.currentTrack = s.currentTrack || null;
@@ -502,6 +504,7 @@ function saveState() {
     challengesDone: state.challengesDone || {},
     streakProtectedToday: state.streakProtectedToday || false,
     revKnown: state.revKnown || {},
+    srsData:  state.srsData  || {},
     earnedBadges: state.earnedBadges || [],
     badgeFlags: state.badgeFlags || {}
   });
@@ -2186,7 +2189,6 @@ function goToFloor(fi) {
   }
 }
 function goToSection(fi, si) {
-  destroySageTorch();
   stopNarration();
   if (isRestLocked(fi, si)) {
     var b = getFloorBreakState(fi);
@@ -2703,8 +2705,6 @@ if (!isLoggedIn && !isGuest) {
     };
     mc.addEventListener('scroll', mc._readProgressFn);
   })();
-  // Sage torch guide — desktop reading companion
-  setTimeout(initSageTorch, 400);
 }
 
 function escHtml(str) {
@@ -4211,120 +4211,7 @@ function getChallengeIcon(type, color, sz) {
   }
 }
 
-// ============================================
-// SAGE TORCH GUIDE — scroll-linked reading companion
-// ============================================
-var _sageTorchRAF = null;
-var _sageTorchActive = false;
-
-function sageTorchOwlSVG() {
-  return '<svg width="62" height="90" viewBox="0 0 62 90" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-    // Torch handle
-    '<rect x="46" y="44" width="5" height="30" rx="2.5" fill="#7c5a1e"/>' +
-    // Wrap rings on handle
-    '<rect x="45" y="49" width="7" height="2.5" rx="1.2" fill="#a07830"/>' +
-    '<rect x="45" y="56" width="7" height="2.5" rx="1.2" fill="#a07830"/>' +
-    // Flame outer glow
-    '<ellipse cx="48.5" cy="34" rx="9" ry="12" fill="#ff6a00" opacity="0.35" class="stf-flicker"/>' +
-    // Flame layers
-    '<g class="stf-flicker">' +
-      '<ellipse cx="48.5" cy="31" rx="6" ry="9" fill="#ff8c00"/>' +
-      '<ellipse cx="48.5" cy="28" rx="4" ry="6.5" fill="#ffa500"/>' +
-      '<ellipse cx="48.5" cy="25.5" rx="2.5" ry="4" fill="#ffd600"/>' +
-      '<ellipse cx="48.5" cy="23.5" rx="1.5" ry="2.5" fill="#fff8dc" opacity="0.9"/>' +
-    '</g>' +
-    // Soft halo from torch
-    '<ellipse cx="48.5" cy="30" rx="18" ry="14" fill="#ffaa00" opacity="0.06"/>' +
-    // Body
-    '<ellipse cx="26" cy="61" rx="17" ry="19" fill="#1a2744"/>' +
-    '<ellipse cx="26" cy="64" rx="10" ry="12" fill="#212f54"/>' +
-    // Head
-    '<ellipse cx="26" cy="38" rx="14" ry="14" fill="#1a2744"/>' +
-    // Ear tufts
-    '<path d="M16 27 L13 16 L21 24Z" fill="#1a2744"/>' +
-    '<path d="M36 27 L39 16 L31 24Z" fill="#1a2744"/>' +
-    // Eyes
-    '<circle cx="20" cy="37" r="5.5" fill="#0f172a"/>' +
-    '<circle cx="32" cy="37" r="5.5" fill="#0f172a"/>' +
-    '<circle cx="20" cy="37" r="3.8" fill="#7dd3fc"/>' +
-    '<circle cx="32" cy="37" r="3.8" fill="#7dd3fc"/>' +
-    '<circle cx="21" cy="36" r="1.6" fill="#fff"/>' +
-    '<circle cx="33" cy="36" r="1.6" fill="#fff"/>' +
-    // Beak
-    '<path d="M26 43 L23 47 L29 47Z" fill="#f59e0b"/>' +
-    // Right wing (raised, holding torch)
-    '<path d="M39 52 C46 46 54 44 54 53 C54 61 45 63 39 60Z" fill="#2d3f6a"/>' +
-    // Left wing
-    '<path d="M13 52 C6 47 0 50 2 57 C4 63 12 63 14 59Z" fill="#2d3f6a"/>' +
-    // Feet
-    '<line x1="20" y1="77" x2="15" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="20" y1="77" x2="20" y2="87" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="20" y1="77" x2="25" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="32" y1="77" x2="27" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="32" y1="77" x2="32" y2="87" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<line x1="32" y1="77" x2="37" y2="86" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>' +
-    '</svg>';
-}
-
-function initSageTorch() {
-  if (window.innerWidth < 960) return;
-  destroySageTorch();
-
-  var mc = document.getElementById('main-content');
-  if (!mc) return;
-
-  // Owl guide
-  var guide = document.createElement('div');
-  guide.id = 'sage-torch-guide';
-  guide.className = 'sage-torch-guide';
-  guide.innerHTML = sageTorchOwlSVG();
-
-  // Torch light cone
-  var light = document.createElement('div');
-  light.id = 'sage-torch-light';
-  light.className = 'sage-torch-light';
-
-  document.body.appendChild(light);
-  document.body.appendChild(guide);
-  _sageTorchActive = true;
-
-  // After fly-in, switch to float animation
-  setTimeout(function() {
-    if (document.getElementById('sage-torch-guide')) {
-      guide.classList.add('sage-torch-floating');
-    }
-  }, 650);
-
-  function tick() {
-    if (!_sageTorchActive) return;
-    var rect = mc.getBoundingClientRect();
-    // Owl sits just outside the right edge of the content column
-    var owlLeft = rect.right + 14;
-    var owlTop  = window.innerHeight * 0.40;
-
-    guide.style.left = owlLeft + 'px';
-    guide.style.top  = owlTop  + 'px';
-
-    // Light cone emanates leftward from the torch flame (top of owl)
-    light.style.left = (owlLeft - 460) + 'px';
-    light.style.top  = (owlTop - 20)   + 'px';
-
-    _sageTorchRAF = requestAnimationFrame(tick);
-  }
-  tick();
-}
-
-function destroySageTorch() {
-  _sageTorchActive = false;
-  if (_sageTorchRAF) { cancelAnimationFrame(_sageTorchRAF); _sageTorchRAF = null; }
-  var g = document.getElementById('sage-torch-guide');
-  var l = document.getElementById('sage-torch-light');
-  if (g) g.remove();
-  if (l) l.remove();
-}
-
 function renderLearnHub() {
-  destroySageTorch();
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
   var ls = document.getElementById('left-sidebar');
@@ -7336,6 +7223,49 @@ var REV_CODE_SYMS = [
   'fn','if','for','try','new','let','var','$','_','~','|>','::',':='
 ];
 
+// ── SM-2 Spaced Repetition ──────────────────────────────────────
+function sm2Update(data, gotIt) {
+  var q  = gotIt ? 4 : 1;
+  var ef = Math.max(1.3, (data.ef || 2.5) + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02)));
+  var reps, interval;
+  if (!gotIt) {
+    reps = 0; interval = 1;
+  } else {
+    reps = (data.reps || 0) + 1;
+    if (reps === 1)      interval = 1;
+    else if (reps === 2) interval = 6;
+    else                 interval = Math.max(1, Math.round((data.interval || 1) * ef));
+  }
+  return { ef: ef, interval: interval, reps: reps, nextReview: Date.now() + interval * 86400000 };
+}
+
+function srsStatus(i) {
+  var d = (state.srsData || {})[i];
+  if (!d) return 'new';
+  if (Date.now() >= d.nextReview) return 'due';
+  if (d.interval >= 21) return 'mastered';
+  return 'upcoming';
+}
+
+function srsDaysUntil(i) {
+  var d = (state.srsData || {})[i];
+  if (!d || Date.now() >= d.nextReview) return 0;
+  return Math.ceil((d.nextReview - Date.now()) / 86400000);
+}
+
+function srsCounts() {
+  var due = 0, mastered = 0, upcoming = 0, fresh = 0;
+  for (var i = 0; i < REVISION_CARDS.length; i++) {
+    var s = srsStatus(i);
+    if (s === 'due')      due++;
+    else if (s === 'mastered')  mastered++;
+    else if (s === 'upcoming')  upcoming++;
+    else                        fresh++;
+  }
+  return { due: due, mastered: mastered, upcoming: upcoming, fresh: fresh };
+}
+// ────────────────────────────────────────────────────────────────
+
 function renderRevisionPanel() {
   var panel = document.getElementById('panel-revision');
   if (!panel) return;
@@ -7347,10 +7277,20 @@ function renderRevisionPanel() {
 }
 
 function _renderRevDeck(panel) {
+  var c = srsCounts();
+  var dueLabel = c.due > 0
+    ? '<span class="rev-srs-due-badge">' + c.due + ' due today</span>'
+    : (c.mastered === REVISION_CARDS.length ? '<span class="rev-srs-all-done">All ' + REVISION_CARDS.length + ' cards mastered ✓</span>' : '');
   var html = '<div class="rev-wrap">' +
     '<div class="rev-header">' +
       '<h2 class="rev-title">Revision Centre</h2>' +
-      '<p class="rev-subtitle">52 key concepts — one card for every term in the book</p>' +
+      '<p class="rev-subtitle">52 key concepts — reviewed with spaced repetition</p>' +
+    '</div>' +
+    '<div class="rev-srs-overview">' +
+      '<div class="rev-srs-stat"><span class="rev-srs-num srs-due">' + c.due + '</span><span class="rev-srs-lbl">due</span></div>' +
+      '<div class="rev-srs-stat"><span class="rev-srs-num srs-new">' + c.fresh + '</span><span class="rev-srs-lbl">new</span></div>' +
+      '<div class="rev-srs-stat"><span class="rev-srs-num srs-up">' + c.upcoming + '</span><span class="rev-srs-lbl">scheduled</span></div>' +
+      '<div class="rev-srs-stat"><span class="rev-srs-num srs-done">' + c.mastered + '</span><span class="rev-srs-lbl">mastered</span></div>' +
     '</div>' +
     '<div class="rev-deck-scene" onclick="dealRevisionCards()">' +
       '<div class="rev-deck-stack">' +
@@ -7366,7 +7306,7 @@ function _renderRevDeck(panel) {
           '<div class="rev-cc rev-cc-br"><span class="rev-cc-rank">A</span><span class="rev-cc-sym">{}</span></div>' +
         '</div>' +
       '</div>' +
-      '<div class="rev-deal-hint">Tap to deal your cards</div>' +
+      '<div class="rev-deal-hint">' + (c.due > 0 ? 'Tap to review ' + c.due + ' due card' + (c.due !== 1 ? 's' : '') : 'Tap to review all cards') + '</div>' +
     '</div>' +
   '</div>';
   panel.innerHTML = html;
@@ -7379,25 +7319,36 @@ function dealRevisionCards() {
 }
 
 function _renderRevGrid(panel, animate) {
-  var known = state.revKnown || {};
-  var knownCount = Object.keys(known).length;
-  var pct = Math.round(knownCount / 52 * 100);
+  var c = srsCounts();
+  var masteredPct = Math.round(c.mastered / REVISION_CARDS.length * 100);
+
+  // Sort: due → new → upcoming → mastered
+  var order = [];
+  for (var i = 0; i < REVISION_CARDS.length; i++) order.push(i);
+  var statusRank = { due: 0, new: 1, upcoming: 2, mastered: 3 };
+  order.sort(function(a, b) { return statusRank[srsStatus(a)] - statusRank[srsStatus(b)]; });
 
   var html = '<div class="rev-wrap">' +
     '<div class="rev-header">' +
       '<div class="rev-header-row">' +
         '<h2 class="rev-title">Revision Centre</h2>' +
-        '<button class="rev-reset-btn" onclick="resetRevisionCards()">&#8635; Reshuffle</button>' +
+        '<button class="rev-reset-btn" onclick="resetRevisionCards()">&#8635; Reset</button>' +
       '</div>' +
-      '<div class="rev-prog-track"><div class="rev-prog-fill" style="width:' + pct + '%"></div></div>' +
-      '<div class="rev-prog-label">' + knownCount + ' / 52 mastered</div>' +
+      '<div class="rev-srs-bar-row">' +
+        '<span class="rev-srs-chip srs-due">' + c.due + ' due</span>' +
+        '<span class="rev-srs-chip srs-new">' + c.fresh + ' new</span>' +
+        '<span class="rev-srs-chip srs-up">' + c.upcoming + ' scheduled</span>' +
+        '<span class="rev-srs-chip srs-done">' + c.mastered + ' mastered</span>' +
+      '</div>' +
+      '<div class="rev-prog-track"><div class="rev-prog-fill" style="width:' + masteredPct + '%"></div></div>' +
     '</div>' +
     '<div class="rev-grid">';
 
-  for (var i = 0; i < REVISION_CARDS.length; i++) {
+  for (var oi = 0; oi < order.length; oi++) {
+    var i = order[oi];
     var card = REVISION_CARDS[i];
-    var isKnown = known[i] === true;
-    var delay = animate ? (i * 22) : 0;
+    var status = srsStatus(i);
+    var delay = animate ? (oi * 22) : 0;
     var sx = animate ? (Math.round((Math.random() - 0.5) * 700)) : 0;
     var sy = animate ? (Math.round((Math.random() - 0.5) * 500)) : 0;
     var sr = animate ? (Math.round((Math.random() - 0.5) * 70)) : 0;
@@ -7406,14 +7357,23 @@ function _renderRevGrid(panel, animate) {
     if (animate) cardStyle += ';--rev-sx:' + sx + 'px;--rev-sy:' + sy + 'px;--rev-sr:' + sr + 'deg;animation-delay:' + delay + 'ms';
     var rank = REV_CARD_RANKS[i % 13];
     var sym = REV_CODE_SYMS[i];
-    var corner = '<div class="rev-cc rev-cc-tl"><span class="rev-cc-rank">' + rank + '</span><span class="rev-cc-sym">' + sym + '</span></div>';
+    var corner   = '<div class="rev-cc rev-cc-tl"><span class="rev-cc-rank">' + rank + '</span><span class="rev-cc-sym">' + sym + '</span></div>';
     var cornerBr = '<div class="rev-cc rev-cc-br"><span class="rev-cc-rank">' + rank + '</span><span class="rev-cc-sym">' + sym + '</span></div>';
-    html += '<div class="rev-card' + (isKnown ? ' rev-card-known' : '') + (animate ? ' rev-card-dealing' : '') + '" style="' + cardStyle + '" onclick="openRevCard(' + i + ')">' +
+    var statusBadge = '';
+    if (status === 'due')      statusBadge = '<div class="rev-card-status srs-badge-due">DUE</div>';
+    else if (status === 'new') statusBadge = '<div class="rev-card-status srs-badge-new">NEW</div>';
+    else if (status === 'upcoming') statusBadge = '<div class="rev-card-status srs-badge-up">+' + srsDaysUntil(i) + 'd</div>';
+    else                            statusBadge = '<div class="rev-card-tick">&#10003;</div>';
+    html += '<div class="rev-card' +
+      (status === 'mastered' ? ' rev-card-known' : '') +
+      (status === 'due' ? ' rev-card-due' : '') +
+      (animate ? ' rev-card-dealing' : '') +
+      '" style="' + cardStyle + '" onclick="openRevCard(' + i + ')">' +
       corner +
       '<div class="rev-card-owl">' + sageOwlSVG(36, 40) + '</div>' +
       '<div class="rev-card-bookname">THE CODE<br>BOOK</div>' +
       '<div class="rev-card-floorlabel">F' + card.floor + '</div>' +
-      (isKnown ? '<div class="rev-card-tick">&#10003;</div>' : '') +
+      statusBadge +
       cornerBr +
     '</div>';
   }
@@ -7425,14 +7385,18 @@ function _renderRevGrid(panel, animate) {
 
 function openRevCard(i) {
   _revModalIndex = i;
-  var bg = document.getElementById('rev-modal-bg');
+  var bg  = document.getElementById('rev-modal-bg');
   var box = document.getElementById('rev-modal-box');
   if (!bg || !box) return;
   var card = REVISION_CARDS[i];
+  var d    = (state.srsData || {})[i];
   var mRank = REV_CARD_RANKS[i % 13];
-  var mSym = REV_CODE_SYMS[i];
+  var mSym  = REV_CODE_SYMS[i];
   var mCornerTL = '<div class="rev-cc rev-cc-tl rev-cc-lg"><span class="rev-cc-rank">' + mRank + '</span><span class="rev-cc-sym">' + mSym + '</span></div>';
   var mCornerBR = '<div class="rev-cc rev-cc-br rev-cc-lg"><span class="rev-cc-rank">' + mRank + '</span><span class="rev-cc-sym">' + mSym + '</span></div>';
+  // Preview: what interval will "Got it" give?
+  var nextGotIt = sm2Update(d || { ef: 2.5, interval: 0, reps: 0 }, true);
+  var nextFail  = sm2Update(d || { ef: 2.5, interval: 0, reps: 0 }, false);
   box.innerHTML =
     '<div class="rev-mc-wrap">' +
       '<div class="rev-mc-scene" id="rev-mc-scene">' +
@@ -7449,8 +7413,12 @@ function openRevCard(i) {
             '<div class="rev-mc-term-sm">' + card.term + '</div>' +
             '<div class="rev-mc-def">' + card.def + '</div>' +
             '<div class="rev-mc-actions">' +
-              '<button class="rev-gotit-btn" onclick="markRevCard(' + i + ',true)">Got it &#10003;</button>' +
-              '<button class="rev-review-btn" onclick="markRevCard(' + i + ',false)">Review Again &#8635;</button>' +
+              '<button class="rev-gotit-btn" onclick="markRevCard(' + i + ',true)">' +
+                'Got it &#10003;<span class="rev-srs-next">+' + nextGotIt.interval + 'd</span>' +
+              '</button>' +
+              '<button class="rev-review-btn" onclick="markRevCard(' + i + ',false)">' +
+                'Review Again &#8635;<span class="rev-srs-next">+' + nextFail.interval + 'd</span>' +
+              '</button>' +
             '</div>' +
             mCornerBR +
           '</div>' +
@@ -7475,13 +7443,13 @@ function closeRevCard() {
   _revModalIndex = null;
 }
 
-function markRevCard(i, known) {
+function markRevCard(i, gotIt) {
+  if (!state.srsData) state.srsData = {};
+  state.srsData[i] = sm2Update(state.srsData[i] || { ef: 2.5, interval: 0, reps: 0 }, gotIt);
+  // Keep legacy revKnown in sync for badge checks
   if (!state.revKnown) state.revKnown = {};
-  if (known) {
-    state.revKnown[i] = true;
-  } else {
-    delete state.revKnown[i];
-  }
+  if (state.srsData[i].interval >= 21) state.revKnown[i] = true;
+  else delete state.revKnown[i];
   saveState();
   closeRevCard();
   var panel = document.getElementById('panel-revision');
@@ -7489,6 +7457,7 @@ function markRevCard(i, known) {
 }
 
 function resetRevisionCards() {
+  state.srsData  = {};
   state.revKnown = {};
   saveState();
   var panel = document.getElementById('panel-revision');
