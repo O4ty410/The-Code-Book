@@ -741,7 +741,11 @@ function launchApp() {
 
   // Render content
   renderNav();
-  renderLearnHub();
+  if (typeof isMobile === 'function' && isMobile()) {
+    if (typeof renderMobileHub === 'function') renderMobileHub();
+  } else {
+    renderLearnHub();
+  }
   updateTimeLog();
   updateXPPanel();
   resetSageIdleTimer();
@@ -1740,7 +1744,7 @@ if (!section) { return; }
     '</div>' +
     dots +
     '</div>' +
-    '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
+    '<div class="go-back-wrap"><button class="go-back-btn" onclick="typeof isMobile===\'function\'&&isMobile()?renderMobileHub():renderLearnHub()">&#8592; Go Back</button></div>';
 
   // READ
    var _readWords = (section.body || '').replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length;
@@ -2449,7 +2453,7 @@ function nextTrackSection(trackId, si) {
   if (mc) mc.classList.add('section-slide-out-left');
   setTimeout(function() {
     if (si < track.sections.length - 1) { loadTrackSection(trackId, si + 1); }
-    else { renderLearnHub(); }
+    else { if (typeof isMobile === 'function' && isMobile() && typeof renderMobileHub === 'function') { renderMobileHub(); } else { renderLearnHub(); } }
   }, 220);
 }
 
@@ -2459,7 +2463,7 @@ function prevTrackSection(trackId, si) {
   if (mc) mc.classList.add('section-slide-out-right');
   setTimeout(function() {
     if (si > 0) { loadTrackSection(trackId, si - 1); }
-    else { renderLearnHub(); }
+    else { if (typeof isMobile === 'function' && isMobile() && typeof renderMobileHub === 'function') { renderMobileHub(); } else { renderLearnHub(); } }
   }, 220);
 }
 
@@ -2515,7 +2519,7 @@ function loadTrackSection(trackId, si) {
     '<button class="section-tab-btn notes-tab-btn" onclick="switchSectionTab(\'notes\',\'' + section.id + '\',this)">&#128221; Notes</button>' +
     '</div>' + dots +
     '</div>' +
-    '<div class="go-back-wrap"><button class="go-back-btn" onclick="renderLearnHub()">&#8592; Go Back</button></div>';
+    '<div class="go-back-wrap"><button class="go-back-btn" onclick="typeof isMobile===\'function\'&&isMobile()?renderMobileHub():renderLearnHub()">&#8592; Go Back</button></div>';
 
   // READ
   var _readWords = (section.body || '').replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length;

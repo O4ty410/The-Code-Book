@@ -167,7 +167,14 @@ function mobNavTo(tab) {
   if (typeof switchTopNav === 'function') {
     switchTopNav(tab, document.getElementById('tnav-' + tab));
   }
-  // Inject a lightweight back-to-hub header
+  // Scroll everything to top immediately
+  var mainCol = document.getElementById('main-col');
+  if (mainCol) mainCol.scrollTop = 0;
+  var panel = document.getElementById('panel-' + tab);
+  if (panel) panel.scrollTop = 0;
+  window.scrollTo(0, 0);
+
+  // Inject back-to-hub bar
   setTimeout(function() {
     if (document.getElementById('mob-panel-back')) return;
     var bar = document.createElement('div');
@@ -184,6 +191,9 @@ function mobBackToHub() {
   if (typeof switchTopNav === 'function') {
     switchTopNav('learn', document.getElementById('tnav-learn'));
   }
+  var mainCol = document.getElementById('main-col');
+  if (mainCol) mainCol.scrollTop = 0;
+  window.scrollTo(0, 0);
   renderMobileHub();
 }
 
