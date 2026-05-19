@@ -5972,6 +5972,81 @@ function renderProfilePanel() {
       badgesHtml +
     '</div>' +
 
+    // Insights
+    (function() {
+      // 7-day bar chart
+      var days = [], dayLabels = [];
+      var maxSecs = 1;
+      for (var d = 6; d >= 0; d--) {
+        var dt = new Date(); dt.setDate(dt.getDate() - d);
+        var n = parseInt(localStorage.getItem('daily_sections_' + dt.toDateString()) || '0');
+        days.push(n);
+        if (n > maxSecs) maxSecs = n;
+        var dow = dt.getDay();
+        dayLabels.push(['Su','Mo','Tu','We','Th','Fr','Sa'][dow]);
+      }
+      var barHtml = '<div class="ins-chart">' +
+        days.map(function(n, i) {
+          var h = maxSecs > 0 ? Math.max(4, Math.round((n / maxSecs) * 52)) : 4;
+          var isToday = i === 6;
+          return '<div class="ins-bar-col">' +
+            '<div class="ins-bar-wrap"><div class="ins-bar' + (isToday ? ' ins-bar-today' : '') + (n === 0 ? ' ins-bar-empty' : '') + '" style="height:' + h + 'px"></div></div>' +
+            '<div class="ins-bar-lbl' + (isToday ? ' ins-lbl-today' : '') + '">' + dayLabels[i] + '</div>' +
+            (n > 0 ? '<div class="ins-bar-val">' + n + '</div>' : '') +
+          '</div>';
+        }).join('') +
+      '</div>';
+
+      // Quiz accuracy per floor
+      var accHtml = '<div class="ins-accuracy">';
+      FLOORS.forEach(function(f, fi) {
+        var total = 0, correct = 0;
+        f.sections.forEach(function(s) {
+          if (!s.quiz) return;
+          if (s.quiz.questions) {
+            var ms = state.quizMultiState && state.quizMultiState[s.id];
+            if (ms && ms.done) {
+              s.quiz.questions.forEach(function(q, qi) { total++; if (ms.answers[qi] === q.correct) correct++; });
+            }
+          } else {
+            var ans = state.quizAnswered && state.quizAnswered[s.id];
+            if (ans !== undefined) { total++; if (ans === s.quiz.correct) correct++; }
+          }
+        });
+        var pct = total > 0 ? Math.round(correct / total * 100) : null;
+        var color = f.color || '#c8a96e';
+        accHtml += '<div class="ins-acc-row">' +
+          '<span class="ins-acc-floor" style="color:' + color + '">F' + (fi + 1) + '</span>' +
+          '<div class="ins-acc-bar-wrap">' +
+            (pct !== null
+              ? '<div class="ins-acc-bar" style="width:' + pct + '%;background:' + color + '"></div>'
+              : '<div class="ins-acc-bar ins-acc-none" style="width:100%"></div>') +
+          '</div>' +
+          '<span class="ins-acc-pct">' + (pct !== null ? pct + '%' : '—') + '</span>' +
+        '</div>';
+      });
+      accHtml += '</div>';
+
+      // SRS breakdown
+      var counts = typeof srsCounts === 'function' ? srsCounts() : { mastered: 0, due: 0, upcoming: 0, new: 0 };
+      var srsHtml = '<div class="ins-srs-row">' +
+        '<div class="ins-srs-cell ins-srs-mastered"><div class="ins-srs-n">' + counts.mastered + '</div><div class="ins-srs-k">Mastered</div></div>' +
+        '<div class="ins-srs-cell ins-srs-due"><div class="ins-srs-n">' + counts.due + '</div><div class="ins-srs-k">Due</div></div>' +
+        '<div class="ins-srs-cell ins-srs-upcoming"><div class="ins-srs-n">' + counts.upcoming + '</div><div class="ins-srs-k">Upcoming</div></div>' +
+        '<div class="ins-srs-cell ins-srs-new"><div class="ins-srs-n">' + counts.new + '</div><div class="ins-srs-k">New</div></div>' +
+      '</div>';
+
+      return '<div class="pf-section">' +
+        '<div class="pf-section-hdr">// LEARNING INSIGHTS</div>' +
+        '<div class="ins-sub-hdr">Sections completed — last 7 days</div>' +
+        barHtml +
+        '<div class="ins-sub-hdr" style="margin-top:18px">Quiz accuracy by floor</div>' +
+        accHtml +
+        '<div class="ins-sub-hdr" style="margin-top:18px">Revision cards</div>' +
+        srsHtml +
+      '</div>';
+    })() +
+
     // Export
     '<div class="pf-section">' +
       '<button class="pf-export-btn" onclick="generateProgressCard()">&#8681; Download Progress Card</button>' +
