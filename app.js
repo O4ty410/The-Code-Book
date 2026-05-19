@@ -3872,9 +3872,60 @@ function toggleCheck(key, el) {
   if (state.checklistDone[key]) {
     el.classList.add('just-checked');
     setTimeout(() => el.classList.remove('just-checked'), 400);
-    const rect = el.getBoundingClientRect();
   }
   saveState();
+
+  // Extract sectionId from key (format: sectionId-checkIndex, e.g. "7-3-0")
+  var sectionId = key.replace(/-\d+$/, '');
+  var section = null;
+  for (var _fi = 0; _fi < FLOORS.length && !section; _fi++) {
+    var _s = FLOORS[_fi].sections.find(function(s) { return s.id === sectionId; });
+    if (_s) section = _s;
+  }
+  if (!section || !section.checklist) return;
+
+  var allChecked = section.checklist.every(function(_, ci) {
+    return !!(state.checklistDone || {})[sectionId + '-' + ci];
+  });
+
+  var existingBox = document.getElementById('checklist-sage-' + sectionId);
+  if (!allChecked) {
+    if (existingBox) existingBox.remove();
+    return;
+  }
+  if (existingBox) return; // already showing
+
+  var card = el.closest('.checklist-card');
+  if (!card) return;
+
+  var box = document.createElement('div');
+  box.id = 'checklist-sage-' + sectionId;
+  box.className = 'checklist-sage-box';
+  box.innerHTML =
+    '<div class="checklist-sage-inner">' +
+      '<div class="checklist-sage-owl">' + sageOwlSVG(36, 40) + '</div>' +
+      '<div class="checklist-sage-content">' +
+        '<div class="checklist-sage-title">Great work.</div>' +
+        '<div class="checklist-sage-body">You understand <strong>' + escHtml(section.title) + '</strong>. ' +
+          "That thinking is yours now \u2014 not just something you read. " +
+          "We'll test what you know with a quick quiz next.</div>" +
+        '<button class="checklist-sage-btn" onclick="goToQuizTab(\'' + sectionId + '\')">Take the Quiz \u2192</button>' +
+      '</div>' +
+    '</div>';
+
+  card.after(box);
+  setTimeout(function() { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 120);
+}
+
+function goToQuizTab(sectionId) {
+  var btns = document.querySelectorAll('.section-tab-btn');
+  for (var i = 0; i < btns.length; i++) {
+    var oc = btns[i].getAttribute('onclick') || '';
+    if (oc.indexOf("'quiz'") !== -1 && oc.indexOf(sectionId) !== -1) {
+      switchSectionTab('quiz', sectionId, btns[i]);
+      return;
+    }
+  }
 }
 
 // \u2500\u2500 ACTIVITY TRACKING \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
