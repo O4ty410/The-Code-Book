@@ -2985,6 +2985,9 @@ function switchTopNav(tab, btn) {
   var ls = document.getElementById('left-sidebar');
 
   if (tab === 'learn') {
+    // Remove any panel-back bar that was injected by mobNavTo
+    var panelBackBar = document.getElementById('mob-panel-back');
+    if (panelBackBar) panelBackBar.remove();
     if (mainContent) mainContent.style.display = '';
     renderLearnHub();
     if (typeof renderMobileHub === 'function' && typeof isMobile === 'function' && isMobile()) {
