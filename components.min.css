@@ -4896,6 +4896,7 @@ body.learn-mode #main-col {
   overflow: hidden;
   animation: sageSlideUp 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
+.editor-hint-panel{max-width:480px}.editor-hint-popup-body{padding:20px;overflow-y:auto}
 @keyframes sageSlideUp {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }

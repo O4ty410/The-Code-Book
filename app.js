@@ -2432,7 +2432,7 @@ if (!section) { return; }
     '<div class="editor-mac-dots"><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div></div>' +
     '<div class="editor-filename">' + editorDef.filename + '</div>' +
     '<div class="editor-action-row">' +
-    (section.hint ? '<button class="editor-hint-btn" onclick="toggleHint(\'editor-hint-' + section.id + '\')" title="Show hint">💡 Hint</button>' : '') +
+    (section.hint ? '<button class="editor-hint-btn" onclick="showEditorHintPopup(\'' + section.id + '\')" title="Show hint">💡 Hint</button>' : '') +
     '<button class="editor-reset-btn" onclick="resetEditor(\'' + section.id + '\')">&#8634; Reset</button>' +
     '<button class="editor-run-btn" onclick="runEditor(\'' + section.id + '\')">&#9654; Run</button>' +
     '</div></div>' +
@@ -2460,14 +2460,7 @@ if (!section) { return; }
       '<span class="ch-text">' + ch + '</span></div>';
   });
   if ((editorDef && editorDef.challenges || []).length === 0) allChDone = true;
-  c += '</div>';
-  if (section.hint) {
-    c += '<div class="hint-box editor-hint-box" id="editor-hint-' + section.id + '">' +
-      '<div class="owl-wrap"><div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
-      '<div class="owl-bubble"><div class="owl-name">SAGE &mdash; YOUR GUIDE</div>' +
-      '<div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div></div></div></div>';
-  }
-  c += '</div>';
+  c += '</div></div>';
 
   // QUIZ
   var answered = state.quizAnswered[section.id];
@@ -3141,7 +3134,7 @@ function loadTrackSection(trackId, si) {
     '<div class="editor-mac-dots"><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div><div class="editor-mac-dot"></div></div>' +
     '<div class="editor-filename">' + editorDef.filename + '</div>' +
     '<div class="editor-action-row">' +
-    (section.hint ? '<button class="editor-hint-btn" onclick="toggleHint(\'editor-hint-' + section.id + '\')" title="Show hint">💡 Hint</button>' : '') +
+    (section.hint ? '<button class="editor-hint-btn" onclick="showEditorHintPopup(\'' + section.id + '\')" title="Show hint">💡 Hint</button>' : '') +
     '<button class="editor-reset-btn" onclick="resetEditor(\'' + section.id + '\')">&#8634; Reset</button>' +
     '<button class="editor-run-btn" onclick="runEditor(\'' + section.id + '\')">&#9654; Run</button></div></div>' +
     '<div class="editor-split"><div class="editor-code-pane"><div class="editor-line-nums" id="lines-' + section.id + '">1</div>' +
@@ -3157,14 +3150,7 @@ function loadTrackSection(trackId, si) {
       '<button class="ch-check-btn" onclick="toggleChallenge(\'' + chKey + '\',0,' + si + ')" title="' + (done ? 'Mark incomplete' : 'Mark done') + '">' + (done ? '&#10003;' : '&#9675;') + '</button>' +
       '<span class="ch-text">' + ch + '</span></div>';
   });
-  c += '</div>';
-  if (section.hint) {
-    c += '<div class="hint-box editor-hint-box" id="editor-hint-' + section.id + '">' +
-      '<div class="owl-wrap"><div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
-      '<div class="owl-bubble"><div class="owl-name">SAGE &mdash; YOUR GUIDE</div>' +
-      '<div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div></div></div></div>';
-  }
-  c += '</div>';
+  c += '</div></div>';
 
   // QUIZ
   var answered = state.quizAnswered[section.id];
@@ -4820,6 +4806,37 @@ function toggleChallenge(chKey, fi, si) {
 }
 
 // ── SAGE CHAT PANEL ───────────────────────────────────────────────────────
+
+function showEditorHintPopup(sectionId) {
+  var existing = document.getElementById('editor-hint-overlay');
+  if (existing) { existing.remove(); return; }
+
+  var found = findSectionById(sectionId);
+  var section = found ? found.section : null;
+  if (!section || !section.hint) return;
+
+  var overlay = document.createElement('div');
+  overlay.id = 'editor-hint-overlay';
+  overlay.className = 'sage-chat-overlay';
+  overlay.innerHTML =
+    '<div class="sage-chat-panel editor-hint-panel">' +
+      '<div class="sage-chat-header">' +
+        '<div class="sage-chat-title"><span class="sage-chat-owl">' + sageOwlSVG(20, 22) + '</span> Hint</div>' +
+        '<button class="sage-chat-close" onclick="document.getElementById(\'editor-hint-overlay\').remove()">×</button>' +
+      '</div>' +
+      '<div class="editor-hint-popup-body">' +
+        '<div class="owl-wrap">' +
+          '<div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
+          '<div class="owl-bubble">' +
+            '<div class="owl-name">SAGE &mdash; YOUR GUIDE</div>' +
+            '<div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
+}
 
 function checkSageReset() {
   if (state.sageLastUsedAt && (Date.now() - state.sageLastUsedAt) >= 24 * 60 * 60 * 1000) {
