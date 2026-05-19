@@ -426,6 +426,8 @@ let state = {
   sageUsesLeft: SAGE_TOTAL_USES,
   sageLastUsedAt: null,
   codeCanvasOpacity: 100,
+  narratorGender: 'female',
+  autoScroll: false,
   challengesDone: {},
   streakProtectedToday: false,
   revKnown: {},
@@ -453,6 +455,8 @@ function loadState() {
       state.sageUsesLeft = (s.sageUsesLeft !== undefined) ? s.sageUsesLeft : SAGE_TOTAL_USES;
       state.sageLastUsedAt = s.sageLastUsedAt || null;
       state.codeCanvasOpacity = (s.codeCanvasOpacity !== undefined) ? s.codeCanvasOpacity : 100;
+      state.narratorGender = s.narratorGender || 'female';
+      state.autoScroll = !!s.autoScroll;
       state.challengesDone = s.challengesDone || {};
       state.streakProtectedToday = s.streakProtectedToday || false;
       state.revKnown = s.revKnown || {};
@@ -490,6 +494,8 @@ function saveState() {
     sageUsesLeft: state.sageUsesLeft,
     sageLastUsedAt: state.sageLastUsedAt || null,
     codeCanvasOpacity: state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100,
+    narratorGender: state.narratorGender || 'female',
+    autoScroll: !!state.autoScroll,
     challengesDone: state.challengesDone || {},
     streakProtectedToday: state.streakProtectedToday || false,
     revKnown: state.revKnown || {},
@@ -4588,6 +4594,52 @@ function nextSection(fi, si) {
 // --- VOICE NARRATION SYSTEM ---
 let currentUtterance = null;
 let currentNarrationId = null;
+var _narratorVoices = [];
+var _autoScrollInterval = null;
+
+if (window.speechSynthesis) {
+  _narratorVoices = window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = function() {
+    _narratorVoices = window.speechSynthesis.getVoices();
+  };
+}
+
+function getBestVoice(gender) {
+  var voices = (_narratorVoices.length ? _narratorVoices : window.speechSynthesis.getVoices())
+    .filter(function(v) { return v.lang.startsWith('en'); });
+  var checks = gender === 'male' ? [
+    function(v) { return v.name === 'Google UK English Male'; },
+    function(v) { return v.name === 'Microsoft David Desktop - English (United States)'; },
+    function(v) { return v.name === 'Alex'; },
+    function(v) { return /\b(male|david|james|oliver|daniel|thomas)\b/i.test(v.name); },
+    function(v) { return v.name.toLowerCase().includes('male'); },
+    function(v) { return true; }
+  ] : [
+    function(v) { return v.name === 'Google UK English Female'; },
+    function(v) { return v.name === 'Microsoft Zira Desktop - English (United States)'; },
+    function(v) { return v.name === 'Samantha'; },
+    function(v) { return /\b(female|zira|samantha|emily|alice|victoria|karen|moira)\b/i.test(v.name); },
+    function(v) { return v.name.toLowerCase().includes('female'); },
+    function(v) { return true; }
+  ];
+  for (var i = 0; i < checks.length; i++) {
+    var match = voices.find(checks[i]);
+    if (match) return match;
+  }
+  return null;
+}
+
+function startAutoScroll() {
+  stopAutoScroll();
+  if (!state.autoScroll) return;
+  var col = document.getElementById('main-col') || document.querySelector('.main-col');
+  if (!col) return;
+  _autoScrollInterval = setInterval(function() { col.scrollTop += 1; }, 38);
+}
+
+function stopAutoScroll() {
+  if (_autoScrollInterval) { clearInterval(_autoScrollInterval); _autoScrollInterval = null; }
+}
 
 function getReadableText(sectionId) {
   const fi = state.currentFloor - 1;
@@ -4604,20 +4656,32 @@ function getReadableText(sectionId) {
 }
 
 function toggleNarration(sectionId) {
-  const btn = document.getElementById('listen-btn-' + sectionId);
+  var btn = document.getElementById('listen-btn-' + sectionId);
   if (currentNarrationId === sectionId && window.speechSynthesis.speaking) {
     window.speechSynthesis.cancel();
+    stopAutoScroll();
     currentNarrationId = null;
     if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
     return;
   }
   window.speechSynthesis.cancel();
-  const text = getReadableText(sectionId);
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.88;
-  utterance.pitch = 1;
+  stopAutoScroll();
+  var text = getReadableText(sectionId);
+  var utterance = new SpeechSynthesisUtterance(text);
+  var gender = state.narratorGender || 'female';
+  var voice = getBestVoice(gender);
+  if (voice) utterance.voice = voice;
+  utterance.rate  = gender === 'male' ? 0.90 : 0.88;
+  utterance.pitch = gender === 'male' ? 0.92 : 1.05;
   utterance.volume = 1;
-  utterance.onend = () => {
+  utterance.onstart = function() { startAutoScroll(); };
+  utterance.onend = function() {
+    stopAutoScroll();
+    currentNarrationId = null;
+    if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
+  };
+  utterance.onerror = function() {
+    stopAutoScroll();
     currentNarrationId = null;
     if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
   };
@@ -4629,6 +4693,7 @@ function toggleNarration(sectionId) {
 
 function stopNarration() {
   if (window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+  stopAutoScroll();
   currentNarrationId = null;
 }
 
@@ -5911,6 +5976,18 @@ function selectAvatar(id) {
   renderProfilePanel();
 }
 
+function setNarratorGender(gender) {
+  state.narratorGender = gender;
+  saveState();
+  renderProfilePanel();
+}
+
+function setAutoScroll(val) {
+  state.autoScroll = !!val;
+  saveState();
+  if (!val) stopAutoScroll();
+}
+
 function setCodeCanvasOpacity(val) {
   var v = Math.max(0, Math.min(100, parseInt(val, 10)));
   state.codeCanvasOpacity = v;
@@ -6196,12 +6273,28 @@ function renderProfilePanel() {
     // Display settings
     '<div class="pf-section">' +
       '<div class="pf-section-hdr">// DISPLAY</div>' +
+
       '<div class="pf-display-row">' +
         '<span class="pf-display-label">Code Background</span>' +
         '<span class="pf-display-val" id="canvas-opacity-val">' + (state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100) + '%</span>' +
       '</div>' +
       '<input type="range" class="pf-opacity-slider" min="0" max="100" value="' + (state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100) + '" oninput="setCodeCanvasOpacity(this.value)">' +
       '<div class="pf-display-hints"><span>Off</span><span>Full</span></div>' +
+
+      '<div class="pf-display-row" style="margin-top:14px">' +
+        '<span class="pf-display-label">Narrator Voice</span>' +
+        '<div class="pf-toggle-group">' +
+          '<button class="pf-toggle-btn' + ((!state.narratorGender || state.narratorGender === 'female') ? ' pf-toggle-active' : '') + '" onclick="setNarratorGender(\'female\')">♀ Female</button>' +
+          '<button class="pf-toggle-btn' + (state.narratorGender === 'male' ? ' pf-toggle-active' : '') + '" onclick="setNarratorGender(\'male\')">♂ Male</button>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="pf-display-row" style="margin-top:14px">' +
+        '<span class="pf-display-label">Auto-scroll while reading</span>' +
+        '<button class="pf-toggle-switch' + (state.autoScroll ? ' pf-toggle-on' : '') + '" onclick="setAutoScroll(' + (!state.autoScroll) + '); this.classList.toggle(\'pf-toggle-on\')">' +
+          '<span class="pf-toggle-thumb"></span>' +
+        '</button>' +
+      '</div>' +
     '</div>' +
 
     // Badges
