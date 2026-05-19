@@ -1254,3 +1254,124 @@ body.light #panel-premium .premium-card-tooltip {
 body.light #panel-premium .premium-tooltip-full { color: var(--text-muted); }
 body.light #panel-premium .premium-tooltip-problem { color: var(--text-muted); border-left-color: rgba(160,117,42,0.3); }
 body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-shadow: none; }
+
+/* ══════════════════════════════════════════════════
+   SPECIALISATION TRACKS  — Learn Hub track cards
+   ══════════════════════════════════════════════════ */
+
+.hub-tracks-section {
+  padding: 28px 0 8px;
+  width: 100%;
+}
+
+.hub-tracks-hdr {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.hub-tracks-title {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(200,220,255,0.5);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.hub-tracks-sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  color: rgba(200,220,255,0.4);
+}
+
+.hub-tracks-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 16px 24px;
+}
+
+.trk-card {
+  flex: 1;
+  min-width: 110px;
+  max-width: 160px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--trk-color, #c8a96e);
+  border-radius: 14px;
+  padding: 20px 14px 16px;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 0 20px rgba(0,0,0,0);
+}
+
+.trk-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255,255,255,0.04);
+  box-shadow: 0 8px 32px var(--trk-glow, rgba(200,169,110,0.25));
+}
+
+.trk-card-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--trk-color);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.trk-card-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+
+.trk-card-sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.trk-card-prog {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 1px;
+}
+
+.trk-locked {
+  opacity: 0.38;
+  cursor: default;
+  pointer-events: none;
+  filter: grayscale(0.5);
+}
+
+.trk-lock-badge {
+  margin-top: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+}
+
+.trk-done {
+  background: rgba(255,255,255,0.04);
+}
+
+@media (max-width: 420px) {
+  .hub-tracks-row { gap: 8px; padding: 0 12px 20px; }
+  .trk-card { min-width: 90px; padding: 16px 10px 12px; border-radius: 12px; }
+  .trk-card-title { font-size: 17px; }
+  .trk-card-sub { font-size: 9px; }
+}

@@ -5458,3 +5458,546 @@ renderPipeline(null);
     ]
   }
 ];
+
+// ── SPECIALISATION TRACKS ─────────────────────────────────────────────────────
+// Unlocked after all 7 floors are complete.
+var TRACKS = [
+  {
+    id: 'react',
+    title: 'React',
+    subtitle: 'Web Development',
+    desc: 'Build interactive user interfaces with the world\'s most popular front-end library.',
+    color: '#61dafb',
+    tag: 'REACT TRACK',
+    sections: [
+      {
+        id: 'tr-react-1',
+        title: 'Why React Exists',
+        body: `Before React, building interactive web pages meant writing a lot of <strong>imperative</strong> code — code that described every step the browser must take. Add an item to a list? Find the list element, create a new <code>&lt;li&gt;</code>, set its text, append it, then maybe update a counter somewhere else, then maybe toggle a CSS class on a button. Every interaction required you to think about the current state of the DOM and manually synchronise it with the data you had in JavaScript.\n\nThis approach worked fine for small pages. But as applications grew — Gmail, Facebook, Airbnb — the DOM manipulation code became impossible to maintain. Change one thing and three other things broke, because the DOM was the source of truth for everything and nothing was coordinated.\n\n<strong>React's answer was the component model.</strong> Instead of thinking about DOM operations, you describe what the UI should look like for a given set of data. React handles the translation from description to DOM. When your data changes, you just update the data and let React figure out the minimum number of DOM operations needed to bring the page in line. This is what people mean when they say React is <strong>declarative</strong>: you declare the result, not the process.\n\nThe mechanism that makes this efficient is the <strong>virtual DOM</strong>. When state changes, React creates a new lightweight JavaScript representation of the desired DOM, compares it to the previous one (this is called <strong>reconciliation</strong>), and applies only the differences to the real DOM. This batching and diffing process means React rarely does more work than necessary, even when data changes frequently.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Every time you type in a search box and the results update without a page reload — that\'s a component re-rendering in response to state change. The DOM didn\'t reload. React (or something like it) worked out the minimum change needed.</div>\n\nToday React is used by Meta, Netflix, Airbnb, Atlassian, and thousands of other companies. The job market for React developers is enormous, and the skills transfer directly to React Native (iOS and Android apps) and Next.js (full-stack web apps). Learning React is not learning one tool — it\'s learning a mental model that applies across an entire ecosystem.`,
+        callout: {
+          type: 'default',
+          label: 'The Core Idea',
+          text: 'React lets you describe your UI as a function of your data. When data changes, the UI updates automatically. You stop thinking about DOM operations and start thinking about state.'
+        },
+        hint: `If the virtual DOM still feels abstract, try this mental model: imagine you're editing a document. The naive approach is to re-print the entire document every time you change one word. React's approach is to compare the new version to the old, find the changed word, and only update that word in the printed copy.\n\n<strong>Reconciliation</strong> is React's diff-and-patch process. It's fast because JavaScript object comparisons are cheap; real DOM mutations are expensive.`,
+        quiz: {
+          question: "What problem does React's virtual DOM primarily solve?",
+          options: [
+            "Making pages load faster over the network",
+            "Reducing the number of actual DOM updates by batching and diffing",
+            "Replacing HTML with JavaScript entirely",
+            "Encrypting data between client and server"
+          ],
+          correct: 1,
+          feedback: "The virtual DOM is an in-memory representation of the real DOM. React diffs the new virtual DOM against the previous one (reconciliation) and applies only the changes. This batching and diffing dramatically reduces expensive real DOM mutations. It doesn't affect network speed, doesn't replace HTML, and has nothing to do with encryption."
+        }
+      },
+      {
+        id: 'tr-react-2',
+        title: 'JSX and Components',
+        body: `React introduces a syntax extension called <strong>JSX</strong> — JavaScript XML. It looks like HTML written inside JavaScript, which is precisely what it is. JSX is not valid JavaScript on its own; a build tool (or, in our case, Babel running in the browser) transforms it into regular <code>React.createElement()</code> calls. The end result is the same — a description of what should appear in the DOM — but JSX makes it dramatically more readable.\n\nA <strong>functional component</strong> is just a JavaScript function that returns JSX. That\'s the entire definition. If a function accepts an argument called <code>props</code> and returns something that looks like HTML, React will treat it as a component. You can compose components inside other components — a <code>&lt;App /&gt;</code> might contain a <code>&lt;Header /&gt;</code> which contains a <code>&lt;Nav /&gt;</code> — building up a tree of reusable UI pieces.\n\n<strong>Props</strong> (short for properties) are how you pass data into a component. They flow one way: from parent to child. A parent component decides what a child displays by passing props. The child cannot modify its props — they are read-only from the child\'s perspective. This one-way data flow makes React applications predictable: if a component looks wrong, you know to look at the props being passed in.\n\n<div class="inline-q"><span class="iq-label">The pattern:</span> Think of a component like a stamp. You define the stamp once — the shape, the design. Then you use it multiple times with different ink (props). The stamp doesn\'t change; the output does.</div>\n\nIn the code editor below, you\'ll work with a simple component that accepts props and renders a greeting card. The key habit to build here is: before you write the JSX, think about what data the component needs. That data becomes its props.`,
+        callout: {
+          type: 'focus',
+          label: 'Props are read-only',
+          text: 'A component should never modify its own props. Props are facts passed down from the parent. If a component needs to change something, it needs its own state — which comes in the next section.'
+        },
+        hint: `JSX expressions must return a single root element. If you need to return multiple elements without a wrapper div, use a React Fragment: <code>&lt;&gt;...&lt;/&gt;</code>.\n\n<strong>Common mistake:</strong> Using <code>class</code> instead of <code>className</code> in JSX. JSX compiles to JavaScript, and <code>class</code> is a reserved word. React uses <code>className</code> for the HTML class attribute.`,
+        code: {
+          lang: 'html',
+          filename: 'component.html',
+          starter: `<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0a0a0a; color: #e0e0e0; font-family: sans-serif; display: flex; justify-content: center; padding: 40px 20px; }
+  .card { background: #111; border: 1px solid #222; border-radius: 12px; padding: 24px 28px; max-width: 320px; width: 100%; }
+  .card-name { font-size: 22px; font-weight: 700; color: #61dafb; margin-bottom: 4px; }
+  .card-role { font-size: 13px; color: rgba(255,255,255,0.45); letter-spacing: 0.08em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function GreetingCard({ name }) {
+      return (
+        <div className="card">
+          <div className="card-name">Hello, {name}!</div>
+          <div className="card-role">Welcome to React</div>
+        </div>
+      );
+    }
+
+    function App() {
+      return <GreetingCard name="Developer" />;
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>`,
+          challenges: [
+            'Add a second prop for a subtitle and display it below the name',
+            'Render 3 different instances of GreetingCard with different names and subtitles',
+            'Style it with inline styles to give each card a different border colour'
+          ]
+        }
+      },
+      {
+        id: 'tr-react-3',
+        title: 'State with useState',
+        body: `Props are data passed in from outside. <strong>State</strong> is data owned and managed by the component itself. When state changes, React automatically re-renders the component — and only that component plus any children that depend on its data. This is the core reactivity mechanism.\n\nThe <strong>useState</strong> hook is the primary way to add state to a functional component. You call it with an initial value and it returns an array of two things: the current state value, and a function to update it. By convention, they're destructured immediately:\n\n<pre><code>const [count, setCount] = React.useState(0);</code></pre>\n\nWhen you call <code>setCount(newValue)</code>, React schedules a re-render. On the next render, <code>count</code> will have the new value. You never mutate state directly — you always go through the setter function. Direct mutation (<code>count = count + 1</code>) won't trigger a re-render and will cause subtle bugs.\n\n<strong>Event handlers</strong> are how user interactions update state. You pass a function to an element's event prop — <code>onClick</code>, <code>onChange</code>, <code>onSubmit</code> — and that function calls the state setter with the new value. React handles the wiring from DOM event to your handler.\n\n<div class="inline-q"><span class="iq-label">The mental model:</span> A component is a snapshot of the UI at a given moment in time. State is the input that determines the snapshot. Change the state, get a new snapshot. React's job is to update the DOM to match the new snapshot as efficiently as possible.</div>\n\nIn the code editor below you\'ll build a counter component. The counter is simple by design — the pattern (state → render → event → state) is what matters, and you\'ll apply it to real features once the pattern is clear.`,
+        callout: {
+          type: 'warning',
+          label: 'Never mutate state directly',
+          text: 'Always use the setter function. count++ or count = count + 1 will change the variable but React won\'t know about it, so the UI won\'t update. React only re-renders when you call the setter.'
+        },
+        hint: `If you need the new state value to depend on the previous one, pass a function to the setter:\n\n<code>setCount(prev => prev + 1);</code>\n\nThis is safer than <code>setCount(count + 1)</code> because React may batch multiple state updates, so reading <code>count</code> directly might give you a stale value. The function form always receives the latest value.`,
+        code: {
+          lang: 'html',
+          filename: 'state.html',
+          starter: `<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0a0a0a; color: #e0e0e0; font-family: sans-serif; display: flex; justify-content: center; padding: 40px 20px; }
+  .counter { background: #111; border: 1px solid #222; border-radius: 16px; padding: 32px; text-align: center; min-width: 240px; }
+  .count-val { font-size: 64px; font-weight: 900; color: #61dafb; line-height: 1; margin: 16px 0; }
+  .btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+  button { background: #1a2a3a; color: #61dafb; border: 1px solid #61dafb44; border-radius: 8px; padding: 10px 24px; font-size: 20px; cursor: pointer; }
+  button:hover { background: #61dafb22; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function Counter() {
+      const [count, setCount] = React.useState(0);
+      return (
+        <div className="counter">
+          <div>Count</div>
+          <div className="count-val">{count}</div>
+          <div className="btn-row">
+            <button onClick={() => setCount(count - 1)}>-</button>
+            <button onClick={() => setCount(count + 1)}>+</button>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Counter />);
+  </script>
+</body>
+</html>`,
+          challenges: [
+            'Add a Reset button that sets the count back to 0',
+            'Prevent the counter going below 0 — disable or guard the decrement',
+            'Add a step input so the user can increment and decrement by any amount they type'
+          ]
+        }
+      },
+      {
+        id: 'tr-react-4',
+        title: 'Props, Lists and Keys',
+        body: `Real applications rarely display static data. They display <strong>lists</strong> — a list of products, messages, tasks, users. In React, you render lists by transforming an array of data into an array of JSX elements using <code>.map()</code>. Because <code>.map()</code> returns an array of elements, React renders each one.\n\n<pre><code>const tasks = ['Design', 'Build', 'Deploy'];\nreturn (\n  &lt;ul&gt;\n    {tasks.map(task => &lt;li key={task}&gt;{task}&lt;/li&gt;)}\n  &lt;/ul&gt;\n);</code></pre>\n\nNotice the <strong>key</strong> prop. React needs keys to efficiently update lists. When the list changes — an item is added, removed, or reordered — React uses keys to identify which element is which. Without keys, React might re-render the entire list when only one item changed, or worse, it might mix up the elements and display incorrect data.\n\nKeys must be <strong>unique among siblings</strong> and <strong>stable</strong> — they shouldn't change between renders. Using array indices as keys works for static lists but causes bugs when items are reordered or filtered. Database IDs make the best keys; failing that, use a stable property like a slug or username.\n\n<strong>Composing components with lists</strong> is where React's reusability becomes visible. Instead of a list of raw <code>&lt;li&gt;</code> elements, you define a <code>&lt;TaskItem /&gt;</code> component and pass each task\'s data as props. Now you can style, test, and evolve the task display in one place.\n\n<div class="inline-q"><span class="iq-label">The rule of thumb:</span> If you find yourself copying and pasting JSX to make slight variations, that code wants to be a component with props. Create the component, then use .map() to render it once per data item.</div>`,
+        callout: {
+          type: 'warning',
+          label: 'Never use array index as key for dynamic lists',
+          text: 'If users can add, remove or sort items, index-based keys cause React to mix up component state. Use a unique, stable ID from your data instead.'
+        },
+        hint: `If your data doesn't have IDs, you can generate them once when the data is created using a simple counter or <code>crypto.randomUUID()</code>. The key requirement is that it doesn't change — not that it's globally unique across all of space and time.`,
+        code: {
+          lang: 'html',
+          filename: 'lists.html',
+          starter: `<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0a0a0a; color: #e0e0e0; font-family: sans-serif; display: flex; justify-content: center; padding: 40px 20px; }
+  .task-list { background: #111; border: 1px solid #222; border-radius: 14px; padding: 24px; min-width: 300px; max-width: 400px; width: 100%; }
+  h2 { font-size: 16px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 16px; }
+  .task-item { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #1a1a1a; font-size: 15px; }
+  .task-item:last-child { border-bottom: none; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const initialTasks = [
+      { id: 1, title: 'Learn React basics' },
+      { id: 2, title: 'Build a counter' },
+      { id: 3, title: 'Render a list with .map()' },
+    ];
+
+    function TaskItem({ task }) {
+      return (
+        <div className="task-item">
+          <span>{task.title}</span>
+        </div>
+      );
+    }
+
+    function App() {
+      return (
+        <div className="task-list">
+          <h2>Tasks</h2>
+          {initialTasks.map(task => (
+            <TaskItem key={task.id} task={task} />
+          ))}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>`,
+          challenges: [
+            'Add a completed boolean to each task and display a checkmark next to completed ones',
+            'Add a form with an input and button to add new tasks to the list',
+            'Add a toggle to filter the list and show only incomplete tasks'
+          ]
+        }
+      },
+      {
+        id: 'tr-react-5',
+        title: 'Your React App',
+        body: `You now have all the building blocks: components that accept props, state that triggers re-renders, event handlers that update state, and lists rendered with <code>.map()</code>. A real React application is simply these four things composed together at increasing complexity.\n\nThe key discipline at this stage is knowing where to put state. A rule of thumb: state should live in the <strong>lowest common ancestor</strong> of all components that need it. If only one component needs a piece of data, state lives there. If two sibling components need to share data, state lifts up to their parent, which passes the data down as props and the update functions down as callback props.\n\nThis pattern — lifting state up, passing callbacks down — is fundamental to React. It keeps data flowing one direction and makes applications predictable. When something breaks, you can trace the data from the component that displays it, up through the props, to the state that owns it.\n\n<strong>The code editor below</strong> has a small task manager — the same list you built in the last section, but now with state. Tasks can be added, toggled complete, and filtered. Read through the code and understand each piece before attempting the checklist.\n\n<div class="inline-q"><span class="iq-label">Before you continue:</span> Can you explain, in plain English, what happens between pressing a button and seeing the UI change? Trace the path: event → handler → setState → render. If you can narrate that cycle, you understand React's core model.</div>`,
+        callout: {
+          type: 'focus',
+          label: 'The React mental shift',
+          text: 'Stop thinking about the DOM. Think about state. Ask: what data does this screen need? What events can change that data? Let React handle turning data into DOM — that\'s its job.'
+        },
+        code: {
+          lang: 'html',
+          filename: 'app.html',
+          starter: `<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0a0a0a; color: #e0e0e0; font-family: sans-serif; display: flex; justify-content: center; padding: 40px 20px; }
+  .app { background: #111; border: 1px solid #222; border-radius: 14px; padding: 24px; width: 100%; max-width: 400px; }
+  h1 { font-size: 20px; font-weight: 700; color: #61dafb; margin: 0 0 20px; }
+  .add-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  input { flex: 1; background: #0a1520; border: 1px solid #333; color: #e0e0e0; border-radius: 8px; padding: 8px 12px; font-size: 14px; }
+  .add-btn { background: #61dafb22; border: 1px solid #61dafb44; color: #61dafb; border-radius: 8px; padding: 8px 14px; cursor: pointer; font-size: 14px; }
+  .filter-row { display: flex; gap: 6px; margin-bottom: 14px; }
+  .filter-btn { background: transparent; border: 1px solid #333; color: rgba(255,255,255,0.4); border-radius: 6px; padding: 5px 12px; font-size: 11px; cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
+  .filter-btn.active { border-color: #61dafb; color: #61dafb; }
+  .task { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #1a1a1a; cursor: pointer; }
+  .task:last-child { border-bottom: none; }
+  .task.done span { text-decoration: line-through; opacity: 0.4; }
+  .task-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid #333; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .task.done .task-dot { border-color: #61dafb; background: #61dafb22; color: #61dafb; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function App() {
+      const [tasks, setTasks] = React.useState([
+        { id: 1, title: 'Learn components', done: true },
+        { id: 2, title: 'Understand state', done: false },
+        { id: 3, title: 'Render lists', done: false },
+      ]);
+      const [input, setInput] = React.useState('');
+      const [filter, setFilter] = React.useState('all');
+
+      function addTask() {
+        if (!input.trim()) return;
+        setTasks([...tasks, { id: Date.now(), title: input.trim(), done: false }]);
+        setInput('');
+      }
+
+      function toggle(id) {
+        setTasks(tasks.map(t => t.id === id ? { ...t, done: !t.done } : t));
+      }
+
+      const visible = tasks.filter(t => filter === 'all' || (filter === 'todo' && !t.done) || (filter === 'done' && t.done));
+
+      return (
+        <div className="app">
+          <h1>Task Manager</h1>
+          <div className="add-row">
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Add a task…" />
+            <button className="add-btn" onClick={addTask}>Add</button>
+          </div>
+          <div className="filter-row">
+            {['all','todo','done'].map(f => (
+              <button key={f} className={'filter-btn' + (filter === f ? ' active' : '')} onClick={() => setFilter(f)}>{f}</button>
+            ))}
+          </div>
+          {visible.map(task => (
+            <div key={task.id} className={'task' + (task.done ? ' done' : '')} onClick={() => toggle(task.id)}>
+              <div className="task-dot">{task.done ? '✓' : ''}</div>
+              <span>{task.title}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>`,
+          challenges: [
+            'Add a delete button to each task item',
+            'Show a count of remaining incomplete tasks below the filter row',
+            'Persist the task list to localStorage so it survives a page refresh'
+          ]
+        },
+        checklist: [
+          "I can explain what a component is and why they're reusable",
+          "I understand the difference between props (passed in) and state (owned by the component)",
+          "I've built a component that renders a list from an array using .map()",
+          "I know why React needs keys on list items and what makes a good key",
+          "I've connected an input to state with onChange and seen the UI update live"
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'python',
+    title: 'Python',
+    subtitle: 'Data & AI',
+    desc: 'Master the language that powers data science, machine learning, and modern AI tooling.',
+    color: '#4584b6',
+    tag: 'PYTHON TRACK',
+    sections: [
+      {
+        id: 'tr-python-1',
+        title: 'Why Python',
+        body: `Python has become the dominant language for data science and artificial intelligence — not because it is the fastest language (it is not), but because it strikes the best balance between <strong>readability, ecosystem breadth, and community size</strong>.\n\nThe readability matters more than it sounds. Data work is fundamentally exploratory. You write a line, look at the output, revise, and write another. Python's syntax is close enough to plain English that this cycle is fast. You spend time thinking about the data problem, not fighting the language. Compare a list comprehension in Python to the equivalent in Java or C++ and the difference is immediately apparent.\n\nThe <strong>ecosystem</strong> is where Python's dominance becomes self-reinforcing. <strong>NumPy</strong> gives you fast numerical arrays. <strong>pandas</strong> gives you DataFrames — a spreadsheet-like structure for data manipulation. <strong>Matplotlib</strong> and <strong>seaborn</strong> handle visualisation. <strong>scikit-learn</strong> provides classical machine learning. <strong>PyTorch</strong> and <strong>TensorFlow</strong> handle deep learning. Every AI research paper publishes its code in Python. Every cloud provider's AI SDK has a Python client. This is not a coincidence — it is a network effect that has been compounding for over a decade.\n\n<div class="inline-q"><span class="iq-label">The reality:</span> OpenAI, Anthropic, Google DeepMind, and every other major AI lab use Python as their primary language. If you want to work with AI — building products on top of AI APIs, fine-tuning models, or doing research — Python is the starting point.</div>\n\nThis track does not try to teach you all of Python. It teaches you the parts that matter most for data and AI work: fundamentals, data manipulation with pandas, and how to interact with APIs and AI models. The goal is to give you enough to build something real and know how to find everything else.`,
+        callout: {
+          type: 'default',
+          label: 'Python\'s Niche',
+          text: 'Python is not the best language for building web servers at scale (Go, Rust) or mobile apps (Swift, Kotlin) or systems software (C, C++). It is the best language for data analysis, ML experimentation, scripting, and AI API integration. Know the tool, know the domain.'
+        },
+        hint: `Python runs server-side — it can't run natively in the browser, which is why this track uses quizzes and code examples rather than a live editor. To run Python yourself, install it from python.org, use a cloud notebook (Google Colab is free), or use an online REPL like repl.it. The concepts here are what matter.`,
+        quiz: {
+          question: "Which of the following best describes Python's primary advantage in data science?",
+          options: [
+            "A readable syntax combined with a vast ecosystem of specialist libraries (NumPy, pandas, PyTorch) that no other language can match in breadth or maturity",
+            "It runs faster than all other programming languages, making it ideal for processing large datasets",
+            "It is the only language that works in web browsers, allowing interactive data visualisations",
+            "It enforces strict static typing, preventing data type errors at compile time"
+          ],
+          correct: 0,
+          feedback: "Python's speed is actually one of its weaknesses (though NumPy and PyTorch offload heavy computation to optimised C and CUDA kernels). It cannot run in browsers natively. It is dynamically typed, not statically typed. Its real strength is the combination of readable syntax and an unmatched ecosystem — the tools that exist for Python in data/AI have no equivalent collection in any other language."
+        }
+      },
+      {
+        id: 'tr-python-2',
+        title: 'Python Fundamentals',
+        body: `Python is dynamically typed — you don't declare types, you just assign values. Python figures out the type from the value.\n\n<pre><code>name = "Alice"          # str\nage = 28               # int\nheight = 1.72          # float\nis_active = True       # bool</code></pre>\n\n<strong>Functions</strong> are defined with <code>def</code>. Indentation (whitespace) defines the block — Python has no braces. This is enforced by the language, not optional style.\n\n<pre><code>def greet(name, greeting="Hello"):\n    return f"{greeting}, {name}!"</code></pre>\n\n<strong>Lists</strong> are ordered, mutable sequences. <strong>Dictionaries</strong> are key-value stores — the Python equivalent of JavaScript objects.\n\n<pre><code>scores = [95, 87, 92, 78]\nuser = {"name": "Alice", "age": 28, "active": True}</code></pre>\n\n<strong>Control flow</strong> uses <code>if / elif / else</code> and <code>for</code> loops:\n\n<pre><code>for score in scores:\n    if score >= 90:\n        print("A")\n    elif score >= 80:\n        print("B")\n    else:\n        print("C")</code></pre>\n\n<strong>List comprehensions</strong> are one of Python's most expressive features — a concise way to build a new list by transforming or filtering an existing one:\n\n<pre><code># squares of numbers 0–4\nsquares = [x**2 for x in range(5)]\n# [0, 1, 4, 9, 16]</code></pre>\n\n<div class="inline-q"><span class="iq-label">The pattern:</span> <code>[expression for item in iterable if condition]</code>. The <code>if condition</code> part is optional — use it to filter. The expression transforms each item.</div>`,
+        callout: {
+          type: 'focus',
+          label: 'Indentation is syntax',
+          text: 'In Python, indentation is not style — it is syntax. Inconsistent indentation causes IndentationError. Use 4 spaces per level. Never mix tabs and spaces. Most editors handle this automatically when configured for Python.'
+        },
+        hint: `<code>range(5)</code> produces 0, 1, 2, 3, 4 — five values starting from 0, not including 5. <code>range(1, 6)</code> produces 1, 2, 3, 4, 5.\n\n<code>f-strings</code> (formatted string literals) are the modern way to interpolate values into strings: <code>f"Hello, {name}"</code>. The <code>f</code> prefix before the opening quote enables it.`,
+        quiz: {
+          question: "What does the expression [x**2 for x in range(5)] evaluate to?",
+          options: [
+            "[0, 1, 4, 9, 16]",
+            "[1, 4, 9, 16, 25]",
+            "[0, 2, 4, 6, 8]",
+            "SyntaxError — list comprehensions are not valid Python"
+          ],
+          correct: 0,
+          feedback: "range(5) generates 0, 1, 2, 3, 4. The expression x**2 squares each value: 0²=0, 1²=1, 2²=4, 3²=9, 4²=16. Result: [0, 1, 4, 9, 16]. [1, 4, 9, 16, 25] would be the result of range(1, 6) — starting from 1. [0, 2, 4, 6, 8] would be x*2, not x**2. List comprehensions are absolutely valid Python."
+        }
+      },
+      {
+        id: 'tr-python-3',
+        title: 'Working with Data',
+        body: `<strong>pandas</strong> is the central tool for data manipulation in Python. Its primary data structure is the <strong>DataFrame</strong> — a two-dimensional table with labelled columns, much like a spreadsheet, but programmable.\n\n<pre><code>import pandas as pd\n\n# Read a CSV file into a DataFrame\ndf = pd.read_csv("sales.csv")\n\n# Inspect the data\nprint(df.head())          # first 5 rows\nprint(df.shape)           # (rows, columns)\nprint(df.describe())      # stats summary\nprint(df.dtypes)          # column types</code></pre>\n\n<strong>Selecting and filtering</strong> are the most common operations. You can select columns by name and filter rows by condition:\n\n<pre><code># Select a single column (returns a Series)\nnames = df["name"]\n\n# Filter rows where revenue > 10000\nhigh_revenue = df[df["revenue"] > 10000]\n\n# Multiple conditions\nfiltered = df[(df["revenue"] > 10000) & (df["region"] == "EMEA")]</code></pre>\n\n<strong>groupby</strong> is pandas's version of SQL's GROUP BY — split the data by a category, apply an aggregation, and combine the results:\n\n<pre><code># Average revenue per product category\ndf.groupby("category")["revenue"].mean()\n\n# Multiple aggregations at once\ndf.groupby("region").agg({"revenue": "sum", "orders": "count"})</code></pre>\n\n<div class="inline-q"><span class="iq-label">The real power:</span> In a few lines you can take a raw CSV with millions of rows, filter it, group it, aggregate it, and export the result. Operations that would take hours in a spreadsheet take seconds in pandas.</div>\n\nThe learning curve with pandas is mostly in remembering the method names and understanding how indexing works. The best approach: keep a pandas cheat sheet open and look things up as you need them. You'll remember the ones you use most.`,
+        callout: {
+          type: 'default',
+          label: 'pandas and SQL',
+          text: 'If you know SQL, pandas will feel familiar. SELECT → column selection. WHERE → boolean indexing. GROUP BY → groupby. JOIN → merge. ORDER BY → sort_values. The concepts are the same; the syntax is Python.'
+        },
+        hint: `Missing data is represented as <code>NaN</code> (Not a Number) in pandas. Before analysing, always check:\n<pre><code>df.isnull().sum()  # count missing values per column\ndf.dropna()        # remove rows with any NaN\ndf.fillna(0)       # replace NaN with 0</code></pre>\nIgnoring missing data is one of the most common causes of incorrect analysis results.`,
+        quiz: {
+          question: "What does df.groupby('category').mean() return?",
+          options: [
+            "A new DataFrame with one row per unique category value, containing the mean of all numeric columns for that category",
+            "The single category with the highest average value across the entire DataFrame",
+            "A filtered version of the original DataFrame containing only rows where category equals 'mean'",
+            "An error — groupby requires an aggregation function to be specified separately with .agg()"
+          ],
+          correct: 0,
+          feedback: "groupby('category') splits the DataFrame into groups by unique category values. .mean() then computes the arithmetic mean of every numeric column within each group. The result is a new DataFrame indexed by the unique category values, with one row per category. pandas does accept .mean() directly on a GroupBy object — you only need .agg() when you want different aggregations for different columns."
+        }
+      },
+      {
+        id: 'tr-python-4',
+        title: 'APIs and AI Tools',
+        body: `An <strong>API</strong> (Application Programming Interface) is a structured way for your code to talk to another service over the internet. You send an HTTP request with certain parameters, the service processes it, and returns a structured response — usually JSON.\n\nThe <code>requests</code> library is the standard Python tool for making HTTP requests:\n\n<pre><code>import requests\n\nresponse = requests.get(\n    "https://api.openweathermap.org/data/2.5/weather",\n    params={"q": "London", "appid": "YOUR_API_KEY"}\n)\n\ndata = response.json()          # parse JSON response\ntemp = data["main"]["temp"]     # extract a value\nprint(f"Temperature: {temp}K")</code></pre>\n\n<strong>AI APIs</strong> work the same way — you send a request with a prompt, the model generates a response, you receive it as JSON. The Anthropic and OpenAI SDKs wrap this HTTP pattern in Python objects:\n\n<pre><code>import anthropic\n\nclient = anthropic.Anthropic(api_key="sk-ant-...")  # never hardcode this\n\nmessage = client.messages.create(\n    model="claude-opus-4-5",\n    max_tokens=1024,\n    messages=[{"role": "user", "content": "Explain recursion simply."}]\n)\n\nprint(message.content[0].text)</code></pre>\n\n<strong>Prompt engineering</strong> — writing effective prompts — is a learnable skill. The key principles: be specific about what you want, specify the format of the output, provide examples if the task is complex, and break multi-step tasks into sequential messages.\n\n<div class="inline-q"><span class="iq-label">Security rule:</span> An API key is a password. Never put it in code you commit to a public repository. Never put it in frontend JavaScript — users can read your source code. Use environment variables (<code>os.environ["ANTHROPIC_API_KEY"]</code>) and load them from a <code>.env</code> file that is listed in <code>.gitignore</code>.</div>`,
+        callout: {
+          type: 'warning',
+          label: 'API Keys in Frontend Code',
+          text: 'Putting an API key in JavaScript that runs in the browser means every visitor to your site can steal it. Always make API calls from a backend (server-side Python, Node.js, etc.) where the key is in an environment variable the public cannot access.'
+        },
+        hint: `<strong>Rate limits:</strong> AI APIs charge per token (roughly per word) and enforce rate limits. Build your applications to handle <code>429 Too Many Requests</code> errors gracefully — catch the exception, wait, and retry. The <code>tenacity</code> library makes retry logic simple in Python.`,
+        quiz: {
+          question: "What is an API key and why must it never appear in frontend JavaScript?",
+          options: [
+            "An API key is a credential that authenticates your requests to a service. Placing it in frontend JS exposes it in the browser's source — anyone can copy it and use your account, incurring your costs or accessing your data",
+            "An API key is an encryption algorithm that secures the connection. It must be frontend-only because servers cannot use HTTPS",
+            "An API key is a cached response from a previous API call. It should not be in JS because it wastes bandwidth",
+            "An API key is a database password. It must not be in JS because JavaScript cannot handle binary data"
+          ],
+          correct: 0,
+          feedback: "An API key is a secret credential — it identifies and authenticates your application to the API provider. Browser JavaScript is public: anyone who opens DevTools can read it. An exposed key can be misused to make calls billed to your account, access private data, or exhaust your quota. The correct pattern: your frontend sends requests to your own backend, your backend authenticates with the API key (stored as an environment variable), and returns results. The key never leaves your server."
+        }
+      },
+      {
+        id: 'tr-python-5',
+        title: 'Your Python Project',
+        body: `The best way to solidify Python is to build something you actually care about. The skills from this track — fundamentals, data manipulation, API integration — combine into a huge range of possible projects.\n\n<strong>CLI tool:</strong> A command-line script that automates something tedious. Rename files based on a pattern, process a folder of CSVs and produce a summary report, pull data from an API and email you a daily digest. These projects are immediately useful and require only the core language.\n\n<strong>Data analyser:</strong> Take a dataset that interests you — personal finance exports, sports statistics, weather data, social media metrics — and explore it with pandas. Find patterns. Build visualisations with Matplotlib. Write up findings. This is the complete data workflow and it's excellent for a portfolio.\n\n<strong>AI chatbot or assistant:</strong> Use the Anthropic or OpenAI API to build an assistant that has a specific purpose — a code reviewer, a recipe suggester, a study partner for a subject you're learning. Adding a system prompt that defines the assistant's behaviour is the key technique.\n\n<div class="inline-q"><span class="iq-label">The project rule:</span> Pick the smallest version of the project that would be genuinely useful to you. Build that first. If it's useful, you'll naturally add features. If you start too big, you'll never finish.</div>\n\nPython's package ecosystem means almost any task you can imagine has a library for it. <code>pip install package-name</code> is one of the most powerful commands you'll learn. The ability to find, evaluate, and integrate a library in minutes is a core Python skill worth practising deliberately.`,
+        callout: {
+          type: 'focus',
+          label: 'Your first Python project in 3 steps',
+          text: '1. Pick a dataset or API you care about. 2. Write 10 lines that fetch or load the data and print it. 3. Extend from there. The first working output — no matter how rough — is the hardest part.'
+        },
+        checklist: [
+          "I can write a Python function, pass arguments to it, and return a value",
+          "I understand lists and dicts well enough to store and retrieve structured data",
+          "I've made at least one HTTP request using the requests library (or I know exactly how to)",
+          "I know the difference between calling an existing AI API and training a model from scratch",
+          "I have a concrete project idea I can describe in one sentence and could start today"
+        ]
+      }
+    ]
+  },
+
+  {
+    id: 'swift',
+    title: 'Swift',
+    subtitle: 'iOS Development',
+    desc: 'Build native iOS apps with Apple\'s modern language and the declarative SwiftUI framework.',
+    color: '#F05138',
+    tag: 'SWIFT TRACK',
+    sections: [
+      {
+        id: 'tr-swift-1',
+        title: 'Why Swift and iOS',
+        body: `Apple introduced <strong>Swift</strong> in 2014 as a replacement for Objective-C — the language that had powered iOS and macOS development since the NeXT era. Objective-C was powerful but verbose and error-prone. Swift was designed to be safe, fast, and expressive, with modern language features like optionals, type inference, and closures built in from the start.\n\nToday Swift is the primary language for all Apple platform development: <strong>iOS</strong> (iPhone), <strong>iPadOS</strong>, <strong>macOS</strong>, <strong>watchOS</strong>, and <strong>tvOS</strong>. If you want to build a native Apple app — the kind distributed through the App Store — Swift is where you start.\n\nFor building the user interface, you have two options. <strong>UIKit</strong> is the older, imperative framework that has powered iOS apps since 2008. You describe UI by creating view objects, setting their properties, and arranging them in view hierarchies. <strong>SwiftUI</strong>, introduced in 2019, is declarative — you describe what the UI should look like for a given state, and SwiftUI handles the rendering. SwiftUI is Apple's investment in the future and the right place to start for new learners.\n\n<div class="inline-q"><span class="iq-label">The market:</span> There are over 2.2 billion active Apple devices. The App Store generates over $100 billion in annual developer revenue. iOS development is one of the highest-paid specialisations in software — senior iOS engineers at major companies regularly earn above £120,000 / $150,000. The barrier is Xcode, which requires a Mac, and the conceptual model of app development, which is different from web development.</div>\n\nThe transfer from web development to iOS is more significant than the transfer from, say, JavaScript to Python. You are learning not just a new language but a new platform with its own lifecycle, navigation model, data persistence layer, and UI paradigm. Give it the time it deserves.`,
+        callout: {
+          type: 'default',
+          label: 'What you need',
+          text: 'To develop for iOS you need a Mac running a recent version of macOS, and Xcode (free from the Mac App Store). To test on a real device you need a free Apple developer account. To publish to the App Store you need a paid Apple Developer Program membership ($99/year).'
+        },
+        hint: `SwiftUI previews in Xcode let you see the UI update live as you type code — no compile-run cycle required. This is one of the most productive development loops in all of software development. When you start with Xcode, spend time getting comfortable with the preview canvas before anything else.`,
+        quiz: {
+          question: "What is SwiftUI?",
+          options: [
+            "Apple's declarative UI framework, introduced in 2019, where you describe the desired state of the UI and SwiftUI handles rendering and updates automatically",
+            "A JavaScript library for styling web pages to look like native iOS apps",
+            "Apple's older, imperative UI framework that has powered iOS since 2008 and is still the primary choice for new apps",
+            "A Swift package manager for downloading third-party libraries and dependencies"
+          ],
+          correct: 0,
+          feedback: "SwiftUI is Apple's declarative framework, introduced at WWDC 2019. You describe what the UI should look like for a given state — SwiftUI renders it and re-renders when state changes. UIKit is the older imperative framework (option 3). SwiftUI has nothing to do with JavaScript or CSS (option 2). Swift Package Manager (SPM) is a separate tool for managing dependencies (option 4)."
+        }
+      },
+      {
+        id: 'tr-swift-2',
+        title: 'Swift Fundamentals',
+        body: `Swift's type system is one of its biggest strengths. <strong>Type inference</strong> means you rarely write types explicitly — Swift figures them out from context:\n\n<pre><code>let name = "Alice"      // inferred as String\nlet age = 28            // inferred as Int\nvar score = 95.5        // inferred as Double</code></pre>\n\n<code>let</code> declares a constant (immutable). <code>var</code> declares a variable (mutable). Prefer <code>let</code> wherever possible — it signals intent and enables compiler optimisations.\n\n<strong>Optionals</strong> are one of Swift's most important features. They represent a value that might be absent. A <code>String</code> is always a string. A <code>String?</code> is either a string or <code>nil</code>. The compiler forces you to handle the <code>nil</code> case before using the value:\n\n<pre><code>var username: String? = nil\nusername = "alice"\n\n// Safe unwrapping\nif let name = username {\n    print("Hello, \\(name)")\n} else {\n    print("No username")\n}\n\n// Nil coalescing — provide a default\nlet display = username ?? "Guest"</code></pre>\n\n<strong>Structs</strong> are value types — each assignment creates a copy. <strong>Classes</strong> are reference types — variables point to the same object. SwiftUI views are structs. Most of your data models will be structs.\n\n<strong>Closures</strong> are anonymous functions — the Swift equivalent of JavaScript arrow functions. They're used extensively for event handling, async completion handlers, and higher-order functions like <code>.map</code> and <code>.filter</code>:\n\n<pre><code>let doubled = [1, 2, 3].map { $0 * 2 }  // [2, 4, 6]</code></pre>\n\n<div class="inline-q"><span class="iq-label">The key habit:</span> When Swift gives you a compile error about an optional, read it carefully. The compiler is telling you about a real problem — a value that might not be there. Fix the unwrapping, don't force-unwrap with <code>!</code> unless you're absolutely certain the value exists.</div>`,
+        callout: {
+          type: 'warning',
+          label: 'Avoid force-unwrapping',
+          text: 'The ! operator force-unwraps an optional — if the value is nil at that point, your app crashes instantly with a fatal error. Use if let, guard let, or ?? instead. Force unwraps are a red flag in code review.'
+        },
+        hint: `<code>guard let</code> is an alternative to <code>if let</code> that exits early if the condition fails:\n\n<pre><code>func greet(username: String?) {\n    guard let name = username else {\n        print("No name")\n        return\n    }\n    print("Hello, \\(name)")\n}</code></pre>\n\nUse <code>guard let</code> when the nil case is the exceptional path and the non-nil case is the happy path — it keeps the happy path un-indented and easier to read.`,
+        quiz: {
+          question: "In Swift, what does String? represent?",
+          options: [
+            "An optional String — a value that is either a valid String or nil, requiring explicit unwrapping before use",
+            "A required String that must be set at initialisation and cannot be nil",
+            "A special syntax for string interpolation, equivalent to \\(value) in a string literal",
+            "A String that has been validated and is safe to use without error handling"
+          ],
+          correct: 0,
+          feedback: "In Swift, the ? suffix makes a type optional — it can hold a value of that type or nil. String? is either a String or nil. The compiler prevents you from using it directly as a String without unwrapping. Option 2 describes a non-optional String (without ?). Option 3 confuses the syntax — string interpolation uses \\(). Option 4 is not a Swift concept."
+        }
+      },
+      {
+        id: 'tr-swift-3',
+        title: 'SwiftUI Basics',
+        body: `SwiftUI is <strong>declarative</strong>: you describe what the UI should look like, and SwiftUI renders it. A SwiftUI view is a Swift struct that conforms to the <code>View</code> protocol, which requires a <code>body</code> property that returns some view content.\n\n<pre><code>struct ContentView: View {\n    var body: some View {\n        VStack(spacing: 16) {\n            Text("Hello, World!")\n                .font(.title)\n                .bold()\n                .foregroundColor(.blue)\n            Image(systemName: "star.fill")\n                .font(.system(size: 40))\n                .foregroundColor(.yellow)\n        }\n        .padding()\n    }\n}</code></pre>\n\n<strong>Modifiers</strong> are methods that return a modified copy of the view. They chain — each modifier wraps the previous result. Order matters: <code>.padding()</code> applied before <code>.background()</code> will pad inside the background; applied after, it pads outside.\n\n<strong>Layout containers</strong> arrange child views:\n- <code>VStack</code> — vertical stack (top to bottom)\n- <code>HStack</code> — horizontal stack (left to right)\n- <code>ZStack</code> — depth stack (back to front, for overlays)\n- <code>List</code> — scrollable list with automatic row dividers\n- <code>ScrollView</code> — any content made scrollable\n\n<div class="inline-q"><span class="iq-label">SF Symbols:</span> Apple provides over 6,000 system icons accessible by name via <code>Image(systemName: "icon-name")</code>. Browse them at developer.apple.com/sf-symbols or in the SF Symbols app. Using system icons gives your app a native look with zero effort.</div>\n\n<strong>The preview:</strong> Every SwiftUI file includes a preview struct that renders in Xcode's canvas. You can have multiple previews with different data or device sizes. The preview updates live as you type — this tight feedback loop is what makes SwiftUI so productive.`,
+        callout: {
+          type: 'focus',
+          label: 'Think in views and modifiers',
+          text: 'SwiftUI has one core pattern: everything is a view, and views are modified by chaining methods. Master VStack, HStack, ZStack, Text, Image, Button and the most common modifiers (font, foregroundColor, padding, background, frame) and you can build almost any screen.'
+        },
+        hint: `The <code>some View</code> return type is Swift's opaque type feature. You don't need to specify the exact type that <code>body</code> returns — you just say it's "some View" and Swift figures it out. This is necessary because modifier chains create deeply nested generic types that would be painful to write explicitly.`,
+        quiz: {
+          question: "What does a modifier do in SwiftUI?",
+          options: [
+            "It returns a new view that wraps the original with the specified visual or behavioural change applied — modifiers chain to build up the final appearance",
+            "It permanently changes a property of the view struct in memory",
+            "It sends a message to the view's parent to update the screen",
+            "It defines a new type of view that can be reused elsewhere in the app"
+          ],
+          correct: 0,
+          feedback: "SwiftUI modifiers are methods that return a new, modified view — they don't mutate the original. Each modifier in a chain wraps the result of the previous one. This is why order matters. SwiftUI views are value types (structs), so there is no permanent in-place mutation (option 2). Modifiers don't communicate with parent views (option 3) — that's done via bindings and environment. They don't define new types (option 4) — they return anonymous wrapper types."
+        }
+      },
+      {
+        id: 'tr-swift-4',
+        title: 'State and Navigation',
+        body: `SwiftUI's views are structs — they're recreated on every render. To persist data across renders, you need <strong>state</strong>. The <code>@State</code> property wrapper tells SwiftUI that this property owns a piece of mutable state. When the state changes, SwiftUI re-renders the body:\n\n<pre><code>struct CounterView: View {\n    @State private var count = 0\n\n    var body: some View {\n        VStack {\n            Text("\\(count)")\n                .font(.largeTitle)\n            Button("Increment") {\n                count += 1\n            }\n        }\n    }\n}</code></pre>\n\n<code>@Binding</code> allows a child view to read and write state owned by a parent. The parent passes a binding with the <code>$</code> prefix:\n\n<pre><code>struct ToggleRow: View {\n    @Binding var isOn: Bool\n    var label: String\n\n    var body: some View {\n        Toggle(label, isOn: $isOn)\n    }\n}\n\n// In the parent:\n@State private var darkMode = false\nToggleRow(isOn: $darkMode, label: "Dark Mode")</code></pre>\n\n<code>@ObservableObject</code> (or <code>@Observable</code> in Swift 5.9+) is for state that needs to be shared across multiple views or persists at a higher level than a single view. It's a class that publishes changes, and views observe it.\n\n<strong>Navigation</strong> in SwiftUI uses <code>NavigationStack</code> and <code>NavigationLink</code>:\n\n<pre><code>NavigationStack {\n    List(items) { item in\n        NavigationLink(item.title, destination: DetailView(item: item))\n    }\n    .navigationTitle("Items")\n}</code></pre>\n\n<div class="inline-q"><span class="iq-label">The rule:</span> Use @State for local, private state that belongs to one view. Use @Binding to share a piece of parent state with a child. Use @Observable/@ObservableObject for state that spans multiple views or the whole app.</div>`,
+        callout: {
+          type: 'default',
+          label: 'Sheet vs Navigation',
+          text: 'Use NavigationLink to push a new screen onto a stack (like drilling into a list item). Use .sheet() to present a modal overlay (like an edit form or settings). The choice tells users whether they\'re going deeper or doing a temporary action.'
+        },
+        hint: `To dismiss a presented view from within the view itself, use the <code>@Environment(\\.dismiss)</code> value:\n\n<pre><code>struct DetailView: View {\n    @Environment(\\.dismiss) var dismiss\n    var body: some View {\n        Button("Done") { dismiss() }\n    }\n}</code></pre>`,
+        quiz: {
+          question: "What does @State do in a SwiftUI view?",
+          options: [
+            "It marks a property as a source of truth owned by the view — when the property changes, SwiftUI automatically re-renders the view's body to reflect the new value",
+            "It marks a property as read-only and prevents it from being changed after initialisation",
+            "It shares a property across all views in the app so any view can read and write it",
+            "It persists a property to disk so the value survives the app being closed and reopened"
+          ],
+          correct: 0,
+          feedback: "@State marks a property as mutable state owned by the view. SwiftUI stores the actual value outside the struct (so it survives re-renders) and triggers a new render whenever it changes. Option 2 describes a constant (let). Option 3 describes @EnvironmentObject or @Observable. Option 4 describes UserDefaults or SwiftData persistence — @State only persists for the lifetime of the view."
+        }
+      },
+      {
+        id: 'tr-swift-5',
+        title: 'Your iOS App Plan',
+        body: `The workflow for building an iOS app is distinct from web development. You write and run code in <strong>Xcode</strong>, Apple's IDE (free, Mac-only). You test in the <strong>iOS Simulator</strong> — a full iPhone or iPad emulator that runs on your Mac — or on a physical device connected via USB.\n\nA typical development cycle: edit code in Xcode → simulator rebuilds → preview updates live (for SwiftUI) or you run the app → test the feature → repeat. The loop is fast for UI work because of SwiftUI's live previews.\n\nFor <strong>data persistence</strong>, you have several options depending on scale: <code>UserDefaults</code> for small key-value data (settings, preferences), <code>SwiftData</code> or <code>Core Data</code> for structured, queryable data (like a task list or journal), and network APIs for anything that needs to sync across devices.\n\nFor <strong>networking</strong>, Swift's <code>URLSession</code> handles HTTP requests natively. Combined with <code>Codable</code> — Swift's built-in JSON encoding and decoding protocol — you can fetch data from any API and map it directly to Swift structs with very little code.\n\n<div class="inline-q"><span class="iq-label">Before you start:</span> Sketch your app on paper first. Draw every screen. Draw the arrows between screens (the navigation flow). Identify what data each screen needs and where that data lives. A clear paper sketch will save you hours of refactoring once you start coding.</div>\n\nThe most important thing at this stage is to build <strong>something small and complete</strong>. A weather app that shows current conditions for one city. A simple timer. A personal daily journal. Completeness — an app that actually works end to end — is more valuable than a complex app that's half-finished.`,
+        callout: {
+          type: 'focus',
+          label: 'The fastest path to your first app',
+          text: 'Open Xcode. Create a new project (iOS → App → SwiftUI). Replace ContentView with a VStack containing Text and a Button connected to @State. See it work in the simulator. That first working screen is the foundation everything else is built on.'
+        },
+        checklist: [
+          "I understand the difference between SwiftUI (declarative, modern) and UIKit (imperative, older)",
+          "I know what an optional is and how to safely unwrap it with if let, guard let, or ??",
+          "I can explain the difference between @State (local to one view) and @ObservableObject (shared across views)",
+          "I know how to push a new view using NavigationLink inside a NavigationStack",
+          "I have a concrete iOS app idea I can describe in one sentence and sketch on paper"
+        ]
+      }
+    ]
+  }
+];
