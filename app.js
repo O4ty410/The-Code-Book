@@ -4762,44 +4762,61 @@ function getReadableText(sectionId) {
   parts.push(strip(section.body));
   if (section.callout) parts.push(section.callout.label + '. ' + strip(section.callout.text));
   if (section.callout2) parts.push(section.callout2.label + '. ' + strip(section.callout2.text));
-  if (section.hint) parts.push('Hint. ' + strip(section.hint));
+  if (section.checklist && section.checklist.length) {
+    parts.push('Before you continue. ' + section.checklist.map(strip).join('. '));
+  }
+  if (section.hint) parts.push("Here's a hint from Sage. " + strip(section.hint));
   return parts.join(' ... ');
 }
 
 function toggleNarration(sectionId) {
   var btn = document.getElementById('listen-btn-' + sectionId);
   if (currentNarrationId === sectionId && window.speechSynthesis.speaking) {
-    window.speechSynthesis.cancel();
-    stopAutoScroll();
-    currentNarrationId = null;
-    if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
+    if (window.speechSynthesis.paused) {
+      window.speechSynthesis.resume();
+      if (btn) btn.innerHTML = '<span class="listen-dot"></span>\u23F8 Pause';
+    } else {
+      window.speechSynthesis.pause();
+      if (btn) btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Resume';
+    }
     return;
   }
   window.speechSynthesis.cancel();
   stopAutoScroll();
-  var text = getReadableText(sectionId);
-  var utterance = new SpeechSynthesisUtterance(text);
+  var chunks = getReadableText(sectionId).split(' ... ').filter(Boolean);
+  if (!chunks.length) return;
   var gender = state.narratorGender || 'female';
   var voice = getBestVoice(gender);
-  if (voice) utterance.voice = voice;
-  utterance.rate  = gender === 'male' ? 0.90 : 0.88;
-  utterance.pitch = gender === 'male' ? 0.92 : 1.05;
-  utterance.volume = 1;
-  utterance.onstart = function() { startAutoScroll(); };
-  utterance.onend = function() {
-    stopAutoScroll();
-    currentNarrationId = null;
-    if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
-  };
-  utterance.onerror = function() {
-    stopAutoScroll();
-    currentNarrationId = null;
-    if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
-  };
-  currentUtterance = utterance;
   currentNarrationId = sectionId;
-  window.speechSynthesis.speak(utterance);
   if (btn) { btn.classList.add('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u23F8 Pause'; }
+
+  var chunkIdx = 0;
+  function speakNextChunk() {
+    if (chunkIdx >= chunks.length || currentNarrationId !== sectionId) {
+      stopAutoScroll();
+      currentNarrationId = null;
+      currentUtterance = null;
+      if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
+      return;
+    }
+    var utt = new SpeechSynthesisUtterance(chunks[chunkIdx++]);
+    if (voice) utt.voice = voice;
+    utt.rate  = gender === 'male' ? 0.90 : 0.88;
+    utt.pitch = gender === 'male' ? 0.92 : 1.05;
+    utt.volume = 1;
+    if (chunkIdx === 1) utt.onstart = function() { startAutoScroll(); };
+    utt.onend  = speakNextChunk;
+    utt.onerror = function(e) {
+      if (e.error === 'interrupted' || e.error === 'canceled') return;
+      stopAutoScroll();
+      currentNarrationId = null;
+      currentUtterance = null;
+      if (btn) { btn.classList.remove('playing'); btn.innerHTML = '<span class="listen-dot"></span>\u25B6 Listen'; }
+    };
+    currentUtterance = utt;
+    window.speechSynthesis.speak(utt);
+  }
+  speakNextChunk();
 }
 
 function stopNarration() {
