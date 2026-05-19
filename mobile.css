@@ -262,6 +262,24 @@
   white-space: nowrap;
 }
 
+.mob-hero-slogan {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mg-color, #c8a96e);
+  letter-spacing: 0.5px;
+  margin-top: 14px;
+}
+
+.mob-hero-slogan-sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.5;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
 .mob-hero-cta {
   width: 100%;
   padding: 13px 20px;

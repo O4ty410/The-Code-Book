@@ -64,7 +64,7 @@ function renderMobileHub() {
     });
   }
   var learnColor = (currentFloor && currentFloor.color) ? currentFloor.color : '#c8a96e';
-  var learnBtn = currentDone > 0 ? 'Continue' : 'Begin';
+  var learnBtn = currentDone > 0 ? 'Continue to Floors' : 'Begin';
   var floorPct = currentTotal > 0 ? Math.round(currentDone / currentTotal * 100) : 0;
 
   var revDue = 0;
@@ -99,6 +99,8 @@ function renderMobileHub() {
         '<div class="mob-hero-bar"><div class="mob-hero-bar-fill" style="width:' + floorPct + '%"></div></div>' +
         '<span class="mob-hero-pct">' + floorPct + '%</span>' +
       '</div>' +
+      '<div class="mob-hero-slogan">Seven Floors. One Goal.</div>' +
+      '<div class="mob-hero-slogan-sub">Work through each floor in order. Each one builds directly on the last.</div>' +
       '<button class="mob-hero-cta" style="background:' + learnColor + '">' + learnBtn + ' →</button>' +
     '</div>';
 
