@@ -4782,12 +4782,7 @@ document.addEventListener('keydown', function(e) {
   var tag = document.activeElement && document.activeElement.tagName;
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
   if (document.activeElement && document.activeElement.isContentEditable) return;
-  // Don't intercept if a modifier key is held (browser shortcuts)
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-
-  var fi = state.currentFloor - 1;
-  var si = state.currentSection || 0;
-  var inSection = !!FLOORS[fi];
 
   switch (e.key) {
     case ' ':
@@ -4797,61 +4792,7 @@ document.addEventListener('keydown', function(e) {
       toggleNarration(currentNarrationId);
       break;
 
-    case 'ArrowRight':
-      if (!inSection) return;
-      e.preventDefault();
-      nextSection(fi, si);
-      break;
-
-    case 'ArrowLeft':
-      if (!inSection) return;
-      e.preventDefault();
-      prevSection(fi, si);
-      break;
-
-    case 'ArrowDown': {
-      e.preventDefault();
-      var scrollEl = document.getElementById('main-col') || document.getElementById('main-content') || document.documentElement;
-      scrollEl.scrollBy({ top: 220, behavior: 'smooth' });
-      break;
-    }
-
-    case 'ArrowUp': {
-      e.preventDefault();
-      var scrollEl = document.getElementById('main-col') || document.getElementById('main-content') || document.documentElement;
-      scrollEl.scrollBy({ top: -220, behavior: 'smooth' });
-      break;
-    }
-
-    case 'Enter': {
-      // Floor celebration primary button
-      var celebBtn = document.querySelector('.fc-btn-primary');
-      if (celebBtn) { e.preventDefault(); celebBtn.click(); break; }
-      // Section complete / next popup
-      var pop = document.getElementById('sec-complete-pop');
-      if (pop) {
-        var primary = pop.querySelector('.scp-complete') || pop.querySelector('.scp-next');
-        if (primary) { e.preventDefault(); primary.click(); }
-      }
-      break;
-    }
-
-    case 'l':
-    case 'L':
-      if (!inSection) return;
-      e.preventDefault();
-      var section = FLOORS[fi].sections[si];
-      if (section) toggleNarration(section.id);
-      break;
-
-    case 'r':
-    case 'R':
-      e.preventDefault();
-      switchTopNav('revision', document.getElementById('mob-revision'));
-      break;
-
-    case 'Escape':
-      // Close any open overlay / modal / sheet
+    case 'Escape': {
       var searchModal = document.getElementById('search-modal');
       if (searchModal) { closeSearchModal(); return; }
       var tourOverlay = document.getElementById('app-tour-overlay');
@@ -4864,11 +4805,7 @@ document.addEventListener('keydown', function(e) {
         if (cel) closeCelebration();
       }
       break;
-
-    case '?':
-      e.preventDefault();
-      showKeyboardHelp();
-      break;
+    }
   }
 });
 
