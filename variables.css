@@ -48,3 +48,25 @@ body.light {
   --floor6: #7a6030;
   --floor7: #6a2e8a;
 }
+
+/* ── Space Mono global legibility ─────────────────────────────────────────── */
+/* Anywhere Space Mono is used, open up letter-spacing slightly and boost     */
+/* font-weight to 700 so it reads cleanly on dark backgrounds.                */
+*[style*="Space Mono"],
+.editor-run-btn, .editor-reset-btn, .editor-hint-btn,
+.editor-filename, .editor-challenge-label, .ch-text,
+.sage-ask-label, .sage-ask-sub, .sage-chat-title, .sage-chat-meta,
+.sage-chat-warning, .sage-msg-text,
+.hint-btn, .hint-box .owl-name, .hint-text,
+.sfi-sage-label, .sfi-floor-num, .sfi-meta,
+.pf-section-hdr, .pf-stat-k, .pf-display-label, .pf-display-val,
+.pf-display-hints, .pf-theme-name, .pf-badge-name,
+.pf-header-status, .pf-header-rank, .pf-header-mission,
+.cover-label, .cover-feature,
+.editor-console-line,
+.editor-preview-label,
+.sage-chat-close,
+.scp-label span, .scp-btn {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
