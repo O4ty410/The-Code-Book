@@ -792,6 +792,25 @@
   padding: 4px;
 }
 .fc-btn-share:hover { color: var(--text); }
+.fc-btn-cert {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(200,169,110,0.35);
+  border-radius: 10px;
+  padding: 13px 24px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--fc-color, var(--accent));
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+.fc-btn-cert:hover {
+  background: rgba(200,169,110,0.08);
+  border-color: rgba(200,169,110,0.6);
+  transform: scale(1.01);
+}
 
 /* ============================================================
    DASHBOARD PANEL

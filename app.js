@@ -1848,6 +1848,7 @@ function showFloorCelebration(floorIndex, newBadges) {
         '<button class="fc-btn-primary" onclick="closeCelebration()">' +
           (nextFloor ? 'Continue to Floor ' + nextFloor.id + ' \u2192' : 'You\'re done \u2713') +
         '</button>' +
+        '<button class="fc-btn-cert" onclick="generateFloorCertificate(' + floorIndex + ')">&#8681; Download Certificate</button>' +
         '<button class="fc-btn-share" onclick="shareAchievement()">Share this achievement</button>' +
       '</div>' +
     '</div>';
@@ -1922,6 +1923,148 @@ function closeCelebration() {
   document.getElementById('floor-celebration').style.display = 'none';
   document.body.classList.remove('celebrating');
 }
+
+// ── Floor Completion Certificate (Canvas) ────────────────────────
+function generateFloorCertificate(fi) {
+  var floor = FLOORS[fi];
+  if (!floor) return;
+  var playerName = state.playerName || localStorage.getItem('codebook_player_name') || 'The Learner';
+  var accentHex  = floor.color || '#c8a96e';
+  var W = 1400, H = 900;
+
+  function hexRgba(hex, a) {
+    var r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+  function cornerMark(ctx, x, y, dir) {
+    var L = 26, dx = dir[1]==='r'?-1:1, dy = dir[0]==='b'?-1:1;
+    ctx.beginPath(); ctx.moveTo(x+dx*L,y); ctx.lineTo(x,y); ctx.lineTo(x,y+dy*L); ctx.stroke();
+  }
+  function fitText(ctx, text, maxW) {
+    var sz = 80;
+    ctx.font = '300 '+sz+'px Inter,sans-serif';
+    while (ctx.measureText(text).width > maxW && sz > 32) {
+      sz -= 2;
+      ctx.font = '300 '+sz+'px Inter,sans-serif';
+    }
+    return sz;
+  }
+
+  document.fonts.ready.then(function() {
+    var canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    var c = canvas.getContext('2d');
+
+    // ── Background ──
+    c.fillStyle = '#05070a';
+    c.fillRect(0, 0, W, H);
+
+    // Subtle centre radial warmth
+    var radGrd = c.createRadialGradient(W/2, H/2, 0, W/2, H/2, W*0.55);
+    radGrd.addColorStop(0, 'rgba(28,40,60,0.45)');
+    radGrd.addColorStop(1, 'transparent');
+    c.fillStyle = radGrd;
+    c.fillRect(0, 0, W, H);
+
+    // Side glow from accent bar
+    var sideGrd = c.createLinearGradient(0,0,300,0);
+    sideGrd.addColorStop(0, hexRgba(accentHex, 0.07));
+    sideGrd.addColorStop(1, 'transparent');
+    c.fillStyle = sideGrd; c.fillRect(0,0,W,H);
+
+    // ── Left accent bar ──
+    c.fillStyle = accentHex;
+    c.fillRect(0, 0, 7, H);
+
+    // ── Corner marks ──
+    c.strokeStyle = 'rgba(80,110,140,0.5)'; c.lineWidth = 1.5;
+    cornerMark(c, 44, 44, 'tl');
+    cornerMark(c, W-44, 44, 'tr');
+    cornerMark(c, 44, H-44, 'bl');
+    cornerMark(c, W-44, H-44, 'br');
+
+    // ── Watermark floor number ──
+    c.save();
+    c.globalAlpha = 0.028;
+    c.fillStyle = '#ffffff';
+    c.font = '900 300px Inter,sans-serif';
+    c.textAlign = 'right'; c.textBaseline = 'top';
+    c.fillText(String(fi+1), W-30, -30);
+    c.restore();
+
+    // ── Top-left branding ──
+    c.font = '700 12px "Space Mono",monospace';
+    c.fillStyle = 'rgba(100,140,180,0.55)';
+    c.textAlign = 'left'; c.textBaseline = 'top';
+    c.fillText('T H E   C O D E   B O O K', 50, 46);
+
+    // ── "CERTIFICATE OF COMPLETION" ──
+    var midY = Math.round(H * 0.40);
+    c.font = '700 12px "Space Mono",monospace';
+    c.fillStyle = hexRgba(accentHex, 0.85);
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText('C E R T I F I C A T E   O F   C O M P L E T I O N', W/2, midY - 80);
+
+    // Rule above name
+    c.strokeStyle = hexRgba(accentHex, 0.4);
+    c.lineWidth = 1;
+    c.beginPath(); c.moveTo(W/2-300, midY-58); c.lineTo(W/2+300, midY-58); c.stroke();
+
+    // ── Player name ──
+    var nameSz = fitText(c, playerName, 800);
+    c.font = '300 '+nameSz+'px Inter,sans-serif';
+    c.fillStyle = '#f1f5f9';
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(playerName, W/2, midY + 14);
+
+    // Rule below name
+    c.strokeStyle = 'rgba(255,255,255,0.07)';
+    c.lineWidth = 1;
+    c.beginPath(); c.moveTo(W/2-220, midY+62); c.lineTo(W/2+220, midY+62); c.stroke();
+
+    // ── "has completed" ──
+    c.font = '400 15px Inter,sans-serif';
+    c.fillStyle = 'rgba(125,150,180,0.75)';
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText('has completed', W/2, midY + 94);
+
+    // ── Floor title ──
+    var floorLine = 'FLOOR ' + (fi+1) + '  —  ' + floor.title.toUpperCase();
+    c.font = '700 21px "Space Mono",monospace';
+    c.fillStyle = accentHex;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(floorLine, W/2, midY + 136);
+
+    // ── Subtitle ──
+    c.font = 'italic 400 15px Inter,sans-serif';
+    c.fillStyle = 'rgba(100,130,165,0.7)';
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillText(floor.subtitle, W/2, midY + 168);
+
+    // ── Bottom rule ──
+    c.strokeStyle = hexRgba(accentHex, 0.25);
+    c.lineWidth = 1;
+    c.beginPath(); c.moveTo(50, H-64); c.lineTo(W-50, H-64); c.stroke();
+
+    // Date (bottom left)
+    var dateStr = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+    c.font = '400 12px "Space Mono",monospace';
+    c.fillStyle = 'rgba(80,110,140,0.6)';
+    c.textAlign = 'left'; c.textBaseline = 'middle';
+    c.fillText(dateStr, 50, H-40);
+
+    // Floor N of 7 (bottom right)
+    c.textAlign = 'right';
+    c.fillText('Floor ' + (fi+1) + ' of ' + FLOORS.length, W-50, H-40);
+
+    // ── Download ──
+    var link = document.createElement('a');
+    link.download = 'the-code-book-floor-' + (fi+1) + '-certificate.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+}
+// ─────────────────────────────────────────────────────────────────
 
 function shareAchievement() {
   const name = state.playerName || localStorage.getItem('codebook_player_name') || 'Someone';
