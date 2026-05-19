@@ -6319,9 +6319,66 @@ function renderProfilePanel() {
     // Export
     '<div class="pf-section">' +
       '<button class="pf-export-btn" onclick="generateProgressCard()">&#8681; Download Progress Card</button>' +
+      '<button class="pf-export-btn pf-export-notes-btn" onclick="exportNotes()">&#128203; Export Notes</button>' +
     '</div>' +
 
     '</div>';
+}
+
+// ============================================================
+// NOTES EXPORT
+// ============================================================
+function exportNotes() {
+  var name = (typeof state !== 'undefined' && state.playerName) ||
+             localStorage.getItem('codebook_player_name') || 'Learner';
+  var date = new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+
+  var lines = [
+    '# The Code Book — My Notes',
+    'Exported by: ' + name,
+    'Date: ' + date,
+    '',
+  ];
+
+  var hasAny = false;
+
+  if (typeof FLOORS !== 'undefined') {
+    FLOORS.forEach(function(f, fi) {
+      var floorNotes = [];
+      f.sections.forEach(function(s, si) {
+        var note = localStorage.getItem('note_' + s.id);
+        if (note && note.trim()) {
+          floorNotes.push({ title: s.title, note: note.trim() });
+          hasAny = true;
+        }
+      });
+      if (floorNotes.length > 0) {
+        lines.push('## Floor ' + (fi + 1) + ': ' + f.title);
+        lines.push('');
+        floorNotes.forEach(function(n) {
+          lines.push('### ' + n.title);
+          lines.push('');
+          lines.push(n.note);
+          lines.push('');
+        });
+      }
+    });
+  }
+
+  if (!hasAny) {
+    sageMessage('No notes to export yet — write some notes in the Notes tab of any section.', 'info');
+    return;
+  }
+
+  var md = lines.join('\n');
+  var blob = new Blob([md], { type: 'text/markdown; charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'codebook-notes-' + new Date().toISOString().slice(0, 10) + '.md';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
 }
 
 function renderPremiumPanel() {
