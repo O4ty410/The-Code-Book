@@ -4765,15 +4765,98 @@ function resetSageIdleTimer() {
 
 // Space bar: pause narration + stop auto-scroll (desktop only)
 document.addEventListener('keydown', function(e) {
-  if (e.code !== 'Space') return;
-  if (!currentNarrationId) return;
-  // Don't intercept if focus is inside a text input or textarea
+  // Don't intercept when typing in inputs, textareas, or contenteditable
   var tag = document.activeElement && document.activeElement.tagName;
-  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-  e.preventDefault();
-  stopAutoScroll();
-  toggleNarration(currentNarrationId);
+  if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+  if (document.activeElement && document.activeElement.isContentEditable) return;
+  // Don't intercept if a modifier key is held (browser shortcuts)
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+  var fi = state.currentFloor - 1;
+  var si = state.currentSection || 0;
+  var inSection = !!FLOORS[fi];
+
+  switch (e.key) {
+    case ' ':
+      if (!currentNarrationId) return;
+      e.preventDefault();
+      stopAutoScroll();
+      toggleNarration(currentNarrationId);
+      break;
+
+    case 'ArrowRight':
+    case 'ArrowDown':
+      if (!inSection) return;
+      e.preventDefault();
+      nextSection(fi, si);
+      break;
+
+    case 'ArrowLeft':
+    case 'ArrowUp':
+      if (!inSection) return;
+      e.preventDefault();
+      prevSection(fi, si);
+      break;
+
+    case 'l':
+    case 'L':
+      if (!inSection) return;
+      e.preventDefault();
+      var section = FLOORS[fi].sections[si];
+      if (section) toggleNarration(section.id);
+      break;
+
+    case 'r':
+    case 'R':
+      e.preventDefault();
+      switchTopNav('revision', document.getElementById('mob-revision'));
+      break;
+
+    case 'Escape':
+      // Close any open overlay / modal / sheet
+      var tourOverlay = document.getElementById('app-tour-overlay');
+      if (tourOverlay && tourOverlay.classList.contains('app-tour-visible')) { dismissAppTour(); return; }
+      var kbHelp = document.getElementById('kb-help-overlay');
+      if (kbHelp) { kbHelp.remove(); return; }
+      if (typeof closeSectionSheet === 'function') closeSectionSheet();
+      if (typeof closeCelebration === 'function') {
+        var cel = document.querySelector('.fc-overlay.fc-visible');
+        if (cel) closeCelebration();
+      }
+      break;
+
+    case '?':
+      e.preventDefault();
+      showKeyboardHelp();
+      break;
+  }
 });
+
+function showKeyboardHelp() {
+  if (document.getElementById('kb-help-overlay')) { document.getElementById('kb-help-overlay').remove(); return; }
+  var el = document.createElement('div');
+  el.id = 'kb-help-overlay';
+  el.className = 'kb-help-overlay';
+  el.innerHTML =
+    '<div class="kb-help-card">' +
+      '<div class="kb-help-hdr">Keyboard Shortcuts <button class="kb-help-close" onclick="document.getElementById(\'kb-help-overlay\').remove()">&#215;</button></div>' +
+      '<div class="kb-help-grid">' +
+        _kbRow('→ / ↓', 'Next section') +
+        _kbRow('← / ↑', 'Previous section') +
+        _kbRow('Space', 'Pause / resume narration') +
+        _kbRow('L', 'Toggle listen (narrate section)') +
+        _kbRow('R', 'Open Revision Centre') +
+        _kbRow('Esc', 'Close overlay / modal') +
+        _kbRow('?', 'Show / hide this help') +
+      '</div>' +
+    '</div>';
+  el.addEventListener('click', function(e) { if (e.target === el) el.remove(); });
+  document.body.appendChild(el);
+}
+
+function _kbRow(key, desc) {
+  return '<div class="kb-row"><kbd class="kb-key">' + escHtml(key) + '</kbd><span class="kb-desc">' + escHtml(desc) + '</span></div>';
+}
 
 
 // ============================================
