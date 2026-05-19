@@ -1967,7 +1967,7 @@ function showProgressNudge(fi, si) {
   nudge.style.cssText = `position:fixed;bottom:80px;right:16px;background:var(--surface);border:1px solid var(--accent);border-radius:12px;padding:16px 20px;z-index:5000;max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,0.4);animation:fadeUp 0.4s ease;`;
   nudge.innerHTML = `
     <div style="margin-bottom:8px;">${sageOwlSVG(22, 24)}</div>
-    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:13px;margin-bottom:6px;">${name ? 'Halfway there, ' + (name) + '!' : 'Halfway there!'}</div>
+    <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:13px;margin-bottom:6px;">${name ? 'Halfway there, ' + escHtml(name) + '!' : 'Halfway there!'}</div>
     <div style="font-size:12px;color:var(--text-dim);line-height:1.6;">You\'re halfway through this floor. The hard part is behind you.</div>
     <button onclick="this.parentElement.remove()" style="margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 14px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;cursor:pointer;">Keep going</button>
   `;
@@ -6021,6 +6021,7 @@ function getProfileRank(fi) {
 }
 
 function getSageFieldNote(st, name) {
+  name = escHtml(name || '');
   var floor  = st.currentFloor || 1;
   var streak = st.streak || 0;
   var earned = (st.earnedBadges || []).length;
@@ -6113,7 +6114,7 @@ function renderProfilePanel() {
     '<div class="pf-header">' +
       '<div class="pf-hdr-main">' +
         '<div class="pf-header-status"><span class="pf-status-dot"></span>ACTIVE OPERATOR</div>' +
-        '<div class="pf-header-name">' + name + '</div>' +
+        '<div class="pf-header-name">' + escHtml(name) + '</div>' +
         '<div class="pf-header-rank">' + rank + ' · LEVEL ' + cur.level + ' — ' + levelName.toUpperCase() + '</div>' +
         '<div class="pf-header-mission">' + missionLine + '</div>' +
       '</div>' +
