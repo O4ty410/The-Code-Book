@@ -114,9 +114,11 @@ function renderMobileHub() {
 
   html += '<div class="mob-grid-cells">';
   tiles.forEach(function(t) {
-    var tglow = _hexGlow(t.color, 0.22);
+    var tglow   = _hexGlow(t.color, 0.18);
+    var tborder = _hexGlow(t.color, 0.30);
+    var tbg     = _hexGlow(t.color, 0.07);
     html +=
-      '<div class="mob-grid-tile" style="--mg-color:' + t.color + ';--mg-glow:' + tglow + '" onclick="' + t.action + '">' +
+      '<div class="mob-grid-tile" style="--mg-color:' + t.color + ';--mg-glow:' + tglow + ';--mg-border:' + tborder + ';--mg-bg:' + tbg + '" onclick="' + t.action + '">' +
         '<div class="mg-accent"></div>' +
         '<div class="mg-icon-lg">' + t.icon + '</div>' +
         '<div class="mg-title-lg">' + t.title + '</div>' +

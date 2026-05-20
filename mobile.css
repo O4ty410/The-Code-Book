@@ -137,8 +137,10 @@
 
 .mob-grid-tile {
   position: relative;
-  background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
-  border: 1px solid var(--mg-color, rgba(255,255,255,0.1));
+  background:
+    linear-gradient(180deg, var(--mg-bg, rgba(200,169,110,0.04)) 0%, transparent 60%),
+    linear-gradient(180deg, #050e1e 0%, #040b18 100%);
+  border: 1px solid var(--mg-border, rgba(200,169,110,0.28));
   border-radius: 14px;
   padding: 18px 14px 16px;
   cursor: pointer;
@@ -148,15 +150,16 @@
   overflow: hidden;
   transition: border-color 0.22s, box-shadow 0.22s, transform 0.18s;
   box-shadow:
-    0 0 12px var(--mg-glow, rgba(200,169,110,0.14)),
-    0 2px 14px rgba(0,0,0,0.45);
+    0 0 10px var(--mg-glow, rgba(200,169,110,0.12)),
+    0 2px 12px rgba(0,0,0,0.45);
   -webkit-tap-highlight-color: transparent;
 }
 
 .mob-grid-tile:active {
   transform: scale(0.97);
+  border-color: var(--mg-color, #c8a96e);
   box-shadow:
-    0 0 20px var(--mg-glow, rgba(200,169,110,0.35)),
+    0 0 22px var(--mg-glow, rgba(200,169,110,0.32)),
     0 4px 20px rgba(0,0,0,0.55);
 }
 
