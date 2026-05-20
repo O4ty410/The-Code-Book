@@ -1,5 +1,5 @@
 let isLoggedIn = false;
-let isGuest = false;
+let isGuest = !!localStorage.getItem('codebook_guest');
 let currentFloor = 1;
 
 var sageBubbleTimeout = null;
@@ -74,7 +74,10 @@ let state = {
   streakProtectedToday: false,
   revKnown: {},
   srsData: {},
-  currentTrack: null
+  currentTrack: null,
+  earnedBadges: [],
+  badgeFlags: {},
+  checklistDone: {}
 };
 state.playerName = localStorage.getItem("codebook_player_name") || null;
 
@@ -175,7 +178,8 @@ function togglePasswordVisibility(inputId, btn) {
 
 
 function showAuthFromLanding() {
-  // Check if user has already started \u2014 skip auth and go straight in
+  // Load persisted state before checking progress so returning users are not routed to onboarding
+  loadState();
   const sectionIds = new Set();
   FLOORS.forEach(function(f) { f.sections.forEach(function(s) { sectionIds.add(s.id); }); });
   const completedCount = Object.keys(state.completed).filter(function(k) {
@@ -184,7 +188,6 @@ function showAuthFromLanding() {
   const hasStarted = completedCount > 0 || state.currentSection > 0 || state.currentFloor > 1 || state.xp > 0;
   if (hasStarted) {
     // Returning user — go straight into the app
-    loadState();
     var _streakExtended = updateStreak();
     stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
     document.body.style.overflow = '';
@@ -374,7 +377,6 @@ function closeSessionComplete(done) {
   document.getElementById('session-complete').style.display = 'none';
   if (done) {
     document.getElementById('app').style.display = 'none';
-    document.getElementById('cover').style.display = 'flex';
     populateDashboard();
   }
 }
@@ -441,9 +443,12 @@ async function saveToSupabase() {
 }
 
 async function signOut() {
+  var confirmed = window.confirm('Sign out? Your local progress will be cleared. This cannot be undone.');
+  if (!confirmed) return;
   currentUser = null;
   localStorage.removeItem('codebook_user');
   localStorage.removeItem('codebook_v1');
+  localStorage.removeItem('codebook_guest');
   document.getElementById('user-bar').style.display = 'none';
   document.getElementById('app').style.display = 'none';
   var ag = document.querySelector('.app-grid'); if (ag) ag.style.display = 'none';
@@ -1485,8 +1490,8 @@ function renderNav() {
     }).join('') : '';
     return '<div class="floor-nav-item ' + (isUnlocked ? 'unlocked' : '') + ' ' + (isActive ? 'active' : '') + ' ' + (isComplete ? 'completed' : '') + ' ' + (isGuestLocked ? 'guest-locked' : '') + '" onclick="goToFloor(' + fi + ')">' +
       '<div class="floor-nav-header">' +
-      '<div class="floor-num" style="color:' + f.color + '">' + (isGuestLocked ? '&#128274;' : isComplete ? '2713' : fi + 1) + '</div>' +
-      '<div class="floor-nav-label">' + f.title + (isGuestLocked ? ' 2014 Account required' : '') + '</div>' +
+      '<div class="floor-num" style="color:' + f.color + '">' + (isGuestLocked ? '&#128274;' : isComplete ? '\u2713' : fi + 1) + '</div>' +
+      '<div class="floor-nav-label">' + f.title + (isGuestLocked ? ' \u2014 Account required' : '') + '</div>' +
       '</div>' +
       (isActive ? '<div class="floor-sections">' + sections + '</div>' : '') +
       '</div>';
@@ -1520,7 +1525,13 @@ function showSageFloorIntro(fi) {
   if (!floor) { goToFloor(fi); return; }
 
   var introTexts = [
-    'Before you write a single line of code, let me make sure you understand how the internet actually works — and why it works that way.<br><br>In Floor 1 we cover how browsers talk to servers, what HTML, CSS and JavaScript actually are, and the three ideas that every program ever written is built on: conditions, loops and functions.<br><br>Five sections. No prior experience needed. Take your time with each one.'
+    'Before you write a single line of code, let me make sure you understand how the internet actually works — and why it works that way.<br><br>In Floor 1 we cover how browsers talk to servers, what HTML, CSS and JavaScript actually are, and the three ideas that every program ever written is built on: conditions, loops and functions.<br><br>Five sections. No prior experience needed. Take your time with each one.',
+    'You have the foundation. Now we build on it.<br><br>Floor 2 is where HTML and CSS stop being abstract and start becoming visible. You will learn how structure and style combine to produce what users actually see. Every layout you have ever used was built with these principles.<br><br>Apply what you learned in Floor 1. This is where it clicks.',
+    'Floor 3 is the turning point.<br><br>JavaScript makes things move, react, and remember. By the end of this floor you will be writing logic that responds to users in real time. This is when development starts to feel like a skill and not just a process.<br><br>Pay close attention. The concepts here underpin everything that follows.',
+    'You are now writing real programs.<br><br>Floor 4 introduces the patterns that professional developers use every day — functions, data structures, and the way complex systems are broken into manageable pieces. It is not about memorising syntax. It is about thinking in structures.<br><br>Work through each section slowly. Understanding the why matters more than the how.',
+    'The back end is where your code stops being a user interface and starts being a system.<br><br>Floor 5 covers servers, databases, and the request-response cycle that drives every application on the web. You will write code that stores data, retrieves it, and responds to requests from the real world.<br><br>This is a significant step. Take it seriously.',
+    'Floor 6 connects everything you have built so far.<br><br>Full-stack development means owning both the interface the user sees and the system that powers it. You will deploy, integrate, and debug across the entire stack. Real applications have real complexity. This floor prepares you for it.',
+    'You have reached the final floor.<br><br>Floor 7 is about professional practice — version control, testing, deployment pipelines, and the habits that separate someone who codes from someone who engineers. Everything before this was preparation. This is how you work in the real world.<br><br>Finish what you started.'
   ];
   var text = introTexts[fi] || 'This floor builds directly on everything you have learned so far. Each section is designed to be completed in one sitting.';
 
@@ -3224,15 +3235,6 @@ function renderAllNav() {
   renderRightNav();
 }
 
-function initSageSidebarSync() {
-  var orig = window.sageMessage;
-  if (orig) {
-    window.sageMessage = function(text, mood) {
-      orig.call(this, text, mood);
-      updateSageSidebar(text);
-    };
-  }
-}
 
 // Patch renderNav to also update sidebars
 // Guard flag prevents infinite recursion (renderNav -> renderAllNav -> renderLeftNav -> goToFloor -> renderNav)
@@ -3758,181 +3760,6 @@ function renderLearnHub() {
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
   startHubCanvas();
 }
-function renderFloor1(si) {
-  var ls = document.getElementById('left-sidebar');
-  if (ls) ls.style.display = 'flex';
-  var floor = FLOORS[0];
-  var fi = 0;
-
-  // Progress calculation
-  var totalSecs = floor.sections.length;
-  var doneSecs = floor.sections.filter(function(s) { return state.completed[s.id]; }).length;
-  var pct = Math.round((doneSecs / totalSecs) * 100);
-  var streak = state.streak || 0;
-
-  // Section list for right sidebar
-  var sectionListHtml = floor.sections.map(function(s, i) {
-    var done = state.completed[s.id];
-    var active = i === si;
-    return '<div class="f1-sec-row ' + (active ? 'f1-sec-active' : '') + ' ' + (done ? 'f1-sec-done' : '') + '" onclick="renderFloor1(' + i + ')">' +
-      '<div class="f1-sec-num">' + (done ? '&#10003;' : (i + 1)) + '</div>' +
-      '<div class="f1-sec-name">' + s.title + '</div>' +
-      (active ? '<div class="f1-sec-indicator"></div>' : '') +
-      '</div>';
-  }).join('');
-
-  // Activity log
-  var actLog = getActivityLog();
-  var actHtml = actLog.length ? actLog.slice(0, 3).map(function(a) {
-    return '<div class="f1-activity-row">' +
-      '<div class="f1-activity-dot"></div>' +
-      '<div class="f1-activity-label">' + a.label + '</div>' +
-      (a.xp ? '<div class="f1-activity-xp">+' + a.xp + ' XP</div>' : '') +
-      '<div class="f1-activity-time">' + timeAgo(a.time) + '</div>' +
-      '</div>';
-  }).join('') : '<div class="f1-activity-empty">No activity yet. Start your first section!</div>';
-
-  // Today\'s goal
-  var dailyGoal = parseInt(localStorage.getItem('codebook_daily_goal')) || 2;
-  var todayKey = 'daily_sections_' + new Date().toDateString();
-  var todayDone = parseInt(localStorage.getItem(todayKey)) || 0;
-  var goalPct = Math.min(100, Math.round((todayDone / dailyGoal) * 100));
-  var circumference = 2 * Math.PI * 28;
-  var dashOffset = circumference - (circumference * goalPct / 100);
-
-  // Section cards
-  var section = floor.sections[si];
-  var sectionCardsHtml = floor.sections.map(function(s, i) {
-    var done = state.completed[s.id];
-    var active = i === si;
-    var num = i < 9 ? '0' + (i + 1) : '' + (i + 1);
-    var badge = done && !active
-      ? '<span class="f1-card-badge f1-card-badge-done">&#10003; Complete</span>'
-      : active
-      ? '<span class="f1-card-badge f1-card-badge-active">Active</span>'
-      : '<span class="f1-card-badge f1-card-badge-locked">Locked</span>';
-    var cardClass = 'f1-section-card ' + (active ? 'f1-section-active' : done ? 'f1-section-done' : 'f1-section-locked');
-    var clickFn = active ? 'loadSection(0,' + i + ')' : 'renderFloor1(' + i + ')';
-    var inner = '<div class="f1-card-header">' +
-      '<div class="f1-card-num">' + num + '</div>' +
-      badge +
-      '</div>' +
-      '<div class="f1-section-title">' + s.title + '</div>';
-    if (active) {
-      inner += '<div class="f1-section-desc">' + (s.body ? s.body.replace(/<[^>]+>/g, '').substring(0, 90) + '...' : '') + '</div>' +
-        '<div class="f1-section-actions"><button class="f1-continue-btn" onclick="event.stopPropagation();loadSection(0,' + i + ')">Continue &#8594;</button></div>';
-    }
-    return '<div class="' + cardClass + '" onclick="' + clickFn + '">' + inner + '</div>';
-  }).join('');
-
-  // CSS orb illustration
-  var orbHtml = '<div class="f1-orb-wrap">' +
-    '<div class="f1-orb-outer">' +
-    '<div class="f1-orb-inner">' +
-    '<div class="f1-orb-core"></div>' +
-    '</div>' +
-    '</div>' +
-    '<div class="f1-orb-shadow"></div>' +
-    '</div>';
-
-  var html =
-    '<div class="f1-layout">' +
-
-    // \u2500\u2500 MAIN COLUMN \u2500\u2500
-    '<div class="f1-main">' +
-
-    // Hero
-    '<div class="f1-hero">' +
-    orbHtml +
-    '<div class="f1-hero-content">' +
-    '<div class="f1-floor-tag">FLOOR 01 &bull; FOUNDATION</div>' +
-    '<div class="f1-floor-title">' + floor.title + '</div>' +
-    '<div class="f1-floor-desc">' + floor.sections[0].body.substring(0, 90) + '...</div>' +
-    '<div class="f1-stats-row">' +
-    '<div class="f1-stat"><span class="f1-stat-icon">&#128337;</span><div><div class="f1-stat-label">DURATION</div><div class="f1-stat-value">' + floor.duration + '</div></div></div>' +
-    '<div class="f1-stat"><span class="f1-stat-icon">&#128197;</span><div><div class="f1-stat-label">SESSIONS</div><div class="f1-stat-value">' + floor.sessions + '</div></div></div>' +
-    '<div class="f1-stat"><span class="f1-stat-icon">&#9200;</span><div><div class="f1-stat-label">LENGTH</div><div class="f1-stat-value">' + floor.length + '</div></div></div>' +
-    '<div class="f1-stat"><span class="f1-stat-icon">&#128200;</span><div><div class="f1-stat-label">DIFFICULTY</div><div class="f1-stat-value">Curious</div></div></div>' +
-    '</div>' +
-    '<div class="f1-hero-btns">' +
-    '<button class="f1-start-btn" onclick="loadSection(0,0)">Start Floor 01 &#8594;</button>' +
-    '<button class="f1-preview-btn" onclick="sageMessage(\'Floor 1 covers how the internet works, how computers read code, and the logic behind all programming. Five sections, no prior experience needed.\', \'info\')">&#9654; Preview</button>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-
-    // Progress bar
-    '<div class="f1-progress-wrap">' +
-    '<div class="f1-progress-label">YOUR PROGRESS</div>' +
-    '<div class="f1-progress-center">' +
-    '<span class="f1-progress-floor">FLOOR 01</span>' +
-    '<div class="f1-progress-track"><div class="f1-progress-fill" style="width:' + pct + '%"></div></div>' +
-    '<span class="f1-progress-pct">' + pct + '%</span>' +
-    '</div>' +
-    '<div class="f1-progress-streak">&#128293; ' + streak + ' days</div>' +
-    '</div>' +
-
-    // Section cards
-    '<div class="f1-sections">' + sectionCardsHtml + '</div>' +
-
-    '</div>' + // end f1-main
-
-    // \u2500\u2500 RIGHT SIDEBAR \u2500\u2500
-    '<div class="f1-sidebar">' +
-
-    // Section list
-    '<div class="f1-sidebar-card">' +
-    '<div class="f1-sidebar-label">FLOOR 01 &bull; SECTIONS</div>' +
-    sectionListHtml +
-    '</div>' +
-
-    // Sage guide
-    '<div class="f1-sidebar-card f1-sage-card">' +
-    '<div class="f1-sage-header">' +
-    '<div class="f1-sage-avatar">&#129497;</div>' +
-    '<div class="f1-sage-name">YOUR GUIDE</div>' +
-    '</div>' +
-    '<div class="f1-sage-quote">Every expert was once a beginner who refused to quit.</div>' +
-    '</div>' +
-
-    // Today\'s goal
-    '<div class="f1-sidebar-card">' +
-    '<div class="f1-sidebar-label">TODAY\'S GOAL</div>' +
-    '<div class="f1-goal-row">' +
-    '<svg class="f1-goal-circle" viewBox="0 0 64 64">' +
-    '<circle cx="32" cy="32" r="28" fill="none" stroke="var(--border)" stroke-width="4"/>' +
-    '<circle cx="32" cy="32" r="28" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="' + circumference + '" stroke-dashoffset="' + dashOffset + '" stroke-linecap="round" transform="rotate(-90 32 32)"/>' +
-    '<text x="32" y="37" text-anchor="middle" fill="var(--accent)" font-size="13" font-family="IBM Plex Mono">' + todayDone + '/' + dailyGoal + '</text>' +
-    '</svg>' +
-    '<div class="f1-goal-text">' +
-    '<div class="f1-goal-title">Complete ' + dailyGoal + ' sections</div>' +
-    '<div class="f1-goal-sub">Earn XP and keep your streak!</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-
-    // Recent activity
-    '<div class="f1-sidebar-card">' +
-    '<div class="f1-sidebar-label">RECENT ACTIVITY</div>' +
-    '<div class="f1-activity-list">' + actHtml + '</div>' +
-    '</div>' +
-
-    // Motivational footer
-    '<div class="f1-sidebar-card f1-motive-card">' +
-    '<div class="f1-motive-text">Stay consistent.<br>Progress compounds.</div>' +
-    '<div class="f1-motive-icon">&#128218;</div>' +
-    '</div>' +
-
-    '</div>' + // end f1-sidebar
-    '</div>'; // end f1-layout
-
-  document.getElementById('main-content').innerHTML = html;
-  state.currentFloor = 1;
-  state.currentSection = si;
-  saveState();
-  updateTopChips();
-}
-
 function completeSection(sectionId, fi, si) {
   closeSectionCompletePopup();
   var gate = sectionGateState[sectionId] || {};
@@ -4387,27 +4214,9 @@ function renderFloor(fi, si) {
     setTimeout(renderMobileSectionChrome, 60);
   }
 }
-function renderFloorWithElevator(fi, si) {
-  const direction = fi > lastFloorIndex ? 'up' : fi < lastFloorIndex ? 'down' : null;
-  lastFloorIndex = fi;
-  renderFloor(fi, si);
-  if (direction) {
-    const panel = document.querySelector('.floor-panel') || document.getElementById('main-content').firstElementChild;
-    if (panel) {
-      panel.classList.remove('elevator-up', 'elevator-down');
-      void panel.offsetWidth;
-      panel.classList.add(direction === 'up' ? 'elevator-up' : 'elevator-down');
-    }
-  }
-}
-
 // ============================================
 // SYSTEM 2 \u2014 SAGE SPEECH BUBBLE
 // ============================================
-let sageBubbleTimeout = null;
-let sageIdleTimeout = null;
-
-
 const SAGE_MOODS = {
   encourage: { icon: sageOwlSVG(18, 20), color: 'var(--accent)' },
   tip:       { icon: sageOwlSVG(18, 20), color: 'var(--accent2)' },
@@ -4415,14 +4224,6 @@ const SAGE_MOODS = {
   celebrate: { icon: sageOwlSVG(18, 20), color: 'var(--success)' }
 };
 
-const SAGE_IDLE_MESSAGES = [
-  { text: "Every great structure starts with a foundation that refuses to be rushed. Take the time this section needs.", mood: 'encourage' },
-  { text: "The best architects read the blueprint three times before they lift a tool. Read this again.", mood: 'tip' },
-  { text: "Three minutes on one section is not slow. It is precise. Precision is what separates builders from dreamers.", mood: 'encourage' },
-  { text: "If something is unclear, tap the hint. I designed it for exactly this moment.", mood: 'tip' },
-  { text: "A building is only as strong as the floor you are standing on. Do not ascend until this one is solid.", mood: 'warn' },
-  { text: "Stillness before understanding is not wasted time. It is the load-bearing wall of knowledge.", mood: 'encourage' }
-];
 
 // ── CHALLENGE CHECK-OFF ───────────────────────────────────────────────────
 function toggleChallenge(chKey, fi, si) {
@@ -4779,7 +4580,7 @@ function toggleHint(id) {
   if (box) box.classList.toggle('visible');
 }
 function toggleTheme() {}
-function applyTheme() {}
+function applyTheme() { applyProfThemeToBody(getProfTheme()); }
 function toggleTimer() {
   if (state.timerRunning) {
     clearInterval(state.timerInterval);

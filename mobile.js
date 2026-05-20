@@ -70,12 +70,10 @@ function renderMobileHub() {
   var revDue = 0;
   if (typeof srsCounts === 'function') {
     var counts = srsCounts();
-    revDue = (counts.due || 0) + (counts.new || 0);
+    revDue = (counts.due || 0) + (counts.fresh || 0);
   }
-  var chalDone = false;
-  if (typeof state !== 'undefined' && state.dailyChallengeDate) {
-    chalDone = state.dailyChallengeDate === new Date().toDateString();
-  }
+  var chalTs = parseInt(localStorage.getItem('codebook_challenge_ts') || '0');
+  var chalDone = chalTs > 0 && (Date.now() - chalTs < 86400000);
 
   function _hexGlow(hex, a) {
     if (!hex || hex[0] !== '#') return 'rgba(200,169,110,' + (a || 0.28) + ')';
