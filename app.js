@@ -6080,16 +6080,15 @@ function renderProfilePanel() {
     }).join('') +
   '</div>';
 
-  // Badge grid
-  var badgesHtml = '<div class="pf-badge-grid">' +
-    BADGES.map(function(b) {
-      var earned = state.earnedBadges && state.earnedBadges.indexOf(b.id) > -1;
-      return '<div class="pf-badge' + (earned ? ' pf-badge-earned' : ' pf-badge-locked') + '">' +
-        '<span class="pf-badge-icon">' + b.emoji + '</span>' +
-        '<span class="pf-badge-name">' + b.name.toUpperCase() + '</span>' +
-      '</div>';
-    }).join('') +
-  '</div>';
+  // Badge strip — earned only
+  var earnedBadges = BADGES.filter(function(b) {
+    return state.earnedBadges && state.earnedBadges.indexOf(b.id) > -1;
+  });
+  var badgesHtml = earnedBadges.length > 0
+    ? '<div class="pf-badge-grid">' + earnedBadges.map(function(b) {
+        return '<div class="pf-badge pf-badge-earned" title="' + b.name + '"><span class="pf-badge-icon">' + b.emoji + '</span></div>';
+      }).join('') + '</div>'
+    : '<div class="pf-badge-none">No badges earned yet — complete sections to unlock them.</div>';
 
   panel.innerHTML =
     '<div class="prof-layout pf-v2" data-prof-theme="' + currentTheme + '">' +
