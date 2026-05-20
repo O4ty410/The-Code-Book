@@ -27,6 +27,89 @@ function _checkMobileClass() {
 }
 
 // ============================================================
+// NAV TILE ICONS — geometric SVG, matches desktop fc-card holo style
+// ============================================================
+function getMobNavIcon(type, sz) {
+  sz = sz || 36;
+  var fid = 'mni' + type;
+  var flt = '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="b"/>' +
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter></defs>';
+  var open = '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" class="holo-icon" style="display:block;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
+  var close = '</g></svg>';
+  var s  = 'fill:none;stroke:var(--mg-color)';
+  var sf = 'fill:var(--mg-color)';
+  var d  = ';opacity:0.42';
+
+  var map = {
+    challenge:
+      open +
+      '<polygon points="28,3 13,25 21,25 16,45 35,21 27,21" style="stroke-width:1.7;stroke-linejoin:round;' + s + '"/>' +
+      '<line x1="26" y1="9" x2="21" y2="25" style="stroke-width:0.7;' + s + d + '"/>' +
+      '<line x1="27" y1="21" x2="19" y2="39" style="stroke-width:0.7;' + s + d + '"/>' +
+      '<circle cx="28" cy="3" r="2.2" style="' + sf + '"/>' +
+      '<circle cx="16" cy="45" r="2.2" style="' + sf + '"/>' +
+      close,
+
+    revision:
+      open +
+      '<rect x="8" y="10" width="22" height="30" rx="3" style="stroke-width:1;' + s + d + '"/>' +
+      '<rect x="14" y="8" width="22" height="30" rx="3" style="stroke-width:1.5;' + s + '"/>' +
+      '<line x1="14" y1="17" x2="36" y2="17" style="stroke-width:0.8;' + s + d + '"/>' +
+      '<circle cx="21" cy="25" r="2.2" style="' + sf + '"/>' +
+      '<circle cx="29" cy="32" r="2.2" style="' + sf + '"/>' +
+      '<circle cx="14" cy="8" r="1.8" style="' + sf + ';opacity:0.55"/>' +
+      '<circle cx="36" cy="38" r="1.8" style="' + sf + ';opacity:0.55"/>' +
+      close,
+
+    tools:
+      open +
+      '<circle cx="24" cy="24" r="11" style="stroke-width:1.5;' + s + '"/>' +
+      '<circle cx="24" cy="24" r="4.5" style="stroke-width:1.1;' + s + '"/>' +
+      '<circle cx="24" cy="24" r="2" style="' + sf + '"/>' +
+      '<rect x="21.5" y="2" width="5" height="6" rx="1.5" style="' + sf + ';opacity:0.8"/>' +
+      '<rect x="21.5" y="40" width="5" height="6" rx="1.5" style="' + sf + ';opacity:0.8"/>' +
+      '<rect x="2" y="21.5" width="6" height="5" rx="1.5" style="' + sf + ';opacity:0.8"/>' +
+      '<rect x="40" y="21.5" width="6" height="5" rx="1.5" style="' + sf + ';opacity:0.8"/>' +
+      close,
+
+    game:
+      open +
+      '<rect x="6" y="14" width="36" height="22" rx="10" style="stroke-width:1.5;' + s + '"/>' +
+      '<line x1="14" y1="19" x2="14" y2="31" style="stroke-width:1.3;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="8" y1="25" x2="20" y2="25" style="stroke-width:1.3;stroke-linecap:round;' + s + '"/>' +
+      '<circle cx="30" cy="21" r="2.2" style="stroke-width:1;' + s + '"/>' +
+      '<circle cx="36" cy="25" r="2.2" style="stroke-width:1;' + s + '"/>' +
+      '<circle cx="33" cy="30" r="2.2" style="stroke-width:1;' + s + '"/>' +
+      '<circle cx="22" cy="25" r="1.3" style="' + sf + ';opacity:0.65"/>' +
+      '<circle cx="26" cy="25" r="1.3" style="' + sf + ';opacity:0.65"/>' +
+      close,
+
+    profile:
+      open +
+      '<circle cx="24" cy="15" r="9" style="stroke-width:1.5;' + s + '"/>' +
+      '<circle cx="24" cy="15" r="3.5" style="' + sf + '"/>' +
+      '<circle cx="24" cy="15" r="6.5" style="stroke-width:0.6;' + s + d + '"/>' +
+      '<path d="M6,45 Q6,30 24,30 Q42,30 42,45" style="stroke-width:1.5;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="6" y1="45" x2="42" y2="45" style="stroke-width:0.7;' + s + d + '"/>' +
+      close,
+
+    premium:
+      open +
+      '<polyline points="5,37 5,20 15,30 24,7 33,30 43,20 43,37" style="stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="5" y1="37" x2="43" y2="37" style="stroke-width:1.8;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="5" y1="42" x2="43" y2="42" style="stroke-width:1;stroke-linecap:round;' + s + d + '"/>' +
+      '<circle cx="24" cy="7" r="2.8" style="' + sf + '"/>' +
+      '<circle cx="5" cy="20" r="2" style="' + sf + '"/>' +
+      '<circle cx="43" cy="20" r="2" style="' + sf + '"/>' +
+      close
+  };
+
+  return map[type] || '';
+}
+
+// ============================================================
 // MOBILE HOME GRID
 // ============================================================
 function renderMobileHub() {
@@ -104,23 +187,24 @@ function renderMobileHub() {
 
   // 2-col grid
   var tiles = [
-    { color: '#f0a832', icon: '&#9889;', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
-    { color: '#64c8a0', icon: '&#127183;', badge: 'REVISION',   title: 'Revision Centre', hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',       action: 'mobNavTo(\'revision\')' },
-    { color: '#7eb8c8', icon: '&#9881;',  badge: 'TOOLS',      title: 'Tools',            hint: 'Speed round & more',                                        action: 'mobNavTo(\'tools\')' },
-    { color: '#d46eb8', icon: '&#127918;', badge: 'GAME HUB',  title: 'Game Hub',         hint: 'Play & practice',                                           action: 'mobNavTo(\'game\')' },
-    { color: '#8888ff', icon: '&#128100;', badge: 'PROFILE',   title: 'Profile',          hint: 'Stats, notes & badges',                                     action: 'mobNavTo(\'profile\')' },
-    { color: '#e0c060', icon: '&#9813;',  badge: 'PREMIUM',   title: 'Premium',           hint: 'Unlock everything',                                         action: 'mobNavTo(\'premium\')' },
+    { color: '#f0a832', iconType: 'challenge', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
+    { color: '#64c8a0', iconType: 'revision',  badge: 'REVISION',   title: 'Revision Centre',  hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',      action: 'mobNavTo(\'revision\')' },
+    { color: '#7eb8c8', iconType: 'tools',     badge: 'TOOLS',      title: 'Tools',            hint: 'Speed round & more',                                       action: 'mobNavTo(\'tools\')' },
+    { color: '#d46eb8', iconType: 'game',      badge: 'GAME HUB',   title: 'Game Hub',         hint: 'Play & practice',                                          action: 'mobNavTo(\'game\')' },
+    { color: '#8888ff', iconType: 'profile',   badge: 'PROFILE',    title: 'Profile',          hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
+    { color: '#e0c060', iconType: 'premium',   badge: 'PREMIUM',    title: 'Premium',          hint: 'Unlock everything',                                        action: 'mobNavTo(\'premium\')' },
   ];
 
   html += '<div class="mob-grid-cells">';
   tiles.forEach(function(t) {
     var tglow   = _hexGlow(t.color, 0.18);
     var tborder = _hexGlow(t.color, 0.30);
-    var tbg     = _hexGlow(t.color, 0.07);
+    var tbg     = _hexGlow(t.color, 0.08);
     html +=
       '<div class="mob-grid-tile" style="--mg-color:' + t.color + ';--mg-glow:' + tglow + ';--mg-border:' + tborder + ';--mg-bg:' + tbg + '" onclick="' + t.action + '">' +
         '<div class="mg-accent"></div>' +
-        '<div class="mg-icon-lg">' + t.icon + '</div>' +
+        '<div class="mg-badge">' + t.badge + '</div>' +
+        '<div class="mg-icon-lg">' + getMobNavIcon(t.iconType, 38) + '</div>' +
         '<div class="mg-title-lg">' + t.title + '</div>' +
         '<div class="mg-hint">' + t.hint + '</div>' +
       '</div>';
