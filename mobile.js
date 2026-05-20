@@ -74,16 +74,27 @@ function getMobNavIcon(type, sz) {
       '<rect x="40" y="21.5" width="6" height="5" rx="1.5" style="' + sf + ';opacity:0.8"/>' +
       close,
 
-    game:
+    glitch:
       open +
-      '<rect x="6" y="14" width="36" height="22" rx="10" style="stroke-width:1.5;' + s + '"/>' +
-      '<line x1="14" y1="19" x2="14" y2="31" style="stroke-width:1.3;stroke-linecap:round;' + s + '"/>' +
-      '<line x1="8" y1="25" x2="20" y2="25" style="stroke-width:1.3;stroke-linecap:round;' + s + '"/>' +
-      '<circle cx="30" cy="21" r="2.2" style="stroke-width:1;' + s + '"/>' +
-      '<circle cx="36" cy="25" r="2.2" style="stroke-width:1;' + s + '"/>' +
-      '<circle cx="33" cy="30" r="2.2" style="stroke-width:1;' + s + '"/>' +
-      '<circle cx="22" cy="25" r="1.3" style="' + sf + ';opacity:0.65"/>' +
-      '<circle cx="26" cy="25" r="1.3" style="' + sf + ';opacity:0.65"/>' +
+      // Grid background lines
+      '<line x1="24" y1="4" x2="24" y2="44" style="stroke-width:0.6;' + s + d + '"/>' +
+      '<line x1="4" y1="24" x2="44" y2="24" style="stroke-width:0.6;' + s + d + '"/>' +
+      // Source node
+      '<circle cx="9" cy="9" r="4.5" style="' + sf + '"/>' +
+      // Signal path (connected segments)
+      '<line x1="13" y1="9" x2="24" y2="9" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="24" y1="9" x2="24" y2="20" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      // Glitch break (gap with cross marks)
+      '<line x1="21" y1="22" x2="24" y2="20" style="stroke-width:1.2;' + s + '"/>' +
+      '<line x1="27" y1="22" x2="24" y2="20" style="stroke-width:1.2;' + s + '"/>' +
+      '<line x1="21" y1="26" x2="24" y2="28" style="stroke-width:1.2;' + s + '"/>' +
+      '<line x1="27" y1="26" x2="24" y2="28" style="stroke-width:1.2;' + s + '"/>' +
+      // Continue path
+      '<line x1="24" y1="28" x2="24" y2="39" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="24" y1="39" x2="37" y2="39" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      // Target node (outline)
+      '<circle cx="41" cy="39" r="4.5" style="stroke-width:1.6;' + s + '"/>' +
+      '<circle cx="41" cy="39" r="2" style="' + sf + ';opacity:0.55"/>' +
       close,
 
     profile:
@@ -190,7 +201,7 @@ function renderMobileHub() {
     { color: '#f0a832', iconType: 'challenge', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
     { color: '#64c8a0', iconType: 'revision',  badge: 'REVISION',   title: 'Revision Centre',  hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',      action: 'mobNavTo(\'revision\')' },
     { color: '#7eb8c8', iconType: 'tools',     badge: 'TOOLS',      title: 'Tools',            hint: 'Speed round & more',                                       action: 'mobNavTo(\'tools\')' },
-    { color: '#d46eb8', iconType: 'game',      badge: 'GAME HUB',   title: 'Game Hub',         hint: 'Play & practice',                                          action: 'mobNavTo(\'game\')' },
+    { color: '#d46eb8', iconType: 'glitch',    badge: 'GLITCH',     title: 'Glitch Mode',      hint: 'Route the signal',                                         action: 'mobNavTo(\'glitch\')' },
     { color: '#8888ff', iconType: 'profile',   badge: 'PROFILE',    title: 'Profile',          hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
     { color: '#e0c060', iconType: 'premium',   badge: 'PREMIUM',    title: 'Premium',          hint: 'Unlock everything',                                        action: 'mobNavTo(\'premium\')' },
   ];
@@ -248,11 +259,19 @@ function mobNavTo(tab) {
     bar.innerHTML = '<button class="mob-panel-back-btn" onclick="mobBackToHub()">&#8592; Home</button>';
     document.body.appendChild(bar);
   }, 60);
+
+  // Init Glitch Mode game when its panel is shown
+  if (tab === 'glitch') {
+    setTimeout(function() {
+      if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
+    }, 120);
+  }
 }
 
 function mobBackToHub() {
   var bar = document.getElementById('mob-panel-back');
   if (bar) bar.remove();
+  if (typeof GlitchGame !== 'undefined') GlitchGame.destroy();
   if (typeof switchTopNav === 'function') {
     switchTopNav('learn', document.getElementById('tnav-learn'));
   }
