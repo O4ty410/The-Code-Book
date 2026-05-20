@@ -813,6 +813,12 @@ function finishOnboarding() {
 
 var _tourSteps = [
   {
+    type: 'welcome',
+    icon: '📖',
+    title: 'Welcome to The Code Book.',
+    body: 'This started as a personal project — built out of frustration with how coding is usually taught. Most resources either assume too much or explain too little. The confusion isn\'t you. It\'s the material.\n\nThe Code Book is for anyone starting from nothing who wants to understand how this actually works. No skipped steps. No pressure. Just a clear, honest path.\n\nThank you for taking part. It genuinely means something.'
+  },
+  {
     icon: '🏗️',
     title: 'Seven floors. Zero to professional.',
     body: 'Each floor builds on the last — from how computers think, all the way to building full-stack apps. You unlock the next floor when the current one is complete.'
@@ -845,17 +851,22 @@ function showAppTour() {
     var el = document.createElement('div');
     el.id = 'app-tour-overlay';
     el.className = 'app-tour-overlay';
+    var isWelcome = s.type === 'welcome';
+    var featureCount = _tourSteps.length - 1;
+    var stepLabel = isWelcome ? 'Welcome' : step + ' of ' + featureCount;
+    var btnLabel = isWelcome ? 'Get started →' : (isLast ? 'Start learning →' : 'Next →');
+    var bodyHtml = escHtml(s.body).replace(/\n\n/g, '</p><p class="app-tour-body-p">');
     el.innerHTML =
-      '<div class="app-tour-card">' +
-        '<button class="app-tour-skip" onclick="dismissAppTour()">Skip tour</button>' +
+      '<div class="app-tour-card' + (isWelcome ? ' app-tour-welcome' : '') + '">' +
+        '<button class="app-tour-skip" onclick="dismissAppTour()">Skip</button>' +
         '<div class="app-tour-icon">' + s.icon + '</div>' +
-        '<div class="app-tour-step">' + (step + 1) + ' of ' + _tourSteps.length + '</div>' +
+        '<div class="app-tour-step">' + stepLabel + '</div>' +
         '<div class="app-tour-title">' + escHtml(s.title) + '</div>' +
-        '<div class="app-tour-body">' + escHtml(s.body) + '</div>' +
+        '<div class="app-tour-body"><p class="app-tour-body-p">' + bodyHtml + '</p></div>' +
         '<div class="app-tour-dots">' +
           _tourSteps.map(function(_, i) { return '<div class="app-tour-dot' + (i === step ? ' active' : '') + '"></div>'; }).join('') +
         '</div>' +
-        '<button class="app-tour-next" onclick="appTourNext()">' + (isLast ? 'Start learning →' : 'Next →') + '</button>' +
+        '<button class="app-tour-next" onclick="appTourNext()">' + btnLabel + '</button>' +
       '</div>';
     document.body.appendChild(el);
     requestAnimationFrame(function() { el.classList.add('app-tour-visible'); });

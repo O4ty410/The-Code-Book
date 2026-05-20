@@ -1251,6 +1251,13 @@
 }
 .app-tour-next:hover { opacity: 0.88; transform: scale(1.01); }
 
+.app-tour-body-p { margin: 0; }
+.app-tour-body-p + .app-tour-body-p { margin-top: 10px; }
+
+.app-tour-welcome .app-tour-icon { font-size: 38px; margin-bottom: 10px; }
+.app-tour-welcome .app-tour-title { font-size: 20px; margin-bottom: 12px; }
+.app-tour-welcome .app-tour-body { max-width: 360px; }
+
 @media (max-width: 420px) {
   .app-tour-card { padding: 28px 20px 22px; }
   .app-tour-title { font-size: 17px; }
