@@ -31,7 +31,7 @@ function _checkMobileClass() {
 // ============================================================
 function renderMobileHub() {
   if (!isMobile()) return;
-  var panel = document.getElementById('panel-learn');
+  var panel = document.getElementById('main-content');
   if (!panel) return;
 
   _removeMobileSectionChrome();
@@ -181,7 +181,7 @@ function mobBackToHub() {
 // ============================================================
 function renderMobileFloorList() {
   if (!isMobile()) return;
-  var panel = document.getElementById('panel-learn');
+  var panel = document.getElementById('main-content');
   if (!panel) return;
 
   function _hexGlow(hex, a) {
