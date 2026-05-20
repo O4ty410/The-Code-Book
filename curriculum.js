@@ -1044,7 +1044,15 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
       {
         id: "3-1",
         title: "What JavaScript Does",
-        body: `HTML is structure. CSS is appearance. JavaScript is behaviour \u2014 what happens when you actually interact with a page.\n\nEvery programming language you'll encounter later in your career \u2014 Python, Go, Rust, Swift \u2014 lives on servers or devices. JavaScript is the only language browsers run natively. If it happens in a browser and it responds to you, JavaScript made it happen.\n\nThe mental model to internalise: JavaScript is <strong>event-driven</strong>. It doesn't run top-to-bottom once and stop. It loads onto the page, then sits waiting. Waiting for a click, a keypress, a timer firing, a network response arriving. When one of those things happens, the relevant function runs. When it's done, JavaScript goes back to waiting. This is fundamentally different from the sequential scripts you saw in Floor 1.\n\nJavaScript's view of the page is the <strong>DOM</strong> \u2014 Document Object Model. The browser represents every HTML element as a JavaScript object in a tree structure. JavaScript can find any node in that tree, read its properties, change its content or style, add new nodes, or remove existing ones \u2014 all without reloading the page. This is called DOM manipulation, and it's the core mechanism behind every interactive website.\n\nWhen Instagram shows a like animation the instant you tap the heart \u2014 no page reload, just an immediate response \u2014 JavaScript found the heart element in the DOM, changed its CSS class to the filled version, incremented the like count, and sent a network request to save the like to the server. All of that in milliseconds, without you seeing anything except the animation.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — pick one interaction on a website you use daily. Can you name the event that triggers it, what changes in the DOM, and whether a network request is involved?</div>\n\nThat is what you're about to learn to do.`,
+        body: `HTML is structure. CSS is appearance. JavaScript is what happens when you interact with a page.
+
+Every other language you'll encounter — Python, Go, Swift — runs on servers or devices. JavaScript is the only language browsers run natively. If something happens in a browser and it responds to you, JavaScript made it happen.
+
+It doesn't run top to bottom and stop. It loads onto the page and waits. Waiting for a click, a keypress, a timer, a network response. When something happens, it reacts. That pattern — event, response, event, response — is how every interactive website works.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Press F12 on any website. Click the Console tab. Type: document.body.style.background = 'red' and press Enter. You just ran JavaScript directly in the browser — the language talked to the page and the page changed.</div>
+
+The relationship between the three: HTML gives JavaScript something to attach to. CSS handles how things look before and after. JavaScript decides when and how they change.`,
         callout: {
           type: "default",
           label: "The Third Layer",
@@ -1055,7 +1063,9 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
           label: "Expect the Difficulty",
           text: "Floor 3 is harder than Floors 1 and 2. JavaScript is a programming language \u2014 it has logic, state, and behaviour that HTML and CSS don't. That difficulty is real and expected. Every developer found JavaScript harder than HTML. The ones who got through it weren't smarter \u2014 they were more patient with the confusion."
         },
-        hint: `The best way to start is to see it, not read about it. Open any website, press F12, click the Console tab. Type: document.body.style.background = 'red' and press Enter. Watch the page turn red. That's JavaScript modifying the DOM in real time.\n\n<strong>Try this:</strong> On any page, in the console, type: document.querySelectorAll('p').forEach(p => p.style.color = 'lime'). Every paragraph on the page turns lime green. You just ran DOM manipulation from the console. That exact pattern is what JavaScript does when you write it in a script file.\n\n<strong>Still fuzzy on event-driven?</strong> Think of JavaScript as a security guard sitting at the door. When nothing is happening, they wait. When someone knocks (a click), they check who it is and respond. When the phone rings (a timer), they answer. They don't patrol the building constantly \u2014 they respond to events. That's the event-driven model.`,
+        hint: `The best way to start is to see it. Open any website, press F12, click the Console tab. Type: document.body.style.background = 'red' and press Enter. Watch the page change. You just ran JavaScript.
+
+That console is your testing ground throughout this floor. Use it constantly — type code, see what happens, adjust.`,
         quiz: {
           question: "When you click a 'Like' button on Instagram and the count updates immediately without the page reloading, what is happening technically?",
           options: ["The server sends a new version of the entire page with the updated count", "JavaScript handles the click event, updates the DOM to show the new count, and sends a network request in the background", "CSS animations handle the like effect and the count is recalculated automatically", "The browser caches the updated count and displays it without contacting the server"],
@@ -1067,7 +1077,17 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
       {
         id: "3-2",
         title: "Variables and Data Types",
-        body: `Every JavaScript bug that makes a developer stare at their screen saying "but the value IS 5" has the same root cause: the value is not 5. It's the string <code>"5"</code>. And in JavaScript, <code>"5" + 3</code> is <code>"53"</code>, not <code>8</code>. This is the first thing that will catch you, and it catches everyone.\n\nVariables are how you name values so you can refer to them later. In JavaScript, you create them with <code>const</code> or <code>let</code>. The rule is simple: use <code>const</code> by default. Only use <code>let</code> when the value genuinely needs to change over time \u2014 a counter, a toggle state, an accumulating total. <code>var</code> is the old way; it has scoping behaviours that cause bugs. Avoid it.\n\nJavaScript has four primitive data types you need now. <strong>String</strong>: text, wrapped in single quotes, double quotes, or backticks. <strong>Number</strong>: all numeric values \u2014 integers and decimals alike, no distinction. <strong>Boolean</strong>: exactly two values, <code>true</code> or <code>false</code>. <strong>Undefined</strong>: a variable that's been declared but not yet assigned a value.\n\nThe <code>typeof</code> operator tells you what type a value is: <code>typeof "hello"</code> returns <code>"string"</code>, <code>typeof 42</code> returns <code>"number"</code>. When a value is behaving strangely, this is the first thing to check.\n\nTemplate literals are backtick strings that allow embedded expressions: <code>\`Hello, \${name}. You have \${count} messages.\`</code> Stripe, GitHub, and almost every modern codebase uses these instead of string concatenation \u2014 they're cleaner and harder to break.\n\n<strong>Type coercion</strong> is why the string/number confusion happens: JavaScript automatically converts between types in certain situations. <code>"5" + 3</code> is <code>"53"</code> because <code>+</code> with a string triggers concatenation. <code>"5" - 3</code> is <code>2</code> because <code>-</code> has no string version, so JavaScript converts <code>"5"</code> to a number first. This is why you always use <code>===</code> (strict equality, checks value AND type) instead of <code>==</code> (loose equality, coerces types). <code>0 == false</code> is <code>true</code>. <code>0 === false</code> is <code>false</code>. The second is correct.\n\n<div class="inline-q"><span class="iq-label">Before you continue:</span> Without running it \u2014 what does <code>"3" + 4 + 5</code> return? What about <code>3 + 4 + "5"</code>? Work it out left to right, then check in the console.</div>`,
+        body: `Every JavaScript bug where you stare at the screen thinking "but the value IS 5" has the same root cause: the value is not 5. It's the string "5". In JavaScript, "5" + 3 is "53". Not 8. "5" minus 3 is 2. Same value, different type, completely different result.
+
+This is type coercion, and it catches everyone.
+
+Variables are containers with labels. <strong>let</strong> can be reassigned. <strong>const</strong> cannot. Use const by default — it makes your intentions clear — and use let when you know the value will change.
+
+The types you'll use constantly: strings (text, in quotes), numbers, booleans (true or false), null (intentional emptiness), undefined (something that has no value yet), arrays, and objects.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Open the console (F12). Type: "5" + 3 and press Enter. Then "5" - 3. Then typeof "5" and typeof 5. JavaScript sees those last two as completely different things.</div>
+
+The rule that prevents most coercion bugs: use === instead of == for comparisons. It checks value AND type, not just value.`,
         callout: {
           type: "default",
           label: "const by Default",
@@ -1078,7 +1098,11 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
           label: "Always Use ===",
           text: "Never use == in JavaScript. Always use ===. The loose equality operator performs type coercion in ways that are hard to predict and create subtle bugs. Strict equality (===) checks both value and type with no surprises. This is one of the few rules with no exceptions."
         },
-        hint: `Type coercion catches everyone. The key: <code>+</code> with any string becomes concatenation. Every other operator (<code>-</code>, <code>*</code>, <code>/</code>) converts strings to numbers. So <code>"10" * 2</code> is <code>20</code>, but <code>"10" + 2</code> is <code>"102"</code>.\n\n<strong>Try this:</strong> Open the browser console (F12) and try these one at a time: <code>typeof "hello"</code>, <code>typeof 42</code>, <code>typeof true</code>, <code>typeof undefined</code>, <code>"5" + 3</code>, <code>"5" - 3</code>, <code>5 == "5"</code>, <code>5 === "5"</code>. Understanding the output of each is worth more than reading about it.\n\n<strong>Still fuzzy on template literals?</strong> They're backtick strings that can contain expressions inside <code>\${}</code>. Anything JavaScript can evaluate goes inside: variables, calculations, function calls. <code>\`Total: \${price * quantity}\`</code> embeds a calculation directly in the string.`,
+        hint: `Type coercion catches everyone. The key: + with any string becomes string concatenation. Every other operator (-, *, /) converts strings to numbers first.
+
+So "10" * 2 is 20, but "10" + 2 is "102".
+
+<strong>Test it:</strong> Open the console and try both. Then try typeof "5" and typeof 5 — JavaScript sees those as different types entirely.`,
         quiz: {
           question: "What is the output of: console.log('10' + 5); and why?",
           options: ["15, because JavaScript adds the numbers together", "'105', because the + operator with a string triggers concatenation, not addition", "Error, because you cannot use + with mixed types", "NaN, because '10' is not a valid number"],
@@ -1090,7 +1114,17 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
       {
         id: "3-3",
         title: "Logic and Conditions",
-        body: `Conditions are how code makes decisions. The basic form: <code>if (expression) { } else if (expression) { } else { }</code>. The expression inside the parentheses must evaluate to truthy or falsy. If truthy, the block runs. If not, it falls through to the next else if, or the else.\n\nComparison operators produce booleans: <code>===</code> (strictly equal), <code>!==</code> (not equal), <code>></code> (greater than), <code><</code> (less than), <code>>=</code> (greater than or equal), <code><=</code> (less than or equal).\n\nLogical operators combine conditions: <code>&&</code> (AND \u2014 both sides must be truthy), <code>||</code> (OR \u2014 at least one side must be truthy), <code>!</code> (NOT \u2014 inverts the boolean).\n\nNow the important part that most courses underexplain: <strong>truthy and falsy</strong>. JavaScript doesn't just work with true and false \u2014 it treats every value as either truthy or falsy. The falsy values in JavaScript are exactly six: <code>false</code>, <code>0</code>, <code>""</code> (empty string), <code>null</code>, <code>undefined</code>, and <code>NaN</code>. Every other value \u2014 including empty arrays and empty objects \u2014 is truthy. This means <code>if (username)</code> checks whether username is a non-empty string without an explicit comparison.\n\nThe ternary operator is a shorthand condition on one line: <code>condition ? valueIfTrue : valueIfFalse</code>. Use it for simple assignments. Don't nest them \u2014 nested ternaries are unreadable.\n\nShort-circuit evaluation is a subtlety that shows up constantly in real code. <code>a && b</code> returns <code>a</code> if <code>a</code> is falsy (never evaluates <code>b</code>), or returns <code>b</code> if <code>a</code> is truthy. <code>a || b</code> returns <code>a</code> if truthy, or <code>b</code> if <code>a</code> is falsy. That's why <code>const name = user.name || 'Anonymous'</code> works as a default value pattern \u2014 if user.name is falsy (undefined, empty string), it falls back to 'Anonymous'.`,
+        body: `Code makes decisions with conditions. The basic structure: if something is true, do this. If not, do that.
+
+The expression inside the if() evaluates to truthy or falsy. JavaScript considers these falsy: 0, "" (empty string), null, undefined, NaN, and false itself. Everything else is truthy — including empty arrays and empty objects, which surprises people.
+
+The comparison operators you'll use most: <strong>===</strong> (same value AND same type), <strong>!==</strong> (not equal), <strong>&gt;</strong>, <strong>&lt;</strong>, <strong>&gt;=</strong>, <strong>&lt;=</strong>. Use === instead of == unless you specifically need type coercion — which is almost never.
+
+Chain conditions with <strong>&amp;&amp;</strong> (and) and <strong>||</strong> (or).
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Open the console (F12) and type Boolean(0), then Boolean([]), then Boolean(''), then Boolean('hello'). The results show exactly which values JavaScript treats as false — and which ones surprise you.</div>
+
+The ternary operator is a one-line condition: result = condition ? ifTrue : ifFalse. Useful for simple cases. When the condition gets complex, use a full if statement — readability matters more than brevity.`,
         callout: {
           type: "default",
           label: "The Six Falsy Values",
@@ -1101,7 +1135,11 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
           label: "Short-Circuit as a Pattern",
           text: "const value = input || 'default' is one of the most common patterns in JavaScript. If input is falsy (undefined, null, empty string), value gets 'default'. You'll see this pattern in essentially every real JavaScript codebase. Recognising it and using it is a sign of fluency."
         },
-        hint: `The best way to internalise truthy and falsy: open the console and type <code>Boolean(0)</code>, <code>Boolean('')</code>, <code>Boolean(null)</code>, <code>Boolean([])</code>, <code>Boolean({})</code>, <code>Boolean('hello')</code>. The output for each tells you directly whether it's truthy or falsy.\n\n<strong>Try this:</strong> Write a condition without a comparison operator. <code>if (username) { console.log('has username') }</code>. Set username to different values \u2014 'Alex', '', null, undefined, 0 \u2014 and see when the block runs. This is the truthy/falsy concept made concrete.\n\n<strong>Still unclear on &&?</strong> Think of it as a chain of guards. If the first guard says no (falsy), nobody else is checked \u2014 the whole chain returns false. If the first guard says yes, the second is checked, and so on. The chain only succeeds if every guard approves.`,
+        hint: `Truthy and falsy: the falsy values are 0, "" (empty string), null, undefined, NaN, and false. Everything else is truthy — yes, even an empty array or empty object.
+
+Test it: open the console and type Boolean(0), Boolean([]), Boolean(''), Boolean('hello'). The output tells you exactly what JavaScript considers true or false.
+
+<strong>Use ===</strong> not == for comparisons. It checks value and type. == does type coercion and produces results that are hard to predict.`,
         quiz: {
           question: "A function checks: if (userInput) { processInput(userInput) }. For which of the following userInput values will processInput NOT be called?",
           options: ["'hello' \u2014 because it's a non-empty string", "[] \u2014 because empty arrays are falsy", "0 \u2014 because 0 is one of JavaScript's falsy values", "'false' \u2014 because it contains the word false"],
@@ -1113,7 +1151,18 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
       {
         id: "3-4",
         title: "Functions",
-        body: `A function is a named, reusable block of code. You define it once and call it by name whenever you need it to run. Without functions, code would be an unmanageable sequence of repeated instructions.\n\nThe classic declaration syntax: <code>function greet(name) { return 'Hello, ' + name; }</code>. The words inside the parentheses are <strong>parameters</strong> \u2014 placeholders that receive values when the function is called. When you call <code>greet('Alex')</code>, the string 'Alex' is the <strong>argument</strong> \u2014 the actual value that fills the parameter slot.\n\nThe <code>return</code> statement sends a value back to wherever the function was called. A function without a return statement returns <code>undefined</code> \u2014 it runs for its side effects (displaying something, modifying the DOM, logging to console) rather than producing a value.\n\nArrow functions are a shorter syntax: <code>const greet = (name) => 'Hello, ' + name;</code>. For a single expression, the return is implicit. Arrow functions are preferred in modern code for short callbacks and expressions. Regular function declarations are still used for named, top-level functions \u2014 they have the advantage of being hoisted (available before they're defined in the file), which matters in certain architectures.\n\nFunction scope: variables declared inside a function don't exist outside it. They're created when the function runs and destroyed when it finishes. This means two functions can have a variable called <code>count</code> without them interfering with each other.\n\n<strong>Pure functions</strong> are the gold standard: given the same inputs, they always return the same output, and they have no side effects (they don't modify anything outside themselves). Every time you click "Add to Cart" on Amazon, a function runs that takes the item and the current cart and returns a new cart. Same inputs, same output, no surprises.`,
+        body: `Functions let you write something once and use it as many times as you need. Without them, code repeats itself — and repeated code means bugs in multiple places when something needs to change.
+
+The basic syntax: <strong>function name(parameters) { return something; }</strong>. The name is what you call it by. Parameters are inputs. The return statement is what comes back.
+
+Arrow functions are the modern shorthand:
+<strong>const add = (a, b) =&gt; a + b;</strong>
+
+Same idea, shorter to write. Both work. Arrow functions are the default style in most professional codebases today.
+
+<div class="inline-q"><span class="iq-label">Watch out:</span> A function that doesn't have a return statement returns undefined automatically. If you're calling a function and getting undefined back, that's almost always why — check whether the function actually returns something.</div>
+
+Functions can call other functions. A complex problem broken into small functions, each doing one thing, is not a best practice — it's just how maintainable code works. Start thinking in that direction now.`,
         callout: {
           type: "default",
           label: "Parameters vs Arguments",
@@ -1124,7 +1173,11 @@ HTML structure first. Completely. Don't start adding styles until the HTML says 
           label: "When to Use Arrow vs Regular Functions",
           text: "Arrow functions for callbacks, array methods, and short expressions: array.map(item => item.name). Regular function declarations for top-level named functions you'll call throughout a file. Don't overthink this early on \u2014 both work, and the style preference becomes natural with exposure."
         },
-        hint: `If a function doesn't return a value and you try to use its result, you get <code>undefined</code>. This is one of the most common bugs. Check: does your function have a return statement? Does it return the right thing? Add <code>console.log</code> inside the function to verify what it's producing before it returns.\n\n<strong>Try this:</strong> Write a function that takes two numbers and returns their sum. Call it with three different pairs of numbers and log the results. Then remove the return keyword \u2014 see what happens. Experiencing undefined is more memorable than reading about it.\n\n<strong>Confused about scope?</strong> Any variable declared inside a function with const or let is invisible outside it. This is protective \u2014 functions can do their work without accidentally overwriting variables from elsewhere. Think of a function's scope as a room: what happens in the room stays in the room.`,
+        hint: `If a function returns undefined when you expect a value, check two things: does the function have a return statement, and does that return statement have the right variable in it?
+
+Common mistake: returning from inside an if block but not from the function's main path. If the condition isn't met, the function falls off the end and returns undefined.
+
+<strong>Test any function</strong> by calling it in the console with different inputs and checking what comes back.`,
         quiz: {
           question: "A function is defined as: function double(x) { x * 2; }. You call it with console.log(double(5)). What is logged and why?",
           options: ["10, because the function multiplies x by 2", "undefined, because the function calculates x * 2 but never returns the result", "Error, because x is not defined outside the function", "null, because the function has no explicit return type"],
@@ -1223,7 +1276,15 @@ document.getElementById('output').innerHTML=out;
       {
         id: "3-5",
         title: "Loops",
-        body: `A loop runs a block of code repeatedly until a condition says to stop. Every time JavaScript renders a list \u2014 Spotify's playlist tracks, Instagram's feed posts, Airbnb's search results \u2014 it loops through an array of data and renders a component for each item. Loops are ubiquitous.\n\nThe <strong>for loop</strong> has three parts in the parentheses: initialisation (what to set up before the loop starts), condition (run the loop while this is true), and update (what to do after each iteration). <code>for (let i = 0; i < 10; i++)</code> runs ten times, with i going from 0 to 9.\n\nThe <strong>while loop</strong> is simpler but less safe for counted iterations: it runs while a condition is true, with no built-in counter. Use it when you don't know how many iterations are needed in advance \u2014 reading items from a stream until it's empty, for example.\n\n<code>forEach</code> is an array method that runs a function for each item: <code>songs.forEach(song => { render(song); })</code>. Clean and readable for arrays.\n\n<code>for...of</code> iterates over values in an iterable: <code>for (const song of songs)</code>. <code>for...in</code> iterates over the keys of an object \u2014 use it for objects, not arrays.\n\n<code>break</code> exits a loop immediately. <code>continue</code> skips the rest of the current iteration and moves to the next. Both are useful for early termination and filtering within loops.\n\nThe most common mistake: the infinite loop. A while loop whose condition never becomes false, or a for loop whose counter never reaches the stopping condition, will freeze the browser. Always double-check: will the condition eventually be false? Will the counter actually reach the limit?`,
+        body: `A loop runs the same block of code repeatedly until a condition says to stop.
+
+The three kinds you'll use: the <strong>for</strong> loop (set a start, a stop condition, and a step), the <strong>while</strong> loop (runs as long as a condition is true), and <strong>for...of</strong> (walks through every item in an array).
+
+Every list you've ever seen rendered on a page — Spotify's tracks, Instagram's feed, Amazon's search results — is a loop walking through an array and drawing one element per item. That's it.
+
+<div class="inline-q"><span class="iq-label">Watch out:</span> If your browser freezes after writing a loop, it's almost certainly an infinite loop — the stopping condition never becomes false. Close the tab, fix the condition, reload. This happens to everyone at least once.</div>
+
+The array methods — <strong>map</strong>, <strong>filter</strong>, <strong>reduce</strong> — are loops written more cleanly. You'll use them more than raw for loops once you're comfortable with functions. They come in the next section.`,
         callout: {
           type: "default",
           label: "for...of vs forEach",
@@ -1234,7 +1295,12 @@ document.getElementById('output').innerHTML=out;
           label: "The Infinite Loop Risk",
           text: "An infinite loop crashes the browser tab. Before you run any while loop, ask: what changes in each iteration that will eventually make the condition false? If nothing changes, the loop runs forever. For loops are safer because the update step is built into the syntax."
         },
-        hint: `If your browser freezes after writing a loop, it's almost certainly infinite. Close the tab. Reopen your editor. Check: does the while condition eventually become false? Does the for loop's counter actually reach the limit?\n\n<strong>Try this:</strong> Write a for loop that logs numbers 1 to 10. Then modify it to only log odd numbers by adding <code>if (i % 2 === 0) continue;</code>. Then modify the condition to stop at 7 instead of 10. Three small changes, three different loop behaviours.\n\n<strong>Confused by for...in vs for...of?</strong> for...in gives you keys (property names or array indices as strings). for...of gives you values. For arrays, almost always use for...of or forEach \u2014 for...in on arrays gives you index strings and includes any inherited properties, which causes subtle bugs.`,
+        hint: `If your browser freezes: infinite loop. The while condition never became false, or the for loop's counter never reached its stop value. Close the tab. Fix the condition.
+
+for...of is the cleanest way to walk an array:
+for (const item of items) { console.log(item); }
+
+<strong>For each item in the list, do this.</strong> That's all a loop is. If you find yourself repeating the same block of code for different items, a loop is the answer.`,
         quiz: {
           question: "A for loop is written as: for (let i = 0; i < 5; i++). On which value of i does the loop stop executing its body?",
           options: ["When i reaches 5, because the condition i < 5 becomes false", "When i reaches 4, because arrays are zero-indexed", "When i reaches 6, because i++ runs once more after the last iteration", "The loop never stops unless break is called explicitly"],
@@ -1275,7 +1341,15 @@ document.getElementById('output').innerHTML=out;
       {
         id: "3-6",
         title: "Arrays and Objects",
-        body: `Arrays and objects are the two data structures you'll work with constantly. Every real JavaScript application is essentially arrays of objects, transformed and displayed.\n\nAn <strong>array</strong> is an ordered list. You access items by index (starting at 0). Core methods:\n\n<code>push(item)</code> adds to the end. <code>pop()</code> removes from the end. <code>shift()</code> removes from the start. <code>unshift(item)</code> adds to the start. <code>slice(start, end)</code> returns a portion without modifying the original. <code>splice(start, count)</code> removes items in place. <code>indexOf(item)</code> finds the position. <code>includes(item)</code> returns true/false.\n\nThe three array methods that change how you write code:\n\n<code>map(fn)</code> transforms every item, returns a new array of the same length: <code>prices.map(p => p * 1.2)</code>.\n<code>filter(fn)</code> keeps only items where the function returns true: <code>movies.filter(m => m.rating > 8)</code>.\n<code>reduce(fn, initial)</code> reduces an array to a single value: totals, averages, grouped objects.\n\nAn <strong>object</strong> is a collection of key-value pairs. Access values with dot notation (<code>user.name</code>) or bracket notation (<code>user['name']</code> \u2014 useful when the key is in a variable). Objects can contain any values \u2014 strings, numbers, arrays, other objects, functions.\n\nThe most common data structure in real applications: an array of objects. A Netflix category row is an array of movie objects, each with title, imageUrl, rating, and description. When JavaScript renders the row, it maps over the array and creates a DOM element for each object.\n\n<strong>JSON</strong> (JavaScript Object Notation) is how data is sent between frontend and backend. It looks like JavaScript object and array syntax, but it's a text format \u2014 all keys must be in double quotes, values can only be strings, numbers, booleans, arrays, objects, or null. <code>JSON.stringify()</code> converts a JavaScript object to a JSON string. <code>JSON.parse()</code> converts JSON back to a JavaScript object.`,
+        body: `Almost every real JavaScript application is arrays and objects in some combination. You fetch data from a server. It comes back as objects inside arrays. You filter them, transform them, display them. That's the job, at different scales.
+
+<strong>An array</strong> is an ordered list. Items are accessed by position, starting at 0. The methods you'll reach for constantly: <strong>push</strong> (add to end), <strong>filter</strong> (return items matching a condition), <strong>map</strong> (transform every item), <strong>find</strong> (first item matching a condition).
+
+<strong>An object</strong> is a set of key-value pairs. You access values by key name. Most real data is arrays of objects — a list of users, products, messages, each one an object with multiple properties.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> Before writing any code that works with data, ask: is this a list of things (array) or a description of one thing (object)? Getting that right first makes everything else simpler.</div>
+
+Arrays and objects can contain each other. An object can have an array as one of its values. An array can hold objects. Real data is almost always nested — start small and build up.`,
         callout: {
           type: "default",
           label: "map, filter, reduce",
@@ -1286,7 +1360,11 @@ document.getElementById('output').innerHTML=out;
           label: "Arrays of Objects",
           text: "const users = [{name: 'Alex', age: 28}, {name: 'Sam', age: 34}] is the most common data shape in real applications. API responses return this format. Databases return this format. Knowing how to navigate and transform arrays of objects is one of the most practically useful skills in JavaScript."
         },
-        hint: `The difference between dot and bracket notation: use dot when you know the key name at write time (<code>user.name</code>). Use bracket notation when the key is in a variable (<code>obj[keyVariable]</code>) or when the key has special characters.\n\n<strong>Try this:</strong> Create an array of 5 objects, each with a name and a score. Use filter to get only items with a score above 50. Use map on the result to get just the names. Use reduce to sum all scores. Three method chains, three transformations, no for loops.\n\n<strong>Confused by reduce?</strong> Think of it as a running total. The accumulator starts at your initial value. For each item, your function receives the current accumulator and the current item, and returns the new accumulator. <code>arr.reduce((total, item) => total + item.price, 0)</code> starts at 0 and adds each price.`,
+        hint: `The difference between dot and bracket notation: use dot when you know the key at write time (user.name). Use bracket notation when the key is in a variable (obj[keyVariable]).
+
+The array methods worth learning first: push, pop, filter, map, find, forEach. Open the console and try each one on a small array. Seeing them work on real data is faster than reading about them.
+
+<strong>Common mistake:</strong> forgetting that array indexes start at 0. The first item is items[0], not items[1].`,
         quiz: {
           question: "Given: const nums = [3, 7, 1, 9, 4]. What does nums.filter(n => n > 4) return?",
           options: ["[7, 9] \u2014 only values strictly greater than 4", "[4, 7, 9] \u2014 values greater than or equal to 4", "[3, 1, 4] \u2014 values less than or equal to 4", "5 \u2014 the count of values greater than 4"],
@@ -1337,7 +1415,17 @@ document.getElementById('output').innerHTML=out;
       {
         id: "3-7",
         title: "DOM Manipulation",
-        body: `The DOM is the browser's live, in-memory model of the page as a tree of objects. JavaScript can navigate this tree, read its nodes, change them, add new ones, or remove existing ones. This is how every interactive website works.\n\nFinding elements. <code>document.getElementById('id')</code> finds one element by its id attribute \u2014 fast and explicit. <code>document.querySelector('.class')</code> finds the first element matching any CSS selector. <code>document.querySelectorAll('p')</code> returns all matching elements as a NodeList, which you can loop over with forEach.\n\nReading and writing. <code>element.textContent</code> reads or sets the text inside an element \u2014 safe, just text. <code>element.innerHTML</code> reads or sets HTML content \u2014 powerful but dangerous with user-provided content because a malicious string could inject scripts (this is called XSS, Cross-Site Scripting). If you're displaying user input, always use textContent.\n\n<code>element.setAttribute('href', 'https://example.com')</code> sets any HTML attribute. <code>element.getAttribute('href')</code> reads it.\n\n<code>element.classList.add('active')</code> adds a class. <code>element.classList.remove('active')</code> removes it. <code>element.classList.toggle('active')</code> adds it if absent, removes it if present. This toggle pattern is how most show/hide, open/close, and active/inactive interactions work.\n\nCreating and removing. <code>document.createElement('div')</code> creates a new element (not yet on the page). <code>parent.appendChild(child)</code> attaches it. <code>element.remove()</code> deletes it from the DOM.\n\nWhen Twitter's compose box enables the Tweet button only when text exists, and disables it when the box is empty, that's a JavaScript event listener reading the textContent length and toggling a disabled attribute. Six lines of DOM manipulation powering a feature used billions of times daily.`,
+        body: `The DOM is the browser's live map of the page. Every element you see is a node in that map. JavaScript can find those nodes, read them, change them, add new ones, or remove them. That's how every interactive website works.
+
+<strong>Finding elements:</strong> document.getElementById('id') for one specific element. document.querySelector('.class') for the first match. document.querySelectorAll('.class') for all matches.
+
+<strong>Changing them:</strong> element.textContent changes the text. element.innerHTML sets the HTML inside. element.style.color = 'red' changes a style. element.classList.add('active') adds a CSS class.
+
+<strong>Creating new ones:</strong> document.createElement('div') makes a new element. parent.appendChild(newElement) puts it in the page.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Open any website, press F12, go to the Console. Type: document.querySelector('h1').textContent = 'I changed this'. The heading changes — you're directly manipulating the DOM.</div>
+
+When updating many elements at once, batch changes and update the DOM once rather than in separate operations. You'll understand why this matters more once your code is working with larger amounts of data.`,
         callout: {
           type: "default",
           label: "textContent vs innerHTML",
@@ -1348,7 +1436,9 @@ document.getElementById('output').innerHTML=out;
           label: "classList.toggle Is Your Most-Used DOM Tool",
           text: "The pattern: add a CSS class that defines one state (hidden, active, expanded), then use classList.toggle to switch between states. No if/else needed, no style manipulation, just toggling a class. This is how 80% of interactive UI behaviours work in professional code."
         },
-        hint: `If your JavaScript isn't finding an element, there are three things to check. One: is the id or class name spelled correctly, including capitalisation? Two: is the script running before the element exists in the DOM? (script tags at the bottom of body fix this). Three: is the element actually in the HTML?\n\n<strong>Try this:</strong> In the browser console on any page, run <code>document.querySelectorAll('a')</code>. You'll get a NodeList of every link on the page. Run <code>document.querySelectorAll('a').length</code> to count them. Then <code>document.querySelectorAll('a')[0].textContent</code> to read the first link's text.\n\n<strong>Confused by appendChild vs innerHTML?</strong> appendChild attaches a single element you've created with createElement. innerHTML replaces everything inside a parent with an HTML string. appendChild is better for adding single items. innerHTML is often used to re-render an entire list (write the full HTML string, set it once).`,
+        hint: `If JavaScript isn't finding an element, check these in order: is the id or class spelled correctly including capitalisation? Is the script running before the element exists in the DOM (put it at the bottom of body, or use DOMContentLoaded)? Is the selector correct?
+
+<strong>Quick test:</strong> console.log(document.querySelector('#your-id')). If it logs null, the element isn't being found. That tells you which problem to fix.`,
         quiz: {
           question: "You're building a dropdown menu. Clicking a button should show the menu if it's hidden, and hide it if it's showing. Which DOM method handles this most cleanly?",
           options: ["element.style.display = 'block' or 'none' \u2014 toggling the display property directly", "element.setAttribute('visible', true) \u2014 setting a custom attribute to track state", "element.classList.toggle('hidden') \u2014 adding or removing a CSS class that controls visibility", "element.innerHTML = '' \u2014 clearing the menu content to hide it"],
@@ -1391,7 +1481,21 @@ function toggleMessage(){
       {
         id: "3-8",
         title: "Events",
-        body: `JavaScript is event-driven. Code doesn't run continuously \u2014 it waits for something to happen, then responds. An event is anything that happens in the browser: a click, a keypress, text being typed, a form being submitted, a page finishing loading.\n\n<code>addEventListener</code> is the professional way to attach event handlers. <code>button.addEventListener('click', handleClick)</code> is better than the inline <code>onclick="handleClick()"</code> attribute because it keeps behaviour separate from structure, allows multiple listeners on the same element, and can be removed later.\n\nCommon events: <code>click</code>, <code>input</code> (fires on every character typed), <code>change</code> (fires when an input loses focus after value changes), <code>submit</code> (form submission), <code>keydown</code> and <code>keyup</code> (keyboard events), <code>mouseover</code> and <code>mouseout</code>, <code>focus</code> and <code>blur</code>.\n\nEvery event handler receives an <strong>event object</strong> as its first argument. It contains information about the event: <code>event.target</code> (the element that triggered the event), <code>event.type</code> (which event occurred), <code>event.key</code> (for keyboard events, which key was pressed).\n\n<code>event.preventDefault()</code> stops the browser's default action. On a form submit, the default is to reload the page \u2014 <code>preventDefault()</code> stops that so you can handle the submission with JavaScript. On a link click, it prevents navigation.\n\n<strong>Event delegation</strong> is attaching one listener to a parent element instead of many listeners to individual children. When a list item is clicked, the event bubbles up to the parent. The listener on the parent can read <code>event.target</code> to determine which item was clicked. This scales to dynamic lists where items are added after the listeners are attached.\n\nGoogle's search suggestions use the <code>input</code> event: every character you type fires a request, and results update in real time. One listener, hundreds of keystrokes, millions of users.`,
+        body: `JavaScript waits. It loads onto the page and sits there, doing nothing, until something happens. A click. A keypress. Text being typed. A form submitted. A timer running out. Those are events.
+
+When an event happens, a function you've registered runs. That registration is an event listener:
+
+<strong>element.addEventListener('click', function(event) {</strong>
+<strong>  // this runs when the element is clicked</strong>
+<strong>});</strong>
+
+The first argument is the event type. The second is the function that handles it. That function receives an event object — it contains information about what happened: which key was pressed, what was typed, where the mouse was.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> Every user interaction on every website is an event listener firing. The like button. The search input updating results. The dropdown opening. All of them are addEventListener calls waiting for the right moment.</div>
+
+Common event types: <strong>click</strong>, <strong>keydown</strong>, <strong>input</strong> (fires as text changes), <strong>submit</strong> (form submitted), <strong>change</strong> (select or checkbox changed).
+
+Remove listeners you no longer need. Ones that aren't cleaned up can slow pages and cause unexpected behaviour over time.`,
         callout: {
           type: "default",
           label: "addEventListener Over onclick",
@@ -1402,7 +1506,9 @@ function toggleMessage(){
           label: "Event Delegation Scales",
           text: "If you have a list of 100 items and attach a click listener to each one, you have 100 listeners. Attach one listener to the parent list instead, and check event.target inside it. One listener handles any item, including ones added to the list after the listener was attached. This is how real applications handle dynamic lists."
         },
-        hint: `If an event listener isn't firing, check these in order. One: is the listener attached to the right element? Use console.log inside the handler as the first test. Two: is the event name spelled correctly? ('click' not 'onClick'). Three: for keyboard events, log event.key to see what string the key produces.\n\n<strong>Try this:</strong> Add an event listener to the document that logs every keydown: <code>document.addEventListener('keydown', e => console.log(e.key))</code>. Press various keys. See what strings they produce. This reveals why keyboard shortcut code checks <code>e.key === 'Enter'</code> not <code>e.key === 13</code>.\n\n<strong>Confused by event bubbling?</strong> When you click an element, the event fires on that element, then on its parent, then its parent's parent, all the way up to the document. This is bubbling. Event delegation relies on it \u2014 a click on a child element bubbles up to the parent listener, which reads event.target to know which child was actually clicked.`,
+        hint: `If an event listener isn't firing: is it attached to the right element? Log the element first to confirm it's what you think it is. Is the event type spelled correctly? Try console.log('fired') as the first line inside the handler — if that doesn't appear, the listener isn't reaching the handler at all.
+
+<strong>Common mistake:</strong> attaching the listener to the wrong element — a parent instead of the child, or the document instead of the button.`,
         quiz: {
           question: "A form has a submit button. When clicked, the page reloads and the JavaScript handler seems to run for a split second then disappear. What is the most likely cause and fix?",
           options: ["The event listener is attached incorrectly \u2014 use onclick instead of addEventListener", "The browser's default form submit is reloading the page \u2014 call event.preventDefault() at the start of the handler", "JavaScript cannot handle form submissions \u2014 use a server-side language instead", "The handler function is asynchronous and needs to be awaited"],
@@ -1514,7 +1620,15 @@ document.getElementById('submit-btn').addEventListener('click',function(e){
       {
         id: "3-9",
         title: "Error Handling and Debugging",
-        body: `Every developer writes broken code. The difference between a beginner and a professional isn't that professionals make fewer mistakes \u2014 it's that they find and fix mistakes faster because they have a systematic approach.\n\nJavaScript has three error types. A <strong>SyntaxError</strong> means the code isn't valid JavaScript \u2014 a missing bracket, an unclosed string, a typo in a keyword. The script doesn't execute at all. A <strong>ReferenceError</strong> means you tried to use a variable that doesn't exist \u2014 either it was never declared, or it's out of scope, or it's misspelled (JavaScript is case-sensitive). A <strong>TypeError</strong> means you performed an operation on a value of the wrong type \u2014 calling something that isn't a function, accessing a property on null or undefined.\n\nReading error messages is a skill that develops with practice. Every JavaScript error in the console tells you: the error type, a plain-English description of what went wrong, and the file name and line number where it was detected. Start there. Go to that line. The problem is usually either on that line or one line above.\n\n<code>console.log()</code> is the most-used debugging tool at every level of experience. Drop it inside a function to confirm it's being called. Log a variable to see its value at a specific moment in execution. Trace your assumptions before changing any code.\n\n<code>try { } catch (error) { }</code> wraps code that might fail and handles the error gracefully instead of crashing. The catch block receives the error object. <code>error.message</code> is the human-readable description. <code>throw new Error('Something went wrong')</code> creates a custom error with a message you choose.\n\nThe browser DevTools debugger is more powerful than console.log: click the line number in the Sources tab to set a breakpoint, run the code, and execution pauses there. You can inspect every variable's current value and step through code one line at a time. Systematic debugging \u2014 forming a hypothesis, testing it, narrowing it down \u2014 solves bugs faster than random changes.`,
+        body: `Every developer writes broken code. That's not a beginner problem — it's the nature of the work. The skill isn't avoiding errors. It's finding them faster.
+
+JavaScript has three main error types. <strong>Syntax errors</strong>: the code can't be parsed — a missing bracket, a misspelled keyword. <strong>Reference errors</strong>: you're using a variable that doesn't exist. <strong>Type errors</strong>: you're trying to do something with a value that doesn't support it — calling a function on null, for instance.
+
+Read the error message before doing anything else. It gives you the type, a description, and the file and line number where it was detected. The line number is where the problem was noticed — not always where it actually is.
+
+<div class="inline-q"><span class="iq-label">The most useful habit:</span> Put console.log() before the line that's failing and log every value you're working with. Nine times out of ten the problem is immediately obvious when you can see the actual values instead of assuming what they are.</div>
+
+try...catch lets you handle errors you expect might happen — network requests that fail, data in an unexpected format. Wrap the risky code in try, handle the failure in catch. Don't wrap everything — only what you genuinely expect might fail.`,
         callout: {
           type: "default",
           label: "Debugging Is Systematic",
@@ -1525,7 +1639,11 @@ document.getElementById('submit-btn').addEventListener('click',function(e){
           label: "try/catch for Expected Failures",
           text: "Use try/catch when you're calling code that might legitimately fail \u2014 parsing JSON, accessing an API, reading from localStorage. Don't wrap everything in try/catch; that suppresses bugs you need to see. Use it at the boundary where controlled failure is the correct response."
         },
-        hint: `When the error message says something 'is not a function', the thing you're calling isn't a function. It might be undefined (the function name is misspelled), or null, or a string. Log the thing before calling it to see what it actually is.\n\n<strong>Try this:</strong> Open the DevTools Sources tab on any page, find a JavaScript file, and click on a line number to set a breakpoint. Reload the page. Execution pauses there. Hover over any variable name to see its current value. Use the step controls to move through execution one line at a time. This is what professional debugging looks like.\n\n<strong>Stuck on a bug for more than 20 minutes?</strong> Stop trying to fix it. Instead, explain the problem out loud \u2014 to a rubber duck, to the wall, to anyone. Articulating "I expect X but I'm getting Y because..." forces your brain to reprocess the logic, and the answer often appears while you're still talking. This is known as rubber duck debugging and it works.`,
+        hint: `When an error says something "is not a function", the thing you're calling isn't a function. It might be undefined (misspelled name), null, or a string. console.log it before calling it.
+
+When the line number in the error seems wrong, the real error is usually a few lines earlier — the browser can only report where it noticed the problem, not where the bug is.
+
+<strong>First step every time:</strong> console.log the values you're working with. Most bugs are visible the moment you can see the actual data.`,
         quiz: {
           question: "You see this error: TypeError: Cannot read properties of undefined (reading 'name'). What most likely caused it?",
           options: ["The variable 'name' was declared with let instead of const", "You're trying to access the .name property on a value that is undefined \u2014 the object you expected to exist doesn't", "The name property needs to be in quotes to be accessed correctly", "TypeError means the JavaScript engine doesn't recognise the type of the variable"],
@@ -1566,7 +1684,15 @@ el.innerHTML+=parseData('this is not valid JSON');
       {
         id: "3-10",
         title: "Guided To-Do List Project",
-        body: `The to-do list is the classic beginner project because it isn't trivial. Done properly, it exercises every concept from this floor: DOM creation, event listeners, array state management, and localStorage persistence.\n\nThe scaffold in the editor handles the visual layout and structure. Your job is to complete four functions. Read every comment in the code before writing a single line \u2014 the comments describe exactly what each function needs to do.\n\n<code>addTodo</code>: read the input value, validate it's not empty, add it to the todos array, create a DOM element for it, append to the list, clear the input.\n\n<code>deleteTodo</code>: given an id, remove the matching item from the todos array, remove its DOM element.\n\n<code>toggleComplete</code>: given an id, find the item in the todos array, flip its completed boolean, update the DOM element's visual state.\n\n<code>saveToStorage</code>: convert the todos array to JSON and save it to localStorage. Call this after every state change.\n\nThe sequence matters. Get addTodo working first \u2014 confirm items appear in the list. Then deleteTodo. Then toggleComplete. Then saveToStorage and the load-on-startup logic. Each function is a small, self-contained problem. Solve them one at a time and the whole system assembles itself.`,
+        body: `The to-do list is the classic beginner project because it's not trivial. Done properly it touches everything from this floor: adding elements to the DOM, listening for events, managing state in an array, and persisting data with localStorage so it survives a page refresh.
+
+The scaffold handles the structure. Your job is to wire it up.
+
+Work in this order: get items adding to the list first. Then deletion. Then toggling completion. Then localStorage last — once the rest works, persistence is straightforward. Building in layers is how professionals approach unfamiliar code.
+
+<div class="inline-q"><span class="iq-label">The test that matters:</span> When you're done, refresh the page. Do your items still appear? If yes, localStorage is working. If not, you're probably saving to it once instead of every time the list changes.</div>
+
+If you finish and want to go further: add the ability to edit an item in place, sort by completion, or filter between active and completed. None of those require anything beyond what you've already learned.`,
         callout: {
           type: "default",
           label: "Read Before Writing",
@@ -1577,7 +1703,11 @@ el.innerHTML+=parseData('this is not valid JSON');
           label: "State and DOM Must Stay in Sync",
           text: "The todos array is the source of truth. The DOM is a visual representation of that array. Every time the array changes, the relevant part of the DOM must update to match. If you ever manually change the DOM without updating the array first, they get out of sync and bugs appear."
         },
-        hint: `If items are appearing in the list but deletion isn't working, check that each todo has a unique id and that the delete button is referencing that same id. If toggleComplete isn't updating the visual state, confirm you're finding the right DOM element \u2014 log the id you're looking for and the element you found.\n\n<strong>For addTodo:</strong> The most common mistake is forgetting to clear the input after adding. The second most common is not validating for empty strings \u2014 <code>if (!input.trim()) return;</code> stops empty todos.\n\n<strong>For localStorage:</strong> Save after every state-changing operation. Load on startup with <code>JSON.parse(localStorage.getItem('todos')) || []</code>. The <code>|| []</code> handles the case where nothing is saved yet \u2014 without it, JSON.parse(null) throws an error.`,
+        hint: `If items appear but deletion doesn't work: check that each item has a unique id and the delete button is referencing that exact id.
+
+If localStorage isn't persisting: check that you're saving after every change, not just once. JSON.stringify() before saving, JSON.parse() when loading.
+
+<strong>Debugging order:</strong> get one feature working completely before moving to the next. A partially working app with three broken features is harder to debug than three features completed one at a time.`,
         quiz: {
           question: "The to-do list stores todos in both a JavaScript array and the DOM. When a user deletes an item, you correctly remove its DOM element but forget to remove it from the todos array. What happens on the next page refresh?",
           options: ["The item is permanently deleted because the DOM update is authoritative", "The item reappears, because localStorage was saved from the array which still contains it", "Nothing \u2014 the DOM and array don't affect each other", "A TypeError is thrown because the array and DOM are out of sync"],
@@ -1644,7 +1774,17 @@ render();
       {
         id: "3-11",
         title: "Solo Interactive Project",
-        body: `No scaffold. No hints until you've spent 30 minutes trying on your own. The brief is intentionally open.\n\n<strong>Build something interactive that responds to user input.</strong> Ideas: a tip calculator, a colour picker, a character counter with a limit, a random quote generator, a unit converter, a password strength checker, a countdown timer. The complexity is yours to choose. The subject is yours to choose. But it must actually work.\n\nMinimum requirements: at least one input or button, JavaScript that reads from that input, and DOM manipulation that changes the page based on what the user does. Beyond that, the decisions are yours. How much to build, how polished to make it, what edge cases to handle.\n\nWhen you hit a wall \u2014 and you will \u2014 apply the debugging process. Read the error. Identify the line. Form a hypothesis. Test it with console.log. One change at a time.\n\nSearching for solutions is not cheating. Every professional developer searches. The skill is knowing what to search for, evaluating what you find, and integrating it into code you understand. If you copy something without understanding it, run it, break it, and figure out why. Understanding is the requirement, not original authorship.`,
+        body: `No scaffold. A brief and a blank file.
+
+Build something interactive that responds to user input. Ideas: a tip calculator that splits a bill, a character counter with a limit, a colour picker that outputs hex codes, a random quote generator, a quiz with a score. Anything that takes input and produces output.
+
+The only rules: no scaffold, no copied templates. The HTML, CSS, and JavaScript are yours.
+
+<div class="inline-q"><span class="iq-label">Before you write a line:</span> Write in plain language what the thing does. What does the user put in? What happens? What do they see? One or two sentences. If you can't describe it simply, the code will be harder than it needs to be.</div>
+
+If you're blank on an idea: look at the last ten apps you used on your phone. Every one of them takes input and produces output. A calculator. A unit converter. A timer. Any of those, stripped to their simplest form, is this project.
+
+It doesn't need to be impressive. It needs to be built.`,
         callout: {
           type: "default",
           label: "Choose Scope Deliberately",
@@ -1655,7 +1795,11 @@ render();
           label: "The 30-Minute Rule",
           text: "Spend at least 30 minutes genuinely attempting a problem before searching for a solution. Not 30 minutes of staring \u2014 30 minutes of forming hypotheses, trying things, reading error messages, and narrowing down what's wrong. That process is the skill. The answer matters less than developing the ability to find it."
         },
-        hint: `If you're completely blank on a project idea: open your phone, look at the last 10 apps you used. Every one of them takes input and produces output. A calculator. A unit converter. A text formatter. A colour tool. Pick the simplest one. Build the simplest version of it. Then add one feature. Then another.\n\n<strong>Feeling overwhelmed before you start?</strong> Open a file. Write the HTML scaffold. Add an h1 with the project name. That's it for the first five minutes. Momentum is built by starting, not by planning.\n\n<strong>Something works but looks broken?</strong> That's a CSS problem, not a JavaScript problem. Get the functionality completely working first \u2014 correct output in the right elements. Then improve the appearance. Trying to fix both simultaneously is how sessions go nowhere.`,
+        hint: `If you're blank on what to build: don't try to invent something. Build the simplest version of something you already use. A tip calculator. A countdown timer. A word counter.
+
+HTML first, then JavaScript. Write all the inputs and outputs in HTML before writing a single line of JavaScript. Separating structure from behaviour makes both easier to think about.
+
+<strong>Stuck halfway through?</strong> console.log the value of every variable at the point where things stop working. The problem will usually be visible immediately.`,
         quiz: {
           question: "You find a Stack Overflow answer that solves your problem. You paste the code in and it works. What is the most important next step?",
           options: ["Nothing \u2014 if it works, it works, and moving on is the right choice", "Delete the answer and write it yourself from memory to ensure you've understood it", "Read the code line by line until you can explain what each part does and why it works", "Add a comment crediting the Stack Overflow answer"],
@@ -1667,7 +1811,17 @@ render();
       {
         id: "3-12",
         title: "Floor Check",
-        body: `Before Floor 4, a hard check. Not "did you finish the sections" \u2014 that's the minimum. The question is whether you actually understand what you built.\n\nFloor 4 has no guided building. You receive a brief and produce working code. There are no step-by-step walkthroughs. If you're missing foundations from Floor 3, Floor 4 will not teach them to you \u2014 it will expose the gap and it will be harder to fill from there.\n\nSo before moving: can you explain the DOM to someone who has never coded? Not recite the definition \u2014 explain it, with an example, in a way that would make sense to them. Can you write a function from memory that takes parameters, does something with them, and returns a value? Without looking anything up? Can you debug your own code? When something breaks, do you read the error, identify the line, form a hypothesis, and test it \u2014 or do you change things randomly and hope?\n\nIf any of these feel shaky, spend another week on Floor 3 projects. Not re-reading sections \u2014 building things. Build two more interactive projects. Build them without scaffolds. Debug the inevitable breakages. The foundation solidifies through doing, not through reviewing.\n\nIf you can answer all three questions clearly: you're ready. Floor 4 is waiting.`,
+        body: `Before Floor 4, an honest check.
+
+Not whether you finished the sections. Whether the ideas are actually in your hands.
+
+Floor 4 has no guided building. You get a brief and produce working code. If the concepts from Floor 3 aren't solid — variables, functions, DOM manipulation, events — Floor 4 will be harder than it needs to be.
+
+<div class="inline-q"><span class="iq-label">Three things to test now:</span> Open a blank file and write a function from memory. Write an event listener from memory. Write something that reads from and writes to the DOM without looking anything up. If those three come easily, you're ready.</div>
+
+If they don't, go back to the sections that feel shaky. Not the whole floor — just those sections. One more pass through something you half-understood is worth more than pushing forward on unstable ground.
+
+The quiz below will show you where the gaps are.`,
         callout: {
           type: "default",
           label: "Understanding vs Completion",
@@ -1678,7 +1832,15 @@ render();
           label: "Another Week Is Not Failure",
           text: "Spending an extra week on Floor 3 because the foundations aren't solid is the smart choice. Rushing to Floor 4 with shaky fundamentals creates a debt that compounds. Every floor is built on the one before it. A solid Floor 3 makes Floor 4 easier. A shaky one makes every subsequent floor harder."
         },
-        hint: `Three things to test right now, before deciding you're ready.\n\nOne: close this app, open a blank HTML file, and write a complete page with a JavaScript function that responds to a button click and modifies the DOM. No looking anything up. If you can do it, the fundamentals are there.\n\nTwo: take one of the projects you built this floor and add a feature that wasn't in the original. Something you have to figure out. If the process of figuring it out feels manageable, you're ready.\n\nThree: read someone else's short JavaScript snippet \u2014 something you didn't write. Can you explain what it does line by line? If yes, you're reading code fluently enough for Floor 4.`,
+        hint: `Three things to test before deciding you're ready.
+
+One: close this app, open a blank HTML file, and write a complete page with a JavaScript function that responds to a button click — no looking anything up.
+
+Two: write an array of five objects and use .filter() to return only the ones matching a condition.
+
+Three: explain out loud what the DOM is and how JavaScript changes it.
+
+If any of those are hard, go back to that section. Not the whole floor.`,
         quiz: {
           questions: [
             {
