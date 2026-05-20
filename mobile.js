@@ -97,6 +97,18 @@ function getMobNavIcon(type, sz) {
       '<circle cx="41" cy="39" r="2" style="' + sf + ';opacity:0.55"/>' +
       close,
 
+    game:
+      open +
+      '<rect x="6" y="14" width="36" height="22" rx="10" style="stroke-width:1.5;' + s + '"/>' +
+      '<line x1="14" y1="19" x2="14" y2="31" style="stroke-width:1.3;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="8" y1="25" x2="20" y2="25" style="stroke-width:1.3;stroke-linecap:round;' + s + '"/>' +
+      '<circle cx="30" cy="21" r="2.2" style="stroke-width:1;' + s + '"/>' +
+      '<circle cx="36" cy="25" r="2.2" style="stroke-width:1;' + s + '"/>' +
+      '<circle cx="33" cy="30" r="2.2" style="stroke-width:1;' + s + '"/>' +
+      '<circle cx="22" cy="25" r="1.3" style="' + sf + ';opacity:0.65"/>' +
+      '<circle cx="26" cy="25" r="1.3" style="' + sf + ';opacity:0.65"/>' +
+      close,
+
     profile:
       open +
       '<circle cx="24" cy="15" r="9" style="stroke-width:1.5;' + s + '"/>' +
@@ -204,6 +216,7 @@ function renderMobileHub() {
     { color: '#d46eb8', iconType: 'glitch',    badge: 'GLITCH',     title: 'Glitch Mode',      hint: 'Route the signal',                                         action: 'mobNavTo(\'glitch\')' },
     { color: '#8888ff', iconType: 'profile',   badge: 'PROFILE',    title: 'Profile',          hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
     { color: '#e0c060', iconType: 'premium',   badge: 'PREMIUM',    title: 'Premium',          hint: 'Unlock everything',                                        action: 'mobNavTo(\'premium\')' },
+    { color: '#7eb8d4', iconType: 'game',      badge: 'GAME HUB',   title: 'Game Hub',         hint: 'Switch the light on',                                      action: 'mobNavTo(\'game\')',    wide: true },
   ];
 
   html += '<div class="mob-grid-cells">';
@@ -211,13 +224,24 @@ function renderMobileHub() {
     var tglow   = _hexGlow(t.color, 0.18);
     var tborder = _hexGlow(t.color, 0.30);
     var tbg     = _hexGlow(t.color, 0.08);
-    html +=
-      '<div class="mob-grid-tile" style="--mg-color:' + t.color + ';--mg-glow:' + tglow + ';--mg-border:' + tborder + ';--mg-bg:' + tbg + '" onclick="' + t.action + '">' +
-        '<div class="mg-accent"></div>' +
-        '<div class="mg-badge">' + t.badge + '</div>' +
-        '<div class="mg-icon-lg">' + getMobNavIcon(t.iconType, 38) + '</div>' +
+    var tileStyle = (t.wide ? 'grid-column:1/-1;flex-direction:row;align-items:center;gap:16px;' : '') +
+      '--mg-color:' + t.color + ';--mg-glow:' + tglow + ';--mg-border:' + tborder + ';--mg-bg:' + tbg;
+    var iconSz = t.wide ? 44 : 38;
+    var inner = t.wide
+      ? '<div class="mg-icon-lg">' + getMobNavIcon(t.iconType, iconSz) + '</div>' +
+        '<div style="display:flex;flex-direction:column;">' +
+          '<div class="mg-badge">' + t.badge + '</div>' +
+          '<div class="mg-title-lg">' + t.title + '</div>' +
+          '<div class="mg-hint">' + t.hint + '</div>' +
+        '</div>'
+      : '<div class="mg-badge">' + t.badge + '</div>' +
+        '<div class="mg-icon-lg">' + getMobNavIcon(t.iconType, iconSz) + '</div>' +
         '<div class="mg-title-lg">' + t.title + '</div>' +
-        '<div class="mg-hint">' + t.hint + '</div>' +
+        '<div class="mg-hint">' + t.hint + '</div>';
+    html +=
+      '<div class="mob-grid-tile" style="' + tileStyle + '" onclick="' + t.action + '">' +
+        '<div class="mg-accent"></div>' +
+        inner +
       '</div>';
   });
   html += '</div>';
