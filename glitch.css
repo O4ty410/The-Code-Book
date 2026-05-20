@@ -184,6 +184,7 @@
 }
 
 /* ── Mobile back-bar padding ────────────────────────────── */
-.is-mobile #panel-glitch {
+.is-mobile #panel-glitch,
+.is-mobile #panel-game {
   padding-top: calc(48px + env(safe-area-inset-top, 0px));
 }
