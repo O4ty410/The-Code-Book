@@ -138,11 +138,13 @@
 .mob-grid-tile {
   position: relative;
   background:
-    linear-gradient(180deg, var(--mg-bg, rgba(200,169,110,0.04)) 0%, transparent 60%),
-    linear-gradient(180deg, #050e1e 0%, #040b18 100%);
+    radial-gradient(ellipse 80% 55% at 50% 0%, var(--mg-bg, rgba(200,169,110,0.10)) 0%, transparent 70%),
+    linear-gradient(180deg, var(--mg-bg, rgba(200,169,110,0.05)) 0%, transparent 55%),
+    linear-gradient(180deg, #060f22 0%, #040b18 100%);
   border: 1px solid var(--mg-border, rgba(200,169,110,0.28));
   border-radius: 14px;
-  padding: 18px 14px 16px;
+  padding: 16px 14px 18px;
+  min-height: 148px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -150,8 +152,9 @@
   overflow: hidden;
   transition: border-color 0.22s, box-shadow 0.22s, transform 0.18s;
   box-shadow:
-    0 0 10px var(--mg-glow, rgba(200,169,110,0.12)),
-    0 2px 12px rgba(0,0,0,0.45);
+    0 0 14px var(--mg-glow, rgba(200,169,110,0.14)),
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    0 2px 16px rgba(0,0,0,0.50);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -302,14 +305,51 @@
   transform: scale(0.98);
 }
 
-/* Grid tiles — cleaner, bigger icons */
-.mg-icon-lg {
-  font-size: 32px;
-  line-height: 1;
+/* ── Holo-pulse animation (mirrors desktop fc-card icon glow) ── */
+@keyframes holo-pulse {
+  0%, 100% { opacity: 0.75; filter: drop-shadow(0 0 3px var(--mg-color)); }
+  50%       { opacity: 1;    filter: drop-shadow(0 0 8px var(--mg-color)); }
+}
+
+.holo-icon {
+  animation: holo-pulse 2.8s ease-in-out infinite;
+}
+
+/* Stagger glow so tiles pulse at different phases */
+.mob-grid-tile:nth-child(1) .holo-icon { animation-delay:  0.00s; }
+.mob-grid-tile:nth-child(2) .holo-icon { animation-delay:  0.47s; }
+.mob-grid-tile:nth-child(3) .holo-icon { animation-delay:  0.94s; }
+.mob-grid-tile:nth-child(4) .holo-icon { animation-delay:  1.41s; }
+.mob-grid-tile:nth-child(5) .holo-icon { animation-delay:  1.88s; }
+.mob-grid-tile:nth-child(6) .holo-icon { animation-delay:  2.35s; }
+
+/* Small category label above icon */
+.mg-badge {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 1.6px;
+  color: var(--mg-color, #c8a96e);
+  opacity: 0.70;
+  text-transform: uppercase;
   margin-bottom: 10px;
+  line-height: 1;
+}
+
+/* Grid tiles — geometric SVG icons */
+.mg-icon-lg {
+  font-size: 0;
+  line-height: 0;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: radial-gradient(circle at 50% 45%,
+    var(--mg-bg, rgba(200,169,110,0.18)) 0%,
+    transparent 72%);
+  position: relative;
 }
 
 .mg-title-lg {
