@@ -178,16 +178,9 @@ function togglePasswordVisibility(inputId, btn) {
 
 
 function showAuthFromLanding() {
-  // Load persisted state before checking progress so returning users are not routed to onboarding
   loadState();
-  const sectionIds = new Set();
-  FLOORS.forEach(function(f) { f.sections.forEach(function(s) { sectionIds.add(s.id); }); });
-  const completedCount = Object.keys(state.completed).filter(function(k) {
-    return sectionIds.has(k) && state.completed[k];
-  }).length;
-  const hasStarted = completedCount > 0 || state.currentSection > 0 || state.currentFloor > 1 || state.xp > 0;
-  if (hasStarted) {
-    // Returning user — go straight into the app
+  if (isLoggedIn) {
+    // Authenticated logged-in user — go straight into the app
     var _streakExtended = updateStreak();
     stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
     document.body.style.overflow = '';
@@ -197,14 +190,9 @@ function showAuthFromLanding() {
     if (_streakExtended && state.streak >= 2) {
       setTimeout(function() { showStreakWelcome(state.streak); }, 1400);
     }
-    (function() {
-      if (_isDailyChallengeAvailable() && !_dailyChallengeShownThisSession) {
-        setTimeout(showDailyChallenge, _streakExtended ? 3200 : 1200);
-      }
-      updateChallengeDot();
-    })();
+    updateChallengeDot();
   } else {
-    // New user — show onboarding or auth
+    // Guest or new user — always show onboarding or auth screen
     stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
     const hasOnboarded = localStorage.getItem('codebook_onboarded');
     if (!hasOnboarded) {
@@ -702,9 +690,6 @@ function startBook() {
   document.getElementById('app').style.display = 'block';
   applyTheme();
   launchApp();
-  if (_isDailyChallengeAvailable()) {
-    setTimeout(() => showDailyChallenge(), 800);
-  }
 }
 
 function launchApp() {
