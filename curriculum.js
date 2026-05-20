@@ -333,7 +333,15 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-1",
         title: "What HTML Is",
-        body: `HTML is not a programming language. It has no logic, no conditions, no loops. What it has is something more fundamental: a way to describe what content <strong>is</strong>.\n\nHTML stands for HyperText Markup Language. The "markup" part is the key idea. You take a piece of content — a heading, a paragraph, an image, a button — and you wrap it in a tag that labels it. <code>&lt;h1&gt;My Title&lt;/h1&gt;</code> doesn't tell the browser to make text big and bold. It tells the browser: this is a level-one heading. The browser then applies its own default styling to that heading. CSS is what overrides those defaults.\n\nThis distinction matters. When YouTube marks up a video title with <code>&lt;h1&gt;</code>, when GitHub wraps a code block in <code>&lt;pre&gt;&lt;code&gt;</code>, when Twitter marks each post with <code>&lt;article&gt;</code> — they're not making visual decisions. They're declaring meaning. Search engines, screen readers, and other tools all use that meaning.\n\nThe tags you'll use most: <strong>h1 through h6</strong> for headings (h1 is the most important, h6 the least), <strong>p</strong> for paragraphs, <strong>a</strong> for links, <strong>img</strong> for images, <strong>ul</strong> and <strong>li</strong> for unordered lists, <strong>div</strong> for grouping content without semantic meaning, <strong>button</strong> for clickable controls, and <strong>input</strong> for form fields.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if HTML describes what content IS rather than how it looks, what do you think happens when a screen reader for a blind user encounters an &lt;h1&gt; vs a &lt;div&gt; containing the same text?</div>\n\nBeyond those basics, HTML has semantic elements: <strong>header</strong>, <strong>main</strong>, <strong>nav</strong>, <strong>footer</strong>, <strong>section</strong>, <strong>article</strong>. These are divs with meaning attached. Use them where they fit the content. A screen reader navigating your page will thank you. So will your future self six months later trying to read your own code.`,
+        body: `HTML is not a programming language. It has no logic, no decisions, no loops. What it has is more fundamental: a way to describe what something is.
+
+You take a piece of content — a heading, a paragraph, an image — and you wrap it in a tag that labels it. <strong>&lt;h1&gt;</strong> means this is the most important heading. <strong>&lt;p&gt;</strong> means this is a paragraph. <strong>&lt;img&gt;</strong> means this is an image. The browser reads those labels and knows how to treat each one.
+
+That's the entire job of HTML. Not how something looks. Not what happens when you click it. Just: what is this?
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Right-click any website and choose View Page Source. Scan for angle brackets. Every one of them is labelling a piece of content — h1, p, a, div, img. All of them doing exactly this one job.</div>
+
+CSS handles appearance. JavaScript handles behaviour. HTML describes structure. Keep those three jobs separate in your head and they'll stay separate in your code.`,
         callout: {
           type: "default",
           label: "The Key Distinction",
@@ -344,7 +352,11 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Why Semantic HTML Matters",
           text: "When you use the right element for the right content — nav for navigation, article for articles, button for buttons — you're building something that works for everyone: search engines rank it better, screen readers navigate it correctly, and your code communicates its intent to every developer who reads it."
         },
-        hint: `HTML is about labelling, not styling. The easiest way to internalise this: open any major website, right-click the page, click "View Page Source." Scan for tags. You'll see h1, p, nav, div, a, img — the same handful of elements used thousands of times.\n\n<strong>Try this:</strong> Before writing any HTML, write out what your page contains in plain English. "A heading. A paragraph. A list of three items. A button." Then translate each thing into the correct tag. Structure first, appearance never — that's CSS's job.\n\n<strong>Still fuzzy on semantic elements?</strong> Think of them as named boxes. A <code>&lt;div&gt;</code> is a box with no label. A <code>&lt;nav&gt;</code> is a box with a sign that says "navigation lives here." Both behave the same visually — the label is for humans and machines, not the browser's renderer.`,
+        hint: `HTML is about labelling. Not styling, not behaviour — just describing what content is.
+
+Right-click any website, choose View Page Source. Every pair of angle brackets is a label. h1 means big heading. p means paragraph. a means link. div means a generic container.
+
+<strong>Still fuzzy?</strong> Think of tags like labels on filing folders. The label doesn't change what's inside — it tells you (and the browser) what to expect.`,
         quiz: {
           question: "A developer uses a &lt;div&gt; for their site's main navigation instead of a &lt;nav&gt; element. The page looks identical either way. Why does the choice still matter?",
           options: [
@@ -367,7 +379,17 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-2",
         title: "What CSS Is",
-        body: `CSS stands for Cascading Style Sheets. Every visual decision on every website you've ever used — every colour, every font, every spacing choice, every hover effect — is a CSS rule.\n\nThe syntax is consistent and readable once you see the pattern. You write a <strong>selector</strong> (what to target), then inside curly braces you write <strong>property: value</strong> pairs. <code>h1 { color: #1a1a1a; font-size: 32px; }</code> targets every h1 element on the page and sets two properties. That's the entire pattern.\n\nTargeting works three ways. A <strong>tag selector</strong> like <code>p { }</code> targets every paragraph. A <strong>class selector</strong> like <code>.card { }</code> targets every element with class="card" — a class can be reused across many elements. An <strong>ID selector</strong> like <code>#header { }</code> targets the single element with id="header" — IDs are unique per page. Classes are what you'll use most.\n\nThe "Cascading" in CSS is the important part that trips up beginners. When two rules target the same element, the more specific one wins. An ID selector beats a class selector. A class beats a tag name. If specificity is equal, the rule that appears last in the file wins. This hierarchy is called the <strong>cascade</strong>.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if a tag selector, a class selector, and an ID selector all target the same element with conflicting colour values, which one do you predict wins? Why?</div>\n\nSpotify's entire dark theme — the black backgrounds, the white text, the green accents — is CSS <code>background-color</code> and <code>color</code> properties applied systematically. Nothing magic. Just properties on elements.\n\nCSS can live in three places: as an inline <code>style</code> attribute on an element (avoid this except for quick tests), inside a <code>&lt;style&gt;</code> tag in the HTML head, or in a completely separate <code>.css</code> file linked with <code>&lt;link&gt;</code>. External files are the professional standard — they keep style separate from structure and let one stylesheet control an entire site.`,
+        body: `Every visual decision on every website you've ever used was a CSS rule. The colour of a button. The space between paragraphs. The font on a heading. The way something shifts when you hover over it. All CSS.
+
+The pattern is always the same: who gets the rule, what changes, and by how much.
+
+<strong>p { color: red; }</strong>
+
+Who: all paragraphs. What: text colour. How much: red. The entire CSS language follows that structure — selector, property, value.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Press F12 on any website and click the Elements tab. Click any piece of text on the page. In the Styles panel you'll see every CSS rule applying to that element. That's the real code running the site.</div>
+
+The properties are numerous but you'll use the same small set constantly. You'll learn those in the next section. The pattern never changes.`,
         callout: {
           type: "default",
           label: "Specificity in One Sentence",
@@ -378,7 +400,13 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Why External Stylesheets",
           text: "An external CSS file linked to 50 HTML pages means one change to the stylesheet updates all 50 pages instantly. Inline styles mean changing the same thing 50 times. Professional CSS lives in separate files. Always."
         },
-        hint: `The selector is who. The property is what. The value is how much.\n\n<code>p { color: red; }</code> — who: all paragraphs, what: text colour, how much: red.\n\n<strong>Try this:</strong> Open the browser DevTools (F12), click the Elements tab, click any element on the page. The Styles panel on the right shows every CSS rule targeting that element, where it came from, and whether it's being overridden by a more specific rule. Spend five minutes just clicking around a site you know — you'll see specificity in action immediately.\n\n<strong>Still confused by classes vs IDs?</strong> Use classes for anything you might want to style more than once. Use IDs only when a thing is guaranteed to be unique on the page — and even then, many developers prefer classes because IDs have high specificity that can cause unexpected overriding.`,
+        hint: `The pattern is always the same. Who (selector). What (property). How much (value).
+
+p { color: red; } — all paragraphs, text colour, red.
+
+Press F12 on any website. Click an element. Look at the Styles panel. You'll see exactly this pattern, repeated for every visual decision on the page.
+
+<strong>Still fuzzy?</strong> Pick one element and find every CSS rule applying to it in DevTools. The pattern will be obvious immediately.`,
         quiz: {
           question: "A page has two CSS rules: <code>p { color: black; }</code> and <code>.intro { color: blue; }</code>. A paragraph has class='intro'. What colour is the text and why?",
           options: [
@@ -401,7 +429,13 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-3",
         title: "How a Browser Renders Code",
-        body: `Browsers don't just display HTML files. They go through a precise sequence every time — and understanding it explains several decisions you'll make every day as a developer.\n\nWhen a browser receives an HTML file, it reads it from top to bottom and constructs the <strong>DOM</strong> — the Document Object Model. The DOM is the browser's internal tree-like representation of the page. Every element is a node. Every node has a parent, children, and siblings. When JavaScript adds, removes, or changes elements later, it's modifying this DOM tree.\n\nAs the browser parses HTML, it discovers linked resources — CSS files, images, scripts. CSS files are fetched and parsed into a structure called the <strong>CSSOM</strong>. The DOM and CSSOM are combined into a <strong>render tree</strong> — the set of elements that will actually be drawn on screen with their computed styles. Then comes <strong>layout</strong> (calculating each element's size and position) and <strong>paint</strong> (drawing pixels to screen). This full sequence is called the <strong>critical rendering path</strong>.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — based on this sequence, where do you think CSS should be placed in an HTML file to prevent a flash of unstyled content? And where should JavaScript go to prevent the page appearing blank while it loads?</div>\n\nThis explains two conventions you'll see everywhere. CSS goes in the <code>&lt;head&gt;</code>: because the browser needs styles before painting. If CSS arrives late, the page flashes unstyled content for a split second — this is called a FOUC (Flash of Unstyled Content) and it looks broken. JavaScript usually goes at the bottom of <code>&lt;body&gt;</code>, or uses the <code>defer</code> attribute: because JavaScript blocks parsing while it executes. A large JS file in the head means the user stares at a blank page while it downloads and runs.\n\nWhen you open DevTools and inspect an element, you're looking at the live DOM — not the original HTML file. If JavaScript has modified the page, the DevTools shows the current state. The "View Page Source" option shows the original HTML the server sent. They're often different, and that difference is JavaScript.`,
+        body: `When a browser receives an HTML file it doesn't just display it. It goes through a sequence — and understanding the sequence explains why certain things break in ways that seem illogical.
+
+The browser reads the HTML top to bottom and builds a tree called the <strong>DOM</strong> — a structured map of every element on the page. At the same time it reads any linked CSS and builds a separate map called the <strong>CSSOM</strong>. It combines them into a render tree, calculates where everything goes (layout), then draws it (paint).
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> This is why CSS goes in the <strong>&lt;head&gt;</strong> and JavaScript at the bottom of <strong>&lt;body&gt;</strong>. CSS needs to be ready before the page renders. JavaScript, which often manipulates the DOM, is safer after the page has loaded.</div>
+
+You don't need to memorise the sequence. You need to understand why it exists. When something renders out of order or a style doesn't apply when you expect it to — this is usually the reason.`,
         callout: {
           type: "default",
           label: "The DOM vs The Source",
@@ -412,7 +446,11 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Why This Matters Practically",
           text: "Every time you wonder why your CSS isn't applying, or why your page loads slowly, or why a JavaScript change doesn't show up — the answer is somewhere in this rendering sequence. Understanding it turns debugging from guesswork into diagnosis."
         },
-        hint: `The critical rendering path is HTML → DOM, CSS → CSSOM, DOM + CSSOM → Render Tree → Layout → Paint.\n\n<strong>Try this:</strong> Open any website and press F12. In the Elements tab, right-click any element and click "Edit as HTML." Change something. Watch it update instantly. You're directly editing the DOM — not the file on the server, just the browser's in-memory model. Refresh the page and your change is gone.\n\n<strong>Still unclear on render-blocking?</strong> Think of parsing HTML like reading a book. When you hit a script tag with no defer, it's like someone interrupting your reading and making you solve a puzzle before you can continue. defer says "I'll tell you what puzzle to solve after you finish the page." The reading continues uninterrupted.`,
+        hint: `The sequence: HTML builds the DOM, CSS builds the CSSOM, they combine into a Render Tree, then Layout, then Paint.
+
+You don't need those names. What matters: the browser needs everything before it can draw anything — which is why loading order affects what the user sees and when.
+
+<strong>Try this:</strong> Press F12, go to the Elements tab, click any element on the page. The highlighted entry in the panel is that element's position in the DOM.`,
         quiz: {
           question: "Why do professional developers typically put &lt;link&gt; stylesheet tags in the &lt;head&gt; but &lt;script&gt; tags at the bottom of &lt;body&gt; or use the defer attribute?",
           options: [
@@ -499,7 +537,15 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-4",
         title: "Building Your First Page",
-        body: `Every HTML page on the internet starts with the same scaffold. GitHub's code viewer. The New York Times homepage. Every Airbnb listing page. The scaffold is not optional — it's the contract the browser needs before it will parse anything.\n\nAt the top: <code>&lt;!DOCTYPE html&gt;</code> tells the browser this is a modern HTML5 document. Without it, the browser switches into "quirks mode" — a compatibility layer for 1990s pages that breaks modern CSS in subtle, maddening ways. Then the root <code>&lt;html&gt;</code> element wraps everything. Inside it, <code>&lt;head&gt;</code> contains information about the page that isn't displayed: the character encoding (<code>&lt;meta charset="UTF-8"&gt;</code>, which ensures text renders correctly), the page title (shown in the browser tab), and any linked CSS files. Then <code>&lt;body&gt;</code> contains everything the user actually sees.\n\nConnecting CSS is a single line in the head: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code>. The path in href must exactly match your CSS file's location — it's case-sensitive on most servers.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — the head element contains information the browser needs but the user never sees. The body contains everything the user sees. What does that tell you about where to put: a page title, a paragraph of text, a link to a CSS file, a button?</div>\n\nProfessional habit worth building from day one: write all your HTML first. Get the complete structure in place with real content. Only then open the CSS file. When you try to build both simultaneously, you end up with neither fully thought through. HTML is structure. CSS is style. They're different problems and they deserve separate focus.`,
+        body: `Every HTML page starts with the same scaffold. Not most pages — every page. GitHub, the BBC, every Airbnb listing. The scaffold is the contract the browser needs before it will parse anything reliably.
+
+<strong>&lt;!DOCTYPE html&gt;</strong> tells the browser what version of HTML to expect. The <strong>&lt;html&gt;</strong> tag wraps everything. Inside it, <strong>&lt;head&gt;</strong> contains metadata — the page title, links to CSS, instructions the browser needs but the user never sees. <strong>&lt;body&gt;</strong> contains what the user actually sees.
+
+That structure doesn't change. The content inside <strong>&lt;body&gt;</strong> does.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Paste the scaffold from the code editor into a blank text file, save it as page.html, and open it in a browser. You've just run HTML on your machine. Everything you build from here is a version of that file.</div>
+
+One thing that catches people early: linking a CSS file uses a <strong>&lt;link&gt;</strong> tag inside <strong>&lt;head&gt;</strong>, not inside <strong>&lt;body&gt;</strong>. The browser needs to know about styles before it starts drawing.`,
         callout: {
           type: "default",
           label: "The Scaffold Never Changes",
@@ -510,7 +556,9 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Structure Before Style",
           text: "Write HTML first, CSS second. Always. When you write both at once you context-switch between two different problems and solve neither well. Finish the structure completely, then style it. Every experienced developer works this way."
         },
-        hint: `If you open an HTML file in a browser and see nothing, check the order: Did you close all your tags? Did the link tag href actually match your CSS filename exactly (case-sensitive on some systems)? Is the CSS file in the same folder?\n\n<strong>Try this:</strong> Type out the scaffold from memory without looking at this section. DOCTYPE, html, head, meta charset, title, link, body. Five minutes. If you can do it without looking, it's yours. If you can't, type it out once more with the section open, then close it and try again.\n\n<strong>Still confused about the head vs body?</strong> Head = information about the page, not displayed to users. Body = the actual content the user sees. Meta tags, titles, CSS links — head. Headings, paragraphs, images, buttons — body. If it should appear on screen, it goes in body.`,
+        hint: `If nothing appears when you open your file in a browser, check in this order: Did you save the file? Did you close all your tags? Does the CSS filename in your link tag match the actual file exactly (including capitalisation)? Is the CSS file in the same folder?
+
+<strong>Still fuzzy?</strong> Start from the bare scaffold and add one element at a time. That way you always know which change caused the problem.`,
         quiz: {
           question: "Where should a &lt;link&gt; tag connecting an external CSS file be placed, and why?",
           options: [
@@ -543,7 +591,17 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-5",
         title: "Styling Basics",
-        body: `CSS has hundreds of properties. In practice, you'll use the same twenty for 80% of your work. The engineers building Spotify's interface, Notion's editor, and Stripe's dashboard are reaching for the same small set of properties you're about to learn. Learn those well and look up the rest as you need it.\n\nText: <strong>color</strong> (text colour, not background), <strong>font-family</strong> (typeface — stack multiple in order of preference with a generic fallback last), <strong>font-size</strong> (how large), <strong>font-weight</strong> (100 to 900, or named values like bold), <strong>line-height</strong> (vertical space between lines — 1.5 to 1.7 is comfortable for body text).\n\nSpacing: <strong>margin</strong> (space outside the element — transparent, pushes other elements away), <strong>padding</strong> (space inside the element, between the content and the border — background colour fills through it). Both accept 1 to 4 values: one value sets all four sides, two values set top/bottom and left/right, four values set top, right, bottom, left — clockwise from the top.\n\nVisual: <strong>background-color</strong>, <strong>border</strong> (width style colour, e.g. 1px solid #333), <strong>border-radius</strong> (rounds corners — border-radius: 50% makes a circle), <strong>width</strong> and <strong>max-width</strong> (max-width is more flexible than fixed width for responsive layouts).\n\nLayout: <strong>display</strong> controls how an element participates in layout. The most important values: <code>block</code> (takes full width, stacks vertically), <code>inline</code> (flows with text, no width/height control), <code>inline-block</code> (flows with text but accepts width/height), <code>flex</code> (enables flexbox layout on the container), <code>none</code> (removes the element from the page entirely).\n\nFor units: <strong>px</strong> is an exact pixel count. <strong>%</strong> is relative to the parent element's size. <strong>rem</strong> is relative to the root (html) element's font-size. Use rem for font sizes. Here's why it matters: some users increase their browser's default font size because small text is hard for them to read. If you set font-size in px, that preference is silently ignored. If you use rem, your text scales with it. Stripe's design system, GitHub's design system, and GOV.UK's design system all specify font sizes in rem for exactly this reason. It's one line of reasoning that changes a habit permanently.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — open Spotify or any site you use regularly in DevTools (F12). Click any text element. In the Styles panel, find the font-size property. Is it in px or rem? What does that tell you about how that team handles accessibility?</div>`,
+        body: `You don't need to know every CSS property. You need the twenty or so you'll reach for constantly, and look up the rest when you need them.
+
+For text: <strong>color</strong> (text colour — not background), <strong>font-family</strong>, <strong>font-size</strong>, <strong>font-weight</strong>, <strong>line-height</strong>.
+For spacing: <strong>margin</strong> (space outside the element), <strong>padding</strong> (space inside).
+For size: <strong>width</strong>, <strong>height</strong>, <strong>max-width</strong>.
+For appearance: <strong>background</strong>, <strong>border</strong>, <strong>border-radius</strong>, <strong>opacity</strong>.
+For layout: <strong>display</strong>, <strong>position</strong> — these get their own sections.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Press F12, click any element on any page, and look at the Styles panel. Rules with a strikethrough are being overridden by something else. That panel is one of the most useful tools you have — use it constantly.</div>
+
+Don't treat CSS like a list to memorise. Write a rule, see what it does, adjust it. The feedback loop is immediate. That's how you learn it.`,
         callout: {
           type: "default",
           label: "Why rem Over px for Fonts",
@@ -554,7 +612,11 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Shorthand Properties",
           text: "margin: 16px 32px sets top and bottom to 16px, left and right to 32px. margin: 16px sets all four sides. border: 2px solid #333 sets width, style, and colour in one line. Shorthand properties are everywhere in CSS — recognise the pattern rather than memorising each one."
         },
-        hint: `When a CSS property isn't doing what you expect, open DevTools (F12), click the element, and look at the Styles panel. It shows every rule applying to that element, which rule is winning, and which rules are being crossed out (overridden). You can edit values live to experiment without touching your files.\n\n<strong>Try this:</strong> Open Spotify or any dark-themed website. In DevTools, find the body element and change background-color to white. Watch the theme collapse instantly. That's CSS in action — one property change, entire visual impact.\n\n<strong>Still confused by margin vs padding?</strong> Padding is inside the element, between the content and the edge. Margin is outside the element, pushing it away from other elements. If you add a background colour, padding sits inside the colour. Margin is transparent.`,
+        hint: `When a property isn't doing what you expect, press F12, click the element, and look at the Styles panel. Rules with a strikethrough are being overridden by another rule.
+
+The most common early mistake: using color for background colour. The property for that is background or background-color. color controls text only.
+
+<strong>Try this:</strong> Pick any element on any page and count how many CSS rules are applying to it in DevTools. The number is usually surprising.`,
         quiz: {
           question: "A developer sets font-size: 1.5rem on a paragraph. The user has set their browser's default font size to 20px. What size does the paragraph text appear at?",
           options: [
@@ -587,7 +649,15 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-6",
         title: "The Box Model",
-        body: `Everything in CSS is a box. Every element — a heading, an image, a button, a div — is a rectangular box, and that box has four layers.\n\nFrom inside out: <strong>content</strong> (the text, image, or whatever lives inside), <strong>padding</strong> (transparent space between the content and the border), <strong>border</strong> (the edge of the element, can be visible or invisible), <strong>margin</strong> (transparent space outside the border, separating this element from its neighbours).\n\nThe box model has a quirk that causes confusion until you understand it. By default, <code>width</code> applies to the content area only. Add padding and border on top of that, and your element ends up wider than you specified. A 200px wide element with 20px padding on each side is actually 240px wide on screen.\n\nThe fix is <code>box-sizing: border-box</code>. With this property, width includes content, padding, and border. A 200px wide element with 20px padding is 200px wide — the content shrinks to accommodate the padding. This is so universally useful that Airbnb, GitHub, and essentially every professional CSS codebase starts with a global reset that applies it everywhere: <code>*, *::before, *::after { box-sizing: border-box; }</code>.\n\nMargin collapse is CSS's most confusing behaviour for beginners: when two block elements are stacked vertically, their vertical margins merge (collapse) into the larger of the two. A paragraph with 24px bottom margin and a heading with 16px top margin don't add up to 40px of space — they collapse to 24px. This doesn't happen with horizontal margins, flexbox children, or absolutely positioned elements. Knowing it exists means you won't waste an hour trying to figure out why your spacing doesn't add up.`,
+        body: `Every element in CSS is a rectangular box. Not visually — structurally. The heading, the button, the image, the paragraph — each one is a box with four layers.
+
+From inside out: <strong>content</strong> (what's actually in it), <strong>padding</strong> (transparent space between the content and the border), <strong>border</strong> (the edge — visible or invisible), and <strong>margin</strong> (space outside the element, separating it from everything else).
+
+This matters because when you set <strong>width: 200px</strong>, you're setting the content width. Padding and border are added on top. The element ends up wider than 200px. This surprises almost everyone the first time.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Open DevTools, click any block element, and look at the box model diagram in the Styles or Computed panel. Every number maps directly to one of those four layers.</div>
+
+There's a fix: <strong>box-sizing: border-box</strong> makes width include padding and border. Most developers apply it globally to every project before writing anything else.`,
         callout: {
           type: "default",
           label: "The Professional Reset",
@@ -598,7 +668,11 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "DevTools for the Box Model",
           text: "In browser DevTools, click any element and scroll down in the Styles panel to find the box model diagram. It shows the exact content, padding, border, and margin values in a visual diagram. Use this constantly when layouts don't behave as expected."
         },
-        hint: `If your layout is off by a mysterious amount — an element is wider than expected, spacing doesn't add up — the box model is usually why.\n\n<strong>Try this:</strong> Open DevTools, click any block element, and look at the box model diagram in the Styles panel. You'll see the four layers as coloured rings. Hover over each one — the browser highlights that layer on the page.\n\n<strong>Still confused by margin collapse?</strong> Picture two magnets with the same pole facing each other. They don't stack their repulsion — the stronger one wins. That's vertical margin collapse. The larger margin wins; the smaller one disappears. Horizontal margins never collapse, and neither do flex or grid container children.`,
+        hint: `If an element is wider than you expected, the box model is usually why. Width sets the content width — padding and border add to it by default.
+
+Fix it: add box-sizing: border-box to the element (or * { box-sizing: border-box; } for everything). Now width includes padding and border.
+
+<strong>Try this:</strong> Open DevTools, click any block element, and look at the box diagram. Every number maps to one of the four layers — content, padding, border, margin.`,
         quiz: {
           question: "A div has width: 300px, padding: 20px, and border: 5px solid black. With the default box-sizing: content-box, what is the total rendered width of the element?",
           options: [
@@ -631,7 +705,18 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-7",
         title: "Flexbox Layout",
-        body: `Before flexbox, CSS layout was genuinely difficult. Centering something vertically required tricks. Equal-height columns needed hacks. Developers used floats, clearfixes, and negative margins to achieve layouts that should have been simple. If you've ever seen old CSS with <code>clear: both</code> and a mysterious empty div — that's what layout looked like before 2012.\n\nFlexbox solved all of it. It's now universally supported and is the layout tool you'll reach for most often as a professional.\n\nFlexbox works on a container-and-children model. Set <code>display: flex</code> on a parent element, and all its direct children become <strong>flex items</strong>. You control their arrangement by setting properties on the container — not on the children.\n\nThe key concept is <strong>axes</strong>. Flex items lay out along a <strong>main axis</strong>. By default, that axis runs horizontally (row). The perpendicular is the <strong>cross axis</strong>. <code>flex-direction: column</code> flips them — main axis runs vertically, items stack top to bottom.\n\nThe four properties you'll use in almost every layout:\n\n<strong>justify-content</strong> — positions items along the main axis: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>space-between</code> (first and last at edges, rest evenly spaced).\n\n<strong>align-items</strong> — positions items along the cross axis: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>stretch</code> (default).\n\n<strong>gap</strong> — consistent space between items, no margin hacks needed.\n\n<strong>flex-wrap: wrap</strong> — allows items to wrap to the next line when they don't fit.\n\nAirbnb's listing card grid, Spotify's top navigation bar, GitHub's file explorer toolbar, the action buttons at the bottom of this panel — all built with exactly these four properties in combination. The same tool, applied to different problems.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — open any site you use and inspect a navigation bar in DevTools. Look for <code>display: flex</code> on the nav element. When you find it, look at which justify-content and align-items values they've set. What problem is each one solving?</div>\n\nUse flexbox for one-dimensional layouts: a row of buttons, a navbar, a card row, a vertical stack. For two-dimensional layouts (rows and columns simultaneously), CSS Grid is the right tool.`,
+        body: `Before flexbox, CSS layout required hacks. Centering something vertically was harder than it should have been. Equal-height columns needed workarounds. If you ever look at old CSS and see <strong>float</strong>, <strong>clear: both</strong>, or negative margins doing strange things — that's what developers used before something better existed.
+
+Flexbox made layout logical.
+
+You add <strong>display: flex</strong> to a container. The children of that container automatically arrange in a row. From there: <strong>flex-direction</strong> controls the axis, <strong>justify-content</strong> controls distribution along it, <strong>align-items</strong> controls alignment across it.
+
+Centering something both ways — the thing that used to require tricks — is now three lines:
+<strong>display: flex; justify-content: center; align-items: center;</strong>
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> Flex properties go on the container, not the children. The container controls the rules. The children respond. Keep that distinction clear and flexbox becomes predictable.</div>
+
+You'll use flexbox in almost everything you build. Spend time in the code editor until the mental model clicks.`,
         callout: {
           type: "default",
           label: "Centering With Flexbox",
@@ -642,7 +727,14 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Flexbox vs Grid",
           text: "Flexbox is for one dimension: either a row or a column. CSS Grid is for two dimensions: rows and columns at the same time. Navigation bars, button groups, and card rows — flexbox. Full page layouts with both columns and rows — Grid. When in doubt, start with flexbox."
         },
-        hint: `The mental model: the container is a flexible box. The children are flexible items inside it. You control how items sit in that box by setting rules on the container.\n\n<strong>Try this:</strong> Add display: flex to any element in your code editor. Watch its children line up horizontally. Then add justify-content: center. Then try space-between. Each property change reshapes the layout instantly.\n\n<strong>Still confused by justify-content vs align-items?</strong> justify-content works along the direction items are flowing (the main axis). align-items works perpendicular to that. In a row layout: justify-content controls left-right positioning, align-items controls up-down. In a column layout, they flip.`,
+        hint: `The container holds the flex rules. The children respond.
+
+justify-content spreads children along the main axis (horizontal by default).
+align-items aligns children on the cross axis (vertical by default).
+
+To centre something: display: flex; justify-content: center; align-items: center;
+
+<strong>Still fuzzy?</strong> Add display: flex to any container and watch what happens. Then add justify-content and align-items one at a time and watch the children respond.`,
         quiz: {
           question: "A flex container has flex-direction: row (the default). Which property and value would push all items to the right side of the container?",
           options: [
@@ -728,7 +820,15 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-8",
         title: "Building a Real Component",
-        body: `Real interfaces are made of components. A Spotify song card. A GitHub repository card. A Twitter post. A product tile on an e-commerce site. Look at any of them and you see the same anatomy: a container, an image or icon, a text hierarchy, interactive elements.\n\nBreak apart a typical card. A container div with a fixed width, background, border-radius, and box-shadow. Inside it: an image (or placeholder) that fills the top. Below the image: a title in larger text, a subtitle in smaller muted text, metadata like a date or a label. At the bottom, action elements — buttons, links, icons.\n\nNothing about this is complex individually. What makes professional work feel polished is the consistency: padding that's the same multiple throughout (8px, 16px, 24px — always multiples of 8), colours from a defined palette, font sizes that follow a logical scale.\n\nThe approach professional developers use to build a component: HTML structure first — container, then the hierarchy inside it, no CSS yet. Then CSS from outside in: style the container first, then the layout inside it (flex or grid), then individual elements. Never start styling the small details before the structure is solid.\n\nThis is the session where HTML and CSS stop feeling like separate things you're applying and start feeling like a vocabulary you're speaking. When a layout problem appears, you know which property to reach for. When something looks wrong, you know where to look.`,
+        body: `Real interfaces are built from components — self-contained pieces that do one job. A song card. A user profile tile. A product listing. Look closely at any of them and the anatomy is the same: a container, something visual, a text hierarchy, sometimes an action.
+
+Building one from scratch is how CSS, HTML, and layout decisions stop being abstract.
+
+The process: start with the container and get its dimensions right. Add the internal layout. Add the children in the right order. Then style each child. Don't jump to details before the structure is in place — details fight you when the structure is wrong.
+
+<div class="inline-q"><span class="iq-label">Before you code:</span> Look at the component and describe it in plain language. What's the container? What are the children? What layout do they use? Naming things before writing them is a habit worth starting now.</div>
+
+If something isn't sitting where you expect, check the container first. Most layout problems are the container, not the child.`,
         callout: {
           type: "default",
           label: "CSS From Outside In",
@@ -739,7 +839,11 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "The 8px Grid",
           text: "Most design systems (including Airbnb's, GitHub's, Spotify's) use multiples of 8 for spacing: 8px, 16px, 24px, 32px, 48px, 64px. When you use consistent spacing multiples, layouts feel ordered even without a design spec. It's one of the easiest habits that makes the biggest visible difference."
         },
-        hint: `If the component doesn't look right, check this order. Is the container the right size? Is the internal layout (flex/grid) working? Are the children the right sizes? Then check the individual styling.\n\n<strong>Try this:</strong> Before writing CSS, sketch the component on paper. Just boxes and labels. Container. Image area. Title. Subtitle. Button. That sketch becomes your HTML structure. The CSS then has a clear plan to follow.\n\n<strong>Hover states feel hard?</strong> Add a <code>:hover</code> selector to any element. Whatever properties you change inside it only apply when the cursor is over the element. <code>transform: translateY(-4px)</code> lifts it. <code>box-shadow</code> adds depth. <code>transition: all 0.2s ease</code> on the base element smooths the change.`,
+        hint: `If the component doesn't look right, check in this order: container size, container layout (flex or not), children in the right order, then individual child styles.
+
+Going straight to child styles when the container layout is wrong is the most common mistake. Structure first.
+
+<strong>Quick debug:</strong> Add border: 1px solid red to each element temporarily. It makes every box visible and shows exactly what space each element is taking up.`,
         quiz: {
           question: "When building a card component, you write all the HTML first and then open the CSS file. What is the main advantage of this approach?",
           options: [
@@ -772,7 +876,15 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-9",
         title: "Guided Profile Page Project",
-        body: `You've seen profile pages hundreds of times: Dribbble, Behance, GitHub, LinkedIn. They all follow the same pattern because that pattern works. A header with name and role. An about section with a short bio. A skills section. A projects grid. Contact links.\n\nThe scaffold in the code editor covers that full structure: a header with your name and title, a bio section, a skills grid using flexbox, project cards, and footer links. The HTML is structured. The base CSS is styled. The layout is there.\n\nYour job is threefold. First: replace every piece of placeholder content with your actual information. Don't leave a single word of placeholder text — this is your page now. Second: change the visual design. The colour scheme, the typography choices, the spacing — make it feel like you, not the template. Third: add something the scaffold doesn't have. A section, an element, an interaction. Anything that requires you to figure it out yourself.\n\nThe third part is the most important. The first two are filling in blanks. The third is actual building.`,
+        body: `Profile pages follow a consistent pattern because the pattern works. A header with name and role. A short bio. Skills. Projects. Contact links. You've seen it on GitHub, Dribbble, LinkedIn. The structure isn't unoriginal — it's a convention. Conventions exist because they're what people already know how to read.
+
+The code editor has a scaffold. Your job is to finish it, then go beyond it.
+
+Finishing it is guided — fill in the gaps. Going beyond is yours. Add at least one section that isn't in the scaffold. It doesn't need to be complex. It needs to be something you decided to put there.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> If someone from the industry saw this page, what would you actually want on it? That question is more useful than any brief.</div>
+
+The goal isn't a polished portfolio. It's a page where you made real decisions without being told exactly what to decide. That shift — from following instructions to owning the outcome — is what this section is actually for.`,
         callout: {
           type: "default",
           label: "What This Builds",
@@ -783,7 +895,11 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Make It Yours",
           text: "The most common mistake with guided projects: leaving the template colours and changing only the text. Colour scheme is the first thing anyone notices. Pick two or three colours that feel right to you and apply them throughout. A page that looks like the template is a template. A page that looks like you is a portfolio piece."
         },
-        hint: `If you don't know what to add as your original element, here are three options that require real CSS work: a horizontal scrolling skills bar, a timeline for your learning journey, or a dark/light mode toggle (research CSS custom properties and class toggling with JavaScript).\n\n<strong>Feeling stuck on the design?</strong> Open Dribbble or Behance and look at three profile pages you find visually interesting. Don't copy any of them. Instead, write down what they have in common: spacing generosity, font weight contrast, a strong accent colour. Use those patterns, not the specific designs.\n\n<strong>Testing on mobile:</strong> In DevTools (F12), click the icon that looks like a phone and tablet (Toggle Device Toolbar). This lets you simulate different screen sizes. If your page looks broken on mobile, the most common fix is adding max-width: 100% to images and checking that your flex containers have flex-wrap: wrap.`,
+        hint: `Not sure what to add as your own section? Three options that use what you've learned: a horizontal skills bar, a simple two-column projects grid, or a timeline.
+
+None of those require anything beyond Floor 2. They just require you to apply it without step-by-step instructions.
+
+<strong>Stuck on content?</strong> The content doesn't matter as much as the CSS. Use placeholder text if you need to — just make the layout yours.`,
         quiz: {
           question: "You've built a profile page using the scaffold. You replaced all text but kept all original colours and layout. A recruiter views it alongside the original template. What's the most accurate description of what you've built?",
           options: [
@@ -816,7 +932,17 @@ One gap doesn't undo everything else. It just shows you where to look.`,
       {
         id: "2-10",
         title: "Floor 2 Check — No Template",
-        body: `Before you advance to Floor 3, prove to yourself you understood this floor.\n\nNo scaffold. No starter code. No template. A blank file and a brief.\n\n<strong>The brief:</strong> Build a landing page for something that doesn't exist yet. An app idea you've had. A fictional brand. A band. A game. A product. It can be anything — the subject doesn't matter. What matters is that you make every decision.\n\nThe page must have three sections minimum: a hero (the top section with a heading and a call-to-action), a features or about section (three or more benefits or facts), and a footer with at minimum two links.\n\nEvery HTML element — your choice. Every colour — your choice. Every font, every spacing value, every layout approach — yours. When something doesn't work, you figure out why. When you want something you don't know how to do, you search for it.\n\nThis is what the work actually feels like. There's no right answer to compare yourself to. There's only: does it work, does it look intentional, and is it something you made.\n\nThe questions below assess the full floor — not just this final section.`,
+        body: `No scaffold. No starter code. A blank file and a brief.
+
+The brief: build a landing page for something that doesn't exist yet. An app idea. A fictional brand. A band. A product. A service. Anything — as long as you're not copying something that already exists.
+
+The page needs: a headline, a short description, at least two sections, a call to action, and CSS you wrote yourself.
+
+<div class="inline-q"><span class="iq-label">The point:</span> Floor 2 covered HTML structure, CSS properties, the box model, flexbox, and component building. This check is whether those things are actually in your hands — not just in your notes.</div>
+
+If you're not sure where to start: write all the HTML first, then add CSS. Separating structure from appearance is how professionals work on new pages. It stops the two things from interfering with each other while you're still thinking.
+
+If it looks nothing like what you pictured, that's normal. The gap between what you imagined and what you built is exactly the gap that practice closes.`,
         callout: {
           type: "default",
           label: "The Blank Page Problem",
@@ -827,7 +953,11 @@ One gap doesn't undo everything else. It just shows you where to look.`,
           label: "Searching Is Part of the Work",
           text: "If you want a feature you don't know how to build — a sticky navigation, a gradient background, a CSS animation — search for it. Searching for CSS solutions is not cheating. It's exactly what every professional developer does. The skill is knowing what to search for and evaluating what you find."
         },
-        hint: `If you're completely blank on an idea: don't make it about an app. Make it about something you know. A landing page for your favourite book, for a coffee shop that should exist in your city, for a service that would have helped you learn to code faster. Anything you have opinions about is easier to design than something abstract.\n\n<strong>When the design feels off but you can't say why:</strong> Look at the spacing. Inconsistent spacing makes pages feel unpolished more than almost anything else. Pick one spacing unit (like 8px) and make every margin and padding a multiple of it.\n\n<strong>Still fuzzy on the hero section?</strong> A hero needs: a strong headline, a brief supporting line, and a button or link. That's the complete minimum.`,
+        hint: `If you're blank on what to build: don't reach for an app idea. Build a landing page for something you actually know — your favourite restaurant, a coffee shop that should exist, a service you wish was available. Real content makes the decisions easier.
+
+HTML structure first. Completely. Don't start adding styles until the HTML says what you want it to say.
+
+<strong>Stuck on layout?</strong> Start with a container div for each section. Get the sections stacking correctly before you worry about what's inside them.`,
         quiz: {
           questions: [
             {
