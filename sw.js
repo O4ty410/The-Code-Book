@@ -4,7 +4,7 @@
    Includes streak reminder notification support.
    ============================================================ */
 
-var CACHE = 'codebook-v9';
+var CACHE = 'codebook-v10';
 
 var SHELL = [
   './',
@@ -59,17 +59,19 @@ self.addEventListener('fetch', function(e) {
   if (!e.request.url.startsWith(self.location.origin)) return;
 
   var url = new URL(e.request.url);
+  // Strip query string for cache matching — versioned URLs (?v=...) must still hit the cache
+  var cacheKey = new Request(url.origin + url.pathname);
   var isShell = SHELL.some(function(s) {
     return url.pathname === s || url.pathname.endsWith(s.replace('./', '/'));
   });
 
   if (isShell) {
-    // Cache-first for shell
+    // Cache-first for shell — match without query string
     e.respondWith(
-      caches.match(e.request).then(function(cached) {
+      caches.match(cacheKey).then(function(cached) {
         var fetched = fetch(e.request).then(function(res) {
           if (res.ok) {
-            caches.open(CACHE).then(function(c) { c.put(e.request, res.clone()); });
+            caches.open(CACHE).then(function(c) { c.put(cacheKey, res.clone()); });
           }
           return res;
         });
