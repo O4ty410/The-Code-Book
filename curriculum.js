@@ -3419,7 +3419,15 @@ Fix the names first. Good names make the logic easier to read without changing h
       {
         id: "5-1",
         title: "What Full Stack Means",
-        body: `When you double-tap a photo on Instagram, three separate systems fire in under half a second — running on different computers, in different buildings, probably in different countries. The animation plays in your browser. A server records the like and notifies the poster. A database stores it so it's there when you come back tomorrow. You built the browser layer in the last four floors. This floor is the other two.\n\n<strong>Frontend</strong> is HTML, CSS, and JavaScript running in your browser. The browser downloads these files from the server and executes them locally on your device. The user controls this environment — they can open DevTools, modify the JavaScript, intercept requests. This is why you can never trust the frontend to enforce rules.\n\n<strong>Backend</strong> is code running on a server — Node.js, Python, Go, Java, and others. The user never sees this code. This is where business logic lives: authentication, payment processing, data validation, anything that must not be tampered with. When Instagram decides whether you can see a private account's posts, that decision happens on the server, not in your browser.\n\n<strong>Database</strong> is where data survives. Close the browser. Shut down the server. Restart everything. The data is still there because the database writes it to disk. Without this layer, Spotify forgets your playlists the moment the server restarts.\n\nThe full cycle on a single request: your browser sends a GET request → Instagram's server receives it, checks you're logged in, queries the database for posts from accounts you follow → the database returns rows → the server formats them into JSON → your browser renders the feed. That round trip, for a production app serving millions of users, typically completes in under 200ms.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Before you continue:</span> A developer stores all user sessions in a JavaScript object in server memory — no database. The server process crashes and restarts. What happens to every logged-in user? What does this tell you about the database's job?</div>`,
+        body: `When you double-tap a photo on Instagram, three separate systems fire in under half a second. The animation in the browser. A server recording the like. A database storing it so it's there when you come back tomorrow. You built the browser layer in the first four floors. This floor is the other two.
+
+Frontend is HTML, CSS, and JavaScript running in your browser — on your device. Backend is code running on a server somewhere, handling requests, making decisions, talking to a database.
+
+The split exists for a reason. You don't want your database accessible directly from a browser — that would mean anyone could query it. The server sits between them. It receives requests, validates them, queries the database, and sends back only what the frontend is allowed to see.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> Pick any feature of an app you use daily. Ask three questions: does this run in the browser, on a server, or in a database? Most features touch all three. Being able to answer that question for any feature is what full stack actually means.</div>
+
+The skills from the first four floors stay. You're adding a layer underneath them.`,
         callout: {
           type: "default",
           label: "Why the Separation",
@@ -3430,11 +3438,11 @@ Fix the names first. Good names make the logic easier to read without changing h
           label: "The Instagram Example",
           text: "When you post on Instagram, the browser sends a POST request to Instagram's backend with the image data and caption. The backend validates it, compresses the image, stores it (likely in object storage like S3), saves metadata to a database, updates your follower feeds, and returns a success response. None of that happens in the browser."
         },
-        hint: `You're confused about which layer handles what.
+        hint: `Confused about which layer handles what? Take any feature and ask three questions: does this run in the browser (frontend), on a server (backend), or in a database?
 
-<strong>Try this:</strong> Take any feature of an app you use daily. Ask three questions: does this run in the browser, on a server, or in a database? Login button click = browser. Password verification = server. Stored password hash = database. Tracing features through layers builds the mental model faster than any explanation.
+The browser handles display and interaction. The server handles logic, validation, and security. The database handles persistence — data that outlasts any individual request.
 
-<strong>Still fuzzy?</strong> The rule of thumb: anything that must be secure, private, or persistent goes on the server or database. Anything that's just about what the user sees and interacts with goes in the browser.`,
+<strong>Most problems in full stack</strong> come from confusing which layer should own a responsibility. When something breaks, asking "which layer is this" points you to where to look.`,
         quiz: {
           question: "A user submits a payment form on an e-commerce site. Where must the actual payment processing happen and why?",
           options: ["In the browser's JavaScript, for the fastest user experience", "On the server, because JavaScript in the browser can be modified by anyone", "In the database, because it needs to persist", "In the browser's localStorage for security"],
@@ -3446,7 +3454,15 @@ Fix the names first. Good names make the logic easier to read without changing h
       {
         id: "5-2",
         title: "How Servers Work",
-        body: `At 09:14:32, you search "cheap flights London to Barcelona." That string leaves your browser, reaches a load balancer, gets handed to one of GitHub's available server processes, passes through authentication middleware, hits a route handler, fires a database query, and arrives back in your browser as a JSON response — in around 200ms. The chain between "user presses Enter" and "results appear" is what a server is.\n\n<strong>Routing</strong> is the first thing a server does with an incoming request: match the URL and HTTP method to the right piece of code. A GET to <code>/users/123</code> runs different code than a POST to <code>/users</code>. The router reads the pattern, extracts any dynamic segments (like the <code>123</code>), and calls the corresponding handler function. Handler functions receive a request object — the incoming data, headers, user identity — and a response object — the channel to send data back.\n\n<strong>Middleware</strong> is code that runs before your route handlers, and it's where the real architecture lives. Authentication middleware runs first: if you're not logged in, the request ends there — it never reaches the route. Rate limiting middleware counts how many requests you've made in the last minute. Request parsing middleware converts the raw HTTP body into usable JavaScript. Each middleware either passes the request along or ends it. Stripe's API processes every payment through roughly a dozen middleware layers before a single line of business logic runs.\n\nPorts: a server listens on a specific number. Port 443 is HTTPS in production. Port 3000 or 8080 are development defaults. When you visit <code>localhost:3000</code>, you're connecting to port 3000 on your own machine — the same concept, just local.\n\n<div class="inline-q"><span class="iq-label">Before you continue:</span> A request arrives at your route handler but <code>req.body</code> is undefined, even though you sent JSON in the request. What middleware is missing, and where in the chain should it run?</div>`,
+        body: `A server is a computer that does nothing but wait for requests and respond to them. No screen. No keyboard. It runs continuously, receiving messages from browsers and sending responses back.
+
+The request arrives with three things: a method (GET, POST, PUT, DELETE), a path (/users, /posts/42), and sometimes a body of data. The server reads those and decides what to do. That decision — written in code — is your route handler.
+
+Every URL you've ever typed was a GET request to a server. Every form you've submitted was a POST. Every delete button that works without reloading sent a DELETE or POST from JavaScript. HTTP is just messages.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> When you search something on a website, what GET request do you think the browser is sending? What path? What query parameters? What does the server probably do with that request before returning results?</div>
+
+The response comes back with a status code (200 OK, 404 Not Found, 500 Server Error), headers, and a body — usually JSON. Your frontend reads that and decides what to display.`,
         callout: {
           type: "default",
           label: "Middleware Is the Architecture",
@@ -3457,11 +3473,9 @@ Fix the names first. Good names make the logic easier to read without changing h
           label: "Request Object vs Response Object",
           text: "In Express (and most web frameworks), every route handler receives req (the incoming request: headers, body, params, the user's identity) and res (the outgoing response: what to send back and with what status code). Understanding what lives on each object is the foundation of server-side development."
         },
-        hint: `You're building a server route but the request isn't reaching your handler.
+        hint: `Building a route but the request isn't reaching your handler? Add console.log('Route hit') as the very first line. If it doesn't appear in the server logs, the request never reached that route — check the method and path match exactly. If it does appear, the problem is inside the handler.
 
-<strong>Try this:</strong> Add console.log('Route hit') as the very first line of your handler. If it doesn't print, the request isn't matching your route. Check: is the HTTP method correct (GET vs POST)? Is the URL path exact? Is there middleware before it that might be blocking?
-
-<strong>Still stuck?</strong> Add a catch-all route at the very bottom: app.use((req, res) => res.status(404).send('Not found: ' + req.path)). This catches any request that didn't match a defined route and tells you exactly what URL the server is seeing.`,
+<strong>Check the method.</strong> A POST request won't match a GET route. A route at /user won't match a request to /users. Exact match, exact method.`,
         quiz: {
           question: "Authentication middleware is registered before route handlers in an Express app. A request arrives for a protected route. What is the correct order of execution?",
           options: ["Route handler runs first, then auth middleware verifies the result", "Auth middleware runs, checks the credentials, and either passes the request to the route handler or rejects it", "Both run simultaneously in parallel", "Auth middleware runs after the route handler returns data"],
@@ -3473,7 +3487,15 @@ Fix the names first. Good names make the logic easier to read without changing h
       {
         id: "5-3",
         title: "Databases",
-        body: `Close your browser. Shut down the server. Restart everything. Every note you’ve ever taken, every photo you’ve ever uploaded, every account you follow — still there when you come back. That’s the database’s only job: make sure data outlives the process that created it. Without it, Notion forgets your documents the moment the server restarts.\n\nThe two main categories: <strong>relational databases</strong> (PostgreSQL, MySQL, SQLite) store data in tables with rows and columns. A <code>posts</code> table has a <code>user_id</code> column that references the <code>users</code> table — that foreign key is what makes it relational. GitHub’s entire codebase, pull requests, issues, and comments live in a PostgreSQL database. SQL is the language for querying them.\n\n<strong>Document databases</strong> (MongoDB, Firestore) store data as JSON-like documents. No fixed schema — different documents in the same collection can have different fields. Flexible, but at the cost of enforced structure. Choose these when your data genuinely has no fixed shape.\n\nThe SQL commands that cover 90% of database work: <code>SELECT</code> (retrieve), <code>INSERT</code> (add), <code>UPDATE</code> (modify), <code>DELETE</code> (remove). With <code>WHERE</code> to filter, <code>ORDER BY</code> to sort, <code>JOIN</code> to combine tables, and <code>LIMIT</code> to paginate. These aren’t academic — every time you load your Twitter feed, Spotify playlist, or Slack message history, a SELECT with joins and a limit is running.\n\n<strong>Indexes</strong> are how databases stay fast as data grows. A query that scans 1,000 rows in 50ms scans 1,000,000 rows in 50 seconds without one. Add indexes on every column you filter by in a WHERE clause and every foreign key.\n\n<strong>ACID</strong> properties are what separates a real database from a JSON file. When you transfer money between two bank accounts, both the debit and credit must succeed or neither does — never one without the other. Atomicity guarantees this. Durability guarantees that a committed transaction survives a power cut.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Before you continue:</span> You fetch 20 blog posts, then make a separate database query for each post’s author. How many total queries did you make? What is this pattern called, and how does a JOIN solve it?</div>`,
+        body: `Close your browser. Shut down the server. Restart everything. Every message you've sent, every photo you've uploaded, every account you follow — still there. That's the database. Everything that needs to outlast a request lives there.
+
+Two main kinds: relational databases (PostgreSQL, MySQL, SQLite) store data in tables — rows and columns, linked by relationships. A users table and a posts table, each post linked to a user. SQL is the language you use to query them. Non-relational databases (MongoDB) store documents — flexible, JSON-like objects without a rigid schema.
+
+For most applications, start with a relational database. The structure it forces you into is usually a feature, not a constraint.
+
+<div class="inline-q"><span class="iq-label">Before you write any code:</span> design the data first. What needs to be stored? What relationships exist between things? Sketch the tables and their connections. The database schema is the foundation — everything else is built on top of it.</div>
+
+SQL is not difficult. The four operations you'll use constantly: SELECT (read), INSERT (create), UPDATE (change), DELETE (remove). Everything else is a variation on those four.`,
         callout: {
           type: "default",
           label: "SQL vs NoSQL",
@@ -3484,11 +3506,11 @@ Fix the names first. Good names make the logic easier to read without changing h
           label: "Indexes or Slow Queries",
           text: "A query that takes 50ms with 1,000 rows takes 50 seconds with 1,000,000 rows without an index. Database queries are almost always the performance bottleneck in web applications. Add an index on every column you filter by in a WHERE clause and every foreign key column."
         },
-        hint: `Your database query is returning wrong or unexpected results.
+        hint: `Query returning wrong or unexpected results? Run it directly in the database tool first — pgAdmin for PostgreSQL, Compass for MongoDB. If the query is wrong there, fix it there before touching the application code.
 
-<strong>Try this:</strong> Run the query directly in the database tool (pgAdmin for PostgreSQL, Compass for MongoDB) before running it through your application code. If the query is wrong there, it's a SQL problem. If it's correct there but wrong in your app, it's a code problem. Isolate the layer first.
+If the query works in the tool but fails in the app, the issue is how you're passing parameters. Check that the values are the right type and in the right order.
 
-<strong>Still stuck?</strong> Add a LIMIT 5 clause to your SELECT to see a small sample of results. Check the actual data that's in the table — sometimes the issue is that the data was never inserted correctly, or was inserted with the wrong values.`,
+<strong>Always test queries</strong> in isolation before calling them from routes. It separates "is my SQL right" from "is my route right".`,
         quiz: {
           question: "A bank transfer involves debiting one account and crediting another. The server crashes after the debit but before the credit. What database property prevents both accounts from ending up in an inconsistent state?",
           options: ["Indexing — fast lookups ensure both operations complete before timeout", "Atomicity — the transaction either fully completes or fully rolls back, never partially", "Isolation — other transactions can't see the debit until the credit is complete", "Durability — the data is written to disk immediately"],
@@ -3500,15 +3522,15 @@ Fix the names first. Good names make the logic easier to read without changing h
       {
         id: "5-4",
         title: "Authentication",
-        body: `Authentication is proving who you are. Authorisation is proving what you're allowed to do. The distinction matters: you can be authenticated (the server knows you're Alex) but not authorised (Alex doesn't have admin access). These are two separate checks.
+        body: `Authentication is proving who you are. Authorisation is proving what you're allowed to do. Those are different things and confusing them causes security problems.
 
-The session-based approach: after login, the server creates a session record in a database and sends a session ID to the browser in a cookie. Every subsequent request includes that cookie. The server looks up the session ID to identify the user. Sessions are revocable: delete the session record and the user is logged out everywhere.
+The standard pattern: a user registers with an email and password. The password is hashed — converted by a one-way function into something unrecognisable — before it's stored. When they log in, the submitted password is hashed the same way and compared to the stored hash. If they match, the user is who they say they are.
 
-The token-based approach (JWT): after login, the server creates a signed token containing the user's ID and sends it to the client. The client stores it (usually in memory or localStorage) and sends it in the Authorization header of every subsequent request. The server verifies the signature — no database lookup needed. JWTs expire but can't be revoked before expiry without additional infrastructure.
+The server then issues a JWT (JSON Web Token) that the browser stores and sends with every subsequent request. The token proves the user is authenticated without them logging in every time.
 
-Password storage: you never, under any circumstances, store plain text passwords. If your database is compromised and passwords are plain text, every user's password is exposed. You store a hash: a one-way transformation of the password. bcrypt is the standard — it's deliberately slow (to make brute-force attacks expensive) and adds a random salt (to prevent rainbow table attacks).
+<div class="inline-q"><span class="iq-label">Important:</span> Never store plain text passwords. If your database is ever compromised and passwords are plain text, every user is exposed. Hash with bcrypt. The hash cannot be reversed back to the original password. This is not optional.</div>
 
-OAuth: "Login with Google" delegates authentication to a trusted provider. Google verifies the user's identity and tells your application who it is. You never handle the password. This is the right approach for any application where managing credentials securely is more complexity than you want to take on.`,
+Authorisation comes after authentication. Once you know who someone is, you check what they're allowed to do. That check is usually middleware — code that runs before the route handler and either allows or rejects the request.`,
         callout: {
           type: "default",
           label: "Never Build Auth From Scratch",
@@ -3519,11 +3541,11 @@ OAuth: "Login with Google" delegates authentication to a trusted provider. Googl
           label: "JWT Expiry",
           text: "JWTs have an expiry time (typically 15 minutes to 24 hours). After expiry, the token is invalid and the user must re-authenticate. To avoid constant logouts, applications use refresh tokens: a longer-lived token that can exchange for a new JWT. Get the access/refresh token pattern right before shipping any JWT-based auth."
         },
-        hint: `Users are getting logged out unexpectedly or tokens aren't working.
+        hint: `Users getting logged out unexpectedly? Decode your JWT at jwt.io and check the exp field. If the token is expired, increase the expiration time or implement refresh tokens.
 
-<strong>Try this:</strong> Decode your JWT at jwt.io (it's a public tool for inspection). Check the exp field — it's a Unix timestamp showing when the token expires. If tokens expire faster than expected, check that the server clock is accurate (time drift breaks JWT validation).
+If tokens work but users are accessing data they shouldn't, the authorisation check is missing or incomplete. Every query that returns user-specific data should filter by the authenticated user's ID.
 
-<strong>Still stuck?</strong> Log the Authorization header on the server for every request. If it's missing, the client isn't sending it — check the fetch call. If it's there but invalid, the server-side verification code has an issue — check the secret key.`,
+<strong>Checklist:</strong> password hashed before storing, JWT signed with a secret from environment variables, protected routes check for valid token, queries filter by user ID.`,
         quiz: {
           question: "A user's JWT token is compromised. The token expires in 7 days. What is the fundamental limitation of JWT-based authentication in this scenario?",
           options: ["Nothing — the server can delete the token from its database to invalidate it immediately", "The token cannot be revoked before its expiry time without additional infrastructure like a token blocklist", "The user must change their password to invalidate the token", "JWTs can be recalled remotely by the token issuer at any time"],
@@ -3599,17 +3621,21 @@ OAuth: "Login with Google" delegates authentication to a trusted provider. Googl
       {
         id: "5-5",
         title: "Node and Express",
-        body: `Node.js runs JavaScript on the server. The same language you've been writing in the browser now runs outside it — with access to the filesystem, the network, and the ability to listen for HTTP connections. No DOM, no window object, but full access to the operating system.
+        body: `Node.js runs JavaScript on the server. The language you've been writing in the browser runs outside it — with access to the filesystem, the network, and the ability to listen for HTTP connections.
 
-Express is the most widely used Node.js web framework. It provides routing, middleware, and request/response handling. The core concept: register handlers for HTTP method + path combinations. When a matching request arrives, the handler runs.
+Express is the most common framework for Node servers. It gives you routing, middleware, and request/response handling.
 
-The request object (req) contains everything about the incoming request: req.params for URL parameters (/users/:id makes id available on req.params), req.query for query string parameters (?page=2 makes page available on req.query), req.body for the request body (POST/PUT data, after body-parser middleware), req.headers for HTTP headers including Authorization.
+The pattern for every route:
 
-The response object (res) is how you send data back: res.json(data) sends JSON with a 200 status, res.status(404).json({error: 'Not found'}) sends an error, res.send() for plain text.
+<strong>app.get('/users', (req, res) =&gt; {</strong>
+<strong>  res.json({ users: [] });</strong>
+<strong>});</strong>
 
-Middleware with app.use() runs before route handlers. Order matters: body parser before routes that need req.body, auth middleware before protected routes, error handler after all routes.
+The handler receives the request (req) and response (res). Every route follows that pattern — the method, the path, and a function that does the work.
 
-GitHub's API, Stripe's API, Shopify's API — all built on frameworks equivalent to Express. Every endpoint you call as a developer is a route handler like the ones you're about to write.`,
+<div class="inline-q"><span class="iq-label">Try this:</span> Build the smallest possible Express server — one route, one response. Run it locally and request it from your browser. Once you can see the response, the fundamentals are clear. Everything else is adding routes and logic on top of that.</div>
+
+Middleware runs before your route handlers. Middleware for logging, for parsing JSON request bodies, for auth checks. You register it with app.use() and it runs in order for every request — or for specific routes if you need it to.`,
         callout: {
           type: "default",
           label: "Node Is JavaScript",
@@ -3620,11 +3646,11 @@ GitHub's API, Stripe's API, Shopify's API — all built on frameworks equivalent
           label: "Body Parser",
           text: "Without body-parsing middleware, req.body is undefined. Express doesn't parse request bodies automatically. Add app.use(express.json()) before any route that needs to read POST or PUT body data. This is one of the most common 'why is req.body undefined' mistakes in new Express applications."
         },
-        hint: `Your Express route isn't receiving the data you're sending from the frontend.
+        hint: `Route not receiving the data you're sending from the frontend? Add console.log('Body:', req.body) at the top of the handler. If req.body is undefined, you're missing express.json() middleware — add app.use(express.json()) before your routes.
 
-<strong>Try this:</strong> Add console.log('Headers:', req.headers, 'Body:', req.body) at the top of your route handler. If body is undefined, you're missing body-parsing middleware. If headers don't include Content-Type: application/json, the client isn't sending JSON correctly. Both of these are fixable in one line.
+If req.body appears but the values are wrong, check how the frontend is sending the data — is it sending JSON with the right Content-Type header?
 
-<strong>Still stuck?</strong> Test the route directly with Postman or Thunder Client before connecting the frontend. Send the exact request you expect the frontend to send. If it works in Postman but not from the browser, the problem is in the frontend fetch call, not the server.`,
+<strong>Start minimal:</strong> one working route before building anything else. Confirm the server starts, confirm a request reaches the handler, confirm the response reaches the browser. Then build.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -3684,15 +3710,19 @@ routes.forEach(function(r){
       {
         id: "5-6",
         title: "Connecting to a Database",
-        body: `The connection between your server and database is managed by a client library. For PostgreSQL, pg or Prisma. For MongoDB, Mongoose. The library handles the connection, translates your code into database queries, and returns results as JavaScript objects.
+        body: `Your server and database are separate systems. The connection between them is managed by a client library — pg or Prisma for PostgreSQL, Mongoose for MongoDB. The library handles the connection, translates your code into database queries, and returns results.
 
-<strong>Connection pooling</strong> is critical for performance. Opening a new database connection for every request takes 50-200ms and has an upper limit on concurrent connections. A connection pool maintains a set of open connections that are reused. pg and Prisma handle this automatically when configured correctly.
+The connection is usually a pool — multiple open connections ready to handle simultaneous requests. You set it up once when the server starts and reuse it for every query.
 
-The decision between an ORM (Object-Relational Mapper) and raw SQL has real trade-offs. ORMs like Prisma let you write JavaScript that generates SQL — faster to write, database-agnostic, but hides complexity and can generate inefficient queries. Raw SQL gives you precise control and transparency but requires writing more code. Know both. Use ORMs for productivity, drop to raw SQL for performance-critical queries.
+The single most important practice: use parameterised queries.
 
-<strong>Database transactions</strong> are essential when multiple operations must succeed or fail together. Transferring money between two accounts requires both the debit and credit to succeed — if the credit fails after the debit, the transaction rolls back and both accounts return to their original state. Without transactions, partial writes corrupt your data.
+<strong>pool.query('SELECT * FROM users WHERE id = $1', [userId])</strong>
 
-Profile before optimising. The query that looks slow might be fast. The query that looks simple might be doing a full table scan. Add EXPLAIN ANALYZE before any PostgreSQL query to see exactly what the database is doing and where time is spent.`,
+The $1 is a placeholder. The actual value is passed separately. This prevents SQL injection — one of the most damaging vulnerabilities in web applications. Never build queries by joining strings directly.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> Keep database functions separate from route handlers. Routes should be thin — receive a request, call a function, send a response. The database logic lives in its own file. Separating them makes both easier to test and easier to debug.</div>
+
+Test database functions in isolation before wiring them into routes. Write a function, call it directly, log the result. Once that works, connect it to the route.`,
         callout: {
           type: "default",
           label: "Queries Are the Bottleneck",
@@ -3703,11 +3733,11 @@ Profile before optimising. The query that looks slow might be fast. The query th
           label: "N+1 Queries",
           text: "The N+1 problem: you fetch 10 posts, then for each post you fetch the author in a separate query — 11 queries total. With 100 posts it's 101 queries. The fix is a JOIN query that fetches posts and authors together in one query. ORMs can generate N+1 problems silently. Always check what SQL your ORM actually produces."
         },
-        hint: `Your database queries are working in isolation but failing when called from your Express routes.
+        hint: `Database queries working in isolation but failing from routes? Test each database function separately with a small script first. If the function works there, the bug is in how the route calls it or handles the result.
 
-<strong>Try this:</strong> Test each database function in isolation with a small test script before integrating with the server. If the function works standalone but fails in the route, the problem is usually that you're not awaiting an async function, or an error isn't being caught.
+<strong>Parameterised queries every time.</strong> No string concatenation. No template literals with user input. Only parameterised placeholders.
 
-<strong>Still stuck?</strong> Add try/catch to every database function and log the full error including the error.code. PostgreSQL error codes are specific — 23505 means a unique constraint violation (duplicate data), 23503 means a foreign key violation (referencing a row that doesn't exist). The code tells you exactly what's wrong.`,
+Connection failing? Check the DATABASE_URL format against the library documentation — it's usually postgres://user:password@host:port/dbname. A single typo breaks it.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -3774,17 +3804,21 @@ show(0);
       {
         id: "5-7",
         title: "Building a REST API",
-        body: `A REST API is a set of HTTP endpoints that expose your data and operations in a consistent, predictable way. RESTful conventions are not a standard — they're widely adopted patterns that make APIs easier to use and understand.
+        body: `A REST API is a set of HTTP endpoints that expose your data in a predictable, consistent way. RESTful conventions make APIs readable: GET retrieves, POST creates, PUT or PATCH updates, DELETE removes. The path describes the resource.
 
-The conventions: GET /users returns all users. GET /users/123 returns user 123. POST /users creates a new user. PUT /users/123 replaces user 123 entirely. PATCH /users/123 updates specific fields of user 123. DELETE /users/123 removes user 123. These patterns are recognisable to any developer who's worked with APIs before.
+GET /notes — all notes
+GET /notes/42 — one note
+POST /notes — create a note
+PUT /notes/42 — update that note
+DELETE /notes/42 — delete it
 
-Request validation must happen before any database interaction. If required fields are missing or values are invalid, return a 400 status with a clear error message explaining exactly what's wrong. Never let invalid data reach the database.
+That pattern, applied consistently, means anyone familiar with REST can understand your API without reading documentation.
 
-Response consistency matters. Always return the same shape for the same type of response. If success responses look like {data: {...}} and error responses look like {error: '...'}, that's a contract every client can depend on. Inconsistent response shapes are one of the most common sources of frontend bugs.
+Status codes matter: 200 for success, 201 for created, 400 for bad request (the client sent something wrong), 404 for not found, 401 for unauthorised, 500 for server error. Return the code that reflects what actually happened.
 
-Versioning protects existing clients when you change the API: /api/v1/users and /api/v2/users can coexist. Clients using v1 aren't broken by changes to v2. Don't version until you have external consumers, but design with versioning in mind from the start.
+<div class="inline-q"><span class="iq-label">Before writing any route:</span> define the contract. Method, path, what the request body contains, what the response looks like. Write it in a comment. A route with a clear contract is much easier to implement than one you're figuring out as you go.</div>
 
-Design your API as if a developer you've never met needs to use it without documentation. The URL should say what the resource is. The method should say what operation. The status code should tell them what happened. The response body should have everything they need.`,
+Always validate request data before using it. If a route expects a userId and the request doesn't include one, return 400 immediately. Don't let invalid data reach your database.`,
         callout: {
           type: "default",
           label: "API Design Is a Skill",
@@ -3795,11 +3829,11 @@ Design your API as if a developer you've never met needs to use it without docum
           label: "Validate Before Touching the Database",
           text: "Every POST and PUT request should validate its input before running any database query. Check required fields are present, types are correct, values are in valid ranges. Return 400 with a specific error message if anything is wrong. Letting invalid data reach the database causes harder-to-diagnose problems than a clear 400 response."
         },
-        hint: `Your API is returning data but the frontend is having trouble using it.
+        hint: `API returning data but the frontend is having trouble using it? Open the Network tab and look at the actual response the server sent. Compare the structure to what the frontend expects. The mismatch is usually visible immediately.
 
-<strong>Try this:</strong> Open the Network tab in the browser DevTools and look at the actual response your API is sending. Is it the shape you expected? Compare the exact JSON structure to what the frontend code expects to receive. The mismatch is usually obvious once you look at both side by side.
+<strong>Status codes matter.</strong> If a route returns 200 but the operation failed, the frontend won't know to show an error. Return the code that reflects what actually happened.
 
-<strong>Still stuck?</strong> Test your API with Postman or curl to isolate it from the frontend. If the API returns correct data in Postman but the frontend breaks, the problem is how the frontend is parsing the response — not the API itself.`,
+Test routes with a tool like Postman or Insomnia before connecting the frontend. Confirm they return exactly what you expect before adding display logic.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -3872,15 +3906,15 @@ endpoints.forEach(function(ep,i){
       {
         id: "5-8",
         title: "Environment Variables and Security",
-        body: `Environment variables store secrets and configuration outside your code. Database passwords, API keys, JWT secrets, and third-party service credentials must never be committed to a Git repository. A public GitHub repository with a database password in it is a security incident, not just a mistake.
+        body: `Database passwords, API keys, JWT secrets — none of these belong in your code. Code gets shared. Code gets committed to repositories. A secret in your code is a secret that will leak.
 
-The dotenv package reads a .env file and loads its contents into process.env. Add .env to your .gitignore immediately when you create any project. Commit a .env.example file that shows what variables are needed with placeholder values — this is the convention for onboarding new developers without exposing secrets.
+Environment variables store configuration outside the code. On your machine, a .env file holds them. In production, the platform's settings hold them. Your code reads them at runtime — process.env.DATABASE_URL — without ever containing the actual value.
 
-SQL injection is the most common web application vulnerability. It happens when you build SQL queries with string concatenation: 'SELECT * FROM users WHERE name = ' + userInput. If userInput is ' OR '1'='1, the query returns every row in the table. The fix is parameterised queries: the query and the data are sent separately, and the database handles the escaping. Never build SQL with string concatenation.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if req.body.username is the string \' OR \'1\'=\'1, what does the concatenated query look like? What does it return, and what does that mean for your users?</div>
+The .env file must be in your .gitignore before you ever commit. Before pushing anything, confirm it's there. If you commit the file by mistake, the secret is in the git history — even if you delete the file later, the history still contains it.
 
-XSS (Cross-Site Scripting) happens when user input is rendered as HTML without sanitisation. If a user submits <script>steal(document.cookie)</script> as a comment and you display it directly, that script runs in every reader's browser. Sanitise or encode user content before rendering it.
+<div class="inline-q"><span class="iq-label">If you've already committed secrets:</span> revoke and regenerate the credentials immediately. Rotate everything exposed. Then fix the history. Assume the secret is already compromised. This happens at every level — the important thing is acting immediately.</div>
 
-CORS (Cross-Origin Resource Sharing) is the browser's mechanism for restricting which domains can call your API. Configure CORS explicitly: list the specific origins your frontend runs on. Never set Access-Control-Allow-Origin: * in a production application that uses authentication — it allows any website to make authenticated requests on behalf of your users.`,
+Create a .env.example file with the same keys but empty values and commit that. It documents what variables the project needs without exposing what they contain.`,
         callout: {
           type: "default",
           label: "The .gitignore Rule",
@@ -3891,11 +3925,11 @@ CORS (Cross-Origin Resource Sharing) is the browser's mechanism for restricting 
           label: "Parameterised Queries",
           text: "Every database client supports parameterised queries: pg uses db.query('SELECT * FROM users WHERE id = $1', [userId]). The $1 is a placeholder — the database treats the value as data, not SQL syntax. This is not optional in production code. SQL injection vulnerabilities have caused some of the largest data breaches in history."
         },
-        hint: `You've committed sensitive data to a public repository.
+        hint: `Accidentally committed a secret to a public repository? Act immediately: revoke the credential, generate a new one, update it in your environment variables and any deployment platforms. Then address the git history.
 
-<strong>What to do right now:</strong> Revoke and regenerate the compromised credentials immediately — new database password, new API key, new JWT secret. Do this before doing anything else. Then remove the secrets from the codebase and add them to .env. Then use BFG Repo Cleaner or git filter-branch to purge them from Git history. Removing a file from the current commit doesn't remove it from history.
+To prevent it: add .env to .gitignore before your first commit. Run git status before every commit and check that .env doesn't appear.
 
-<strong>Prevention:</strong> Use git-secrets or pre-commit hooks that block commits containing credential patterns. The few minutes of setup prevents this conversation.`,
+<strong>Create .env.example</strong> with keys but no values — DATABASE_URL=, JWT_SECRET=, API_KEY=. Commit that. It documents what the project needs without exposing anything.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -4028,19 +4062,15 @@ Fix: Sanitise with DOMPurify or escape special chars. Never trust user input.</d
       {
         id: "5-9",
         title: "Deployment",
-        body: `Deployment is putting your application on a server that anyone on the internet can reach. Until you deploy, only you can use what you've built.
+        body: `Deployment means putting your application on a server anyone on the internet can reach. Until you deploy, only you can use what you've built.
 
-For Node/Express backends, Railway, Render, and Fly.io offer free or low-cost hosting with minimal configuration. You connect your GitHub repository, configure environment variables in the platform dashboard (never in the code), and the platform handles the server, the network, and keeping your process running.
+For Node/Express backends: Railway, Render, and Fly.io handle the infrastructure — you push code and they run it. For databases: Supabase and PlanetScale provide hosted databases that connect to your deployed backend.
 
-For frontends, Netlify and Vercel detect your repository, build it automatically on every push to main, and serve it from a global CDN. Deployment becomes automatic: push to main, wait two minutes, the live site is updated.
+The process: push code to GitHub. Connect the platform to the repository. Set environment variables in the platform's dashboard. Deploy. The platform installs dependencies and starts the server.
 
-Process managers like PM2 keep your Node.js application running if it crashes. Without PM2 or an equivalent, your server goes down every time there's an unhandled error. Railway and Render handle process management for you — on a VPS, you manage it yourself.
+<div class="inline-q"><span class="iq-label">When things break after deployment:</span> check the logs first. Every platform provides build and runtime logs. Most deployment failures are a missing environment variable, a dependency issue, or code that assumes something about the local environment that doesn't hold in production.</div>
 
-Environment variables in production are set in the platform dashboard, not in code or .env files (which you'd never deploy). Every platform has a variables section. Set them before your first deployment.
-
-<strong>Monitoring</strong> is knowing your application is down before users tell you. A basic uptime monitor (UptimeRobot is free) pings your /health endpoint every 5 minutes and notifies you if it doesn't respond. On day one this feels unnecessary. On the day your app is down and you find out from a tweet, it feels essential.
-
-Deployment is not the end. It's where the real work begins: watching logs, responding to errors, iterating from real user feedback.`,
+"Works locally, broken in production" is the most common deployment problem. The cause is almost always environment difference — something on your machine that isn't replicated in production. The logs will usually point directly to it.`,
         callout: {
           type: "default",
           label: "Continuous Deployment",
@@ -4051,11 +4081,11 @@ Deployment is not the end. It's where the real work begins: watching logs, respo
           label: "Logs Are Your Eyes",
           text: "In production, you can't open DevTools. Logs are how you see what's happening. Every platform has a log viewer. Check them when something breaks. Add structured logging (Winston or Pino) to your Node application so you have context when things go wrong: which user, which endpoint, what data, what error."
         },
-        hint: `Your application works locally but fails after deployment.
+        hint: `App works locally but fails after deployment? Check the deployment logs first — the platform will show exactly where the build or startup failed.
 
-<strong>Try this:</strong> Check the deployment logs first — every platform shows the build and runtime logs. Most production failures are one of: missing environment variable, port mismatch (your app must listen on process.env.PORT, not a hardcoded 3000), or a dependency that wasn't in package.json.
+Most common causes: a missing environment variable (DATABASE_URL not set in the platform dashboard), a dependency that's in devDependencies instead of dependencies, or a file path that works on your machine but not on the deployment server.
 
-<strong>Still stuck?</strong> Compare your .env file to the environment variables set in the platform dashboard. A missing variable causes the exact application startup failure that's hardest to diagnose without logs.`,
+<strong>Check environment variables first.</strong> It's the cause of the majority of deployment failures. Every value in your .env file needs to be set in the platform's environment settings.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -4136,15 +4166,15 @@ renderSteps();
       {
         id: "5-10",
         title: "Connecting Frontend to Backend",
-        body: `The frontend and backend are separate systems that communicate over HTTP. They might be on different domains. They might be built with different technologies. They talk to each other exactly the same way your browser talks to any other server: HTTP requests.
+        body: `The frontend and backend are separate systems. They communicate over HTTP — the frontend makes fetch requests, the backend receives them, processes them, and sends responses. The frontend reads the response and updates the UI.
 
-CORS is the browser's mechanism for restricting cross-origin requests. When your frontend on localhost:3000 calls your API on localhost:8000, the browser blocks it unless the server explicitly allows that origin. Configure the cors middleware on your Express server: cors({ origin: 'http://localhost:3000' }). In production, replace that with your deployed frontend URL.
+The practical issue that appears immediately: CORS. Browsers block requests to a different origin by default — a different domain, a different port. Your frontend at localhost:3000 making a request to localhost:4000 will be blocked unless the backend explicitly allows it.
 
-The standard fetch workflow from the frontend: for read operations, GET request, handle loading and error states. For write operations, POST/PATCH/DELETE with Content-Type: application/json and JSON.stringify in the body. Always handle the loading state (show a spinner or disable the submit button) and the error state (show a message, don't just fail silently).
+On the Express backend: install the cors package and add app.use(cors()). In production, configure it to allow only your frontend's domain specifically.
 
-Authentication headers: after login, store the JWT in memory or localStorage. Send it with every authenticated request: headers: { 'Authorization': 'Bearer ' + token }. The server extracts and verifies the token in auth middleware before the route handler runs.
+<div class="inline-q"><span class="iq-label">When debugging connection issues:</span> open the Network tab in DevTools. Find the request. Check the status code and the response body. If the request isn't appearing, the fetch call isn't running. If it's a CORS error, fix the backend configuration first — no amount of frontend changes will fix a CORS problem.</div>
 
-Treat your backend API as if it belongs to a completely separate team. Test it with Postman before connecting the frontend. Define the response shape before writing either side. This discipline exposes misalignments early, when they're cheap to fix.`,
+Use environment variables for the backend URL in the frontend too — localhost in development, the deployed URL in production. Don't hardcode URLs in either direction.`,
         callout: {
           type: "default",
           label: "Design the Contract First",
@@ -4155,11 +4185,11 @@ Treat your backend API as if it belongs to a completely separate team. Test it w
           label: "Optimistic UI",
           text: "Optimistic UI updates the interface immediately when the user takes an action, before the server confirms. If the server returns an error, the update is reverted. Twitter uses this for likes — the heart fills instantly, the server is updated in the background. It makes applications feel fast. Instagram, Notion, and Linear all use it extensively."
         },
-        hint: `Your fetch request is being blocked by CORS.
+        hint: `Fetch request blocked by CORS? Look at the browser console error — it says exactly which origin is blocked and what's missing. The fix is always on the server side, not the frontend.
 
-<strong>Try this:</strong> Look at the browser console error message carefully. It will say exactly which origin is blocked and which origin the server allows. The fix is always server-side: add the correct origin to your CORS configuration. The browser enforces CORS — you can't bypass it client-side.
+Add cors() middleware to the Express backend before your routes. In production, configure it to allow only your frontend's exact domain.
 
-<strong>Still stuck?</strong> A CORS error only appears in browsers. If you test with curl or Postman and it works, the API is fine. The CORS error is specifically the browser blocking the cross-origin request. Configure the cors middleware with the exact origin your frontend is running on, including the port number.`,
+<strong>CORS is a browser security feature.</strong> It doesn't affect server-to-server requests — only browser-to-server requests from a different origin. Testing with Postman will work even without CORS configured, which is why it seems to work in testing but fail in the browser.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -4245,15 +4275,17 @@ function renderPosts(){
       {
         id: "5-11",
         title: "Guided Full Stack Notes App",
-        body: `The notes app is your first complete full stack project: frontend, backend, database, deployed. Not a tutorial you follow — a system you build by connecting the pieces you've learned on this floor.
+        body: `Your first complete full stack project: a frontend, a backend, a database, deployed and accessible to anyone. Not a tutorial to follow — a system to build by connecting the pieces from this floor.
 
-The scaffold provides a React-style HTML frontend, an Express backend with in-memory array storage, and basic CRUD endpoints for notes. Your job is to connect the frontend to the backend, replace the in-memory array with a real database, add proper error handling to every operation, and deploy both services.
+The scaffold defines the structure. Your job is the implementation.
 
-This is the project where everything from Floor 5 becomes a single working system. The database you learned in section 5-3. The Express server from 5-5. The database connection from 5-6. The REST API design from 5-7. The environment variables from 5-8. The deployment from 5-9. The frontend-backend connection from 5-10. It all converges here.
+The backend needs four endpoints: GET all notes, POST a new note, PUT to update one, DELETE to remove one. The database needs a notes table. The frontend fetches from those endpoints, displays results, and sends user actions as requests.
 
-Read the full scaffold before writing a single line. Understand the data flow: what does the frontend send, what does the backend receive, what does the database store, what does the response look like. Draw it on paper if it helps. Build the data layer first, then the API layer, then connect the frontend, then deploy.
+<div class="inline-q"><span class="iq-label">Build in this order:</span> database schema first. Then backend endpoints, tested directly before the frontend touches them. Then the frontend. Deploy last. Building everything simultaneously makes it impossible to know what's broken.</div>
 
-The order matters. A working backend you can test with Postman before the frontend exists is much easier to debug than a system where everything breaks simultaneously.`,
+If something isn't working, check the Network tab to see what the frontend is actually sending, and the server logs to see what the backend is receiving. The gap between those two is usually where the problem is.
+
+Once the basic version works, add at least one feature that's not in the scaffold — sorting notes, character limits, timestamps. The decision is yours.`,
         callout: {
           type: "default",
           label: "Build Order",
@@ -4264,11 +4296,11 @@ The order matters. A working backend you can test with Postman before the fronte
           label: "In-Memory vs Database",
           text: "The scaffold uses an in-memory array to store notes. It works, but data is lost every time the server restarts. Replacing it with real database queries is the most important change you'll make. Every note stored in the array needs a corresponding row in a database table."
         },
-        hint: `The frontend and backend are both working independently but don't communicate correctly.
+        hint: `Frontend and backend both working independently but not communicating? Check the Network tab in DevTools. Find the request your frontend is making. Look at the URL — is it pointing to the right port? Is the method correct? Is the request body being sent?
 
-<strong>Try this:</strong> Open the browser Network tab and watch the request your frontend sends when you create a note. Check: is the URL correct? Is the method POST? Is the body JSON? Is the Content-Type header set? Then look at the server logs for the same moment — did the request arrive? What does the server log?
+Then check the server logs. Is the request appearing? If yes, the issue is in the handler. If no, the request isn't reaching the server at all.
 
-<strong>Still stuck?</strong> Add console.log(req.method, req.path, req.body) at the top of every route. This shows you exactly what the server receives. If the route isn't logging, the request isn't reaching Express. If it's logging but req.body is empty, body-parsing middleware is missing.`,
+<strong>Build the backend first.</strong> Test every endpoint with Postman before writing a single line of frontend code. A backend you've confirmed works is much easier to connect to the frontend than one you're debugging simultaneously.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -4377,13 +4409,15 @@ if(currentId)selectNote(currentId);else renderSidebar();
       {
         id: "5-12",
         title: "Adding Authentication",
-        body: `Adding authentication to the notes app means building the complete auth flow: register endpoint, login endpoint, JWT generation, auth middleware, and route protection. Then on the frontend: storing the token, sending it with every request, handling logout, and redirecting unauthenticated users.
+        body: `Adding authentication means building the full flow: register, login, protected routes on the backend, and token management on the frontend.
 
-The notes should be private per user. A user should only see their own notes, not everyone's. This requires adding a userId foreign key to the notes table. Every note is owned by a user. Every query for notes filters by the authenticated user's ID extracted from the JWT.
+Backend flow: a /register endpoint that hashes the password and creates a user. A /login endpoint that verifies credentials and returns a JWT. Middleware that checks for the token on protected routes. Each notes endpoint updated to only return and modify notes belonging to the authenticated user.
 
-The auth flow in detail: the user submits a login form → the frontend POSTs credentials to /api/auth/login → the server finds the user by email, verifies the password with bcrypt.compare(), generates a JWT signed with the secret key, and returns it → the frontend stores the token and includes it in the Authorization header of every subsequent request → the auth middleware on the server verifies the JWT, extracts the userId, and attaches it to req.user → route handlers use req.user.id to filter data to the authenticated user's records.
+Frontend flow: a login form that stores the returned JWT. Every subsequent request to the backend includes that token in the Authorization header.
 
-Common mistakes: not hashing passwords with bcrypt before storage, not verifying the JWT secret matches between generation and verification, not filtering database queries by userId so users can see each other's notes, and not handling the case where a token is expired or invalid.`,
+<div class="inline-q"><span class="iq-label">The most important thing to verify:</span> can one user see another user's notes? If yes, the query is missing a user_id filter. Every query that returns notes needs WHERE user_id = $1, with the authenticated user's ID as the parameter. No exceptions.</div>
+
+Test each piece in order: register works, login returns a token, a protected route rejects a request with no token, a protected route accepts a valid one. Then wire in the notes endpoints. Don't connect pieces until the previous piece is confirmed working.`,
         callout: {
           type: "default",
           label: "The JWT Secret",
@@ -4394,11 +4428,11 @@ Common mistakes: not hashing passwords with bcrypt before storage, not verifying
           label: "Filter by User ID",
           text: "After adding auth, every database query for notes must include WHERE user_id = $1 with the authenticated user's ID. Without this filter, any logged-in user can read any note. This is the most common data isolation bug in new full stack applications. Test it explicitly: log in as user A, try to access user B's note ID, confirm you get a 403."
         },
-        hint: `Authentication works but users can see each other's notes.
+        hint: `Users seeing each other's notes? Check every database query that returns notes — does each one have WHERE user_id = $1? If not, add it.
 
-<strong>Try this:</strong> Look at your database query for fetching notes. Does it have a WHERE user_id = $1 clause? If not, add it. The userId comes from req.user.id, which your auth middleware should be attaching. Log req.user at the top of the route to confirm it's there and contains the correct ID.
+Auth middleware not blocking unauthorised requests? Log the token in the middleware before verifying it. If it's undefined, the frontend isn't sending the Authorization header correctly. If it's there but verification fails, check the JWT_SECRET in the environment variables.
 
-<strong>Still stuck?</strong> Test with two different accounts in two different browser windows (or one regular, one incognito). Create a note in each. Confirm each account only sees its own notes. This test exposes data isolation bugs that unit tests often miss.`,
+<strong>Test authorisation specifically:</strong> log in as user A, get the token, try to fetch user B's notes using that token. If you can see them, the authorisation is broken.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -4515,15 +4549,15 @@ if(savedToken){showDashboard({name:'Demo User'},savedToken);}else{renderForm();}
       {
         id: "5-13",
         title: "Deploying It Live",
-        body: `Deploy the complete authenticated notes application to production. This is not a practice run — it's a real deployed application with real authentication and real data persistence.
+        body: `Deploy the complete authenticated notes application. Not a test — a real deployed application with real authentication and real data persistence.
 
-Backend to Railway or Render. Database to Supabase or PlanetScale (both have free tiers sufficient for this project). Frontend to Netlify or Vercel. Set every environment variable in the platform dashboards: DATABASE_URL, JWT_SECRET, the frontend API base URL, and CORS origin.
+Backend to Railway or Render: push to GitHub, connect the repository, set the environment variables (DATABASE_URL, JWT_SECRET, and CORS_ORIGIN pointing at your frontend URL). Deploy.
 
-Test the deployed app end-to-end after deployment: register a new account using the live URL, create a note, log out, log back in, confirm the note is still there. Then register a second account and confirm the first account's notes are not visible. If anything breaks, check the deployment logs — they contain the exact error.
+Frontend to Netlify or Vercel: update the backend URL environment variable to point at the deployed backend, not localhost. If the frontend calls localhost in production, it won't find the server.
 
-Share the URL. Not because it's required, but because a deployed, working, authenticated full stack application is something worth showing. This is not beginner-level work. A production-ready notes application with authentication is something many developers with years of experience have never built cleanly from scratch.
+<div class="inline-q"><span class="iq-label">The check that matters:</span> register a new account from the deployed URL. Log in. Create a note. Refresh the page. Is the note still there? If yes, the database, authentication, and frontend are all connected and working. That's a deployed full stack application.</div>
 
-Monitor it for 24 hours after deployment. Watch the logs. Note what errors appear in real usage that you didn't catch in development. Fix them. This is the production feedback loop that makes software better.`,
+If the database isn't persisting data between deployments, the production DATABASE_URL is probably pointing at a local or ephemeral database. Confirm it points to Supabase or another hosted database, not a file-based SQLite that gets wiped on redeploy.`,
         callout: {
           type: "default",
           label: "This Is Real",
@@ -4534,11 +4568,11 @@ Monitor it for 24 hours after deployment. Watch the logs. Note what errors appea
           label: "Environment Variables Are Critical",
           text: "The most common production deployment failure is a missing environment variable. Before deploying, make a list of every variable in your .env file. Confirm every single one is set in the platform dashboard. A missing JWT_SECRET or DATABASE_URL will cause immediate startup failure."
         },
-        hint: `The deployed app works but database changes aren't persisting.
+        hint: `App deployed but database changes not persisting? Check that your production DATABASE_URL points to the hosted database — Supabase, PlanetScale, or similar. If it's pointing at localhost or a local file, it's connecting to a database that doesn't exist in production.
 
-<strong>Try this:</strong> Check that your production DATABASE_URL points to the hosted database (Supabase or PlanetScale), not to localhost. If it points to localhost, the server is trying to connect to a database on its own machine rather than the hosted one. This is a common mistake when copying local environment variables to production.
+Frontend deployed but still calling localhost? Check the environment variable for the backend URL. It needs to be the deployed backend URL in production, not localhost:3000.
 
-<strong>Still stuck?</strong> Add a log at application startup that prints (safely) which database host is being connected to. Never log the full connection string, but logging the host is enough to confirm you're connecting to the right place.`,
+<strong>The full check:</strong> register → login → create data → refresh → data still there. If that sequence works, the deployment is correct.`,
         quiz: {
           question: "After deploying, the app registers users but their notes disappear after a few hours. What is the most likely cause?",
           options: ["JWTs expire after a few hours, deleting the user's data", "The backend is using an in-memory array instead of the database, and the server restarts periodically", "The database has a scheduled cleanup job running", "The frontend is clearing localStorage on page load"],
@@ -4550,15 +4584,15 @@ Monitor it for 24 hours after deployment. Watch the logs. Note what errors appea
       {
         id: "5-14",
         title: "Solo Full Stack Project",
-        body: `Design and build a full stack application from scratch. No scaffold, no starter code, no prescribed idea. Yours completely.
+        body: `Design and build a full stack application from scratch. No scaffold, no starter code. Yours completely.
 
-The requirements are structural: a frontend (HTML/CSS/JS or React), a backend (Node/Express or another language if you've explored one), a database, user authentication, and deployment. The idea is yours. It should be something you would actually use or that solves a real problem you've encountered.
+The structural requirements: a frontend, a backend with at least four endpoints, a database with at least two tables, and deployment to a live URL. What you build within those constraints is your decision.
 
-The complexity target is honest: more complex than the notes app, less complex than Airbnb. That's a wide range. Ideas that fit: a expense tracker that splits bills between friends, a recipe manager that generates shopping lists, a habit tracker with streaks, a link organiser with tags and search, a reading list with notes per book. All of these are within reach. All of them are worth building.
+Start with the data. Before writing any code, design the schema: what tables do you need, what columns, what relationships. The schema tells you what the API needs to expose, which tells you what the frontend needs to display. Getting the data model right first means the rest follows naturally.
 
-Timeline: 3-4 weeks at full session intensity. This is a real project that takes real time. Resist the urge to rush the planning phase — the decisions you make before writing code determine how hard the last 40% is.
+<div class="inline-q"><span class="iq-label">If the scope feels too large:</span> build the smallest version that meets the requirements and deploy it. A working simple app is more valuable than an ambitious one that doesn't run. Add features after the foundation is live, not before.</div>
 
-When it's deployed: write a README that explains what the application does, the technical decisions you made (why this database, why this architecture), and what you'd do differently. This written reflection is as valuable as the code — it's evidence of how you think, not just what you can build.`,
+This is the project that belongs in a portfolio — not because of its complexity, but because every decision in it is yours. The data model. The API design. The interface. That's the work of a developer.`,
         callout: {
           type: "default",
           label: "The Planning Phase",
@@ -4569,11 +4603,11 @@ When it's deployed: write a README that explains what the application does, the 
           label: "Scope Ruthlessly",
           text: "Every feature you add to the spec is time you're committing to. Start with the minimum version: the smallest set of features that makes the application genuinely useful. Build that first. Deploy it. Then add features from a position of working software rather than an incomplete prototype."
         },
-        hint: `The project feels too big to start.
+        hint: `Project feels too big to start? Write the database schema first — just the CREATE TABLE statements. No code, no server, no frontend. When the tables and their relationships make sense, the rest of the architecture follows from them.
 
-<strong>Try this:</strong> Write the database schema first — just the CREATE TABLE statements. No code, no server, no frontend. Just the data model. If you can define what data the application stores, you understand the application. The schema is the clearest expression of what the system does.
+<strong>Then:</strong> build one endpoint and confirm it works. Build one frontend interaction connected to that endpoint. Confirm it works end to end. Then add the next piece.
 
-<strong>Still stuck?</strong> Build the most boring version first. Ignore design, ignore edge cases, ignore optimisation. Get one thing working end-to-end: create one record through the API and see it in the database. That first working vertical slice is the hardest part. Everything after it is extending something that already works.`,
+A working application with one feature is more valuable than a complex application that doesn't run. Ship the simple version first.`,
         quiz: {
           questions: [
             {
