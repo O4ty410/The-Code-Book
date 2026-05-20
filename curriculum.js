@@ -2122,13 +2122,17 @@ function runTests() {
       {
         id: "4-1",
         title: "How Developers Think",
-        body: `Professional developers don't memorise — they have a process. When they face a new problem, they break it down into the smallest possible piece, solve that piece, then move to the next. The first version doesn't need to be perfect. It needs to work. Then you improve it.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — think of the last time you got stuck on something for more than 20 minutes. What was the smallest piece of the problem you could have isolated and searched for specifically? What would that search query have looked like?</div>
+        body: `At some point your code won't work and you won't know why. That happens to everyone. What matters is what you do next.
 
-One of the most useful debugging techniques has a ridiculous name: rubber duck debugging. You explain your code, line by line, to an inanimate object. The act of explaining forces you to articulate assumptions you didn't know you were making. The bug usually reveals itself before you finish the sentence.
+Make the problem smaller. Not clearer — smaller. Find the least amount of code that still breaks, and fix that. Everything else follows from that instinct.
 
-The 20-minute rule: try to solve something yourself for 20 minutes before searching. After 20 minutes of searching, ask someone. Both limits matter — the first builds genuine problem-solving capacity, the second prevents you from losing an hour to something a colleague could answer in 30 seconds.
+The first working version doesn't need to be clean. Get it working first, then improve it. In that order. Always.
 
-Reading error messages properly is a skill most beginners skip. Every error has a type (what kind of error), a message (what went wrong in plain English), a file name, and a line number. The line number is where the error was <em>detected</em>, not always where the bug <em>is</em>. Stack traces show the chain of function calls that led to the error — read them from the bottom up.`,
+There's a technique called rubber duck debugging. You explain your code out loud, line by line, to something that can't respond. Saying it aloud forces you to hear what the code actually does — not what you think it does. The mistake usually surfaces before you finish.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> The last time you got stuck on something — anything, not just code — what was the smallest part of it you could have isolated? What would have changed if you'd started there?</div>
+
+Error messages tell you four things: what kind of error, what went wrong, which file, which line. Read them before you search. The line number is where the problem was noticed — not always where it actually is.`,
         callout: {
           type: "default",
           label: "The Process",
@@ -2139,11 +2143,11 @@ Reading error messages properly is a skill most beginners skip. Every error has 
           label: "Common Confusion",
           text: "The line number in an error message tells you where the problem was detected, not necessarily where you made the mistake. A missing variable declared on line 5 might only cause an error when it's used on line 40."
         },
-        hint: `You're stuck and you don't know why the code isn't working. That is the normal state of development. It isn't a sign you're doing it wrong.
+        hint: `Stuck and don't know why the code isn't working? That's the normal state of development — not a sign you're doing it wrong.
 
-<strong>Try this:</strong> Explain what the code should be doing, line by line, out loud. Don't skip lines. If you can't explain a line, that line is probably where the problem is.
+Explain the code out loud, line by line. What is it actually doing? Not what you think it's doing — what does it literally say? The bug usually surfaces during that explanation.
 
-<strong>Still stuck?</strong> Read the error message in full before doing anything else. The error type tells you what category of problem it is. The message tells you what specifically went wrong. The line number tells you where to look. You have more information than you think.`,
+<strong>Then:</strong> add console.log() at the line before the problem and log every value. Most bugs become visible immediately when you can see the actual data.`,
         quiz: {
           question: "You see an error on line 47 of your code. What does this tell you about where the bug actually is?",
           options: ["The bug is definitely on line 47", "Line 47 is where the error was detected, but the actual mistake could be on an earlier line", "The bug is on a line after line 47", "The error message is unreliable and should be ignored"],
@@ -2155,15 +2159,17 @@ Reading error messages properly is a skill most beginners skip. Every error has 
       {
         id: "4-2",
         title: "Reading Documentation",
-        body: `MDN Web Docs is the authoritative reference for everything on the web. Not a blog post, not a Stack Overflow answer — MDN. It is maintained by Mozilla and browser vendors and reflects the actual specification. When you want to know how something works, MDN is where you go.
+        body: `Nobody reads documentation start to finish. That's not what it's for.
 
-Reading documentation is a skill. A doc page has a consistent structure: description of what the thing is, syntax showing how to call it, parameters explaining what it accepts, return value describing what it gives back, and examples. Skim the structure first, then read the part that answers your specific question.
+Documentation is a reference. You go to it when you need to know something specific — what arguments a function takes, what it returns, what happens when something fails. You don't need to understand everything on a page. You need the one part that answers your question.
 
-Searching docs effectively means knowing what you're looking for. Searching "array remove item" in MDN gives you Array.prototype.splice() and Array.prototype.filter(). From there you can decide which fits your situation. Documentation is a reference, not a textbook — you look things up when you need them, not memorise them in advance.
+MDN Web Docs is the authoritative reference for web development. When a blog post and MDN disagree, go with MDN. It's maintained by browser vendors and reflects how things actually work.
 
-Stack Overflow answers require more evaluation. Before trusting an answer: check when it was posted (a 2012 answer may use outdated syntax), check the vote count (highly voted answers are usually correct), and check whether the question matches your exact situation (the question might look similar but have a crucial difference).
+The pattern for reading a doc page: find the function you need. Read the syntax. Read the parameters. Look at the examples — working examples are usually faster to understand than descriptions. Check the return value.
 
-The browser console is an underused sandbox. Any line of JavaScript can be typed directly into the console and run immediately. Before adding code to a file, test the concept in the console first. It saves the file-save, browser-refresh cycle entirely.`,
+<div class="inline-q"><span class="iq-label">Try this:</span> Search "MDN Array filter". Open the result. Find the syntax, the parameters, and one example. Practice reading it as a reference — extract the specific thing you need and move on.</div>
+
+If a doc page makes no sense, you're probably missing a prerequisite. Don't fight through it — find the prerequisite first. Documentation assumes context.`,
         callout: {
           type: "default",
           label: "MDN First",
@@ -2174,11 +2180,11 @@ The browser console is an underused sandbox. Any line of JavaScript can be typed
           label: "Stack Overflow Gotcha",
           text: "A Stack Overflow answer with 800 upvotes from 2014 can be completely wrong for modern JavaScript. Always check the date alongside the vote count. The most dangerous answers are the highly-voted outdated ones — they look authoritative but lead you to deprecated patterns."
         },
-        hint: `You're reading a doc page and it makes no sense. That's normal. Documentation is written for people who already understand the basics — it's a reference, not a tutorial.
+        hint: `Documentation is written for people who already understand the basics. If a page makes no sense, you're missing context — not intelligence.
 
-<strong>Try this:</strong> Skip to the Examples section at the bottom. Read a working example first, then go back to the description. Code before theory makes the theory stick.
+The fastest way to use docs: go straight to the examples. A working example usually explains the concept faster than the description does.
 
-<strong>Still stuck?</strong> Type the specific thing you want to do into the browser console. If it works, you understand it. If it errors, read the error. The console gives you immediate feedback that documentation can't.`,
+<strong>MDN pattern:</strong> search "MDN" + the thing you're looking for. Find the syntax section. Find an example. Apply it. Look up the details if something doesn't work as expected.`,
         quiz: {
           question: "You find a Stack Overflow answer that perfectly matches your problem. It has 1,200 upvotes. Before using it, what should you check?",
           options: ["Nothing — 1,200 upvotes means it's definitely correct and up to date", "The date it was posted and whether the question describes exactly your situation", "Whether the answerer has a gold badge", "Whether the page has been viewed more than 10,000 times"],
@@ -2190,15 +2196,15 @@ The browser console is an underused sandbox. Any line of JavaScript can be typed
       {
         id: "4-3",
         title: "What APIs Are",
-        body: `APIs let your code talk to other systems. Every major product you use is built on top of other people's APIs. Uber doesn't build maps — it uses Google Maps API. Spotify doesn't build payment processing — it uses Stripe. Every "Login with Google" button you've ever clicked is an OAuth API call.
+        body: `Most software doesn't build everything itself. Uber doesn't build maps. Spotify doesn't build payment processing. Airbnb doesn't build email delivery. They use APIs — interfaces that let one system talk to another without knowing how the other system works internally.
 
-REST APIs use the same HTTP methods your browser uses to load pages. GET retrieves data. POST creates something new. PUT or PATCH updates something existing. DELETE removes something. These four methods map onto the four database operations: read, create, update, delete.
+An API is a defined way of asking another system for something or sending it something. You make a request. It responds. The response is usually JSON — structured data your code can read and work with.
 
-Every API call goes to an <strong>endpoint</strong> — a URL that represents a specific resource or action. https://api.spotify.com/v1/tracks/123 is an endpoint that returns data about a specific track. The request goes out, the server processes it, and the response comes back with data and a status code.
+Every major platform exposes an API: GitHub, Google Maps, OpenWeatherMap, Stripe. Some are free. Some require payment. All of them require an API key — a credential that identifies your application and controls your access.
 
-HTTP status codes tell you what happened: 200 means success, 201 means something was created, 400 means your request was malformed, 401 means you're not authenticated, 403 means you don't have permission, 404 means the resource doesn't exist, 500 means the server broke. Knowing these by feel speeds up debugging dramatically.
+<div class="inline-q"><span class="iq-label">Think about this:</span> The next time you use an app that shows data from another service — a weather widget, a map embed, a payment form — that's an API call happening in the background. One system asking another for something.</div>
 
-APIs speak in JSON — JavaScript Object Notation. It is the universal format for data exchange between systems: key-value pairs, arrays, nested objects. Any language on any platform can read it. That's why it won.`,
+Read the documentation before writing any code. The documentation is the contract. It tells you exactly what you can ask for, how to ask for it, and what you'll get back. Guessing wastes more time than reading.`,
         callout: {
           type: "default",
           label: "APIs Are Everywhere",
@@ -2209,11 +2215,11 @@ APIs speak in JSON — JavaScript Object Notation. It is the universal format fo
           label: "Status Codes That Bite Everyone",
           text: "401 Unauthorized means you're not authenticated (no valid credentials sent). 403 Forbidden means you ARE authenticated but don't have permission for this resource. These two look similar but require completely different fixes. Getting them confused wastes time."
         },
-        hint: `You're calling an API and getting an error status code but don't know what it means.
+        hint: `Getting an error status code and don't know what it means? Search "HTTP [code]" — 404 means not found, 401 means unauthorised, 422 means the data you sent is invalid, 500 means the server failed.
 
-<strong>Try this:</strong> Look up the status code directly — "HTTP 422" in a search returns the exact meaning immediately. Then look at the response body — most APIs include a JSON error message explaining exactly what went wrong.
+Always check the API documentation for the exact format of the request — what headers it needs, what parameters it expects, what the response looks like.
 
-<strong>Still stuck?</strong> Open the Network tab in DevTools. Find your API request, click it, and look at the Headers and Response tabs. You'll see the exact request that went out and the exact response that came back. This is the fastest way to diagnose any API problem.`,
+<strong>Before writing code:</strong> paste the API URL into your browser. If it returns data you can read, the URL is correct. If it errors, fix the URL before writing any fetch calls.`,
         quiz: {
           question: "An API returns a 401 status code. What does this tell you about what went wrong?",
           options: ["The server crashed and needs to be restarted", "The resource you requested does not exist", "Your request did not include valid authentication credentials", "You have permission to read but not to write to this resource"],
@@ -2338,15 +2344,20 @@ function runParallel() {
       {
         id: "4-4",
         title: "Fetch and Async/Await",
-        body: `The browser's fetch() function sends HTTP requests from JavaScript. When you search GitHub and results appear without a page reload, that's fetch() making API calls as you type.
+        body: `When you search GitHub and results appear without the page reloading, that's fetch() making API calls as you type.
 
-fetch() is <strong>asynchronous</strong> — it doesn't block the rest of your code while waiting for the server to respond. Instead, it returns a <strong>Promise</strong>: an object that represents a value that will be available in the future. When the response arrives, the Promise resolves and your code continues.
+fetch() sends an HTTP request from JavaScript and returns a Promise — a placeholder for data that hasn't arrived yet. Because network requests take time, JavaScript doesn't wait. It registers what to do when the response arrives and moves on. That's asynchronous code.
 
-async/await is syntax that makes asynchronous code read like synchronous code. Mark a function as async, then use await before any operation that returns a Promise. The function pauses at that point, waits for the Promise to resolve, and continues. Under the hood it's still a Promise — async/await is just cleaner syntax on top.
+async/await is the readable way to write it:
 
-Error handling in async functions uses try/catch. Wrap your await calls in try, and handle network failures or bad responses in catch. An unhandled async error silently fails — the user sees nothing, and the bug is invisible. Always handle errors in production code.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you write const data = await fetch(url) and the network is down, what happens? Where does the error go if there’s no try/catch? What does the user see?</div>
+<strong>const response = await fetch(url);</strong>
+<strong>const data = await response.json();</strong>
 
-A critical mistake: never try to use fetched data outside the async function without properly awaiting it.\n\n<div class=\"inline-q\"><span class=\"iq-label\">Think about this:</span> Before you continue — if you write const data = await fetch(url) and the network is down, what exception is thrown? Where does it go if there is no try/catch around the await?</div> The data doesn't exist yet at the point the outer code runs — the Promise hasn't resolved. This is the number one source of undefined errors in code that makes API calls.`,
+The await keyword pauses that line until the Promise resolves. The function must be marked async. The data comes back as JSON, which you convert with .json().
+
+<div class="inline-q"><span class="iq-label">Watch out:</span> You need two awaits. One for the network request. One to convert the response to JSON. Missing the second one is the most common fetch bug — you get a Response object when you expected the actual data.</div>
+
+Always wrap fetch calls in try...catch. Networks fail. APIs go down. Servers return errors. Code that doesn't handle those cases breaks in ways that confuse users without telling you what went wrong.`,
         callout: {
           type: "default",
           label: "Why Async Exists",
@@ -2357,11 +2368,11 @@ A critical mistake: never try to use fetched data outside the async function wit
           label: "The Classic Mistake",
           text: "fetch() returns a Response object, not the data. You need to call .json() on the response to parse the body — and .json() is also async. So you await fetch(), then await response.json(). Forgetting the second await gives you a Promise object where you expected data."
         },
-        hint: `Your fetch call returns undefined or a Promise object instead of the data you expected.
+        hint: `Getting undefined or a Promise object instead of data? Add console.log() immediately after each await line. If you see [object Promise], you're missing an await somewhere.
 
-<strong>Try this:</strong> Add console.log() immediately after each await line. If you see [object Promise] instead of your data, you're missing an await somewhere. If you see undefined, the data property you're accessing doesn't exist — console.log the whole response object first to see its actual shape.
+Two awaits, always. One for the request. One for .json().
 
-<strong>Still stuck?</strong> Open the Network tab in DevTools, find your fetch request, and look at the Response tab. That shows exactly what the API returned. Compare that structure to how you're accessing the data in your code.`,
+<strong>Check the Network tab</strong> in DevTools when a fetch isn't working. It shows every request, its status code, and the full response. If the request isn't appearing at all, the code never ran. If it appears with a 4xx or 5xx status, the API is returning an error — read the response body.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -2480,15 +2491,18 @@ function field(k,v){return '<div class="field"><span class="key">'+k+'</span><sp
       {
         id: "4-5",
         title: "Local Storage",
-        body: `localStorage is the browser's built-in key-value store. Data saved to localStorage survives page refreshes and browser restarts — it persists until explicitly cleared. Medium uses it to save your draft article so you don't lose it if you close the tab by accident.
+        body: `localStorage saves data in the browser that survives a page refresh. Close the tab, come back tomorrow — it's still there. That's how draft articles are still around when you accidentally close a tab, why shopping carts don't empty when you navigate away.
 
-localStorage stores strings only. Save a number or boolean and it becomes a string when you read it back. To save objects or arrays, use JSON.stringify() to convert them to a string before saving, and JSON.parse() to convert them back after reading.
+The API: localStorage.setItem('key', value) to save. localStorage.getItem('key') to retrieve. localStorage.removeItem('key') to delete.
 
-The API is minimal: localStorage.setItem('key', value) to save, localStorage.getItem('key') to read (returns null if the key doesn't exist), localStorage.removeItem('key') to delete one item, localStorage.clear() to wipe everything.
+One thing to know: localStorage only stores strings. Saving an object or array requires converting it first:
 
-sessionStorage works identically but is cleared when the tab closes. The difference matters: use localStorage for things that should persist (user preferences, saved data), sessionStorage for things that should reset each session (temporary UI state, one-time notices).
+<strong>localStorage.setItem('user', JSON.stringify({ name: 'Alex', score: 42 }));</strong>
+<strong>const user = JSON.parse(localStorage.getItem('user'));</strong>
 
-Common use cases: dark mode preference (so the user doesn't have to toggle it every visit), draft content (so input isn't lost on refresh), cached API responses (so you don't re-fetch the same data), and shopping cart state (so items don't vanish on navigation).`,
+<div class="inline-q"><span class="iq-label">Try this:</span> Open DevTools (F12) and go to Application &gt; Local Storage. You can see everything stored for this site, edit values directly, and delete keys. It's the fastest way to debug storage issues.</div>
+
+localStorage is not secure storage. Don't put sensitive data — passwords, tokens, personal information — in localStorage. It's accessible to any JavaScript running on the page.`,
         callout: {
           type: "default",
           label: "The String Trap",
@@ -2499,11 +2513,11 @@ Common use cases: dark mode preference (so the user doesn't have to toggle it ev
           label: "sessionStorage vs localStorage",
           text: "If you save something to sessionStorage and the user closes the tab and reopens it, the data is gone. localStorage survives that. Pick based on whether the data should outlast the session — don't default to one or the other without thinking about it."
         },
-        hint: `Your data disappears on page refresh even though you're using localStorage.
+        hint: `Data disappearing on refresh even though you're using localStorage? Open DevTools &gt; Application &gt; Local Storage. You can see exactly what's stored and with what keys.
 
-<strong>Try this:</strong> Open DevTools, go to Application > Local Storage. You can see exactly what's stored, what keys exist, and what values they hold. If your key isn't there, setItem isn't running correctly — add a console.log just before it to confirm it's being called.
+Most common mistake: forgetting JSON.stringify() when saving objects and JSON.parse() when loading them. Without those, you save "[object Object]" and get the string back — not the data.
 
-<strong>Still stuck?</strong> The most common mistake is saving an object without JSON.stringify. localStorage.setItem('user', {name: 'Alex'}) saves the string '[object Object]' — completely useless. Always stringify objects before saving.`,
+<strong>Check the key name.</strong> localStorage.getItem('User') and localStorage.getItem('user') are different keys. Capitalisation matters.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -2569,15 +2583,23 @@ render();
       {
         id: "4-6",
         title: "Error Handling at Scale",
-        body: `try/catch is not optional in production code. The question is not whether errors will happen — they will. The question is whether your application handles them gracefully or crashes silently and confuses the user.
+        body: `Something will go wrong. A network request will fail. An API will return unexpected data. A user will do something you didn't anticipate. The question isn't whether errors happen — it's whether your code handles them gracefully or silently breaks and confuses the user.
 
-There are two categories of error. <strong>Expected errors</strong> are things you anticipate: the user enters invalid input, the network times out, the API returns no results. These should be handled explicitly with informative messages. <strong>Unexpected errors</strong> are bugs: null pointer exceptions, type mismatches, logic errors. These should be caught, logged, and surfaced in a way that doesn't expose your internals to users.
+try/catch is how you handle expected failures:
 
-Defensive programming means checking that data exists before trying to use it. If an API response might not include a nested property, don't access it directly — use optional chaining: user?.address?.city returns undefined instead of throwing a TypeError when address doesn't exist.
+<strong>try {</strong>
+<strong>  const data = await fetchUserData();</strong>
+<strong>  displayUser(data);</strong>
+<strong>} catch (error) {</strong>
+<strong>  showMessage('Could not load. Try again.');</strong>
+<strong>  console.error(error);</strong>
+<strong>}</strong>
 
-Nullish coalescing (??) provides fallback values for null or undefined. user?.name ?? 'Anonymous' returns 'Anonymous' if name is null or undefined, but returns the actual name otherwise. It's more precise than || because || also triggers on 0 and empty string, which are valid values.
+Wrap the risky code in try. Handle the failure in catch. Give the user a useful message. Log the error so you can see it.
 
-Production applications fail gracefully. When Spotify can't load your playlist, it shows a retry button — not a blank screen, not a stack trace. The user should always know what happened and what they can do about it.`,
+<div class="inline-q"><span class="iq-label">Think about this:</span> Don't wrap everything in try...catch — only what can genuinely fail for reasons outside your control. Network requests. JSON parsing. External APIs. Wrapping everything hides real bugs by catching errors that should propagate.</div>
+
+Error handling at the edges of your system — API calls, user input, external data — protects the interior. Interior code that works with already-validated data doesn't need wrapping.`,
         callout: {
           type: "default",
           label: "The Production Standard",
@@ -2588,11 +2610,11 @@ Production applications fail gracefully. When Spotify can't load your playlist, 
           label: "Optional Chaining",
           text: "user.profile.avatar.url throws a TypeError if any step in that chain is null or undefined. user?.profile?.avatar?.url returns undefined safely. Use optional chaining whenever you're accessing data that came from an API — you can't guarantee the shape of every response."
         },
-        hint: `Your code crashes when the API returns unexpected data, but you're not sure where to add the error handling.
+        hint: `Not sure where to add error handling? Find every place you access data that came from outside your code — API responses, user input, localStorage. Those are the boundaries. Everything that crosses a boundary should be wrapped.
 
-<strong>Try this:</strong> Find every place you access a property on data that came from an API. Ask: what happens if this property doesn't exist? Add optional chaining (?.) to every nested property access. Then add ?? fallbacks wherever you need a default value.
+Interior code — functions that receive validated data from your own code — usually doesn't need try...catch.
 
-<strong>Still stuck?</strong> Add console.log(data) before any property access to inspect the full shape of what you're working with. API responses often differ from the documentation in edge cases.`,
+<strong>Always log the error</strong> in the catch block, even if you're showing a friendly message to the user. console.error(error) gives you the stack trace. Without it, you'll have no idea what went wrong.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -2662,15 +2684,17 @@ function runRetry(){
       {
         id: "4-7",
         title: "Git and Version Control",
-        body: `Git is non-negotiable. Every professional developer uses it every day. If it's not in Git, it doesn't exist. A file on your hard drive that isn't committed is a file that can be lost.
+        body: `Git is how you don't lose work. Every professional developer uses it every day. If it's not committed, it's one accident away from being gone.
 
-The core workflow: git init to start tracking a folder. git add filename (or git add . for everything) to stage changes. git commit -m "describe what you did" to save a snapshot. git push to send it to GitHub. That four-command sequence is 90% of day-to-day Git.
+The core workflow: make changes. Stage what you want to include: <strong>git add filename</strong>. Commit with a message explaining what changed and why: <strong>git commit -m "add user authentication"</strong>. Push to a remote when ready: <strong>git push</strong>.
 
-Branches let you work on something new without breaking what already works. git checkout -b feature/new-thing creates a new branch and switches to it. Work there, commit there. When it's ready, merge it back with git merge. If the same line was changed in both branches, that's a merge conflict — Git will mark the conflict and you resolve it manually.
+That's 90% of daily Git usage.
 
-Commit messages matter. "fixed stuff" tells your future self nothing. "fix: prevent crash when API returns empty array" tells your future self exactly what changed and why. The history of your commit messages is the history of your thinking. Write them accordingly.
+Branches let you work on something new without affecting what's already working. Create a branch, make changes, merge it back when it's ready. This is how every team works — main stays stable, new work happens in branches.
 
-The GitHub workflow for team projects: fork the repo, clone your fork, create a branch, make commits, push the branch, open a pull request. The pull request is where code gets reviewed before it's merged into the main codebase.`,
+<div class="inline-q"><span class="iq-label">The habit that matters:</span> Commit often. Small commits with clear messages are easier to understand, easier to review, and easier to undo when something goes wrong. "Fixed everything" is not a commit message.</div>
+
+git log shows every commit in the history. git diff shows what's changed since the last commit. Those two commands will answer most of your questions when something breaks.`,
         callout: {
           type: "default",
           label: "Start Now",
@@ -2681,11 +2705,11 @@ The GitHub workflow for team projects: fork the repo, clone your fork, create a 
           label: "git restore vs git revert",
           text: "git restore unstages changes or discards uncommitted edits — it modifies your working directory. git revert creates a new commit that undoes a previous commit — it's safe for shared branches because it preserves history. Never use git reset --hard on a branch others are using."
         },
-        hint: `You made a commit with a mistake and want to undo it.
+        hint: `Made a commit with a mistake and want to undo it? If it's not pushed yet, git reset HEAD~1 moves the commit back to staged changes. Fix the mistake and commit again.
 
-<strong>Try this:</strong> If the commit isn't pushed yet, git reset HEAD~1 moves the commit back to staged changes. You can fix the mistake and recommit. If it's already pushed and others may have pulled it, use git revert HEAD instead — this creates a new commit that undoes it safely.
+If it's already pushed, create a new commit that reverses it — don't rewrite shared history.
 
-<strong>Still stuck?</strong> Run git log to see your commit history. Each commit has a hash (a long string like a3f9d2b). git revert <hash> undoes that specific commit. git diff <hash> shows what changed in it.`,
+<strong>Commit message rule:</strong> write it as a short instruction. "Add login form", "Fix cart total calculation", "Remove unused import". If you can't describe the change in one short sentence, the commit is probably too large.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -2741,17 +2765,15 @@ cmds.forEach(function(c,i){
       {
         id: "4-8",
         title: "Debugging Like a Developer",
-        body: `Debugging is a systematic process, not a random one. The instinct to change things and hope something improves is the most expensive debugging habit you can have — it wastes time, introduces new bugs, and teaches you nothing.
+        body: `Debugging is a process. Changing things randomly and hoping something improves isn't debugging — it's guessing. Guessing wastes time and introduces new problems.
 
-The correct process: first, reproduce the bug reliably. A bug you can't reproduce consistently is a bug you can't fix confidently. Then isolate where it breaks. Then fix the root cause, not the symptom.
+The process: reproduce the bug reliably first. If you can't reproduce it consistently, you can't know when you've fixed it. Isolate it — remove everything unrelated until you have the smallest version that still breaks. Fix it. Understand why the fix works. If you don't understand why, you haven't really fixed it.
 
-The DevTools debugger in the Sources tab is more powerful than console.log for complex bugs. Set a breakpoint by clicking a line number. When code execution hits that line, it pauses. You can then step over (run the next line), step into (go inside a function call), or step out (finish the current function and return). You can inspect every variable's value at that exact moment.
+The tools: console.log() is still the fastest way to see what's happening. Log every value before the broken line. The Network tab shows every API call and its response. The Sources tab lets you set breakpoints and step through code line by line.
 
-console.log is not embarrassing. Every developer at every level uses it. The art is in knowing where to put it and what to log. Log variable values at key points in your logic. Log the start and end of functions you're unsure about.
+<div class="inline-q"><span class="iq-label">Before you change anything:</span> Write down what you think the bug is and what you think causes it. Being wrong about your hypothesis is useful — it tells you something about your mental model that needs adjusting.</div>
 
-The Network tab shows every request your page makes and the exact response that came back. When an API call isn't working, the Network tab shows you whether the request was even sent, what URL it went to, what headers were included, and what the server returned. This eliminates guessing.
-
-The most important debugging habit: change one thing at a time. Change two things simultaneously and you don't know which one fixed it or which one caused the new problem.`,
+The most expensive habit: changing multiple things at once. Change one thing. Test. Change another. Test. If you change three things and the bug disappears, you don't know which one fixed it.`,
         callout: {
           type: "default",
           label: "The Single Change Rule",
@@ -2762,11 +2784,11 @@ The most important debugging habit: change one thing at a time. Change two thing
           label: "Breakpoints vs console.log",
           text: "console.log requires you to know in advance what you want to inspect. Breakpoints let you pause execution and inspect everything at once. Use console.log for quick checks on values you already know you want. Use breakpoints when you're not sure what's wrong or where."
         },
-        hint: `Something is broken but you can't figure out where the problem is.
+        hint: `Broken but can't find where? Add console.log('reached here', variableName) at key points in the code. Run it and watch the console. The last log that appears before the error tells you roughly where the problem is.
 
-<strong>Try this:</strong> Add console.log('reached here', variableName) at key points in your code. Run it and watch the console. The last log that prints before the error tells you which section the bug is in. Then narrow it down further with more logs.
+<strong>Then narrow it down:</strong> add more logs between the last working point and the first broken point. The bug will be in that gap.
 
-<strong>Still stuck?</strong> Open DevTools Sources tab, find your script, and click the line number where you think the problem might be to set a breakpoint. Run the code and when it pauses, look at the Scope panel on the right — it shows every variable's current value. This is often faster than reasoning about what might be wrong.`,
+For API bugs specifically: open the Network tab in DevTools. Click the request. Check the status code and the response body. The API is usually telling you exactly what went wrong.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -3070,13 +3092,15 @@ How to test:
       {
         id: "4-9",
         title: "Weather App with Real API",
-        body: `This is your first real application using a real external API. The OpenWeatherMap API is free, well-documented, and used by thousands of real applications. The scaffold connects to the API and displays current weather — your job is to extend it.
+        body: `This is your first application using a real external API. The OpenWeatherMap API is free, requires registration for a key, and is well-documented.
 
-This is exactly how professional development works. You inherit a codebase. You read it. You understand it. You extend it. The difference between a junior and senior developer is not who writes things from scratch — it's who reads, understands, and extends code more effectively.
+The scaffold connects to the API and displays current weather for a searched city. Your job: wire it up completely, handle the cases where things go wrong — city not found, network error, empty search — and add at least one feature that isn't in the scaffold.
 
-Read every line of the scaffold before changing anything. Understand what each function does. Understand what data the API returns by checking the Network tab when you run it. Then extend it. Make it yours.
+Work in this order: get a successful API response and log it to the console first. Once you can see the data, build the display. Once the display works, add error handling. The extra feature comes last.
 
-Real APIs have real constraints: rate limits (you can only make a certain number of requests per hour), authentication requirements (your API key goes in the request, not the code you commit to GitHub), and data formats that can change. These are not hypothetical concerns — they are things you will hit in the first hour of working with a real API.`,
+<div class="inline-q"><span class="iq-label">Before you start:</span> Open the Network tab in DevTools while the app is running. Find the API request. Look at the response. Understanding the shape of the data before trying to display it saves significant time.</div>
+
+The extra feature doesn't need to be complex — a five-day forecast, a Celsius/Fahrenheit toggle, or a list of recently searched cities are all straightforward with the data you already have. Pick one and build it completely.`,
         callout: {
           type: "default",
           label: "API Key Security",
@@ -3087,11 +3111,9 @@ Real APIs have real constraints: rate limits (you can only make a certain number
           label: "Read Before You Change",
           text: "The professional habit with inherited code: read the entire file, understand the data flow, then make your first change. Developers who jump straight to changing things without reading spend three times as long fixing the confusion they created."
         },
-        hint: `The app isn't showing data and you can't tell if it's the API call or the display code.
+        hint: `App isn't showing data and you can't tell if it's the API call or the display code? Check them separately. Open the Network tab and run the app. Find the API request. If the request is failing, fix the API call. If the request is succeeding, the data is there — log the response and check its shape before trying to display it.
 
-<strong>Try this:</strong> Open the Network tab in DevTools and run the app. Find the API request. Check the status code first — 200 means it reached the API, anything else means the call failed. If it's 200, click the request and look at the Response tab to see the raw JSON the API returned. Now you know whether the problem is the fetch or the display.
-
-<strong>Still stuck?</strong> Add console.log(data) right after you receive the API response. Look at the actual shape of what came back and compare it to what your display code expects. APIs don't always match documentation exactly.`,
+<strong>Most common mistake:</strong> trying to access a property that doesn't exist in the response. Log the full response object first and check exactly what fields are available.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -3157,13 +3179,13 @@ function stat(label,val){return '<div class="stat"><div class="stat-label">'+lab
       {
         id: "4-10",
         title: "Quiz App with Score Tracking",
-        body: `A quiz app is more complex than it looks. It has <strong>state</strong>: the current question index, the score, whether the user has answered the current question. It has multiple <strong>UI states</strong>: showing a question, showing answer feedback, showing results. Managing state and driving UI from it is the fundamental challenge of interactive application development.
+        body: `A quiz app has more moving parts than it looks like. It has state — the current question, the score, whether the user has already answered. It has multiple UI states — showing a question, showing feedback, showing the final score. Getting those transitions right is the actual challenge.
 
-This is the kind of stateful thinking that React, Vue, and Angular formalise with hooks, reactive properties, and components. Understanding how to manage it in vanilla JavaScript first means you'll understand those frameworks at a conceptual level, not just a syntactic one. You'll know why they exist, not just how to use them.
+Think about state before you write any code. What does the app need to remember at each point? Write it out: the questions array, the current index, the score, whether the current question is answered. Those are your state variables. Everything else responds to changes in them.
 
-The scaffold handles the rendering. Your job is to implement the state logic: what happens when an answer is selected, how the score is updated, when to advance to the next question, when to show results. Every piece of the logic should update state first, then re-render from that state. Never update the DOM directly without first updating the underlying data.
+<div class="inline-q"><span class="iq-label">Common mistake:</span> letting the user answer the same question twice. Once an answer is selected, disable the other options immediately. Handle this in the event listener before doing anything else.</div>
 
-The relationship between state and UI is: state is the truth, DOM is the display of that truth. When state changes, the DOM should be regenerated from state. When the DOM changes, state should update first. This single discipline prevents an entire category of synchronisation bugs.`,
+If transition timing feels wrong — feedback disappears too fast, or the next question appears before the user can read the result — add a "Next" button that appears after feedback is shown and advances on click. That gives the user control over when to move forward.`,
         callout: {
           type: "default",
           label: "State Before DOM",
@@ -3174,11 +3196,11 @@ The relationship between state and UI is: state is the truth, DOM is the display
           label: "The 'Answered' Flag",
           text: "The answered boolean is a common source of bugs in quiz apps. Without it, a user can click multiple answers and the score increments multiple times. Check answered at the start of every checkAnswer function and return early if it's already true. State guards prevent invalid state transitions."
         },
-        hint: `The quiz is advancing to the next question before the user can see the feedback.
+        hint: `Quiz advancing before the user can read the feedback? Add a "Next" button that appears after an answer is selected rather than using a setTimeout delay. It gives the user control and makes the flow more reliable.
 
-<strong>Try this:</strong> Add a small delay before calling nextQuestion(), or better, show a "Next" button that only appears after the answer is checked. The user should explicitly advance, not have it happen automatically. This is also a better user experience — it gives them time to read the feedback.
+Score not tracking correctly? Log the score variable every time it should change. If the log shows the right value but the display doesn't, the display function isn't reading the variable correctly. If the log is wrong, the logic updating the score has a bug.
 
-<strong>Still stuck?</strong> Log the state variables (currentIndex, score, answered) to the console at the start of every function that modifies them. If the values aren't what you expect, you'll see exactly where state is diverging from your intention.`,
+<strong>State first.</strong> Get the state management right before building the display. A quiz with correct state and broken display is easier to fix than one with broken state.`,
         code: {
           lang: "HTML",
           starter: `<!DOCTYPE html>
@@ -3260,15 +3282,17 @@ render();
       {
         id: "4-11",
         title: "Solo Project — No Brief",
-        body: `No brief. No scaffold. No requirements beyond this: build something that uses a real external API.
+        body: `No brief. No scaffold. One requirement: build something that uses a real external API.
 
-It must make at least one fetch request and display real data. The idea, the design, the implementation — all yours. This is the first time in this course that nothing is given to you.
+It must make at least one fetch request and display real data. The idea, the design, and the implementation are yours.
 
-Stuck for ideas? GitHub's API lets you search repositories and display star counts and descriptions. The NASA API has photos from Mars taken by the Curiosity rover, updated daily. The Dictionary API can power a word lookup tool. The Open Library API has data on millions of books. The CocktailDB has thousands of cocktail recipes. Any of these work.
+Find a free API first. Public APIs with no authentication or simple key-based auth are the starting point — weather, quotes, country data, dictionaries, currency rates. Don't choose an API with complex OAuth authentication for a first solo project. The complexity should be in the build, not the auth setup.
 
-The constraint is the point. Working with real external data forces you to handle things that don't exist in contrived examples: missing properties, unexpected response shapes, rate limits, API keys, authentication. These are the problems you'll solve every day as a professional.
+<div class="inline-q"><span class="iq-label">Before you write anything:</span> Test the API endpoint directly in your browser. If it returns readable data, you can work with it. If you get an error, figure out why before writing any code. Starting with a working API call saves hours.</div>
 
-The project doesn't have to be impressive. It has to be finished and working. A working, deployed tool that shows real API data is worth more than an ambitious unfinished one.`,
+When you're stuck: the problem is almost always the API call (wrong URL, wrong key, wrong parameters) or the data shape (accessing a property that doesn't exist). Log the raw response before doing anything with it.
+
+Ship something that works over something ambitious that doesn't.`,
         callout: {
           type: "default",
           label: "The Only Rule",
@@ -3279,11 +3303,11 @@ The project doesn't have to be impressive. It has to be finished and working. A 
           label: "Starting Point",
           text: "Pick the API first. Read its documentation for 20 minutes. Make one working fetch call and log the response to the console. Once you can see real data in your console, you have the foundation. Build the UI around what the data actually looks like, not what you imagined it would look like."
         },
-        hint: `You have an idea but you can't get the API to return data.
+        hint: `Have an idea but can't get the API to return data? Test the URL directly in your browser before writing any JavaScript. If it returns data there, the URL is correct and the issue is in your code. If it doesn't, fix the URL first.
 
-<strong>Try this:</strong> Test the API URL directly in your browser before writing any code. If it's a GET endpoint with no authentication, paste the URL into the browser address bar. You should see the raw JSON response. If you see an error there, the problem is the URL or the API key — not your JavaScript.
+<strong>API key issues:</strong> check that the key is in the right place in the URL or headers — the documentation will tell you exactly where. Check that the key is active (some require email verification).
 
-<strong>Still stuck?</strong> Use the API's official documentation examples first, unchanged. Get those working. Then modify them step by step to return the data you actually want. Don't write custom code until you understand what the API returns.`,
+Log the full response before trying to use the data: console.log(data). See exactly what came back before assuming what structure it has.`,
         quiz: {
           question: "You're building a project with a public API and getting a 401 error on every request. What is the most likely cause?",
           options: ["The API server is down", "You're missing or incorrectly sending an API key", "Your JavaScript has a syntax error", "The API doesn't support the data format you're requesting"],
@@ -3295,13 +3319,15 @@ The project doesn't have to be impressive. It has to be finished and working. A 
       {
         id: "4-12",
         title: "Code Review of Own Work",
-        body: `Take every project you've built on Floor 4. Review each one as if it belongs to a colleague you've never met — not to you. Remove the emotional attachment to your decisions and ask the questions a reviewer would ask.
+        body: `Look at every project you've built on this floor as if someone else wrote it.
 
-Can someone unfamiliar with this code understand what it does in five minutes? If not, the naming or structure is the problem. Are there functions doing more than one thing? Split them. Are error cases handled? Add them. Is there repetition that a function could eliminate? Refactor it. Are variable names descriptive enough to replace comments? If you need a comment to explain what a variable is, the variable name is wrong.
+That's harder than it sounds. You know what you meant. The code makes sense to you because you wrote it. A review requires reading what's actually there — not what you intended.
 
-Write down one genuine improvement for each project. Not a vague note — a specific change: "rename variable x to userSearchQuery", "extract the renderCard logic into a separate function", "add error handling to the fetch call in getWeatherData". Then implement at least three of them.
+Ask these questions for each piece: Does this function do one thing or several? Would someone who didn't write it understand what it does from the name alone? Are there variables named x, temp, or data that could be more specific? Is there duplicated logic that could be a function?
 
-Code review is where you stop being a person who writes code and start being a person who thinks about code. The most valuable developers on any team are not the fastest typists — they're the ones who catch problems before they become production incidents. That skill starts here, reviewing your own work with honesty.`,
+<div class="inline-q"><span class="iq-label">The test:</span> Read the code out loud. Literally say it. Awkward or verbose code usually reveals itself when you hear it spoken. If a variable name takes more than a few words to explain aloud, it needs a better name.</div>
+
+You don't need to refactor everything. Find the two or three things that would make the code clearest and do those. Readability isn't a nice-to-have — it's what makes code maintainable six months from now when you've forgotten exactly what it was supposed to do.`,
         callout: {
           type: "default",
           label: "The Reviewer's Question",
@@ -3312,11 +3338,11 @@ Code review is where you stop being a person who writes code and start being a p
           label: "Naming Is Architecture",
           text: "If you have to read a function's implementation to understand what it does, the function name is wrong. A well-named function is self-documenting. calculateTotalWithTax(price, taxRate) tells you everything. calc(p, r) tells you nothing. Naming is not a minor detail — it's the most read part of your code."
         },
-        hint: `You're looking at your own code and everything seems fine — you understand it perfectly.
+        hint: `Looking at your own code and everything seems fine? Leave it for 48 hours. Come back and read it as if a colleague wrote it. Things that seemed obvious will start to look ambiguous. That's normal — distance reveals what familiarity hides.
 
-<strong>Try this:</strong> Leave the code for 48 hours without looking at it. Come back and read it as if you wrote it a year ago. The things that are actually unclear will reveal themselves immediately when the memory of writing it fades.
+<strong>Questions to ask:</strong> Does every function have a name that says what it does? Does every variable name make sense without context? Is there any code that does the same thing in two places?
 
-<strong>Still not sure what to improve?</strong> Apply one test to every function: cover the body and read only the name. Without reading the implementation, can you predict what it does and what it returns? If not, the name needs work.`,
+Fix the names first. Good names make the logic easier to read without changing how it works.`,
         quiz: {
           questions: [
             {
