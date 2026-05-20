@@ -7085,8 +7085,7 @@ body.learn-mode #main-col {
 /* ── Theme selector ── */
 .pf-themes {
   display: flex;
-  gap: 10px;
-  justify-content: space-around;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -7094,30 +7093,30 @@ body.learn-mode #main-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
+  gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 6px;
-  border-radius: 10px;
+  padding: 4px;
+  border-radius: 8px;
   transition: background 0.2s;
 }
 
 .pf-theme-btn:hover { background: rgba(255,255,255,0.04); }
 
 .pf-theme-orb {
-  width: 48px;
-  height: 48px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: var(--sw-dot);
-  border: 2px solid rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.15);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 
 .pf-theme-active .pf-theme-orb {
   border-color: var(--sw-border);
-  box-shadow: 0 0 22px var(--sw-glow), 0 0 0 3px rgba(255,255,255,0.08);
-  transform: scale(1.14);
+  box-shadow: 0 0 10px var(--sw-glow), 0 0 0 2px rgba(255,255,255,0.08);
+  transform: scale(1.18);
 }
 
 .pf-theme-name {
@@ -7130,49 +7129,35 @@ body.learn-mode #main-col {
 
 .pf-theme-active .pf-theme-name { color: var(--pth-accent); }
 
-/* ── Badge grid ── */
+/* ── Badge strip (earned only) ── */
 .pf-badge-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .pf-badge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 14px 8px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.02);
-  text-align: center;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  font-size: 20px;
+  line-height: 1;
+  transition: transform 0.15s;
 }
 
-.pf-badge-earned {
-  border-color: var(--pth-border);
-  background: var(--pth-bg);
-  box-shadow: 0 0 14px var(--pth-glow);
-}
+.pf-badge:hover { transform: scale(1.15); }
 
-.pf-badge-locked {
-  opacity: 0.28;
-  filter: grayscale(1);
-}
+.pf-badge-locked { display: none; }
 
-.pf-badge-icon { font-size: 24px; line-height: 1; }
+.pf-badge-earned { }
 
-.pf-badge-name {
+.pf-badge-icon { font-size: inherit; }
+
+.pf-badge-name { display: none; }
+
+.pf-badge-none {
   font-family: 'Space Mono', monospace;
-  font-size: 7px;
-  letter-spacing: 1px;
+  font-size: 10px;
   color: var(--text-muted);
-  text-transform: uppercase;
-  line-height: 1.4;
+  letter-spacing: 0.5px;
 }
-
-.pf-badge-earned .pf-badge-name { color: var(--text); }
 
 /* ── Responsive ── */
 @media (max-width: 600px) {
@@ -7191,9 +7176,9 @@ body.learn-mode #main-col {
   .pf-section       { padding: 12px 18px; }
   .pf-section-hdr   { margin-bottom: 10px; }
   .pf-section-last  { padding-bottom: 16px; }
-  .pf-theme-orb     { width: 36px; height: 36px; }
+  .pf-theme-orb     { width: 22px; height: 22px; }
   .pf-themes        { gap: 6px; }
-  .pf-badge-grid    { grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .pf-badge-grid    { gap: 8px; }
   .pf-badge         { padding: 8px 4px; gap: 4px; }
   .pf-badge-icon    { font-size: 20px; }
 }
@@ -7212,12 +7197,9 @@ body.learn-mode #main-col {
   .pf-sage-text     { font-size: 11px; }
   .pf-section       { padding: 10px 14px; }
   .pf-section-hdr   { margin-bottom: 8px; font-size: 8px; }
-  .pf-badge-grid    { grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  .pf-badge         { padding: 7px 3px; border-radius: 8px; }
-  .pf-badge-icon    { font-size: 18px; }
-  .pf-badge-name    { font-size: 6px; }
-  .pf-theme-orb     { width: 32px; height: 32px; }
-  .pf-theme-btn     { gap: 5px; padding: 4px; }
+  .pf-badge         { font-size: 18px; }
+  .pf-theme-orb     { width: 22px; height: 22px; }
+  .pf-theme-btn     { gap: 4px; padding: 3px; }
 }
 
 /* ── Profile display settings ─────────────────────────────────────────────── */
