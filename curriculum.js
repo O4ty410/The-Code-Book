@@ -13,7 +13,23 @@ const FLOORS = [
       {
         id: "1-1",
         title: "How the Internet Actually Works",
-        body: `The page you're reading right now travelled from a server to your browser in under 200 milliseconds. Here's exactly what happened.\n\nYou typed an address and pressed Enter. Your browser sent a <strong>request</strong> — a message that said "give me this page." That request travelled to a server — another computer, always on, always connected — that found the right files and sent them back. Your browser read those files and drew what you're looking at now. That entire sequence happened before you could blink.\n\nEvery webpage — Gmail, Airbnb, the BBC, this one — is the result of that same cycle. And every page is made of exactly three types of files:\n\n<strong>HTML</strong> — the structure. Headings, paragraphs, buttons.\n<strong>CSS</strong> — the visual style. Colours, fonts, layout.\n<strong>JavaScript</strong> — the behaviour. What happens when you click, type, or scroll.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — right-click anywhere on this page and choose "View Page Source." What you see is the exact file the server sent to your browser. Scan it. Can you spot the three types of files at work?</div>\n\nYou are going to learn all three. But the most important thing to understand right now is this: you are not creating magic. You are creating files. Files that any computer in the world can read and display.\n\nEvery developer at Google, Stripe, and Spotify is doing exactly that. So will you.`,
+        body: `The web is simpler than it looks. That's not something you say to make someone feel better. It's just true.
+
+Every page you've ever visited — Gmail, YouTube, your bank — is a set of files sitting on a computer somewhere. When you type an address and press enter, your browser sends a message to that computer: give me those files. The computer finds them and sends them back. Your browser reads them and draws what you see. That whole exchange takes less than a second.
+
+Those files are always one of three types.
+
+<strong>HTML</strong> — what's on the page. Text, headings, buttons. The structure.
+<strong>CSS</strong> — what it looks like. Colours, fonts, spacing. The appearance.
+<strong>JavaScript</strong> — what it does. What happens when you click, type, scroll. The behaviour.
+
+Three types. That's the entire web.
+
+<div class="inline-q"><span class="iq-label">Do this now:</span> Right-click anywhere on this page and choose View Page Source. Don't try to understand it yet — just look. That's the actual file your browser received. Somewhere in all of that, those three types are there. You're going to learn to write files that look exactly like that.</div>
+
+Nobody's hiding a secret here. The developers building Stripe, Airbnb, the BBC — they're writing those same three file types. Different scale. Same building blocks.
+
+You start with the same materials as everyone else.`,
         callout: {
           type: "default",
           label: "The Key Idea",
@@ -24,7 +40,11 @@ const FLOORS = [
           label: "For Your Brain",
           text: "Don't try to memorise this. Just let the idea sit. You're building a mental picture, not a fact sheet. The detail comes later through doing."
         },
-        hint: `The request-response cycle is how the entire web works. Browser asks. Server answers.\n\n<strong>Try this right now:</strong> Open any website. Right-click anywhere on the page and choose "View Page Source." What you see — all of it — is what the server sent back to your browser. Every site you've ever visited sent files that looked like that.\n\n<strong>Still fuzzy?</strong> Think of it like ordering food. You place an order (request). The kitchen prepares it (server processes). The waiter brings it to your table (response). Your browser is the waiter. You're the one eating.`,
+        hint: `Every website works the same way. Your browser asks. A server answers.
+
+Right-click on any page and choose View Page Source. That wall of text is the actual file the server sent back. Every site you've visited works like that.
+
+<strong>Still not clicking?</strong> Think of it like ordering food. You ask for something (request). The kitchen makes it (server). It arrives at your table (response). Your browser is the last step — it takes what arrives and draws it on screen.`,
         quiz: {
           question: "When you visit a website, what is your browser actually doing?",
           options: [
@@ -48,18 +68,30 @@ const FLOORS = [
       {
         id: "1-2",
         title: "How a Computer Reads Instructions",
-        body: `Computers are extraordinarily fast. But they are not smart. They do <strong>exactly</strong> what you tell them — nothing more, nothing less.\n\nA computer reads code <strong>line by line, top to bottom</strong>. It doesn't skip ahead. It doesn't assume. It reads instruction 1, executes it, then reads instruction 2. This is called <strong>sequential execution</strong> and it is the foundation of everything.\n\nThe order you write things in <strong>matters enormously</strong>. A recipe that says "serve the cake" before "bake the cake" produces nothing edible. Code works the same way. Ask a computer to display a result before it has calculated the result — and it has nothing to show.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — can you think of a real situation in your daily life where the order of steps is non-negotiable? What goes wrong if you change the order?</div>\n\nThis is one of the most common beginner mistakes. And now you already understand why it happens.\n\nProfessional developers spend a lot of time thinking about order. Not just what to do — but when.`,
+        body: `A computer is not smart. It is fast. Those are different things.
+
+It reads your code line by line, top to bottom. It doesn't skip ahead. It doesn't assume you meant something different. It reads instruction one, runs it, then moves to instruction two. That's called <strong>sequential execution</strong>, and it's the foundation of everything else you'll learn.
+
+The order you write things in matters more than almost anything else when you're starting out.
+
+A recipe that says "serve the cake" before "bake the cake" produces nothing edible. Code is the same. Tell a computer to display a number before it's calculated that number and it has nothing to show you. Sometimes not even an error. Just nothing — which is harder to debug.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> Think of something in your daily life where the order of steps is non-negotiable — where switching two steps breaks the whole thing. That instinct for sequence is exactly what you're building here.</div>
+
+This is the mistake that catches most beginners early. Not because it's complicated — because it's invisible. The code looks right. The order is just wrong.`,
         callout: {
           type: "default",
-          label: "The Logical Thinker in You",
-          text: "This is where your logical thinking becomes your biggest advantage. Code is pure logic. There is always a reason why something works or doesn't. You just have to find it."
+          label: "Remember This",
+          text: "Code is pure logic. There is always a reason why something works or doesn't. Finding that reason is the skill you're building."
         },
         callout2: {
           type: "focus",
           label: "ADHD Note",
           text: "<strong>Don't rush this section.</strong> The concept of sequential execution is small but everything else is built on top of it. Two minutes understanding this properly saves hours of confusion later."
         },
-        hint: `Think of a recipe. If it says "serve the cake" before "bake the cake" — you have a problem. Computers are the same. They do exactly what you say, in exactly the order you say it. No guessing, no common sense.\n\n<strong>Still fuzzy?</strong> Write out 5 instructions for making a cup of tea in order. That sequential thinking — that's exactly how a computer reads code.`,
+        hint: `Think of a recipe. "Serve the cake" before "bake the cake" — nothing comes out right. A computer does exactly what you say, in exactly the order you say it. No guessing. No common sense. No filling in the gaps.
+
+<strong>Try this:</strong> Write out five steps for making a cup of tea. That sequential thinking is exactly what a computer does with your code.`,
         quiz: {
           question: "Your code has two steps: Step 1 displays a discount amount, Step 2 calculates what that discount is. What happens when you run it?",
           options: [
@@ -84,13 +116,27 @@ const FLOORS = [
       {
         id: "1-3",
         title: "The Logic Behind All Code",
-        body: `Every program ever written — from a calculator app to a social network — is built from exactly three ideas.\n\n<strong>Conditions</strong> decide which path to take. If the user is logged in, show the dashboard. If not, show the login page. Every decision in code is a condition. There are no exceptions.\n\n<strong>Loops</strong> repeat instructions until something changes. Check every item in a shopping cart and add up the total. Send a notification to every user in a list. Any time something needs to happen "for each item" or "until a condition is met" — that is a loop.\n\n<strong>Functions</strong> are named, reusable blocks of instructions. Instead of writing the same ten lines every time you need to validate a form, you write it once, give it a name, and call that name whenever you need it. Functions are how professional code stays manageable as it scales.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — pick any app on your phone. Can you identify one decision it makes (condition), one thing it does repeatedly (loop), and one action it reuses across multiple screens (function)?</div>\n\nThere is nothing in any programming language — not one thing — that is not built on some combination of these three ideas. When you are writing complex software in two years, you will still be thinking in conditions, loops and functions.`,
+        body: `Every program ever written is built from three ideas. Not most programs. Every one.
+
+<strong>Conditions</strong> decide which path to take. If the user is logged in, show the dashboard. If not, show the login page. Every decision in every piece of code is a condition.
+
+<strong>Loops</strong> repeat something until something changes. Add up every item in a shopping cart. Send a notification to every user in a list. Any time code does something "for each" or "until" — that's a loop.
+
+<strong>Functions</strong> are instructions you write once and reuse. Instead of writing the same ten lines every time you need to do the same job, you write it once, give it a name, and call that name whenever you need it. That's how code stays manageable when it grows.
+
+<div class="inline-q"><span class="iq-label">Think about this:</span> Pick any app on your phone. Find one decision it makes (condition), one thing it does repeatedly (loop), one action it reuses across multiple screens (function). They're all there.</div>
+
+These three ideas don't go away as you get more advanced. When the code is far more complex than anything in this floor, you'll still be thinking in conditions, loops, and functions.`,
         callout: {
           type: "default",
-          label: "The Professional Lens",
-          text: `When a developer reads someone else's code for the first time, this is what they look for: where are the conditions, where are the loops, where are the functions. Everything else is just detail. Master these three and you can read any codebase.`
+          label: "How Developers Read Code",
+          text: `When a developer opens an unfamiliar codebase for the first time, they look for three things: where are the conditions, where are the loops, where are the functions. Everything else is detail. These three are the skeleton.`
         },
-        hint: `A <strong>condition</strong> is a fork in the road. The road splits. You go one way or the other based on what's true.\nA <strong>loop</strong> is a roundabout. You go around until you're told to exit.\nA <strong>function</strong> is a shortcut. You name a journey once. Then you can take it anytime just by saying its name.\n\n<strong>Try this:</strong> Pick any app on your phone. Describe one condition it uses, one loop it uses, and one repeated action that is probably a function. You will find all three in under a minute.`,
+        hint: `A <strong>condition</strong> is a fork in the road — you go one way or the other based on what's true.
+A <strong>loop</strong> is going around a roundabout — you keep going until you're told to exit.
+A <strong>function</strong> is a named shortcut — you describe a journey once, then take it whenever you need it by name.
+
+<strong>Try this:</strong> Open any app on your phone. Find one condition, one loop, one function. You'll find all three in under a minute.`,
         quiz: {
           question: "A shopping cart calculates tax on every item in the basket. Which concept handles the 'do this for every item' part?",
           options: [
@@ -123,7 +169,15 @@ const FLOORS = [
       {
         id: "1-4",
         title: "Your First Look at Real Code",
-        body: `You are not going to write code yet. You are going to <strong>read</strong> it.\n\nThis is deliberate. Every professional developer spends more time reading code than writing it. The engineers at GitHub read code written by people they've never met. The engineers at Stripe read code that was written years before they joined. Reading fluently is not a step toward writing — it is the more important skill.\n\nBefore you speak a language fluently, you learn to recognise it. Same principle here. Reading code before writing it trains your brain to see structure and meaning rather than just symbols.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — look at the five lines of code below without reading any explanation. Cover the hints. Just guess: what does each line tell the browser to do? Write your guesses down. Then compare. The act of guessing — even incorrectly — is already how developers think when they open an unfamiliar file.</div>\n\nLook at the example. Do not panic. Do not try to memorise it. Read it like road signs, not like a textbook.`,
+        body: `Before you write code, you're going to read it.
+
+This is deliberate. Professional developers spend more time reading code than writing it — code written by people they've never met, in files from years before they arrived. Reading fluently isn't a step towards writing. It's the more important skill.
+
+Before you speak a language, you learn to recognise it. Same thing here. Reading code first trains your brain to see structure, not just symbols.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Look at the code example below before reading any explanation. Cover the hints. Just guess what each line tells the browser to do — write it down, then compare. Getting it wrong doesn't matter. The act of guessing is already how developers think when they open an unfamiliar file.</div>
+
+Don't try to memorise what you see. Don't panic at the syntax. Read it like a road sign — you don't need to know how the sign was made to understand what it's telling you.`,
         code: {
           lang: "HTML",
           lines: [
@@ -151,7 +205,11 @@ const FLOORS = [
           label: "What You're Actually Learning",
           text: `The three lines below represent three of the most-used elements in all of web development. Every professional developer has written h1, p and button hundreds of times. By the end of this course, so will you.`
         },
-        hint: `Don't read the code like a sentence. Read it like signs on a road.\n\nThe tag name tells you what type of thing it is. &lt;h1&gt; = big heading. &lt;p&gt; = paragraph. &lt;button&gt; = button. The words between the opening and closing tag are what actually appears on screen.\n\n<strong>Still fuzzy?</strong> Think of tags like labels on boxes. The label tells you what's inside. The content is the thing inside the box. Open the box (opening tag), here's what's inside (content), close the box (closing tag).`,
+        hint: `Don't read code like a sentence. Read it like signs.
+
+The tag name tells you what it is. &lt;h1&gt; is a big heading. &lt;p&gt; is a paragraph. &lt;button&gt; is a button. The words between the opening and closing tag are what actually appears on screen.
+
+<strong>Still fuzzy?</strong> Think of tags like labels on boxes. The label says what's inside. The content is the thing inside. Open the box (opening tag), here's what's inside (content), close the box (closing tag).`,
         quiz: {
           question: "Looking at the code example — what does the &lt;p&gt; tag tell the browser about the content inside it?",
           options: [
@@ -167,18 +225,28 @@ const FLOORS = [
       {
         id: "1-5",
         title: "Floor 1 Check — Prove It Back",
-        body: `Before you move to Floor 2, do a genuine check — not for this app, but for yourself.\n\nYou have covered the four ideas that underpin everything in web development: how the internet works, how computers read instructions sequentially, the three building blocks of all code, and your first look at HTML tags.\n\nThis is not a small thing. Most people who try to learn to code never properly understand these foundations — they rush to write syntax before they understand what it is or why it works. You have not done that.\n\nThe questions below get progressively harder. They test whether you can connect and apply what you've learned — not just recall it. Answer each one honestly in your head before selecting. If something feels shaky, go back to that one section. Not the whole floor — just that section.`,
+        body: `Before Floor 2, do an honest check.
+
+Not for this app. For yourself.
+
+You've covered four things: how the internet moves files between computers, how a computer reads instructions in order, the three ideas that underpin all code, and your first look at real HTML. That's the foundation everything else is built on.
+
+The questions below aren't testing your memory. They're testing whether the ideas have actually connected — whether you can use them, not just recognise them.
+
+If something feels shaky, go back to that section. Not the whole floor. Just that one. There's no penalty. No timer. The only person this matters to is you.`,
         callout: {
           type: "default",
-          label: "The Foundation",
-          text: `What you have learned on Floor 1 is not beginner knowledge that you will forget when things get advanced. It is the foundation every professional developer still thinks from. The concepts scale with you.`
+          label: "Before You Move On",
+          text: `The concepts in Floor 1 don't get left behind as things get more advanced. Conditions, loops, functions, request and response — they're still there in every piece of professional code. They just look different at scale.`
         },
         callout2: {
           type: "focus",
           label: "Floor 2 Preview",
           text: `Floor 2 is where it becomes real. You will write actual HTML and CSS and see the results on screen immediately. Everything you understood here becomes something you can build.`
         },
-        hint: `If you cannot answer the questions below without guessing — that is useful information, not failure. It tells you exactly which section to return to. One weak brick does not mean a broken building. It means one brick to fix.`,
+        hint: `If you can't answer the questions without guessing, that's not failure — it's information. It tells you exactly which section to go back to. Not the whole floor. Just that one.
+
+One gap doesn't undo everything else. It just shows you where to look.`,
         quiz: {
           questions: [
             {
