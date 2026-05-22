@@ -174,6 +174,7 @@ function startHubCanvas() {
   stopHubCanvas();
   var canvas = document.getElementById('hub-canvas');
   if (!canvas) return;
+  canvas.style.display = 'block';
 
   var rgb = getHubThemeRGB();
   var cr = rgb[0], cg = rgb[1], cb = rgb[2];
@@ -354,5 +355,6 @@ function stopHubCanvas() {
   if (canvas) {
     if (canvas._hcResize) { window.removeEventListener('resize', canvas._hcResize); canvas._hcResize = null; }
     if (canvas._hcSpark)  { clearTimeout(canvas._hcSpark); canvas._hcSpark = null; }
+    canvas.style.display = 'none';
   }
 }
