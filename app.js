@@ -5533,7 +5533,25 @@ function toggleGameLight() {
 function launchGame(gameId) {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
-  var src = gameId === 'launch-sequence' ? './game/index.html' : './game/index.html';
+  var src = './game/index.html';
+
+  if (typeof isMobile === 'function' && isMobile()) {
+    // Full-screen fixed overlay on mobile so the game gets its own proper viewport
+    var existing = document.getElementById('gh-game-overlay');
+    if (existing) existing.remove();
+    var overlay = document.createElement('div');
+    overlay.id = 'gh-game-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#000;display:flex;flex-direction:column;';
+    overlay.innerHTML =
+      '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
+        '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="background:none;border:none;color:#c8a96e;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
+      '</div>' +
+      '<iframe src="' + src + '" title="' + gameId + '" allowfullscreen ' +
+        'style="flex:1;border:none;width:100%;display:block;"></iframe>';
+    document.body.appendChild(overlay);
+    return;
+  }
+
   panel.innerHTML =
     '<div class="gh-back-bar">' +
       '<button class="gh-back-btn" onclick="renderGamePanel()">&#8592; GAME HUB</button>' +

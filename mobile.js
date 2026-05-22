@@ -288,7 +288,7 @@ function mobNavTo(tab) {
   if (tab === 'glitch') {
     setTimeout(function() {
       if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
-    }, 120);
+    }, 300);
   }
 }
 
