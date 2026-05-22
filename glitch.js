@@ -430,8 +430,9 @@
   function resize() {
     if (!G.canvas) return;
     var parent = G.canvas.parentElement;
-    var avail = parent ? parent.clientWidth - 24 : 300;
-    var sz = Math.min(avail, 400);
+    var avail = (parent && parent.clientWidth > 0) ? parent.clientWidth - 24 : window.innerWidth - 24;
+    if (avail < 100) avail = window.innerWidth - 24;
+    var sz = Math.min(Math.max(avail, 100), 400);
     G.canvas.width  = sz;
     G.canvas.height = sz;
     G.cellPx = Math.floor(sz / G.size);
