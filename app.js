@@ -5492,12 +5492,12 @@ function renderGamePanel() {
             '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
-          '<div class="gh-card gh-card--locked">' +
-            '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
-            '<div class="gh-card-icon">&#128274;</div>' +
-            '<div class="gh-card-name">MISSION 2</div>' +
-            '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
-            '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
+          '<div class="gh-card gh-card--active" onclick="launchGlitchMode()">' +
+            '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
+            '<div class="gh-card-icon">&#128268;</div>' +
+            '<div class="gh-card-name">GLITCH MODE</div>' +
+            '<div class="gh-card-desc">Signal routing puzzle. Tap pipes to rotate them and reconnect the source to the target.</div>' +
+            '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
           '<div class="gh-card gh-card--locked">' +
@@ -5560,6 +5560,62 @@ function launchGame(gameId) {
       'style="width:100%;height:calc(100% - 44px);border:none;display:block;"></iframe>';
 }
 
+
+function launchGlitchMode() {
+  var panel = document.getElementById('panel-game');
+  if (!panel) return;
+
+  var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(0,200,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
+    '<button onclick="__glitchBack()" style="background:none;border:none;color:#00e5ff;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
+    '</div>';
+  var glitchBody =
+    '<div class="glitch-hdr">' +
+      '<div class="glitch-hdr-left">' +
+        '<div class="glitch-hdr-title">GLITCH MODE</div>' +
+        '<div class="glitch-hdr-sub">Reconnect the signal.<br>Tap pipes to rotate.</div>' +
+      '</div>' +
+      '<div class="glitch-stats">' +
+        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-level">1</span><span class="glitch-stat-lbl">LVL</span></div>' +
+        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-score">0</span><span class="glitch-stat-lbl">SCORE</span></div>' +
+        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-moves">0</span><span class="glitch-stat-lbl">MOVES</span></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="glitch-canvas-wrap" style="flex:1">' +
+      '<canvas id="glitch-canvas"></canvas>' +
+    '</div>' +
+    '<div id="glitch-complete" class="glitch-complete-overlay" style="display:none">' +
+      '<div class="glitch-complete-card">' +
+        '<span class="glitch-complete-glyph">&#9672;</span>' +
+        '<div class="glitch-complete-title">SYSTEM RESTORED</div>' +
+        '<div class="glitch-complete-sub">Signal pathway reconnected.</div>' +
+        '<div id="glitch-xp" class="glitch-complete-xp">+50 XP</div>' +
+        '<button class="glitch-next-btn" onclick="GlitchGame.nextLevel()">Next Level &#8594;</button>' +
+      '</div>' +
+    '</div>';
+
+  window.__glitchBack = function() {
+    if (typeof GlitchGame !== 'undefined') GlitchGame.destroy();
+    var ov = document.getElementById('gh-game-overlay');
+    if (ov) ov.remove();
+    else renderGamePanel();
+  };
+
+  if (typeof isMobile === 'function' && isMobile()) {
+    var existing = document.getElementById('gh-game-overlay');
+    if (existing) existing.remove();
+    var overlay = document.createElement('div');
+    overlay.id = 'gh-game-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#020608;display:flex;flex-direction:column;';
+    overlay.innerHTML = backBar + glitchBody;
+    document.body.appendChild(overlay);
+    setTimeout(function() { if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas'); }, 150);
+    return;
+  }
+
+  panel.innerHTML = '<div style="position:relative;display:flex;flex-direction:column;height:100%;">' +
+    backBar + glitchBody + '</div>';
+  setTimeout(function() { if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas'); }, 100);
+}
 
 function getProfileRank(fi) {
   if (fi >= 6) return 'DIRECTOR';

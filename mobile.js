@@ -213,7 +213,7 @@ function renderMobileHub() {
     { color: '#f0a832', iconType: 'challenge', badge: 'CHALLENGES', title: 'Daily Challenges', hint: chalDone ? 'Done for today ✓' : 'New challenge ready', action: 'mobNavTo(\'challenge\')' },
     { color: '#64c8a0', iconType: 'revision',  badge: 'REVISION',   title: 'Revision Centre',  hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',      action: 'mobNavTo(\'revision\')' },
     { color: '#7eb8c8', iconType: 'tools',     badge: 'TOOLS',      title: 'Tools',            hint: 'Speed round & more',                                       action: 'mobNavTo(\'tools\')' },
-    { color: '#d46eb8', iconType: 'glitch',    badge: 'GLITCH',     title: 'Glitch Mode',      hint: 'Route the signal',                                         action: 'mobNavTo(\'glitch\')' },
+    { color: '#d46eb8', iconType: 'glitch',    badge: 'GLITCH',     title: 'Glitch Mode',      hint: 'Route the signal',                                         action: 'mobNavToGlitch()' },
     { color: '#8888ff', iconType: 'profile',   badge: 'PROFILE',    title: 'Profile',          hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
     { color: '#e0c060', iconType: 'premium',   badge: 'PREMIUM',    title: 'Premium',          hint: 'Unlock everything',                                        action: 'mobNavTo(\'premium\')' },
     { color: '#7eb8d4', iconType: 'game',      badge: 'GAME HUB',   title: 'Game Hub',         hint: 'Switch the light on',                                      action: 'mobNavTo(\'game\')',    wide: true },
@@ -284,12 +284,13 @@ function mobNavTo(tab) {
     document.body.appendChild(bar);
   }, 60);
 
-  // Init Glitch Mode game when its panel is shown
-  if (tab === 'glitch') {
-    setTimeout(function() {
-      if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
-    }, 300);
-  }
+}
+
+function mobNavToGlitch() {
+  mobNavTo('game');
+  setTimeout(function() {
+    if (typeof launchGlitchMode === 'function') launchGlitchMode();
+  }, 200);
 }
 
 function mobBackToHub() {
