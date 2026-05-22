@@ -312,6 +312,7 @@ function renderMobileFloorList() {
   if (!isMobile()) return;
   var panel = document.getElementById('main-content');
   if (!panel) return;
+  if (typeof stopHubCanvas === 'function') stopHubCanvas();
 
   function _hexGlow(hex, a) {
     if (!hex || hex[0] !== '#') return 'rgba(200,169,110,' + (a || 0.28) + ')';
