@@ -5946,7 +5946,10 @@ function renderProfilePanel() {
       '</div>' +
       '<div class="pf-hdr-avatar">' +
         '<div class="pf-avatar-frame">' + (selectedAv ? '<span style="font-size:28px;line-height:1">' + selectedAv.icon + '</span>' : '<div class="prof-av-silhouette" style="width:26px;height:38px"></div>') + '</div>' +
-        '<button class="pf-avatar-btn" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'SELECT') + '</button>' +
+        '<div class="pf-avatar-btns">' +
+          '<button class="pf-avatar-btn" onclick="showAvatarPicker()">' + (selectedAv ? 'CHANGE' : 'SELECT') + '</button>' +
+          '<button class="pf-avatar-btn pf-logout-btn" onclick="signOut()" title="Sign out">EXIT</button>' +
+        '</div>' +
       '</div>' +
     '</div>' +
 
