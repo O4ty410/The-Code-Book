@@ -103,6 +103,14 @@
           ctx.fillRect(px + 1, py + 1, cellPx - 2, cellPx - 2);
           ctx.restore();
         }
+        // Persistent tilde indicator — readability parity with ↺ (reverse) and X (corrupt)
+        ctx.save();
+        ctx.font = 'bold ' + Math.floor(cellPx * 0.22) + 'px monospace';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = 'rgba(0,200,255,0.30)';
+        ctx.fillText('~', px + cellPx - 4, py + 4);
+        ctx.restore();
       }
     };
   }

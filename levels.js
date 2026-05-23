@@ -139,7 +139,7 @@ window.GlitchLevels = [
     ]
   },
 
-  // 12 — Near-full grid snake; many pipes to track
+  // 12 — T-junction midpoint with dead branch; chained elbows to target
   { id: 'LINK-12', name: 'LINK-12', size: 4,
     start: [0,0], end: [3,3],
     pipes: [
@@ -147,12 +147,8 @@ window.GlitchLevels = [
       [0,2,'I',0],                         // need EW(1)
       [0,3,'L',3],                         // need SW(1)
       [1,3,'L',0],                         // need NW(2)
-      [1,2,'I',0],                         // need EW(1)
-      [1,1,'I',0],                         // need EW(1)
-      [1,0,'L',2],                         // need ES(0)
-      [2,0,'L',1],                         // need NE(3)
-      [2,1,'I',0],                         // need EW(1)
-      [2,2,'I',0],                         // need EW(1)
+      [1,2,'T',0],                         // need ESW(1); dead W to [1,1]
+      [2,2,'L',1],                         // need NE(3)
       [2,3,'L',3]                          // need SW(1)
     ]
   },
@@ -163,7 +159,7 @@ window.GlitchLevels = [
     pipes: [
       [0,1,'I',0],                         // need EW(1)
       [0,2,'L',3],                         // need SW(1)
-      [1,2,'X',0],                         // cross; dead W and E
+      [1,2,'X',0],                         // cross; dead W and S
       [1,3,'L',0],                         // need SW(1)
       [2,3,'I',1]                          // need NS(0)
     ]
