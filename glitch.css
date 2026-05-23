@@ -363,6 +363,198 @@
   }
 }
 
+/* ============================================================
+   OPTION B — MODE ATMOSPHERES
+   Venus: deep-space starfield + nebula glow
+   Glitch: scanlines + red-shift vignette + corruption pulse
+   ============================================================ */
+
+/* ── Venus: starfield ───────────────────────────────────── */
+@keyframes venus-twinkle {
+  0%   { opacity: 0.55; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.55; }
+}
+
+@keyframes venus-drift {
+  0%   { transform: translateY(0px); }
+  100% { transform: translateY(-40px); }
+}
+
+.glitch-game-root:not(.glitch-game-root--chaos)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  /* 80 stars as box-shadow dots on a 1×1 transparent node */
+  width: 1px;
+  height: 1px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  box-shadow:
+    1310px 115px rgba(255,255,255,0.16),
+    564px 251px rgba(255,255,255,0.26),
+    210px 693px rgba(255,255,255,0.52),
+    1117px 90px rgba(255,255,255,0.45),
+    66px 31px rgba(255,255,255,0.2),
+    477px 518px rgba(255,255,255,0.45),
+    1150px 204px rgba(255,255,255,0.51),
+    1117px 430px rgba(255,255,255,0.26),
+    1207px 285px rgba(255,255,255,0.55),
+    14px 778px rgba(255,255,255,0.55),
+    866px 349px rgba(255,255,255,0.29),
+    441px 782px rgba(255,255,255,0.32),
+    190px 390px rgba(255,255,255,0.2),
+    705px 619px rgba(255,255,255,0.28),
+    89px 748px rgba(255,255,255,0.38),
+    256px 388px rgba(255,255,255,0.19),
+    601px 850px rgba(255,255,255,0.46),
+    741px 592px rgba(255,255,255,0.25),
+    143px 47px rgba(255,255,255,0.48),
+    593px 82px rgba(255,255,255,0.58),
+    207px 390px rgba(255,255,255,0.29),
+    1302px 855px rgba(255,255,255,0.33),
+    759px 364px rgba(255,255,255,0.25),
+    547px 719px rgba(255,255,255,0.62),
+    1328px 74px rgba(255,255,255,0.45),
+    351px 547px rgba(255,255,255,0.51),
+    335px 474px rgba(255,255,255,0.34),
+    1311px 705px rgba(255,255,255,0.43),
+    665px 864px rgba(255,255,255,0.53),
+    115px 235px rgba(255,255,255,0.56),
+    647px 411px rgba(255,255,255,0.28),
+    433px 581px rgba(255,255,255,0.59),
+    645px 218px rgba(255,255,255,0.48),
+    811px 659px rgba(255,255,255,0.38),
+    543px 143px rgba(255,255,255,0.27),
+    1150px 552px rgba(255,255,255,0.28),
+    1198px 439px rgba(255,255,255,0.6),
+    818px 371px rgba(255,255,255,0.26),
+    284px 522px rgba(255,255,255,0.4),
+    97px 882px rgba(255,255,255,0.2),
+    1286px 164px rgba(255,255,255,0.55),
+    865px 611px rgba(255,255,255,0.18),
+    782px 611px rgba(255,255,255,0.65),
+    1084px 258px rgba(255,255,255,0.64),
+    24px 697px rgba(255,255,255,0.51),
+    1397px 550px rgba(255,255,255,0.53),
+    1313px 349px rgba(255,255,255,0.21),
+    891px 162px rgba(255,255,255,0.38),
+    540px 513px rgba(255,255,255,0.53),
+    1040px 109px rgba(255,255,255,0.59),
+    612px 862px rgba(255,255,255,0.47),
+    1248px 204px rgba(255,255,255,0.23),
+    331px 553px rgba(255,255,255,0.63),
+    1087px 1px rgba(255,255,255,0.45),
+    1001px 20px rgba(255,255,255,0.21),
+    744px 900px rgba(255,255,255,0.64),
+    630px 246px rgba(255,255,255,0.18),
+    1162px 81px rgba(255,255,255,0.19),
+    996px 836px rgba(255,255,255,0.18),
+    1091px 785px rgba(255,255,255,0.21),
+    1352px 487px rgba(255,255,255,0.62),
+    339px 272px rgba(255,255,255,0.41),
+    1243px 434px rgba(255,255,255,0.63),
+    1105px 774px rgba(255,255,255,0.51),
+    412px 731px rgba(255,255,255,0.31),
+    1376px 666px rgba(255,255,255,0.34),
+    1060px 463px rgba(255,255,255,0.21),
+    461px 66px rgba(255,255,255,0.32),
+    1205px 568px rgba(255,255,255,0.27),
+    452px 8px rgba(255,255,255,0.19),
+    1293px 61px rgba(255,255,255,0.26),
+    65px 881px rgba(255,255,255,0.32),
+    1053px 244px rgba(255,255,255,0.29),
+    995px 220px rgba(255,255,255,0.42),
+    1170px 591px rgba(255,255,255,0.39),
+    969px 827px rgba(255,255,255,0.35),
+    194px 100px rgba(255,255,255,0.48),
+    726px 434px rgba(255,255,255,0.36),
+    111px 690px rgba(255,255,255,0.48),
+    1324px 101px rgba(255,255,255,0.18);
+  animation: venus-twinkle 6s ease-in-out infinite, venus-drift 90s linear infinite;
+}
+
+/* Venus: nebula background gradient behind canvas */
+.glitch-game-root:not(.glitch-game-root--chaos) {
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 5%, rgba(0,40,120,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 40% at 15% 90%, rgba(0,15,80,0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 90% 75%, rgba(0,60,140,0.10) 0%, transparent 55%),
+    #020608;
+}
+
+/* ── Glitch: scanlines across the panel ─────────────────── */
+@keyframes chaos-glitch-bar {
+  0%, 85%, 100% { opacity: 0; transform: translateY(-100%); }
+  87%  { opacity: 1; transform: translateY(20%); }
+  90%  { opacity: 0.6; transform: translateY(60%); }
+  93%  { opacity: 0; transform: translateY(110%); }
+}
+
+@keyframes chaos-noise-pulse {
+  0%, 89%, 100% { opacity: 0; }
+  90% { opacity: 1; }
+  91% { opacity: 0.3; }
+  92% { opacity: 0.8; }
+  93% { opacity: 0; }
+  96% { opacity: 0.5; }
+  97% { opacity: 0; }
+}
+
+/* Scanlines layer */
+.glitch-game-root--chaos::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.12) 3px,
+    rgba(0,0,0,0.12) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Glitch sweep bar */
+.glitch-game-root--chaos::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255,40,80,0.55), rgba(255,120,40,0.40), transparent);
+  pointer-events: none;
+  z-index: 2;
+  animation: chaos-glitch-bar 8s ease-in-out infinite;
+}
+
+/* Chaos ambient background */
+.glitch-game-root--chaos {
+  background:
+    radial-gradient(ellipse 90% 50% at 50% 0%, rgba(140,20,0,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 90% 85%, rgba(100,10,20,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 10% 60%, rgba(80,0,10,0.10) 0%, transparent 50%),
+    #060104;
+}
+
+/* Canvas-wrap ambient glow — Venus */
+.glitch-game-root:not(.glitch-game-root--chaos) .glitch-canvas-wrap {
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 50%, rgba(0,50,140,0.22) 0%, transparent 68%),
+    radial-gradient(ellipse 40% 30% at 20% 75%, rgba(0,20,80,0.12) 0%, transparent 55%) !important;
+}
+
+/* Canvas-wrap ambient glow — Chaos */
+.glitch-game-root--chaos .glitch-canvas-wrap {
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 50%, rgba(140,30,0,0.20) 0%, transparent 68%),
+    radial-gradient(ellipse 40% 30% at 80% 75%, rgba(80,10,0,0.12) 0%, transparent 55%) !important;
+}
+
 /* ── Game root & body containers ───────────────────────── */
 .glitch-game-root {
   position: relative;
