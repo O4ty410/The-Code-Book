@@ -27,98 +27,8 @@
   var OPP = [2, 3, 0, 1];
   var DRC = [[-1,0],[0,1],[1,0],[0,-1]]; // N E S W
 
-  // ── Hand-crafted levels ───────────────────────────────────
-  // Each cell: [type, startRotation]
-  // Cells listed row by row, left to right.
-  // startRotation is intentionally wrong so the player must fix it.
-  var LEVELS = [
-
-    // 1 — Top row then right column (tutorial)
-    { name: 'LINK-01', size: 4, cells: [
-      [T_SOURCE,0],[T_I,0],    [T_I,0],    [T_L,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
-    ]},
-
-    // 2 — Left column then bottom row
-    { name: 'LINK-02', size: 4, cells: [
-      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_L,2],     [T_I,0],    [T_I,0],    [T_TARGET,0]
-    ]},
-
-    // 3 — Diagonal zigzag with L-pipes only
-    { name: 'LINK-03', size: 4, cells: [
-      [T_SOURCE,0],[T_L,3],    [T_EMPTY,0],[T_EMPTY,0],
-      [T_EMPTY,0], [T_L,1],    [T_L,3],    [T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_L,2],    [T_L,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
-    ]},
-
-    // 4 — S-shape through middle row
-    { name: 'LINK-04', size: 4, cells: [
-      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_L,1],     [T_I,0],    [T_I,0],    [T_L,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
-    ]},
-
-    // 5 — Introduces T-pipe (junction with harmless branch)
-    { name: 'LINK-05', size: 4, cells: [
-      [T_SOURCE,0],[T_I,0],    [T_T,3],    [T_L,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
-    ]},
-
-    // 6 — First 5×5: U-path down, across, up
-    { name: 'LINK-06', size: 5, cells: [
-      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_L,1],     [T_I,0],    [T_I,0],    [T_I,0],    [T_L,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_I,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
-    ]},
-
-    // 7 — 5×5: column path with L turn at bottom
-    { name: 'LINK-07', size: 5, cells: [
-      [T_SOURCE,0],[T_I,0],    [T_I,0],    [T_L,3],    [T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],    [T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],    [T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],    [T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_L,1],    [T_TARGET,0]
-    ]},
-
-    // 8 — 5×5: snake fills most of the grid
-    { name: 'LINK-08', size: 5, cells: [
-      [T_SOURCE,0],[T_I,0],    [T_I,0],    [T_I,0],    [T_L,3],
-      [T_L,2],     [T_I,0],    [T_I,0],    [T_I,0],    [T_L,0],
-      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_L,1],     [T_I,0],    [T_I,0],    [T_I,0],    [T_TARGET,0]
-    ]},
-
-    // 9 — 5×5: T-junction creates a visible dead branch
-    { name: 'LINK-09', size: 5, cells: [
-      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
-      [T_L,1],     [T_I,0],    [T_T,3],    [T_I,0],    [T_L,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_I,0],    [T_EMPTY,0],[T_I,3],
-      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
-    ]},
-
-    // 10 — 5×5: X cross-pipe with misdirection branches
-    { name: 'LINK-10', size: 5, cells: [
-      [T_SOURCE,0],[T_I,0],    [T_L,3],    [T_EMPTY,0],[T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_I,3],    [T_EMPTY,0],[T_EMPTY,0],
-      [T_EMPTY,0], [T_I,0],    [T_X,0],    [T_I,0],    [T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_I,3],    [T_EMPTY,0],[T_EMPTY,0],
-      [T_EMPTY,0], [T_EMPTY,0],[T_L,1],    [T_I,0],    [T_TARGET,0]
-    ]}
-
-  ];
+  var TYPE_MAP = { 'I': T_I, 'L': T_L, 'T': T_T, 'X': T_X };
+  var LEVELS = window.GlitchLevels || [];
 
   function getConn(type, rot) {
     var c = BASE[type].slice();
@@ -155,12 +65,13 @@
     var n = def.size;
     G.size = n;
     var grid = makeGrid(n);
-    def.cells.forEach(function(cell, i) {
-      var r = Math.floor(i / n), c = i % n;
-      grid[r][c] = { type: cell[0], rot: cell[1] };
+    grid[def.start[0]][def.start[1]] = { type: T_SOURCE, rot: 0 };
+    grid[def.end[0]][def.end[1]]     = { type: T_TARGET, rot: 0 };
+    def.pipes.forEach(function(p) {
+      var type = TYPE_MAP[p[2]];
+      if (type !== undefined) grid[p[0]][p[1]] = { type: type, rot: p[3] };
     });
     G.grid = grid;
-    // Update level name in sub-header
     var sub = document.getElementById('glitch-sub');
     if (sub) sub.textContent = def.name;
   }
