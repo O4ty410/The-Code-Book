@@ -29,6 +29,7 @@
 
   var TYPE_MAP = { 'I': T_I, 'L': T_L, 'T': T_T, 'X': T_X };
   var LEVELS = window.GlitchLevels || [];
+  var DEFAULT_LEVELS = LEVELS;
 
   function getConn(type, rot) {
     var c = BASE[type].slice();
@@ -54,6 +55,7 @@
     tapped: null,  // {r, c, t0} — tap flash
     powered: {},   // "r,c" → true — last-frame powered set
     powFlash: {},  // "r,c" → timestamp — newly-powered flash
+    glitchMods: null, // modifier hooks (set via setModifiers)
   };
 
   function makeGrid(n) {
@@ -83,18 +85,23 @@
 
   // ── Power BFS ────────────────────────────────────────────
   function computePower() {
-    var n = G.size, pow = [];
+    var n = G.size;
+    // Allow modifiers to present a logical view of the grid different from the visual one
+    var vGrid = (G.glitchMods && G.glitchMods.transformGrid)
+      ? G.glitchMods.transformGrid(G.grid, G.t, n)
+      : G.grid;
+    var pow = [];
     for (var r = 0; r < n; r++) { pow[r] = []; for (var c = 0; c < n; c++) pow[r][c] = false; }
     var queue = [], qi = 0;
     for (var r2 = 0; r2 < n; r2++)
       for (var c2 = 0; c2 < n; c2++)
-        if (G.grid[r2][c2].type === T_SOURCE) { pow[r2][c2] = true; queue.push([r2,c2]); }
+        if (vGrid[r2][c2].type === T_SOURCE) { pow[r2][c2] = true; queue.push([r2,c2]); }
     while (qi < queue.length) {
       var p = queue[qi++];
       for (var d = 0; d < 4; d++) {
         var nr = p[0]+DRC[d][0], nc = p[1]+DRC[d][1];
         if (nr<0||nr>=n||nc<0||nc>=n||pow[nr][nc]) continue;
-        if (cellConnects(G.grid[p[0]][p[1]], G.grid[nr][nc], d)) { pow[nr][nc] = true; queue.push([nr,nc]); }
+        if (cellConnects(vGrid[p[0]][p[1]], vGrid[nr][nc], d)) { pow[nr][nc] = true; queue.push([nr,nc]); }
       }
     }
     return pow;
@@ -366,9 +373,18 @@
         if      (cell.type === T_SOURCE) drawSource(r2, c2, t);
         else if (cell.type === T_TARGET) drawTarget(r2, c2, pow, t);
         else if (cell.type !== T_EMPTY)  drawPipe(r2, c2, pow);
+        // Modifier cell overlay (drawn on top of pipe, below particle)
+        if (G.glitchMods && G.glitchMods.cellOverlay && cell.type !== T_EMPTY) {
+          G.glitchMods.cellOverlay(G.ctx, r2, c2, pow[r2][c2], cell, t,
+            G.ox + c2*G.cellPx, G.oy + r2*G.cellPx, G.cellPx);
+        }
       }
     }
     if (G.solving && G.signalPath.length > 0) drawParticle(G.signalPath, G.signalT);
+    // Modifier post-render (scanlines, stripe effects, etc.)
+    if (G.glitchMods && G.glitchMods.postRender) {
+      G.glitchMods.postRender(G.ctx, G.canvas.width, G.canvas.height, t);
+    }
     G.animId = requestAnimationFrame(render);
   }
 
@@ -533,5 +549,13 @@
     G.ctx    = null;
   }
 
-  window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy };
+  function setModifiers(mods) {
+    G.glitchMods = mods || null;
+  }
+
+  function setLevels(arr) {
+    LEVELS = (arr && arr.length) ? arr : DEFAULT_LEVELS;
+  }
+
+  window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy, setModifiers: setModifiers, setLevels: setLevels };
 }());

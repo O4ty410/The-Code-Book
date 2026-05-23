@@ -5495,17 +5495,17 @@ function renderGamePanel() {
           '<div class="gh-card gh-card--active" onclick="launchGlitchMode()">' +
             '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
             '<div class="gh-card-icon">&#128268;</div>' +
-            '<div class="gh-card-name">GLITCH MODE</div>' +
+            '<div class="gh-card-name">VENUS MODE</div>' +
             '<div class="gh-card-desc">Signal routing puzzle. Tap pipes to rotate them and reconnect the source to the target.</div>' +
             '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
-          '<div class="gh-card gh-card--locked">' +
-            '<div class="gh-card-badge gh-card-badge--soon">COMING SOON</div>' +
-            '<div class="gh-card-icon">&#128274;</div>' +
-            '<div class="gh-card-name">MISSION 3</div>' +
-            '<div class="gh-card-desc">A new challenge is being prepared. Stand by for further transmissions.</div>' +
-            '<button class="gh-card-btn gh-card-btn--locked" disabled>LOCKED</button>' +
+          '<div class="gh-card gh-card--active" onclick="launchChaosMode()">' +
+            '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
+            '<div class="gh-card-icon">&#9889;</div>' +
+            '<div class="gh-card-name">GLITCH MODE</div>' +
+            '<div class="gh-card-desc">Corrupted signal routing. Pipes behave unexpectedly — learn the patterns and route through the chaos.</div>' +
+            '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
         '</div>' +
@@ -5616,6 +5616,63 @@ function launchGlitchMode() {
   panel.innerHTML = '<div style="position:relative;display:flex;flex-direction:column;height:100%;">' +
     backBar + glitchBody + '</div>';
   setTimeout(function() { if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas'); }, 100);
+}
+
+function launchChaosMode() {
+  var panel = document.getElementById('panel-game');
+  if (!panel) return;
+
+  var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0208;border-bottom:1px solid rgba(255,40,80,0.18);display:flex;align-items:center;padding:0 14px;">' +
+    '<button onclick="__chaosBack()" style="background:none;border:none;color:#ff4466;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
+    '</div>';
+  var chaosBody =
+    '<div class="glitch-hdr" style="border-bottom-color:rgba(255,40,80,0.12)">' +
+      '<div class="glitch-hdr-left">' +
+        '<div class="glitch-hdr-title" style="color:#ff4466;text-shadow:0 0 14px rgba(255,40,80,0.55)">GLITCH MODE</div>' +
+        '<div class="glitch-hdr-sub" id="glitch-sub">GLITCH-01</div>' +
+      '</div>' +
+      '<div class="glitch-stats">' +
+        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-level">1</span><span class="glitch-stat-lbl">LVL</span></div>' +
+        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-score">0</span><span class="glitch-stat-lbl">SCORE</span></div>' +
+        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-moves">0</span><span class="glitch-stat-lbl">MOVES</span></div>' +
+        '<div class="glitch-stat"><button class="glitch-restart-btn" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635;</button></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="glitch-canvas-wrap" style="flex:1">' +
+      '<canvas id="glitch-canvas"></canvas>' +
+    '</div>' +
+    '<div id="glitch-complete" class="glitch-complete-overlay" style="display:none">' +
+      '<div class="glitch-complete-card" style="border-color:rgba(255,40,80,0.28);box-shadow:0 0 60px rgba(255,40,80,0.10),0 0 120px rgba(255,40,80,0.04)">' +
+        '<span class="glitch-complete-glyph" style="color:#ff4466;text-shadow:0 0 22px rgba(255,40,80,0.8)">&#9889;</span>' +
+        '<div class="glitch-complete-title" style="color:#ff4466;text-shadow:0 0 14px rgba(255,40,80,0.6)">SIGNAL PATCHED</div>' +
+        '<div class="glitch-complete-sub">Chaos contained. For now.</div>' +
+        '<div id="glitch-xp" class="glitch-complete-xp">+50 XP</div>' +
+        '<button class="glitch-next-btn" onclick="ChaosGame.nextLevel()">Next Level &#8594;</button>' +
+      '</div>' +
+    '</div>';
+
+  window.__chaosBack = function () {
+    if (typeof ChaosGame !== 'undefined') ChaosGame.destroy();
+    var ov = document.getElementById('gh-game-overlay');
+    if (ov) ov.remove();
+    else renderGamePanel();
+  };
+
+  if (typeof isMobile === 'function' && isMobile()) {
+    var existing = document.getElementById('gh-game-overlay');
+    if (existing) existing.remove();
+    var overlay = document.createElement('div');
+    overlay.id = 'gh-game-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#060104;display:flex;flex-direction:column;';
+    overlay.innerHTML = backBar + chaosBody;
+    document.body.appendChild(overlay);
+    setTimeout(function () { if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas'); }, 150);
+    return;
+  }
+
+  panel.innerHTML = '<div style="position:relative;display:flex;flex-direction:column;height:100%;">' +
+    backBar + chaosBody + '</div>';
+  setTimeout(function () { if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas'); }, 100);
 }
 
 function getProfileRank(fi) {
