@@ -1031,3 +1031,228 @@
 }
 .game-intro--venus .game-intro-skip { color: rgba(0,200,255,0.28); }
 .game-intro--chaos .game-intro-skip { color: rgba(255,80,30,0.28); }
+
+/* ── Game briefing slides ───────────────────────────────── */
+.game-brief {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px 32px;
+  box-sizing: border-box;
+  opacity: 0;
+  animation: gi-fade-in 0.45s ease 0.05s forwards;
+}
+
+.game-brief--exit {
+  animation: gi-fade-out 0.5s ease forwards !important;
+}
+
+.game-brief--venus {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 28%, rgba(0,50,170,0.58) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 38% at 8% 92%,  rgba(0,20,120,0.36) 0%, transparent 55%),
+    #020510;
+}
+
+.game-brief--chaos {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 28%, rgba(130,10,0,0.60) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 38% at 92% 92%, rgba(100,15,0,0.44) 0%, transparent 55%),
+    #060102;
+}
+
+/* Skip button — top-right */
+.gb-skip {
+  position: absolute;
+  top: 18px; right: 18px;
+  background: none;
+  border: none;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  padding: 8px 12px;
+  text-transform: uppercase;
+}
+.game-brief--venus .gb-skip { color: rgba(0,200,255,0.32); }
+.game-brief--chaos .gb-skip { color: rgba(255,80,30,0.32);  }
+
+/* Slide content area */
+.gb-slide {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 520px;
+  width: 100%;
+  padding: 0 4px;
+}
+
+@keyframes gb-slide-out {
+  from { opacity: 1; transform: translateX(0);     }
+  to   { opacity: 0; transform: translateX(-22px); }
+}
+@keyframes gb-slide-in {
+  from { opacity: 0; transform: translateX(22px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+.gb-slide--out { animation: gb-slide-out 0.22s ease forwards; }
+.gb-slide--in  { animation: gb-slide-in  0.32s ease forwards; }
+
+.gb-slide-icon {
+  font-size: 34px;
+  margin-bottom: 14px;
+  opacity: 0.82;
+}
+
+.gb-slide-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.game-brief--venus .gb-slide-tag { color: rgba(0,200,255,0.55); }
+.game-brief--chaos .gb-slide-tag { color: rgba(255,90,40,0.60);  }
+
+.gb-slide-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(20px, 5.5vw, 34px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 18px;
+}
+.game-brief--venus .gb-slide-title { color: #00e5ff; text-shadow: 0 0 20px rgba(0,229,255,0.42); }
+.game-brief--chaos .gb-slide-title { color: #ff4422; text-shadow: 0 0 20px rgba(255,60,30,0.42); }
+
+.gb-slide-body {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(11px, 2.4vw, 13px);
+  line-height: 1.85;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.game-brief--venus .gb-slide-body { color: rgba(180,220,255,0.72); }
+.game-brief--chaos .gb-slide-body { color: rgba(255,185,145,0.72); }
+.game-brief--venus .gb-slide-body strong { color: #00e5ff; }
+.game-brief--chaos .gb-slide-body strong { color: #ff8844; }
+
+/* Level tier table */
+.gb-tiers {
+  width: 100%;
+  max-width: 430px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 2px auto 0;
+}
+
+.gb-tier {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 3px 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-align: left;
+}
+.game-brief--venus .gb-tier { background: rgba(0,180,255,0.07); border: 1px solid rgba(0,180,255,0.15); }
+.game-brief--chaos .gb-tier { background: rgba(255,80,30,0.07);  border: 1px solid rgba(255,80,30,0.15);  }
+
+.gb-tier-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  grid-column: 1; grid-row: 1;
+}
+.game-brief--venus .gb-tier-name { color: #00e5ff; }
+.game-brief--chaos .gb-tier-name { color: #ff6633; }
+
+.gb-tier-grid {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  grid-column: 2; grid-row: 1;
+  opacity: 0.55;
+}
+.game-brief--venus .gb-tier-grid { color: #00e5ff; }
+.game-brief--chaos .gb-tier-grid { color: #ff8844; }
+
+.gb-tier-desc {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  opacity: 0.62;
+  grid-column: 1 / -1; grid-row: 2;
+}
+.game-brief--venus .gb-tier-desc { color: rgba(180,220,255,0.80); }
+.game-brief--chaos .gb-tier-desc { color: rgba(255,185,145,0.80); }
+
+.gb-slide-footer {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  margin-top: 14px;
+  opacity: 0.40;
+}
+.game-brief--venus .gb-slide-footer { color: rgba(0,200,255,1);   }
+.game-brief--chaos .gb-slide-footer { color: rgba(255,120,60,1);  }
+
+/* Navigation row */
+.gb-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-top: 20px;
+  flex-shrink: 0;
+}
+
+.gb-dots { display: flex; gap: 8px; }
+
+.gb-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+}
+.game-brief--venus .gb-dot         { background: rgba(0,200,255,0.22); }
+.game-brief--chaos .gb-dot         { background: rgba(255,80,30,0.22);  }
+.game-brief--venus .gb-dot--active { background: #00e5ff; box-shadow: 0 0 8px rgba(0,229,255,0.70); }
+.game-brief--chaos .gb-dot--active { background: #ff4422; box-shadow: 0 0 8px rgba(255,60,30,0.70); }
+
+.gb-next {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  padding: 14px 38px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 190px;
+  text-transform: uppercase;
+}
+.game-brief--venus .gb-next {
+  background: rgba(0,200,255,0.10);
+  border: 1px solid rgba(0,200,255,0.38);
+  color: #00e5ff;
+}
+.game-brief--venus .gb-next:hover {
+  background: rgba(0,200,255,0.18);
+  box-shadow: 0 0 22px rgba(0,229,255,0.22);
+}
+.game-brief--chaos .gb-next {
+  background: rgba(255,80,30,0.10);
+  border: 1px solid rgba(255,80,30,0.38);
+  color: #ff4422;
+}
+.game-brief--chaos .gb-next:hover {
+  background: rgba(255,80,30,0.18);
+  box-shadow: 0 0 22px rgba(255,60,30,0.25);
+}
