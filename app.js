@@ -5571,8 +5571,9 @@ function launchGlitchMode() {
   var glitchBody =
     '<div class="glitch-hdr">' +
       '<div class="glitch-hdr-left">' +
-        '<div class="glitch-hdr-title">GLITCH MODE</div>' +
+        '<div class="glitch-hdr-title">VENUS MODE</div>' +
         '<div class="glitch-hdr-sub" id="glitch-sub">LINK-01</div>' +
+        '<div class="glitch-log" id="glitch-log"></div>' +
       '</div>' +
       '<div class="glitch-stats">' +
         '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-level">1</span><span class="glitch-stat-lbl">LVL</span></div>' +
@@ -5581,8 +5582,9 @@ function launchGlitchMode() {
         '<div class="glitch-stat"><button class="glitch-restart-btn" onclick="if(typeof GlitchGame!==\'undefined\')GlitchGame.restart()" title="Restart level">&#8635;</button></div>' +
       '</div>' +
     '</div>' +
-    '<div class="glitch-canvas-wrap" style="flex:1">' +
+    '<div class="glitch-canvas-wrap" style="flex:1;position:relative">' +
       '<canvas id="glitch-canvas"></canvas>' +
+      '<div id="glitch-level-msg" class="glitch-level-msg"></div>' +
     '</div>' +
     '<div id="glitch-complete" class="glitch-complete-overlay" style="display:none">' +
       '<div class="glitch-complete-card">' +
@@ -5595,6 +5597,7 @@ function launchGlitchMode() {
     '</div>';
 
   window.__glitchBack = function() {
+    if (typeof LoreSystem !== 'undefined') LoreSystem.destroy();
     if (typeof GlitchGame !== 'undefined') GlitchGame.destroy();
     var ov = document.getElementById('gh-game-overlay');
     if (ov) ov.remove();
@@ -5609,13 +5612,19 @@ function launchGlitchMode() {
     overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#020608;display:flex;flex-direction:column;';
     overlay.innerHTML = backBar + glitchBody;
     document.body.appendChild(overlay);
-    setTimeout(function() { if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas'); }, 150);
+    setTimeout(function() {
+      if (typeof LoreSystem !== 'undefined') LoreSystem.init('venus');
+      if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
+    }, 150);
     return;
   }
 
   panel.innerHTML = '<div style="position:relative;display:flex;flex-direction:column;height:100%;">' +
     backBar + glitchBody + '</div>';
-  setTimeout(function() { if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas'); }, 100);
+  setTimeout(function() {
+    if (typeof LoreSystem !== 'undefined') LoreSystem.init('venus');
+    if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
+  }, 100);
 }
 
 function launchChaosMode() {
@@ -5630,6 +5639,7 @@ function launchChaosMode() {
       '<div class="glitch-hdr-left">' +
         '<div class="glitch-hdr-title" style="color:#ff4466;text-shadow:0 0 14px rgba(255,40,80,0.55)">GLITCH MODE</div>' +
         '<div class="glitch-hdr-sub" id="glitch-sub">GLITCH-01</div>' +
+        '<div class="glitch-log" id="glitch-log"></div>' +
       '</div>' +
       '<div class="glitch-stats">' +
         '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-level">1</span><span class="glitch-stat-lbl">LVL</span></div>' +
@@ -5638,8 +5648,9 @@ function launchChaosMode() {
         '<div class="glitch-stat"><button class="glitch-restart-btn" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635;</button></div>' +
       '</div>' +
     '</div>' +
-    '<div class="glitch-canvas-wrap" style="flex:1">' +
+    '<div class="glitch-canvas-wrap" style="flex:1;position:relative">' +
       '<canvas id="glitch-canvas"></canvas>' +
+      '<div id="glitch-level-msg" class="glitch-level-msg" style="color:rgba(255,60,80,0.32)"></div>' +
     '</div>' +
     '<div id="glitch-complete" class="glitch-complete-overlay" style="display:none">' +
       '<div class="glitch-complete-card" style="border-color:rgba(255,40,80,0.28);box-shadow:0 0 60px rgba(255,40,80,0.10),0 0 120px rgba(255,40,80,0.04)">' +
@@ -5652,6 +5663,7 @@ function launchChaosMode() {
     '</div>';
 
   window.__chaosBack = function () {
+    if (typeof LoreSystem !== 'undefined') LoreSystem.destroy();
     if (typeof ChaosGame !== 'undefined') ChaosGame.destroy();
     var ov = document.getElementById('gh-game-overlay');
     if (ov) ov.remove();
@@ -5666,13 +5678,19 @@ function launchChaosMode() {
     overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#060104;display:flex;flex-direction:column;';
     overlay.innerHTML = backBar + chaosBody;
     document.body.appendChild(overlay);
-    setTimeout(function () { if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas'); }, 150);
+    setTimeout(function () {
+      if (typeof LoreSystem !== 'undefined') LoreSystem.init('chaos');
+      if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas');
+    }, 150);
     return;
   }
 
   panel.innerHTML = '<div style="position:relative;display:flex;flex-direction:column;height:100%;">' +
     backBar + chaosBody + '</div>';
-  setTimeout(function () { if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas'); }, 100);
+  setTimeout(function () {
+    if (typeof LoreSystem !== 'undefined') LoreSystem.init('chaos');
+    if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas');
+  }, 100);
 }
 
 function getProfileRank(fi) {

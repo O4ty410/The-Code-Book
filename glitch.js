@@ -69,7 +69,7 @@
     return g;
   }
 
-  function loadLevel(idx) {
+  function loadLevel(idx, skipLore) {
     var def = LEVELS[idx % LEVELS.length];
     var n = def.size;
     G.size = n;
@@ -83,6 +83,7 @@
     G.grid = grid;
     var sub = document.getElementById('glitch-sub');
     if (sub) sub.textContent = def.name;
+    if (!skipLore && typeof LoreSystem !== 'undefined') LoreSystem.onLevelStart(idx + 1);
   }
 
   // ── Power BFS ────────────────────────────────────────────
@@ -528,6 +529,7 @@
     if (nextBtn) nextBtn.textContent = G.level >= LEVELS.length ? 'Play Again →' : 'Next Level →';
     if (G.canvas) G.canvas.classList.add('is-solved');
     if (typeof awardXP === 'function') awardXP(xp, 'Glitch Mode');
+    if (typeof LoreSystem !== 'undefined') LoreSystem.onSolve();
   }
 
   function resize() {
@@ -606,6 +608,7 @@
   }
 
   function restart() {
+    if (typeof LoreSystem !== 'undefined') LoreSystem.onRestart();
     G.moves       = 0;
     G.solving     = false;
     G.solvedFired = false;
@@ -614,7 +617,7 @@
     G.tapped      = null;
     G.powered     = {};
     G.powFlash    = {};
-    loadLevel(G.level - 1);
+    loadLevel(G.level - 1, true); // skipLore: restart reuses same level, no start msg
     if (G.canvas) G.canvas.classList.remove('is-solved');
     var ov = document.getElementById('glitch-complete');
     if (ov) ov.style.display = 'none';
