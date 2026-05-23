@@ -5716,7 +5716,8 @@ function launchGlitchMode() {
   if (!panel) return;
   showGameIntro('venus', function() { showGameBriefing('venus'); });
 
-  var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(0,200,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
+  var envBgVenus = '<div class="env-bg env-bg--venus" aria-hidden="true"><img class="env-bg-img" src="assets/venus-bg.jpg" alt=""><div class="env-bg-depth"></div><div class="env-bg-horizon"></div><div class="env-bg-vignette"></div></div>';
+  var backBar = '<div class="glitch-back-bar" style="height:44px;background:#0a0a0a;border-bottom:1px solid rgba(0,200,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__glitchBack()" style="background:none;border:none;color:#00e5ff;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
     '</div>';
   var glitchBody =
@@ -5766,7 +5767,7 @@ function launchGlitchMode() {
     var overlay = document.createElement('div');
     overlay.id = 'gh-game-overlay';
     overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#020608;display:flex;flex-direction:column;';
-    overlay.innerHTML = backBar + glitchBody;
+    overlay.innerHTML = envBgVenus + backBar + glitchBody;
     document.body.appendChild(overlay);
     setTimeout(function() {
       if (typeof LoreSystem !== 'undefined') LoreSystem.init('venus');
@@ -5775,7 +5776,7 @@ function launchGlitchMode() {
     return;
   }
 
-  panel.innerHTML = '<div class="glitch-game-root">' + backBar + glitchBody + '</div>';
+  panel.innerHTML = '<div class="glitch-game-root">' + envBgVenus + backBar + glitchBody + '</div>';
   setTimeout(function() {
     if (typeof LoreSystem !== 'undefined') LoreSystem.init('venus');
     if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
@@ -5787,7 +5788,8 @@ function launchChaosMode() {
   if (!panel) return;
   showGameIntro('chaos', function() { showGameBriefing('chaos'); });
 
-  var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0208;border-bottom:1px solid rgba(255,40,80,0.18);display:flex;align-items:center;padding:0 14px;">' +
+  var envBgChaos = '<div class="env-bg env-bg--chaos" aria-hidden="true"><img class="env-bg-img" src="assets/chaos-bg.jpg" alt=""><div class="env-bg-depth"></div><div class="env-bg-horizon"></div><div class="env-bg-vignette"></div></div>';
+  var backBar = '<div class="glitch-back-bar" style="height:44px;background:#0a0208;border-bottom:1px solid rgba(255,40,80,0.18);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__chaosBack()" style="background:none;border:none;color:#ff4466;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
     '</div>';
   var chaosBody =
@@ -5837,7 +5839,7 @@ function launchChaosMode() {
     var overlay = document.createElement('div');
     overlay.id = 'gh-game-overlay';
     overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#060104;display:flex;flex-direction:column;';
-    overlay.innerHTML = backBar + chaosBody;
+    overlay.innerHTML = envBgChaos + backBar + chaosBody;
     document.body.appendChild(overlay);
     setTimeout(function () {
       if (typeof LoreSystem !== 'undefined') LoreSystem.init('chaos');
@@ -5846,7 +5848,7 @@ function launchChaosMode() {
     return;
   }
 
-  panel.innerHTML = '<div class="glitch-game-root glitch-game-root--chaos">' + backBar + chaosBody + '</div>';
+  panel.innerHTML = '<div class="glitch-game-root glitch-game-root--chaos">' + envBgChaos + backBar + chaosBody + '</div>';
   setTimeout(function () {
     if (typeof LoreSystem !== 'undefined') LoreSystem.init('chaos');
     if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas');

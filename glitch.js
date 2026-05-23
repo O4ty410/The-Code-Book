@@ -334,8 +334,7 @@
 
   function drawBg() {
     var ctx = G.ctx, w = G.canvas.width, h = G.canvas.height;
-    ctx.fillStyle = C.bg;
-    ctx.fillRect(0, 0, w, h);
+    ctx.clearRect(0, 0, w, h);
 
     // Animated mode-specific atmosphere
     if (G.mode === 'chaos') {
