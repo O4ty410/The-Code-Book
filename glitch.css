@@ -54,6 +54,7 @@
   color: #00e5ff;
   line-height: 1;
   text-shadow: 0 0 10px rgba(0,229,255,0.5);
+  display: inline-block; /* required for transform in pop animation */
 }
 
 .glitch-stat-lbl {
@@ -62,6 +63,16 @@
   letter-spacing: 1px;
   color: rgba(0,200,255,0.40);
   text-transform: uppercase;
+}
+
+/* Stat counter pop on update */
+@keyframes glitch-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.38); }
+  100% { transform: scale(1); }
+}
+.glitch-pop {
+  animation: glitch-pop 0.22s ease-out;
 }
 
 /* ── Restart button ─────────────────────────────────────── */
@@ -74,11 +85,17 @@
   line-height: 1;
   padding: 4px 7px;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.glitch-restart-btn:hover {
+  color: #00e5ff;
+  border-color: rgba(0,229,255,0.50);
+  background: rgba(0,229,255,0.06);
 }
 .glitch-restart-btn:active {
   color: #00e5ff;
-  border-color: rgba(0,229,255,0.6);
+  border-color: rgba(0,229,255,0.70);
+  background: rgba(0,229,255,0.12);
 }
 
 /* ── Canvas area ────────────────────────────────────────── */
@@ -99,6 +116,15 @@
     inset 0 0 24px rgba(0,0,0,0.5);
   touch-action: none;
   cursor: pointer;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Canvas border turns green when solved */
+#glitch-canvas.is-solved {
+  border-color: rgba(0,255,150,0.45);
+  box-shadow:
+    0 0 50px rgba(0,255,150,0.18),
+    inset 0 0 24px rgba(0,0,0,0.5);
 }
 
 /* ── Level complete overlay ─────────────────────────────── */
@@ -112,7 +138,7 @@
   align-items: center;
   justify-content: center;
   z-index: 20;
-  animation: glitch-fade-in 0.3s ease;
+  animation: glitch-fade-in 0.25s ease;
 }
 
 @keyframes glitch-fade-in {
@@ -120,6 +146,7 @@
   to   { opacity: 1; }
 }
 
+/* Card bounces in with spring easing */
 .glitch-complete-card {
   text-align: center;
   padding: 32px 28px;
@@ -131,6 +158,12 @@
     0 0 120px rgba(0,229,255,0.05);
   max-width: 280px;
   width: 90%;
+  animation: glitch-card-in 0.40s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes glitch-card-in {
+  from { transform: scale(0.84) translateY(14px); opacity: 0; }
+  to   { transform: scale(1)    translateY(0);    opacity: 1; }
 }
 
 .glitch-complete-glyph {
@@ -182,16 +215,30 @@
   color: #00e5ff;
   cursor: pointer;
   letter-spacing: 1.5px;
-  transition: background 0.15s, box-shadow 0.15s;
+  transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
   text-transform: uppercase;
 }
-
+.glitch-next-btn:hover {
+  background: rgba(0,229,255,0.08);
+  border-color: rgba(0,229,255,0.65);
+  box-shadow: 0 0 20px rgba(0,229,255,0.15);
+}
 .glitch-next-btn:active {
-  background: rgba(0,229,255,0.10);
-  box-shadow: 0 0 22px rgba(0,229,255,0.18);
+  background: rgba(0,229,255,0.14);
+  box-shadow: 0 0 28px rgba(0,229,255,0.22);
 }
 
 /* ── Mobile back-bar padding ────────────────────────────── */
 .is-mobile #panel-game {
   padding-top: calc(48px + env(safe-area-inset-top, 0px));
+}
+
+/* ── Compact layout for short screens (landscape mobile) ── */
+@media (max-height: 600px) {
+  .glitch-hdr {
+    padding: 10px 12px 8px;
+  }
+  .glitch-canvas-wrap {
+    padding: 8px 8px 10px;
+  }
 }
