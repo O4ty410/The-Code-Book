@@ -13,14 +13,20 @@
   flex-shrink: 0;
 }
 
+/* Title pulses gently — signals active system state */
+@keyframes glitch-title-pulse {
+  0%, 100% { text-shadow: 0 0 14px rgba(0,229,255,0.55); }
+  50%       { text-shadow: 0 0 26px rgba(0,229,255,0.92), 0 0 50px rgba(0,229,255,0.18); }
+}
+
 .glitch-hdr-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: #00e5ff;
   letter-spacing: 3px;
-  text-shadow: 0 0 14px rgba(0,229,255,0.55);
   margin-bottom: 4px;
+  animation: glitch-title-pulse 3.4s ease-in-out infinite;
 }
 
 .glitch-hdr-sub {
@@ -105,26 +111,32 @@
   align-items: center;
   justify-content: center;
   padding: 16px 12px 20px;
+  background: radial-gradient(ellipse at 50% 52%, rgba(0,50,90,0.14) 0%, transparent 68%);
+}
+
+/* Canvas breathes at rest — feels like a living system interface */
+@keyframes glitch-canvas-breathe {
+  0%, 100% { box-shadow: 0 0 40px rgba(0,200,255,0.06), inset 0 0 24px rgba(0,0,0,0.5); }
+  50%       { box-shadow: 0 0 76px rgba(0,200,255,0.13), inset 0 0 24px rgba(0,0,0,0.5); }
 }
 
 #glitch-canvas {
   display: block;
   border-radius: 8px;
   border: 1px solid rgba(0,200,255,0.12);
-  box-shadow:
-    0 0 40px rgba(0,200,255,0.07),
-    inset 0 0 24px rgba(0,0,0,0.5);
   touch-action: none;
   cursor: pointer;
-  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+  transition: border-color 0.5s ease;
+  animation: glitch-canvas-breathe 3.8s ease-in-out infinite;
 }
 
-/* Canvas border turns green when solved */
+/* Canvas border turns green when solved; idle breathe stops */
 #glitch-canvas.is-solved {
   border-color: rgba(0,255,150,0.45);
   box-shadow:
     0 0 50px rgba(0,255,150,0.18),
     inset 0 0 24px rgba(0,0,0,0.5);
+  animation: none;
 }
 
 /* ── Level complete overlay ─────────────────────────────── */

@@ -51,11 +51,13 @@
     animId: null,
     cellPx: 80, ox: 0, oy: 0,
     _tx: 0, _ty: 0,
-    t: 0,          // current rAF timestamp
-    tapped: null,  // {r, c, t0} — tap flash
-    powered: {},   // "r,c" → true — last-frame powered set
-    powFlash: {},  // "r,c" → timestamp — newly-powered flash
-    glitchMods: null, // modifier hooks (set via setModifiers)
+    t: 0,            // current rAF timestamp
+    tapped: null,    // {r, c, t0} — tap flash
+    powered: {},     // "r,c" → true — last-frame powered set
+    powFlash: {},    // "r,c" → timestamp — newly-powered flash
+    glitchMods: null,  // modifier hooks (set via setModifiers)
+    bgParticles: [],   // ambient drifting canvas particles
+    vignetteGrad: null // cached radial gradient for depth vignette
   };
 
   function makeGrid(n) {
@@ -156,17 +158,52 @@
             G.oy + r*G.cellPx + G.cellPx*0.5];
   }
 
+  // ── Background: particles + vignette ─────────────────────
   function drawBg() {
-    G.ctx.fillStyle = C.bg;
-    G.ctx.fillRect(0, 0, G.canvas.width, G.canvas.height);
+    var ctx = G.ctx, w = G.canvas.width, h = G.canvas.height;
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(0, 0, w, h);
+
+    // Ambient drifting particles — all batched into one fill call
+    var pts = G.bgParticles;
+    if (pts && pts.length) {
+      var pAlpha = 0.032 * (0.45 + 0.55 * Math.sin(G.t * 0.0013));
+      ctx.fillStyle = 'rgba(0,210,255,' + pAlpha.toFixed(4) + ')';
+      ctx.beginPath();
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = w;
+        if (p.x > w) p.x = 0;
+        if (p.y < 0) p.y = h;
+        if (p.y > h) p.y = 0;
+        ctx.moveTo(p.x + p.r, p.y);
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      }
+      ctx.fill();
+    }
+
+    // Edge vignette — caches gradient until canvas is resized
+    if (!G.vignetteGrad) {
+      var vg = ctx.createRadialGradient(w*0.5, h*0.5, h*0.22, w*0.5, h*0.5, h*0.80);
+      vg.addColorStop(0, 'rgba(0,0,0,0)');
+      vg.addColorStop(1, 'rgba(0,0,0,0.38)');
+      G.vignetteGrad = vg;
+    }
+    ctx.fillStyle = G.vignetteGrad;
+    ctx.fillRect(0, 0, w, h);
   }
 
+  // ── Grid lines with subtle ripple ─────────────────────────
   function drawGridLines() {
     var ctx = G.ctx, n = G.size;
     ctx.save();
-    ctx.strokeStyle = C.grid;
     ctx.lineWidth = 0.5;
+    var baseT = G.t * 0.00075;
     for (var i = 0; i <= n; i++) {
+      var alpha = 0.07 + 0.04 * Math.sin(baseT + i * 0.58);
+      ctx.strokeStyle = 'rgba(0,200,255,' + alpha.toFixed(3) + ')';
       ctx.beginPath();
       ctx.moveTo(G.ox, G.oy + i*G.cellPx);
       ctx.lineTo(G.ox + n*G.cellPx, G.oy + i*G.cellPx);
@@ -179,6 +216,7 @@
     ctx.restore();
   }
 
+  // ── Pipe drawing with idle breathing + reactive ring flash ─
   function drawPipe(r, c, pow) {
     var ctx = G.ctx, cell = G.grid[r][c];
     var conn = getConn(cell.type, cell.rot);
@@ -204,12 +242,22 @@
       }
     }
 
-    // Power-on flash — extra glow when a pipe first becomes powered
+    // Power-on flash — expanding ring + extra glow when pipe first becomes powered
     var extraGlow = 0;
     if (on && G.powFlash[key]) {
-      var flashAge = (G.t - G.powFlash[key]) / 300;
-      if (flashAge < 1) extraGlow = (1 - flashAge) * 24;
-      else delete G.powFlash[key];
+      var flashAge = (G.t - G.powFlash[key]) / 400;
+      if (flashAge < 1) {
+        extraGlow = (1 - flashAge) * 22;
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, (1 - flashAge) * G.cellPx * 0.46, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(0,229,255,' + ((1 - flashAge) * 0.52) + ')';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.restore();
+      } else {
+        delete G.powFlash[key];
+      }
     }
 
     ctx.save();
@@ -220,7 +268,9 @@
       ctx.shadowBlur = 14 + extraGlow;
       ctx.shadowColor = C.pipeGlow;
     } else {
-      ctx.strokeStyle = C.pipeOff;
+      // Idle breathing — each pipe breathes at its own phase for organic feel
+      var breathe = 0.52 + 0.22 * Math.sin(G.t * 0.0017 + r * 0.85 + c * 1.1);
+      ctx.strokeStyle = 'rgba(0,200,255,' + (0.22 * breathe).toFixed(3) + ')';
       ctx.lineWidth = 3;
       ctx.shadowBlur = 0;
     }
@@ -239,9 +289,22 @@
     ctx.restore();
   }
 
+  // ── Source node with slow rotating outer ring ─────────────
   function drawSource(r, c, t) {
     var ctx = G.ctx, pos = ctr(r, c), cx = pos[0], cy = pos[1];
     var pulse = 0.85 + 0.15 * Math.sin(t * 0.003);
+
+    // Slow outer rotating arc — adds depth and suggests active power
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(t * 0.0009);
+    ctx.beginPath();
+    ctx.arc(0, 0, 23, 0, Math.PI * 1.55);
+    ctx.strokeStyle = 'rgba(0,229,255,0.10)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.restore();
+
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, 17*pulse, 0, Math.PI*2);
@@ -338,6 +401,26 @@
     ctx.restore();
   }
 
+  // Slow ambient energy dots that flow along the solved path
+  function drawAmbientFlow(t) {
+    var path = G.signalPath;
+    if (path.length < 2) return;
+    var ctx = G.ctx;
+    for (var i = 0; i < 3; i++) {
+      var prog = ((t * 0.00028) + i * 0.34) % 1;
+      var pos = getParticlePos(path, prog);
+      var alpha = 0.16 + 0.10 * Math.sin(t * 0.002 + i * 2.09);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(pos[0], pos[1], 2.2, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(0,229,255,' + alpha.toFixed(3) + ')';
+      ctx.shadowBlur = 7;
+      ctx.shadowColor = '#00e5ff';
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
   function render(t) {
     G.t = t;
     var pow = computePower();
@@ -380,7 +463,11 @@
         }
       }
     }
-    if (G.solving && G.signalPath.length > 0) drawParticle(G.signalPath, G.signalT);
+    // Ambient flow along signal path (visible during solve animation + through overlay blur)
+    if (G.solving && G.signalPath.length > 0) {
+      drawAmbientFlow(t);
+      drawParticle(G.signalPath, G.signalT);
+    }
     // Modifier post-render (scanlines, stripe effects, etc.)
     if (G.glitchMods && G.glitchMods.postRender) {
       G.glitchMods.postRender(G.ctx, G.canvas.width, G.canvas.height, t);
@@ -454,6 +541,7 @@
     G.cellPx = Math.floor(sz / G.size);
     G.ox = Math.floor((sz - G.cellPx * G.size) / 2);
     G.oy = G.ox;
+    G.vignetteGrad = null; // invalidate cached gradient when size changes
   }
 
   // ── Public API ───────────────────────────────────────────
@@ -477,6 +565,18 @@
     G.powFlash    = {};
     loadLevel(0);
     resize();
+
+    // Seed ambient background particles after canvas is sized
+    G.bgParticles = [];
+    for (var i = 0; i < 18; i++) {
+      G.bgParticles.push({
+        x:  Math.random() * G.canvas.width,
+        y:  Math.random() * G.canvas.height,
+        vx: (Math.random() - 0.5) * 0.13,
+        vy: (Math.random() - 0.5) * 0.13,
+        r:  0.55 + Math.random() * 0.85
+      });
+    }
 
     canvas.addEventListener('touchstart', function(e) {
       e.preventDefault();
