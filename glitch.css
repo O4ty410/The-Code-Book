@@ -822,3 +822,212 @@
     right: 260px !important;
   }
 }
+
+/* ── Cinematic game intro overlay ──────────────────────── */
+.game-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 0;
+  animation: gi-fade-in 0.5s ease 0.05s forwards;
+  cursor: pointer;
+}
+
+.game-intro--exit {
+  animation: gi-fade-out 0.56s ease forwards !important;
+}
+
+@keyframes gi-fade-in  {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes gi-fade-out {
+  from { opacity: 1; transform: scale(1);    filter: brightness(1); }
+  to   { opacity: 0; transform: scale(1.04); filter: brightness(1.6); }
+}
+
+/* Venus atmospheric background */
+.game-intro--venus {
+  background:
+    radial-gradient(ellipse 85% 65% at 50% 38%, rgba(0,60,200,0.60) 0%, transparent 66%),
+    radial-gradient(ellipse 55% 42% at 12% 85%, rgba(0,20,140,0.42) 0%, transparent 55%),
+    radial-gradient(ellipse 48% 36% at 88% 18%, rgba(70,0,190,0.34) 0%, transparent 55%),
+    #020510;
+}
+
+/* Chaos atmospheric background */
+.game-intro--chaos {
+  background:
+    radial-gradient(ellipse 85% 60% at 50% 38%, rgba(150,10,0,0.65) 0%, transparent 66%),
+    radial-gradient(ellipse 55% 40% at 88% 85%, rgba(110,20,0,0.50) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 10% 18%, rgba(90,5,15,0.40) 0%, transparent 55%),
+    #060102;
+}
+
+/* CRT scanline grid over the whole intro */
+.game-intro-scanlines {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 1px,
+    rgba(0,0,0,0.10) 1px,
+    rgba(0,0,0,0.10) 2px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Content block */
+.game-intro-inner {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  padding: 0 24px;
+}
+
+/* Eyebrow label */
+.game-intro-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: gi-text-up 0.6s ease 0.40s forwards;
+}
+.game-intro--venus .game-intro-eyebrow { color: rgba(0,200,255,0.58); }
+.game-intro--chaos .game-intro-eyebrow { color: rgba(255,90,40,0.68); }
+
+/* Main title */
+.game-intro-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(68px, 15vw, 138px);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  margin-bottom: 28px;
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  animation: gi-title-bloom 0.92s cubic-bezier(0.16,1,0.3,1) 0.85s forwards;
+}
+.game-intro--venus .game-intro-title {
+  color: #00e5ff;
+  text-shadow:
+    0 0 28px rgba(0,229,255,0.95),
+    0 0 80px rgba(0,200,255,0.50),
+    0 0 170px rgba(0,120,255,0.22);
+}
+.game-intro--chaos .game-intro-title {
+  color: #ff3c1a;
+  text-shadow:
+    0 0 28px rgba(255,60,25,0.95),
+    0 0 80px rgba(255,40,15,0.52),
+    0 0 170px rgba(200,0,0,0.24);
+}
+
+@keyframes gi-title-bloom {
+  0%   { opacity: 0; transform: scale(0.86); filter: blur(18px); }
+  60%  { opacity: 1; transform: scale(1.03); filter: blur(0px);  }
+  100% { opacity: 1; transform: scale(1);    filter: blur(0px);  }
+}
+
+/* Chaos RGB channel-split glitch on title */
+.game-intro--chaos .game-intro-title::before,
+.game-intro--chaos .game-intro-title::after {
+  content: attr(data-glitch);
+  position: absolute;
+  top: 0; left: 0; width: 100%;
+  font-family: inherit; font-size: inherit;
+  font-weight: inherit; letter-spacing: inherit;
+  line-height: inherit;
+}
+.game-intro--chaos .game-intro-title::before {
+  color: rgba(0,255,255,0.42);
+  clip-path: polygon(0 0, 100% 0, 100% 44%, 0 44%);
+  animation: gi-glitch-lo 5s step-end 2.0s infinite;
+}
+.game-intro--chaos .game-intro-title::after {
+  color: rgba(255,0,80,0.42);
+  clip-path: polygon(0 56%, 100% 56%, 100% 100%, 0 100%);
+  animation: gi-glitch-hi 5s step-end 2.2s infinite;
+}
+@keyframes gi-glitch-lo {
+  0%, 80%, 100% { transform: translate(0,0);   }
+  82%            { transform: translate(-6px,0); }
+  86%            { transform: translate(4px,0);  }
+  90%            { transform: translate(-2px,0); }
+}
+@keyframes gi-glitch-hi {
+  0%, 80%, 100% { transform: translate(0,0);  }
+  82%            { transform: translate(6px,0); }
+  86%            { transform: translate(-4px,0);}
+  90%            { transform: translate(2px,0); }
+}
+
+/* Subtitle */
+.game-intro-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  margin-bottom: 38px;
+  opacity: 0;
+  animation: gi-text-up 0.5s ease 1.55s forwards;
+}
+.game-intro--venus .game-intro-sub { color: rgba(0,180,255,0.50); }
+.game-intro--chaos .game-intro-sub { color: rgba(255,110,50,0.50); }
+
+@keyframes gi-text-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);     }
+}
+
+/* Progress bar */
+.game-intro-bar {
+  width: min(280px, 58vw);
+  height: 2px;
+  margin: 0 auto 22px;
+  border-radius: 2px;
+  overflow: hidden;
+  opacity: 0;
+  animation: gi-text-up 0.4s ease 1.65s forwards;
+}
+.game-intro--venus .game-intro-bar { background: rgba(0,200,255,0.12); }
+.game-intro--chaos .game-intro-bar { background: rgba(255,80,30,0.12); }
+
+.game-intro-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 2px;
+  animation: gi-bar-fill 1.7s cubic-bezier(0.4,0,0.2,1) 1.75s forwards;
+}
+.game-intro--venus .game-intro-bar-fill {
+  background: linear-gradient(90deg, rgba(0,180,255,0.55), #00e5ff);
+}
+.game-intro--chaos .game-intro-bar-fill {
+  background: linear-gradient(90deg, rgba(255,60,20,0.55), #ff4422);
+}
+
+@keyframes gi-bar-fill {
+  from { width: 0%;   }
+  to   { width: 100%; }
+}
+
+/* Skip hint */
+.game-intro-skip {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: gi-text-up 0.4s ease 2.5s forwards;
+}
+.game-intro--venus .game-intro-skip { color: rgba(0,200,255,0.28); }
+.game-intro--chaos .game-intro-skip { color: rgba(255,80,30,0.28); }
