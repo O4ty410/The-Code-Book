@@ -362,3 +362,156 @@
     padding: 8px 8px 10px;
   }
 }
+
+/* ── Game root & body containers ───────────────────────── */
+.glitch-game-root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.glitch-game-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Desktop 2-column layout (≥ 900px) ─────────────────── */
+@media (min-width: 900px) {
+
+  /* Body becomes a side-by-side row */
+  .glitch-game-body {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  /* Canvas column — fills all remaining space on the left */
+  .glitch-canvas-wrap {
+    order: 1;
+    flex: 1 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px 28px 24px !important;
+  }
+
+  /* Info panel — right column */
+  .glitch-hdr {
+    order: 2;
+    width: 250px;
+    flex-shrink: 0;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start;
+    border-bottom: none !important;
+    border-left: 1px solid rgba(0,200,255,0.10);
+    padding: 28px 22px 24px !important;
+    gap: 0 !important;
+    overflow-y: auto;
+  }
+
+  .glitch-game-root--chaos .glitch-hdr {
+    border-left-color: rgba(255,40,80,0.12);
+  }
+
+  /* Bigger mode title */
+  .glitch-hdr-title {
+    font-size: 18px !important;
+    letter-spacing: 4px !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* Level/log text more readable */
+  .glitch-hdr-sub {
+    font-size: 11px !important;
+    color: rgba(0,200,255,0.60) !important;
+  }
+
+  .glitch-hdr-left {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .glitch-log {
+    font-size: 9.5px !important;
+    max-width: none !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: unset !important;
+    line-height: 1.75 !important;
+    color: rgba(0,200,255,0.35) !important;
+    margin-top: 6px !important;
+    min-height: 32px !important;
+  }
+
+  .glitch-log--chaos {
+    color: rgba(255,60,80,0.32) !important;
+  }
+
+  /* Divider between log and stats */
+  .glitch-hdr-left::after {
+    content: '';
+    display: block;
+    height: 1px;
+    background: rgba(0,200,255,0.08);
+    margin-top: 16px;
+  }
+
+  /* Stats stack vertically, label left / value right */
+  .glitch-stats {
+    flex-direction: column !important;
+    gap: 0 !important;
+    margin-top: 20px !important;
+    width: 100% !important;
+    align-items: stretch !important;
+  }
+
+  .glitch-stat {
+    flex-direction: row !important;
+    align-items: baseline !important;
+    justify-content: space-between !important;
+    min-width: unset !important;
+    width: 100% !important;
+    gap: 0 !important;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,200,255,0.06);
+  }
+
+  .glitch-game-root--chaos .glitch-stat {
+    border-bottom-color: rgba(255,40,80,0.06);
+  }
+
+  /* Restart row — full-width button, no divider */
+  .glitch-stat--restart {
+    border-bottom: none !important;
+    padding-top: 18px !important;
+  }
+
+  .glitch-stat-lbl {
+    font-size: 8px !important;
+    letter-spacing: 1.5px !important;
+    color: rgba(0,200,255,0.38) !important;
+  }
+
+  .glitch-stat-val {
+    font-size: 24px !important;
+  }
+
+  /* Restart button — full width */
+  .glitch-stat--restart .glitch-restart-btn {
+    width: 100% !important;
+    padding: 10px 14px !important;
+    font-size: 11px !important;
+    border-radius: 8px !important;
+    letter-spacing: 1.5px !important;
+    font-family: 'Space Mono', monospace !important;
+    text-transform: uppercase;
+  }
+
+  /* Solve overlay only covers the canvas column on desktop */
+  .glitch-complete-overlay {
+    right: 250px !important;
+  }
+}

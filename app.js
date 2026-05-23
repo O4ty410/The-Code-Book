@@ -5569,22 +5569,24 @@ function launchGlitchMode() {
     '<button onclick="__glitchBack()" style="background:none;border:none;color:#00e5ff;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
     '</div>';
   var glitchBody =
-    '<div class="glitch-hdr">' +
-      '<div class="glitch-hdr-left">' +
-        '<div class="glitch-hdr-title">VENUS MODE</div>' +
-        '<div class="glitch-hdr-sub" id="glitch-sub">LINK-01</div>' +
-        '<div class="glitch-log" id="glitch-log"></div>' +
+    '<div class="glitch-game-body">' +
+      '<div class="glitch-hdr">' +
+        '<div class="glitch-hdr-left">' +
+          '<div class="glitch-hdr-title">VENUS MODE</div>' +
+          '<div class="glitch-hdr-sub" id="glitch-sub">LINK-01</div>' +
+          '<div class="glitch-log" id="glitch-log"></div>' +
+        '</div>' +
+        '<div class="glitch-stats">' +
+          '<div class="glitch-stat"><span class="glitch-stat-lbl">LVL</span><span class="glitch-stat-val" id="glitch-level">1</span></div>' +
+          '<div class="glitch-stat"><span class="glitch-stat-lbl">SCORE</span><span class="glitch-stat-val" id="glitch-score">0</span></div>' +
+          '<div class="glitch-stat"><span class="glitch-stat-lbl">MOVES</span><span class="glitch-stat-val" id="glitch-moves">0</span></div>' +
+          '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" onclick="if(typeof GlitchGame!==\'undefined\')GlitchGame.restart()" title="Restart level">&#8635; RESTART</button></div>' +
+        '</div>' +
       '</div>' +
-      '<div class="glitch-stats">' +
-        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-level">1</span><span class="glitch-stat-lbl">LVL</span></div>' +
-        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-score">0</span><span class="glitch-stat-lbl">SCORE</span></div>' +
-        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-moves">0</span><span class="glitch-stat-lbl">MOVES</span></div>' +
-        '<div class="glitch-stat"><button class="glitch-restart-btn" onclick="if(typeof GlitchGame!==\'undefined\')GlitchGame.restart()" title="Restart level">&#8635;</button></div>' +
+      '<div class="glitch-canvas-wrap" style="position:relative">' +
+        '<canvas id="glitch-canvas"></canvas>' +
+        '<div id="glitch-level-msg" class="glitch-level-msg"></div>' +
       '</div>' +
-    '</div>' +
-    '<div class="glitch-canvas-wrap" style="flex:1;position:relative">' +
-      '<canvas id="glitch-canvas"></canvas>' +
-      '<div id="glitch-level-msg" class="glitch-level-msg"></div>' +
     '</div>' +
     '<div id="glitch-complete" class="glitch-complete-overlay" style="display:none">' +
       '<div class="glitch-complete-card">' +
@@ -5621,8 +5623,7 @@ function launchGlitchMode() {
     return;
   }
 
-  panel.innerHTML = '<div style="position:relative;display:flex;flex-direction:column;height:100%;">' +
-    backBar + glitchBody + '</div>';
+  panel.innerHTML = '<div class="glitch-game-root">' + backBar + glitchBody + '</div>';
   setTimeout(function() {
     if (typeof LoreSystem !== 'undefined') LoreSystem.init('venus');
     if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
@@ -5637,22 +5638,24 @@ function launchChaosMode() {
     '<button onclick="__chaosBack()" style="background:none;border:none;color:#ff4466;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
     '</div>';
   var chaosBody =
-    '<div class="glitch-hdr" style="border-bottom-color:rgba(255,40,80,0.12)">' +
-      '<div class="glitch-hdr-left">' +
-        '<div class="glitch-hdr-title" style="color:#ff4466;text-shadow:0 0 14px rgba(255,40,80,0.55)">GLITCH MODE</div>' +
-        '<div class="glitch-hdr-sub" id="glitch-sub">GLITCH-01</div>' +
-        '<div class="glitch-log" id="glitch-log"></div>' +
+    '<div class="glitch-game-body">' +
+      '<div class="glitch-hdr" style="border-bottom-color:rgba(255,40,80,0.12)">' +
+        '<div class="glitch-hdr-left">' +
+          '<div class="glitch-hdr-title" style="color:#ff4466;text-shadow:0 0 14px rgba(255,40,80,0.55)">GLITCH MODE</div>' +
+          '<div class="glitch-hdr-sub" id="glitch-sub">GLITCH-01</div>' +
+          '<div class="glitch-log glitch-log--chaos" id="glitch-log"></div>' +
+        '</div>' +
+        '<div class="glitch-stats">' +
+          '<div class="glitch-stat"><span class="glitch-stat-lbl">LVL</span><span class="glitch-stat-val" id="glitch-level">1</span></div>' +
+          '<div class="glitch-stat"><span class="glitch-stat-lbl">SCORE</span><span class="glitch-stat-val" id="glitch-score">0</span></div>' +
+          '<div class="glitch-stat"><span class="glitch-stat-lbl">MOVES</span><span class="glitch-stat-val" id="glitch-moves">0</span></div>' +
+          '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" style="color:rgba(255,60,80,0.70);border-color:rgba(255,40,80,0.30)" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635; RESTART</button></div>' +
+        '</div>' +
       '</div>' +
-      '<div class="glitch-stats">' +
-        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-level">1</span><span class="glitch-stat-lbl">LVL</span></div>' +
-        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-score">0</span><span class="glitch-stat-lbl">SCORE</span></div>' +
-        '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-moves">0</span><span class="glitch-stat-lbl">MOVES</span></div>' +
-        '<div class="glitch-stat"><button class="glitch-restart-btn" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635;</button></div>' +
+      '<div class="glitch-canvas-wrap" style="position:relative">' +
+        '<canvas id="glitch-canvas"></canvas>' +
+        '<div id="glitch-level-msg" class="glitch-level-msg" style="color:rgba(255,60,80,0.32)"></div>' +
       '</div>' +
-    '</div>' +
-    '<div class="glitch-canvas-wrap" style="flex:1;position:relative">' +
-      '<canvas id="glitch-canvas"></canvas>' +
-      '<div id="glitch-level-msg" class="glitch-level-msg" style="color:rgba(255,60,80,0.32)"></div>' +
     '</div>' +
     '<div id="glitch-complete" class="glitch-complete-overlay" style="display:none">' +
       '<div class="glitch-complete-card" style="border-color:rgba(255,40,80,0.28);box-shadow:0 0 60px rgba(255,40,80,0.10),0 0 120px rgba(255,40,80,0.04)">' +
@@ -5689,8 +5692,7 @@ function launchChaosMode() {
     return;
   }
 
-  panel.innerHTML = '<div style="position:relative;display:flex;flex-direction:column;height:100%;">' +
-    backBar + chaosBody + '</div>';
+  panel.innerHTML = '<div class="glitch-game-root glitch-game-root--chaos">' + backBar + chaosBody + '</div>';
   setTimeout(function () {
     if (typeof LoreSystem !== 'undefined') LoreSystem.init('chaos');
     if (typeof ChaosGame !== 'undefined') ChaosGame.init('glitch-canvas');

@@ -718,9 +718,10 @@
   function resize() {
     if (!G.canvas) return;
     var parent = G.canvas.parentElement;
-    var avail = (parent && parent.clientWidth > 0) ? parent.clientWidth - 24 : window.innerWidth - 24;
-    if (avail < 100) avail = window.innerWidth - 24;
-    var sz = Math.min(Math.max(avail, 100), 400);
+    var avail = (parent && parent.clientWidth > 0) ? parent.clientWidth - 32 : window.innerWidth - 32;
+    if (avail < 100) avail = window.innerWidth - 32;
+    var maxSz = window.innerWidth >= 900 ? 560 : 400;
+    var sz = Math.min(Math.max(avail, 100), maxSz);
     G.canvas.width  = sz;
     G.canvas.height = sz;
     G.cellPx = Math.floor(sz / G.size);
@@ -763,6 +764,9 @@
         r:  0.55 + Math.random() * 0.85
       });
     }
+
+    G._resizeHandler = function() { resize(); };
+    window.addEventListener('resize', G._resizeHandler);
 
     canvas.addEventListener('touchstart', function(e) {
       e.preventDefault();
@@ -834,6 +838,7 @@
 
   function destroy() {
     if (G.animId) { cancelAnimationFrame(G.animId); G.animId = null; }
+    if (G._resizeHandler) { window.removeEventListener('resize', G._resizeHandler); G._resizeHandler = null; }
     G.canvas = null;
     G.ctx    = null;
   }
