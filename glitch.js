@@ -55,6 +55,7 @@
     tapped: null,    // {r, c, t0} — tap flash
     powered: {},     // "r,c" → true — last-frame powered set
     powFlash: {},    // "r,c" → timestamp — newly-powered flash
+    mode: 'venus',     // 'venus' | 'chaos' — switched via setMode()
     glitchMods: null,  // modifier hooks (set via setModifiers)
     bgParticles: [],   // ambient drifting canvas particles
     vignetteGrad: null // cached radial gradient for depth vignette
@@ -142,17 +143,52 @@
     return path;
   }
 
-  // ── Canvas colours ────────────────────────────────────────
-  var C = {
-    bg:       '#020608',
-    grid:     'rgba(0,200,255,0.10)',
-    pipeOff:  'rgba(0,200,255,0.22)',
-    pipeOn:   '#00e5ff',
-    pipeGlow: 'rgba(0,229,255,0.95)',
-    srcFill:  '#00e5ff',
-    tgtOff:   '#ff4444',
-    tgtOn:    '#00ff96',
+  // ── Canvas colour palettes (mode-switched via setMode) ────
+  var PALETTES = {
+    venus: {
+      bg:          '#020608',
+      bgTint:      null,
+      gridRGB:     '0,200,255',
+      gridBase:    0.08,
+      gridAmp:     0.04,
+      gridSpeed:   0.00075,
+      pipeOffRGB:  '0,200,255',
+      pipeOffBlur: 3,
+      pipeOffGlow: 'rgba(0,180,255,0.14)',
+      pipeOn:      '#00e5ff',
+      pipeOnBlur:  22,
+      pipeGlow:    'rgba(0,229,255,0.95)',
+      flashRGB:    '0,229,255',
+      srcFill:     '#00e5ff',
+      srcArcRGB:   '0,229,255',
+      tgtOff:      '#ff4444',
+      tgtOn:       '#00ff96',
+      partRGB:     '0,210,255',
+      partGlow:    '#00e5ff',
+    },
+    chaos: {
+      bg:          '#070204',
+      bgTint:      'rgba(200,30,10,0.03)',
+      gridRGB:     '255,90,30',
+      gridBase:    0.07,
+      gridAmp:     0.07,
+      gridSpeed:   0.0016,
+      pipeOffRGB:  '255,110,40',
+      pipeOffBlur: 3,
+      pipeOffGlow: 'rgba(255,80,20,0.18)',
+      pipeOn:      '#ff8c42',
+      pipeOnBlur:  22,
+      pipeGlow:    'rgba(255,140,60,0.95)',
+      flashRGB:    '255,140,60',
+      srcFill:     '#00e5ff',
+      srcArcRGB:   '255,120,40',
+      tgtOff:      '#ff4444',
+      tgtOn:       '#00ff96',
+      partRGB:     '255,120,50',
+      partGlow:    '#ff8c42',
+    }
   };
+  var C = PALETTES.venus;
 
   function ctr(r, c) {
     return [G.ox + c*G.cellPx + G.cellPx*0.5,
@@ -169,7 +205,7 @@
     var pts = G.bgParticles;
     if (pts && pts.length) {
       var pAlpha = 0.032 * (0.45 + 0.55 * Math.sin(G.t * 0.0013));
-      ctx.fillStyle = 'rgba(0,210,255,' + pAlpha.toFixed(4) + ')';
+      ctx.fillStyle = 'rgba(' + C.partRGB + ',' + pAlpha.toFixed(4) + ')';
       ctx.beginPath();
       for (var i = 0; i < pts.length; i++) {
         var p = pts[i];
@@ -194,6 +230,11 @@
     }
     ctx.fillStyle = G.vignetteGrad;
     ctx.fillRect(0, 0, w, h);
+
+    if (C.bgTint) {
+      ctx.fillStyle = C.bgTint;
+      ctx.fillRect(0, 0, w, h);
+    }
   }
 
   // ── Grid lines with subtle ripple ─────────────────────────
@@ -201,10 +242,10 @@
     var ctx = G.ctx, n = G.size;
     ctx.save();
     ctx.lineWidth = 0.5;
-    var baseT = G.t * 0.00075;
+    var baseT = G.t * C.gridSpeed;
     for (var i = 0; i <= n; i++) {
-      var alpha = 0.07 + 0.04 * Math.sin(baseT + i * 0.58);
-      ctx.strokeStyle = 'rgba(0,200,255,' + alpha.toFixed(3) + ')';
+      var alpha = C.gridBase + C.gridAmp * Math.sin(baseT + i * 0.58);
+      ctx.strokeStyle = 'rgba(' + C.gridRGB + ',' + alpha.toFixed(3) + ')';
       ctx.beginPath();
       ctx.moveTo(G.ox, G.oy + i*G.cellPx);
       ctx.lineTo(G.ox + n*G.cellPx, G.oy + i*G.cellPx);
@@ -251,9 +292,9 @@
         extraGlow = (1 - flashAge) * 22;
         ctx.save();
         ctx.beginPath();
-        ctx.arc(cx, cy, (1 - flashAge) * G.cellPx * 0.46, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(0,229,255,' + ((1 - flashAge) * 0.52) + ')';
-        ctx.lineWidth = 1.5;
+        ctx.arc(cx, cy, (1 - flashAge) * G.cellPx * 0.50, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(' + C.flashRGB + ',' + ((1 - flashAge) * 0.68).toFixed(3) + ')';
+        ctx.lineWidth = 2;
         ctx.stroke();
         ctx.restore();
       } else {
@@ -265,15 +306,15 @@
     ctx.lineCap = 'round';
     if (on) {
       ctx.strokeStyle = C.pipeOn;
-      ctx.lineWidth = 4;
-      ctx.shadowBlur = 14 + extraGlow;
+      ctx.lineWidth = 5;
+      ctx.shadowBlur = C.pipeOnBlur + extraGlow;
       ctx.shadowColor = C.pipeGlow;
     } else {
-      // Idle breathing — each pipe breathes at its own phase for organic feel
       var breathe = 0.52 + 0.22 * Math.sin(G.t * 0.0017 + r * 0.85 + c * 1.1);
-      ctx.strokeStyle = 'rgba(0,200,255,' + (0.22 * breathe).toFixed(3) + ')';
+      ctx.strokeStyle = 'rgba(' + C.pipeOffRGB + ',' + (0.30 * breathe).toFixed(3) + ')';
       ctx.lineWidth = 3;
-      ctx.shadowBlur = 0;
+      ctx.shadowBlur = C.pipeOffBlur;
+      ctx.shadowColor = C.pipeOffGlow;
     }
     for (var d = 0; d < 4; d++) {
       if (!conn[d]) continue;
@@ -283,9 +324,9 @@
       ctx.stroke();
     }
     ctx.beginPath();
-    ctx.arc(cx, cy, on ? 5 : 3.5, 0, Math.PI*2);
-    ctx.fillStyle = on ? C.pipeOn : C.pipeOff;
-    ctx.shadowBlur = on ? (16 + extraGlow) : 0;
+    ctx.arc(cx, cy, on ? 5.5 : 3.5, 0, Math.PI*2);
+    ctx.fillStyle = on ? C.pipeOn : ('rgba(' + C.pipeOffRGB + ',0.38)');
+    ctx.shadowBlur = on ? (20 + extraGlow) : 0;
     ctx.fill();
     ctx.restore();
   }
@@ -301,7 +342,7 @@
     ctx.rotate(t * 0.0009);
     ctx.beginPath();
     ctx.arc(0, 0, 23, 0, Math.PI * 1.55);
-    ctx.strokeStyle = 'rgba(0,229,255,0.10)';
+    ctx.strokeStyle = 'rgba(' + C.srcArcRGB + ',0.12)';
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.restore();
@@ -383,9 +424,9 @@
       ctx.save();
       ctx.beginPath();
       ctx.arc(pos[0], pos[1], tr.r, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(0,229,255,' + tr.a + ')';
+      ctx.fillStyle = 'rgba(' + C.partRGB + ',' + tr.a + ')';
       ctx.shadowBlur = 10;
-      ctx.shadowColor = '#00e5ff';
+      ctx.shadowColor = C.partGlow;
       ctx.fill();
       ctx.restore();
     });
@@ -397,7 +438,7 @@
     ctx.arc(pos[0], pos[1], 6.5, 0, Math.PI*2);
     ctx.fillStyle = '#fff';
     ctx.shadowBlur = 32;
-    ctx.shadowColor = '#00e5ff';
+    ctx.shadowColor = C.partGlow;
     ctx.fill();
     ctx.restore();
   }
@@ -414,9 +455,9 @@
       ctx.save();
       ctx.beginPath();
       ctx.arc(pos[0], pos[1], 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0,229,255,' + alpha.toFixed(3) + ')';
+      ctx.fillStyle = 'rgba(' + C.partRGB + ',' + alpha.toFixed(3) + ')';
       ctx.shadowBlur = 7;
-      ctx.shadowColor = '#00e5ff';
+      ctx.shadowColor = C.partGlow;
       ctx.fill();
       ctx.restore();
     }
@@ -555,6 +596,7 @@
 
     G.canvas      = canvas;
     G.ctx         = canvas.getContext('2d');
+    canvas.setAttribute('data-mode', G.mode);
     G.level       = 1;
     G.score       = 0;
     G.moves       = 0;
@@ -660,5 +702,12 @@
     LEVELS = (arr && arr.length) ? arr : DEFAULT_LEVELS;
   }
 
-  window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy, setModifiers: setModifiers, setLevels: setLevels };
+  function setMode(m) {
+    G.mode = (m === 'chaos') ? 'chaos' : 'venus';
+    C = PALETTES[G.mode];
+    G.vignetteGrad = null;
+    if (G.canvas) G.canvas.setAttribute('data-mode', G.mode);
+  }
+
+  window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy, setModifiers: setModifiers, setLevels: setLevels, setMode: setMode };
 }());

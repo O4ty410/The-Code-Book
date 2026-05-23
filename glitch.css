@@ -139,6 +139,23 @@
   animation: none;
 }
 
+/* ── Chaos mode canvas — amber glow, faster breathe ─────── */
+@keyframes glitch-canvas-breathe-chaos {
+  0%, 100% { box-shadow: 0 0 40px rgba(220,60,20,0.09), inset 0 0 24px rgba(0,0,0,0.5); }
+  50%       { box-shadow: 0 0 76px rgba(220,60,20,0.22), inset 0 0 24px rgba(0,0,0,0.5); }
+}
+
+#glitch-canvas[data-mode="chaos"] {
+  border-color: rgba(200,60,20,0.22);
+  animation: glitch-canvas-breathe-chaos 2.4s ease-in-out infinite;
+}
+
+#glitch-canvas[data-mode="chaos"].is-solved {
+  border-color: rgba(0,255,150,0.45);
+  box-shadow: 0 0 50px rgba(0,255,150,0.18), inset 0 0 24px rgba(0,0,0,0.5);
+  animation: none;
+}
+
 /* ── Level complete overlay ─────────────────────────────── */
 .glitch-complete-overlay {
   position: absolute;
