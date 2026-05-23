@@ -5367,6 +5367,7 @@ body.learn-mode #main-col {
 
 .holo-quiz-card {
   perspective: 1400px;
+  -webkit-perspective: 1400px;
   margin: 8px auto;
   max-width: 360px;
 }
@@ -5374,6 +5375,7 @@ body.learn-mode #main-col {
 .holo-quiz-inner {
   display: grid;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   animation: holoCardFlip 1.6s cubic-bezier(0.4, 0.2, 0.2, 1) 0.5s both;
 }
 
@@ -5401,7 +5403,9 @@ body.learn-mode #main-col {
       #c8a96e 74%,
       #7dd3fc 100%
     ) border-box;
-  animation: holoSpin 6s linear infinite;
+  /* holoSpin intentionally NOT set here — active animations on backface-hidden
+     elements create compositing layers on iOS Safari that break backface-visibility.
+     The animated gradient border is restored below via @supports for non-WebKit. */
   box-shadow:
     0 0 18px 3px rgba(125, 211, 252, 0.28),
     0 0 36px 8px rgba(192, 132, 252, 0.18),
@@ -5916,6 +5920,7 @@ body.learn-mode #main-col {
 
 .rev-mc-scene {
   perspective: 1400px;
+  -webkit-perspective: 1400px;
   width: 300px;
   height: 420px;
 }
@@ -5925,6 +5930,7 @@ body.learn-mode #main-col {
   height: 100%;
   display: grid;
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 
@@ -5941,7 +5947,7 @@ body.learn-mode #main-col {
   background:
     linear-gradient(#030d1c, #030d1c) padding-box,
     conic-gradient(from var(--holo-angle), #7dd3fc 0%, #c084fc 20%, #a96ec8 38%, #4ade80 56%, #c8a96e 74%, #7dd3fc 100%) border-box;
-  animation: holoSpin 6s linear infinite;
+  /* holoSpin intentionally omitted — same iOS Safari compositing fix as holo-quiz */
   box-shadow:
     0 0 18px 3px rgba(125, 211, 252, 0.28),
     0 0 36px 8px rgba(192, 132, 252, 0.18),
