@@ -9,10 +9,10 @@
   var T_EMPTY  = 0;
   var T_SOURCE = 1;
   var T_TARGET = 2;
-  var T_I      = 3; // straight (N-S base)
-  var T_L      = 4; // elbow   (E-S base)
-  var T_T      = 5; // tee     (N-E-S base)
-  var T_X      = 6; // cross   (all)
+  var T_I      = 3; // straight  rot0=NS  rot1=EW
+  var T_L      = 4; // elbow     rot0=ES  rot1=SW  rot2=WN  rot3=NE
+  var T_T      = 5; // tee       rot0=NES rot1=ESW rot2=SWN rot3=WNE
+  var T_X      = 6; // cross     all directions
 
   // Base connections [N, E, S, W] at rotation 0
   var BASE = [];
@@ -26,6 +26,99 @@
 
   var OPP = [2, 3, 0, 1];
   var DRC = [[-1,0],[0,1],[1,0],[0,-1]]; // N E S W
+
+  // ── Hand-crafted levels ───────────────────────────────────
+  // Each cell: [type, startRotation]
+  // Cells listed row by row, left to right.
+  // startRotation is intentionally wrong so the player must fix it.
+  var LEVELS = [
+
+    // 1 — Top row then right column (tutorial)
+    { name: 'LINK-01', size: 4, cells: [
+      [T_SOURCE,0],[T_I,0],    [T_I,0],    [T_L,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
+    ]},
+
+    // 2 — Left column then bottom row
+    { name: 'LINK-02', size: 4, cells: [
+      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_L,2],     [T_I,0],    [T_I,0],    [T_TARGET,0]
+    ]},
+
+    // 3 — Diagonal zigzag with L-pipes only
+    { name: 'LINK-03', size: 4, cells: [
+      [T_SOURCE,0],[T_L,3],    [T_EMPTY,0],[T_EMPTY,0],
+      [T_EMPTY,0], [T_L,1],    [T_L,3],    [T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_L,2],    [T_L,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
+    ]},
+
+    // 4 — S-shape through middle row
+    { name: 'LINK-04', size: 4, cells: [
+      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_L,1],     [T_I,0],    [T_I,0],    [T_L,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
+    ]},
+
+    // 5 — Introduces T-pipe (junction with harmless branch)
+    { name: 'LINK-05', size: 4, cells: [
+      [T_SOURCE,0],[T_I,0],    [T_T,3],    [T_L,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
+    ]},
+
+    // 6 — First 5×5: U-path down, across, up
+    { name: 'LINK-06', size: 5, cells: [
+      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_L,1],     [T_I,0],    [T_I,0],    [T_I,0],    [T_L,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_I,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
+    ]},
+
+    // 7 — 5×5: column path with L turn at bottom
+    { name: 'LINK-07', size: 5, cells: [
+      [T_SOURCE,0],[T_I,0],    [T_I,0],    [T_L,3],    [T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],    [T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],    [T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_I,3],    [T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_L,1],    [T_TARGET,0]
+    ]},
+
+    // 8 — 5×5: snake fills most of the grid
+    { name: 'LINK-08', size: 5, cells: [
+      [T_SOURCE,0],[T_I,0],    [T_I,0],    [T_I,0],    [T_L,3],
+      [T_L,2],     [T_I,0],    [T_I,0],    [T_I,0],    [T_L,0],
+      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_L,1],     [T_I,0],    [T_I,0],    [T_I,0],    [T_TARGET,0]
+    ]},
+
+    // 9 — 5×5: T-junction creates a visible dead branch
+    { name: 'LINK-09', size: 5, cells: [
+      [T_SOURCE,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_I,3],     [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],
+      [T_L,1],     [T_I,0],    [T_T,3],    [T_I,0],    [T_L,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_I,0],    [T_EMPTY,0],[T_I,3],
+      [T_EMPTY,0], [T_EMPTY,0],[T_EMPTY,0],[T_EMPTY,0],[T_TARGET,0]
+    ]},
+
+    // 10 — 5×5: X cross-pipe with misdirection branches
+    { name: 'LINK-10', size: 5, cells: [
+      [T_SOURCE,0],[T_I,0],    [T_L,3],    [T_EMPTY,0],[T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_I,3],    [T_EMPTY,0],[T_EMPTY,0],
+      [T_EMPTY,0], [T_I,0],    [T_X,0],    [T_I,0],    [T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_I,3],    [T_EMPTY,0],[T_EMPTY,0],
+      [T_EMPTY,0], [T_EMPTY,0],[T_L,1],    [T_I,0],    [T_TARGET,0]
+    ]}
+
+  ];
 
   function getConn(type, rot) {
     var c = BASE[type].slice();
@@ -48,9 +141,6 @@
     _tx: 0, _ty: 0,
   };
 
-  function levelSize(lvl) { return lvl <= 3 ? 4 : lvl <= 7 ? 5 : 6; }
-
-  // ── Level generation ──────────────────────────────────────
   function makeGrid(n) {
     var g = [];
     for (var r = 0; r < n; r++) {
@@ -60,103 +150,19 @@
     return g;
   }
 
-  function generateLevel(lvl) {
-    var n = levelSize(lvl);
+  function loadLevel(idx) {
+    var def = LEVELS[idx % LEVELS.length];
+    var n = def.size;
     G.size = n;
     var grid = makeGrid(n);
-
-    grid[0][0]       = { type: T_SOURCE, rot: 0 };
-    grid[n-1][n-1]   = { type: T_TARGET, rot: 0 };
-
-    var path = buildPath(n);
-
-    // Assign pipe types along path
-    for (var i = 1; i < path.length - 1; i++) {
-      var info = calcPipe(path[i-1], path[i], path[i+1]);
-      grid[path[i][0]][path[i][1]] = { type: info.t, rot: info.r };
-    }
-
-    // Fill non-path cells
-    var inPath = {};
-    path.forEach(function(p) { inPath[p[0]+','+p[1]] = 1; });
-    var fill = [T_I, T_L, T_T];
-    for (var r = 0; r < n; r++) {
-      for (var c = 0; c < n; c++) {
-        if (!inPath[r+','+c]) {
-          grid[r][c] = {
-            type: fill[Math.floor(Math.random() * fill.length)],
-            rot:  Math.floor(Math.random() * 4)
-          };
-        }
-      }
-    }
-
-    // Scramble solution path pipes so puzzle isn't trivially solved
-    for (var j = 1; j < path.length - 1; j++) {
-      var cell = grid[path[j][0]][path[j][1]];
-      // Add 1 or 3 extra rotations (skip 0 and 2 which may preserve straight pipes)
-      cell.rot = (cell.rot + (Math.random() < 0.5 ? 1 : 3)) & 3;
-    }
-
-    return grid;
-  }
-
-  function buildPath(n) {
-    var path = [[0, 0]];
-    var seen = { '0,0': 1 };
-    var r = 0, c = 0, tr = n-1, tc = n-1;
-    var limit = n * n * 4;
-
-    for (var step = 0; step < limit && (r !== tr || c !== tc); step++) {
-      var opts = [];
-      for (var d = 0; d < 4; d++) {
-        var nr = r + DRC[d][0], nc = c + DRC[d][1];
-        if (nr < 0 || nr >= n || nc < 0 || nc >= n || seen[nr+','+nc]) continue;
-        // Weight toward target
-        var closer = (Math.abs(nr-tr)+Math.abs(nc-tc)) < (Math.abs(r-tr)+Math.abs(c-tc));
-        var w = closer ? 3 : 1;
-        for (var wi = 0; wi < w; wi++) opts.push([nr, nc]);
-      }
-      if (!opts.length) break;
-      var pick = opts[Math.floor(Math.random() * opts.length)];
-      r = pick[0]; c = pick[1];
-      seen[r+','+c] = 1;
-      path.push([r, c]);
-    }
-
-    // Force path to target if random walk fell short
-    while (r < tr) { r++; if (!seen[r+','+c]) { seen[r+','+c]=1; path.push([r,c]); } }
-    while (r > tr) { r--; if (!seen[r+','+c]) { seen[r+','+c]=1; path.push([r,c]); } }
-    while (c < tc) { c++; if (!seen[r+','+c]) { seen[r+','+c]=1; path.push([r,c]); } }
-    while (c > tc) { c--; if (!seen[r+','+c]) { seen[r+','+c]=1; path.push([r,c]); } }
-
-    return path;
-  }
-
-  function dirOf(from, to) {
-    var dr = to[0]-from[0], dc = to[1]-from[1];
-    return dr < 0 ? 0 : dc > 0 ? 1 : dr > 0 ? 2 : 3; // N E S W
-  }
-
-  function calcPipe(prev, curr, next) {
-    var inDir  = dirOf(prev, curr);
-    var outDir = dirOf(curr, next);
-    var inOpp  = OPP[inDir]; // side of curr that accepts incoming
-
-    if (inOpp === outDir) {
-      // Straight
-      return { t: T_I, r: (inOpp === 0 || inOpp === 2) ? 0 : 1 };
-    }
-
-    // Elbow: L base (rot 0) = E(1)+S(2), rot1=S+W, rot2=W+N, rot3=N+E
-    var elbows = [[1,2],[2,3],[3,0],[0,1]];
-    for (var rot = 0; rot < 4; rot++) {
-      var p = elbows[rot];
-      if ((p[0]===inOpp&&p[1]===outDir)||(p[0]===outDir&&p[1]===inOpp)) {
-        return { t: T_L, r: rot };
-      }
-    }
-    return { t: T_I, r: 0 };
+    def.cells.forEach(function(cell, i) {
+      var r = Math.floor(i / n), c = i % n;
+      grid[r][c] = { type: cell[0], rot: cell[1] };
+    });
+    G.grid = grid;
+    // Update level name in sub-header
+    var sub = document.getElementById('glitch-sub');
+    if (sub) sub.textContent = def.name;
   }
 
   // ── Power BFS ────────────────────────────────────────────
@@ -218,7 +224,7 @@
     return path;
   }
 
-  // ── Canvas ────────────────────────────────────────────────
+  // ── Canvas colours ────────────────────────────────────────
   var C = {
     bg:       '#020608',
     grid:     'rgba(0,200,255,0.07)',
@@ -424,6 +430,8 @@
     if (ov) ov.style.display = 'flex';
     var xpEl = document.getElementById('glitch-xp');
     if (xpEl) xpEl.textContent = '+' + xp + ' XP';
+    var nextBtn = document.querySelector('.glitch-next-btn');
+    if (nextBtn) nextBtn.textContent = G.level >= LEVELS.length ? 'Play Again →' : 'Next Level →';
     if (typeof awardXP === 'function') awardXP(xp, 'Glitch Mode');
   }
 
@@ -440,12 +448,11 @@
     G.oy = G.ox;
   }
 
-  // ── Public ───────────────────────────────────────────────
+  // ── Public API ───────────────────────────────────────────
   function init(canvasId) {
     var canvas = document.getElementById(canvasId);
     if (!canvas) return;
 
-    // Destroy previous instance cleanly
     if (G.animId)  { cancelAnimationFrame(G.animId); G.animId = null; }
     if (G.sigIv)   { clearInterval(G.sigIv); G.sigIv = null; }
 
@@ -457,11 +464,9 @@
     G.solving = false;
     G.signalT = 0;
     G.signalPath = [];
-    G.size    = levelSize(1);
-    G.grid    = generateLevel(1);
+    loadLevel(0);
     resize();
 
-    // Touch
     canvas.addEventListener('touchstart', function(e) {
       e.preventDefault();
       G._tx = e.touches[0].clientX;
@@ -489,17 +494,29 @@
     if (ov2) ov2.style.display = 'none';
   }
 
-  function nextLevel() {
-    var ov = document.getElementById('glitch-complete');
-    if (ov) ov.style.display = 'none';
+  function restart() {
     if (G.sigIv) { clearInterval(G.sigIv); G.sigIv = null; }
-    G.level++;
     G.moves   = 0;
     G.solving = false;
     G.signalT = 0;
     G.signalPath = [];
-    G.size    = levelSize(G.level);
-    G.grid    = generateLevel(G.level);
+    loadLevel(G.level - 1);
+    var ov = document.getElementById('glitch-complete');
+    if (ov) ov.style.display = 'none';
+    var mv = document.getElementById('glitch-moves');
+    if (mv) mv.textContent = 0;
+  }
+
+  function nextLevel() {
+    var ov = document.getElementById('glitch-complete');
+    if (ov) ov.style.display = 'none';
+    if (G.sigIv) { clearInterval(G.sigIv); G.sigIv = null; }
+    G.level   = G.level >= LEVELS.length ? 1 : G.level + 1;
+    G.moves   = 0;
+    G.solving = false;
+    G.signalT = 0;
+    G.signalPath = [];
+    loadLevel(G.level - 1);
     resize();
     var lvl = document.getElementById('glitch-level');
     if (lvl) lvl.textContent = G.level;
@@ -514,5 +531,5 @@
     G.ctx    = null;
   }
 
-  window.GlitchGame = { init: init, nextLevel: nextLevel, destroy: destroy };
+  window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy };
 }());

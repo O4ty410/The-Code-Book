@@ -64,6 +64,23 @@
   text-transform: uppercase;
 }
 
+/* ── Restart button ─────────────────────────────────────── */
+.glitch-restart-btn {
+  background: none;
+  border: 1px solid rgba(0,200,255,0.25);
+  border-radius: 6px;
+  color: rgba(0,200,255,0.60);
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px 7px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.glitch-restart-btn:active {
+  color: #00e5ff;
+  border-color: rgba(0,229,255,0.6);
+}
+
 /* ── Canvas area ────────────────────────────────────────── */
 .glitch-canvas-wrap {
   flex: 1;

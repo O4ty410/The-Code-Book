@@ -5572,12 +5572,13 @@ function launchGlitchMode() {
     '<div class="glitch-hdr">' +
       '<div class="glitch-hdr-left">' +
         '<div class="glitch-hdr-title">GLITCH MODE</div>' +
-        '<div class="glitch-hdr-sub">Reconnect the signal.<br>Tap pipes to rotate.</div>' +
+        '<div class="glitch-hdr-sub" id="glitch-sub">LINK-01</div>' +
       '</div>' +
       '<div class="glitch-stats">' +
         '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-level">1</span><span class="glitch-stat-lbl">LVL</span></div>' +
         '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-score">0</span><span class="glitch-stat-lbl">SCORE</span></div>' +
         '<div class="glitch-stat"><span class="glitch-stat-val" id="glitch-moves">0</span><span class="glitch-stat-lbl">MOVES</span></div>' +
+        '<div class="glitch-stat"><button class="glitch-restart-btn" onclick="if(typeof GlitchGame!==\'undefined\')GlitchGame.restart()" title="Restart level">&#8635;</button></div>' +
       '</div>' +
     '</div>' +
     '<div class="glitch-canvas-wrap" style="flex:1">' +
