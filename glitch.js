@@ -45,10 +45,15 @@
     canvas: null, ctx: null,
     grid: [], size: 4,
     level: 1, score: 0, moves: 0,
-    solving: false, signalPath: [], signalT: 0, sigIv: null,
+    solving: false, solvedFired: false,
+    signalPath: [], signalT: 0, sigStart: 0, sigDur: 600,
     animId: null,
     cellPx: 80, ox: 0, oy: 0,
     _tx: 0, _ty: 0,
+    t: 0,          // current rAF timestamp
+    tapped: null,  // {r, c, t0} — tap flash
+    powered: {},   // "r,c" → true — last-frame powered set
+    powFlash: {},  // "r,c" → timestamp — newly-powered flash
   };
 
   function makeGrid(n) {
@@ -78,24 +83,18 @@
 
   // ── Power BFS ────────────────────────────────────────────
   function computePower() {
-    var n = G.size, pow = makeGrid(n);
-    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) pow[r][c] = false;
-
+    var n = G.size, pow = [];
+    for (var r = 0; r < n; r++) { pow[r] = []; for (var c = 0; c < n; c++) pow[r][c] = false; }
     var queue = [], qi = 0;
-    for (var r2 = 0; r2 < n; r2++) {
-      for (var c2 = 0; c2 < n; c2++) {
+    for (var r2 = 0; r2 < n; r2++)
+      for (var c2 = 0; c2 < n; c2++)
         if (G.grid[r2][c2].type === T_SOURCE) { pow[r2][c2] = true; queue.push([r2,c2]); }
-      }
-    }
     while (qi < queue.length) {
       var p = queue[qi++];
       for (var d = 0; d < 4; d++) {
         var nr = p[0]+DRC[d][0], nc = p[1]+DRC[d][1];
         if (nr<0||nr>=n||nc<0||nc>=n||pow[nr][nc]) continue;
-        if (cellConnects(G.grid[p[0]][p[1]], G.grid[nr][nc], d)) {
-          pow[nr][nc] = true;
-          queue.push([nr,nc]);
-        }
+        if (cellConnects(G.grid[p[0]][p[1]], G.grid[nr][nc], d)) { pow[nr][nc] = true; queue.push([nr,nc]); }
       }
     }
     return pow;
@@ -110,12 +109,11 @@
 
   function getSignalPath(pow) {
     var n = G.size, sr = -1, sc = -1, tr = -1, tc = -1;
-    for (var r = 0; r < n; r++) {
+    for (var r = 0; r < n; r++)
       for (var c = 0; c < n; c++) {
         if (G.grid[r][c].type === T_SOURCE) { sr=r; sc=c; }
         if (G.grid[r][c].type === T_TARGET) { tr=r; tc=c; }
       }
-    }
     var parent = {}, queue = [[sr,sc]], qi = 0;
     parent[sr+','+sc] = null;
     while (qi < queue.length) {
@@ -126,8 +124,7 @@
         if (nr<0||nr>=n||nc<0||nc>=n) continue;
         var k = nr+','+nc;
         if (k in parent || !pow[nr][nc]) continue;
-        parent[k] = p;
-        queue.push([nr,nc]);
+        parent[k] = p; queue.push([nr,nc]);
       }
     }
     var path = [], cur = [tr,tc];
@@ -138,10 +135,10 @@
   // ── Canvas colours ────────────────────────────────────────
   var C = {
     bg:       '#020608',
-    grid:     'rgba(0,200,255,0.07)',
-    pipeOff:  'rgba(0,200,255,0.20)',
+    grid:     'rgba(0,200,255,0.10)',
+    pipeOff:  'rgba(0,200,255,0.22)',
     pipeOn:   '#00e5ff',
-    pipeGlow: 'rgba(0,229,255,0.9)',
+    pipeGlow: 'rgba(0,229,255,0.95)',
     srcFill:  '#00e5ff',
     tgtOff:   '#ff4444',
     tgtOn:    '#00ff96',
@@ -153,9 +150,8 @@
   }
 
   function drawBg() {
-    var ctx = G.ctx;
-    ctx.fillStyle = C.bg;
-    ctx.fillRect(0, 0, G.canvas.width, G.canvas.height);
+    G.ctx.fillStyle = C.bg;
+    G.ctx.fillRect(0, 0, G.canvas.width, G.canvas.height);
   }
 
   function drawGridLines() {
@@ -180,23 +176,45 @@
     var ctx = G.ctx, cell = G.grid[r][c];
     var conn = getConn(cell.type, cell.rot);
     var pos = ctr(r, c), cx = pos[0], cy = pos[1];
-    var half = G.cellPx * 0.48;
+    var half = G.cellPx * 0.46;
     var on = pow[r][c];
+    var key = r + ',' + c;
 
     var edges = [
       [cx, cy-half], [cx+half, cy], [cx, cy+half], [cx-half, cy]
     ];
 
+    // Tap flash — brief cyan rectangle over tapped cell
+    if (G.tapped && G.tapped.r === r && G.tapped.c === c) {
+      var tapAge = (G.t - G.tapped.t0) / 180;
+      if (tapAge < 1) {
+        ctx.save();
+        ctx.fillStyle = 'rgba(0,229,255,' + ((1 - tapAge) * 0.28) + ')';
+        ctx.fillRect(G.ox + c*G.cellPx + 1, G.oy + r*G.cellPx + 1, G.cellPx - 2, G.cellPx - 2);
+        ctx.restore();
+      } else {
+        G.tapped = null;
+      }
+    }
+
+    // Power-on flash — extra glow when a pipe first becomes powered
+    var extraGlow = 0;
+    if (on && G.powFlash[key]) {
+      var flashAge = (G.t - G.powFlash[key]) / 300;
+      if (flashAge < 1) extraGlow = (1 - flashAge) * 24;
+      else delete G.powFlash[key];
+    }
+
     ctx.save();
     ctx.lineCap = 'round';
     if (on) {
       ctx.strokeStyle = C.pipeOn;
-      ctx.lineWidth = 3.5;
-      ctx.shadowBlur = 12;
+      ctx.lineWidth = 4;
+      ctx.shadowBlur = 14 + extraGlow;
       ctx.shadowColor = C.pipeGlow;
     } else {
       ctx.strokeStyle = C.pipeOff;
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 3;
       ctx.shadowBlur = 0;
     }
     for (var d = 0; d < 4; d++) {
@@ -207,9 +225,9 @@
       ctx.stroke();
     }
     ctx.beginPath();
-    ctx.arc(cx, cy, on ? 4.5 : 3, 0, Math.PI*2);
+    ctx.arc(cx, cy, on ? 5 : 3.5, 0, Math.PI*2);
     ctx.fillStyle = on ? C.pipeOn : C.pipeOff;
-    ctx.shadowBlur = on ? 14 : 0;
+    ctx.shadowBlur = on ? (16 + extraGlow) : 0;
     ctx.fill();
     ctx.restore();
   }
@@ -242,21 +260,23 @@
   function drawTarget(r, c, pow, t) {
     var ctx = G.ctx, pos = ctr(r, c), cx = pos[0], cy = pos[1];
     var on = pow[r][c];
-    var pulse = 0.8 + 0.2 * Math.sin(t * 0.004);
-    var col = on ? C.tgtOn : C.tgtOff;
-    var glow = on ? 'rgba(0,255,150,0.7)' : 'rgba(255,68,68,0.7)';
+    var pulse = on
+      ? (0.92 + 0.08 * Math.sin(t * 0.008))
+      : (0.80 + 0.20 * Math.sin(t * 0.004));
+    var col  = on ? C.tgtOn  : C.tgtOff;
+    var glow = on ? 'rgba(0,255,150,0.8)' : 'rgba(255,68,68,0.7)';
     ctx.save();
     ctx.beginPath();
     ctx.arc(cx, cy, 16*pulse, 0, Math.PI*2);
-    ctx.strokeStyle = on ? 'rgba(0,255,150,0.28)' : 'rgba(255,68,68,0.28)';
+    ctx.strokeStyle = on ? 'rgba(0,255,150,0.35)' : 'rgba(255,68,68,0.28)';
     ctx.lineWidth = 1.5;
-    ctx.shadowBlur = 20;
+    ctx.shadowBlur = on ? 26 : 20;
     ctx.shadowColor = glow;
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(cx, cy, 9, 0, Math.PI*2);
     ctx.fillStyle = col;
-    ctx.shadowBlur = 28;
+    ctx.shadowBlur = 30;
     ctx.fill();
     ctx.fillStyle = on ? '#000' : '#fff';
     ctx.font = 'bold 6px "Space Mono",monospace';
@@ -267,38 +287,98 @@
     ctx.restore();
   }
 
-  function drawParticle(path, progress) {
-    if (path.length < 2) return;
+  // ── Signal particle helpers ──────────────────────────────
+  function getParticlePos(path, p) {
     var segs = path.length - 1;
-    var t = Math.min(progress * segs, segs - 0.001);
+    var t = Math.min(Math.max(p, 0) * segs, segs - 0.001);
     var i = Math.floor(t), f = t - i;
     var a = ctr(path[i][0], path[i][1]);
     var b = ctr(path[i+1][0], path[i+1][1]);
+    return [a[0] + (b[0]-a[0])*f, a[1] + (b[1]-a[1])*f];
+  }
+
+  function drawParticle(path, progress) {
+    if (path.length < 2) return;
     var ctx = G.ctx;
+
+    // Comet trail — three fading circles behind the head
+    var trail = [
+      { dp: 0.055, r: 4.5, a: 0.50 },
+      { dp: 0.110, r: 3.0, a: 0.25 },
+      { dp: 0.180, r: 1.8, a: 0.10 },
+    ];
+    trail.forEach(function(tr) {
+      var pos = getParticlePos(path, progress - tr.dp);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(pos[0], pos[1], tr.r, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(0,229,255,' + tr.a + ')';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#00e5ff';
+      ctx.fill();
+      ctx.restore();
+    });
+
+    // Head
+    var pos = getParticlePos(path, progress);
     ctx.save();
     ctx.beginPath();
-    ctx.arc(a[0]+(b[0]-a[0])*f, a[1]+(b[1]-a[1])*f, 7, 0, Math.PI*2);
+    ctx.arc(pos[0], pos[1], 6.5, 0, Math.PI*2);
     ctx.fillStyle = '#fff';
-    ctx.shadowBlur = 26;
+    ctx.shadowBlur = 32;
     ctx.shadowColor = '#00e5ff';
     ctx.fill();
     ctx.restore();
   }
 
   function render(t) {
+    G.t = t;
     var pow = computePower();
+    var n = G.size;
+
+    // Track newly powered cells for flash effect
+    for (var r = 0; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        var key = r + ',' + c;
+        if (pow[r][c]) {
+          if (!G.powered[key]) G.powFlash[key] = t;
+          G.powered[key] = true;
+        } else {
+          delete G.powered[key];
+        }
+      }
+    }
+
+    // Advance signal via rAF timestamp for frame-perfect smoothness
+    if (G.solving) {
+      G.signalT = Math.min((t - G.sigStart) / G.sigDur, 1);
+      if (G.signalT >= 1 && !G.solvedFired) {
+        G.solvedFired = true;
+        onSolved();
+      }
+    }
+
     drawBg();
     drawGridLines();
-    for (var r = 0; r < G.size; r++) {
-      for (var c = 0; c < G.size; c++) {
-        var cell = G.grid[r][c];
-        if      (cell.type === T_SOURCE) drawSource(r, c, t);
-        else if (cell.type === T_TARGET) drawTarget(r, c, pow, t);
-        else if (cell.type !== T_EMPTY)  drawPipe(r, c, pow);
+    for (var r2 = 0; r2 < n; r2++) {
+      for (var c2 = 0; c2 < n; c2++) {
+        var cell = G.grid[r2][c2];
+        if      (cell.type === T_SOURCE) drawSource(r2, c2, t);
+        else if (cell.type === T_TARGET) drawTarget(r2, c2, pow, t);
+        else if (cell.type !== T_EMPTY)  drawPipe(r2, c2, pow);
       }
     }
     if (G.solving && G.signalPath.length > 0) drawParticle(G.signalPath, G.signalT);
     G.animId = requestAnimationFrame(render);
+  }
+
+  // ── UI helpers ───────────────────────────────────────────
+  function popEl(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('glitch-pop');
+    void el.offsetWidth; // force reflow so animation restarts
+    el.classList.add('glitch-pop');
   }
 
   // ── Input ────────────────────────────────────────────────
@@ -315,20 +395,20 @@
     if (cell.type === T_SOURCE || cell.type === T_TARGET || cell.type === T_EMPTY || G.solving) return;
 
     cell.rot = (cell.rot + 1) & 3;
+    G.tapped = { r: row, c: col, t0: G.t };
     G.moves++;
     var el = document.getElementById('glitch-moves');
-    if (el) el.textContent = G.moves;
+    if (el) { el.textContent = G.moves; popEl('glitch-moves'); }
 
     var pow = computePower();
     if (isSolved(pow) && !G.solving) {
-      G.solving = true;
+      G.solving    = true;
+      G.solvedFired = false;
       G.signalPath = getSignalPath(pow);
-      G.signalT = 0;
-      if (G.sigIv) clearInterval(G.sigIv);
-      G.sigIv = setInterval(function() {
-        G.signalT += 0.03;
-        if (G.signalT >= 1) { clearInterval(G.sigIv); G.signalT = 1; onSolved(); }
-      }, 16);
+      G.signalT    = 0;
+      G.sigStart   = G.t;
+      // Scale duration to path length — short paths feel snappy, long ones epic
+      G.sigDur = Math.max(420, Math.min(820, G.signalPath.length * 48));
     }
   }
 
@@ -336,13 +416,14 @@
     var xp = Math.max(10, 60 - G.moves * 3);
     G.score += xp;
     var sc = document.getElementById('glitch-score');
-    if (sc) sc.textContent = G.score;
+    if (sc) { sc.textContent = G.score; popEl('glitch-score'); }
     var ov = document.getElementById('glitch-complete');
     if (ov) ov.style.display = 'flex';
     var xpEl = document.getElementById('glitch-xp');
     if (xpEl) xpEl.textContent = '+' + xp + ' XP';
     var nextBtn = document.querySelector('.glitch-next-btn');
     if (nextBtn) nextBtn.textContent = G.level >= LEVELS.length ? 'Play Again →' : 'Next Level →';
+    if (G.canvas) G.canvas.classList.add('is-solved');
     if (typeof awardXP === 'function') awardXP(xp, 'Glitch Mode');
   }
 
@@ -364,17 +445,20 @@
     var canvas = document.getElementById(canvasId);
     if (!canvas) return;
 
-    if (G.animId)  { cancelAnimationFrame(G.animId); G.animId = null; }
-    if (G.sigIv)   { clearInterval(G.sigIv); G.sigIv = null; }
+    if (G.animId) { cancelAnimationFrame(G.animId); G.animId = null; }
 
-    G.canvas  = canvas;
-    G.ctx     = canvas.getContext('2d');
-    G.level   = 1;
-    G.score   = 0;
-    G.moves   = 0;
-    G.solving = false;
-    G.signalT = 0;
-    G.signalPath = [];
+    G.canvas      = canvas;
+    G.ctx         = canvas.getContext('2d');
+    G.level       = 1;
+    G.score       = 0;
+    G.moves       = 0;
+    G.solving     = false;
+    G.solvedFired = false;
+    G.signalT     = 0;
+    G.signalPath  = [];
+    G.tapped      = null;
+    G.powered     = {};
+    G.powFlash    = {};
     loadLevel(0);
     resize();
 
@@ -406,12 +490,16 @@
   }
 
   function restart() {
-    if (G.sigIv) { clearInterval(G.sigIv); G.sigIv = null; }
-    G.moves   = 0;
-    G.solving = false;
-    G.signalT = 0;
-    G.signalPath = [];
+    G.moves       = 0;
+    G.solving     = false;
+    G.solvedFired = false;
+    G.signalT     = 0;
+    G.signalPath  = [];
+    G.tapped      = null;
+    G.powered     = {};
+    G.powFlash    = {};
     loadLevel(G.level - 1);
+    if (G.canvas) G.canvas.classList.remove('is-solved');
     var ov = document.getElementById('glitch-complete');
     if (ov) ov.style.display = 'none';
     var mv = document.getElementById('glitch-moves');
@@ -421,14 +509,18 @@
   function nextLevel() {
     var ov = document.getElementById('glitch-complete');
     if (ov) ov.style.display = 'none';
-    if (G.sigIv) { clearInterval(G.sigIv); G.sigIv = null; }
-    G.level   = G.level >= LEVELS.length ? 1 : G.level + 1;
-    G.moves   = 0;
-    G.solving = false;
-    G.signalT = 0;
-    G.signalPath = [];
+    G.level       = G.level >= LEVELS.length ? 1 : G.level + 1;
+    G.moves       = 0;
+    G.solving     = false;
+    G.solvedFired = false;
+    G.signalT     = 0;
+    G.signalPath  = [];
+    G.tapped      = null;
+    G.powered     = {};
+    G.powFlash    = {};
     loadLevel(G.level - 1);
     resize();
+    if (G.canvas) G.canvas.classList.remove('is-solved');
     var lvl = document.getElementById('glitch-level');
     if (lvl) lvl.textContent = G.level;
     var mv = document.getElementById('glitch-moves');
@@ -437,7 +529,6 @@
 
   function destroy() {
     if (G.animId) { cancelAnimationFrame(G.animId); G.animId = null; }
-    if (G.sigIv)  { clearInterval(G.sigIv); G.sigIv = null; }
     G.canvas = null;
     G.ctx    = null;
   }
