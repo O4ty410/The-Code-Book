@@ -572,6 +572,50 @@
   min-height: 0;
 }
 
+/* ── Mode watermark — large ghost text behind canvas ────── */
+.glitch-mode-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(72px, 18vw, 148px);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  white-space: nowrap;
+}
+.glitch-mode-watermark--venus {
+  color: rgba(0,140,255,0.042);
+  text-shadow: 0 0 80px rgba(0,140,255,0.06);
+}
+.glitch-mode-watermark--chaos {
+  color: rgba(255,60,20,0.042);
+  text-shadow: 0 0 80px rgba(255,60,20,0.06);
+}
+#glitch-canvas { position: relative; z-index: 1; }
+
+/* ── Animated aurora shimmer overlay on Venus canvas-wrap ── */
+@keyframes aurora-shift {
+  0%   { background-position: 0% 30%, 100% 70%, 50% 50%; }
+  33%  { background-position: 30% 60%, 70% 40%, 80% 20%; }
+  66%  { background-position: 60% 80%, 20% 60%, 30% 70%; }
+  100% { background-position: 0% 30%, 100% 70%, 50% 50%; }
+}
+@keyframes chaos-flicker {
+  0%, 92%, 100% { opacity: 1; }
+  94%            { opacity: 0.88; }
+  96%            { opacity: 0.95; }
+}
+.glitch-game-root:not(.glitch-game-root--chaos) .glitch-canvas-wrap {
+  animation: aurora-shift 18s ease-in-out infinite;
+}
+.glitch-game-root--chaos .glitch-canvas-wrap {
+  animation: chaos-flicker 8s ease-in-out infinite;
+}
+
 /* ── Desktop 2-column layout (≥ 900px) ─────────────────── */
 @media (min-width: 900px) {
 

@@ -5593,6 +5593,7 @@ function launchGlitchMode() {
         '</div>' +
       '</div>' +
       '<div class="glitch-canvas-wrap" style="position:relative">' +
+        '<div class="glitch-mode-watermark glitch-mode-watermark--venus">VENUS</div>' +
         '<canvas id="glitch-canvas"></canvas>' +
         '<div id="glitch-level-msg" class="glitch-level-msg"></div>' +
       '</div>' +
@@ -5662,6 +5663,7 @@ function launchChaosMode() {
         '</div>' +
       '</div>' +
       '<div class="glitch-canvas-wrap" style="position:relative">' +
+        '<div class="glitch-mode-watermark glitch-mode-watermark--chaos">GLITCH</div>' +
         '<canvas id="glitch-canvas"></canvas>' +
         '<div id="glitch-level-msg" class="glitch-level-msg" style="color:rgba(255,60,80,0.32)"></div>' +
       '</div>' +

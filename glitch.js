@@ -59,8 +59,8 @@
     glitchMods: null,   // modifier hooks (set via setModifiers)
     bgParticles: [],    // ambient drifting canvas particles
     vignetteGrad: null, // cached radial gradient for depth vignette
-    bgPattern: null,    // cached offscreen canvas — hex grid or circuit traces
-    bgPatternSz: 0,     // canvas width when pattern was built
+    chaosPattern: null, // cached CRT scanline pattern
+    chaosPatternW: 0,   // canvas width when scanline pattern was built
     levelLoadT:  null,  // rAF timestamp when current level first rendered
     _cascPending: false,// true between loadLevel and first render frame
     solveFlashT: null   // rAF timestamp when level was solved (surge effect)
@@ -238,61 +238,98 @@
             G.oy + r*G.cellPx + G.cellPx*0.5];
   }
 
-  // ── Background: particles + vignette ─────────────────────
-  // Builds an offscreen canvas with a mode-specific background texture.
-  // Cached until canvas is resized or mode changes.
-  function buildBgPattern(w, h) {
-    var off = document.createElement('canvas');
-    off.width = w; off.height = h;
-    var ptx = off.getContext('2d');
-
-    if (G.mode === 'chaos') {
-      // Circuit board traces — sparse PCB grid with node circles
-      var gs = Math.floor(w / 9);
-      var cols = Math.ceil(w / gs) + 2;
-      var rows = Math.ceil(h / gs) + 2;
-      ptx.lineWidth = 0.9;
-      ptx.strokeStyle = 'rgba(255,100,30,0.16)';
-      ptx.fillStyle   = 'rgba(255,120,40,0.22)';
-      for (var ry = -1; ry < rows; ry++) {
-        for (var cx2 = -1; cx2 < cols; cx2++) {
-          var px = cx2 * gs, py = ry * gs;
-          if (cx2 < cols - 1 && Math.random() < 0.58) {
-            ptx.beginPath(); ptx.moveTo(px, py); ptx.lineTo(px + gs, py); ptx.stroke();
-          }
-          if (ry < rows - 1 && Math.random() < 0.52) {
-            ptx.beginPath(); ptx.moveTo(px, py); ptx.lineTo(px, py + gs); ptx.stroke();
-          }
-          if (Math.random() < 0.28) {
-            ptx.beginPath(); ptx.arc(px, py, 2.2, 0, Math.PI * 2); ptx.fill();
-          }
-        }
+  // ── Background: animated aurora (Venus) / CRT (Chaos) ────
+  function drawVenusBg(ctx, w, h, t) {
+    // 5 aurora curtain bands — each slowly drifts up/down with a wavy silhouette
+    var bands = [
+      { spd: 0.00018, ph: 0.0, yf: 0.22, col: [0,  80,200], a: 0.20 },
+      { spd: 0.00022, ph: 1.4, yf: 0.40, col: [0, 180,220], a: 0.16 },
+      { spd: 0.00014, ph: 2.7, yf: 0.55, col: [90,  0,200], a: 0.18 },
+      { spd: 0.00020, ph: 4.1, yf: 0.70, col: [0, 210,240], a: 0.14 },
+      { spd: 0.00017, ph: 5.5, yf: 0.85, col: [50,  0,170], a: 0.17 },
+    ];
+    for (var i = 0; i < bands.length; i++) {
+      var b = bands[i];
+      var cy = b.yf * h + Math.sin(t * b.spd + b.ph) * h * 0.08;
+      var bh = h * 0.11;
+      var steps = 40;
+      ctx.beginPath();
+      for (var s = 0; s <= steps; s++) {
+        var px = (s / steps) * w;
+        var yTop = cy - bh + Math.sin(t * b.spd * 2.2 + px * 0.0055 + b.ph) * 22;
+        s === 0 ? ctx.moveTo(px, yTop) : ctx.lineTo(px, yTop);
       }
-    } else {
-      // Hexagonal colony grid
-      var r = Math.floor(w / 12);
-      var s3 = Math.sqrt(3);
-      var hcols = Math.ceil(w / (r * s3)) + 2;
-      var hrows = Math.ceil(h / (r * 1.5)) + 2;
-      ptx.strokeStyle = 'rgba(0,200,255,0.11)';
-      ptx.lineWidth = 0.8;
-      for (var row = -1; row < hrows; row++) {
-        for (var col = -1; col < hcols; col++) {
-          var hcx = col * r * s3 + (row & 1) * r * s3 * 0.5;
-          var hcy = row * r * 1.5;
-          ptx.beginPath();
-          for (var i = 0; i < 6; i++) {
-            var ang = Math.PI / 3 * i - Math.PI / 6;
-            var hx = hcx + (r - 0.5) * Math.cos(ang);
-            var hy = hcy + (r - 0.5) * Math.sin(ang);
-            i === 0 ? ptx.moveTo(hx, hy) : ptx.lineTo(hx, hy);
-          }
-          ptx.closePath();
-          ptx.stroke();
-        }
+      for (var s2 = steps; s2 >= 0; s2--) {
+        var px2 = (s2 / steps) * w;
+        var yBot = cy + bh + Math.sin(t * b.spd * 2.2 + px2 * 0.0055 + b.ph + 1.0) * 14;
+        ctx.lineTo(px2, yBot);
+      }
+      ctx.closePath();
+      var gr = ctx.createLinearGradient(0, cy - bh * 2.5, 0, cy + bh * 2.5);
+      gr.addColorStop(0,   'rgba(' + b.col + ',0)');
+      gr.addColorStop(0.5, 'rgba(' + b.col + ',' + b.a + ')');
+      gr.addColorStop(1,   'rgba(' + b.col + ',0)');
+      ctx.fillStyle = gr;
+      ctx.fill();
+    }
+    // Soft nebula depth clouds
+    var neb = [
+      [0.25, 0.30, 0.38, '0,40,130'],
+      [0.75, 0.62, 0.32, '70,0,160'],
+      [0.48, 0.82, 0.28, '0,90,190']
+    ];
+    for (var j = 0; j < neb.length; j++) {
+      var n = neb[j];
+      var pulse = 0.09 + 0.02 * Math.sin(t * 0.00035 + j * 2.0);
+      var rg = ctx.createRadialGradient(n[0]*w, n[1]*h, 0, n[0]*w, n[1]*h, n[2] * Math.max(w, h));
+      rg.addColorStop(0, 'rgba(' + n[3] + ',' + pulse.toFixed(3) + ')');
+      rg.addColorStop(1, 'rgba(' + n[3] + ',0)');
+      ctx.fillStyle = rg;
+      ctx.fillRect(0, 0, w, h);
+    }
+  }
+
+  function drawChaosBg(ctx, w, h, t) {
+    // CRT scanlines — every other row slightly darker, cached as a 2-row pattern
+    if (!G.chaosPattern || G.chaosPatternW !== w) {
+      var off2 = document.createElement('canvas');
+      off2.width = w; off2.height = 2;
+      var ptx2 = off2.getContext('2d');
+      ptx2.fillStyle = 'rgba(0,0,0,0.20)';
+      ptx2.fillRect(0, 0, w, 1);
+      G.chaosPattern = ctx.createPattern(off2, 'repeat');
+      G.chaosPatternW = w;
+    }
+    ctx.fillStyle = G.chaosPattern;
+    ctx.fillRect(0, 0, w, h);
+    // Descending phosphor scan bar
+    var scanY = ((t * 0.042) % (h + 80)) - 40;
+    var sg = ctx.createLinearGradient(0, scanY - 25, 0, scanY + 25);
+    sg.addColorStop(0,   'rgba(255,90,20,0)');
+    sg.addColorStop(0.4, 'rgba(255,130,50,0.14)');
+    sg.addColorStop(0.5, 'rgba(255,160,60,0.22)');
+    sg.addColorStop(0.6, 'rgba(255,130,50,0.14)');
+    sg.addColorStop(1,   'rgba(255,90,20,0)');
+    ctx.fillStyle = sg;
+    ctx.fillRect(0, Math.max(0, scanY - 25), w, Math.min(h, 50));
+    // Corruption glitches — deterministic blocks keyed to time buckets
+    var bucket = Math.floor(t * 0.0025);
+    var rng = function(s) { return (((s * 1664525 + 1013904223) >>> 0) & 0x7fffffff) / 0x7fffffff; };
+    for (var i = 0; i < 4; i++) {
+      var s0 = bucket * 37 + i * 991;
+      if (rng(s0) < 0.055) {
+        ctx.fillStyle = 'rgba(255,' + Math.floor(rng(s0+1)*100) + ',10,' + (0.06 + rng(s0+2)*0.12).toFixed(3) + ')';
+        ctx.fillRect(rng(s0+3)*w, rng(s0+4)*h, 15+rng(s0+5)*55, 2+rng(s0+6)*10);
       }
     }
-    return off;
+    // Phosphor edge bleed — subtle warm cast at left/right edges
+    var pg = ctx.createLinearGradient(0, 0, w, 0);
+    pg.addColorStop(0,    'rgba(100,25,0,0.10)');
+    pg.addColorStop(0.15, 'rgba(0,0,0,0)');
+    pg.addColorStop(0.85, 'rgba(0,0,0,0)');
+    pg.addColorStop(1,    'rgba(100,25,0,0.10)');
+    ctx.fillStyle = pg;
+    ctx.fillRect(0, 0, w, h);
   }
 
   function drawBg() {
@@ -300,31 +337,51 @@
     ctx.fillStyle = C.bg;
     ctx.fillRect(0, 0, w, h);
 
-    // Mode-specific background texture (hex grid or circuit traces)
-    if (!G.bgPattern || G.bgPatternSz !== w) {
-      G.bgPattern = buildBgPattern(w, h);
-      G.bgPatternSz = w;
+    // Animated mode-specific atmosphere
+    if (G.mode === 'chaos') {
+      drawChaosBg(ctx, w, h, G.t);
+    } else {
+      drawVenusBg(ctx, w, h, G.t);
     }
-    ctx.drawImage(G.bgPattern, 0, 0);
 
-    // Ambient drifting particles — all batched into one fill call
+    // Ambient particles
     var pts = G.bgParticles;
     if (pts && pts.length) {
-      var pAlpha = 0.032 * (0.45 + 0.55 * Math.sin(G.t * 0.0013));
-      ctx.fillStyle = 'rgba(' + C.partRGB + ',' + pAlpha.toFixed(4) + ')';
-      ctx.beginPath();
-      for (var i = 0; i < pts.length; i++) {
-        var p = pts[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = w;
-        if (p.x > w) p.x = 0;
-        if (p.y < 0) p.y = h;
-        if (p.y > h) p.y = 0;
-        ctx.moveTo(p.x + p.r, p.y);
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      if (G.mode === 'venus') {
+        // Star field — each star twinkles independently
+        for (var i = 0; i < pts.length; i++) {
+          var p = pts[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+          var tw = 0.25 + 0.75 * Math.abs(Math.sin(G.t * 0.00065 + p.phase));
+          var al = (p.baseAlpha * tw).toFixed(3);
+          ctx.fillStyle = 'rgba(180,220,255,' + al + ')';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * (0.7 + 0.3 * tw), 0, Math.PI * 2);
+          ctx.fill();
+          if (p.r > 1.5) {
+            ctx.fillStyle = 'rgba(100,180,255,' + (parseFloat(al) * 0.35).toFixed(3) + ')';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r * 3.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      } else {
+        // Chaos embers — batched draw
+        var pAlpha = (0.30 + 0.10 * Math.sin(G.t * 0.0011)).toFixed(3);
+        ctx.fillStyle = 'rgba(' + C.partRGB + ',' + pAlpha + ')';
+        ctx.beginPath();
+        for (var i = 0; i < pts.length; i++) {
+          var p = pts[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+          ctx.moveTo(p.x + p.r, p.y);
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        }
+        ctx.fill();
       }
-      ctx.fill();
     }
 
     // Edge vignette — caches gradient until canvas is resized
@@ -792,7 +849,8 @@
     G.cellPx = Math.floor(sz / G.size);
     G.ox = Math.floor((sz - G.cellPx * G.size) / 2);
     G.oy = G.ox;
-    G.vignetteGrad = null; // invalidate cached gradient when size changes
+    G.vignetteGrad  = null; // invalidate cached gradient when size changes
+    G.chaosPattern  = null; // invalidate scanline pattern when width changes
   }
 
   // ── Public API ───────────────────────────────────────────
@@ -820,14 +878,28 @@
 
     // Seed ambient background particles after canvas is sized
     G.bgParticles = [];
-    for (var i = 0; i < 18; i++) {
-      G.bgParticles.push({
-        x:  Math.random() * G.canvas.width,
-        y:  Math.random() * G.canvas.height,
-        vx: (Math.random() - 0.5) * 0.13,
-        vy: (Math.random() - 0.5) * 0.13,
-        r:  0.55 + Math.random() * 0.85
-      });
+    if (G.mode === 'venus') {
+      for (var i = 0; i < 40; i++) {
+        G.bgParticles.push({
+          x: Math.random() * G.canvas.width,
+          y: Math.random() * G.canvas.height,
+          vx: (Math.random() - 0.5) * 0.08,
+          vy: (Math.random() - 0.5) * 0.08,
+          r: 0.5 + Math.random() * 1.7,
+          phase: Math.random() * Math.PI * 2,
+          baseAlpha: 0.35 + Math.random() * 0.50
+        });
+      }
+    } else {
+      for (var i = 0; i < 25; i++) {
+        G.bgParticles.push({
+          x:  Math.random() * G.canvas.width,
+          y:  Math.random() * G.canvas.height,
+          vx: (Math.random() - 0.5) * 0.22,
+          vy: -(Math.random() * 0.18 + 0.03),
+          r:  0.8 + Math.random() * 1.0
+        });
+      }
     }
 
     G._resizeHandler = function() { resize(); };
@@ -920,8 +992,32 @@
     G.mode = (m === 'chaos') ? 'chaos' : 'venus';
     C = PALETTES[G.mode];
     G.vignetteGrad = null;
-    G.bgPattern = null; // rebuild pattern for new mode
+    G.chaosPattern = null;
     if (G.canvas) G.canvas.setAttribute('data-mode', G.mode);
+    // Re-seed particles for the new atmosphere
+    if (G.canvas) {
+      var pw = G.canvas.width, ph = G.canvas.height;
+      G.bgParticles = [];
+      if (G.mode === 'venus') {
+        for (var i = 0; i < 40; i++) {
+          G.bgParticles.push({
+            x: Math.random()*pw, y: Math.random()*ph,
+            vx: (Math.random()-0.5)*0.08, vy: (Math.random()-0.5)*0.08,
+            r: 0.5 + Math.random()*1.7,
+            phase: Math.random()*Math.PI*2,
+            baseAlpha: 0.35 + Math.random()*0.50
+          });
+        }
+      } else {
+        for (var i = 0; i < 25; i++) {
+          G.bgParticles.push({
+            x: Math.random()*pw, y: Math.random()*ph,
+            vx: (Math.random()-0.5)*0.22, vy: -(Math.random()*0.18+0.03),
+            r: 0.8 + Math.random()*1.0
+          });
+        }
+      }
+    }
   }
 
   window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy, setModifiers: setModifiers, setLevels: setLevels, setMode: setMode };
