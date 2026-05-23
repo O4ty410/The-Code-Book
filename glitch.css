@@ -232,6 +232,31 @@
   line-height: 1;
 }
 
+/* Concept line — coding pattern revealed after each solve */
+.glitch-concept-line {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(0,229,255,0.82);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  min-height: 13px;
+  text-shadow: 0 0 10px rgba(0,229,255,0.4);
+}
+
+.glitch-concept-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: rgba(255,255,255,0.32);
+  letter-spacing: 0.2px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  min-height: 12px;
+  max-width: 220px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .glitch-next-btn {
   width: 100%;
   padding: 12px 20px;
