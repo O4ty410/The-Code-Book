@@ -1589,10 +1589,6 @@ function goToFloor(fi) {
 }
 function goToSection(fi, si) {
   stopNarration();
-  if (isRestLocked(fi, si)) {
-    var b = getFloorBreakState(fi);
-    if (b) { showRestBreakPopup(fi, FLOORS[fi].sections.length - getBreakMidpoint(fi)); return; }
-  }
   state.currentFloor = fi + 1;
   state.currentSection = si;
   saveState();
@@ -1647,36 +1643,20 @@ function renderSectionStrip(fi, si) {
   var floor = FLOORS[fi];
   if (!floor) return '';
   var color = floor.color || '#c8a96e';
-  var breakState = getFloorBreakState(fi);
-  var mid = getBreakMidpoint(fi);
   var html = '<div class="section-strip">';
   floor.sections.forEach(function(sec, i) {
     var isDone = !!state.completed[sec.id];
     var isCurrent = i === si;
-    var restLocked = breakState && mid >= 0 && i >= mid;
     var cls = 'section-strip-item' +
       (isCurrent ? ' ss-active' : '') +
-      (isDone && !isCurrent ? ' ss-done' : '') +
-      (restLocked ? ' ss-rest-locked' : '');
+      (isDone && !isCurrent ? ' ss-done' : '');
     var style = isCurrent ? ' style="color:' + color + ';border-color:' + color + '"' : '';
     html += '<div class="' + cls + '"' + style +
       ' onclick="goToSection(' + fi + ',' + i + ')">' +
-      (restLocked ? '🔒 ' : isDone && !isCurrent ? '✓ ' : '') +
+      (isDone && !isCurrent ? '✓ ' : '') +
       (i + 1) + '. ' + sec.title +
       '</div>';
   });
-  if (breakState) {
-    html += '<div class="ss-break-notice">🔒 Rest break active — unlocks in <span id="ss-countdown">' + formatBreakCountdown(breakState.unlocksAt) + '</span></div>';
-    setTimeout(function() {
-      var tick = setInterval(function() {
-        var el = document.getElementById('ss-countdown');
-        if (!el) { clearInterval(tick); return; }
-        var rem = Math.max(0, breakState.unlocksAt - Date.now());
-        el.textContent = formatBreakCountdown(breakState.unlocksAt);
-        if (rem <= 0) { clearInterval(tick); getFloorBreakState(fi); renderFloor(fi, si); }
-      }, 1000);
-    }, 0);
-  }
   html += '</div>';
   return html;
 }
@@ -3804,17 +3784,14 @@ function completeSection(sectionId, fi, si) {
   showSectionRecap(section, function() {
     // Brief pause so button press animation is visible, then advance
     setTimeout(function() {
-      // Fatigue break: if we just finished the midpoint section, lock the rest
+      // Mind Checkpoint: suggest a recovery action at the midpoint — never blocks navigation
       var mid = getBreakMidpoint(fi);
       if (mid > 0 && si === mid - 1 && !isNowComplete) {
-        if (!getFloorBreakState(fi)) {
-          state.floorRestBreak = { fi: fi, unlocksAt: Date.now() + REST_BREAK_MS };
-          saveState();
+        var ccKey = 'cc_seen_f' + fi;
+        if (!sessionStorage.getItem(ccKey)) {
+          sessionStorage.setItem(ccKey, '1');
+          showCognitiveCooldown(fi, FLOORS[fi].sections.length - mid);
         }
-        var remaining = FLOORS[fi].sections.length - mid;
-        renderFloor(fi, si);
-        showRestBreakPopup(fi, remaining);
-        return;
       }
       var floor = FLOORS[fi];
       if (!isNowComplete && floor && si < floor.sections.length - 1) {
@@ -3901,9 +3878,10 @@ function nextSection(fi, si) {
   }, 220);
 }
 
-// ── FATIGUE BREAK SYSTEM ──────────────────────────────────────────────────
-var REST_BREAK_MS = 30 * 60 * 1000; // 30 minutes
-var REST_BREAK_MIN_SECTIONS = 5;    // only trigger for floors with >5 sections
+// ── COGNITIVE COOLDOWN SYSTEM ─────────────────────────────────────────────
+// Replaces the 30-minute hard lock with a guided recommendation modal.
+// Shown at most once per floor per browser session — never blocks navigation.
+var REST_BREAK_MIN_SECTIONS = 5; // only trigger for floors with >5 sections
 
 function getBreakMidpoint(fi) {
   var floor = FLOORS[fi];
@@ -3911,63 +3889,75 @@ function getBreakMidpoint(fi) {
   return Math.ceil(floor.sections.length / 2);
 }
 
-function getFloorBreakState(fi) {
-  var b = state.floorRestBreak;
-  if (!b || b.fi !== fi) return null;
-  if (Date.now() >= b.unlocksAt) {
-    state.floorRestBreak = null;
-    saveState();
-    return null;
-  }
-  return b;
-}
-
-function isRestLocked(fi, si) {
-  var mid = getBreakMidpoint(fi);
-  if (mid < 0) return false;
-  return !!getFloorBreakState(fi) && si >= mid;
-}
-
-function formatBreakCountdown(unlocksAt) {
-  var ms = Math.max(0, unlocksAt - Date.now());
-  var m = Math.floor(ms / 60000);
-  var s = Math.floor((ms % 60000) / 1000);
-  return m + ':' + (s < 10 ? '0' : '') + s;
-}
-
-function showRestBreakPopup(fi, sectionsRemaining) {
-  var existing = document.getElementById('rest-break-overlay');
+function showCognitiveCooldown(fi, sectionsRemaining) {
+  var existing = document.getElementById('cc-overlay');
   if (existing) existing.remove();
 
   var overlay = document.createElement('div');
-  overlay.id = 'rest-break-overlay';
-  overlay.className = 'rest-break-overlay';
+  overlay.id = 'cc-overlay';
+  overlay.className = 'cc-overlay';
 
-  var unlocksAt = state.floorRestBreak ? state.floorRestBreak.unlocksAt : Date.now() + REST_BREAK_MS;
+  function action(tab) {
+    overlay.remove();
+    if (tab) switchTopNav(tab);
+  }
 
   overlay.innerHTML =
-    '<div class="rest-break-panel">' +
-      '<div class="rest-break-owl">' + sageOwlSVG(56, 62) + '</div>' +
-      '<div class="rest-break-title">Time for a rest.</div>' +
-      '<div class="rest-break-body">You\'ve cleared the first half of this floor. ' +
-        'Your brain needs time to consolidate what you\'ve learned — ' +
-        'that\'s not a suggestion, it\'s how memory works.<br><br>' +
-        'Step away. Get some water. Come back fresh.' +
+    '<div class="cc-panel">' +
+      '<div class="cc-owl">' + sageOwlSVG(52, 58) + '</div>' +
+      '<div class="cc-title">Mind Checkpoint</div>' +
+      '<p class="cc-desc">You\'ve completed several focused learning sections. ' +
+        'Short recovery periods can improve retention and reduce overload.</p>' +
+      '<div class="cc-options">' +
+        '<button class="cc-option" data-cc-action="challenge">' +
+          '<span class="cc-option-icon">&#127919;</span>' +
+          '<span class="cc-option-text">' +
+            '<span class="cc-option-title">Daily Challenge</span>' +
+            '<span class="cc-option-desc">Quick timed quiz to reinforce what you\'ve learned.</span>' +
+          '</span>' +
+          '<span class="cc-option-arrow">&#8250;</span>' +
+        '</button>' +
+        '<button class="cc-option" data-cc-action="revision">' +
+          '<span class="cc-option-icon">&#128218;</span>' +
+          '<span class="cc-option-text">' +
+            '<span class="cc-option-title">Revision Centre</span>' +
+            '<span class="cc-option-desc">Review concepts and flashcards from this floor.</span>' +
+          '</span>' +
+          '<span class="cc-option-arrow">&#8250;</span>' +
+        '</button>' +
+        '<button class="cc-option" data-cc-action="game">' +
+          '<span class="cc-option-icon">&#127918;</span>' +
+          '<span class="cc-option-text">' +
+            '<span class="cc-option-title">Game Hub</span>' +
+            '<span class="cc-option-desc">Lighter learning activities and coding mini-games.</span>' +
+          '</span>' +
+          '<span class="cc-option-arrow">&#8250;</span>' +
+        '</button>' +
+        '<button class="cc-option" data-cc-action="">' +
+          '<span class="cc-option-icon">&#9749;</span>' +
+          '<span class="cc-option-text">' +
+            '<span class="cc-option-title">Take A Break</span>' +
+            '<span class="cc-option-desc">Step away and return refreshed.</span>' +
+          '</span>' +
+          '<span class="cc-option-arrow">&#8250;</span>' +
+        '</button>' +
+        '<button class="cc-option cc-option--continue" data-cc-action="">' +
+          '<span class="cc-option-icon">&#9654;</span>' +
+          '<span class="cc-option-text">' +
+            '<span class="cc-option-title">Continue Learning</span>' +
+            '<span class="cc-option-desc">Keep going &mdash; the next ' + sectionsRemaining + ' section' + (sectionsRemaining !== 1 ? 's' : '') + ' await.</span>' +
+          '</span>' +
+          '<span class="cc-option-arrow">&#8250;</span>' +
+        '</button>' +
       '</div>' +
-      '<div class="rest-break-timer-label">The next ' + sectionsRemaining + ' section' + (sectionsRemaining !== 1 ? 's' : '') + ' unlock in</div>' +
-      '<div class="rest-break-timer" id="rest-break-countdown">' + formatBreakCountdown(unlocksAt) + '</div>' +
-      '<button class="rest-break-btn" onclick="document.getElementById(\'rest-break-overlay\').remove()">Got it — I\'ll be back</button>' +
     '</div>';
 
-  document.body.appendChild(overlay);
+  overlay.querySelectorAll('.cc-option').forEach(function(btn) {
+    btn.addEventListener('click', function() { action(btn.dataset.ccAction); });
+  });
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
 
-  var tick = setInterval(function() {
-    var el = document.getElementById('rest-break-countdown');
-    if (!el) { clearInterval(tick); return; }
-    var remaining = Math.max(0, unlocksAt - Date.now());
-    el.textContent = formatBreakCountdown(unlocksAt);
-    if (remaining <= 0) clearInterval(tick);
-  }, 1000);
+  document.body.appendChild(overlay);
 }
 
 // --- VOICE NARRATION SYSTEM ---
