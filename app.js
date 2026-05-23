@@ -5484,27 +5484,36 @@ function renderGamePanel() {
         '</div>' +
         '<div class="gh-grid">' +
 
-          '<div class="gh-card gh-card--active" onclick="launchGame(\'launch-sequence\')">' +
+          '<div class="gh-card gh-card--active gh-card--launch" onclick="launchGame(\'launch-sequence\')">' +
             '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
-            '<div class="gh-card-icon">&#128640;</div>' +
-            '<div class="gh-card-name">LAUNCH SEQUENCE</div>' +
-            '<div class="gh-card-desc">Educational sci-fi mission. Repair rocket systems, debug code faults, and launch to Mars.</div>' +
+            '<div class="gh-card-icon-wrap"><span class="gh-card-icon">&#128640;</span></div>' +
+            '<div class="gh-card-body">' +
+              '<div class="gh-card-name">LAUNCH SEQUENCE</div>' +
+              '<div class="gh-card-tagline">Mars Mission Briefing</div>' +
+              '<div class="gh-card-desc">Educational sci-fi mission. Repair rocket systems, debug code faults, and launch to Mars.</div>' +
+            '</div>' +
             '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
-          '<div class="gh-card gh-card--active" onclick="launchGlitchMode()">' +
+          '<div class="gh-card gh-card--active gh-card--venus" onclick="launchGlitchMode()">' +
             '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
-            '<div class="gh-card-icon">&#128268;</div>' +
-            '<div class="gh-card-name">VENUS MODE</div>' +
-            '<div class="gh-card-desc">The colony\'s infrastructure is failing. Route the signal through damaged conduit nodes — keep life support online. Each puzzle is a real coding pattern.</div>' +
+            '<div class="gh-card-icon-wrap"><span class="gh-card-icon">&#128268;</span></div>' +
+            '<div class="gh-card-body">' +
+              '<div class="gh-card-name">VENUS MODE</div>' +
+              '<div class="gh-card-tagline">Colony Signal Router</div>' +
+              '<div class="gh-card-desc">The colony\'s infrastructure is failing. Route the signal through damaged conduit nodes to keep life support online. Every connection teaches a real coding pattern.</div>' +
+            '</div>' +
             '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
-          '<div class="gh-card gh-card--active" onclick="launchChaosMode()">' +
+          '<div class="gh-card gh-card--active gh-card--chaos" onclick="launchChaosMode()">' +
             '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
-            '<div class="gh-card-icon">&#9889;</div>' +
-            '<div class="gh-card-name">GLITCH MODE</div>' +
-            '<div class="gh-card-desc">The colony AI has corrupted itself and is fighting your repairs. REVERSE. CORRUPT. FLICKER. Real bugs. Real consequences. Debug under fire.</div>' +
+            '<div class="gh-card-icon-wrap"><span class="gh-card-icon">&#9889;</span></div>' +
+            '<div class="gh-card-body">' +
+              '<div class="gh-card-name">GLITCH MODE</div>' +
+              '<div class="gh-card-tagline">Debug Under Fire</div>' +
+              '<div class="gh-card-desc">The colony AI has corrupted itself and is fighting your repairs. REVERSE. CORRUPT. FLICKER. Real bugs. Real consequences. Can you debug faster than it breaks?</div>' +
+            '</div>' +
             '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
