@@ -5569,7 +5569,7 @@ function launchGame(gameId) {
       'style="width:100%;height:calc(100% - 44px);border:none;display:block;"></iframe>';
 }
 
-function showGameIntro(mode) {
+function showGameIntro(mode, onComplete) {
   var existing = document.getElementById('game-intro-overlay');
   if (existing) existing.remove();
   var isVenus = mode === 'venus';
@@ -5589,16 +5589,142 @@ function showGameIntro(mode) {
   function dismiss() {
     if (!el.parentNode) return;
     el.classList.add('game-intro--exit');
-    setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 560);
+    setTimeout(function() {
+      if (el.parentNode) el.parentNode.removeChild(el);
+      if (onComplete) onComplete();
+    }, 560);
   }
   var autoT = setTimeout(dismiss, 3200);
   el.addEventListener('click', function() { clearTimeout(autoT); dismiss(); }, { once: true });
 }
 
+function showGameBriefing(mode) {
+  var isVenus = mode === 'venus';
+  var slides = isVenus ? [
+    {
+      tag: 'THE MISSION', icon: '&#128268;',
+      title: 'Venus Colony<br>Signal Router',
+      body: 'A critical communication link between Venus Colony sectors has been severed. Without signal, the colony goes dark. You are the network engineer tasked with restoring the pathway.'
+    },
+    {
+      tag: 'YOUR TASK', icon: '&#8635;',
+      title: 'Rotate to<br>Reconnect',
+      body: 'Tap any pipe tile to rotate it 90&deg;. Chain the pipes to form a continuous path from <strong>SOURCE</strong> to <strong>TARGET</strong>. Signal flows only through fully connected pipes. Fewer moves earns more XP.'
+    },
+    {
+      tag: 'THE LEVELS', icon: '&#9776;',
+      title: '20 Levels<br>3 Grid Sizes',
+      tiers: [
+        { name: 'LINK-01 &ndash; 04', grid: '3&times;3', desc: 'Linear routing &middot; Basic pipe shapes' },
+        { name: 'LINK-05 &ndash; 13', grid: '4&times;4', desc: 'Branching &middot; T-junctions &middot; Dead code' },
+        { name: 'LINK-14 &ndash; 20', grid: '5&times;5', desc: 'Loops &middot; Recursion &middot; Nested logic' }
+      ],
+      footer: 'Each level teaches a real coding concept.'
+    }
+  ] : [
+    {
+      tag: 'THE MISSION', icon: '&#9889;',
+      title: 'Glitch Mode<br>System Breach',
+      body: 'A rogue process has corrupted the signal routing network. The system is destabilising. You are the last line of defence &mdash; patch the corrupted pipes before the colony loses contact entirely.'
+    },
+    {
+      tag: 'YOUR TASK', icon: '&#8635;',
+      title: 'Patch the<br>Corruption',
+      body: 'Tap any corrupted pipe tile to rotate it 90&deg;. Restore a continuous path from <strong>SOURCE</strong> to <strong>TARGET</strong>. The corruption makes every mis-rotation costly &mdash; think before you act.'
+    },
+    {
+      tag: 'THE LEVELS', icon: '&#9776;',
+      title: '5 Levels<br>Escalating Chaos',
+      tiers: [
+        { name: 'GLITCH-01 &ndash; 04', grid: '4&times;4', desc: 'Inverted logic &middot; Silent bugs &middot; Race faults' },
+        { name: 'GLITCH-05',            grid: '5&times;5', desc: 'Total system failure &middot; Maximum corruption' }
+      ],
+      footer: 'Each level mirrors a real class of software bug.'
+    }
+  ];
+
+  var current = 0;
+
+  function buildSlideHTML(s) {
+    var h = '<div class="gb-slide-icon">' + s.icon + '</div>' +
+      '<div class="gb-slide-tag">' + s.tag + '</div>' +
+      '<h2 class="gb-slide-title">' + s.title + '</h2>';
+    if (s.body) h += '<p class="gb-slide-body">' + s.body + '</p>';
+    if (s.tiers) {
+      h += '<div class="gb-tiers">';
+      for (var i = 0; i < s.tiers.length; i++) {
+        var t = s.tiers[i];
+        h += '<div class="gb-tier">' +
+          '<span class="gb-tier-name">' + t.name + '</span>' +
+          '<span class="gb-tier-grid">' + t.grid + '</span>' +
+          '<span class="gb-tier-desc">' + t.desc + '</span>' +
+          '</div>';
+      }
+      h += '</div>';
+      if (s.footer) h += '<p class="gb-slide-footer">' + s.footer + '</p>';
+    }
+    return h;
+  }
+
+  function buildDots() {
+    var h = '';
+    for (var i = 0; i < slides.length; i++)
+      h += '<span class="gb-dot' + (i === current ? ' gb-dot--active' : '') + '"></span>';
+    return h;
+  }
+
+  var el = document.createElement('div');
+  el.id = 'game-brief-overlay';
+  el.className = 'game-brief game-brief--' + (isVenus ? 'venus' : 'chaos');
+  el.innerHTML =
+    '<button class="gb-skip">SKIP</button>' +
+    '<div class="gb-slide">' + buildSlideHTML(slides[0]) + '</div>' +
+    '<div class="gb-nav">' +
+      '<div class="gb-dots">' + buildDots() + '</div>' +
+      '<button class="gb-next">NEXT &rarr;</button>' +
+    '</div>';
+  document.body.appendChild(el);
+
+  function dismiss() {
+    if (!el.parentNode) return;
+    el.classList.add('game-brief--exit');
+    setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 500);
+  }
+
+  function goTo(idx) {
+    current = idx;
+    var slideEl = el.querySelector('.gb-slide');
+    slideEl.classList.add('gb-slide--out');
+    setTimeout(function() {
+      slideEl.innerHTML = buildSlideHTML(slides[current]);
+      slideEl.classList.remove('gb-slide--out');
+      slideEl.classList.add('gb-slide--in');
+      setTimeout(function() { slideEl.classList.remove('gb-slide--in'); }, 350);
+      var dots = el.querySelectorAll('.gb-dot');
+      for (var i = 0; i < dots.length; i++)
+        dots[i].classList.toggle('gb-dot--active', i === current);
+      el.querySelector('.gb-next').innerHTML =
+        current === slides.length - 1
+          ? (isVenus ? 'BEGIN MISSION' : 'ENTER CHAOS &#9889;')
+          : 'NEXT &rarr;';
+    }, 220);
+  }
+
+  // Set initial button label correctly
+  if (slides.length === 1)
+    el.querySelector('.gb-next').innerHTML = isVenus ? 'BEGIN MISSION' : 'ENTER CHAOS &#9889;';
+
+  el.querySelector('.gb-next').addEventListener('click', function() {
+    if (current < slides.length - 1) goTo(current + 1);
+    else dismiss();
+  });
+  el.querySelector('.gb-skip').addEventListener('click', dismiss);
+}
+
 function launchGlitchMode() {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
-  showGameIntro('venus');
+  showGameIntro('venus', function() { showGameBriefing('venus'); });
 
   var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(0,200,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__glitchBack()" style="background:none;border:none;color:#00e5ff;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
@@ -5669,7 +5795,7 @@ function launchGlitchMode() {
 function launchChaosMode() {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
-  showGameIntro('chaos');
+  showGameIntro('chaos', function() { showGameBriefing('chaos'); });
 
   var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0208;border-bottom:1px solid rgba(255,40,80,0.18);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__chaosBack()" style="background:none;border:none;color:#ff4466;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
