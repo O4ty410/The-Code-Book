@@ -59,6 +59,8 @@
     glitchMods: null,   // modifier hooks (set via setModifiers)
     bgParticles: [],    // ambient drifting canvas particles
     vignetteGrad: null, // cached radial gradient for depth vignette
+    bgPattern: null,    // cached offscreen canvas — hex grid or circuit traces
+    bgPatternSz: 0,     // canvas width when pattern was built
     levelLoadT:  null,  // rAF timestamp when current level first rendered
     _cascPending: false,// true between loadLevel and first render frame
     solveFlashT: null   // rAF timestamp when level was solved (surge effect)
@@ -237,10 +239,73 @@
   }
 
   // ── Background: particles + vignette ─────────────────────
+  // Builds an offscreen canvas with a mode-specific background texture.
+  // Cached until canvas is resized or mode changes.
+  function buildBgPattern(w, h) {
+    var off = document.createElement('canvas');
+    off.width = w; off.height = h;
+    var ptx = off.getContext('2d');
+
+    if (G.mode === 'chaos') {
+      // Circuit board traces — sparse PCB grid with node circles
+      var gs = Math.floor(w / 9);
+      var cols = Math.ceil(w / gs) + 2;
+      var rows = Math.ceil(h / gs) + 2;
+      ptx.lineWidth = 0.9;
+      ptx.strokeStyle = 'rgba(255,100,30,0.16)';
+      ptx.fillStyle   = 'rgba(255,120,40,0.22)';
+      for (var ry = -1; ry < rows; ry++) {
+        for (var cx2 = -1; cx2 < cols; cx2++) {
+          var px = cx2 * gs, py = ry * gs;
+          if (cx2 < cols - 1 && Math.random() < 0.58) {
+            ptx.beginPath(); ptx.moveTo(px, py); ptx.lineTo(px + gs, py); ptx.stroke();
+          }
+          if (ry < rows - 1 && Math.random() < 0.52) {
+            ptx.beginPath(); ptx.moveTo(px, py); ptx.lineTo(px, py + gs); ptx.stroke();
+          }
+          if (Math.random() < 0.28) {
+            ptx.beginPath(); ptx.arc(px, py, 2.2, 0, Math.PI * 2); ptx.fill();
+          }
+        }
+      }
+    } else {
+      // Hexagonal colony grid
+      var r = Math.floor(w / 12);
+      var s3 = Math.sqrt(3);
+      var hcols = Math.ceil(w / (r * s3)) + 2;
+      var hrows = Math.ceil(h / (r * 1.5)) + 2;
+      ptx.strokeStyle = 'rgba(0,200,255,0.11)';
+      ptx.lineWidth = 0.8;
+      for (var row = -1; row < hrows; row++) {
+        for (var col = -1; col < hcols; col++) {
+          var hcx = col * r * s3 + (row & 1) * r * s3 * 0.5;
+          var hcy = row * r * 1.5;
+          ptx.beginPath();
+          for (var i = 0; i < 6; i++) {
+            var ang = Math.PI / 3 * i - Math.PI / 6;
+            var hx = hcx + (r - 0.5) * Math.cos(ang);
+            var hy = hcy + (r - 0.5) * Math.sin(ang);
+            i === 0 ? ptx.moveTo(hx, hy) : ptx.lineTo(hx, hy);
+          }
+          ptx.closePath();
+          ptx.stroke();
+        }
+      }
+    }
+    return off;
+  }
+
   function drawBg() {
     var ctx = G.ctx, w = G.canvas.width, h = G.canvas.height;
     ctx.fillStyle = C.bg;
     ctx.fillRect(0, 0, w, h);
+
+    // Mode-specific background texture (hex grid or circuit traces)
+    if (!G.bgPattern || G.bgPatternSz !== w) {
+      G.bgPattern = buildBgPattern(w, h);
+      G.bgPatternSz = w;
+    }
+    ctx.drawImage(G.bgPattern, 0, 0);
 
     // Ambient drifting particles — all batched into one fill call
     var pts = G.bgParticles;
@@ -277,11 +342,11 @@
       ctx.fillRect(0, 0, w, h);
     }
 
-    // Interface corner brackets — suggest a system targeting frame
-    var brk = 13, pad = 5;
+    // Interface corner brackets — system targeting frame
+    var brk = 20, pad = 7;
     ctx.save();
-    ctx.strokeStyle = 'rgba(' + C.gridRGB + ',0.07)';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(' + C.gridRGB + ',0.28)';
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(pad, pad + brk); ctx.lineTo(pad, pad); ctx.lineTo(pad + brk, pad);
     ctx.moveTo(w - pad - brk, pad); ctx.lineTo(w - pad, pad); ctx.lineTo(w - pad, pad + brk);
@@ -855,6 +920,7 @@
     G.mode = (m === 'chaos') ? 'chaos' : 'venus';
     C = PALETTES[G.mode];
     G.vignetteGrad = null;
+    G.bgPattern = null; // rebuild pattern for new mode
     if (G.canvas) G.canvas.setAttribute('data-mode', G.mode);
   }
 
