@@ -55,9 +55,13 @@
     tapped: null,    // {r, c, t0} — tap flash
     powered: {},     // "r,c" → true — last-frame powered set
     powFlash: {},    // "r,c" → timestamp — newly-powered flash
-    glitchMods: null,  // modifier hooks (set via setModifiers)
-    bgParticles: [],   // ambient drifting canvas particles
-    vignetteGrad: null // cached radial gradient for depth vignette
+    mode: 'venus',      // 'venus' | 'chaos' — switched via setMode()
+    glitchMods: null,   // modifier hooks (set via setModifiers)
+    bgParticles: [],    // ambient drifting canvas particles
+    vignetteGrad: null, // cached radial gradient for depth vignette
+    levelLoadT:  null,  // rAF timestamp when current level first rendered
+    _cascPending: false,// true between loadLevel and first render frame
+    solveFlashT: null   // rAF timestamp when level was solved (surge effect)
   };
 
   function makeGrid(n) {
@@ -69,7 +73,39 @@
     return g;
   }
 
-  function loadLevel(idx, skipLore) {
+  // BFS distances from SRC — used to stagger the cascade materialise animation
+  function computeCascadeDistances() {
+    var n = G.size, sr = -1, sc = -1;
+    for (var r = 0; r < n; r++)
+      for (var c = 0; c < n; c++)
+        if (G.grid[r][c].type === T_SOURCE) { sr = r; sc = c; }
+    if (sr < 0) return;
+    var queue = [[sr, sc, 0]], qi = 0, visited = {};
+    visited[sr + ',' + sc] = true;
+    G.grid[sr][sc]._casc = 0;
+    while (qi < queue.length) {
+      var p = queue[qi++];
+      for (var d = 0; d < 4; d++) {
+        var nr = p[0] + DRC[d][0], nc = p[1] + DRC[d][1];
+        var k = nr + ',' + nc;
+        if (nr < 0 || nr >= n || nc < 0 || nc >= n || visited[k]) continue;
+        visited[k] = true;
+        G.grid[nr][nc]._casc = p[2] + 1;
+        queue.push([nr, nc, p[2] + 1]);
+      }
+    }
+  }
+
+  function cascadeAlpha(r, c) {
+    if (!G.levelLoadT) return 1;
+    var age = G.t - G.levelLoadT;
+    var dist = (G.grid[r] && G.grid[r][c] && G.grid[r][c]._casc) || 0;
+    var delay = dist * 72;
+    if (age < delay) return 0;
+    return Math.min(1, (age - delay) / 170);
+  }
+
+  function loadLevel(idx, skipLore, skipCascade) {
     var def = LEVELS[idx % LEVELS.length];
     var n = def.size;
     G.size = n;
@@ -81,6 +117,12 @@
       if (type !== undefined) grid[p[0]][p[1]] = { type: type, rot: p[3] };
     });
     G.grid = grid;
+    computeCascadeDistances();
+    if (skipCascade) {
+      G.levelLoadT = 0; G._cascPending = false;
+    } else {
+      G.levelLoadT = null; G._cascPending = true;
+    }
     var sub = document.getElementById('glitch-sub');
     if (sub) sub.textContent = def.name;
     if (!skipLore && typeof LoreSystem !== 'undefined') LoreSystem.onLevelStart(idx + 1);
@@ -142,17 +184,52 @@
     return path;
   }
 
-  // ── Canvas colours ────────────────────────────────────────
-  var C = {
-    bg:       '#020608',
-    grid:     'rgba(0,200,255,0.10)',
-    pipeOff:  'rgba(0,200,255,0.22)',
-    pipeOn:   '#00e5ff',
-    pipeGlow: 'rgba(0,229,255,0.95)',
-    srcFill:  '#00e5ff',
-    tgtOff:   '#ff4444',
-    tgtOn:    '#00ff96',
+  // ── Canvas colour palettes (mode-switched via setMode) ────
+  var PALETTES = {
+    venus: {
+      bg:          '#020608',
+      bgTint:      null,
+      gridRGB:     '0,200,255',
+      gridBase:    0.08,
+      gridAmp:     0.04,
+      gridSpeed:   0.00075,
+      pipeOffRGB:  '0,200,255',
+      pipeOffBlur: 3,
+      pipeOffGlow: 'rgba(0,180,255,0.14)',
+      pipeOn:      '#00e5ff',
+      pipeOnBlur:  22,
+      pipeGlow:    'rgba(0,229,255,0.95)',
+      flashRGB:    '0,229,255',
+      srcFill:     '#00e5ff',
+      srcArcRGB:   '0,229,255',
+      tgtOff:      '#ff4444',
+      tgtOn:       '#00ff96',
+      partRGB:     '0,210,255',
+      partGlow:    '#00e5ff',
+    },
+    chaos: {
+      bg:          '#070204',
+      bgTint:      'rgba(200,30,10,0.03)',
+      gridRGB:     '255,90,30',
+      gridBase:    0.07,
+      gridAmp:     0.07,
+      gridSpeed:   0.0016,
+      pipeOffRGB:  '255,110,40',
+      pipeOffBlur: 3,
+      pipeOffGlow: 'rgba(255,80,20,0.18)',
+      pipeOn:      '#ff8c42',
+      pipeOnBlur:  22,
+      pipeGlow:    'rgba(255,140,60,0.95)',
+      flashRGB:    '255,140,60',
+      srcFill:     '#00e5ff',
+      srcArcRGB:   '255,120,40',
+      tgtOff:      '#ff4444',
+      tgtOn:       '#00ff96',
+      partRGB:     '255,120,50',
+      partGlow:    '#ff8c42',
+    }
   };
+  var C = PALETTES.venus;
 
   function ctr(r, c) {
     return [G.ox + c*G.cellPx + G.cellPx*0.5,
@@ -169,7 +246,7 @@
     var pts = G.bgParticles;
     if (pts && pts.length) {
       var pAlpha = 0.032 * (0.45 + 0.55 * Math.sin(G.t * 0.0013));
-      ctx.fillStyle = 'rgba(0,210,255,' + pAlpha.toFixed(4) + ')';
+      ctx.fillStyle = 'rgba(' + C.partRGB + ',' + pAlpha.toFixed(4) + ')';
       ctx.beginPath();
       for (var i = 0; i < pts.length; i++) {
         var p = pts[i];
@@ -194,6 +271,24 @@
     }
     ctx.fillStyle = G.vignetteGrad;
     ctx.fillRect(0, 0, w, h);
+
+    if (C.bgTint) {
+      ctx.fillStyle = C.bgTint;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    // Interface corner brackets — suggest a system targeting frame
+    var brk = 13, pad = 5;
+    ctx.save();
+    ctx.strokeStyle = 'rgba(' + C.gridRGB + ',0.07)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad, pad + brk); ctx.lineTo(pad, pad); ctx.lineTo(pad + brk, pad);
+    ctx.moveTo(w - pad - brk, pad); ctx.lineTo(w - pad, pad); ctx.lineTo(w - pad, pad + brk);
+    ctx.moveTo(pad, h - pad - brk); ctx.lineTo(pad, h - pad); ctx.lineTo(pad + brk, h - pad);
+    ctx.moveTo(w - pad - brk, h - pad); ctx.lineTo(w - pad, h - pad); ctx.lineTo(w - pad, h - pad - brk);
+    ctx.stroke();
+    ctx.restore();
   }
 
   // ── Grid lines with subtle ripple ─────────────────────────
@@ -201,10 +296,10 @@
     var ctx = G.ctx, n = G.size;
     ctx.save();
     ctx.lineWidth = 0.5;
-    var baseT = G.t * 0.00075;
+    var baseT = G.t * C.gridSpeed;
     for (var i = 0; i <= n; i++) {
-      var alpha = 0.07 + 0.04 * Math.sin(baseT + i * 0.58);
-      ctx.strokeStyle = 'rgba(0,200,255,' + alpha.toFixed(3) + ')';
+      var alpha = C.gridBase + C.gridAmp * Math.sin(baseT + i * 0.58);
+      ctx.strokeStyle = 'rgba(' + C.gridRGB + ',' + alpha.toFixed(3) + ')';
       ctx.beginPath();
       ctx.moveTo(G.ox, G.oy + i*G.cellPx);
       ctx.lineTo(G.ox + n*G.cellPx, G.oy + i*G.cellPx);
@@ -250,14 +345,38 @@
       if (flashAge < 1) {
         extraGlow = (1 - flashAge) * 22;
         ctx.save();
+        // Expanding ring
         ctx.beginPath();
-        ctx.arc(cx, cy, (1 - flashAge) * G.cellPx * 0.46, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(0,229,255,' + ((1 - flashAge) * 0.52) + ')';
-        ctx.lineWidth = 1.5;
+        ctx.arc(cx, cy, (1 - flashAge) * G.cellPx * 0.50, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(' + C.flashRGB + ',' + ((1 - flashAge) * 0.68).toFixed(3) + ')';
+        ctx.lineWidth = 2;
         ctx.stroke();
+        // Directional sparks — fire toward each connected arm
+        if (flashAge < 0.55) {
+          var sparkProg = flashAge / 0.55;
+          for (var bd = 0; bd < 4; bd++) {
+            if (!conn[bd]) continue;
+            var bx = cx + (edges[bd][0] - cx) * sparkProg;
+            var by = cy + (edges[bd][1] - cy) * sparkProg;
+            ctx.beginPath();
+            ctx.arc(bx, by, 2.4 * (1 - flashAge), 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(' + C.flashRGB + ',' + ((1 - flashAge) * 0.82).toFixed(3) + ')';
+            ctx.fill();
+          }
+        }
         ctx.restore();
       } else {
         delete G.powFlash[key];
+      }
+    }
+
+    // Solve surge — brief brightness wave across all powered pipes on level complete
+    var surgeExtra = 0;
+    if (on && G.solveFlashT) {
+      var surgeAge = (G.t - G.solveFlashT) / 750;
+      if (surgeAge < 1) {
+        var surgePow = surgeAge < 0.28 ? (surgeAge / 0.28) : (1 - (surgeAge - 0.28) / 0.72);
+        surgeExtra = Math.max(0, surgePow) * 32;
       }
     }
 
@@ -265,15 +384,15 @@
     ctx.lineCap = 'round';
     if (on) {
       ctx.strokeStyle = C.pipeOn;
-      ctx.lineWidth = 4;
-      ctx.shadowBlur = 14 + extraGlow;
+      ctx.lineWidth = 5;
+      ctx.shadowBlur = C.pipeOnBlur + extraGlow + surgeExtra;
       ctx.shadowColor = C.pipeGlow;
     } else {
-      // Idle breathing — each pipe breathes at its own phase for organic feel
       var breathe = 0.52 + 0.22 * Math.sin(G.t * 0.0017 + r * 0.85 + c * 1.1);
-      ctx.strokeStyle = 'rgba(0,200,255,' + (0.22 * breathe).toFixed(3) + ')';
+      ctx.strokeStyle = 'rgba(' + C.pipeOffRGB + ',' + (0.30 * breathe).toFixed(3) + ')';
       ctx.lineWidth = 3;
-      ctx.shadowBlur = 0;
+      ctx.shadowBlur = C.pipeOffBlur;
+      ctx.shadowColor = C.pipeOffGlow;
     }
     for (var d = 0; d < 4; d++) {
       if (!conn[d]) continue;
@@ -283,9 +402,9 @@
       ctx.stroke();
     }
     ctx.beginPath();
-    ctx.arc(cx, cy, on ? 5 : 3.5, 0, Math.PI*2);
-    ctx.fillStyle = on ? C.pipeOn : C.pipeOff;
-    ctx.shadowBlur = on ? (16 + extraGlow) : 0;
+    ctx.arc(cx, cy, on ? 5.5 : 3.5, 0, Math.PI*2);
+    ctx.fillStyle = on ? C.pipeOn : ('rgba(' + C.pipeOffRGB + ',0.38)');
+    ctx.shadowBlur = on ? (20 + extraGlow) : 0;
     ctx.fill();
     ctx.restore();
   }
@@ -301,7 +420,7 @@
     ctx.rotate(t * 0.0009);
     ctx.beginPath();
     ctx.arc(0, 0, 23, 0, Math.PI * 1.55);
-    ctx.strokeStyle = 'rgba(0,229,255,0.10)';
+    ctx.strokeStyle = 'rgba(' + C.srcArcRGB + ',0.12)';
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.restore();
@@ -383,9 +502,9 @@
       ctx.save();
       ctx.beginPath();
       ctx.arc(pos[0], pos[1], tr.r, 0, Math.PI*2);
-      ctx.fillStyle = 'rgba(0,229,255,' + tr.a + ')';
+      ctx.fillStyle = 'rgba(' + C.partRGB + ',' + tr.a + ')';
       ctx.shadowBlur = 10;
-      ctx.shadowColor = '#00e5ff';
+      ctx.shadowColor = C.partGlow;
       ctx.fill();
       ctx.restore();
     });
@@ -397,7 +516,7 @@
     ctx.arc(pos[0], pos[1], 6.5, 0, Math.PI*2);
     ctx.fillStyle = '#fff';
     ctx.shadowBlur = 32;
-    ctx.shadowColor = '#00e5ff';
+    ctx.shadowColor = C.partGlow;
     ctx.fill();
     ctx.restore();
   }
@@ -414,12 +533,58 @@
       ctx.save();
       ctx.beginPath();
       ctx.arc(pos[0], pos[1], 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(0,229,255,' + alpha.toFixed(3) + ')';
+      ctx.fillStyle = 'rgba(' + C.partRGB + ',' + alpha.toFixed(3) + ')';
       ctx.shadowBlur = 7;
-      ctx.shadowColor = '#00e5ff';
+      ctx.shadowColor = C.partGlow;
       ctx.fill();
       ctx.restore();
     }
+  }
+
+  // Traveling energy dots along powered pipe arms — batched for mobile performance
+  function drawPowerFlow(pow, t) {
+    var ctx = G.ctx, n = G.size;
+    ctx.save();
+    ctx.globalAlpha = 0.46;
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    for (var r = 0; r < n; r++) {
+      for (var c = 0; c < n; c++) {
+        if (!pow[r][c]) continue;
+        var cell = G.grid[r][c];
+        if (cell.type === T_SOURCE || cell.type === T_TARGET || cell.type === T_EMPTY) continue;
+        var conn = getConn(cell.type, cell.rot);
+        var pos = ctr(r, c);
+        var cx = pos[0], cy = pos[1];
+        var half = G.cellPx * 0.46;
+        var edgesL = [[cx, cy - half],[cx + half, cy],[cx, cy + half],[cx - half, cy]];
+        for (var d = 0; d < 4; d++) {
+          if (!conn[d]) continue;
+          var phase = ((t * 0.00095 + r * 0.93 + c * 0.67 + d * 1.57) % 1 + 1) % 1;
+          var prog = phase < 0.5 ? phase * 2 : (1 - phase) * 2;
+          var ex = edgesL[d][0], ey = edgesL[d][1];
+          var dx = cx + (ex - cx) * prog, dy = cy + (ey - cy) * prog;
+          ctx.moveTo(dx + 1.5, dy);
+          ctx.arc(dx, dy, 1.5, 0, Math.PI * 2);
+        }
+      }
+    }
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Typewriter reveal — types text character by character into el
+  function typewriter(el, text, startDelay, charSpeed) {
+    el.textContent = '';
+    setTimeout(function () {
+      var i = 0;
+      (function tick() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i++);
+          setTimeout(tick, charSpeed);
+        }
+      }());
+    }, startDelay);
   }
 
   function render(t) {
@@ -449,27 +614,32 @@
       }
     }
 
+    // Lock in cascade start time on first frame after level load
+    if (G._cascPending) { G.levelLoadT = t; G._cascPending = false; }
+
     drawBg();
     drawGridLines();
     for (var r2 = 0; r2 < n; r2++) {
       for (var c2 = 0; c2 < n; c2++) {
+        var caAlpha = cascadeAlpha(r2, c2);
+        if (caAlpha <= 0) continue;
+        if (caAlpha < 1) G.ctx.globalAlpha = caAlpha;
         var cell = G.grid[r2][c2];
         if      (cell.type === T_SOURCE) drawSource(r2, c2, t);
         else if (cell.type === T_TARGET) drawTarget(r2, c2, pow, t);
         else if (cell.type !== T_EMPTY)  drawPipe(r2, c2, pow);
-        // Modifier cell overlay (drawn on top of pipe, below particle)
         if (G.glitchMods && G.glitchMods.cellOverlay && cell.type !== T_EMPTY) {
           G.glitchMods.cellOverlay(G.ctx, r2, c2, pow[r2][c2], cell, t,
             G.ox + c2*G.cellPx, G.oy + r2*G.cellPx, G.cellPx);
         }
+        if (caAlpha < 1) G.ctx.globalAlpha = 1;
       }
     }
-    // Ambient flow along signal path (visible during solve animation + through overlay blur)
+    drawPowerFlow(pow, t);
     if (G.solving && G.signalPath.length > 0) {
       drawAmbientFlow(t);
       drawParticle(G.signalPath, G.signalT);
     }
-    // Modifier post-render (scanlines, stripe effects, etc.)
     if (G.glitchMods && G.glitchMods.postRender) {
       G.glitchMods.postRender(G.ctx, G.canvas.width, G.canvas.height, t);
     }
@@ -517,6 +687,7 @@
   }
 
   function onSolved() {
+    G.solveFlashT = G.t;
     var xp = Math.max(10, 60 - G.moves * 3);
     G.score += xp;
     var sc = document.getElementById('glitch-score');
@@ -530,6 +701,18 @@
     if (G.canvas) G.canvas.classList.add('is-solved');
     if (typeof awardXP === 'function') awardXP(xp, 'Glitch Mode');
     if (typeof LoreSystem !== 'undefined') LoreSystem.onSolve();
+
+    // Concept typewriter — surfaces the coding pattern this level demonstrated
+    var lvDef = LEVELS[(G.level - 1) % LEVELS.length];
+    var conceptEl  = document.getElementById('glitch-concept');
+    var noteEl     = document.getElementById('glitch-concept-note');
+    if (conceptEl && lvDef && lvDef.concept) {
+      var conceptText = '// ' + lvDef.concept;
+      typewriter(conceptEl, conceptText, 640, 30);
+      if (noteEl && lvDef.conceptNote) {
+        typewriter(noteEl, lvDef.conceptNote, 640 + conceptText.length * 30 + 160, 13);
+      }
+    }
   }
 
   function resize() {
@@ -555,6 +738,7 @@
 
     G.canvas      = canvas;
     G.ctx         = canvas.getContext('2d');
+    canvas.setAttribute('data-mode', G.mode);
     G.level       = 1;
     G.score       = 0;
     G.moves       = 0;
@@ -617,7 +801,8 @@
     G.tapped      = null;
     G.powered     = {};
     G.powFlash    = {};
-    loadLevel(G.level - 1, true); // skipLore: restart reuses same level, no start msg
+    G.solveFlashT = null;
+    loadLevel(G.level - 1, true, true); // skipLore + skipCascade on restart
     if (G.canvas) G.canvas.classList.remove('is-solved');
     var ov = document.getElementById('glitch-complete');
     if (ov) ov.style.display = 'none';
@@ -637,6 +822,7 @@
     G.tapped      = null;
     G.powered     = {};
     G.powFlash    = {};
+    G.solveFlashT = null;
     loadLevel(G.level - 1);
     resize();
     if (G.canvas) G.canvas.classList.remove('is-solved');
@@ -660,5 +846,12 @@
     LEVELS = (arr && arr.length) ? arr : DEFAULT_LEVELS;
   }
 
-  window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy, setModifiers: setModifiers, setLevels: setLevels };
+  function setMode(m) {
+    G.mode = (m === 'chaos') ? 'chaos' : 'venus';
+    C = PALETTES[G.mode];
+    G.vignetteGrad = null;
+    if (G.canvas) G.canvas.setAttribute('data-mode', G.mode);
+  }
+
+  window.GlitchGame = { init: init, restart: restart, nextLevel: nextLevel, destroy: destroy, setModifiers: setModifiers, setLevels: setLevels, setMode: setMode };
 }());

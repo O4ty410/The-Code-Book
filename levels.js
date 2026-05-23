@@ -1,7 +1,8 @@
 // ============================================================
 // GLITCH MODE — Level data
 // Format: { id, name, size, start:[r,c], end:[r,c],
-//           pipes:[[r,c,'type',startRot], ...] }
+//           pipes:[[r,c,'type',startRot], ...],
+//           concept: string, conceptNote: string }
 // Types: 'I' straight  'L' elbow  'T' tee  'X' cross
 // startRot is intentionally wrong so the player must rotate to solve.
 // ============================================================
@@ -14,7 +15,9 @@ window.GlitchLevels = [
     start: [0,0], end: [0,2],
     pipes: [
       [0,1,'I',0]                          // need EW(1)
-    ]
+    ],
+    concept: 'LINEAR EXECUTION',
+    conceptNote: 'Code runs one instruction at a time — straight from start to finish.'
   },
 
   // 2 — Down then right: introduces L-pipe
@@ -24,7 +27,9 @@ window.GlitchLevels = [
       [1,0,'I',1],                         // need NS(0)
       [2,0,'L',0],                         // need NE(3)
       [2,1,'I',0]                          // need EW(1)
-    ]
+    ],
+    concept: 'REDIRECTION',
+    conceptNote: 'A path can change direction — in code, this is a function call or a conditional jump.'
   },
 
   // 3 — Diagonal zigzag: chained L-pipes
@@ -34,7 +39,9 @@ window.GlitchLevels = [
       [0,1,'L',3],                         // need SW(1)
       [1,1,'L',0],                         // need NE(3)
       [1,2,'L',3]                          // need SW(1)
-    ]
+    ],
+    concept: 'CHAINED LOGIC',
+    conceptNote: 'Each step connects to the next — break one link and the whole chain fails.'
   },
 
   // 4 — Top row then drop: longer 3×3 path
@@ -44,7 +51,9 @@ window.GlitchLevels = [
       [0,1,'I',0],                         // need EW(1)
       [0,2,'L',3],                         // need SW(1)
       [1,2,'I',1]                          // need NS(0)
-    ]
+    ],
+    concept: 'SEQUENTIAL STEPS',
+    conceptNote: 'Order matters — every step depends on the one before it.'
   },
 
   // ── TIER 2: 4×4 easy ────────────────────────────────────
@@ -58,7 +67,9 @@ window.GlitchLevels = [
       [0,3,'L',3],                         // need SW(1)
       [1,3,'I',1],                         // need NS(0)
       [2,3,'I',1]                          // need NS(0)
-    ]
+    ],
+    concept: 'ROUTING',
+    conceptNote: 'Data can travel any valid path to reach its destination — the route is the logic.'
   },
 
   // 6 — Left column + mid bottom row (different target corner)
@@ -69,7 +80,9 @@ window.GlitchLevels = [
       [2,0,'L',0],                         // need NE(3)
       [2,1,'I',0],                         // need EW(1)
       [2,2,'I',0]                          // need EW(1)
-    ]
+    ],
+    concept: 'ALTERNATIVE PATH',
+    conceptNote: 'When the direct route is blocked, logic finds another way to the same result.'
   },
 
   // 7 — Diagonal staircase with L-pipes only
@@ -81,7 +94,9 @@ window.GlitchLevels = [
       [1,2,'L',3],                         // need SW(1)
       [2,2,'L',0],                         // need NE(3)
       [2,3,'L',3]                          // need SW(1)
-    ]
+    ],
+    concept: 'RECURSIVE PATTERN',
+    conceptNote: 'The same structure repeated at every step — like a function that calls itself.'
   },
 
   // 8 — Introduces T-pipe: dead branch goes south off-path
@@ -93,7 +108,9 @@ window.GlitchLevels = [
       [0,3,'L',3],                         // need SW(1)
       [1,3,'I',1],                         // need NS(0)
       [2,3,'I',1]                          // need NS(0)
-    ]
+    ],
+    concept: 'BRANCHING',
+    conceptNote: 'A fork in the path. In code this is an if-statement — only one branch executes.'
   },
 
   // ── TIER 3: 4×4 medium ──────────────────────────────────
@@ -107,7 +124,9 @@ window.GlitchLevels = [
       [1,2,'L',3],                         // need SW(1)
       [2,2,'L',1],                         // need NE(3)
       [2,3,'L',0]                          // need SW(1)
-    ]
+    ],
+    concept: 'FLOW CONTROL',
+    conceptNote: 'Signal follows the only open route — code does the same, taking the path conditions allow.'
   },
 
   // 10 — Longer snake; target at bottom-left
@@ -122,7 +141,9 @@ window.GlitchLevels = [
       [1,1,'I',0],                         // need EW(1)
       [1,0,'L',3],                         // need ES(0)
       [2,0,'I',1]                          // need NS(0)
-    ]
+    ],
+    concept: 'SEQUENTIAL EXECUTION',
+    conceptNote: 'Every connection runs in order. Skip one and the whole chain breaks.'
   },
 
   // 11 — T-pipe mid-path with meaningful dead branch
@@ -136,7 +157,9 @@ window.GlitchLevels = [
       [1,2,'T',3],                         // need ESW(1); dead W to [1,1]
       [2,2,'I',1],                         // need NS(0)
       [3,2,'L',0]                          // need NE(3)
-    ]
+    ],
+    concept: 'DEAD CODE',
+    conceptNote: 'A branch that never carries signal — just like code that exists but never runs.'
   },
 
   // 12 — T-junction midpoint with dead branch; chained elbows to target
@@ -150,7 +173,9 @@ window.GlitchLevels = [
       [1,2,'T',0],                         // need ESW(1); dead W to [1,1]
       [2,2,'L',1],                         // need NE(3)
       [2,3,'L',3]                          // need SW(1)
-    ]
+    ],
+    concept: 'ISOLATED BRANCH',
+    conceptNote: 'A path exists but leads nowhere. In code, this is unreachable logic.'
   },
 
   // 13 — Introduces X cross-pipe with two visible dead branches
@@ -162,7 +187,9 @@ window.GlitchLevels = [
       [1,2,'X',0],                         // cross; dead W and S
       [1,3,'L',0],                         // need SW(1)
       [2,3,'I',1]                          // need NS(0)
-    ]
+    ],
+    concept: 'MULTIPLE OUTPUTS',
+    conceptNote: 'One node connecting in all directions — not every connection serves the current purpose.'
   },
 
   // ── TIER 4: 5×5 medium-hard ─────────────────────────────
@@ -182,7 +209,9 @@ window.GlitchLevels = [
       [3,4,'I',1],                         // need NS(0)
       [2,4,'I',1],                         // need NS(0)
       [1,4,'I',1]                          // need NS(0)
-    ]
+    ],
+    concept: 'LOOP PATTERN',
+    conceptNote: 'A path that goes out and comes back — like a loop iterating through a data structure.'
   },
 
   // 15 — Staircase entirely built from L-pipes
@@ -196,7 +225,9 @@ window.GlitchLevels = [
       [2,3,'L',3],                         // need SW(1)
       [3,3,'L',0],                         // need NE(3)
       [3,4,'L',3]                          // need SW(1)
-    ]
+    ],
+    concept: 'RECURSION',
+    conceptNote: 'The same pattern at every step — elegant, predictable, and exact.'
   },
 
   // 16 — Two T-junctions: dead branches test planning
@@ -214,7 +245,9 @@ window.GlitchLevels = [
       [3,2,'I',1],                         // need NS(0)
       [4,2,'L',0],                         // need NE(3)
       [4,3,'I',0]                          // need EW(1)
-    ]
+    ],
+    concept: 'MULTIPLE BRANCHES',
+    conceptNote: 'Two decision points — trace both and find which path carries the signal through.'
   },
 
   // 17 — X cross with dead N and S branches visible
@@ -228,7 +261,9 @@ window.GlitchLevels = [
       [2,3,'I',0],                         // need EW(1)
       [2,4,'L',3],                         // need SW(1)
       [3,4,'I',1]                          // need NS(0)
-    ]
+    ],
+    concept: 'CROSS-REFERENCE',
+    conceptNote: 'A node that touches everything — but only the connections that align carry data through.'
   },
 
   // ── TIER 5: 5×5 hard ────────────────────────────────────
@@ -256,7 +291,9 @@ window.GlitchLevels = [
       [3,2,'I',0],                         // need EW(1)
       [3,1,'I',0],                         // need EW(1)
       [3,0,'L',2]                          // need ES(0)
-    ]
+    ],
+    concept: 'COMPLETE TRAVERSAL',
+    conceptNote: 'Every node visited exactly once — like iterating through every item in an array.'
   },
 
   // 19 — Two T-junctions on a winding mid-grid path
@@ -276,7 +313,9 @@ window.GlitchLevels = [
       [3,2,'I',0],                         // need EW(1)
       [3,3,'L',0],                         // need SW(1)
       [4,3,'L',1]                          // need NE(3)
-    ]
+    ],
+    concept: 'NESTED BRANCHING',
+    conceptNote: 'Branches inside branches — each decision point narrows the valid paths forward.'
   },
 
   // 20 — X + two T-junctions; most complex layout
@@ -294,7 +333,9 @@ window.GlitchLevels = [
       [1,4,'I',1],                         // need NS(0)
       [2,4,'I',1],                         // need NS(0)
       [3,4,'L',1]                          // need NE(3)
-    ]
+    ],
+    concept: 'SYSTEM COMPLEXITY',
+    conceptNote: 'Multiple connection types in one system — how real programs handle complex data flow.'
   }
 
 ];

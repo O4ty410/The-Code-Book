@@ -118,16 +118,22 @@
   // ── Global Chaos post-render (canvas scanlines + stripe) ──
 
   function chaosPostRender(ctx, w, h, t) {
-    // Scanlines
-    ctx.fillStyle = 'rgba(0,0,0,0.055)';
+    // Scanlines — slightly more present than Venus
+    ctx.fillStyle = 'rgba(0,0,0,0.065)';
     for (var y = 1; y < h; y += 4) ctx.fillRect(0, y, w, 1);
-    // Occasional horizontal glitch stripe
+    // Warm top/bottom edge — simulates overheating infrastructure
+    var pulse = 0.5 + 0.5 * Math.sin(t * 0.00095);
+    ctx.fillStyle = 'rgba(180,30,10,' + (0.07 * pulse).toFixed(3) + ')';
+    ctx.fillRect(0, 0, w, Math.floor(h * 0.07));
+    ctx.fillStyle = 'rgba(180,30,10,' + (0.04 * pulse).toFixed(3) + ')';
+    ctx.fillRect(0, h - Math.floor(h * 0.05), w, Math.floor(h * 0.05));
+    // Horizontal glitch stripe
     var v = Math.sin(t * 0.00073) * Math.sin(t * 0.00127);
-    if (v > 0.90) {
-      var intensity = (v - 0.90) * 10;
-      var sy = Math.floor(h * 0.2 + Math.sin(t * 0.003) * h * 0.3);
-      ctx.fillStyle = 'rgba(255,20,80,' + intensity * 0.25 + ')';
-      ctx.fillRect(0, sy, w, 2 + Math.floor(intensity * 4));
+    if (v > 0.88) {
+      var intensity = (v - 0.88) * 8.33;
+      var sy = Math.floor(h * 0.15 + Math.sin(t * 0.003) * h * 0.35);
+      ctx.fillStyle = 'rgba(255,20,80,' + (intensity * 0.32).toFixed(3) + ')';
+      ctx.fillRect(0, sy, w, 2 + Math.floor(intensity * 5));
     }
   }
 
@@ -175,6 +181,7 @@
     init: function (canvasId) {
       GlitchGame.setLevels(window.ChaosLevels || []);
       currentIdx = 0;
+      GlitchGame.setMode('chaos');
       GlitchGame.init(canvasId);
       applyMods(0);
     },
@@ -191,6 +198,7 @@
     destroy: function () {
       GlitchGame.setModifiers(null);
       GlitchGame.setLevels(window.GlitchLevels || []);
+      GlitchGame.setMode('venus');
       GlitchGame.destroy();
     }
   };

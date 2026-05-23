@@ -22,7 +22,9 @@ window.ChaosLevels = [
     ],
     modifiers: [
       { type: 'reverse', cells: [[0,3]] }
-    ]
+    ],
+    concept: 'INVERTED LOGIC',
+    conceptNote: 'When true becomes false — boolean logic flipped. A common source of subtle bugs.'
   },
 
   // GLITCH-02: CORRUPT red-herring — broken pipe looks like a shortcut
@@ -40,7 +42,9 @@ window.ChaosLevels = [
     ],
     modifiers: [
       { type: 'corrupt', cells: [[0,1]] }
-    ]
+    ],
+    concept: 'SILENT BUG',
+    conceptNote: 'A node that looks functional but carries nothing — code that runs but does nothing useful.'
   },
 
   // GLITCH-03: FLICKER distraction — flickering noise near source
@@ -58,7 +62,9 @@ window.ChaosLevels = [
     ],
     modifiers: [
       { type: 'flicker', cells: [[1,0]] }
-    ]
+    ],
+    concept: 'INTERMITTENT FAULT',
+    conceptNote: 'A signal that comes and goes — like a race condition that only sometimes triggers.'
   },
 
   // GLITCH-04: REVERSE + FLICKER — two modifiers
@@ -77,7 +83,9 @@ window.ChaosLevels = [
     modifiers: [
       { type: 'reverse', cells: [[0,3]] },
       { type: 'flicker', cells: [[2,1]] }
-    ]
+    ],
+    concept: 'COMPOUND ERROR',
+    conceptNote: 'Multiple bugs at once — the hardest kind to debug, because they interact with each other.'
   },
 
   // GLITCH-05: REVERSE + CORRUPT + FLICKER — all three modifiers, 5×5
@@ -102,7 +110,9 @@ window.ChaosLevels = [
       { type: 'reverse', cells: [[2,0]] },
       { type: 'corrupt', cells: [[1,2]] },
       { type: 'flicker', cells: [[0,2]] }
-    ]
+    ],
+    concept: 'SYSTEM FAILURE',
+    conceptNote: 'Every safeguard corrupted. This is what real production debugging feels like.'
   }
 
 ];

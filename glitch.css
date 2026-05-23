@@ -139,6 +139,23 @@
   animation: none;
 }
 
+/* ── Chaos mode canvas — amber glow, faster breathe ─────── */
+@keyframes glitch-canvas-breathe-chaos {
+  0%, 100% { box-shadow: 0 0 40px rgba(220,60,20,0.09), inset 0 0 24px rgba(0,0,0,0.5); }
+  50%       { box-shadow: 0 0 76px rgba(220,60,20,0.22), inset 0 0 24px rgba(0,0,0,0.5); }
+}
+
+#glitch-canvas[data-mode="chaos"] {
+  border-color: rgba(200,60,20,0.22);
+  animation: glitch-canvas-breathe-chaos 2.4s ease-in-out infinite;
+}
+
+#glitch-canvas[data-mode="chaos"].is-solved {
+  border-color: rgba(0,255,150,0.45);
+  box-shadow: 0 0 50px rgba(0,255,150,0.18), inset 0 0 24px rgba(0,0,0,0.5);
+  animation: none;
+}
+
 /* ── Level complete overlay ─────────────────────────────── */
 .glitch-complete-overlay {
   position: absolute;
@@ -213,6 +230,31 @@
   text-shadow: 0 0 22px rgba(0,229,255,0.65);
   margin-bottom: 22px;
   line-height: 1;
+}
+
+/* Concept line — coding pattern revealed after each solve */
+.glitch-concept-line {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(0,229,255,0.82);
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  min-height: 13px;
+  text-shadow: 0 0 10px rgba(0,229,255,0.4);
+}
+
+.glitch-concept-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: rgba(255,255,255,0.32);
+  letter-spacing: 0.2px;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  min-height: 12px;
+  max-width: 220px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .glitch-next-btn {

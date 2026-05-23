@@ -5496,7 +5496,7 @@ function renderGamePanel() {
             '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
             '<div class="gh-card-icon">&#128268;</div>' +
             '<div class="gh-card-name">VENUS MODE</div>' +
-            '<div class="gh-card-desc">Signal routing puzzle. Tap pipes to rotate them and reconnect the source to the target.</div>' +
+            '<div class="gh-card-desc">The colony\'s infrastructure is failing. Route the signal through damaged conduit nodes — keep life support online. Each puzzle is a real coding pattern.</div>' +
             '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
@@ -5504,7 +5504,7 @@ function renderGamePanel() {
             '<div class="gh-card-badge gh-card-badge--live">LIVE</div>' +
             '<div class="gh-card-icon">&#9889;</div>' +
             '<div class="gh-card-name">GLITCH MODE</div>' +
-            '<div class="gh-card-desc">Corrupted signal routing. Pipes behave unexpectedly — learn the patterns and route through the chaos.</div>' +
+            '<div class="gh-card-desc">The colony AI has corrupted itself and is fighting your repairs. REVERSE. CORRUPT. FLICKER. Real bugs. Real consequences. Debug under fire.</div>' +
             '<button class="gh-card-btn">PLAY NOW</button>' +
           '</div>' +
 
@@ -5591,6 +5591,8 @@ function launchGlitchMode() {
         '<span class="glitch-complete-glyph">&#9672;</span>' +
         '<div class="glitch-complete-title">SYSTEM RESTORED</div>' +
         '<div class="glitch-complete-sub">Signal pathway reconnected.</div>' +
+        '<div id="glitch-concept" class="glitch-concept-line"></div>' +
+        '<div id="glitch-concept-note" class="glitch-concept-note"></div>' +
         '<div id="glitch-xp" class="glitch-complete-xp">+50 XP</div>' +
         '<button class="glitch-next-btn" onclick="GlitchGame.nextLevel()">Next Level &#8594;</button>' +
       '</div>' +
@@ -5657,6 +5659,8 @@ function launchChaosMode() {
         '<span class="glitch-complete-glyph" style="color:#ff4466;text-shadow:0 0 22px rgba(255,40,80,0.8)">&#9889;</span>' +
         '<div class="glitch-complete-title" style="color:#ff4466;text-shadow:0 0 14px rgba(255,40,80,0.6)">SIGNAL PATCHED</div>' +
         '<div class="glitch-complete-sub">Chaos contained. For now.</div>' +
+        '<div id="glitch-concept" class="glitch-concept-line" style="color:rgba(255,140,60,0.82)"></div>' +
+        '<div id="glitch-concept-note" class="glitch-concept-note"></div>' +
         '<div id="glitch-xp" class="glitch-complete-xp">+50 XP</div>' +
         '<button class="glitch-next-btn" onclick="ChaosGame.nextLevel()">Next Level &#8594;</button>' +
       '</div>' +
