@@ -5569,10 +5569,36 @@ function launchGame(gameId) {
       'style="width:100%;height:calc(100% - 44px);border:none;display:block;"></iframe>';
 }
 
+function showGameIntro(mode) {
+  var existing = document.getElementById('game-intro-overlay');
+  if (existing) existing.remove();
+  var isVenus = mode === 'venus';
+  var el = document.createElement('div');
+  el.id = 'game-intro-overlay';
+  el.className = 'game-intro game-intro--' + (isVenus ? 'venus' : 'chaos');
+  el.innerHTML =
+    '<div class="game-intro-inner">' +
+      '<div class="game-intro-eyebrow">' + (isVenus ? 'COLONY SIGNAL ROUTER' : '&#9888; SYSTEM BREACH DETECTED &#9888;') + '</div>' +
+      '<div class="game-intro-title" data-glitch="' + (isVenus ? 'VENUS' : 'GLITCH') + '">' + (isVenus ? 'VENUS' : 'GLITCH') + '</div>' +
+      '<div class="game-intro-sub">' + (isVenus ? 'INITIALIZING NEURAL LINK...' : 'SIGNAL CORRUPTED &mdash; REROUTING...') + '</div>' +
+      '<div class="game-intro-bar"><div class="game-intro-bar-fill"></div></div>' +
+      '<div class="game-intro-skip">TAP TO SKIP</div>' +
+    '</div>' +
+    '<div class="game-intro-scanlines"></div>';
+  document.body.appendChild(el);
+  function dismiss() {
+    if (!el.parentNode) return;
+    el.classList.add('game-intro--exit');
+    setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 560);
+  }
+  var autoT = setTimeout(dismiss, 3200);
+  el.addEventListener('click', function() { clearTimeout(autoT); dismiss(); }, { once: true });
+}
 
 function launchGlitchMode() {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
+  showGameIntro('venus');
 
   var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(0,200,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__glitchBack()" style="background:none;border:none;color:#00e5ff;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
@@ -5643,6 +5669,7 @@ function launchGlitchMode() {
 function launchChaosMode() {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
+  showGameIntro('chaos');
 
   var backBar = '<div style="height:44px;flex-shrink:0;background:#0a0208;border-bottom:1px solid rgba(255,40,80,0.18);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__chaosBack()" style="background:none;border:none;color:#ff4466;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
