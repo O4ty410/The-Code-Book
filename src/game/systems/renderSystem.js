@@ -58,30 +58,94 @@ export function drawDust(ctx, dust, t) {
 // ── stars ──────────────────────────────────────────────────────────────────
 
 export function initStars(count, W, H) {
-  return Array.from({ length: count }, () => ({
+  // Base stars
+  const base = Array.from({ length: count }, () => ({
     x:    Math.random() * W,
     y:    Math.random() * H * 0.55,
     r:    Math.random() * 1.4 + 0.3,
     base: Math.random(),       // base brightness [0,1]
     phase: Math.random() * Math.PI * 2,
     speed: Math.random() * 1.5 + 0.5,
+    bright: false,
+    colorTint: null,
   }));
+
+  // 20 bright near-stars with tints and sparkles
+  const nearStars = Array.from({ length: 20 }, () => {
+    const tints = [null, null, null, 'warm', 'cool']; // mostly white, some tinted
+    return {
+      x:    Math.random() * W,
+      y:    Math.random() * H * 0.55,
+      r:    Math.random() * 1.0 + 1.5,
+      base: Math.random() * 0.4 + 0.6,
+      phase: Math.random() * Math.PI * 2,
+      speed: Math.random() * 3.0 + 1.5, // faster twinkle
+      bright: true,
+      colorTint: tints[Math.floor(Math.random() * tints.length)],
+    };
+  });
+
+  return [...base, ...nearStars];
 }
 
 export function drawStars(ctx, stars, t) {
   stars.forEach((s) => {
     const twinkle = 0.5 + 0.5 * Math.sin(s.phase + t * s.speed);
     const alpha   = 0.3 + 0.7 * twinkle * s.base;
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(200, 230, 255, ${alpha.toFixed(2)})`;
-    ctx.fill();
+
+    if (s.bright) {
+      // Color tint
+      let r = 200, g = 230, b = 255;
+      if (s.colorTint === 'warm') { r = 255; g = 210; b = 160; }
+      else if (s.colorTint === 'cool') { r = 160; g = 200; b = 255; }
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(2)})`;
+      ctx.fill();
+
+      // Cross/sparkle arms
+      const armLen = 4 + s.r * 1.5;
+      const sparkAlpha = (alpha * 0.4).toFixed(3);
+      ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${sparkAlpha})`;
+      ctx.lineWidth = 0.8;
+      for (let a = 0; a < 4; a++) {
+        const angle = (a * Math.PI) / 2;
+        ctx.beginPath();
+        ctx.moveTo(s.x + Math.cos(angle) * s.r, s.y + Math.sin(angle) * s.r);
+        ctx.lineTo(s.x + Math.cos(angle) * (s.r + armLen), s.y + Math.sin(angle) * (s.r + armLen));
+        ctx.stroke();
+      }
+    } else {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 230, 255, ${alpha.toFixed(2)})`;
+      ctx.fill();
+    }
   });
+}
+
+// ── floor concrete dot positions (seeded deterministically) ───────────────
+
+let _floorDots = null;
+function getFloorDots(W, H) {
+  if (_floorDots && _floorDots.W === W && _floorDots.H === H) return _floorDots.dots;
+  const horizon = H * 0.55;
+  // Simple seeded pseudo-random using sin
+  const dots = [];
+  for (let i = 0; i < 200; i++) {
+    const sx = Math.abs(Math.sin(i * 127.1 + 311.7)) * W;
+    const sy = horizon + Math.abs(Math.sin(i * 311.7 + 127.1)) * (H - horizon);
+    dots.push({ x: sx, y: sy });
+  }
+  _floorDots = { W, H, dots };
+  return dots;
 }
 
 // ── floor (perspective grid) ───────────────────────────────────────────────
 
-export function drawFloor(ctx, W, H) {
+export function drawFloor(ctx, W, H, cx, t) {
+  const rocketCX = cx !== undefined ? cx : W / 2;
   const horizon = H * 0.55;
   const lines   = 14;
   const cols    = 20;
@@ -92,8 +156,8 @@ export function drawFloor(ctx, W, H) {
 
   // horizontal lines
   for (let i = 0; i <= lines; i++) {
-    const t  = i / lines;
-    const y  = horizon + (H - horizon) * Math.pow(t, 1.8);
+    const ti = i / lines;
+    const y  = horizon + (H - horizon) * Math.pow(ti, 1.8);
     ctx.beginPath();
     ctx.moveTo(0, y);
     ctx.lineTo(W, y);
@@ -115,6 +179,73 @@ export function drawFloor(ctx, W, H) {
   grad.addColorStop(1, 'rgba(5, 15, 40, 0.75)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, horizon, W, H - horizon);
+
+  // ── concrete texture dots ──────────────────────────────────────────────
+  const dots = getFloorDots(W, H);
+  dots.forEach(({ x, y }) => {
+    ctx.beginPath();
+    ctx.arc(x, y, 1, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(80, 100, 140, 0.08)';
+    ctx.fill();
+  });
+
+  // ── hazard caution ring around rocket base ─────────────────────────────
+  const hazardY = H * 0.55;
+  const hazardR = 60;
+  const stripes = 12;
+  for (let i = 0; i < stripes; i++) {
+    const startAngle = (i / stripes) * Math.PI * 2;
+    const endAngle   = ((i + 0.5) / stripes) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(rocketCX, hazardY, hazardR, startAngle, endAngle);
+    ctx.arc(rocketCX, hazardY, hazardR - 8, endAngle, startAngle, true);
+    ctx.closePath();
+    ctx.fillStyle = i % 2 === 0 ? 'rgba(255, 200, 0, 0.18)' : 'rgba(0, 0, 0, 0.18)';
+    ctx.fill();
+  }
+
+  // ── painted dashed guidelines from rocket center to terminal area ──────
+  ctx.save();
+  ctx.setLineDash([8, 6]);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineWidth = 1;
+  const angles = [-0.9, -0.45, 0, 0.45, 0.9];
+  angles.forEach((angle) => {
+    ctx.beginPath();
+    ctx.moveTo(rocketCX, hazardY);
+    ctx.lineTo(rocketCX + Math.cos(angle + Math.PI / 2) * 220, hazardY + Math.sin(angle + Math.PI / 2) * 80);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+  ctx.restore();
+
+  // ── "LAUNCH PAD" stencil text at floor level ──────────────────────────
+  ctx.save();
+  ctx.font = 'bold 32px Courier New, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+  ctx.translate(rocketCX, H * 0.72);
+  ctx.scale(1, 0.3); // flatten for perspective feel
+  ctx.fillText('LAUNCH PAD', 0, 0);
+  ctx.restore();
+
+  // ── metallic drain grate below rocket ─────────────────────────────────
+  const grateX = rocketCX - 20;
+  const grateY = H * 0.55 - 2;
+  ctx.strokeStyle = 'rgba(60, 80, 120, 0.25)';
+  ctx.lineWidth = 0.8;
+  for (let gx = grateX; gx <= grateX + 40; gx += 4) {
+    ctx.beginPath();
+    ctx.moveTo(gx, grateY);
+    ctx.lineTo(gx, grateY + 10);
+    ctx.stroke();
+  }
+  for (let gy = grateY; gy <= grateY + 10; gy += 4) {
+    ctx.beginPath();
+    ctx.moveTo(grateX, gy);
+    ctx.lineTo(grateX + 40, gy);
+    ctx.stroke();
+  }
 }
 
 // ── ceiling lights ─────────────────────────────────────────────────────────
@@ -136,8 +267,6 @@ export function drawCeilingLights(ctx, W, powered = false) {
     ctx.fillRect(x - 30, 0, 60, 3);
   });
 }
-
-// ── rocket ─────────────────────────────────────────────────────────────────
 
 // ── alarm flash (screen-space, drawn outside camera transform) ─────────────
 
@@ -163,6 +292,223 @@ export function drawAlarmFlash(ctx, W, H, alpha) {
   ctx.fillRect(W - 110, 0, 110, H);
 }
 
+// ── gantry ────────────────────────────────────────────────────────────────
+
+export function drawGantry(ctx, cx, rocketBaseY, rocketTopY, W, H, t) {
+  const floorY    = H * 0.55;
+  const towerTop  = rocketTopY - 40;
+  const leftX     = cx - 80;
+  const rightX    = cx + 80;
+  const towerW    = 12;
+
+  // ── left tower ──────────────────────────────────────────────────────────
+  const leftGrad = ctx.createLinearGradient(leftX - towerW / 2, 0, leftX + towerW / 2, 0);
+  leftGrad.addColorStop(0, '#1a1f2e');
+  leftGrad.addColorStop(0.5, '#2a3040');
+  leftGrad.addColorStop(1, '#1a1f2e');
+  ctx.fillStyle = leftGrad;
+  ctx.fillRect(leftX - towerW / 2, towerTop, towerW, floorY - towerTop);
+
+  // ── right tower ─────────────────────────────────────────────────────────
+  const rightGrad = ctx.createLinearGradient(rightX - towerW / 2, 0, rightX + towerW / 2, 0);
+  rightGrad.addColorStop(0, '#1a1f2e');
+  rightGrad.addColorStop(0.5, '#2a3040');
+  rightGrad.addColorStop(1, '#1a1f2e');
+  ctx.fillStyle = rightGrad;
+  ctx.fillRect(rightX - towerW / 2, towerTop, towerW, floorY - towerTop);
+
+  // ── cross braces ─────────────────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(80, 100, 140, 0.7)';
+  ctx.lineWidth = 2;
+  const towerHeight = floorY - towerTop;
+  for (let level = 0; level < 4; level++) {
+    const y1 = towerTop + (level / 4) * towerHeight;
+    const y2 = towerTop + ((level + 1) / 4) * towerHeight;
+    // X-brace
+    ctx.beginPath();
+    ctx.moveTo(leftX + towerW / 2, y1);
+    ctx.lineTo(rightX - towerW / 2, y2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(rightX - towerW / 2, y1);
+    ctx.lineTo(leftX + towerW / 2, y2);
+    ctx.stroke();
+  }
+
+  // ── horizontal platforms ──────────────────────────────────────────────────
+  const platformHeights = [0.25, 0.55, 0.78].map((f) => towerTop + f * towerHeight);
+  platformHeights.forEach((py) => {
+    // Platform left (from left tower inward)
+    ctx.fillStyle = '#2a3040';
+    ctx.fillRect(leftX + towerW / 2, py - 3, 30, 6);
+    // End cap
+    ctx.fillStyle = '#3a4555';
+    ctx.fillRect(leftX + towerW / 2 + 28, py - 4, 4, 8);
+
+    // Platform right (from right tower inward)
+    ctx.fillStyle = '#2a3040';
+    ctx.fillRect(rightX - towerW / 2 - 30, py - 3, 30, 6);
+    ctx.fillStyle = '#3a4555';
+    ctx.fillRect(rightX - towerW / 2 - 32, py - 4, 4, 8);
+  });
+
+  // ── swing arms ────────────────────────────────────────────────────────────
+  const arm1Y = towerTop + towerHeight * 0.35;
+  const arm2Y = towerTop + towerHeight * 0.65;
+  ctx.strokeStyle = 'rgba(60, 80, 130, 0.85)';
+  ctx.lineWidth = 3;
+  // Left arm
+  ctx.beginPath();
+  ctx.moveTo(leftX + towerW / 2, arm1Y);
+  ctx.lineTo(cx - 22, arm1Y);
+  ctx.stroke();
+  // Right arm
+  ctx.beginPath();
+  ctx.moveTo(rightX - towerW / 2, arm2Y);
+  ctx.lineTo(cx + 22, arm2Y);
+  ctx.stroke();
+  // Connector pads
+  ctx.fillStyle = 'rgba(80, 110, 170, 0.9)';
+  ctx.fillRect(cx - 28, arm1Y - 4, 8, 8);
+  ctx.fillRect(cx + 20, arm2Y - 4, 8, 8);
+
+  // ── ladder on left tower face ────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(50, 70, 110, 0.6)';
+  ctx.lineWidth = 1;
+  // Vertical rail
+  ctx.beginPath();
+  ctx.moveTo(leftX - towerW / 2 + 2, towerTop + 10);
+  ctx.lineTo(leftX - towerW / 2 + 2, floorY - 5);
+  ctx.stroke();
+  // Rungs
+  for (let ry = towerTop + 10; ry < floorY - 5; ry += 8) {
+    ctx.beginPath();
+    ctx.moveTo(leftX - towerW / 2 + 2, ry);
+    ctx.lineTo(leftX - towerW / 2 - 5, ry);
+    ctx.stroke();
+  }
+
+  // ── warning stripes on tower bases ──────────────────────────────────────
+  const stripeH = 20;
+  const stripeY = floorY - stripeH;
+  [leftX, rightX].forEach((tx) => {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(tx - towerW / 2, stripeY, towerW, stripeH);
+    ctx.clip();
+    for (let si = 0; si < 6; si++) {
+      ctx.fillStyle = si % 2 === 0 ? 'rgba(255, 200, 0, 0.60)' : 'rgba(0, 0, 0, 0.50)';
+      ctx.beginPath();
+      ctx.moveTo(tx - towerW / 2 + si * 4,     stripeY);
+      ctx.lineTo(tx - towerW / 2 + si * 4 + 4, stripeY);
+      ctx.lineTo(tx - towerW / 2 + si * 4,     stripeY + stripeH);
+      ctx.lineTo(tx - towerW / 2 + si * 4 - 4, stripeY + stripeH);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  });
+
+  // ── gantry lights along towers ────────────────────────────────────────────
+  const lightPositions = [0.1, 0.3, 0.55, 0.75, 0.9];
+  lightPositions.forEach((frac, idx) => {
+    const ly = towerTop + frac * towerHeight;
+    const on = Math.sin(t * 2.5 + idx * 1.1) > 0.3;
+    const lightAlpha = on ? 0.8 : 0.25;
+    const haloAlpha  = on ? 0.3 : 0.05;
+
+    [leftX, rightX].forEach((tx) => {
+      // Halo
+      const halo = ctx.createRadialGradient(tx, ly, 0, tx, ly, 14);
+      halo.addColorStop(0, `rgba(255, 200, 80, ${haloAlpha})`);
+      halo.addColorStop(1, 'rgba(255, 200, 80, 0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(tx, ly, 14, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Light dot
+      ctx.beginPath();
+      ctx.arc(tx, ly, 3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 200, 80, ${lightAlpha})`;
+      ctx.fill();
+    });
+  });
+
+  // ── cables from tower tops ────────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(100, 120, 160, 0.5)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(leftX, towerTop);
+  ctx.lineTo(leftX - 60, towerTop - 80);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(rightX, towerTop);
+  ctx.lineTo(rightX + 60, towerTop - 80);
+  ctx.stroke();
+}
+
+// ── atmosphere effects ─────────────────────────────────────────────────────
+
+export function drawAtmosphere(ctx, W, H, t) {
+  const cx      = W / 2;
+  const horizon = H * 0.55;
+
+  // ── spotlight bloom from above ─────────────────────────────────────────
+  const bloom = ctx.createRadialGradient(cx, -20, 0, cx, -20, 200);
+  bloom.addColorStop(0, 'rgba(100, 160, 255, 0.12)');
+  bloom.addColorStop(1, 'rgba(100, 160, 255, 0)');
+  ctx.fillStyle = bloom;
+  ctx.beginPath();
+  ctx.arc(cx, -20, 200, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── volumetric god rays ────────────────────────────────────────────────
+  const rayCount = 7;
+  for (let ri = 0; ri < rayCount; ri++) {
+    const angle    = ((ri - rayCount / 2) / rayCount) * 0.6;
+    const rayAlpha = (0.05 + 0.02 * Math.sin(t * 0.3 + ri * 0.7)).toFixed(3);
+    const spreadX  = Math.tan(angle) * horizon;
+
+    const rayGrad = ctx.createLinearGradient(cx, -20, cx + spreadX, horizon);
+    rayGrad.addColorStop(0, `rgba(100, 160, 255, ${rayAlpha})`);
+    rayGrad.addColorStop(1, 'rgba(100, 160, 255, 0)');
+    ctx.fillStyle = rayGrad;
+
+    const halfW = 8 + ri * 3;
+    ctx.beginPath();
+    ctx.moveTo(cx - halfW * 0.1, -20);
+    ctx.lineTo(cx + halfW * 0.1, -20);
+    ctx.lineTo(cx + spreadX + halfW, horizon);
+    ctx.lineTo(cx + spreadX - halfW, horizon);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // ── heat haze strips around rocket base ───────────────────────────────
+  for (let hi = 0; hi < 4; hi++) {
+    const hx = cx + Math.sin(t * 1.2 + hi) * 3 + (hi - 2) * 12;
+    const hazeGrad = ctx.createLinearGradient(hx, horizon - 60, hx, horizon + 20);
+    hazeGrad.addColorStop(0, 'rgba(255, 200, 100, 0)');
+    hazeGrad.addColorStop(0.5, `rgba(255, 200, 100, ${(0.02 + hi * 0.005).toFixed(3)})`);
+    hazeGrad.addColorStop(1, 'rgba(255, 200, 100, 0)');
+    ctx.fillStyle = hazeGrad;
+    ctx.fillRect(hx - 3, horizon - 60, 6, 80);
+  }
+
+  // ── ambient dust motes in spotlight cone ──────────────────────────────
+  for (let mi = 0; mi < 30; mi++) {
+    const mx = cx - 80 + ((Math.sin(mi * 127.1 + t * 0.3 + mi) * 0.5 + 0.5)) * 160;
+    const myBase = ((Math.sin(mi * 311.7) * 0.5 + 0.5)) * horizon;
+    const my  = ((myBase - t * 15 * (0.5 + (mi % 5) * 0.1)) % horizon + horizon) % horizon;
+    const mAlpha = (0.04 + 0.03 * Math.sin(t * 1.5 + mi * 0.7)).toFixed(3);
+    ctx.beginPath();
+    ctx.arc(mx, my, 1, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(200, 220, 255, ${mAlpha})`;
+    ctx.fill();
+  }
+}
+
 // ── rocket ─────────────────────────────────────────────────────────────────
 
 export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel = 1) {
@@ -172,36 +518,92 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
   const bodyW = 52;
   const bodyH = 160;
 
-  // ── exhaust flame ────────────────────────────────────────────────────────
+  // ── exhaust flame — multi-gradient plume ─────────────────────────────────
   const nominalBase = powered ? 80 : 58;
   const nominalVar  = powered ? 20 : 13;
   const flameBase   = nominalBase * (0.25 + 0.75 * ignitionLevel);
   const flameH      = flameBase + Math.sin(t * 9) * nominalVar * ignitionLevel;
   const flameAlpha  = 0.35 + 0.60 * ignitionLevel;
 
-  // inner hot core
+  // Layer 1: inner hot white/yellow core
   const flameCoreG = ctx.createRadialGradient(cx, baseY + 6, 1, cx, baseY + 8, Math.max(1, flameH * 0.5));
-  flameCoreG.addColorStop(0,   `rgba(255, 255, 220, ${flameAlpha})`);
-  flameCoreG.addColorStop(0.4, `rgba(255, 200,  80, ${flameAlpha * 0.80})`);
+  flameCoreG.addColorStop(0,   `rgba(255, 255, 240, ${flameAlpha})`);
+  flameCoreG.addColorStop(0.3, `rgba(255, 240, 180, ${flameAlpha * 0.90})`);
+  flameCoreG.addColorStop(0.6, `rgba(255, 200,  80, ${flameAlpha * 0.70})`);
   flameCoreG.addColorStop(1,   `rgba(255, 120,  20, 0.00)`);
   ctx.fillStyle = flameCoreG;
   ctx.beginPath();
   ctx.ellipse(cx, baseY + 18, Math.max(1, 8 * ignitionLevel), Math.max(1, flameH * 0.55), 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // outer flame bloom
-  const flameG = ctx.createRadialGradient(cx, baseY + 12, 2, cx, baseY + 22, Math.max(1, flameH));
-  flameG.addColorStop(0,   `rgba(255, 160,  40, ${flameAlpha * 0.70})`);
-  flameG.addColorStop(0.5, `rgba(200,  80,  10, ${flameAlpha * 0.45})`);
-  flameG.addColorStop(0.8, `rgba(160,  40, 180, ${flameAlpha * 0.22})`);
-  flameG.addColorStop(1,   'rgba(80,  10, 120, 0.00)');
-  ctx.fillStyle = flameG;
+  // Layer 2: mid orange bloom
+  const flameMidG = ctx.createRadialGradient(cx, baseY + 15, 2, cx, baseY + 25, Math.max(1, flameH * 0.75));
+  flameMidG.addColorStop(0,   `rgba(255, 180,  60, ${flameAlpha * 0.65})`);
+  flameMidG.addColorStop(0.4, `rgba(255, 100,  20, ${flameAlpha * 0.45})`);
+  flameMidG.addColorStop(0.75,`rgba(200,  50,   0, ${flameAlpha * 0.20})`);
+  flameMidG.addColorStop(1,   'rgba(150, 20, 0, 0)');
+  ctx.fillStyle = flameMidG;
   ctx.beginPath();
-  ctx.ellipse(cx, baseY + 32, Math.max(1, 18 * ignitionLevel), Math.max(1, flameH), 0, 0, Math.PI * 2);
+  ctx.ellipse(cx, baseY + 28, Math.max(1, 14 * ignitionLevel), Math.max(1, flameH * 0.80), 0, 0, Math.PI * 2);
   ctx.fill();
 
+  // Layer 3: outer purple/magenta bloom
+  const flameOuterG = ctx.createRadialGradient(cx, baseY + 22, 2, cx, baseY + 32, Math.max(1, flameH));
+  flameOuterG.addColorStop(0,   `rgba(200,  80,  10, ${flameAlpha * 0.50})`);
+  flameOuterG.addColorStop(0.5, `rgba(160,  40, 180, ${flameAlpha * 0.25})`);
+  flameOuterG.addColorStop(0.8, `rgba(100,  20, 140, ${flameAlpha * 0.12})`);
+  flameOuterG.addColorStop(1,   'rgba(80,  10, 120, 0.00)');
+  ctx.fillStyle = flameOuterG;
+  ctx.beginPath();
+  ctx.ellipse(cx, baseY + 32, Math.max(1, 20 * ignitionLevel), Math.max(1, flameH), 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Layer 4: side shockwave rings
+  if (ignitionLevel > 0.5) {
+    for (let ri = 0; ri < 3; ri++) {
+      const rPhase = (t * 6 + ri * 1.2) % 3;
+      const rScale = rPhase / 3;
+      const rAlpha = ((1 - rScale) * 0.18 * ignitionLevel).toFixed(3);
+      ctx.beginPath();
+      ctx.ellipse(cx, baseY + 10 + rPhase * 12, Math.max(1, (12 + rScale * 18) * ignitionLevel), Math.max(1, (4 + rScale * 8) * ignitionLevel), 0, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255, 200, 80, ${rAlpha})`;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+  }
+
+  // ── engine idle glow (always present, even at low ignitionLevel) ──────────
+  const idleGlow = ctx.createRadialGradient(cx, baseY + 10, 0, cx, baseY + 10, 30);
+  idleGlow.addColorStop(0, 'rgba(120, 180, 255, 0.30)');
+  idleGlow.addColorStop(0.5, 'rgba(80, 140, 255, 0.12)');
+  idleGlow.addColorStop(1, 'rgba(60, 100, 255, 0)');
+  ctx.fillStyle = idleGlow;
+  ctx.beginPath();
+  ctx.arc(cx, baseY + 10, 30, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── engine idle heat distortion ───────────────────────────────────────────
+  const heatGlow = ctx.createRadialGradient(cx, baseY + 16, 0, cx, baseY + 16, 30);
+  heatGlow.addColorStop(0, 'rgba(255, 150, 50, 0.08)');
+  heatGlow.addColorStop(1, 'rgba(255, 150, 50, 0)');
+  ctx.fillStyle = heatGlow;
+  ctx.beginPath();
+  ctx.arc(cx, baseY + 16, 30, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── small floating sparks near engine bell ────────────────────────────────
+  for (let si = 0; si < 8; si++) {
+    const sparkX = cx + Math.sin(t * (3.1 + si * 0.7) + si * 1.8) * (6 + si * 2);
+    const sparkY = baseY + 10 - ((t * (15 + si * 5) + si * 7) % 30);
+    const sparkA = (0.3 + 0.4 * Math.sin(t * 4 + si)).toFixed(3);
+    ctx.beginPath();
+    ctx.arc(sparkX, sparkY, 0.8 + (si % 3) * 0.4, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 200, 80, ${sparkA})`;
+    ctx.fill();
+  }
+
   // ── engine bell ──────────────────────────────────────────────────────────
-  ctx.fillStyle = '#4a4a52';
+  ctx.fillStyle = '#3a3a42';
   ctx.beginPath();
   ctx.moveTo(cx - 14, baseY);
   ctx.lineTo(cx + 14, baseY);
@@ -209,6 +611,29 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
   ctx.lineTo(cx - 18, baseY + 14);
   ctx.closePath();
   ctx.fill();
+
+  // Engine bell inner nozzle rings
+  for (let ni = 0; ni < 4; ni++) {
+    const nf = (ni + 1) / 5;
+    const nx = 4 + nf * 14;
+    const ny = baseY + nf * 12;
+    ctx.strokeStyle = `rgba(80, 80, 100, ${0.6 - ni * 0.1})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx - nx, ny);
+    ctx.lineTo(cx + nx, ny);
+    ctx.stroke();
+  }
+
+  // Bell throat bright glow
+  const throatGlow = ctx.createRadialGradient(cx, baseY + 2, 0, cx, baseY + 2, 8);
+  throatGlow.addColorStop(0, 'rgba(200, 230, 255, 0.50)');
+  throatGlow.addColorStop(1, 'rgba(100, 160, 255, 0)');
+  ctx.fillStyle = throatGlow;
+  ctx.beginPath();
+  ctx.arc(cx, baseY + 2, 8, 0, Math.PI * 2);
+  ctx.fill();
+
   // bell rim highlight
   ctx.strokeStyle = 'rgba(180,180,200,0.60)';
   ctx.lineWidth = 1.5;
@@ -242,16 +667,76 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
     ctx.fill();
   });
 
-  // ── main body ────────────────────────────────────────────────────────────
+  // ── main body — 3D metallic gradient ────────────────────────────────────
   const bodyGrad = ctx.createLinearGradient(cx - bodyW / 2, 0, cx + bodyW / 2, 0);
-  bodyGrad.addColorStop(0,    'rgba(168, 172, 185, 0.95)');
-  bodyGrad.addColorStop(0.18, 'rgba(230, 235, 245, 0.97)');
-  bodyGrad.addColorStop(0.50, 'rgba(245, 248, 255, 0.98)');
-  bodyGrad.addColorStop(0.78, 'rgba(210, 215, 228, 0.96)');
-  bodyGrad.addColorStop(1,    'rgba(140, 145, 160, 0.94)');
+  bodyGrad.addColorStop(0,    'rgba(90,  95, 110, 0.95)');   // dark left edge
+  bodyGrad.addColorStop(0.18, 'rgba(200, 210, 225, 0.97)');  // bright silver highlight at ~30%
+  bodyGrad.addColorStop(0.32, 'rgba(235, 240, 252, 0.98)');  // bright silver peak
+  bodyGrad.addColorStop(0.55, 'rgba(215, 220, 235, 0.97)');  // light silver
+  bodyGrad.addColorStop(0.78, 'rgba(175, 180, 196, 0.96)');  // dimmer right
+  bodyGrad.addColorStop(1,    'rgba(110, 115, 130, 0.94)');  // dark right edge
   ctx.fillStyle = bodyGrad;
   roundRect(ctx, cx - bodyW / 2, baseY - bodyH, bodyW, bodyH, 8);
   ctx.fill();
+
+  // Secondary radial gradient for "roundness"
+  ctx.save();
+  roundRect(ctx, cx - bodyW / 2, baseY - bodyH, bodyW, bodyH, 8);
+  ctx.clip();
+  const roundGrad = ctx.createRadialGradient(cx - 8, baseY - bodyH * 0.5, 4, cx - 8, baseY - bodyH * 0.5, bodyW * 0.9);
+  roundGrad.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
+  roundGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.02)');
+  roundGrad.addColorStop(1, 'rgba(0, 0, 0, 0.10)');
+  ctx.fillStyle = roundGrad;
+  ctx.fillRect(cx - bodyW / 2, baseY - bodyH, bodyW, bodyH);
+  ctx.restore();
+
+  // ── panel lines (horizontal) ─────────────────────────────────────────────
+  const panelYs = [0.12, 0.22, 0.34, 0.46, 0.57, 0.68, 0.79, 0.90].map(
+    (f) => baseY - bodyH + bodyH * f
+  );
+  ctx.strokeStyle = 'rgba(60, 65, 80, 0.20)';
+  ctx.lineWidth = 1;
+  panelYs.forEach((py) => {
+    ctx.beginPath();
+    ctx.moveTo(cx - bodyW / 2 + 2, py);
+    ctx.lineTo(cx + bodyW / 2 - 2, py);
+    ctx.stroke();
+  });
+
+  // Vertical panel lines (2 lines suggesting cylindrical panels)
+  ctx.strokeStyle = 'rgba(60, 65, 80, 0.15)';
+  [cx - 10, cx + 10].forEach((vx) => {
+    ctx.beginPath();
+    ctx.moveTo(vx, baseY - bodyH + 5);
+    ctx.lineTo(vx, baseY - 5);
+    ctx.stroke();
+  });
+
+  // ── rivets ───────────────────────────────────────────────────────────────
+  const rivetPositions = [
+    { x: cx - bodyW / 2 + 6, y: baseY - bodyH + bodyH * 0.22 },
+    { x: cx + bodyW / 2 - 6, y: baseY - bodyH + bodyH * 0.22 },
+    { x: cx - bodyW / 2 + 6, y: baseY - bodyH + bodyH * 0.46 },
+    { x: cx + bodyW / 2 - 6, y: baseY - bodyH + bodyH * 0.46 },
+    { x: cx - bodyW / 2 + 6, y: baseY - bodyH + bodyH * 0.68 },
+    { x: cx + bodyW / 2 - 6, y: baseY - bodyH + bodyH * 0.68 },
+    { x: cx - bodyW / 2 + 6, y: baseY - bodyH + bodyH * 0.88 },
+    { x: cx + bodyW / 2 - 6, y: baseY - bodyH + bodyH * 0.88 },
+    { x: cx - 18,             y: baseY - bodyH + bodyH * 0.34 },
+    { x: cx + 18,             y: baseY - bodyH + bodyH * 0.34 },
+    { x: cx - 18,             y: baseY - bodyH + bodyH * 0.57 },
+    { x: cx + 18,             y: baseY - bodyH + bodyH * 0.57 },
+  ];
+  rivetPositions.forEach(({ x, y }) => {
+    ctx.beginPath();
+    ctx.arc(x, y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = '#cccccc';
+    ctx.fill();
+    ctx.strokeStyle = '#888888';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  });
 
   // body shadow/depth line on left edge
   ctx.strokeStyle = 'rgba(90, 95, 110, 0.50)';
@@ -261,14 +746,19 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
   ctx.lineTo(cx - bodyW / 2 + 4, baseY - 10);
   ctx.stroke();
 
+  // ── rim light on left edge (bounce light simulation) ─────────────────────
+  ctx.strokeStyle = 'rgba(100, 180, 255, 0.6)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(cx - bodyW / 2 + 1, baseY - bodyH + 12);
+  ctx.lineTo(cx - bodyW / 2 + 1, baseY - 12);
+  ctx.stroke();
+
   // ── red accent bands ─────────────────────────────────────────────────────
-  // top accent band (below nose transition)
   ctx.fillStyle = 'rgba(210, 38, 28, 0.88)';
   ctx.fillRect(cx - bodyW / 2, baseY - bodyH + 2, bodyW, 14);
-  // second red band mid-body
   ctx.fillStyle = 'rgba(210, 38, 28, 0.78)';
   ctx.fillRect(cx - bodyW / 2, baseY - 80, bodyW, 10);
-  // thin accent stripe lower
   ctx.fillStyle = 'rgba(190, 30, 22, 0.60)';
   ctx.fillRect(cx - bodyW / 2, baseY - 44, bodyW, 5);
 
@@ -281,13 +771,12 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
   ctx.restore();
 
   // ── nose cone ─────────────────────────────────────────────────────────────
-  // silver/white cone
   const noseGrad = ctx.createLinearGradient(cx - bodyW / 2, baseY - bodyH, cx + bodyW / 2, baseY - bodyH);
-  noseGrad.addColorStop(0,    'rgba(150, 155, 170, 0.92)');
-  noseGrad.addColorStop(0.30, 'rgba(220, 228, 240, 0.95)');
-  noseGrad.addColorStop(0.55, 'rgba(240, 245, 255, 0.97)');
-  noseGrad.addColorStop(0.80, 'rgba(200, 205, 220, 0.93)');
-  noseGrad.addColorStop(1,    'rgba(130, 135, 150, 0.90)');
+  noseGrad.addColorStop(0,    'rgba(80,  85, 100, 0.92)');   // darker left edge
+  noseGrad.addColorStop(0.30, 'rgba(200, 210, 228, 0.95)');
+  noseGrad.addColorStop(0.55, 'rgba(225, 232, 248, 0.97)');
+  noseGrad.addColorStop(0.80, 'rgba(185, 192, 210, 0.93)');
+  noseGrad.addColorStop(1,    'rgba(100, 105, 120, 0.90)');
   ctx.fillStyle = noseGrad;
   ctx.beginPath();
   ctx.moveTo(cx - bodyW / 2, baseY - bodyH);
@@ -295,6 +784,37 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
   ctx.quadraticCurveTo(cx + bodyW / 2 - 4, baseY - bodyH - 40, cx, baseY - bodyH - 72);
   ctx.quadraticCurveTo(cx - bodyW / 2 + 4, baseY - bodyH - 40, cx - bodyW / 2, baseY - bodyH);
   ctx.fill();
+
+  // ── heat shield thermal tile pattern on nose tip ──────────────────────────
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(cx - bodyW / 2, baseY - bodyH);
+  ctx.lineTo(cx + bodyW / 2, baseY - bodyH);
+  ctx.quadraticCurveTo(cx + bodyW / 2 - 4, baseY - bodyH - 40, cx, baseY - bodyH - 72);
+  ctx.quadraticCurveTo(cx - bodyW / 2 + 4, baseY - bodyH - 40, cx - bodyW / 2, baseY - bodyH);
+  ctx.clip();
+  // Darker gradient on tip
+  const heatGrad = ctx.createLinearGradient(cx, baseY - bodyH - 72, cx, baseY - bodyH - 30);
+  heatGrad.addColorStop(0, 'rgba(60, 20, 5, 0.35)');
+  heatGrad.addColorStop(1, 'rgba(60, 20, 5, 0)');
+  ctx.fillStyle = heatGrad;
+  ctx.fillRect(cx - bodyW / 2, baseY - bodyH - 72, bodyW, 42);
+  // Thermal tile grid (3px squares)
+  ctx.strokeStyle = 'rgba(60, 30, 0, 0.3)';
+  ctx.lineWidth = 0.5;
+  for (let tx = cx - bodyW / 2; tx < cx + bodyW / 2; tx += 3) {
+    ctx.beginPath();
+    ctx.moveTo(tx, baseY - bodyH - 72);
+    ctx.lineTo(tx, baseY - bodyH - 30);
+    ctx.stroke();
+  }
+  for (let ty = baseY - bodyH - 72; ty < baseY - bodyH - 30; ty += 3) {
+    ctx.beginPath();
+    ctx.moveTo(cx - bodyW / 2, ty);
+    ctx.lineTo(cx + bodyW / 2, ty);
+    ctx.stroke();
+  }
+  ctx.restore();
 
   // nose highlight
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
@@ -306,12 +826,10 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
 
   // ── porthole ──────────────────────────────────────────────────────────────
   const portholeY = baseY - bodyH + 48;
-  // frame ring
   ctx.beginPath();
   ctx.arc(cx, portholeY, 13, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(80, 85, 100, 0.90)';
   ctx.fill();
-  // glass
   ctx.beginPath();
   ctx.arc(cx, portholeY, 10, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(40, 180, 255, 0.28)';
@@ -319,7 +837,6 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
   ctx.strokeStyle = 'rgba(100, 210, 255, 0.75)';
   ctx.lineWidth = 1.5;
   ctx.stroke();
-  // glass reflection
   ctx.beginPath();
   ctx.arc(cx - 3, portholeY - 3, 3.5, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(255, 255, 255, 0.30)';
@@ -345,6 +862,18 @@ export function drawRocket(ctx, cx, groundY, t, powered = false, ignitionLevel =
     ctx.ellipse(cx, baseY - bodyH / 2, glowR * 2.2, glowR * 3, 0, 0, Math.PI * 2);
     ctx.fill();
   }
+
+  // ── floor reflection (ellipse glow beneath rocket) ────────────────────────
+  const reflectY = groundY + 6;
+  const reflGrad = ctx.createRadialGradient(cx, reflectY, 0, cx, reflectY, 50);
+  const reflAlpha = (0.06 + 0.04 * ignitionLevel).toFixed(3);
+  reflGrad.addColorStop(0, `rgba(255, 180, 80, ${reflAlpha})`);
+  reflGrad.addColorStop(0.5, `rgba(200, 120, 40, ${(parseFloat(reflAlpha) * 0.5).toFixed(3)})`);
+  reflGrad.addColorStop(1, 'rgba(100, 50, 0, 0)');
+  ctx.fillStyle = reflGrad;
+  ctx.beginPath();
+  ctx.ellipse(cx, reflectY, 50, 12, 0, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 // ── power indicators (green dots on terminals when power restored) ──────────
@@ -451,7 +980,27 @@ export function drawTrajectoryArc(ctx, cx, rocketGroundY, W, H, t) {
 
 // ── terminal ───────────────────────────────────────────────────────────────
 
+// Terminal screen content lines by terminal id
+const TERMINAL_SCREEN_CONTENT = {
+  power:       ['> STATUS OK',  '> VOLT 24.0V', '> AMP  12.4A', 'ERR 0x00'],
+  fuel:        ['> FUEL  94%',  '> FLOW  OK',   '> PRES 340kPa', 'ERR 0x00'],
+  nav:         ['> LOCK  GPS',  '> ALT  0m',    '> HDG 090°',   'ERR 0x00'],
+  comms:       ['> SIGNAL OK',  '> FREQ 420MHz','> TX READY',   'ERR 0x00'],
+  diagnostics: ['> SCAN  OK',   '> THRM  OK',   '> STRCT OK',   'ERR 0x00'],
+  engine:      ['> IGN  ARMED', '> TEMP  COOL', '> PRES  OK',   'ERR 0x00'],
+};
+
+const TERMINAL_MODEL_NUMBERS = {
+  power: 'TCB-MK2', fuel: 'UNIT-02', nav: 'NAV-01',
+  comms: 'COMM-04', diagnostics: 'DIAG-07', engine: 'ENG-03',
+};
+
 export function drawTerminal(ctx, x, y, label, isNear, t) {
+  // Derive id from label for content lookup
+  const idGuess = Object.keys(TERMINAL_SCREEN_CONTENT).find(
+    (k) => label.toLowerCase().includes(k)
+  ) || 'power';
+
   const w = 68;
   const h = 80;
   const pulse = 0.6 + 0.4 * Math.sin(t * 2.2);
@@ -471,6 +1020,14 @@ export function drawTerminal(ctx, x, y, label, isNear, t) {
   ctx.fillStyle = 'rgba(30, 55, 100, 0.90)';
   ctx.fillRect(x - 5, y, 10, 30);
   ctx.fillRect(x - 18, y + 26, 36, 8);
+
+  // ── cable from terminal base ─────────────────────────────────────────────
+  ctx.strokeStyle = 'rgba(40, 60, 80, 0.6)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(x, y + 34);
+  ctx.quadraticCurveTo(x + 20, y + 60, x + 40, y + 80);
+  ctx.stroke();
 
   // screen body
   const bodyGrad = ctx.createLinearGradient(x - w / 2, y - h, x + w / 2, y);
@@ -501,18 +1058,64 @@ export function drawTerminal(ctx, x, y, label, isNear, t) {
     ctx.fillRect(x - w / 2 + 7, ly, w - 14, 2);
   }
 
-  // blinking cursor
+  // ── code lines on screen ─────────────────────────────────────────────────
+  const lines = TERMINAL_SCREEN_CONTENT[idGuess] || TERMINAL_SCREEN_CONTENT.power;
+  ctx.font = '8px Courier New, monospace';
+  ctx.textAlign = 'left';
+  lines.forEach((line, i) => {
+    const lineAlpha = isNear ? 0.80 : 0.55;
+    const isErr = line.startsWith('ERR');
+    ctx.fillStyle = isErr
+      ? `rgba(255, 80, 80, ${lineAlpha})`
+      : `rgba(0, 255, 180, ${lineAlpha})`;
+    ctx.fillText(line, x - w / 2 + 8, y - h + 14 + i * 12);
+  });
+
+  // blinking cursor (kept for compatibility, drawn after code lines)
   const blink = Math.floor(t * 1.5) % 2 === 0;
   if (blink) {
     ctx.fillStyle = `rgba(0, 220, 255, ${isNear ? '0.9' : '0.55'})`;
     ctx.fillRect(x - 14, y - 20, 8, 2);
   }
 
+  // ── status LED top-right of screen ───────────────────────────────────────
+  const ledX = x + w / 2 - 10;
+  const ledY  = y - h + 10;
+  let ledColor;
+  if (isNear) {
+    // Rapidly blinking amber when player is right next to it
+    const rapidBlink = Math.floor(t * 4) % 2 === 0;
+    ledColor = rapidBlink ? 'rgba(255, 180, 0, 0.95)' : 'rgba(255, 180, 0, 0.20)';
+  } else {
+    ledColor = 'rgba(0, 220, 80, 0.85)'; // green when idle
+  }
+  ctx.beginPath();
+  ctx.arc(ledX, ledY, 3, 0, Math.PI * 2);
+  ctx.fillStyle = ledColor;
+  ctx.fill();
+
+  // ── screen glare ellipse ─────────────────────────────────────────────────
+  ctx.save();
+  ctx.translate(x - w / 2 + 12, y - h + 14);
+  ctx.rotate(-0.52); // ~30 deg
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 8, 4, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+  ctx.fill();
+  ctx.restore();
+
   // label
   ctx.fillStyle = `rgba(160, 220, 255, ${isNear ? '0.90' : '0.55'})`;
   ctx.font      = `bold 9px 'Courier New', monospace`;
   ctx.textAlign = 'center';
   ctx.fillText(label.toUpperCase(), x, y + 42);
+
+  // ── model number text below label ────────────────────────────────────────
+  const modelNum = TERMINAL_MODEL_NUMBERS[idGuess] || 'UNIT-01';
+  ctx.fillStyle = 'rgba(100, 130, 180, 0.4)';
+  ctx.font = '7px Courier New, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(modelNum, x, y + 52);
 }
 
 // ── player (astronaut) ─────────────────────────────────────────────────────
@@ -522,48 +1125,119 @@ export function drawPlayer(ctx, x, y, vx, t) {
   const py  = y + bob;
   const dir = vx > 5 ? 1 : vx < -5 ? -1 : 0;
 
-  // suit body
-  const bodyGrad = ctx.createRadialGradient(x, py - 16, 2, x, py - 16, 20);
+  // Scale factor for bigger, more visible character
+  const S = 1.3;
+
+  // ── shadow beneath player ────────────────────────────────────────────────
+  ctx.beginPath();
+  ctx.ellipse(x, py + 4, 20, 4, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.30)';
+  ctx.fill();
+
+  // ── boots ────────────────────────────────────────────────────────────────
+  const legSwing = Math.abs(vx) > 8 ? Math.sin(t * 9) * 5 : 0;
+  [[-7 * S, legSwing], [7 * S, -legSwing]].forEach(([lx, swing]) => {
+    // Boot shape — slightly wider rounded rect
+    const bootX = x + lx - 5 * S;
+    const bootY = py - 2 + 18 * S + Math.abs(swing * 0.3);
+    roundRect(ctx, bootX, bootY, 10 * S, 6, 3);
+    ctx.fillStyle = 'rgba(30, 50, 100, 0.90)';
+    ctx.fill();
+  });
+
+  // ── legs ─────────────────────────────────────────────────────────────────
+  [[-7 * S, legSwing], [7 * S, -legSwing]].forEach(([lx, swing]) => {
+    ctx.fillStyle = 'rgba(55, 90, 160, 0.90)';
+    ctx.fillRect(x + lx - 4 * S, py - 2, 8 * S, 18 * S + Math.abs(swing * 0.3));
+    // Suit seam on leg
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.30)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x + lx, py - 2);
+    ctx.lineTo(x + lx, py - 2 + 16 * S);
+    ctx.stroke();
+  });
+
+  // ── suit body ────────────────────────────────────────────────────────────
+  const bodyGrad = ctx.createRadialGradient(x, py - 16 * S, 2, x, py - 16 * S, 20 * S);
   bodyGrad.addColorStop(0, 'rgba(120, 170, 230, 0.95)');
   bodyGrad.addColorStop(1, 'rgba(50,  90,  160, 0.95)');
   ctx.fillStyle = bodyGrad;
-  roundRect(ctx, x - 14, py - 30, 28, 28, 7);
+  roundRect(ctx, x - 14 * S, py - 30 * S, 28 * S, 28 * S, 7);
   ctx.fill();
 
-  // helmet
+  // Suit seams on body
+  ctx.strokeStyle = 'rgba(0, 0, 0, 0.30)';
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.arc(x, py - 36, 15, 0, Math.PI * 2);
+  ctx.moveTo(x, py - 30 * S);
+  ctx.lineTo(x, py - 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x - 14 * S, py - 18 * S);
+  ctx.lineTo(x + 14 * S, py - 18 * S);
+  ctx.stroke();
+
+  // ── shoulder pads ────────────────────────────────────────────────────────
+  [[-1, -14 * S - 4], [1, 14 * S + 4 - 10]].forEach(([side, sx]) => {
+    ctx.fillStyle = 'rgba(80, 120, 200, 0.90)';
+    roundRect(ctx, x + sx - (side === 1 ? 0 : 0), py - 30 * S, 10, 10, 4);
+    ctx.fill();
+  });
+
+  // ── helmet ────────────────────────────────────────────────────────────────
+  ctx.beginPath();
+  ctx.arc(x, py - 36 * S, 15 * S, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(40, 70, 130, 0.95)';
   ctx.fill();
 
-  // visor
+  // ── visor ────────────────────────────────────────────────────────────────
   ctx.beginPath();
-  ctx.ellipse(x + dir * 2, py - 36, 9, 7, 0, 0, Math.PI * 2);
+  ctx.ellipse(x + dir * 2 * S, py - 36 * S, 10 * S, 8 * S, 0, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(10, 190, 255, 0.55)';
   ctx.fill();
 
-  // visor highlight
+  // Visor highlight arcs
+  ctx.save();
+  ctx.translate(x + dir * 2 * S - 3, py - 36 * S - 2);
+  // First highlight arc
   ctx.beginPath();
-  ctx.ellipse(x + dir * 2 - 2, py - 39, 3, 2, -0.4, 0, Math.PI * 2);
+  ctx.ellipse(0, 0, 5 * S, 3 * S, -0.4, Math.PI * 1.1, Math.PI * 1.8);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  // Second smaller highlight
+  ctx.beginPath();
+  ctx.ellipse(3, 2, 2 * S, 1.5 * S, 0.2, Math.PI * 1.1, Math.PI * 1.75);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.20)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.restore();
+
+  // original visor highlight dot
+  ctx.beginPath();
+  ctx.ellipse(x + dir * 2 * S - 3, py - 39 * S, 3.5, 2.5, -0.4, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(255, 255, 255, 0.60)';
   ctx.fill();
 
-  // legs
-  const legSwing = Math.abs(vx) > 8 ? Math.sin(t * 9) * 5 : 0;
-  [[-7, legSwing], [7, -legSwing]].forEach(([lx, swing]) => {
-    ctx.fillStyle = 'rgba(55, 90, 160, 0.90)';
-    ctx.fillRect(x + lx - 4, py - 2, 8, 18 + Math.abs(swing * 0.3));
-  });
-
-  // backpack
+  // ── backpack ─────────────────────────────────────────────────────────────
   ctx.fillStyle = 'rgba(30, 55, 110, 0.85)';
-  roundRect(ctx, x - 18, py - 28, 6, 18, 3);
+  roundRect(ctx, x - 18 * S, py - 28 * S, 7 * S, 22 * S, 3);
+  ctx.fill();
+  // Backpack vent/nozzle detail
+  ctx.fillStyle = 'rgba(50, 80, 150, 0.7)';
+  ctx.fillRect(x - 18 * S + 1, py - 14 * S, 5 * S, 3);
+  ctx.fillRect(x - 18 * S + 1, py - 10 * S, 5 * S, 2);
+  // Nozzle tip
+  ctx.fillStyle = 'rgba(80, 110, 180, 0.8)';
+  ctx.beginPath();
+  ctx.arc(x - 18 * S + 3, py - 14 * S + 1, 2, 0, Math.PI * 2);
   ctx.fill();
 }
 
 // ── background nebula ──────────────────────────────────────────────────────
 
-export function drawBackground(ctx, W, H) {
+export function drawBackground(ctx, W, H, t) {
   // deep space gradient
   const bg = ctx.createLinearGradient(0, 0, 0, H);
   bg.addColorStop(0,   '#020818');
@@ -587,6 +1261,59 @@ export function drawBackground(ctx, W, H) {
     ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
     ctx.fill();
   });
+
+  // ── distant planet/moon in upper-right ──────────────────────────────────
+  const planetX = W * 0.85;
+  const planetY = H * 0.12;
+  const planetR = 80;
+  const craterAngle = (t !== undefined ? t * 0.001 : 0); // very slow rotation
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(planetX, planetY, planetR, 0, Math.PI * 2);
+  ctx.clip();
+
+  // Planet fill gradient
+  const planetGrad = ctx.createRadialGradient(planetX - 20, planetY - 20, 10, planetX, planetY, planetR);
+  planetGrad.addColorStop(0, 'rgba(180, 195, 215, 0.90)');
+  planetGrad.addColorStop(0.4, 'rgba(140, 160, 185, 0.88)');
+  planetGrad.addColorStop(0.75, 'rgba(100, 120, 150, 0.85)');
+  planetGrad.addColorStop(1, 'rgba(60, 75, 100, 0.80)');
+  ctx.fillStyle = planetGrad;
+  ctx.fillRect(planetX - planetR, planetY - planetR, planetR * 2, planetR * 2);
+
+  // Craters (3–4 dark ellipses, slowly rotating)
+  const craters = [
+    { dx: 20, dy: -15, rx: 14, ry: 10 },
+    { dx: -25, dy: 20, rx: 10, ry: 8 },
+    { dx: 10, dy: 30, rx: 18, ry: 12 },
+    { dx: -10, dy: -30, rx: 8, ry: 6 },
+  ];
+  craters.forEach(({ dx, dy, rx, ry }, i) => {
+    const ca = craterAngle + i * 0.8;
+    const cdx = dx * Math.cos(ca) - dy * Math.sin(ca);
+    const cdy = dx * Math.sin(ca) + dy * Math.cos(ca);
+    ctx.beginPath();
+    ctx.ellipse(planetX + cdx, planetY + cdy, rx, ry, ca * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(50, 60, 80, 0.40)';
+    ctx.fill();
+    // Crater rim highlight
+    ctx.strokeStyle = 'rgba(200, 215, 235, 0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  });
+
+  ctx.restore();
+
+  // Limb glow around planet edge
+  const limbGlow = ctx.createRadialGradient(planetX, planetY, planetR * 0.85, planetX, planetY, planetR * 1.15);
+  limbGlow.addColorStop(0, 'rgba(100, 150, 255, 0)');
+  limbGlow.addColorStop(0.6, 'rgba(100, 150, 255, 0.12)');
+  limbGlow.addColorStop(1, 'rgba(100, 150, 255, 0)');
+  ctx.fillStyle = limbGlow;
+  ctx.beginPath();
+  ctx.arc(planetX, planetY, planetR * 1.15, 0, Math.PI * 2);
+  ctx.fill();
 }
 
 // ── hangar walls / structure ───────────────────────────────────────────────

@@ -5,6 +5,7 @@ import {
   drawCeilingLights, drawRocket, drawTerminal, drawPlayer,
   drawPowerIndicators, drawPoweredAmbient, drawAlarmFlash,
   drawTrajectoryArc, initDust, updateDust, drawDust,
+  drawGantry, drawAtmosphere,
 } from '../systems/renderSystem';
 import {
   createLaunchState, spawnSmoke, spawnExhaust, spawnContrail,
@@ -297,16 +298,17 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     const powered = ws.powerRestored || !!phase;
     const rocketGroundY = H * 0.55 + launch.rocketAscent;
 
-    drawBackground(ctx, W, H);
+    drawBackground(ctx, W, H, t);
     if (launch.alarmAlpha > 0.005) drawAlarmFlash(ctx, W, H, launch.alarmAlpha);
 
     ctx.save();
     ctx.translate(Math.round(launch.shakeX), Math.round(launch.shakeY - launch.cameraOffset));
 
     drawStars(ctx, starsRef.current, t);
+    drawAtmosphere(ctx, W, H, t);
     drawHangar(ctx, W, H);
     drawCeilingLights(ctx, W, powered);
-    drawFloor(ctx, W, H);
+    drawFloor(ctx, W, H, W / 2, t);
     if (powered) drawPoweredAmbient(ctx, W, H, t);
 
     if (!phase || phase === 'countdown') {
@@ -321,6 +323,8 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     }
 
     drawEngineGlow(ctx, W / 2, rocketGroundY, launch.ignitionLevel);
+    const rocketTopY = rocketGroundY - 232; // body (160) + nose (~72)
+    drawGantry(ctx, W / 2, rocketGroundY, rocketTopY, W, H, t);
     drawRocket(ctx, W / 2, rocketGroundY, t, powered, launch.ignitionLevel);
 
     if (!phase || phase === 'countdown') {
