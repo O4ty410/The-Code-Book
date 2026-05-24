@@ -1063,7 +1063,9 @@ function showFloorCelebration(floorIndex, newBadges) {
         (floorIndex === 1
           ? '<button class="fc-btn-cert" onclick="issueAndShowCertificate(1)">&#8659; Download Certificate</button>' +
             '<button class="fc-btn-download" onclick="downloadFloor2Code()">&#8681; Download Your Code</button>'
-          : '<button class="fc-btn-cert" onclick="generateFloorCertificate(' + floorIndex + ')">&#8681; Download Certificate</button>'
+          : floorIndex === 6
+            ? '<button class="fc-btn-cert" onclick="issueAndShowCertificate(6)">&#8659; Download Certificate</button>'
+            : '<button class="fc-btn-cert" onclick="generateFloorCertificate(' + floorIndex + ')">&#8681; Download Certificate</button>'
         ) +
         '<button class="fc-btn-share" onclick="shareAchievement()">Share this achievement</button>' +
       '</div>' +
@@ -1254,6 +1256,44 @@ function generateFloorCertificate(fi) {
 // ─────────────────────────────────────────────────────────────────
 // Floor 2 — Certificate + Code Download
 
+var FLOOR_CERT_DATA = [
+  {
+    title: 'Certificate of Floor Completion',
+    body: 'Successfully ascended Floor 1, demonstrating a complete understanding of how computers read instructions, the logic behind all programming, and the request-response cycle that powers the entire web.',
+    skills: ['Sequential Execution &amp; Order Dependencies', 'Conditions, Loops &amp; Functions', 'Request-Response Architecture']
+  },
+  {
+    title: 'Certificate of Floor Completion',
+    body: 'Successfully ascended Floor 2, demonstrating mastery of HTML structure, CSS styling, the browser rendering path, and the ability to build real visual components from scratch.',
+    skills: ['HTML Semantics &amp; Document Structure', 'CSS Layout, Specificity &amp; the Box Model', 'Flexbox &amp; Responsive Component Building']
+  },
+  {
+    title: 'Certificate of Floor Completion',
+    body: 'Successfully ascended Floor 3, demonstrating command of JavaScript — variables, functions, DOM manipulation, events, and the ability to build interactive interfaces without a scaffold.',
+    skills: ['JavaScript Functions, Scope &amp; Data Types', 'DOM Manipulation &amp; Event-Driven Interaction', 'Arrays, Objects &amp; Async Foundations']
+  },
+  {
+    title: 'Certificate of Floor Completion',
+    body: 'Successfully ascended Floor 4, demonstrating the developer mindset — working independently, reading documentation, consuming APIs, and handling asynchronous code with fetch and async/await.',
+    skills: ['API Integration &amp; HTTP Protocol', 'Async/Await &amp; Promise Handling', 'Independent Problem-Solving &amp; Documentation Reading']
+  },
+  {
+    title: 'Certificate of Floor Completion',
+    body: 'Successfully ascended Floor 5, demonstrating full-stack capability — building servers, working with databases, implementing authentication, and deploying complete applications end to end.',
+    skills: ['Server-Side Development &amp; REST APIs', 'Relational Databases &amp; SQL', 'Authentication, JWTs &amp; Secure Architecture']
+  },
+  {
+    title: 'Certificate of Floor Completion',
+    body: 'Successfully ascended Floor 6, demonstrating specialist-level depth in a chosen technical direction — moving beyond generalist capability into the territory where genuine professional value is built.',
+    skills: ['Specialist Technical Depth', 'Advanced Architecture &amp; Tooling', 'Production-Grade Code Quality']
+  },
+  {
+    title: 'Certificate of Completion',
+    body: 'Successfully completed The Code Book — ascending all seven floors from foundational thinking to full-stack development. Real software built. Real problems solved. The understanding cannot be taken back.',
+    skills: ['Full-Stack Development, Frontend to Backend', 'Independent Engineering &amp; Professional Workflow', 'The Code Book — Complete']
+  }
+];
+
 async function issueAndShowCertificate(fi) {
   var floor = FLOORS[fi];
   if (!floor) return;
@@ -1268,7 +1308,7 @@ async function issueAndShowCertificate(fi) {
 
   if (!window.sb || !window.currentUser) {
     var guestId = _makeId('');
-    showFloor2Certificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), guestId, ac);
+    showFloorCertificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), guestId, ac, fi);
     return;
   }
 
@@ -1281,7 +1321,7 @@ async function issueAndShowCertificate(fi) {
 
     if (existing.data) {
       var d = new Date(existing.data.issued_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-      showFloor2Certificate(name, d, existing.data.verification_id, ac);
+      showFloorCertificate(name, d, existing.data.verification_id, ac, fi);
       return;
     }
 
@@ -1292,15 +1332,17 @@ async function issueAndShowCertificate(fi) {
       verification_id: vid,
       issued_at: new Date().toISOString()
     });
-    showFloor2Certificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), vid, ac);
+    showFloorCertificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), vid, ac, fi);
   } catch (e) {
     var fallbackId = _makeId(window.currentUser.id);
-    showFloor2Certificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), fallbackId, ac);
+    showFloorCertificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), fallbackId, ac, fi);
   }
 }
 
-function showFloor2Certificate(name, dateStr, verificationId, ac) {
+function showFloorCertificate(name, dateStr, verificationId, ac, fi) {
+  fi = (fi !== undefined) ? fi : 1;
   ac = ac || '#7eb8c8';
+  var certData = FLOOR_CERT_DATA[fi] || FLOOR_CERT_DATA[1];
   var safeName = escHtml(name);
   var css = [
     '*{box-sizing:border-box;margin:0;padding:0;}',
@@ -1338,7 +1380,7 @@ function showFloor2Certificate(name, dateStr, verificationId, ac) {
 
   var html = '<!DOCTYPE html><html lang="en"><head>' +
     '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<title>Certificate — The Code Book</title>' +
+    '<title>' + certData.title + ' — The Code Book</title>' +
     '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">' +
     '<style>' + css + '</style></head><body>' +
     '<div class="controls">' +
@@ -1348,16 +1390,14 @@ function showFloor2Certificate(name, dateStr, verificationId, ac) {
     '<div class="cert">' +
       '<div class="c-tl"></div><div class="c-tr"></div><div class="c-bl"></div><div class="c-br"></div>' +
       '<div class="cert-top">THE CODE BOOK &nbsp;<em>❖</em>&nbsp; SIGNAL VERIFIED</div>' +
-      '<h1 class="cert-title">Certificate of Floor Completion</h1>' +
+      '<h1 class="cert-title">' + certData.title + '</h1>' +
       '<div class="divider"></div>' +
       '<p class="cert-sub">This document reliably records that on ' + dateStr + ', the user known as:</p>' +
       '<div class="cert-name">&gt;&nbsp;' + safeName + '</div>' +
-      '<p class="cert-body">Successfully ascended Floor 2, proving complete mastery over foundational computational thinking, conditional execution flows, and real-world system debugging.</p>' +
+      '<p class="cert-body">' + certData.body + '</p>' +
       '<div class="skills">' +
         '<div class="skills-hdr">Verified Skills</div>' +
-        '<div class="skill"><b>[&#10003;]</b> Primitive Variables &amp; Data Tracing</div>' +
-        '<div class="skill"><b>[&#10003;]</b> Nested Conditional Paths (If / Else Operations)</div>' +
-        '<div class="skill"><b>[&#10003;]</b> Syntax Glitch Detection &amp; Terminal Rectification</div>' +
+        certData.skills.map(function(s) { return '<div class="skill"><b>[&#10003;]</b> ' + s + '</div>'; }).join('') +
       '</div>' +
       '<div class="cert-footer">' +
         '<div class="fl"><div class="fl-lbl">Issued by</div><div class="fl-val">Sage, Core System Guide</div></div>' +
@@ -1374,7 +1414,7 @@ function showFloor2Certificate(name, dateStr, verificationId, ac) {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'floor2-certificate.html';
+    a.download = 'floor' + (fi + 1) + '-certificate.html';
     a.click();
     URL.revokeObjectURL(url);
   }
