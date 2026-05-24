@@ -33,7 +33,6 @@ var SHELL = [
   './overlays.min.css',
   './mobile.min.css',
   './cover.min.css',
-  './background.png',
 ];
 
 self.addEventListener('install', function(e) {
@@ -120,8 +119,6 @@ self.addEventListener('message', function(e) {
         if (anyFocused) return;
         self.registration.showNotification('The Code Book', {
           body: e.data.body || 'Keep your streak alive — finish a section today.',
-          icon: './background.png',
-          badge: './background.png',
           tag: 'streak-reminder',
           renotify: false,
           data: { url: './' }
