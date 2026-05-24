@@ -5882,9 +5882,74 @@ function hideAvatarPicker() {
   setTimeout(function() { if (picker.parentNode) picker.parentNode.removeChild(picker); }, 300);
 }
 
+var _venusStopMusic = null;
+var _glitchStopMusic = null;
+
+function _buildGameAmbient(droneFreqs, lfoFreq, lfoDepth, noiseType, noiseFreq, noiseQ, noiseGainVal, masterGainVal, fadeIn) {
+  try {
+    var actx = getAudioContext();
+    if (!actx) return function() {};
+    var master = actx.createGain();
+    master.gain.value = 0;
+    master.connect(actx.destination);
+    var nodes = [];
+    droneFreqs.forEach(function(f) {
+      var osc = actx.createOscillator();
+      osc.type = f.type || 'sine';
+      osc.frequency.value = f.freq;
+      osc.connect(master);
+      osc.start();
+      nodes.push(osc);
+    });
+    if (nodes.length > 0 && lfoFreq) {
+      var lfo = actx.createOscillator();
+      var lfoG = actx.createGain();
+      lfo.type = 'sine'; lfo.frequency.value = lfoFreq;
+      lfoG.gain.value = lfoDepth || 1;
+      lfo.connect(lfoG); lfoG.connect(nodes[0].frequency);
+      lfo.start(); nodes.push(lfo);
+    }
+    var noiseSize = Math.floor(3 * actx.sampleRate);
+    var noiseBuf = actx.createBuffer(1, noiseSize, actx.sampleRate);
+    var nd = noiseBuf.getChannelData(0);
+    for (var i = 0; i < noiseSize; i++) nd[i] = Math.random() * 2 - 1;
+    var noise = actx.createBufferSource();
+    noise.buffer = noiseBuf; noise.loop = true;
+    var filt = actx.createBiquadFilter();
+    filt.type = noiseType; filt.frequency.value = noiseFreq; filt.Q.value = noiseQ || 1;
+    var ng = actx.createGain(); ng.gain.value = noiseGainVal || 0.01;
+    noise.connect(filt); filt.connect(ng); ng.connect(master);
+    noise.start(); nodes.push(noise);
+    master.gain.linearRampToValueAtTime(masterGainVal, actx.currentTime + (fadeIn || 4));
+    return function() {
+      try {
+        master.gain.cancelScheduledValues(actx.currentTime);
+        master.gain.linearRampToValueAtTime(0, actx.currentTime + 1.5);
+        setTimeout(function() { nodes.forEach(function(n) { try { n.stop(); } catch(_) {} }); }, 1600);
+      } catch(_) {}
+    };
+  } catch(_) { return function() {}; }
+}
+
+function startVenusGameMusic() {
+  return _buildGameAmbient(
+    [{ freq: 110 }, { freq: 155.56 }, { freq: 220, type: 'sine' }],
+    0.04, 1.5, 'highpass', 4000, 0.5, 0.006, 0.016, 4
+  );
+}
+
+function startGlitchGameMusic() {
+  return _buildGameAmbient(
+    [{ freq: 55, type: 'sawtooth' }, { freq: 73.42, type: 'sawtooth' }],
+    0.35, 2, 'bandpass', 900, 3.5, 0.014, 0.022, 2.5
+  );
+}
+
 function renderGamePanel() {
   var panel = document.getElementById('panel-game');
   if (!panel) return;
+  var _fi = panel.querySelector('iframe');
+  if (_fi) { try { _fi.contentWindow.postMessage({ type: 'STOP_AUDIO' }, '*'); } catch(_) {} }
   panel.innerHTML =
     '<div class="game-hub gh-lights-off" id="game-hub-root">' +
 
@@ -6189,7 +6254,11 @@ function launchGlitchMode() {
       '</div>' +
     '</div>';
 
+  if (_venusStopMusic) { _venusStopMusic(); }
+  _venusStopMusic = startVenusGameMusic();
+
   window.__glitchBack = function() {
+    if (_venusStopMusic) { _venusStopMusic(); _venusStopMusic = null; }
     if (typeof LoreSystem !== 'undefined') LoreSystem.destroy();
     if (typeof GlitchGame !== 'undefined') GlitchGame.destroy();
     var ov = document.getElementById('gh-game-overlay');
@@ -6266,7 +6335,11 @@ function launchChaosMode() {
       '</div>' +
     '</div>';
 
+  if (_glitchStopMusic) { _glitchStopMusic(); }
+  _glitchStopMusic = startGlitchGameMusic();
+
   window.__chaosBack = function () {
+    if (_glitchStopMusic) { _glitchStopMusic(); _glitchStopMusic = null; }
     if (typeof LoreSystem !== 'undefined') LoreSystem.destroy();
     if (typeof ChaosGame !== 'undefined') ChaosGame.destroy();
     var ov = document.getElementById('gh-game-overlay');

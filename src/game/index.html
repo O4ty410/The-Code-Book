@@ -7,10 +7,656 @@
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       html, body, #launch-sequence-root { width: 100%; height: 100%; overflow: hidden; background: #000; }
+
+      /* ═══════════════════════════════════════════════════════
+         COCKPIT OVERLAY
+         Sits above the canvas, pointer-events: none so the
+         game still receives all input.
+      ═══════════════════════════════════════════════════════ */
+      #cockpit-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        pointer-events: none;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 1.2s ease;
+      }
+      #cockpit-overlay.active { opacity: 1; }
+
+      /* ── Porthole window ────────────────────────────────── */
+      /* Transparent oval; the huge box-shadow darkens everything
+         outside it, creating the "looking through a window" effect */
+      .cpt-porthole {
+        position: absolute;
+        top: 34%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: clamp(260px, 60vw, 620px);
+        height: clamp(200px, 46vw, 480px);
+        border-radius: 50%;
+        /* Porthole frame — layered rings */
+        border: 10px solid #3d2b16;
+        box-shadow:
+          inset 0 0 60px rgba(0,0,0,0.7),
+          inset 0 -30px 50px rgba(0,0,0,0.4),
+          0 0 0 4px  #1a1208,
+          0 0 0 10px #2e2010,
+          0 0 0 14px #1a1208,
+          0 0 0 20px rgba(50,35,15,0.6),
+          /* Massive outer shadow darkens the entire surround */
+          0 0 0 3000px rgba(5,3,1,0.97);
+        z-index: 1;
+      }
+
+      /* Subtle glare streak on porthole glass */
+      .cpt-porthole::before {
+        content: '';
+        position: absolute;
+        top: 6%;
+        left: 12%;
+        width: 30%;
+        height: 18%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 70%);
+        border-radius: 50%;
+        transform: rotate(-20deg);
+        pointer-events: none;
+      }
+
+      /* Corner struts (top-left + top-right) */
+      .cpt-strut {
+        position: absolute;
+        background: linear-gradient(135deg, #1c1508 0%, #2e2210 40%, #181008 100%);
+        z-index: 2;
+      }
+      .cpt-strut-tl {
+        top: 0; left: 0;
+        width: 14%; height: 32%;
+        clip-path: polygon(0 0, 100% 0, 0 100%);
+        border-right: 1px solid #2a1e0c;
+        border-bottom: 1px solid #2a1e0c;
+      }
+      .cpt-strut-tr {
+        top: 0; right: 0;
+        width: 14%; height: 32%;
+        clip-path: polygon(0 0, 100% 0, 100% 100%);
+        border-left: 1px solid #2a1e0c;
+        border-bottom: 1px solid #2a1e0c;
+      }
+
+      /* ── HUD text strip at very top ──────────────────────── */
+      .cpt-hud {
+        position: absolute;
+        top: 10px; left: 0; right: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        z-index: 3;
+      }
+      .cpt-hud-item {
+        font-family: 'IBM Plex Mono', 'Courier New', monospace;
+        font-size: clamp(8px, 1vw, 10px);
+        letter-spacing: 2px;
+        color: rgba(180,140,60,0.55);
+        text-shadow: 0 0 8px rgba(180,140,60,0.3);
+      }
+
+      /* ── Side wall panels ────────────────────────────────── */
+      .cpt-side {
+        position: absolute;
+        top: 0;
+        bottom: 28vh;
+        width: clamp(36px, 7vw, 90px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(8px, 1.5vh, 16px);
+        padding: clamp(8px, 2vh, 20px) 6px;
+        z-index: 2;
+      }
+      .cpt-side.left  { left: 0;  background: linear-gradient(to right, #100d07, #0a0806); border-right: 1px solid #221a0c; }
+      .cpt-side.right { right: 0; background: linear-gradient(to left,  #100d07, #0a0806); border-left:  1px solid #221a0c; }
+
+      .cpt-switch-group { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+      .cpt-switch {
+        width: clamp(10px, 1.6vw, 18px);
+        height: clamp(20px, 3.5vw, 38px);
+        background: linear-gradient(to bottom, #241c0c, #120e06);
+        border: 1px solid #3a2c18;
+        border-radius: 2px;
+        position: relative;
+        box-shadow: inset 0 1px 0 rgba(255,200,100,0.06), 0 2px 4px rgba(0,0,0,0.5);
+      }
+      .cpt-switch::after {
+        content: '';
+        position: absolute;
+        left: 50%; top: 10%;
+        transform: translateX(-50%);
+        width: 55%; height: 32%;
+        background: linear-gradient(to bottom, #c8a060, #8a6030);
+        border-radius: 1px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      }
+      .cpt-switch.down::after { top: 58%; }
+      .cpt-switch-lbl {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: clamp(5px, 0.65vw, 7px);
+        letter-spacing: 1px;
+        color: rgba(130,100,55,0.65);
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      /* ── Main control panel ──────────────────────────────── */
+      .cpt-panel {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 28vh;
+        background:
+          linear-gradient(to bottom, #0d0a06 0%, #181208 25%, #120f08 100%);
+        border-top: 2px solid #3a2810;
+        display: flex;
+        align-items: stretch;
+        padding: 0 clamp(8px, 2vw, 24px);
+        gap: clamp(4px, 1vw, 12px);
+        z-index: 3;
+      }
+
+      /* Gold accent line along top of panel */
+      .cpt-panel::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(to right,
+          transparent 0%,
+          rgba(180,130,50,0.3) 10%,
+          rgba(220,170,70,0.7) 50%,
+          rgba(180,130,50,0.3) 90%,
+          transparent 100%);
+      }
+
+      /* ── Panel section cells ─────────────────────────────── */
+      .cpt-cell {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: clamp(6px, 1vh, 14px) 4px;
+        border-right: 1px solid rgba(50,36,16,0.6);
+        min-width: 0;
+      }
+      .cpt-cell:last-child { border-right: none; }
+
+      .cpt-cell-label {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: clamp(6px, 0.75vw, 8px);
+        letter-spacing: 2px;
+        color: rgba(160,120,55,0.65);
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+
+      /* ── Analog gauges ───────────────────────────────────── */
+      .cpt-gauge { width: clamp(42px, 6.5vw, 72px); height: clamp(42px, 6.5vw, 72px); }
+      .cpt-gauge canvas { width: 100%; height: 100%; display: block; }
+
+      /* ── Digital readout ─────────────────────────────────── */
+      .cpt-dig {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: clamp(9px, 1.1vw, 13px);
+        color: #00e8a4;
+        letter-spacing: 2px;
+        text-shadow: 0 0 8px rgba(0,232,164,0.55);
+        background: rgba(0,18,10,0.8);
+        padding: clamp(2px,0.4vh,5px) clamp(5px,0.8vw,10px);
+        border: 1px solid rgba(0,180,100,0.18);
+        border-radius: 2px;
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      /* ── Status lights ───────────────────────────────────── */
+      .cpt-lights { display: flex; flex-direction: column; gap: clamp(3px,0.6vh,7px); width: 100%; }
+      .cpt-light-row { display: flex; align-items: center; gap: 6px; }
+      .cpt-dot {
+        width: clamp(5px, 0.8vw, 9px);
+        height: clamp(5px, 0.8vw, 9px);
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .cpt-dot.g { background:#00df60; box-shadow:0 0 5px #00df60, 0 0 10px rgba(0,223,96,.4); animation: cpt-g 3s ease-in-out infinite; }
+      .cpt-dot.a { background:#e0a000; box-shadow:0 0 5px #e0a000; }
+      .cpt-dot.r { background:#e03020; box-shadow:0 0 5px #e03020; animation: cpt-r 1.6s ease-in-out infinite; }
+      .cpt-dot.b { background:#20a0e0; box-shadow:0 0 5px #20a0e0, 0 0 10px rgba(32,160,224,.4); }
+      @keyframes cpt-g { 0%,100%{opacity:1} 50%{opacity:0.35} }
+      @keyframes cpt-r { 0%,100%{opacity:1} 50%{opacity:0.15} }
+      .cpt-light-lbl { font-family:'IBM Plex Mono',monospace; font-size:clamp(5px,0.65vw,7px); color:rgba(150,115,60,.75); letter-spacing:1px; white-space:nowrap; }
+
+      /* ── Fuel bar ────────────────────────────────────────── */
+      .cpt-fuel-wrap {
+        width: clamp(18px, 2.8vw, 36px);
+        height: clamp(40px, 7vh, 72px);
+        background: rgba(0,0,0,0.5);
+        border: 1px solid #2a1e10;
+        border-radius: 3px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+      .cpt-fuel-fill {
+        width: 100%;
+        background: linear-gradient(to top, #e07020, #e0a030, #ffc840);
+        transition: height 3s ease;
+        box-shadow: 0 0 10px rgba(224,150,40,.5);
+      }
+      .cpt-fuel-ticks {
+        position: absolute;
+        inset: 2px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+        pointer-events: none;
+      }
+      .cpt-tick { width: 5px; height: 1px; background: rgba(180,140,80,.35); }
+
+      /* ── Control buttons ─────────────────────────────────── */
+      .cpt-btns { display: flex; flex-direction: column; gap: clamp(3px, 0.6vh, 7px); width: 100%; }
+      .cpt-btn {
+        font-family: 'IBM Plex Mono', monospace;
+        font-size: clamp(6px, 0.75vw, 8px);
+        letter-spacing: 1.5px;
+        color: rgba(170,130,70,.85);
+        background: linear-gradient(to bottom, #1e1810, #130f08);
+        border: 1px solid #3a2c18;
+        border-radius: 3px;
+        padding: clamp(3px,.5vh,6px) clamp(5px,.8vw,10px);
+        white-space: nowrap;
+        box-shadow: 0 2px 4px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,200,100,.07);
+      }
+      .cpt-btn.on {
+        background: linear-gradient(to bottom, #0e1c0a, #0a1408);
+        border-color: rgba(0,200,80,.35);
+        color: #3cd870;
+        box-shadow: 0 0 8px rgba(0,200,80,.15), inset 0 1px 0 rgba(80,255,140,.08);
+      }
+
+      /* ── Rivet row ───────────────────────────────────────── */
+      .cpt-rivets {
+        position: absolute;
+        top: -6px; left: 0; right: 0;
+        height: 12px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 0 30px;
+        z-index: 4;
+      }
+      .cpt-rivet {
+        width: clamp(5px,0.7vw,8px); height: clamp(5px,0.7vw,8px);
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #4a3820, #1a1208);
+        border: 1px solid #2e2010;
+        box-shadow: inset 0 1px 0 rgba(255,200,100,.1), 0 1px 2px rgba(0,0,0,.5);
+        flex-shrink: 0;
+      }
+
+      /* ── Responsive: small screens ───────────────────────── */
+      @media (max-width: 600px) {
+        .cpt-porthole {
+          width: clamp(200px, 78vw, 360px);
+          height: clamp(150px, 58vw, 270px);
+          top: 30%;
+        }
+        .cpt-side { width: clamp(28px, 5vw, 44px); }
+        .cpt-panel { height: 36vh; padding: 0 8px; gap: 4px; }
+        /* Hide less critical cells on small screens */
+        .cpt-cell:nth-child(6),  /* attitude */
+        .cpt-cell:nth-child(7)   /* heading */
+        { display: none; }
+        .cpt-hud { font-size: 8px; padding: 0 8px; }
+        .cpt-rivets { display: none; }
+      }
+
+      @media (max-width: 400px) {
+        .cpt-panel { height: 40vh; flex-wrap: wrap; }
+        .cpt-cell:nth-child(n+5) { display: none; }
+        .cpt-side { display: none; }
+      }
     </style>
+
+    <script type="module" src="/index.jsx"></script>
   </head>
   <body>
     <div id="launch-sequence-root"></div>
-    <script type="module" src="/index.jsx"></script>
+
+    <!-- ═══════════════════════════════════════════════════════
+         COCKPIT OVERLAY — shown only during POV MODE
+    ═══════════════════════════════════════════════════════ -->
+    <div id="cockpit-overlay">
+
+      <!-- Porthole ring + dark surround (box-shadow) -->
+      <div class="cpt-porthole"></div>
+
+      <!-- HUD readouts at top edge -->
+      <div class="cpt-hud">
+        <span class="cpt-hud-item">28°28'N · 80°36'W</span>
+        <span class="cpt-hud-item" id="cpt-mission">MISSION DS-01 · TRANSIT</span>
+        <span class="cpt-hud-item" id="cpt-clock">T+ 00:00:00</span>
+      </div>
+
+      <!-- Corner struts -->
+      <div class="cpt-strut cpt-strut-tl"></div>
+      <div class="cpt-strut cpt-strut-tr"></div>
+
+      <!-- Left side wall switches -->
+      <div class="cpt-side left">
+        <div class="cpt-switch-group"><div class="cpt-switch"></div><div class="cpt-switch-lbl">THRUST</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch down"></div><div class="cpt-switch-lbl">NAV</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch"></div><div class="cpt-switch-lbl">LIFE SYS</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch down"></div><div class="cpt-switch-lbl">SHIELD</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch"></div><div class="cpt-switch-lbl">O2 FLOW</div></div>
+      </div>
+
+      <!-- Right side wall switches -->
+      <div class="cpt-side right">
+        <div class="cpt-switch-group"><div class="cpt-switch down"></div><div class="cpt-switch-lbl">COMM</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch"></div><div class="cpt-switch-lbl">SOLAR</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch down"></div><div class="cpt-switch-lbl">SCAN</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch"></div><div class="cpt-switch-lbl">DOCK</div></div>
+        <div class="cpt-switch-group"><div class="cpt-switch down"></div><div class="cpt-switch-lbl">GYRO</div></div>
+      </div>
+
+      <!-- Main instrument panel -->
+      <div class="cpt-panel">
+        <div class="cpt-rivets" id="cpt-rivet-row"></div>
+
+        <!-- Velocity -->
+        <div class="cpt-cell">
+          <div class="cpt-cell-label">Velocity</div>
+          <div class="cpt-gauge"><canvas id="cg-vel" width="80" height="80"></canvas></div>
+          <div class="cpt-dig" id="cd-vel">32,500</div>
+          <div class="cpt-cell-label">m/s</div>
+        </div>
+
+        <!-- Altitude -->
+        <div class="cpt-cell">
+          <div class="cpt-cell-label">Altitude</div>
+          <div class="cpt-gauge"><canvas id="cg-alt" width="80" height="80"></canvas></div>
+          <div class="cpt-dig" id="cd-alt">420 km</div>
+          <div class="cpt-cell-label">ASL</div>
+        </div>
+
+        <!-- System lights -->
+        <div class="cpt-cell">
+          <div class="cpt-cell-label">Systems</div>
+          <div class="cpt-lights">
+            <div class="cpt-light-row"><div class="cpt-dot g"></div><div class="cpt-light-lbl">PROPULSION</div></div>
+            <div class="cpt-light-row"><div class="cpt-dot g"></div><div class="cpt-light-lbl">LIFE SUPPORT</div></div>
+            <div class="cpt-light-row"><div class="cpt-dot a"></div><div class="cpt-light-lbl">NAVIGATION</div></div>
+            <div class="cpt-light-row"><div class="cpt-dot g"></div><div class="cpt-light-lbl">COMMS</div></div>
+            <div class="cpt-light-row"><div class="cpt-dot b"></div><div class="cpt-light-lbl">DEEP SCAN</div></div>
+          </div>
+        </div>
+
+        <!-- Fuel bar -->
+        <div class="cpt-cell">
+          <div class="cpt-cell-label">Fuel</div>
+          <div class="cpt-fuel-wrap">
+            <div class="cpt-fuel-fill" id="cd-fuel-bar" style="height:78%"></div>
+            <div class="cpt-fuel-ticks">
+              <div class="cpt-tick"></div><div class="cpt-tick"></div>
+              <div class="cpt-tick"></div><div class="cpt-tick"></div>
+            </div>
+          </div>
+          <div class="cpt-dig" id="cd-fuel">78.0%</div>
+          <div class="cpt-cell-label">Main Tank</div>
+        </div>
+
+        <!-- Heading compass -->
+        <div class="cpt-cell">
+          <div class="cpt-cell-label">Heading</div>
+          <div class="cpt-gauge"><canvas id="cg-hdg" width="80" height="80"></canvas></div>
+          <div class="cpt-dig" id="cd-hdg">037°</div>
+          <div class="cpt-cell-label">Bearing</div>
+        </div>
+
+        <!-- Attitude indicator -->
+        <div class="cpt-cell">
+          <div class="cpt-cell-label">Attitude</div>
+          <div class="cpt-gauge"><canvas id="cg-att" width="80" height="80"></canvas></div>
+          <div class="cpt-dig" id="cd-att">+0.2°</div>
+          <div class="cpt-cell-label">Pitch</div>
+        </div>
+
+        <!-- Control buttons -->
+        <div class="cpt-cell">
+          <div class="cpt-cell-label">Controls</div>
+          <div class="cpt-btns">
+            <div class="cpt-btn on">● ENGINES ACTIVE</div>
+            <div class="cpt-btn on">◈ AUTOPILOT</div>
+            <div class="cpt-btn on">⊕ NAV LOCK</div>
+            <div class="cpt-btn">◉ SCAN ARRAY</div>
+            <div class="cpt-btn">▣ DOCKING</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function () {
+      /* ── Rivet row ─────────────────────────────────────── */
+      const rivetRow = document.getElementById('cpt-rivet-row');
+      for (let i = 0; i < 32; i++) {
+        const r = document.createElement('div');
+        r.className = 'cpt-rivet';
+        rivetRow.appendChild(r);
+      }
+
+      /* ── Canvas gauge: arc + needle ─────────────────────── */
+      function drawGauge(id, value, min, max, arcColor, needleColor) {
+        const cv = document.getElementById(id);
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const cx = W / 2, cy = H / 2 + 5, r = W * 0.37;
+        const SA = Math.PI * 0.75, EA = Math.PI * 2.25, RANGE = EA - SA;
+        ctx.clearRect(0, 0, W, H);
+
+        /* face */
+        const fg = ctx.createRadialGradient(cx, cy - 4, 2, cx, cy, r);
+        fg.addColorStop(0, '#1c1508'); fg.addColorStop(1, '#0a0806');
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = fg; ctx.fill();
+        ctx.strokeStyle = '#3a2812'; ctx.lineWidth = 3; ctx.stroke();
+
+        /* ticks */
+        for (let i = 0; i <= 10; i++) {
+          const a = SA + (i / 10) * RANGE;
+          const major = i % 2 === 0;
+          const inner = r - (major ? r * 0.22 : r * 0.12);
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(a) * inner, cy + Math.sin(a) * inner);
+          ctx.lineTo(cx + Math.cos(a) * (r - 3), cy + Math.sin(a) * (r - 3));
+          ctx.strokeStyle = major ? 'rgba(200,155,70,.7)' : 'rgba(150,115,55,.4)';
+          ctx.lineWidth = major ? 1.5 : 0.8;
+          ctx.stroke();
+        }
+
+        /* value arc */
+        const t = Math.max(0, Math.min(1, (value - min) / (max - min)));
+        const na = SA + t * RANGE;
+        ctx.beginPath(); ctx.arc(cx, cy, r - 8, SA, na);
+        ctx.strokeStyle = arcColor; ctx.lineWidth = 3; ctx.stroke();
+
+        /* needle */
+        ctx.save(); ctx.translate(cx, cy); ctx.rotate(na);
+        ctx.beginPath(); ctx.moveTo(-r * 0.12, 0); ctx.lineTo(r * 0.62, 0);
+        ctx.strokeStyle = needleColor; ctx.lineWidth = 1.5;
+        ctx.shadowColor = needleColor; ctx.shadowBlur = 5;
+        ctx.stroke(); ctx.restore();
+
+        /* hub */
+        ctx.beginPath(); ctx.arc(cx, cy, r * 0.08, 0, Math.PI * 2);
+        ctx.fillStyle = '#2a1e10'; ctx.fill();
+        ctx.strokeStyle = '#c8a040'; ctx.lineWidth = 1; ctx.stroke();
+      }
+
+      /* ── Attitude indicator ─────────────────────────────── */
+      function drawAttitude(id, pitch) {
+        const cv = document.getElementById(id);
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const cx = W / 2, cy = H / 2, r = W * 0.37;
+        ctx.clearRect(0, 0, W, H);
+        ctx.save();
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+
+        const horizon = cy + pitch * r * 0.35;
+        const sg = ctx.createLinearGradient(0, 0, 0, horizon);
+        sg.addColorStop(0, '#081428'); sg.addColorStop(1, '#102848');
+        ctx.fillStyle = sg; ctx.fillRect(0, 0, W, horizon);
+
+        const gg = ctx.createLinearGradient(0, horizon, 0, H);
+        gg.addColorStop(0, '#241808'); gg.addColorStop(1, '#100c04');
+        ctx.fillStyle = gg; ctx.fillRect(0, horizon, W, H);
+
+        ctx.beginPath(); ctx.moveTo(0, horizon); ctx.lineTo(W, horizon);
+        ctx.strokeStyle = 'rgba(200,160,70,.8)'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.restore();
+
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.strokeStyle = '#3a2812'; ctx.lineWidth = 3; ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(220,175,75,.85)'; ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(cx - r * 0.5, cy); ctx.lineTo(cx - r * 0.16, cy);
+        ctx.moveTo(cx + r * 0.16, cy); ctx.lineTo(cx + r * 0.5, cy);
+        ctx.moveTo(cx, cy - r * 0.15); ctx.lineTo(cx, cy - r * 0.36);
+        ctx.stroke();
+
+        ctx.beginPath(); ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#e8c060'; ctx.fill();
+      }
+
+      /* ── Compass heading ────────────────────────────────── */
+      function drawHeading(id, heading) {
+        const cv = document.getElementById(id);
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const cx = W / 2, cy = H / 2, r = W * 0.37;
+        ctx.clearRect(0, 0, W, H);
+
+        const fg = ctx.createRadialGradient(cx, cy, 2, cx, cy, r);
+        fg.addColorStop(0, '#1a1408'); fg.addColorStop(1, '#0a0806');
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fillStyle = fg; ctx.fill();
+        ctx.strokeStyle = '#3a2812'; ctx.lineWidth = 3; ctx.stroke();
+
+        ['N','E','S','W'].forEach((d, i) => {
+          const a = (i * 90 - heading - 90) * Math.PI / 180;
+          const x = cx + Math.cos(a) * r * 0.62;
+          const y = cy + Math.sin(a) * r * 0.62;
+          ctx.fillStyle = d === 'N' ? '#e84040' : 'rgba(200,155,70,.8)';
+          ctx.font = `bold ${Math.round(r * 0.28)}px monospace`;
+          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText(d, x, y);
+        });
+
+        /* fixed pointer (always points up = current heading) */
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - r * 0.82);
+        ctx.lineTo(cx - r * 0.14, cy - r * 0.42);
+        ctx.lineTo(cx + r * 0.14, cy - r * 0.42);
+        ctx.closePath();
+        ctx.fillStyle = '#e8c060'; ctx.fill();
+
+        ctx.beginPath(); ctx.arc(cx, cy, r * 0.08, 0, Math.PI * 2);
+        ctx.fillStyle = '#2a1e10'; ctx.fill();
+        ctx.strokeStyle = '#c8a040'; ctx.lineWidth = 1; ctx.stroke();
+      }
+
+      /* ── Animated instrument state ──────────────────────── */
+      let vel = 32500, alt = 420, fuel = 78, hdg = 37, pitch = 0.4;
+      let elapsed = 0, ticker = null;
+
+      function tick() {
+        vel  = Math.min(42000, vel + 55 + Math.random() * 90);
+        alt  = alt + 0.7 + Math.random() * 0.5;
+        fuel = Math.max(0, fuel - 0.004);
+        hdg  = (hdg + (Math.random() - 0.5) * 0.3 + 360) % 360;
+        pitch = Math.sin(Date.now() / 9000) * 1.4;
+        elapsed++;
+
+        drawGauge('cg-vel', vel, 30000, 42000, '#c8a040', '#ffd060');
+        drawGauge('cg-alt', alt, 400,   700,   '#40b8e0', '#60d8ff');
+        drawAttitude('cg-att', pitch);
+        drawHeading('cg-hdg', hdg);
+
+        document.getElementById('cd-vel').textContent = Math.round(vel).toLocaleString();
+        document.getElementById('cd-alt').textContent = Math.round(alt) + ' km';
+        document.getElementById('cd-fuel').textContent = fuel.toFixed(1) + '%';
+        document.getElementById('cd-fuel-bar').style.height = fuel + '%';
+        document.getElementById('cd-hdg').textContent = String(Math.round(hdg)).padStart(3,'0') + '°';
+        document.getElementById('cd-att').textContent = (pitch >= 0 ? '+' : '') + pitch.toFixed(1) + '°';
+
+        const h = Math.floor(elapsed / 3600);
+        const m = Math.floor((elapsed % 3600) / 60);
+        const s = elapsed % 60;
+        document.getElementById('cpt-clock').textContent =
+          'T+ ' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+
+        ticker = setTimeout(tick, 1000);
+      }
+
+      /* ── Show / hide cockpit ─────────────────────────────── */
+      const overlay = document.getElementById('cockpit-overlay');
+      let active = false;
+
+      function showCockpit() {
+        if (active) return;
+        active = true;
+        overlay.classList.add('active');
+        tick();
+      }
+
+      function hideCockpit() {
+        active = false;
+        overlay.classList.remove('active');
+        clearTimeout(ticker);
+      }
+
+      /* ── Watch DOM for POV / 3rd-person buttons ──────────── */
+      const observer = new MutationObserver(() => {
+        document.querySelectorAll('.mmo-btn').forEach(btn => {
+          if (btn._cptWired) return;
+          const titleEl = btn.querySelector('.mmo-btn-title');
+          if (!titleEl) return;
+          btn._cptWired = true;
+          const txt = titleEl.textContent.trim().toUpperCase();
+          if (txt.includes('POV')) {
+            btn.addEventListener('click', showCockpit, true);
+          } else if (txt.includes('3RD') || txt.includes('THIRD') || txt.includes('THIRD PERSON')) {
+            btn.addEventListener('click', hideCockpit, true);
+          }
+        });
+
+        /* Also hide if we navigate away from the transit screen */
+        if (active && !document.querySelector('.mmo-btn')) {
+          hideCockpit();
+        }
+      });
+
+      observer.observe(document.getElementById('launch-sequence-root'),
+        { childList: true, subtree: true });
+    })();
+    </script>
   </body>
 </html>
