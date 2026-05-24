@@ -6172,6 +6172,11 @@ function launchGlitchMode() {
   }
 
   panel.innerHTML = '<div class="glitch-game-root">' + envBgVenus + backBar + glitchBody + '</div>';
+  var _glitchRoot = panel.querySelector('.glitch-game-root');
+  if (_glitchRoot) {
+    _glitchRoot.classList.add('glitch-shake');
+    setTimeout(function() { _glitchRoot.classList.remove('glitch-shake'); }, 520);
+  }
   setTimeout(function() {
     if (typeof LoreSystem !== 'undefined') LoreSystem.init('venus');
     if (typeof GlitchGame !== 'undefined') GlitchGame.init('glitch-canvas');
