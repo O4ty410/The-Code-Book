@@ -332,7 +332,7 @@ window.GlitchLevels = [
       [0,4,'L',3],                         // need SW(1)
       [1,4,'I',1],                         // need NS(0)
       [2,4,'I',1],                         // need NS(0)
-      [3,4,'L',1]                          // need NE(3)
+      [3,4,'I',1]                          // need NS(0)
     ],
     concept: 'SYSTEM COMPLEXITY',
     conceptNote: 'Multiple connection types in one system — how real programs handle complex data flow.'
