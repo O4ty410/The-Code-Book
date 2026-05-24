@@ -5951,10 +5951,36 @@ function _buildGameAmbient(droneFreqs, lfoFreq, lfoDepth, noiseType, noiseFreq, 
 }
 
 function startVenusGameMusic() {
-  return _buildGameAmbient(
-    [{ freq: 110 }, { freq: 155.56 }, { freq: 220, type: 'sine' }],
-    0.04, 1.5, 'highpass', 4000, 0.5, 0.006, 0.016, 4
-  );
+  try {
+    var actx = getAudioContext();
+    if (!actx) return function() {};
+    var master = actx.createGain();
+    master.gain.value = 0;
+    master.connect(actx.destination);
+    var nodes = [];
+    [{ freq: 110 }, { freq: 155.56 }, { freq: 220 }].forEach(function(f) {
+      var osc = actx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.value = f.freq;
+      osc.connect(master);
+      osc.start();
+      nodes.push(osc);
+    });
+    var lfo = actx.createOscillator();
+    var lfoG = actx.createGain();
+    lfo.type = 'sine'; lfo.frequency.value = 0.04;
+    lfoG.gain.value = 1.5;
+    lfo.connect(lfoG); lfoG.connect(nodes[0].frequency);
+    lfo.start(); nodes.push(lfo);
+    master.gain.linearRampToValueAtTime(0.016, actx.currentTime + 4);
+    return function() {
+      try {
+        master.gain.cancelScheduledValues(actx.currentTime);
+        master.gain.linearRampToValueAtTime(0, actx.currentTime + 1.5);
+        setTimeout(function() { nodes.forEach(function(n) { try { n.stop(); } catch(_) {} }); }, 1600);
+      } catch(_) {}
+    };
+  } catch(_) { return function() {}; }
 }
 
 function startGlitchGameMusic() {
@@ -5975,6 +6001,7 @@ function renderGamePanel() {
 
       '<div class="gh-switch-row">' +
         '<button class="gh-light-switch" onclick="toggleGameLight()" title="Toggle light">' +
+          '<span class="gh-light-emoji">&#128161;</span>' +
           '<div class="gh-switch-plate">' +
             '<div class="gh-switch-rocker"></div>' +
           '</div>' +
@@ -6061,7 +6088,7 @@ function launchGame(gameId) {
     if (existing) existing.remove();
     var overlay = document.createElement('div');
     overlay.id = 'gh-game-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#000;display:flex;flex-direction:column;';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:#000;display:flex;flex-direction:column;';
     overlay.innerHTML =
       '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
         '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="background:none;border:none;color:#c8a96e;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
@@ -6254,7 +6281,7 @@ function launchGlitchMode() {
           '<div class="glitch-stat"><span class="glitch-stat-lbl">LVL</span><span class="glitch-stat-val" id="glitch-level">1</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">SCORE</span><span class="glitch-stat-val" id="glitch-score">0</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">MOVES</span><span class="glitch-stat-val" id="glitch-moves">0</span></div>' +
-          '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" onclick="if(typeof GlitchGame!==\'undefined\')GlitchGame.restart()" title="Restart level">&#8635; RESTART</button></div>' +
+          '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" onclick="if(typeof GlitchGame!==\'undefined\')GlitchGame.restart()" title="Restart level">&#8635;</button></div>' +
         '</div>' +
       '</div>' +
       '<div class="glitch-canvas-wrap" style="position:relative">' +
@@ -6306,7 +6333,7 @@ function launchGlitchMode() {
     if (existing) existing.remove();
     var overlay = document.createElement('div');
     overlay.id = 'gh-game-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#020608;display:flex;flex-direction:column;';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:#020608;display:flex;flex-direction:column;';
     overlay.innerHTML = envBgVenus + backBar + glitchBody;
     document.body.appendChild(overlay);
     setTimeout(function() {
@@ -6350,7 +6377,7 @@ function launchChaosMode() {
           '<div class="glitch-stat"><span class="glitch-stat-lbl">LVL</span><span class="glitch-stat-val" id="glitch-level">1</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">SCORE</span><span class="glitch-stat-val" id="glitch-score">0</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">MOVES</span><span class="glitch-stat-val" id="glitch-moves">0</span></div>' +
-          '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" style="color:rgba(255,60,80,0.70);border-color:rgba(255,40,80,0.30)" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635; RESTART</button></div>' +
+          '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" style="color:rgba(255,60,80,0.70);border-color:rgba(255,40,80,0.30)" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635;</button></div>' +
         '</div>' +
       '</div>' +
       '<div class="glitch-canvas-wrap" style="position:relative">' +
@@ -6402,7 +6429,7 @@ function launchChaosMode() {
     if (existing) existing.remove();
     var overlay = document.createElement('div');
     overlay.id = 'gh-game-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:200;background:#060104;display:flex;flex-direction:column;';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:#060104;display:flex;flex-direction:column;';
     overlay.innerHTML = envBgChaos + backBar + chaosBody;
     document.body.appendChild(overlay);
     setTimeout(function () {

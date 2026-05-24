@@ -476,14 +476,14 @@
   transform: scale(1.1);
 }
 
-.gh-light-switch::before {
-  content: '💡';
+.gh-light-emoji {
   font-size: 14px;
   opacity: 0.6;
   transition: opacity 0.3s;
+  display: block;
 }
 
-.game-hub.gh-lights-on .gh-light-switch::before {
+.game-hub.gh-lights-on .gh-light-emoji {
   opacity: 1;
   filter: drop-shadow(0 0 6px rgba(255,230,100,0.7));
 }
