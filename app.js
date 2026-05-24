@@ -217,33 +217,28 @@ function switchTab(mode) {
 }
 
 async function showLeaderboard() {
-  const overlay = document.getElementById('leaderboard-overlay');
+  var overlay = document.getElementById('leaderboard-overlay');
   overlay.style.display = 'flex';
-  const list = document.getElementById('leaderboard-list');
-  list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Leaderboard unavailable.</div>';
+  var list = document.getElementById('leaderboard-list');
+  list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Loading...</div>';
   try {
-    const rows = null;
+    if (!window.sb) throw new Error('no client');
+    var result = await window.sb.from('profiles').select('username,xp,streak').order('xp', { ascending: false }).limit(20);
+    var rows = result.data;
     if (!rows || rows.length === 0) {
       list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">No entries yet. Be the first!</div>';
       return;
     }
-    const medals = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
-    list.innerHTML = rows.map((r, i) => `
-      <div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid ${i === 0 ? '#c8a96e' : i === 1 ? '#aaaaaa' : i === 2 ? '#cd7f32' : 'var(--border)'};border-radius:10px;${i === 0 ? 'box-shadow:0 0 20px rgba(200,169,110,0.15);' : ''}">
-        <div style="font-size:${i < 3 ? '24px' : '14px'};width:36px;text-align:center;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);">${medals[i] || '' + (i+1) + ''}</div>
-        <div style="flex:1;">
-          <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:15px;">${r.username || 'Anonymous'}</div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--floor3);">\uD83D\uDD25 ${r.streak || 0} day streak</div>
-          </div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:18px;color:var(--accent);font-weight:700;">${r.xp || 0}</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;">XP</div>
-        </div>
-      </div>
-    `).join('');
-  } catch(e) {
+    var medals = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
+    list.innerHTML = rows.map(function (r, i) {
+      return '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid ' + (i === 0 ? '#c8a96e' : i === 1 ? '#aaaaaa' : i === 2 ? '#cd7f32' : 'var(--border)') + ';border-radius:10px;' + (i === 0 ? 'box-shadow:0 0 20px rgba(200,169,110,0.15);' : '') + '">' +
+        '<div style="font-size:' + (i < 3 ? '24px' : '14px') + ';width:36px;text-align:center;font-family:\'IBM Plex Mono\',monospace;color:var(--text-muted);">' + (medals[i] || (i + 1)) + '</div>' +
+        '<div style="flex:1;"><div style="font-family:\'Lato\',sans-serif;font-weight:700;color:var(--text);font-size:15px;">' + (r.username || 'Anonymous') + '</div>' +
+        '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--floor3);margin-top:4px;">\uD83D\uDD25 ' + (r.streak || 0) + ' day streak</div></div>' +
+        '<div style="text-align:right;"><div style="font-family:\'IBM Plex Mono\',monospace;font-size:18px;color:var(--accent);font-weight:700;">' + (r.xp || 0) + '</div>' +
+        '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;">XP</div></div></div>';
+    }).join('');
+  } catch (e) {
     list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Could not load leaderboard.</div>';
   }
 }
@@ -282,12 +277,17 @@ async function submitNewPassword() {
   msg.textContent = 'Updating password...';
   msg.className = 'auth-message';
 
-  try {
-    msg.textContent = 'Password reset is not available.';
+  if (!window.sb) return;
+  var result = await window.sb.auth.updateUser({ password: password });
+  if (result.error) {
+    msg.textContent = result.error.message;
     msg.className = 'auth-message error';
-  } catch(e) {
-    msg.textContent = 'Something went wrong. Please try again.';
-    msg.className = 'auth-message error';
+  } else {
+    msg.textContent = 'Password updated! Signing you in...';
+    msg.className = 'auth-message';
+    setTimeout(function () {
+      document.getElementById('reset-overlay').style.display = 'none';
+    }, 1500);
   }
 }
 
@@ -378,15 +378,24 @@ function hidePrivacy() {
 }
 
 async function handleForgotPassword() {
-  const email = document.getElementById('auth-email').value.trim();
-  const msg = document.getElementById('auth-message');
+  var email = document.getElementById('auth-email').value.trim();
+  var msg = document.getElementById('auth-message');
   if (!email) {
-    msg.textContent = 'Enter your email address first, then tap Forgot your password.';
+    msg.textContent = 'Enter your email address first.';
     msg.className = 'auth-message error';
     return;
   }
-  msg.textContent = 'Password reset is not available.';
-  msg.className = 'auth-message error';
+  if (!window.sb) return;
+  var result = await window.sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname + '?reset=true'
+  });
+  if (result.error) {
+    msg.textContent = result.error.message;
+    msg.className = 'auth-message error';
+  } else {
+    msg.textContent = 'Password reset email sent! Check your inbox.';
+    msg.className = 'auth-message';
+  }
 }
 
 function continueAsGuest() {
@@ -401,18 +410,47 @@ function continueAsGuest() {
 }
 
 async function handleAuth() {
-  loadState();
-  updateStreak();
-  if (authMode === 'signup') {
-    awardXP(50, 'account-created', window.innerWidth / 2, window.innerHeight / 2);
+  var email = document.getElementById('auth-email').value.trim();
+  var password = document.getElementById('auth-password').value;
+  var msg = document.getElementById('auth-message');
+  var btn = document.getElementById('auth-submit');
+  if (!email || !password) {
+    msg.textContent = 'Please enter your email and password.';
+    msg.className = 'auth-message error';
+    return;
   }
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('cover').style.display = 'none';
-  stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
-  document.body.style.overflow = '';
-  document.getElementById('app').style.display = 'block';
-  applyTheme();
-  launchApp();
+  btn.disabled = true;
+  btn.textContent = authMode === 'login' ? 'Signing in...' : 'Creating account...';
+  msg.textContent = '';
+  msg.className = 'auth-message';
+  try {
+    var result;
+    if (authMode === 'signup') {
+      var username = (document.getElementById('auth-username').value || '').trim() || email.split('@')[0];
+      result = await window.sb.auth.signUp({ email: email, password: password, options: { data: { username: username } } });
+    } else {
+      result = await window.sb.auth.signInWithPassword({ email: email, password: password });
+    }
+    if (result.error) {
+      msg.textContent = result.error.message;
+      msg.className = 'auth-message error';
+      btn.disabled = false;
+      btn.textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
+      return;
+    }
+    if (authMode === 'signup' && !result.data.session) {
+      msg.textContent = 'Check your email to confirm your account, then sign in.';
+      msg.className = 'auth-message';
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+    // onAuthStateChange handles the rest
+  } catch (e) {
+    msg.textContent = 'Something went wrong. Please try again.';
+    msg.className = 'auth-message error';
+    btn.disabled = false;
+    btn.textContent = authMode === 'login' ? 'Sign In' : 'Create Account';
+  }
 }
 
 async function onUserLoggedIn() {
@@ -428,12 +466,59 @@ async function onUserLoggedIn() {
 }
 
 async function saveToSupabase() {
+  if (!window.sb || !window.currentUser) return;
+  try {
+    await window.sb.from('profiles').upsert({
+      id: window.currentUser.id,
+      xp: state.xp,
+      level: state.level,
+      streak: state.streak,
+      last_active: new Date().toISOString().split('T')[0]
+    });
+  } catch (e) {}
+}
+
+async function loadUserFromSupabase(user) {
+  if (!window.sb) return;
+  try {
+    var profileRes = await window.sb.from('profiles').select('*').eq('id', user.id).single();
+    if (profileRes.data) {
+      var p = profileRes.data;
+      state.xp = p.xp || 0;
+      state.level = p.level || 1;
+      state.streak = p.streak || 0;
+    }
+    var progressRes = await window.sb.from('user_progress').select('section_id').eq('user_id', user.id);
+    if (progressRes.data) {
+      progressRes.data.forEach(function (r) { state.completed[r.section_id] = true; });
+    }
+    saveState();
+  } catch (e) {
+    console.warn('[CodeBook] Could not load profile:', e);
+  }
+}
+
+function markSectionComplete(sectionId) {
+  if (!window.sb || !window.currentUser) return;
+  window.sb.from('user_progress').upsert({ user_id: window.currentUser.id, section_id: sectionId }).then(function () {});
+  saveToSupabase();
+}
+
+async function signInWithGoogle() {
+  if (!window.sb) return;
+  await window.sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin + window.location.pathname }
+  });
 }
 
 async function signOut() {
   var confirmed = window.confirm('Sign out? Your local progress will be cleared. This cannot be undone.');
   if (!confirmed) return;
+  await saveToSupabase();
+  if (window.sb) await window.sb.auth.signOut();
   currentUser = null;
+  isLoggedIn = false;
   localStorage.removeItem('codebook_user');
   localStorage.removeItem('codebook_v1');
   localStorage.removeItem('codebook_guest');
@@ -2378,6 +2463,7 @@ function completeTrackSection(sectionId, trackId, si) {
   var bx = window.innerWidth / 2, by = 300;
   if (btn) { var br = btn.getBoundingClientRect(); bx = br.left + br.width / 2; by = br.top + br.height / 2; }
   state.completed[sectionId] = true;
+  markSectionComplete(sectionId);
   markStreakProtected();
   awardXP(120, 'track-' + sectionId, bx, by);
   playCompletionSound();
@@ -3757,6 +3843,7 @@ function completeSection(sectionId, fi, si) {
   }
 
   state.completed[sectionId] = true;
+  markSectionComplete(sectionId);
   markStreakProtected();
   _cancelStreakReminder();
   var secXP = getSectionXP(fi);
@@ -3857,6 +3944,7 @@ function nextSection(fi, si) {
     if (!hasQuiz) {
       // Auto-complete
       state.completed[section.id] = true;
+      markSectionComplete(section.id);
       markStreakProtected();
       awardXP(getSectionXP(fi), 'complete-' + section.id, window.innerWidth / 2, 300);
       var isNowComplete = isFloorComplete(fi);
@@ -5037,6 +5125,7 @@ function renderBuildPanel() {
 
 function markBuildDone(floorNum) {
   state.completed['build-' + floorNum] = true;
+  markSectionComplete('build-' + floorNum);
   awardXP(75, 'build-project-' + floorNum, window.innerWidth / 2, 300);
   saveState();
   renderBuildPanel();
@@ -5303,6 +5392,7 @@ function markToolSetUp(toolId, xp) {
   var stateKey = 'tool-' + toolId;
   if (state.completed[stateKey]) return;
   state.completed[stateKey] = true;
+  markSectionComplete(stateKey);
   saveState();
   var card = document.getElementById('tool-card-' + toolId);
   if (card) card.classList.add('done');
