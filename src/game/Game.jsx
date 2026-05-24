@@ -3,6 +3,7 @@ import MainMenu        from './scenes/MainMenu';
 import BriefingRoom    from './scenes/BriefingRoom';
 import HangarScene     from './scenes/HangarScene';
 import MarsLaunchScene from './scenes/MarsLaunchScene';
+import MissionCutscene from './scenes/MissionCutscene';
 import DebugArena      from './components/DebugArena';
 import VisualLab       from './components/VisualLab';
 import {
@@ -100,6 +101,8 @@ export default function Game() {
   const [transition, setTransition] = useState(null);
   const [progress,   setProgress]   = useState(() => loadProgress());
   const [paused,     setPaused]     = useState(false);
+  const [cutscene,   setCutscene]   = useState(null); // missionId while cutscene plays
+  const pendingMissionRef            = useRef(null);
 
   const handleQuitToHub = useCallback(() => {
     try { window.parent.postMessage({ type: 'QUIT_TO_HUB' }, '*'); } catch (_) {}
@@ -132,6 +135,16 @@ export default function Game() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBuilderMission = useCallback((missionId) => {
+    // Show cutscene first, then apply progress
+    pendingMissionRef.current = missionId;
+    setCutscene(missionId);
+  }, []);
+
+  const handleCutsceneDone = useCallback(() => {
+    const missionId = pendingMissionRef.current;
+    pendingMissionRef.current = null;
+    setCutscene(null);
+    if (!missionId) return;
     setProgress((prev) => {
       const updated = completeMission(prev, missionId);
       const allDone = BUILDER_MISSION_IDS.every((id) => updated.completedMissions.includes(id));
@@ -197,6 +210,10 @@ export default function Game() {
 
       {scene === 'MARS' && (
         <MarsLaunchScene onPlayAgain={handlePlayAgain} />
+      )}
+
+      {cutscene && (
+        <MissionCutscene missionId={cutscene} onDone={handleCutsceneDone} />
       )}
 
       {transition && (
