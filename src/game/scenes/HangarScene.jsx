@@ -7,16 +7,28 @@ import {
   drawTrajectoryArc, initDust, updateDust, drawDust,
 } from '../systems/renderSystem';
 import {
-  createLaunchState, spawnSmoke, spawnExhaust,
-  updateParticles, drawParticles,
+  createLaunchState, spawnSmoke, spawnExhaust, spawnContrail,
+  updateParticles, drawParticles, drawEngineGlow,
 } from '../systems/launchSystem';
 import TerminalOverlay from '../components/TerminalOverlay';
 import ProgressPanel   from '../components/ProgressPanel';
 import { getTerminal } from '../terminals';
 import { isMissionComplete } from '../systems/progressionSystem';
-import { startAmbientHum, playTerminalOpen, playTerminalClose } from '../systems/audioSystem';
+import {
+  startAmbientHum, playTerminalOpen, playTerminalClose,
+  playCountdownBeep, startEngineRumble, playIgnitionBoom,
+} from '../systems/audioSystem';
 
 const SPEED           = 260;
+
+const COMMS_SCRIPT = [
+  { key: 'c9', threshold: 9.4, from: 'control', msg: 'T-nine — systems nominal.' },
+  { key: 'c7', threshold: 7.4, from: 'control', msg: 'T-seven — fuel pressurised.' },
+  { key: 'c5', threshold: 5.4, from: 'control', msg: 'T-five — computer armed.' },
+  { key: 'c3', threshold: 3.4, from: 'crew',    msg: 'T-three — go for engine start.' },
+  { key: 'c2', threshold: 2.4, from: 'control', msg: 'T-two — you are go for launch.' },
+  { key: 'c1', threshold: 1.4, from: 'crew',    msg: 'T-one — ignition sequence start.' },
+];
 const ACCEL           = 12;
 const TERMINAL_RADIUS = 80;
 const STAR_COUNT      = 120;
@@ -71,7 +83,26 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
   const dustRef             = useRef([]);
   const prevTerminalRef     = useRef(null);
   const onLaunchCompleteRef = useRef(onLaunchComplete);
+  const engineRumbleRef     = useRef(null);
+  const commsShownRef       = useRef(new Set());
+  const [commsLog, setCommsLog] = useState([]);
   useEffect(() => { onLaunchCompleteRef.current = onLaunchComplete; }, [onLaunchComplete]);
+
+  // Launch audio: engine rumble + ignition boom
+  useEffect(() => {
+    if (launchPhase === 'countdown') {
+      engineRumbleRef.current = startEngineRumble();
+    } else if (launchPhase === 'ignition') {
+      engineRumbleRef.current?.stop();
+      engineRumbleRef.current = null;
+      playIgnitionBoom();
+    } else if (!launchPhase || launchPhase === 'complete') {
+      engineRumbleRef.current?.stop();
+      engineRumbleRef.current = null;
+    }
+  }, [launchPhase]);
+
+  useEffect(() => { return () => { engineRumbleRef.current?.stop(); }; }, []);
 
   useEffect(() => { setWorldState(worldFromProgress(progress)); }, [progress, worldFromProgress]);
   useEffect(() => { worldStateRef.current = worldState; }, [worldState]);
@@ -101,6 +132,8 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
       ls.ignitionLevel = 0.3; ls.particles = []; ls.phaseTransitioned = false;
       lastCountdownRef.current = 10;
       launchTriggeredRef.current = true;
+      commsShownRef.current = new Set();
+      setCommsLog([]);
       setCountdownDisplay(10);
       setLaunchPhase('countdown');
     }, 1200);
@@ -175,7 +208,22 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
       launch.ignitionLevel = Math.max(0.3, Math.min(1, (launch.phaseTime - 6) / 4));
       if (launch.phaseTime > 3.5 && Math.random() < prog * 12 * delta) spawnSmoke(launch, W / 2, H * 0.55 + 22);
       const newCount = Math.max(0, Math.ceil(launch.countdownTimer));
-      if (newCount !== lastCountdownRef.current) { lastCountdownRef.current = newCount; setCountdownDisplay(newCount); }
+      if (newCount !== lastCountdownRef.current) {
+        lastCountdownRef.current = newCount;
+        setCountdownDisplay(newCount);
+        if (newCount > 0) playCountdownBeep(newCount);
+      }
+      // Drive engine rumble intensity from ignition level
+      if (engineRumbleRef.current) {
+        engineRumbleRef.current.setLevel(Math.max(0, (launch.ignitionLevel - 0.3) / 0.7));
+      }
+      // Mission control comms
+      COMMS_SCRIPT.forEach(({ key, threshold, from, msg }) => {
+        if (!commsShownRef.current.has(key) && launch.countdownTimer <= threshold) {
+          commsShownRef.current.add(key);
+          setCommsLog((prev) => [...prev.slice(-4), { from, msg, id: key }]);
+        }
+      });
       if (launch.phaseTime >= 10 && !launch.phaseTransitioned) {
         launch.phaseTransitioned = true;
         launch.flashAlpha = 1.0; launch.alarmAlpha = 0; launch.ignitionLevel = 1; launch.phaseTime = 0;
@@ -206,8 +254,9 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
       const shakeAmt = Math.max(0, 5.5 - launch.phaseTime * 2.0);
       launch.shakeX = (Math.random() - 0.5) * shakeAmt;
       launch.shakeY = (Math.random() - 0.5) * shakeAmt;
-      if (Math.random() < 0.80) spawnExhaust(launch, W / 2, H * 0.55 + launch.rocketAscent + 22);
-      if (Math.random() < 0.35) spawnSmoke(launch,   W / 2, H * 0.55 + launch.rocketAscent + 35);
+      if (Math.random() < 0.80) spawnExhaust(launch,  W / 2, H * 0.55 + launch.rocketAscent + 22);
+      if (Math.random() < 0.35) spawnSmoke(launch,    W / 2, H * 0.55 + launch.rocketAscent + 35);
+      if (Math.random() < 0.22) spawnContrail(launch, W / 2, H * 0.55 + launch.rocketAscent + 8);
       if (launch.rocketAscent < -H * 1.35 && !launch.phaseTransitioned) {
         launch.phaseTransitioned = true; launch.phaseTime = 0; setLaunchPhase('ascent');
       }
@@ -271,6 +320,7 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
       drawTrajectoryArc(ctx, W / 2, rocketGroundY, W, H, t);
     }
 
+    drawEngineGlow(ctx, W / 2, rocketGroundY, launch.ignitionLevel);
     drawRocket(ctx, W / 2, rocketGroundY, t, powered, launch.ignitionLevel);
 
     if (!phase || phase === 'countdown') {
@@ -350,6 +400,15 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
           )}
           {launchPhase === 'ignition' && <div className="launch-event launch-event--ignition">Ignition</div>}
           {launchPhase === 'liftoff'  && <div className="launch-event launch-event--liftoff">Liftoff</div>}
+          {commsLog.length > 0 && (
+            <div className="launch-comms">
+              {commsLog.map((line) => (
+                <div key={line.id} className={`launch-comms-line launch-comms-line--${line.from}`}>
+                  <span className="comms-from">{line.from === 'crew' ? 'CREW' : 'MC'}</span>{line.msg}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

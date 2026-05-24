@@ -267,6 +267,135 @@ export function playSound(src) {
   audio.play().catch(() => {});
 }
 
+// ── Launch sequence sounds ─────────────────────────────────────────────────────
+
+export function playCountdownBeep(timer) {
+  if (_muted) return;
+  try {
+    const ctx  = getCtx();
+    if (!ctx) return;
+    const freq = 380 + (10 - Math.max(0, timer)) * 55; // 380 Hz at T-10, 930 Hz at T-0
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type            = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.10, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.16);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.18);
+  } catch (_) {}
+}
+
+// Returns { setLevel(0-1), stop() } — caller drives level from the game loop.
+export function startEngineRumble() {
+  if (_muted) return { setLevel: () => {}, stop: () => {} };
+  try {
+    const ctx = getCtx();
+    if (!ctx) return { setLevel: () => {}, stop: () => {} };
+
+    const master = ctx.createGain();
+    master.gain.value = 0;
+    master.connect(ctx.destination);
+
+    // Sub-bass oscillator with LFO flutter
+    const bass = ctx.createOscillator();
+    bass.type            = 'sawtooth';
+    bass.frequency.value = 38;
+    const bassGain       = ctx.createGain();
+    bassGain.gain.value  = 0.55;
+    bass.connect(bassGain);
+    bassGain.connect(master);
+    bass.start();
+
+    const lfo     = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.type            = 'sine';
+    lfo.frequency.value = 7;
+    lfoGain.gain.value  = 5;
+    lfo.connect(lfoGain);
+    lfoGain.connect(bass.frequency);
+    lfo.start();
+
+    // Low-pass rumble noise layer
+    const noise  = createNoiseSource(ctx, 4);
+    const filter = ctx.createBiquadFilter();
+    filter.type            = 'lowpass';
+    filter.frequency.value = 200;
+    filter.Q.value         = 1.2;
+    const noiseGain       = ctx.createGain();
+    noiseGain.gain.value  = 0.45;
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(master);
+    noise.start();
+
+    let stopped = false;
+    return {
+      setLevel(level) {
+        if (stopped) return;
+        try {
+          master.gain.linearRampToValueAtTime(level * 0.09, ctx.currentTime + 0.08);
+        } catch (_) {}
+      },
+      stop() {
+        stopped = true;
+        try {
+          master.gain.cancelScheduledValues(ctx.currentTime);
+          master.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.0);
+          setTimeout(() => {
+            [bass, lfo, noise].forEach((n) => { try { n.stop(); } catch (_) {} });
+          }, 1200);
+        } catch (_) {}
+      },
+    };
+  } catch (_) {
+    return { setLevel: () => {}, stop: () => {} };
+  }
+}
+
+export function playIgnitionBoom() {
+  if (_muted) return;
+  try {
+    const ctx    = getCtx();
+    if (!ctx) return;
+    const master = ctx.createGain();
+    master.connect(ctx.destination);
+
+    // Deep thud — sine sweep from 80 Hz down to 18 Hz
+    const osc    = ctx.createOscillator();
+    const oscEnv = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(80, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(18, ctx.currentTime + 0.55);
+    oscEnv.gain.setValueAtTime(0.70, ctx.currentTime);
+    oscEnv.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.65);
+    osc.connect(oscEnv);
+    oscEnv.connect(master);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.70);
+
+    // Broadband noise burst — low-pass shaped
+    const noise    = createNoiseSource(ctx, 2);
+    const noiseF   = ctx.createBiquadFilter();
+    noiseF.type            = 'lowpass';
+    noiseF.frequency.value = 900;
+    const noiseEnv = ctx.createGain();
+    noiseEnv.gain.setValueAtTime(0.45, ctx.currentTime);
+    noiseEnv.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.6);
+    noise.connect(noiseF);
+    noiseF.connect(noiseEnv);
+    noiseEnv.connect(master);
+    noise.start(ctx.currentTime);
+    setTimeout(() => { try { noise.stop(); } catch (_) {} }, 1800);
+
+    master.gain.setValueAtTime(0.22, ctx.currentTime);
+    master.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.8);
+    setTimeout(() => { try { master.disconnect(); } catch (_) {} }, 2000);
+  } catch (_) {}
+}
+
 // ── Background Music — Zelda / space hybrid ────────────────────────────────────
 // A minor, 72 BPM. Triangle-wave harp arpeggios + detuned sine pads + bass.
 
