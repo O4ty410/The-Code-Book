@@ -1,5 +1,5 @@
-let isLoggedIn = false;
-let isGuest = !!localStorage.getItem('codebook_guest');
+var isLoggedIn = false;
+var isGuest = !!localStorage.getItem('codebook_guest');
 let currentFloor = 1;
 
 var sageBubbleTimeout = null;
