@@ -526,7 +526,7 @@ function initPovStars(count, W, H) {
   }));
 }
 
-export default function MarsLaunchScene({ onComplete }) {
+export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
   const canvasRef  = useRef(null);
   const starsRef   = useRef([]);
   const povStarsRef = useRef([]);
@@ -994,6 +994,9 @@ export default function MarsLaunchScene({ onComplete }) {
             All code behaviour confirmed.<br />
             Mars orbital insertion nominal.
           </p>
+          {onPlayAgain && (
+            <button className="arr-play-again-btn" onClick={onPlayAgain}>PLAY AGAIN</button>
+          )}
         </div>
       )}
     </div>

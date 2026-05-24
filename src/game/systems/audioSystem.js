@@ -537,3 +537,7 @@ export function startBackgroundMusic() {
     return () => {};
   }
 }
+
+export function suspendAllAudio() {
+  try { if (_ctx) _ctx.suspend().catch(() => {}); } catch (_) {}
+}

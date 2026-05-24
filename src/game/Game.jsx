@@ -8,9 +8,10 @@ import VisualLab       from './components/VisualLab';
 import {
   loadProgress,
   completeMission,
+  clearProgress,
   BUILDER_MISSION_IDS,
 } from './systems/progressionSystem';
-import { toggleMute, isMuted, startBackgroundMusic } from './systems/audioSystem';
+import { toggleMute, isMuted, startBackgroundMusic, suspendAllAudio } from './systems/audioSystem';
 import './styles/game.css';
 
 const MODE = { BUILDER: 'builder', DEBUG: 'debug', VISUAL: 'visual', LAUNCH: 'launch' };
@@ -104,6 +105,22 @@ export default function Game() {
     try { window.parent.postMessage({ type: 'QUIT_TO_HUB' }, '*'); } catch (_) {}
   }, []);
 
+  const handlePlayAgain = useCallback(() => {
+    setProgress(clearProgress());
+    setScene('MAIN_MENU');
+    setGameMode(MODE.BUILDER);
+    setTransition(null);
+    setPaused(false);
+  }, []);
+
+  useEffect(() => {
+    function onMsg(e) {
+      if (e.data && e.data.type === 'STOP_AUDIO') suspendAllAudio();
+    }
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
   useEffect(() => {
     const done = progress.completedMissions;
     const allBuilder = BUILDER_MISSION_IDS.every((id) => done.includes(id));
@@ -179,7 +196,7 @@ export default function Game() {
       )}
 
       {scene === 'MARS' && (
-        <MarsLaunchScene />
+        <MarsLaunchScene onPlayAgain={handlePlayAgain} />
       )}
 
       {transition && (

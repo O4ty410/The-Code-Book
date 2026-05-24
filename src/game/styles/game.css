@@ -2116,3 +2116,20 @@
   line-height: 1.9;
   max-width: 380px;
 }
+.arr-play-again-btn {
+  margin-top: 28px;
+  padding: 12px 36px;
+  font-family: 'IBM Plex Mono', 'Space Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: rgba(0, 220, 255, 0.90);
+  background: rgba(0, 60, 100, 0.30);
+  border: 1px solid rgba(0, 180, 255, 0.40);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.arr-play-again-btn:hover {
+  background: rgba(0, 80, 130, 0.50);
+  border-color: rgba(0, 210, 255, 0.70);
+}

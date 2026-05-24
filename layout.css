@@ -376,6 +376,24 @@ body.game-mode #main-col {
   letter-spacing: 1px;
 }
 
+.top-signout-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  padding: 5px 12px;
+  background: none;
+  border: 1px solid rgba(200,160,80,0.30);
+  border-radius: 4px;
+  color: rgba(200,160,80,0.70);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.top-signout-btn:hover {
+  border-color: rgba(200,160,80,0.65);
+  color: rgba(200,160,80,0.95);
+}
+
 .hamburger-btn {
   display: none;
   background: none;
@@ -563,6 +581,7 @@ body.game-mode #main-col {
   .top-nav-tabs { gap: 1px; }
   .top-nav-tab { font-size: 9px; padding: 5px 8px; letter-spacing: 1px; }
   .top-xp-chip, .top-streak-chip { display: none; }
+  .top-signout-btn { display: none; }
 
   .hamburger-btn { display: none !important; }
 
