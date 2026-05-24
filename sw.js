@@ -4,7 +4,7 @@
    Includes streak reminder notification support.
    ============================================================ */
 
-var CACHE = 'codebook-v10';
+var CACHE = 'codebook-v11';
 
 var SHELL = [
   './',
