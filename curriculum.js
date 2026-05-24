@@ -876,6 +876,221 @@ Going straight to child styles when the container layout is wrong is the most co
         }
       },
       {
+        id: "2-8b",
+        title: "Responsive Design and Media Queries",
+        body: `A page that looks good on a laptop but breaks on a phone isn't finished. Most web traffic is mobile. Building for one screen size and ignoring the rest isn't a style choice — it's an oversight.
+
+<strong>The viewport meta tag</strong> is the first thing. Without it, mobile browsers fake a wide desktop layout and scale it down. Add this to every page's head: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code>
+
+<strong>Media queries</strong> let CSS rules apply only at certain screen widths. The most common form: @media (max-width: 768px) { ... } — rules inside only activate on screens 768px wide or narrower. You can stack them.
+
+<strong>Mobile-first</strong> means writing your base CSS for small screens, then adding media queries to adjust for larger ones. This is the professional approach. Writing for desktop first and patching for mobile produces messier code.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Open any page you've built. Drag the browser window narrower. Watch where it breaks. Those breaks are where your media queries need to go.</div>
+
+Flexible units make layouts adapt without needing a media query for every small adjustment. <strong>%</strong> is relative to the parent. <strong>vw/vh</strong> are relative to the viewport. <strong>rem</strong> is relative to the root font size. <strong>max-width</strong> on a container with <code>margin: 0 auto</code> creates centred content that's bounded on large screens but full-width on small ones.`,
+        callout: {
+          type: "default",
+          label: "Mobile-First Approach",
+          text: "Write your base CSS for the smallest screen. Then use @media (min-width: ...) to add or adjust styles for larger screens. This order produces less code and fewer overrides than starting with desktop and patching down. Start small, layer up."
+        },
+        callout2: {
+          type: "focus",
+          label: "Three Essential Breakpoints",
+          text: "You don't need breakpoints for every device. Three cover most cases: 480px (small phones), 768px (tablets and large phones landscape), 1024px (laptops and desktops). Start with one — usually 768px — and add more only when the layout actually needs it, not on principle."
+        },
+        hint: `The viewport meta tag is not optional. Without it, your media queries won't work correctly on mobile devices — the browser overrides them.
+
+The most useful pattern: a centred container with a max-width.
+<strong>Example:</strong> .container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+This creates a layout that's centred and bounded on large screens, and full-width with padding on small ones.
+
+<strong>Flex and grid already handle a lot:</strong> flex-wrap: wrap lets cards reflow naturally. grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) creates responsive columns without a single media query.`,
+        quiz: {
+          question: "You have a three-column card layout that should stack to a single column on mobile. What is the correct mobile-first approach?",
+          options: [
+            "@media (max-width: 768px) { .cards { flex-direction: column; } } — override to single column on small screens",
+            "Base CSS stacks items vertically, then @media (min-width: 768px) adds flex-direction: row for larger screens",
+            "The viewport meta tag alone will make the layout responsive without CSS changes",
+            "Set a fixed pixel width on the cards so they never exceed the screen size"
+          ],
+          correct: 1,
+          feedback: "This is the mobile-first approach: the base CSS stacks items vertically (single column, the default for block elements). The media query then adds the row layout for screens 768px and wider. The result is less code — you're only adding styles for larger screens, not overriding them back. Option A works but is desktop-first: the default layout is horizontal and you're undoing it for mobile."
+        },
+        checklist: [
+          "Every page I build includes the viewport meta tag — I know why it's required",
+          "I can write a media query from memory that changes layout at a specified breakpoint",
+          "I can explain the difference between mobile-first and desktop-first — and why mobile-first is preferred",
+          "I've tested a layout by resizing the browser to 375px wide and fixed the breaks I found",
+          "I use max-width with margin: auto for centred containers and can explain what each part does"
+        ],
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#fff;font-family:sans-serif;padding:24px}
+h2{color:#c8a96e;margin-bottom:24px;font-size:1.2rem}
+
+/* Base styles — small screens first */
+.container{max-width:1000px;margin:0 auto}
+.cards{display:flex;flex-direction:column;gap:16px}
+.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:20px}
+.card h3{color:#7eb8c8;margin-bottom:8px}
+.card p{color:#888;font-size:0.9rem;line-height:1.5}
+
+/* Medium screens and up */
+@media(min-width:600px){
+  .cards{flex-direction:row;flex-wrap:wrap}
+  .card{flex:1;min-width:200px}
+}
+
+/* Large screens */
+@media(min-width:900px){
+  .card{flex-basis:calc(33% - 12px);flex-grow:0}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Responsive Cards</h2>
+<div class="cards">
+  <div class="card"><h3>Card One</h3><p>Resize the preview to see how the layout changes at different widths.</p></div>
+  <div class="card"><h3>Card Two</h3><p>Mobile: stacked. Tablet: two columns. Desktop: three columns.</p></div>
+  <div class="card"><h3>Card Three</h3><p>No JavaScript needed — just CSS and media queries.</p></div>
+</div>
+</div>
+</body></html>`,
+          challenges: [
+            "Change the layout so cards stack at any width below 600px and switch to a 2-column grid at 600px or above",
+            "Add a navigation bar at the top that shows links horizontally on wide screens but stacks them vertically on mobile",
+            "Use a media query to change the body font size from 14px on mobile to 16px on desktop",
+            "Add a hero section with padding: 32px on mobile and padding: 80px on desktop using a media query"
+          ]
+        }
+      },
+      {
+        id: "2-8c",
+        title: "Accessibility Basics",
+        body: `Accessibility isn't a feature you add at the end. It's a quality of how the code is written from the start.
+
+Around 15% of the population has some form of disability that affects how they use the web. Screen readers read page content aloud for people with visual impairments. Keyboard users navigate without a mouse. People with low vision need sufficient colour contrast. None of these users can use your site if it's built without them in mind.
+
+<strong>Semantic HTML does most of the work.</strong> Use &lt;nav&gt;, &lt;main&gt;, &lt;article&gt;, &lt;aside&gt;, &lt;footer&gt; instead of &lt;div&gt; everywhere. Screen readers announce these landmarks. A page of nested divs is navigable only with a mouse — a page using semantic elements is navigable by keyboard, screen reader, and any other assistive technology.
+
+<strong>Alt text</strong> on images is not optional. &lt;img src="photo.jpg" alt="A developer looking at two monitors"&gt;. If an image is purely decorative, use alt="" (empty string) — screen readers will skip it. If it conveys information, describe that information.
+
+<strong>Heading hierarchy</strong> matters. One h1 per page, then h2, then h3 in order. Don't use h4 because it looks smaller — use CSS for sizing. Screen reader users navigate pages by jumping between headings.
+
+<div class="inline-q"><span class="iq-label">Try this:</span> Tab through any page you've built using only the keyboard. Can you reach every link and button? If not, your keyboard navigation is broken.</div>
+
+<strong>Colour contrast</strong>: text must have sufficient contrast against its background. Light grey on white fails. The minimum ratio is 4.5:1 for normal text. Browser DevTools has a built-in contrast checker in the colour picker.`,
+        callout: {
+          type: "default",
+          label: "Semantic HTML First",
+          text: "The single biggest accessibility improvement most beginners can make: use the correct HTML element for the job. Use &lt;button&gt; for buttons (not &lt;div onclick&gt;). Use &lt;a&gt; for links. Use &lt;label&gt; for form labels. Browsers give these elements keyboard focus and screen reader announcements for free — custom divs get nothing."
+        },
+        callout2: {
+          type: "focus",
+          label: "Focus Styles Are Not Optional",
+          text: "When users tab to an element, the browser shows a focus ring so they can see where they are. CSS resets often remove this with outline: none. Don't. If you don't like the default appearance, replace it with a custom :focus style — but never remove it entirely. Removing focus styles makes a site unusable for keyboard-only users."
+        },
+        hint: `aria-label adds a text description to an element that has no visible text. Example: a close button with just an &times; icon needs aria-label="Close" so screen readers can announce it.
+
+aria-hidden="true" hides elements from screen readers entirely — useful for decorative icons or content that would be confusing when read aloud.
+
+<strong>The tab order follows the DOM order by default.</strong> If your visual layout reorders elements with CSS (like CSS Grid or Flexbox), check that the tab order still makes logical sense. It's based on the HTML, not the visual position.`,
+        quiz: {
+          question: "You have a button that only contains an icon (a trash can image). A screen reader user tabs to it. What does the screen reader announce?",
+          options: [
+            "It announces 'button' and reads the image filename",
+            "It announces nothing because icon buttons are invisible to screen readers",
+            "It announces 'button' with no context — the user has no idea what it does",
+            "It automatically reads the CSS class name of the button"
+          ],
+          correct: 2,
+          feedback: "Without an accessible name, a screen reader announces 'button' and nothing else. The user cannot know what the button does. The fix: add aria-label='Delete item' to the button. aria-label provides the text the screen reader announces in place of visual content. Always give interactive elements an accessible name — either visible text, or aria-label when there is none."
+        },
+        checklist: [
+          "I use semantic HTML elements (nav, main, article, footer) instead of generic divs for page structure",
+          "Every image I add has an alt attribute — descriptive for informative images, empty string for decorative ones",
+          "I can tab through any page I build and reach every interactive element using only the keyboard",
+          "I never remove focus styles without replacing them with a visible custom :focus design",
+          "I've checked the colour contrast of my text against its background using DevTools or an online tool"
+        ],
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#e0e0e0;font-family:sans-serif;padding:24px;line-height:1.6}
+h1{color:#c8a96e;margin-bottom:8px}
+nav{margin-bottom:24px}
+nav a{color:#7eb8c8;text-decoration:none;margin-right:20px;padding:4px 0}
+nav a:hover,nav a:focus{color:#a8d8e8;text-decoration:underline}
+nav a:focus{outline:2px solid #7eb8c8;outline-offset:4px;border-radius:2px}
+main{max-width:600px}
+.card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:20px;margin-bottom:16px}
+label{display:block;color:#888;font-size:0.85rem;margin-bottom:6px}
+input{width:100%;background:#111;border:1px solid #333;color:#e0e0e0;padding:10px;border-radius:6px;font-size:1rem}
+input:focus{outline:2px solid #7eb8c8;outline-offset:0;border-color:#7eb8c8}
+button{background:#c8a96e;color:#0a0a0a;border:none;padding:10px 20px;border-radius:6px;font-size:0.9rem;font-weight:600;cursor:pointer;margin-top:12px}
+button:hover{background:#d9bc85}
+button:focus{outline:3px solid #fff;outline-offset:2px}
+.icon-btn{background:transparent;border:1px solid #444;color:#888;padding:8px;border-radius:4px;cursor:pointer;font-size:1rem}
+.icon-btn:hover{border-color:#ff6b6b;color:#ff6b6b}
+.icon-btn:focus{outline:2px solid #c8a96e;outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Accessible Page Example</h1>
+  <nav aria-label="Main navigation">
+    <a href="#">Home</a>
+    <a href="#">About</a>
+    <a href="#">Projects</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+<main>
+  <article class="card">
+    <h2>Contact Form</h2>
+    <form>
+      <div>
+        <label for="name">Your name</label>
+        <input type="text" id="name" name="name" autocomplete="name">
+      </div>
+      <div style="margin-top:12px">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" autocomplete="email">
+      </div>
+      <button type="submit">Send message</button>
+    </form>
+  </article>
+  <article class="card">
+    <h2>Actions</h2>
+    <p style="margin-bottom:12px;color:#888">Icon-only buttons need aria-label so screen readers know what they do:</p>
+    <button class="icon-btn" aria-label="Delete item">&#x1F5D1;</button>
+    <button class="icon-btn" aria-label="Edit item" style="margin-left:8px">&#x270F;</button>
+    <button class="icon-btn" aria-label="Share item" style="margin-left:8px">&#x2197;</button>
+  </article>
+</main>
+</body></html>`,
+          challenges: [
+            "Tab through the page using only the keyboard — confirm every interactive element is reachable and has a visible focus style",
+            "Add an image with a descriptive alt attribute, and a second decorative image with an empty alt attribute",
+            "Add a skip-to-main-content link as the first element in the body so keyboard users can bypass the navigation",
+            "Check the contrast of the #888 text colour against #0a0a0a background — is it WCAG AA compliant? Adjust if not"
+          ]
+        }
+      },
+      {
         id: "2-9",
         title: "Guided Profile Page Project",
         body: `Profile pages follow a consistent pattern because the pattern works. A header with name and role. A short bio. Skills. Projects. Contact links. You've seen it on GitHub, Dribbble, LinkedIn. The structure isn't unoriginal — it's a convention. Conventions exist because they're what people already know how to read.
@@ -1112,6 +1327,129 @@ So "10" * 2 is 20, but "10" + 2 is "102".
           feedback: "When + encounters a string on either side, it concatenates \u2014 joins them together as text. '10' is a string, so '10' + 5 becomes '10' + '5' (5 is coerced to a string) which is '105'. This is why parseInt() or Number() is used to convert string inputs to numbers before doing maths, and why === catches this kind of type mismatch."
         },
         checklist: ["I default to const and can explain WHY — without looking it up", "I can name the four primitive types and give a concrete example of each", "I can write a template literal with a calculation inside \${} from memory", "I always use === and can predict the result of '5' == 5 vs '5' === 5 before running it", "I can predict what '10' + 3 returns and explain why it differs from '10' - 3"]
+      },
+      {
+        id: "3-2b",
+        title: "Modern JavaScript Syntax",
+        body: `Three features — template literals, destructuring, and the spread operator — appear in essentially every modern JavaScript codebase. They aren't advanced. They're just a cleaner way to do things you already know.
+
+<strong>Template literals</strong> are strings wrapped in backticks instead of quotes. They let you embed expressions directly inside the string using \${...}:
+
+<pre><code>const name = 'Alex';
+const age = 28;
+const message = \`Hello, \${name}. You are \${age} years old.\`;
+// Old way: 'Hello, ' + name + '. You are ' + age + ' years old.'</code></pre>
+
+Multi-line strings work without any escaping — just press Enter inside the backticks.
+
+<strong>Destructuring</strong> extracts values from objects and arrays into named variables in one line:
+
+<pre><code>// Object destructuring
+const user = { name: 'Alex', age: 28, role: 'admin' };
+const { name, age } = user;  // name = 'Alex', age = 28
+
+// Array destructuring
+const colours = ['red', 'green', 'blue'];
+const [first, second] = colours;  // first = 'red'</code></pre>
+
+<strong>Spread operator</strong> (...) expands an array or object in place:
+
+<pre><code>// Copying an array without mutating the original
+const original = [1, 2, 3];
+const copy = [...original, 4];  // [1, 2, 3, 4]
+
+// Merging objects — later keys override earlier ones
+const defaults = { theme: 'dark', lang: 'en' };
+const custom = { lang: 'fr', fontSize: 16 };
+const settings = { ...defaults, ...custom };
+// { theme: 'dark', lang: 'fr', fontSize: 16 }</code></pre>
+
+<div class="inline-q"><span class="iq-label">Why this matters:</span> You'll see these patterns in every tutorial, Stack Overflow answer, and real codebase. Not knowing them means code looks unfamiliar even when the logic is something you already understand.</div>`,
+        callout: {
+          type: "default",
+          label: "Default Parameters",
+          text: "Function parameters can have defaults: function greet(name = 'stranger') { return \`Hello, \${name}\`; }. If the caller passes a value, it's used. If not, the default is used. This replaces the common pattern: name = name || 'stranger'. Same result, clearer intent."
+        },
+        callout2: {
+          type: "focus",
+          label: "Spread vs Rest",
+          text: "The ... syntax has two jobs. In a function call or array/object literal, it spreads (expands): [...arr1, ...arr2] combines both arrays. In a function parameter, it collects (gathers): function sum(...nums) collects all arguments into a nums array. Same syntax, different context, opposite directions."
+        },
+        hint: `Rename while destructuring: const { name: userName } = user — extracts user.name but stores it in a variable called userName. Useful when the property name conflicts with something already in scope.
+
+Default values while destructuring: const { theme = 'light' } = settings — if settings.theme is undefined, theme gets 'light'.
+
+<strong>Common pattern:</strong> API responses are often objects. Destructuring their properties at the start of a function makes the rest of the function much cleaner to read.`,
+        quiz: {
+          question: "What does this code produce? const [,, third] = ['alpha', 'beta', 'gamma'];",
+          options: [
+            "An error — you can't skip positions in array destructuring",
+            "third = 'alpha' — destructuring starts from the first position",
+            "third = 'gamma' — the commas skip the first two positions",
+            "third = ['alpha', 'beta', 'gamma'] — the variable holds the full array"
+          ],
+          correct: 2,
+          feedback: "Array destructuring assigns by position. The commas act as placeholders — the first two positions are skipped, and third gets the value at the third position: 'gamma'. You can skip as many positions as needed using commas. This is useful when a function returns an array and you only need specific positions from it."
+        },
+        checklist: [
+          "I write all string interpolation using template literals — I no longer use + to concatenate variables into strings",
+          "I can destructure an object into named variables in a single line, including renaming and providing defaults",
+          "I can use spread to copy an array without mutating the original, and to merge two objects",
+          "I can write a function with a default parameter and explain what happens when the argument is and isn't provided",
+          "I can read destructuring in someone else's code and immediately know what variables are being created"
+        ],
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px;font-size:16px}
+.section{margin-bottom:20px}
+.label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.output{background:#111;border:1px solid #2a2a2a;border-radius:6px;padding:12px;color:#c8a96e}
+</style></head><body>
+<h2>Modern JS Syntax</h2>
+<div class="section">
+  <div class="label">Template Literals</div>
+  <div id="tl" class="output"></div>
+</div>
+<div class="section">
+  <div class="label">Destructuring</div>
+  <div id="dest" class="output"></div>
+</div>
+<div class="section">
+  <div class="label">Spread Operator</div>
+  <div id="spread" class="output"></div>
+</div>
+<script>
+// Template literals
+const product = { name: 'Keyboard', price: 89, stock: 12 };
+const summary = \`\${product.name} — \xA3\${product.price} (\${product.stock} in stock)\`;
+document.getElementById('tl').textContent = summary;
+
+// Destructuring
+const { name, price, stock } = product;
+const colours = ['crimson', 'navy', 'forest'];
+const [primary, secondary] = colours;
+document.getElementById('dest').textContent =
+  \`name: \${name}, price: \${price} | primary: \${primary}, secondary: \${secondary}\`;
+
+// Spread
+const defaults = { currency: 'GBP', taxRate: 0.2, discount: 0 };
+const custom = { discount: 0.1, currency: 'USD' };
+const config = { ...defaults, ...custom };
+const nums = [3, 1, 4, 1, 5, 9, 2];
+const sorted = [...nums].sort((a, b) => a - b);
+document.getElementById('spread').textContent =
+  \`config: \${JSON.stringify(config)} | sorted: [\${sorted}]\`;
+<\/script></body></html>`,
+          challenges: [
+            "Use destructuring to extract at least 3 properties from an object in one line, including one with a renamed variable",
+            "Write a function with two parameters that both have default values, and call it with and without arguments",
+            "Use spread to combine two arrays into one, then use Math.max(...combinedArray) to find the largest value",
+            "Rewrite this without template literals: const s = 'User ' + user.name + ' has ' + user.score + ' points' — then confirm the output is identical"
+          ]
+        }
       },
       {
         id: "3-3",
@@ -1415,6 +1753,123 @@ document.getElementById('output').innerHTML=out;
         }
       },
       {
+        id: "3-6b",
+        title: "Array Methods in Depth",
+        body: `map, filter, and reduce replace the majority of for loops in modern JavaScript. They don't just shorten code — they make the intent explicit. A loop says "I'm iterating". These methods say exactly what you're doing: transforming, selecting, or aggregating.
+
+<strong>map</strong> — transform every item, return the same number of items:
+<pre><code>const prices = [10, 25, 50];
+const withTax = prices.map(p => p * 1.2);
+// [12, 30, 60] — same length, every value changed</code></pre>
+
+<strong>filter</strong> — keep only items matching a condition:
+<pre><code>const users = [
+  {name:'Alex',active:true},
+  {name:'Sam',active:false},
+  {name:'Jay',active:true}
+];
+const activeUsers = users.filter(u => u.active);
+// [{name:'Alex',active:true},{name:'Jay',active:true}]</code></pre>
+
+<strong>reduce</strong> — aggregate all items into a single value:
+<pre><code>const scores = [85, 92, 78, 95, 88];
+const total = scores.reduce((acc, score) => acc + score, 0);
+// 438 — the second argument (0) is the starting accumulator value</code></pre>
+
+<strong>Chaining</strong> — these methods return arrays, so you can chain them:
+<pre><code>const highScoreNames = scores
+  .filter(s => s &gt;= 85)
+  .map(s => s + ' pts');
+// ['85 pts', '92 pts', '95 pts', '88 pts']</code></pre>
+
+<div class="inline-q"><span class="iq-label">The mental model:</span> map changes shape. filter changes size. reduce collapses to one value. When you know which one you need, the code writes itself.</div>`,
+        callout: {
+          type: "default",
+          label: "None of These Mutate the Original",
+          text: "map, filter, and reduce all return new arrays — they never modify the original. This is one of their most important properties. The original array is unchanged after calling any of them. If you need to update the original, assign the result back: arr = arr.filter(...)"
+        },
+        callout2: {
+          type: "focus",
+          label: "find, some, every",
+          text: "Three more useful array methods: find returns the first item matching a condition (or undefined if none match). some returns true if any item matches. every returns true only if all items match. Example: users.find(u => u.id === 5) returns the user with that id. scores.every(s => s > 50) returns true only if every score exceeds 50."
+        },
+        hint: `reduce is the hardest of the three to read at first. The callback takes two arguments: the accumulator (the running result) and the current item. The second argument to reduce is the initial value of the accumulator.
+
+A reduce that starts confusing you: rewrite it as a for loop first. Once the logic works, convert it back to reduce. The logic is identical.
+
+<strong>Common use cases for reduce:</strong> summing values, counting occurrences (reduce into an object), grouping items by a property (reduce into an object of arrays).`,
+        quiz: {
+          question: "What does this produce? [1, 2, 3, 4, 5].reduce((acc, n) => acc + n, 10)",
+          options: [
+            "15 — the sum of all numbers in the array",
+            "25 — starts from 10, adds each number: 10+1+2+3+4+5",
+            "10 — the initial value is returned unchanged",
+            "50 — multiplies the initial value by the length of the array"
+          ],
+          correct: 1,
+          feedback: "reduce starts with the initial value (10) as the accumulator. It then adds each array item in turn: 10+1=11, 11+2=13, 13+3=16, 16+4=20, 20+5=25. The initial value (second argument to reduce) is where accumulation begins — it's added to first, not skipped."
+        },
+        checklist: [
+          "I can use map to transform an array and predict its length relative to the input",
+          "I can use filter and explain what condition it tests and what the output contains",
+          "I can write a reduce that sums an array of numbers, explaining what the accumulator and initial value do",
+          "I can chain filter and map together and predict the result before running it",
+          "I can use find, some, and every and explain what each returns when no match is found"
+        ],
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px;line-height:1.7}
+h2{color:#c87e9a;margin:0 0 16px;font-size:16px}
+.section{margin-bottom:18px}
+.label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.output{background:#111;border:1px solid #2a2a2a;border-radius:6px;padding:10px;color:#c8a96e}
+</style></head><body>
+<h2>Array Methods</h2>
+<div id="sections"></div>
+<script>
+const orders = [
+  {id:1, item:'Keyboard', price:89, shipped:true},
+  {id:2, item:'Monitor', price:349, shipped:false},
+  {id:3, item:'Mouse', price:45, shipped:true},
+  {id:4, item:'Webcam', price:120, shipped:false},
+  {id:5, item:'Headset', price:75, shipped:true}
+];
+
+const itemNames = orders.map(o => o.item);
+const pending = orders.filter(o => !o.shipped);
+const total = orders.reduce((sum, o) => sum + o.price, 0);
+const shippedItems = orders
+  .filter(o => o.shipped)
+  .sort((a, b) => a.price - b.price)
+  .map(o => \`\${o.item} (\xA3\${o.price})\`);
+const firstExpensive = orders.find(o => o.price > 100);
+const anyPending = orders.some(o => !o.shipped);
+const allShipped = orders.every(o => o.shipped);
+
+const sections = document.getElementById('sections');
+[
+  ['map — all item names', itemNames.join(', ')],
+  ['filter — unshipped orders', pending.map(o=>o.item).join(', ')],
+  ['reduce — order total', '\xA3' + total],
+  ['chain — shipped, by price', shippedItems.join(' \xB7 ')],
+  ['find — first over \xA3100', firstExpensive ? firstExpensive.item + ' (\xA3' + firstExpensive.price + ')' : 'none'],
+  ['some — any unshipped?', String(anyPending)],
+  ['every — all shipped?', String(allShipped)]
+].forEach(([label, val]) => {
+  sections.innerHTML += \`<div class="section"><div class="label">\${label}</div><div class="output">\${val}</div></div>\`;
+});
+<\/script></body></html>`,
+          challenges: [
+            "Use reduce to count how many orders are shipped vs unshipped — return an object like { shipped: 3, pending: 2 }",
+            "Use filter and reduce together to get the total value of only the unshipped orders",
+            "Use map to create a new array of objects with just id and item properties (remove price and shipped)",
+            "Use find to get the most expensive order, and every to check whether all orders cost more than \xA340"
+          ]
+        }
+      },
+      {
         id: "3-7",
         title: "DOM Manipulation",
         body: `The DOM is the browser's live map of the page. Every element you see is a node in that map. JavaScript can find those nodes, read them, change them, add new ones, or remove them. That's how every interactive website works.
@@ -1681,6 +2136,119 @@ el.innerHTML=parseData('{"name":"Alex"}');
 el.innerHTML+=parseData('this is not valid JSON');
 </script></body></html>`,
           challenges: ["Fix the three intentional bugs in the code \u2014 read the error messages in the console for guidance", "Add a try/catch block around the broken function call and display the error message instead of crashing", "Add console.log statements to trace what value each variable holds", "Add input validation that throws a custom error if the input is empty"]
+        }
+      },
+      {
+        id: "3-9b",
+        title: "Timers and Asynchronous Thinking",
+        body: `JavaScript can't be paused. While a browser is running JavaScript, it runs one thing at a time. There's no "wait 3 seconds, then continue". Instead, you say: "after 3 seconds, run this function".
+
+That's the shift. You don't write sequential steps. You register things to happen later — and the browser handles the timing.
+
+<strong>setTimeout</strong> runs a function once, after a delay (in milliseconds):
+<pre><code>setTimeout(() => {
+  console.log('This runs after 2 seconds');
+}, 2000);</code></pre>
+
+<strong>setInterval</strong> runs a function repeatedly at a fixed interval. <strong>clearInterval</strong> stops it:
+<pre><code>const id = setInterval(() => {
+  console.log('tick');
+}, 1000);
+
+// To stop it:
+clearInterval(id);</code></pre>
+
+<strong>Callbacks</strong> are functions passed as arguments to be called later. Both setTimeout and setInterval use them. Event listeners use them too. The pattern is everywhere.
+
+<div class="inline-q"><span class="iq-label">The key insight:</span> setTimeout(() => doSomething(), 0) — a delay of zero — doesn't run immediately. It runs after the current code finishes. JavaScript always completes what it's doing before running any callback. This is the event loop.</div>
+
+This mental model — schedule things rather than wait for them — is the foundation for understanding Promises and async/await in Floor 4. They work the same way, just at a higher level.`,
+        callout: {
+          type: "default",
+          label: "The Event Loop in One Sentence",
+          text: "JavaScript runs one piece of code at a time. When that code finishes, it checks if any scheduled callbacks are ready to run (timers that have elapsed, user events that happened, network responses that arrived) and runs the next one. There is no parallel execution — just a queue of things waiting their turn."
+        },
+        callout2: {
+          type: "focus",
+          label: "Always Clear Intervals",
+          text: "setInterval keeps running until you explicitly stop it with clearInterval. If the component or element it's attached to is removed but the interval isn't cleared, it continues running in the background — calling code that may reference things that no longer exist. Always store the return value of setInterval and clear it when you're done."
+        },
+        hint: `setTimeout returns an id you can use with clearTimeout to cancel a pending timeout before it fires.
+
+<strong>Common use case for setTimeout:</strong> debouncing — you don't want to fire a search request on every keystroke, so you reset a timer each time the user types and only fire after they stop for 300ms.
+
+<strong>A countdown timer pattern:</strong> setInterval to tick every second, decrement a counter, update the DOM, and clearInterval when the counter reaches zero. Try building that — it combines DOM manipulation, closures, and timers together.`,
+        quiz: {
+          question: "What is the order of console.log output?\n\nconsole.log('A');\nsetTimeout(() => console.log('B'), 0);\nconsole.log('C');",
+          options: [
+            "A, B, C — setTimeout with 0ms runs immediately before C",
+            "A, C, B — the setTimeout callback runs after the current code finishes, even with a 0ms delay",
+            "B, A, C — setTimeout callbacks run before synchronous code",
+            "A, C — B never runs because 0ms is treated as never"
+          ],
+          correct: 1,
+          feedback: "The output is A, C, B. JavaScript runs synchronous code first: A is logged, the setTimeout is scheduled (not run yet), C is logged. Only after the current call stack is empty does the event loop check for pending callbacks — then B runs. A delay of 0ms means 'run as soon as possible after current code', not 'run immediately'."
+        },
+        checklist: [
+          "I can write a setTimeout that runs a function after a given number of milliseconds from memory",
+          "I can write a setInterval that ticks every second and store the id to stop it later",
+          "I can explain in plain terms why console.log('B') in a setTimeout(() => ..., 0) runs after synchronous code",
+          "I can build a simple countdown timer using setInterval, DOM updates, and clearInterval",
+          "I understand that callbacks and Promises are different syntax for the same underlying model: register for later"
+        ],
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:13px}
+h2{color:#c87e9a;margin:0 0 20px}
+.display{font-size:64px;color:#c8a96e;margin:20px 0;font-weight:900;letter-spacing:4px}
+.status{color:#888;font-size:12px;margin-bottom:20px}
+button{font-family:inherit;font-size:12px;letter-spacing:1px;cursor:pointer;border:none;border-radius:6px;padding:10px 20px;margin-right:8px}
+#start-btn{background:#6dbf6d;color:#000}
+#start-btn:hover{background:#85d985}
+#reset-btn{background:#333;color:#fff;border:1px solid #555}
+#reset-btn:hover{background:#444}
+</style></head><body>
+<h2>Countdown Timer</h2>
+<div class="display" id="display">10</div>
+<div class="status" id="status">Ready</div>
+<button id="start-btn" onclick="startTimer()">Start</button>
+<button id="reset-btn" onclick="resetTimer()">Reset</button>
+<script>
+var timeLeft = 10;
+var intervalId = null;
+
+function startTimer() {
+  if (intervalId) return;
+  document.getElementById('status').textContent = 'Counting down...';
+  intervalId = setInterval(function() {
+    timeLeft--;
+    document.getElementById('display').textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(intervalId);
+      intervalId = null;
+      document.getElementById('status').textContent = 'Done!';
+      document.getElementById('display').style.color = '#ff6b6b';
+    }
+  }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(intervalId);
+  intervalId = null;
+  timeLeft = 10;
+  document.getElementById('display').textContent = '10';
+  document.getElementById('display').style.color = '#c8a96e';
+  document.getElementById('status').textContent = 'Ready';
+}
+<\/script></body></html>`,
+          challenges: [
+            "Change the starting time to 30 seconds and add a visual colour shift when it reaches 10 or below",
+            "Add a Pause button that clears the interval without resetting the count — Start should resume from where it paused",
+            "Use setTimeout to show a 'Get ready!' message for 2 seconds before the timer actually starts counting down",
+            "Build a stopwatch instead: counts up from 0, shows minutes and seconds in MM:SS format, with Start/Stop/Reset"
+          ]
         }
       },
       {
@@ -2342,6 +2910,110 @@ function runParallel() {
           "I can explain the difference between Promise.all() and Promise.allSettled()",
           "I understand that async/await is syntax built on top of Promises — I can explain what await is actually doing"
         ]
+      },
+      {
+        id: "4-3b",
+        title: "CORS — Why API Calls Fail in the Browser",
+        body: `There's a rule baked into every browser: a page on one origin cannot read responses from a different origin unless that origin explicitly allows it. This is the <strong>same-origin policy</strong>. CORS — Cross-Origin Resource Sharing — is the mechanism that lets servers opt out of that restriction.
+
+An origin is the combination of protocol, domain, and port. http://localhost:3000 and http://localhost:5000 are different origins. So are https://myapp.com and https://api.myapp.com.
+
+When you fetch from a different origin, the browser sends the request but only gives your JavaScript the response if the server includes the right header: <code>Access-Control-Allow-Origin: *</code> (or your specific origin).
+
+<strong>This is why the same API call works in Postman but fails in your browser code.</strong> Postman isn't a browser — it doesn't enforce the same-origin policy. Your JavaScript is subject to it. The request reaches the server fine. The browser blocks you from reading the response.
+
+<div class="inline-q"><span class="iq-label">What the error looks like:</span> "Access to fetch at 'https://api.example.com' from origin 'http://localhost:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource."</div>
+
+<strong>How to fix it:</strong>
+<ul style="margin-left:20px;margin-top:8px;line-height:2">
+<li>If you control the API server: add the CORS headers to your responses</li>
+<li>If you don't control it: route the request through your own backend (a proxy)</li>
+<li>For development only: use your framework's built-in dev proxy (Vite, webpack, etc.)</li>
+</ul>`,
+        callout: {
+          type: "default",
+          label: "CORS Is a Browser Feature, Not an API Bug",
+          text: "A CORS error doesn't mean the API is broken. The request succeeded — the server responded. The browser is blocking your code from reading the response because the server didn't give permission. This is a security feature: it stops malicious websites from making authenticated requests to other services using your session. It's working as designed."
+        },
+        callout2: {
+          type: "focus",
+          label: "Preflight Requests",
+          text: "For some requests (POST, PUT, DELETE, or requests with custom headers), the browser sends a preflight OPTIONS request first to ask: 'can I do this?'. The server must respond to the OPTIONS request with CORS headers, or the real request is never sent. If your GET works but your POST fails in the browser, a missing OPTIONS handler is often the cause."
+        },
+        hint: `During development, some tools help without setting up a full backend.
+
+For Vite projects: add a server.proxy config in vite.config.js that forwards specific API requests through the dev server — the browser talks to localhost, the dev server talks to the external API, no CORS restriction applies.
+
+For quick testing: some public APIs (like JSONPlaceholder, Open-Meteo) include CORS headers already. Use these for learning and prototyping.
+
+<strong>When interviewing:</strong> being able to explain what CORS is, why it exists, and how to resolve it is a green flag. Most juniors just know it as "the annoying error".`,
+        quiz: {
+          question: "You make a fetch() call from localhost:3000 to an external API. Postman gets a 200 response with data. Your browser shows a CORS error. What is actually happening?",
+          options: [
+            "The API is refusing requests from localhost — you need to whitelist your IP address",
+            "The request reaches the server and gets a 200 response, but the browser blocks your JavaScript from reading it because the response lacks the Access-Control-Allow-Origin header",
+            "The browser is sending the request to the wrong URL — CORS errors always indicate a wrong endpoint",
+            "Your fetch code has a syntax error that only appears in browser environments, not Postman"
+          ],
+          correct: 1,
+          feedback: "CORS errors are enforced by the browser on the response side, not the request side. The request succeeds — the server sends a 200. The browser checks for Access-Control-Allow-Origin and, finding it absent, refuses to give the response to your JavaScript. Postman doesn't enforce CORS because it's not a browser context. The fix is server-side: add the header. Or route your request through a backend you control."
+        },
+        checklist: [
+          "I can explain what CORS is and why browsers enforce it — without calling it 'an API error'",
+          "I can explain why the same request works in Postman but fails in my browser code",
+          "I know what the Access-Control-Allow-Origin header does and which side of the request provides it",
+          "I know three approaches to resolving a CORS error depending on whether I control the API server",
+          "I've encountered a CORS error, identified the cause from the console message, and resolved it"
+        ],
+        code: {
+          lang: "HTML",
+          starter: `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><style>
+body{background:#0a0a0a;color:#fff;font-family:'IBM Plex Mono',monospace;padding:24px;font-size:12px;line-height:1.7}
+h2{color:#9a7ec8;margin:0 0 16px;font-size:16px}
+.section{margin-bottom:20px}
+.label{color:#888;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.result{background:#111;border:1px solid #2a2a2a;border-radius:6px;padding:12px;min-height:40px}
+.ok{color:#6dbf6d}.err{color:#ff6b6b}.pending{color:#888}
+button{font-family:inherit;font-size:11px;cursor:pointer;border:none;border-radius:4px;padding:8px 16px;margin-right:8px;margin-bottom:16px;background:#9a7ec8;color:#fff}
+button:hover{background:#b09ed8}
+</style></head><body>
+<h2>CORS in Practice</h2>
+<div class="section">
+  <div class="label">CORS-friendly API (includes Allow-Origin header)</div>
+  <button onclick="fetchOk()">Fetch from JSONPlaceholder</button>
+  <div id="result-ok" class="result"><span class="pending">Click to test...</span></div>
+</div>
+<div class="section">
+  <div class="label">Response headers</div>
+  <div id="headers" class="result"><span class="pending">Run a request to see headers...</span></div>
+</div>
+<script>
+async function fetchOk() {
+  const el = document.getElementById('result-ok');
+  const hEl = document.getElementById('headers');
+  el.innerHTML = '<span class="pending">Fetching...</span>';
+  try {
+    const res = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+    const corsHeader = res.headers.get('access-control-allow-origin');
+    const data = await res.json();
+    el.innerHTML = '<span class="ok">✓ ' + res.status + ' OK: ' + data.title.slice(0,55) + '...</span>';
+    hEl.innerHTML =
+      '<span class="ok">access-control-allow-origin: ' + (corsHeader || '(not exposed to JS)') + '</span><br>' +
+      '<span style="color:#888">content-type: ' + (res.headers.get('content-type') || 'unknown') + '</span>';
+  } catch(e) {
+    el.innerHTML = '<span class="err">✗ ' + e.message + '</span>';
+    hEl.innerHTML = '<span class="err">No headers — request failed</span>';
+  }
+}
+<\/script></body></html>`,
+          challenges: [
+            "Add a second fetch to a different JSONPlaceholder endpoint (/users/1) and display both results side by side",
+            "Add a section that shows all response headers using res.headers.forEach() — display each as a separate line",
+            "Add error handling that shows a different message for network failures vs HTTP errors (4xx/5xx status codes)",
+            "Look up Open-Meteo — a free, no-auth weather API with CORS enabled. Fetch the current temperature for a city and display it"
+          ]
+        }
       },
       {
         id: "4-4",
