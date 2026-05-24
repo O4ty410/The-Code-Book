@@ -37,7 +37,7 @@ You start with the same materials as everyone else.`,
         },
         callout2: {
           type: "focus",
-          label: "For Your Brain",
+          label: "How to Sit With This",
           text: "Don't try to memorise this. Just let the idea sit. You're building a mental picture, not a fact sheet. The detail comes later through doing."
         },
         hint: `Every website works the same way. Your browser asks. A server answers.
@@ -86,7 +86,7 @@ This is the mistake that catches most beginners early. Not because it's complica
         },
         callout2: {
           type: "focus",
-          label: "ADHD Note",
+          label: "Worth Slowing Down For",
           text: "<strong>Don't rush this section.</strong> The concept of sequential execution is small but everything else is built on top of it. Two minutes understanding this properly saves hours of confusion later."
         },
         hint: `Think of a recipe. "Serve the cake" before "bake the cake" — nothing comes out right. A computer does exactly what you say, in exactly the order you say it. No guessing. No common sense. No filling in the gaps.
@@ -448,9 +448,9 @@ You don't need to memorise the sequence. You need to understand why it exists. W
           label: "Why This Matters Practically",
           text: "Every time you wonder why your CSS isn't applying, or why your page loads slowly, or why a JavaScript change doesn't show up — the answer is somewhere in this rendering sequence. Understanding it turns debugging from guesswork into diagnosis."
         },
-        hint: `The sequence: HTML builds the DOM, CSS builds the CSSOM, they combine into a Render Tree, then Layout, then Paint.
+        hint: `The sequence: HTML builds a tree of elements (the DOM), CSS builds a matching set of style rules (the CSSOM), they combine into a render tree, the browser calculates layout, then draws the pixels.
 
-You don't need those names. What matters: the browser needs everything before it can draw anything — which is why loading order affects what the user sees and when.
+The formal names — DOM, CSSOM, Render Tree — are worth knowing, but the order matters more than the terminology. What matters: the browser needs everything before it can draw anything — which is why loading order affects what the user sees and when.
 
 <strong>Try this:</strong> Press F12, go to the Elements tab, click any element on the page. The highlighted entry in the panel is that element's position in the DOM.`,
         quiz: {
@@ -558,7 +558,7 @@ One thing that catches people early: linking a CSS file uses a <strong>&lt;link&
           label: "Structure Before Style",
           text: "Write HTML first, CSS second. Always. When you write both at once you context-switch between two different problems and solve neither well. Finish the structure completely, then style it. Every experienced developer works this way."
         },
-        hint: `If nothing appears when you open your file in a browser, check in this order: Did you save the file? Did you close all your tags? Does the CSS filename in your link tag match the actual file exactly (including capitalisation)? Is the CSS file in the same folder?
+        hint: `If nothing appears when you open your file in a browser, work through this list: the file is saved, all tags are closed, the CSS filename in your link tag matches the actual file exactly (including capitalisation), and the CSS file is in the same folder.
 
 <strong>Still fuzzy?</strong> Start from the bare scaffold and add one element at a time. That way you always know which change caused the problem.`,
         quiz: {
@@ -895,7 +895,7 @@ The goal isn't a polished portfolio. It's a page where you made real decisions w
         callout2: {
           type: "focus",
           label: "Make It Yours",
-          text: "The most common mistake with guided projects: leaving the template colours and changing only the text. Colour scheme is the first thing anyone notices. Pick two or three colours that feel right to you and apply them throughout. A page that looks like the template is a template. A page that looks like you is a portfolio piece."
+          text: "What turns a guided project into a portfolio piece: changing the colour scheme. Colour is the first thing anyone notices. Pick two or three colours that feel right to you and apply them throughout. A page that looks like the template is a template. A page that looks like you is a portfolio piece."
         },
         hint: `Not sure what to add as your own section? Three options that use what you've learned: a horizontal skills bar, a simple two-column projects grid, or a timeline.
 
@@ -1063,7 +1063,7 @@ The relationship between the three: HTML gives JavaScript something to attach to
         callout2: {
           type: "focus",
           label: "Expect the Difficulty",
-          text: "Floor 3 is harder than Floors 1 and 2. JavaScript is a programming language \u2014 it has logic, state, and behaviour that HTML and CSS don't. That difficulty is real and expected. Every developer found JavaScript harder than HTML. The ones who got through it weren't smarter \u2014 they were more patient with the confusion."
+          text: "Floor 3 is harder than Floors 1 and 2. JavaScript is a programming language \u2014 it has logic, state, and behaviour that HTML and CSS don't. That difficulty is real and expected. Every developer found JavaScript harder than HTML. The ones who got through it weren't smarter \u2014 they kept showing up when it was confusing."
         },
         hint: `The best way to start is to see it. Open any website, press F12, click the Console tab. Type: document.body.style.background = 'red' and press Enter. Watch the page change. You just ran JavaScript.
 
@@ -1641,7 +1641,7 @@ try...catch lets you handle errors you expect might happen — network requests 
           label: "try/catch for Expected Failures",
           text: "Use try/catch when you're calling code that might legitimately fail \u2014 parsing JSON, accessing an API, reading from localStorage. Don't wrap everything in try/catch; that suppresses bugs you need to see. Use it at the boundary where controlled failure is the correct response."
         },
-        hint: `When an error says something "is not a function", the thing you're calling isn't a function. It might be undefined (misspelled name), null, or a string. console.log it before calling it.
+        hint: `"Is not a function" usually means the thing you're calling is undefined, null, or a string — not the function you expected. That happens most often when a name is misspelled or a function didn't return a value. console.log it right before the failing line to see what's actually there.
 
 When the line number in the error seems wrong, the real error is usually a few lines earlier — the browser can only report where it noticed the problem, not where the bug is.
 
@@ -1703,7 +1703,7 @@ If you finish and want to go further: add the ability to edit an item in place, 
         callout2: {
           type: "focus",
           label: "State and DOM Must Stay in Sync",
-          text: "The todos array is the source of truth. The DOM is a visual representation of that array. Every time the array changes, the relevant part of the DOM must update to match. If you ever manually change the DOM without updating the array first, they get out of sync and bugs appear."
+          text: "The todos array is the source of truth. The DOM is a visual representation of that array. Every time the array changes, the relevant part of the DOM must update to match. Any time the DOM changes without the array changing first, they fall out of sync — and the array always wins."
         },
         hint: `If items appear but deletion doesn't work: check that each item has a unique id and the delete button is referencing that exact id.
 
@@ -1795,7 +1795,7 @@ It doesn't need to be impressive. It needs to be built.`,
         callout2: {
           type: "focus",
           label: "The 30-Minute Rule",
-          text: "Spend at least 30 minutes genuinely attempting a problem before searching for a solution. Not 30 minutes of staring \u2014 30 minutes of forming hypotheses, trying things, reading error messages, and narrowing down what's wrong. That process is the skill. The answer matters less than developing the ability to find it."
+          text: "Spend at least 30 minutes genuinely attempting a problem before searching for a solution. That means 30 minutes of forming hypotheses, trying things, reading error messages, and narrowing down what's wrong. That process is the skill. The answer matters less than developing the ability to find it."
         },
         hint: `If you're blank on what to build: don't try to invent something. Build the simplest version of something you already use. A tip calculator. A countdown timer. A word counter.
 
@@ -1832,7 +1832,7 @@ The quiz below will show you where the gaps are.`,
         callout2: {
           type: "focus",
           label: "Another Week Is Not Failure",
-          text: "Spending an extra week on Floor 3 because the foundations aren't solid is the smart choice. Rushing to Floor 4 with shaky fundamentals creates a debt that compounds. Every floor is built on the one before it. A solid Floor 3 makes Floor 4 easier. A shaky one makes every subsequent floor harder."
+          text: "Spending an extra week on Floor 3 is an investment, not a delay. Every floor is built on the one before it — going back now means the next floor opens up rather than fights you."
         },
         hint: `Three things to test before deciding you're ready.
 
@@ -2161,7 +2161,7 @@ Explain the code out loud, line by line. What is it actually doing? Not what you
       {
         id: "4-2",
         title: "Reading Documentation",
-        body: `Nobody reads documentation start to finish. That's not what it's for.
+        body: `Documentation isn't designed to be read start to finish. It's a reference, not a book.
 
 Documentation is a reference. You go to it when you need to know something specific — what arguments a function takes, what it returns, what happens when something fails. You don't need to understand everything on a page. You need the one part that answers your question.
 
@@ -2214,8 +2214,8 @@ Read the documentation before writing any code. The documentation is the contrac
         },
         callout2: {
           type: "focus",
-          label: "Status Codes That Bite Everyone",
-          text: "401 Unauthorized means you're not authenticated (no valid credentials sent). 403 Forbidden means you ARE authenticated but don't have permission for this resource. These two look similar but require completely different fixes. Getting them confused wastes time."
+          label: "401 vs 403 — Not the Same Fix",
+          text: "401 Unauthorized means you're not authenticated (no valid credentials sent). 403 Forbidden means you ARE authenticated but don't have permission for this resource. These two look similar but require completely different fixes."
         },
         hint: `Getting an error status code and don't know what it means? Search "HTTP [code]" — 404 means not found, 401 means unauthorised, 422 means the data you sent is invalid, 500 means the server failed.
 
@@ -2233,7 +2233,7 @@ Always check the API documentation for the exact format of the request — what 
       {
         id: "4-promises",
         title: "Understanding Promises",
-        body: `JavaScript is single-threaded: it can only do one thing at a time. When you make a network request, read a file, or set a timer, you can't just stop and wait — the page would freeze completely. So these operations are <strong>asynchronous</strong>: you start the operation, register what should happen when it's done, and move on. The result arrives later.\n\nA <strong>Promise</strong> is an object that represents the eventual result of an asynchronous operation. It exists in one of three states: <strong>pending</strong> (the operation hasn't finished), <strong>fulfilled</strong> (it succeeded, there's a value), or <strong>rejected</strong> (it failed, there's an error). Once a Promise moves from pending to either fulfilled or rejected, it stays there — it never changes state again.\n\nYou handle a fulfilled Promise with <code>.then()</code>, and a rejected one with <code>.catch()</code>:\n\n<pre style="background:#0f0f0f;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;overflow:auto"><code>fetch('https://api.example.com/data')\n  .then(response => response.json())   // runs when fetch succeeds\n  .then(data => console.log(data))     // runs when .json() resolves\n  .catch(error => console.error(error)) // runs if anything fails\n  .finally(() => setLoading(false));   // runs always</code></pre>\n\nEach <code>.then()</code> returns a new Promise, so you can chain them. Each link in the chain receives the return value of the previous one. If any link throws an error or rejects, the chain skips straight to <code>.catch()</code>.\n\n<strong>Promise.all()</strong> runs multiple Promises in parallel and waits for all of them: <code>const [users, posts] = await Promise.all([fetchUsers(), fetchPosts()])</code>. If any one rejects, the whole thing rejects. <strong>Promise.allSettled()</strong> waits for all to complete regardless of success or failure, giving you each result individually.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if a Promise chain has three .then() calls and the second one throws an error, what happens to the third .then()? Where does the error go?</div>\n\nUnderstanding this is essential before using <code>async/await</code> — the next section. async/await is syntax that makes Promise code easier to read, but it's built entirely on Promises underneath. When you <code>await</code> something, you're waiting for a Promise to settle. If it rejects, you get an error. Knowing this makes the next section click immediately.`,
+        body: `JavaScript is single-threaded: it can only do one thing at a time. When you make a network request, read a file, or set a timer, you can't just stop and wait — the page would freeze completely. So these operations are <strong>asynchronous</strong>: you start the operation, register what should happen when it's done, and move on. The result arrives later.\n\nWhen you ask for something that takes time, you can't just pause and wait — so instead you get back a <strong>Promise</strong>: a placeholder that says "I'll have the answer, it's just not ready yet." That placeholder has three possible states: <strong>pending</strong> (still waiting), <strong>fulfilled</strong> (it worked, here's the value), or <strong>rejected</strong> (it failed, here's the error). Once a Promise settles into fulfilled or rejected, it stays there — it never changes state again.\n\nYou handle a fulfilled Promise with <code>.then()</code>, and a rejected one with <code>.catch()</code>:\n\n<pre style="background:#0f0f0f;border-radius:6px;padding:12px;font-size:12px;line-height:1.7;overflow:auto"><code>fetch('https://api.example.com/data')\n  .then(response => response.json())   // runs when fetch succeeds\n  .then(data => console.log(data))     // runs when .json() resolves\n  .catch(error => console.error(error)) // runs if anything fails\n  .finally(() => setLoading(false));   // runs always</code></pre>\n\nEach <code>.then()</code> returns a new Promise, so you can chain them. Each link in the chain receives the return value of the previous one. If any link throws an error or rejects, the chain skips straight to <code>.catch()</code>.\n\n<strong>Promise.all()</strong> runs multiple Promises in parallel and waits for all of them: <code>const [users, posts] = await Promise.all([fetchUsers(), fetchPosts()])</code>. If any one rejects, the whole thing rejects. <strong>Promise.allSettled()</strong> waits for all to complete regardless of success or failure, giving you each result individually.\n\n<div class="inline-q"><span class="iq-label">Think about this:</span> Before you continue — if a Promise chain has three .then() calls and the second one throws an error, what happens to the third .then()? Where does the error go?</div>\n\nUnderstanding this is essential before using <code>async/await</code> — the next section. async/await is syntax that makes Promise code easier to read, but it's built entirely on Promises underneath. When you <code>await</code> something, you're waiting for a Promise to settle. If it rejects, you get an error. Knowing this makes the next section click immediately.`,
         callout: {
           type: "default",
           label: "Promises vs Callbacks",
@@ -2367,7 +2367,7 @@ Always wrap fetch calls in try...catch. Networks fail. APIs go down. Servers ret
         },
         callout2: {
           type: "focus",
-          label: "The Classic Mistake",
+          label: "Two Awaits, Not One",
           text: "fetch() returns a Response object, not the data. You need to call .json() on the response to parse the body — and .json() is also async. So you await fetch(), then await response.json(). Forgetting the second await gives you a Promise object where you expected data."
         },
         hint: `Getting undefined or a Promise object instead of data? Add console.log() immediately after each await line. If you see [object Promise], you're missing an await somewhere.
@@ -3508,11 +3508,11 @@ SQL is not difficult. The four operations you'll use constantly: SELECT (read), 
           label: "Indexes or Slow Queries",
           text: "A query that takes 50ms with 1,000 rows takes 50 seconds with 1,000,000 rows without an index. Database queries are almost always the performance bottleneck in web applications. Add an index on every column you filter by in a WHERE clause and every foreign key column."
         },
-        hint: `Query returning wrong or unexpected results? Run it directly in the database tool first — pgAdmin for PostgreSQL, Compass for MongoDB. If the query is wrong there, fix it there before touching the application code.
+        hint: `Query returning wrong or unexpected results? Try running it directly in the database tool — pgAdmin for PostgreSQL, Compass for MongoDB. If it's wrong there, you've isolated the problem to the SQL itself before any application code is involved.
 
 If the query works in the tool but fails in the app, the issue is how you're passing parameters. Check that the values are the right type and in the right order.
 
-<strong>Always test queries</strong> in isolation before calling them from routes. It separates "is my SQL right" from "is my route right".`,
+<strong>Test queries in isolation</strong> before calling them from routes. It separates "is my SQL right" from "is my route right".`,
         quiz: {
           question: "A bank transfer involves debiting one account and crediting another. The server crashes after the debit but before the credit. What database property prevents both accounts from ending up in an inconsistent state?",
           options: ["Indexing — fast lookups ensure both operations complete before timeout", "Atomicity — the transaction either fully completes or fully rolls back, never partially", "Isolation — other transactions can't see the debit until the credit is complete", "Durability — the data is written to disk immediately"],
@@ -3530,7 +3530,7 @@ The standard pattern: a user registers with an email and password. The password 
 
 The server then issues a JWT (JSON Web Token) that the browser stores and sends with every subsequent request. The token proves the user is authenticated without them logging in every time.
 
-<div class="inline-q"><span class="iq-label">Important:</span> Never store plain text passwords. If your database is ever compromised and passwords are plain text, every user is exposed. Hash with bcrypt. The hash cannot be reversed back to the original password. This is not optional.</div>
+<div class="inline-q"><span class="iq-label">Important:</span> Never store plain text passwords. If your database is ever compromised and passwords are plain text, every user is exposed. Hash with bcrypt. The hash cannot be reversed back to the original password. This is the standard across the industry — it's why data breaches that expose passwords are so much worse than those that don't.</div>
 
 Authorisation comes after authentication. Once you know who someone is, you check what they're allowed to do. That check is usually middleware — code that runs before the route handler and either allows or rejects the request.`,
         callout: {
