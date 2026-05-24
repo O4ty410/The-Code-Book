@@ -454,6 +454,7 @@ async function handleAuth() {
 }
 
 async function onUserLoggedIn() {
+  isLoggedIn = true;
   loadState();
   updateStreak();
   document.getElementById('auth-screen').style.display = 'none';
