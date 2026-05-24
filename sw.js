@@ -4,7 +4,7 @@
    Includes streak reminder notification support.
    ============================================================ */
 
-var CACHE = 'codebook-v13';
+var CACHE = 'codebook-v14';
 
 var SHELL = [
   './',
@@ -19,7 +19,6 @@ var SHELL = [
   './app.js',
   './curriculum.js',
   './glitch.js',
-  './glitch.css',
   './chaos.js',
   './chaos-levels.js',
   './levels.js',
@@ -33,6 +32,7 @@ var SHELL = [
   './overlays.min.css',
   './mobile.min.css',
   './cover.min.css',
+  './glitch.min.css',
 ];
 
 self.addEventListener('install', function(e) {
