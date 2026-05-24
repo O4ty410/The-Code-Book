@@ -63,7 +63,8 @@
     chaosPatternW: 0,   // canvas width when scanline pattern was built
     levelLoadT:  null,  // rAF timestamp when current level first rendered
     _cascPending: false,// true between loadLevel and first render frame
-    solveFlashT: null   // rAF timestamp when level was solved (surge effect)
+    solveFlashT: null,  // rAF timestamp when level was solved (surge effect)
+    _lastConnectT: 0    // throttle for pipe-connect sound
   };
 
   function makeGrid(n) {
@@ -718,7 +719,10 @@
       for (var c = 0; c < n; c++) {
         var key = r + ',' + c;
         if (pow[r][c]) {
-          if (!G.powered[key]) G.powFlash[key] = t;
+          if (!G.powered[key]) {
+            G.powFlash[key] = t;
+            if (t - G._lastConnectT > 80) { playPipeSound('connect'); G._lastConnectT = t; }
+          }
           G.powered[key] = true;
         } else {
           delete G.powered[key];
@@ -767,6 +771,80 @@
     G.animId = requestAnimationFrame(render);
   }
 
+  // ── Sound effects ────────────────────────────────────────
+  function playPipeSound(type) {
+    try {
+      var actx = typeof getAudioContext === 'function' ? getAudioContext() : null;
+      if (!actx) return;
+      var now = actx.currentTime;
+      if (G.mode === 'chaos') {
+        if (type === 'rotate') {
+          var o = actx.createOscillator(), g = actx.createGain();
+          o.type = 'sawtooth'; o.frequency.value = 200;
+          o.frequency.exponentialRampToValueAtTime(90, now + 0.05);
+          g.gain.setValueAtTime(0.07, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+          o.connect(g); g.connect(actx.destination);
+          o.start(now); o.stop(now + 0.08);
+        } else if (type === 'connect') {
+          var o = actx.createOscillator(), filt = actx.createBiquadFilter(), g = actx.createGain();
+          o.type = 'sawtooth'; o.frequency.value = 360;
+          filt.type = 'bandpass'; filt.frequency.value = 700; filt.Q.value = 4;
+          g.gain.setValueAtTime(0.11, now);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          o.connect(filt); filt.connect(g); g.connect(actx.destination);
+          o.start(now); o.stop(now + 0.20);
+        } else if (type === 'solve') {
+          [0, 3, 7, 10].forEach(function(s, i) {
+            var f = 110 * Math.pow(2, s / 12);
+            var o = actx.createOscillator(), g = actx.createGain();
+            o.type = 'sawtooth'; o.frequency.value = f;
+            var t0 = now + i * 0.09;
+            g.gain.setValueAtTime(0.09, t0);
+            g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.30);
+            o.connect(g); g.connect(actx.destination);
+            o.start(t0); o.stop(t0 + 0.32);
+          });
+        }
+      } else {
+        if (type === 'rotate') {
+          // Very soft breath — barely audible whisper
+          var o = actx.createOscillator(), g = actx.createGain();
+          o.type = 'sine'; o.frequency.value = 520;
+          o.frequency.exponentialRampToValueAtTime(390, now + 0.10);
+          g.gain.setValueAtTime(0, now);
+          g.gain.linearRampToValueAtTime(0.032, now + 0.012);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+          o.connect(g); g.connect(actx.destination);
+          o.start(now); o.stop(now + 0.16);
+        } else if (type === 'connect') {
+          // Gentle crystalline chime with slow fade
+          var o = actx.createOscillator(), g = actx.createGain();
+          o.type = 'sine'; o.frequency.value = 880;
+          o.frequency.exponentialRampToValueAtTime(1100, now + 0.05);
+          g.gain.setValueAtTime(0, now);
+          g.gain.linearRampToValueAtTime(0.038, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+          o.connect(g); g.connect(actx.destination);
+          o.start(now); o.stop(now + 0.58);
+        } else if (type === 'solve') {
+          // Soft ascending arpeggio, quiet and flowing
+          [0, 4, 7, 12].forEach(function(s, i) {
+            var f = 330 * Math.pow(2, s / 12);
+            var o = actx.createOscillator(), g = actx.createGain();
+            o.type = 'sine'; o.frequency.value = f;
+            var t0 = now + i * 0.13;
+            g.gain.setValueAtTime(0, t0);
+            g.gain.linearRampToValueAtTime(0.055, t0 + 0.03);
+            g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.70);
+            o.connect(g); g.connect(actx.destination);
+            o.start(t0); o.stop(t0 + 0.74);
+          });
+        }
+      }
+    } catch (_) {}
+  }
+
   // ── UI helpers ───────────────────────────────────────────
   function popEl(id) {
     var el = document.getElementById(id);
@@ -790,6 +868,7 @@
     if (cell.type === T_SOURCE || cell.type === T_TARGET || cell.type === T_EMPTY || G.solving) return;
 
     cell.rot = (cell.rot + 1) & 3;
+    playPipeSound('rotate');
     G.tapped = { r: row, c: col, t0: G.t };
     G.moves++;
     var el = document.getElementById('glitch-moves');
@@ -808,6 +887,7 @@
   }
 
   function onSolved() {
+    playPipeSound('solve');
     G.solveFlashT = G.t;
     var xp = Math.max(10, 60 - G.moves * 3);
     G.score += xp;

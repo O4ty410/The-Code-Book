@@ -516,6 +516,7 @@ async function signInWithGoogle() {
 async function signOut() {
   var confirmed = window.confirm('Sign out? Your local progress will be cleared. This cannot be undone.');
   if (!confirmed) return;
+  stopAllGameMusic();
   await saveToSupabase();
   if (window.sb) await window.sb.auth.signOut();
   currentUser = null;
@@ -3362,6 +3363,7 @@ function switchTopNav(tab, btn) {
     document.body.classList.add('game-mode');
   } else {
     document.body.classList.remove('game-mode');
+    stopAllGameMusic();
   }
 
   // Reset revision deck when navigating away
@@ -5884,6 +5886,15 @@ function hideAvatarPicker() {
 
 var _venusStopMusic = null;
 var _glitchStopMusic = null;
+var _venusMuted = false;
+var _glitchMuted = false;
+
+function stopAllGameMusic() {
+  if (_venusStopMusic) { _venusStopMusic(); _venusStopMusic = null; }
+  if (_glitchStopMusic) { _glitchStopMusic(); _glitchStopMusic = null; }
+  var ov = document.getElementById('gh-game-overlay');
+  if (ov) ov.remove();
+}
 
 function _buildGameAmbient(droneFreqs, lfoFreq, lfoDepth, noiseType, noiseFreq, noiseQ, noiseGainVal, masterGainVal, fadeIn) {
   try {
@@ -5950,6 +5961,7 @@ function renderGamePanel() {
   if (!panel) return;
   var _fi = panel.querySelector('iframe');
   if (_fi) { try { _fi.contentWindow.postMessage({ type: 'STOP_AUDIO' }, '*'); } catch(_) {} }
+  stopAllGameMusic();
   panel.innerHTML =
     '<div class="game-hub gh-lights-off" id="game-hub-root">' +
 
@@ -6220,6 +6232,7 @@ function launchGlitchMode() {
   var envBgVenus = '<div class="env-bg env-bg--venus" aria-hidden="true"><img class="env-bg-img" src="assets/venus-bg.jpg" alt=""><div class="env-bg-depth"></div><div class="env-bg-horizon"></div><div class="env-bg-vignette"></div></div>';
   var backBar = '<div class="glitch-back-bar" style="height:44px;background:#0a0a0a;border-bottom:1px solid rgba(0,200,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__glitchBack()" style="background:none;border:none;color:#00e5ff;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
+    '<button id="venus-music-btn" onclick="__toggleVenusMusic()" style="margin-left:auto;background:none;border:1px solid rgba(0,200,255,0.25);border-radius:3px;color:rgba(0,200,255,' + (_venusMuted ? '0.28' : '0.65') + ');font-size:11px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:4px 10px;">' + (_venusMuted ? '♪ OFF' : '♪ ON') + '</button>' +
     '</div>';
   var glitchBody =
     '<div class="glitch-game-body">' +
@@ -6254,8 +6267,22 @@ function launchGlitchMode() {
       '</div>' +
     '</div>';
 
-  if (_venusStopMusic) { _venusStopMusic(); }
-  _venusStopMusic = startVenusGameMusic();
+  if (_venusStopMusic) { _venusStopMusic(); _venusStopMusic = null; }
+  if (!_venusMuted) { _venusStopMusic = startVenusGameMusic(); }
+
+  window.__toggleVenusMusic = function() {
+    _venusMuted = !_venusMuted;
+    if (_venusMuted) {
+      if (_venusStopMusic) { _venusStopMusic(); _venusStopMusic = null; }
+    } else {
+      _venusStopMusic = startVenusGameMusic();
+    }
+    var btn = document.getElementById('venus-music-btn');
+    if (btn) {
+      btn.textContent = _venusMuted ? '♪ OFF' : '♪ ON';
+      btn.style.color = 'rgba(0,200,255,' + (_venusMuted ? '0.28' : '0.65') + ')';
+    }
+  };
 
   window.__glitchBack = function() {
     if (_venusStopMusic) { _venusStopMusic(); _venusStopMusic = null; }
@@ -6301,6 +6328,7 @@ function launchChaosMode() {
   var envBgChaos = '<div class="env-bg env-bg--chaos" aria-hidden="true"><img class="env-bg-img" src="assets/chaos-bg.jpg" alt=""><div class="env-bg-depth"></div><div class="env-bg-horizon"></div><div class="env-bg-vignette"></div></div>';
   var backBar = '<div class="glitch-back-bar" style="height:44px;background:#0a0208;border-bottom:1px solid rgba(255,40,80,0.18);display:flex;align-items:center;padding:0 14px;">' +
     '<button onclick="__chaosBack()" style="background:none;border:none;color:#ff4466;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
+    '<button id="glitch-music-btn" onclick="__toggleGlitchMusic()" style="margin-left:auto;background:none;border:1px solid rgba(255,40,80,0.25);border-radius:3px;color:rgba(255,68,102,' + (_glitchMuted ? '0.28' : '0.65') + ');font-size:11px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:4px 10px;">' + (_glitchMuted ? '♪ OFF' : '♪ ON') + '</button>' +
     '</div>';
   var chaosBody =
     '<div class="glitch-game-body">' +
@@ -6335,8 +6363,22 @@ function launchChaosMode() {
       '</div>' +
     '</div>';
 
-  if (_glitchStopMusic) { _glitchStopMusic(); }
-  _glitchStopMusic = startGlitchGameMusic();
+  if (_glitchStopMusic) { _glitchStopMusic(); _glitchStopMusic = null; }
+  if (!_glitchMuted) { _glitchStopMusic = startGlitchGameMusic(); }
+
+  window.__toggleGlitchMusic = function() {
+    _glitchMuted = !_glitchMuted;
+    if (_glitchMuted) {
+      if (_glitchStopMusic) { _glitchStopMusic(); _glitchStopMusic = null; }
+    } else {
+      _glitchStopMusic = startGlitchGameMusic();
+    }
+    var btn = document.getElementById('glitch-music-btn');
+    if (btn) {
+      btn.textContent = _glitchMuted ? '♪ OFF' : '♪ ON';
+      btn.style.color = 'rgba(255,68,102,' + (_glitchMuted ? '0.28' : '0.65') + ')';
+    }
+  };
 
   window.__chaosBack = function () {
     if (_glitchStopMusic) { _glitchStopMusic(); _glitchStopMusic = null; }
