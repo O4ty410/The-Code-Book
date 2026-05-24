@@ -1922,10 +1922,13 @@ if (!section) { return; }
     escHtml(savedCode) + '</textarea></div>' +
     '<div class="editor-preview-pane">' +
     '<div class="editor-preview-label">PREVIEW</div>' +
-    '<iframe class="editor-preview-iframe" id="preview-' + section.id + '"></iframe>' +
+    '<iframe class="editor-preview-iframe" id="preview-' + section.id + '" sandbox="allow-scripts"></iframe>' +
     '</div></div>' +
+    '<div class="editor-console-wrap">' +
+    '<div class="editor-console-bar"><span class="editor-console-label">OUTPUT</span>' +
+    '<button class="editor-console-clear" onclick="clearEditorConsole(\'' + section.id + '\')">clear</button></div>' +
     '<div class="editor-console" id="console-' + section.id + '">' +
-    '<div class="editor-console-line">&#9658; Click Run or edit to preview</div></div></div>' +
+    '<div class="editor-console-line muted">&#9658; Click Run or edit to see output</div></div></div></div>' +
     '<div class="editor-challenges"><div class="editor-challenge-label">TRY THESE</div>';
   var allChDone = true;
   ((editorDef && editorDef.challenges) || []).forEach(function(ch, ci) {
@@ -2627,8 +2630,11 @@ function loadTrackSection(trackId, si) {
     '<div class="editor-split"><div class="editor-code-pane"><div class="editor-line-nums" id="lines-' + section.id + '">1</div>' +
     '<textarea class="editor-textarea" id="editor-' + section.id + '" spellcheck="false" oninput="editorInput(\'' + section.id + '\')" onkeydown="handleEditorTab(event)">' + escHtml(savedCode) + '</textarea></div>' +
     '<div class="editor-preview-pane"><div class="editor-preview-label">PREVIEW</div>' +
-    '<iframe class="editor-preview-iframe" id="preview-' + section.id + '"></iframe></div></div>' +
-    '<div class="editor-console" id="console-' + section.id + '"><div class="editor-console-line">&#9658; Click Run or edit to preview</div></div></div>' +
+    '<iframe class="editor-preview-iframe" id="preview-' + section.id + '" sandbox="allow-scripts"></iframe></div></div>' +
+    '<div class="editor-console-wrap">' +
+    '<div class="editor-console-bar"><span class="editor-console-label">OUTPUT</span>' +
+    '<button class="editor-console-clear" onclick="clearEditorConsole(\'' + section.id + '\')">clear</button></div>' +
+    '<div class="editor-console" id="console-' + section.id + '"><div class="editor-console-line muted">&#9658; Click Run or edit to see output</div></div></div></div>' +
     '<div class="editor-challenges"><div class="editor-challenge-label">TRY THESE</div>';
   ((editorDef && editorDef.challenges) || []).forEach(function(ch, ci) {
     var chKey = section.id + '-ch-' + ci;
@@ -2904,6 +2910,26 @@ function retrySingleQuiz(sectionId, fi, si) {
 }
 
 var editorTimers = {};
+var _consoleListeners = {};
+
+var _CONSOLE_SHIM = '<script>(function(){' +
+  'function _send(t,a){' +
+    'var m=Array.prototype.slice.call(a).map(function(x){' +
+      'try{return typeof x==="object"?JSON.stringify(x,null,2):String(x);}catch(e){return"[object]";}' +
+    '}).join(" ");' +
+    'try{parent.postMessage({__cb:1,t:t,m:m},"*");}catch(e){}' +
+  '}' +
+  'window.console={' +
+    'log:function(){_send("log",arguments);},' +
+    'warn:function(){_send("warn",arguments);},' +
+    'error:function(){_send("err",arguments);},' +
+    'info:function(){_send("log",arguments);}' +
+  '};' +
+  'window.onerror=function(msg,src,line){' +
+    'try{parent.postMessage({__cb:1,t:"err",m:msg+" (line "+line+")"},"*");}catch(e){}' +
+    'return true;' +
+  '};' +
+'})();<\/script>';
 
 function initEditor(sectionId, defaultCode) {
   var ta = document.getElementById('editor-' + sectionId);
@@ -2925,7 +2951,6 @@ function editorInput(sectionId) {
 
 function runEditor(sectionId) {
   runEditorCode(sectionId);
-  markGate(sectionId, 'code');
 }
 
 function runEditorCode(sectionId) {
@@ -2933,13 +2958,103 @@ function runEditorCode(sectionId) {
   var frame = document.getElementById('preview-' + sectionId);
   var con = document.getElementById('console-' + sectionId);
   if (!ta || !frame) return;
-  try {
+
+  var found = findSectionById(sectionId);
+  var section = found ? FLOORS[found.fi].sections[found.si] : null;
+  var lang = (section && section.code && section.code.lang) ? section.code.lang.toLowerCase() : 'html';
+  var isJs = lang === 'javascript' || lang === 'js';
+
+  if (!isJs) {
     frame.srcdoc = ta.value;
-    if (con) con.innerHTML = '<div class="editor-console-line ok">&#9658; Rendered successfully</div>';
+    _consoleWrite(con, [{ t: 'ok', m: 'Rendered successfully' }]);
     markGate(sectionId, 'code');
-  } catch(e) {
-    if (con) con.innerHTML = '<div class="editor-console-line err">&#9658; Error: ' + e.message + '</div>';
+    return;
   }
+
+  // JS: inject console shim and capture output
+  var code = ta.value;
+  var isHtmlDoc = /^\s*(<(!DOCTYPE|html))/i.test(code);
+  var safeCode = code.replace(/<\/script>/gi, '<\\/script>');
+
+  var doc;
+  if (isHtmlDoc) {
+    // Inject shim right after <head> tag, or prepend if no <head>
+    if (/<head[^>]*>/i.test(code)) {
+      doc = code.replace(/(<head[^>]*>)/i, '$1' + _CONSOLE_SHIM);
+    } else {
+      doc = _CONSOLE_SHIM + code;
+    }
+  } else {
+    // Pure JS — wrap in minimal HTML runner
+    doc = '<!DOCTYPE html><html><head>' + _CONSOLE_SHIM + '</head>' +
+          '<body style="background:#0a0a0a;margin:0;padding:16px;">' +
+          '<script>' + safeCode + '<\/script></body></html>';
+  }
+
+  _consoleWrite(con, [{ t: 'muted', m: 'Running…' }]);
+
+  // Remove old listener before attaching new one
+  if (_consoleListeners[sectionId]) window.removeEventListener('message', _consoleListeners[sectionId]);
+
+  var target = (section && section.code && section.code.target != null) ? String(section.code.target).trim() : null;
+  var logLines = [];
+
+  _consoleListeners[sectionId] = function(e) {
+    if (!e.data || !e.data.__cb) return;
+    if (e.source !== frame.contentWindow) return;
+    logLines.push({ t: e.data.t, m: e.data.m });
+    _consoleWrite(con, logLines);
+    if (target !== null) {
+      var output = logLines.filter(function(l){ return l.t === 'log'; }).map(function(l){ return l.m; }).join('\n').trim();
+      if (output === target) markGate(sectionId, 'code');
+    } else {
+      markGate(sectionId, 'code');
+    }
+  };
+  window.addEventListener('message', _consoleListeners[sectionId]);
+
+  // HTML-doc JS sections with no target: mark gate + show success immediately (output goes to preview, not console)
+  if (isHtmlDoc && target === null) {
+    _consoleWrite(con, [{ t: 'ok', m: 'Rendered successfully' }]);
+    markGate(sectionId, 'code');
+  }
+
+  frame.srcdoc = doc;
+}
+
+function _consoleWrite(con, lines) {
+  if (!con) return;
+  if (!lines.length) { con.innerHTML = '<div class="editor-console-line muted">&#9658; No output</div>'; return; }
+  con.innerHTML = lines.map(function(l) {
+    var cls = l.t === 'err' ? 'err' : l.t === 'warn' ? 'warn' : l.t === 'ok' ? 'ok' : l.t === 'muted' ? 'muted' : 'log';
+    var icon = l.t === 'err' ? '&#10006;' : l.t === 'warn' ? '&#9888;' : '&#9658;';
+    var msg = escHtml(l.m);
+    if (l.t === 'err') msg = _friendlyError(msg);
+    return '<div class="editor-console-line ' + cls + '">' + icon + ' ' + msg + '</div>';
+  }).join('');
+  con.scrollTop = con.scrollHeight;
+}
+
+function _friendlyError(msg) {
+  var tips = [
+    [/is not defined/i, 'That variable or function hasn\'t been declared yet — check the spelling or where it\'s defined.'],
+    [/unexpected token/i, 'Syntax error — look for a missing bracket, comma, or semicolon.'],
+    [/cannot read prop/i, 'You\'re trying to use a property of something that doesn\'t exist.'],
+    [/is not a function/i, 'That\'s not a function — it might be a variable or a typo.'],
+    [/unexpected end/i, 'The code looks incomplete — check for a missing closing brace or bracket.'],
+    [/invalid or unexpected/i, 'Syntax error — something is in the wrong place.']
+  ];
+  for (var i = 0; i < tips.length; i++) {
+    if (tips[i][0].test(msg)) {
+      return '<span class="con-err-raw">' + msg + '</span><br><span class="con-err-tip">💡 ' + tips[i][1] + '</span>';
+    }
+  }
+  return msg;
+}
+
+function clearEditorConsole(sectionId) {
+  var con = document.getElementById('console-' + sectionId);
+  if (con) con.innerHTML = '<div class="editor-console-line muted">&#9658; Cleared</div>';
 }
 
 function resetEditor(sectionId) {
