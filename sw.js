@@ -4,11 +4,12 @@
    Includes streak reminder notification support.
    ============================================================ */
 
-var CACHE = 'codebook-v12';
+var CACHE = 'codebook-v13';
 
 var SHELL = [
   './',
   './index.html',
+  './manifest.json',
   './helpers.js',
   './canvas-bg.js',
   './srs.js',
