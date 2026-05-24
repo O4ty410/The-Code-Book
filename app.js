@@ -516,6 +516,7 @@ async function signInWithGoogle() {
 async function signOut() {
   var confirmed = window.confirm('Sign out? Your local progress will be cleared. This cannot be undone.');
   if (!confirmed) return;
+  stopAllGameMusic();
   await saveToSupabase();
   if (window.sb) await window.sb.auth.signOut();
   currentUser = null;
@@ -3362,6 +3363,7 @@ function switchTopNav(tab, btn) {
     document.body.classList.add('game-mode');
   } else {
     document.body.classList.remove('game-mode');
+    stopAllGameMusic();
   }
 
   // Reset revision deck when navigating away
@@ -5887,6 +5889,13 @@ var _glitchStopMusic = null;
 var _venusMuted = false;
 var _glitchMuted = false;
 
+function stopAllGameMusic() {
+  if (_venusStopMusic) { _venusStopMusic(); _venusStopMusic = null; }
+  if (_glitchStopMusic) { _glitchStopMusic(); _glitchStopMusic = null; }
+  var ov = document.getElementById('gh-game-overlay');
+  if (ov) ov.remove();
+}
+
 function _buildGameAmbient(droneFreqs, lfoFreq, lfoDepth, noiseType, noiseFreq, noiseQ, noiseGainVal, masterGainVal, fadeIn) {
   try {
     var actx = getAudioContext();
@@ -5952,6 +5961,7 @@ function renderGamePanel() {
   if (!panel) return;
   var _fi = panel.querySelector('iframe');
   if (_fi) { try { _fi.contentWindow.postMessage({ type: 'STOP_AUDIO' }, '*'); } catch(_) {} }
+  stopAllGameMusic();
   panel.innerHTML =
     '<div class="game-hub gh-lights-off" id="game-hub-root">' +
 

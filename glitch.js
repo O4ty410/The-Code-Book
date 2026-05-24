@@ -808,32 +808,37 @@
         }
       } else {
         if (type === 'rotate') {
+          // Very soft breath — barely audible whisper
           var o = actx.createOscillator(), g = actx.createGain();
-          o.type = 'triangle'; o.frequency.value = 700;
-          o.frequency.exponentialRampToValueAtTime(460, now + 0.06);
-          g.gain.setValueAtTime(0.08, now);
-          g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+          o.type = 'sine'; o.frequency.value = 520;
+          o.frequency.exponentialRampToValueAtTime(390, now + 0.10);
+          g.gain.setValueAtTime(0, now);
+          g.gain.linearRampToValueAtTime(0.032, now + 0.012);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
           o.connect(g); g.connect(actx.destination);
-          o.start(now); o.stop(now + 0.10);
+          o.start(now); o.stop(now + 0.16);
         } else if (type === 'connect') {
+          // Gentle crystalline chime with slow fade
           var o = actx.createOscillator(), g = actx.createGain();
-          o.type = 'sine'; o.frequency.value = 1320;
-          o.frequency.exponentialRampToValueAtTime(1760, now + 0.03);
-          g.gain.setValueAtTime(0.07, now);
-          g.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          o.type = 'sine'; o.frequency.value = 880;
+          o.frequency.exponentialRampToValueAtTime(1100, now + 0.05);
+          g.gain.setValueAtTime(0, now);
+          g.gain.linearRampToValueAtTime(0.038, now + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
           o.connect(g); g.connect(actx.destination);
-          o.start(now); o.stop(now + 0.24);
+          o.start(now); o.stop(now + 0.58);
         } else if (type === 'solve') {
+          // Soft ascending arpeggio, quiet and flowing
           [0, 4, 7, 12].forEach(function(s, i) {
-            var f = 440 * Math.pow(2, s / 12);
+            var f = 330 * Math.pow(2, s / 12);
             var o = actx.createOscillator(), g = actx.createGain();
             o.type = 'sine'; o.frequency.value = f;
-            var t0 = now + i * 0.10;
+            var t0 = now + i * 0.13;
             g.gain.setValueAtTime(0, t0);
-            g.gain.linearRampToValueAtTime(0.11, t0 + 0.02);
-            g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.38);
+            g.gain.linearRampToValueAtTime(0.055, t0 + 0.03);
+            g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.70);
             o.connect(g); g.connect(actx.destination);
-            o.start(t0); o.stop(t0 + 0.40);
+            o.start(t0); o.stop(t0 + 0.74);
           });
         }
       }
