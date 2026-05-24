@@ -2041,8 +2041,9 @@ input, textarea, select {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.5px;
+  padding: 12px 17px;
 }
 
 .auth-btn--google::before {
