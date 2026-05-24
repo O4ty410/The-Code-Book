@@ -1060,7 +1060,11 @@ function showFloorCelebration(floorIndex, newBadges) {
         '<button class="fc-btn-primary" onclick="closeCelebration()">' +
           (nextFloor ? 'Continue to Floor ' + nextFloor.id + ' \u2192' : 'You\'re done \u2713') +
         '</button>' +
-        '<button class="fc-btn-cert" onclick="generateFloorCertificate(' + floorIndex + ')">&#8681; Download Certificate</button>' +
+        (floorIndex === 1
+          ? '<button class="fc-btn-cert" onclick="issueAndShowCertificate(1)">&#8659; Download Certificate</button>' +
+            '<button class="fc-btn-download" onclick="downloadFloor2Code()">&#8681; Download Your Code</button>'
+          : '<button class="fc-btn-cert" onclick="generateFloorCertificate(' + floorIndex + ')">&#8681; Download Certificate</button>'
+        ) +
         '<button class="fc-btn-share" onclick="shareAchievement()">Share this achievement</button>' +
       '</div>' +
     '</div>';
@@ -1247,6 +1251,192 @@ function generateFloorCertificate(fi) {
     link.click();
   });
 }
+// ─────────────────────────────────────────────────────────────────
+// Floor 2 — Certificate + Code Download
+
+async function issueAndShowCertificate(fi) {
+  var floor = FLOORS[fi];
+  if (!floor) return;
+  var name = state.playerName || localStorage.getItem('codebook_player_name') || 'The Learner';
+  var ac = floor.color || '#7eb8c8';
+
+  function _makeId(uid) {
+    var u = (uid || '').replace(/-/g, '').slice(0, 6).toUpperCase() || 'GUEST';
+    var t = Date.now().toString(36).toUpperCase().slice(-5);
+    return 'TCB-F' + (fi + 1) + '-' + u + '-' + t;
+  }
+
+  if (!window.sb || !window.currentUser) {
+    var guestId = _makeId('');
+    showFloor2Certificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), guestId, ac);
+    return;
+  }
+
+  try {
+    var existing = await window.sb.from('floor_certificates')
+      .select('verification_id, issued_at')
+      .eq('user_id', window.currentUser.id)
+      .eq('floor_number', fi + 1)
+      .maybeSingle();
+
+    if (existing.data) {
+      var d = new Date(existing.data.issued_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      showFloor2Certificate(name, d, existing.data.verification_id, ac);
+      return;
+    }
+
+    var vid = _makeId(window.currentUser.id);
+    await window.sb.from('floor_certificates').insert({
+      user_id: window.currentUser.id,
+      floor_number: fi + 1,
+      verification_id: vid,
+      issued_at: new Date().toISOString()
+    });
+    showFloor2Certificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), vid, ac);
+  } catch (e) {
+    var fallbackId = _makeId(window.currentUser.id);
+    showFloor2Certificate(name, new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), fallbackId, ac);
+  }
+}
+
+function showFloor2Certificate(name, dateStr, verificationId, ac) {
+  ac = ac || '#7eb8c8';
+  var safeName = escHtml(name);
+  var css = [
+    '*{box-sizing:border-box;margin:0;padding:0;}',
+    'body{background:#08090c;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px;font-family:Inter,system-ui,sans-serif;}',
+    '.controls{display:flex;gap:12px;margin-bottom:32px;}',
+    '.btn-save{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:2.5px;background:none;border:1px solid ' + ac + '60;color:' + ac + ';padding:10px 22px;cursor:pointer;border-radius:3px;transition:background .15s;text-transform:uppercase;}',
+    '.btn-save:hover{background:' + ac + '18;}',
+    '.btn-close{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:2px;background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.3);padding:10px 18px;cursor:pointer;border-radius:3px;}',
+    '.cert{width:100%;max-width:860px;background:#0c0e12;border:1px solid ' + ac + '30;box-shadow:0 0 60px ' + ac + '0c,0 32px 80px rgba(0,0,0,.7);border-radius:2px;padding:68px 88px;position:relative;}',
+    '.c-tl,.c-tr,.c-bl,.c-br{position:absolute;width:26px;height:26px;}',
+    '.c-tl{top:18px;left:18px;border-top:1px solid ' + ac + '55;border-left:1px solid ' + ac + '55;}',
+    '.c-tr{top:18px;right:18px;border-top:1px solid ' + ac + '55;border-right:1px solid ' + ac + '55;}',
+    '.c-bl{bottom:18px;left:18px;border-bottom:1px solid ' + ac + '55;border-left:1px solid ' + ac + '55;}',
+    '.c-br{bottom:18px;right:18px;border-bottom:1px solid ' + ac + '55;border-right:1px solid ' + ac + '55;}',
+    '.cert-top{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:3.5px;color:rgba(255,255,255,.22);text-align:center;margin-bottom:52px;text-transform:uppercase;}',
+    '.cert-top em{color:' + ac + ';font-style:normal;opacity:.9;}',
+    'h1.cert-title{font-family:Inter,system-ui,sans-serif;font-size:28px;font-weight:300;color:rgba(255,255,255,.88);text-align:center;letter-spacing:.3px;margin-bottom:18px;}',
+    '.divider{width:100px;height:1px;background:linear-gradient(90deg,transparent,' + ac + '55,transparent);margin:0 auto 36px;}',
+    '.cert-sub{font-size:14px;color:rgba(255,255,255,.4);text-align:center;line-height:1.9;margin-bottom:4px;}',
+    '.cert-name{font-family:"Space Mono",monospace;font-size:24px;font-weight:700;color:' + ac + ';text-align:center;margin:18px 0 26px;letter-spacing:.5px;text-shadow:0 0 32px ' + ac + '45;}',
+    '.cert-body{font-size:14.5px;color:rgba(255,255,255,.48);text-align:center;line-height:1.95;max-width:580px;margin:0 auto 40px;}',
+    '.skills{border:1px solid rgba(255,255,255,.055);border-top:1px solid ' + ac + '30;background:rgba(255,255,255,.015);border-radius:3px;padding:22px 36px;margin-bottom:52px;}',
+    '.skills-hdr{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:3px;color:' + ac + ';opacity:.6;margin-bottom:16px;text-transform:uppercase;}',
+    '.skill{font-family:"Space Mono",monospace;font-size:12.5px;color:rgba(255,255,255,.6);margin-bottom:11px;display:flex;align-items:center;gap:10px;}',
+    '.skill:last-child{margin-bottom:0;}',
+    '.skill b{color:' + ac + ';}',
+    '.cert-footer{display:flex;justify-content:space-between;align-items:flex-end;padding-top:26px;border-top:1px solid rgba(255,255,255,.05);}',
+    '.fl,.fr{font-family:"Space Mono",monospace;}',
+    '.fr{text-align:right;}',
+    '.fl-lbl,.fr-lbl{font-size:8.5px;letter-spacing:2.5px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-bottom:5px;}',
+    '.fl-val,.fr-val{font-size:11.5px;color:rgba(255,255,255,.52);}',
+    '@media print{body{background:#0c0e12!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:0;}.controls{display:none!important;}.cert{max-width:100%;box-shadow:none;}}',
+    '@media(max-width:640px){.cert{padding:40px 24px;}h1.cert-title{font-size:20px;}.cert-name{font-size:17px;}.skills{padding:18px 20px;}}'
+  ].join('');
+
+  var html = '<!DOCTYPE html><html lang="en"><head>' +
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>Certificate — The Code Book</title>' +
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">' +
+    '<style>' + css + '</style></head><body>' +
+    '<div class="controls">' +
+      '<button class="btn-save" onclick="window.print()">&#8659;&nbsp; Save as PDF</button>' +
+      '<button class="btn-close" onclick="window.close()">Close</button>' +
+    '</div>' +
+    '<div class="cert">' +
+      '<div class="c-tl"></div><div class="c-tr"></div><div class="c-bl"></div><div class="c-br"></div>' +
+      '<div class="cert-top">THE CODE BOOK &nbsp;<em>❖</em>&nbsp; SIGNAL VERIFIED</div>' +
+      '<h1 class="cert-title">Certificate of Floor Completion</h1>' +
+      '<div class="divider"></div>' +
+      '<p class="cert-sub">This document reliably records that on ' + dateStr + ', the user known as:</p>' +
+      '<div class="cert-name">&gt;&nbsp;' + safeName + '</div>' +
+      '<p class="cert-body">Successfully ascended Floor 2, proving complete mastery over foundational computational thinking, conditional execution flows, and real-world system debugging.</p>' +
+      '<div class="skills">' +
+        '<div class="skills-hdr">Verified Skills</div>' +
+        '<div class="skill"><b>[&#10003;]</b> Primitive Variables &amp; Data Tracing</div>' +
+        '<div class="skill"><b>[&#10003;]</b> Nested Conditional Paths (If / Else Operations)</div>' +
+        '<div class="skill"><b>[&#10003;]</b> Syntax Glitch Detection &amp; Terminal Rectification</div>' +
+      '</div>' +
+      '<div class="cert-footer">' +
+        '<div class="fl"><div class="fl-lbl">Issued by</div><div class="fl-val">Sage, Core System Guide</div></div>' +
+        '<div class="fr"><div class="fr-lbl">Verification ID</div><div class="fr-val">' + verificationId + '</div></div>' +
+      '</div>' +
+    '</div></body></html>';
+
+  var w = window.open('', '_blank', 'width=1020,height=820,scrollbars=yes,resizable=yes');
+  if (w) {
+    w.document.write(html);
+    w.document.close();
+  } else {
+    var blob = new Blob([html], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'floor2-certificate.html';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+}
+
+function downloadFloor2Code() {
+  var floor = FLOORS[1];
+  if (!floor) return;
+  var name = state.playerName || localStorage.getItem('codebook_player_name') || 'Developer';
+  var dateStr = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  var codeSections = floor.sections.filter(function(s) { return s.code && s.code.starter; });
+
+  var exercisesHtml = codeSections.map(function(section) {
+    var saved = localStorage.getItem('code_' + section.id);
+    var code = saved || getEditorDefaults(section).code || '';
+    var attrCode = code.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    return '<article class="ex">' +
+      '<header class="ex-hdr">' +
+        '<span class="ex-id">' + section.id + '</span>' +
+        '<span class="ex-title">' + escHtml(section.title) + '</span>' +
+        (saved ? '<span class="ex-badge">YOUR CODE</span>' : '<span class="ex-badge ex-badge-default">STARTER</span>') +
+      '</header>' +
+      '<iframe class="ex-frame" srcdoc="' + attrCode + '" sandbox="allow-scripts" loading="lazy"></iframe>' +
+    '</article>';
+  }).join('');
+
+  var portfolioHtml = '<!DOCTYPE html><html lang="en"><head>' +
+    '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>Floor 2 Portfolio — ' + escHtml(name) + '</title>' +
+    '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Space+Mono&display=swap" rel="stylesheet">' +
+    '<style>' +
+      '*{box-sizing:border-box;margin:0;padding:0;}' +
+      'body{background:#0a0a0a;color:#fff;font-family:Inter,sans-serif;padding:0 0 60px;}' +
+      '.site-header{background:#0c0e12;border-bottom:1px solid rgba(255,255,255,.07);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;}' +
+      '.sh-brand{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.3);}' +
+      '.sh-meta{font-family:"Space Mono",monospace;font-size:11px;color:rgba(255,255,255,.25);text-align:right;}' +
+      '.sh-name{font-size:13px;color:#7eb8c8;font-weight:700;margin-bottom:3px;}' +
+      '.exercises{display:flex;flex-direction:column;gap:0;}' +
+      '.ex{border-bottom:1px solid rgba(255,255,255,.05);}' +
+      '.ex-hdr{display:flex;align-items:center;gap:14px;padding:16px 40px;background:#0d0f13;border-bottom:1px solid rgba(255,255,255,.05);}' +
+      '.ex-id{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.25);}' +
+      '.ex-title{font-family:"Space Mono",monospace;font-size:13px;font-weight:700;color:#7eb8c8;flex:1;}' +
+      '.ex-badge{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:2px;padding:3px 8px;border-radius:2px;background:rgba(126,184,200,.15);color:#7eb8c8;border:1px solid rgba(126,184,200,.25);}' +
+      '.ex-badge-default{background:rgba(255,255,255,.04);color:rgba(255,255,255,.3);border-color:rgba(255,255,255,.1);}' +
+      '.ex-frame{width:100%;height:520px;border:none;display:block;}' +
+    '</style></head><body>' +
+    '<header class="site-header">' +
+      '<div class="sh-brand">THE CODE BOOK &nbsp;&#10086;&nbsp; FLOOR 2</div>' +
+      '<div class="sh-meta"><div class="sh-name">' + escHtml(name) + '</div><div>Generated ' + dateStr + '</div></div>' +
+    '</header>' +
+    '<div class="exercises">' + exercisesHtml + '</div>' +
+    '</body></html>';
+
+  var blob = new Blob([portfolioHtml], { type: 'text/html' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'floor2-web-foundations.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 // ─────────────────────────────────────────────────────────────────
 
 function shareAchievement() {
