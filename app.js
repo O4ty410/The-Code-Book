@@ -377,6 +377,14 @@ function hidePrivacy() {
   document.getElementById('privacy-overlay').style.display = 'none';
 }
 
+function showTerms() {
+  document.getElementById('terms-overlay').style.display = 'flex';
+}
+
+function hideTerms() {
+  document.getElementById('terms-overlay').style.display = 'none';
+}
+
 async function handleForgotPassword() {
   var email = document.getElementById('auth-email').value.trim();
   var msg = document.getElementById('auth-message');
