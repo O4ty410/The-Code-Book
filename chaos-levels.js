@@ -113,6 +113,140 @@ window.ChaosLevels = [
     ],
     concept: 'SYSTEM FAILURE',
     conceptNote: 'Every safeguard corrupted. This is what real production debugging feels like.'
+  },
+
+  // GLITCH-06: Two REVERSE L-pipes in sequence, 5×5
+  // Path: [0,0]→[0,1]→[0,2]→[1,2]→[2,2]→[2,3]→[2,4]→[3,4]→[4,4]
+  // [0,2] REVERSE L: logical SW(1) → set visual NE(3); (3+2)&3=1 ✓
+  // [2,2] REVERSE L: logical NE(3) → set visual SW(1); (1+2)&3=3 ✓
+  { id: 'GLITCH-06', name: 'GLITCH-06', size: 5,
+    start: [0,0], end: [4,4],
+    pipes: [
+      [0,1,'I',0],   // need EW(1), start NS(0)
+      [0,2,'L',0],   // REVERSE — need visual NE(3), start ES(0)
+      [1,2,'I',1],   // need NS(0), start EW(1)
+      [2,2,'L',0],   // REVERSE — need visual SW(1), start ES(0)
+      [2,3,'I',0],   // need EW(1), start NS(0)
+      [2,4,'L',3],   // need SW(1), start NE(3)
+      [3,4,'I',1]    // need NS(0), start EW(1)
+    ],
+    modifiers: [
+      { type: 'reverse', cells: [[0,2], [2,2]] }
+    ],
+    concept: 'DOUBLE INVERSION',
+    conceptNote: 'Two reversed nodes in series — tracing through each one separately is the only reliable method.'
+  },
+
+  // GLITCH-07: Three CORRUPT pipes forming a tempting false path, 5×5
+  // Path: [0,0]→[1,0]→[2,0]→[3,0]→[4,0]→[4,1]→[4,2]→[4,3]→[4,4]
+  // [0,1],[0,2],[1,2] CORRUPT — fake top-right shortcut
+  { id: 'GLITCH-07', name: 'GLITCH-07', size: 5,
+    start: [0,0], end: [4,4],
+    pipes: [
+      [1,0,'I',1],   // need NS(0), start EW(1)
+      [2,0,'I',1],   // need NS(0), start EW(1)
+      [3,0,'I',1],   // need NS(0), start EW(1)
+      [4,0,'L',1],   // need NE(3), start SW(1)
+      [4,1,'I',0],   // need EW(1), start NS(0)
+      [4,2,'I',0],   // need EW(1), start NS(0)
+      [4,3,'I',0],   // need EW(1), start NS(0)
+      [0,1,'L',0],   // CORRUPT — ES visual, logically dead
+      [0,2,'I',0],   // CORRUPT — NS visual, logically dead
+      [1,2,'L',1]    // CORRUPT — SW visual, logically dead
+    ],
+    modifiers: [
+      { type: 'corrupt', cells: [[0,1], [0,2], [1,2]] }
+    ],
+    concept: 'DEAD CODE CLUSTER',
+    conceptNote: 'Three statements that look connected but carry nothing — code that runs but does nothing useful.'
+  },
+
+  // GLITCH-08: REVERSE T-pipe + CORRUPT red-herring, 5×5
+  // Path: [0,0]→[1,0]→[2,0]→[2,1]→[2,2]→[2,3]→[2,4]→[3,4]→[4,4]
+  // [2,2] T REVERSE: logical ESW(1) → set visual WNE(3); (3+2)&3=1 ✓
+  // [1,2] CORRUPT L: looks like T dead-branch connects upward
+  { id: 'GLITCH-08', name: 'GLITCH-08', size: 5,
+    start: [0,0], end: [4,4],
+    pipes: [
+      [1,0,'I',1],   // need NS(0), start EW(1)
+      [2,0,'L',1],   // need NE(3), start SW(1)
+      [2,1,'I',0],   // need EW(1), start NS(0)
+      [2,2,'T',0],   // REVERSE — need visual WNE(3), start NES(0)
+      [2,3,'I',0],   // need EW(1), start NS(0)
+      [2,4,'L',3],   // need SW(1), start NE(3)
+      [3,4,'I',1],   // need NS(0), start EW(1)
+      [1,2,'L',0]    // CORRUPT — ES visual, logically dead
+    ],
+    modifiers: [
+      { type: 'reverse', cells: [[2,2]] },
+      { type: 'corrupt', cells: [[1,2]] }
+    ],
+    concept: 'CORRUPTED JUNCTION',
+    conceptNote: 'An inverted branch point with a broken side path — fix the inversion first, then verify what actually connects.'
+  },
+
+  // GLITCH-09: Two REVERSE L-pipes + three FLICKER distractions, 6×6
+  // Path: [0,0]→[1,0]→[2,0]→[2,1]→[2,2]→[2,3]→[1,3]→[0,3]→[0,4]→[0,5]→[1,5]→[2,5]→[3,5]→[4,5]→[5,5]
+  // [2,3] REVERSE L: logical WN(2) → set visual ES(0); (0+2)&3=2 ✓
+  // [0,3] REVERSE L: logical ES(0) → set visual WN(2); (2+2)&3=0 ✓
+  { id: 'GLITCH-09', name: 'GLITCH-09', size: 6,
+    start: [0,0], end: [5,5],
+    pipes: [
+      [1,0,'I',1],   // need NS(0), start EW(1)
+      [2,0,'L',1],   // need NE(3), start SW(1)
+      [2,1,'I',0],   // need EW(1), start NS(0)
+      [2,2,'I',0],   // need EW(1), start NS(0)
+      [2,3,'L',1],   // REVERSE — need visual ES(0), start SW(1)
+      [1,3,'I',1],   // need NS(0), start EW(1)
+      [0,3,'L',1],   // REVERSE — need visual WN(2), start SW(1)
+      [0,4,'I',0],   // need EW(1), start NS(0)
+      [0,5,'L',3],   // need SW(1), start NE(3)
+      [1,5,'I',1],   // need NS(0), start EW(1)
+      [2,5,'I',1],   // need NS(0), start EW(1)
+      [3,5,'I',1],   // need NS(0), start EW(1)
+      [4,5,'I',1],   // need NS(0), start EW(1)
+      [1,1,'I',0],   // FLICKER — dead-end noise
+      [3,3,'L',0],   // FLICKER — dead-end noise
+      [4,2,'I',0]    // FLICKER — dead-end noise
+    ],
+    modifiers: [
+      { type: 'reverse', cells: [[2,3], [0,3]] },
+      { type: 'flicker', cells: [[1,1], [3,3], [4,2]] }
+    ],
+    concept: 'SIGNAL UNDER NOISE',
+    conceptNote: 'Three distractions hiding two inversions. Ignore the noise — trace the signal from source to target.'
+  },
+
+  // GLITCH-10: Two REVERSE + two CORRUPT + two FLICKER, 6×6, hardest level
+  // Path: [0,0]→[0,1]→[0,2]→[1,2]→[2,2]→[3,2]→[3,3]→[3,4]→[3,5]→[4,5]→[5,5]
+  // [0,2] REVERSE L: logical SW(1) → set visual NE(3); (3+2)&3=1 ✓
+  // [3,2] REVERSE L: logical NE(3) → set visual SW(1); (1+2)&3=3 ✓
+  // [1,3],[2,1] CORRUPT — plausible-looking dead paths
+  // [0,4],[4,3] FLICKER — visual distractions
+  { id: 'GLITCH-10', name: 'GLITCH-10', size: 6,
+    start: [0,0], end: [5,5],
+    pipes: [
+      [0,1,'I',0],   // need EW(1), start NS(0)
+      [0,2,'L',0],   // REVERSE — need visual NE(3), start ES(0)
+      [1,2,'I',1],   // need NS(0), start EW(1)
+      [2,2,'I',1],   // need NS(0), start EW(1)
+      [3,2,'L',0],   // REVERSE — need visual SW(1), start ES(0)
+      [3,3,'I',0],   // need EW(1), start NS(0)
+      [3,4,'I',0],   // need EW(1), start NS(0)
+      [3,5,'L',3],   // need SW(1), start NE(3)
+      [4,5,'I',1],   // need NS(0), start EW(1)
+      [1,3,'L',0],   // CORRUPT — ES visual, logically dead
+      [2,1,'I',0],   // CORRUPT — NS visual, logically dead
+      [0,4,'I',0],   // FLICKER — noise
+      [4,3,'L',3]    // FLICKER — noise
+    ],
+    modifiers: [
+      { type: 'reverse', cells: [[0,2], [3,2]] },
+      { type: 'corrupt', cells: [[1,3], [2,1]] },
+      { type: 'flicker', cells: [[0,4], [4,3]] }
+    ],
+    concept: 'MAXIMUM ENTROPY',
+    conceptNote: 'Every modifier active, every trick combined. Real debugging rarely has just one thing wrong at once.'
   }
 
 ];

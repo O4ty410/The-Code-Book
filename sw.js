@@ -4,7 +4,7 @@
    Includes streak reminder notification support.
    ============================================================ */
 
-var CACHE = 'codebook-v11';
+var CACHE = 'codebook-v12';
 
 var SHELL = [
   './',
@@ -17,6 +17,13 @@ var SHELL = [
   './mobile.js',
   './app.js',
   './curriculum.js',
+  './glitch.js',
+  './glitch.css',
+  './chaos.js',
+  './chaos-levels.js',
+  './levels.js',
+  './lore.js',
+  './supabase-client.js',
   './variables.min.css',
   './animations.min.css',
   './layout.min.css',
