@@ -43,19 +43,32 @@ function fmtTime(secs) {
 
 // ── Canvas draw helpers ────────────────────────────────────────────────────────
 function drawSpaceBg(ctx, W, H) {
-  // Nebula blobs for depth
-  const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, '#020512');
-  bg.addColorStop(1, '#020818');
+  const bg = ctx.createLinearGradient(0, 0, W * 0.3, H);
+  bg.addColorStop(0, '#030820');
+  bg.addColorStop(0.5, '#020614');
+  bg.addColorStop(1, '#060318');
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  const nebulae = [
-    { x: W * 0.12, y: H * 0.20, rx: 220, ry: 130, c: 'rgba(30,15,80,0.18)' },
-    { x: W * 0.82, y: H * 0.12, rx: 180, ry: 100, c: 'rgba(8,40,100,0.16)' },
-    { x: W * 0.55, y: H * 0.75, rx: 240, ry: 130, c: 'rgba(20,12,65,0.14)' },
-  ];
-  nebulae.forEach(({ x, y, rx, ry, c }) => {
+  // Milky Way diagonal band
+  const mw = ctx.createLinearGradient(0, H * 0.65, W * 0.65, H * 0.1);
+  mw.addColorStop(0, 'rgba(0,0,0,0)');
+  mw.addColorStop(0.35, 'rgba(45,35,90,0.13)');
+  mw.addColorStop(0.5, 'rgba(55,42,115,0.20)');
+  mw.addColorStop(0.65, 'rgba(45,35,90,0.13)');
+  mw.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = mw;
+  ctx.fillRect(0, 0, W, H);
+
+  // Rich colorful nebulae
+  [
+    { x: W*0.08, y: H*0.18, rx: 300, ry: 170, c: 'rgba(65,20,130,0.22)' },
+    { x: W*0.80, y: H*0.14, rx: 240, ry: 140, c: 'rgba(12,55,155,0.20)' },
+    { x: W*0.52, y: H*0.74, rx: 320, ry: 175, c: 'rgba(22,14,95,0.18)' },
+    { x: W*0.26, y: H*0.58, rx: 200, ry: 115, c: 'rgba(0,65,110,0.16)' },
+    { x: W*0.87, y: H*0.72, rx: 220, ry: 120, c: 'rgba(85,22,110,0.17)' },
+    { x: W*0.44, y: H*0.34, rx: 260, ry: 140, c: 'rgba(18,55,80,0.11)' },
+  ].forEach(({ x, y, rx, ry, c }) => {
     const g = ctx.createRadialGradient(x, y, 0, x, y, Math.max(rx, ry));
     g.addColorStop(0, c);
     g.addColorStop(1, 'rgba(0,0,0,0)');
@@ -421,6 +434,212 @@ function drawTinyRocket(ctx, cx, cy, alpha, scale) {
   ctx.restore();
 }
 
+function drawSunGlow(ctx, W, H) {
+  const sx = W * 0.04, sy = -H * 0.12;
+  const corona = ctx.createRadialGradient(sx, sy, 0, sx, sy, H * 0.60);
+  corona.addColorStop(0,    'rgba(255,248,200,0.25)');
+  corona.addColorStop(0.12, 'rgba(255,220,100,0.09)');
+  corona.addColorStop(0.35, 'rgba(255,180,50,0.04)');
+  corona.addColorStop(1,    'rgba(0,0,0,0)');
+  ctx.fillStyle = corona;
+  ctx.fillRect(0, 0, W, H);
+  const dir = ctx.createLinearGradient(0, 0, W * 0.6, H * 0.5);
+  dir.addColorStop(0, 'rgba(255,245,180,0.05)');
+  dir.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = dir;
+  ctx.fillRect(0, 0, W, H);
+  const fa = Math.atan2(H * 0.55 - sy, W * 0.55 - sx);
+  [[0.28,22,0.07],[0.44,14,0.05],[0.60,32,0.038],[0.78,9,0.06]].forEach(([fd,fr,fo]) => {
+    const fx = sx + Math.cos(fa) * fd * W;
+    const fy = sy + Math.sin(fa) * fd * W;
+    const fg = ctx.createRadialGradient(fx, fy, 0, fx, fy, fr);
+    fg.addColorStop(0, `rgba(255,240,160,${fo})`);
+    fg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = fg;
+    ctx.beginPath(); ctx.arc(fx, fy, fr, 0, Math.PI * 2); ctx.fill();
+  });
+}
+
+function drawLetterbox(ctx, W, H) {
+  const bh = Math.round(H * 0.092);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, bh);
+  ctx.fillRect(0, H - bh, W, bh);
+}
+
+function drawEdgeVignette(ctx, W, H, intensity) {
+  const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.22, W / 2, H / 2, H * 0.76);
+  vg.addColorStop(0, 'rgba(0,0,0,0)');
+  vg.addColorStop(1, `rgba(0,0,0,${(intensity * 0.72).toFixed(3)})`);
+  ctx.fillStyle = vg;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawCockpitFrame(ctx, W, H, alpha) {
+  if (alpha < 0.01) return;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  const fw = W * 0.055, th = H * 0.065, bh = H * 0.20;
+  const fc = 'rgba(24,36,52,0.97)', rim = 'rgba(0,190,255,0.28)';
+
+  ctx.fillStyle = fc;
+  ctx.fillRect(0, 0, W, th);
+  ctx.fillRect(0, H - bh, W, bh);
+  ctx.fillRect(0, th, fw, H - th - bh);
+  ctx.fillRect(W - fw, th, fw, H - th - bh);
+
+  ctx.strokeStyle = rim; ctx.lineWidth = 1.5;
+  ctx.shadowBlur = 8; ctx.shadowColor = 'rgba(0,200,255,0.30)';
+  ctx.strokeRect(fw + 1, th + 1, W - fw * 2 - 2, H - th - bh - 2);
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = rim; ctx.fillRect(0, H - bh, W, 1.5);
+
+  const stW = [W * 0.22, W * 0.78];
+  const sbw = fw * 0.55, stw = fw * 0.28;
+  stW.forEach((sx) => {
+    ctx.fillStyle = 'rgba(18,30,46,0.98)';
+    ctx.beginPath();
+    ctx.moveTo(sx - stw, th); ctx.lineTo(sx + stw, th);
+    ctx.lineTo(sx + sbw, H - bh); ctx.lineTo(sx - sbw, H - bh);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = rim; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(sx, th + 2); ctx.lineTo(sx, H - bh - 2); ctx.stroke();
+  });
+
+  [
+    { x: fw+22, c:'#22c55e', l:'SYS' }, { x: fw+50, c:'#22c55e', l:'NAV' },
+    { x: fw+78, c:'#f59e0b', l:'THR' }, { x: W-fw-78, c:'#22c55e', l:'O2' },
+    { x: W-fw-50, c:'#22c55e', l:'FUL' }, { x: W-fw-22, c:'#22c55e', l:'ENG' },
+  ].forEach(({ x, c, l }) => {
+    ctx.fillStyle = c; ctx.shadowBlur = 5; ctx.shadowColor = c;
+    ctx.beginPath(); ctx.arc(x, th * 0.42, 3.5, 0, Math.PI * 2); ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(200,220,255,0.50)';
+    ctx.font = '6px monospace'; ctx.textAlign = 'center';
+    ctx.fillText(l, x, th * 0.80);
+  });
+
+  const panelY = H - bh, gr = bh * 0.30;
+  [
+    { x:0.18, v:0.82, c:'#22c55e',  l:'VEL'  },
+    { x:0.33, v:0.74, c:'#14b8a6',  l:'FUEL' },
+    { x:0.50, v:0.68, c:'#f59e0b',  l:'THR'  },
+    { x:0.67, v:0.91, c:'#22c55e',  l:'O2'   },
+    { x:0.82, v:0.58, c:'#60a5fa',  l:'TMP'  },
+  ].forEach(({ x, v, c, l }) => {
+    const gx = W * x, gy = panelY + bh * 0.44;
+    ctx.fillStyle = 'rgba(8,18,32,0.92)';
+    ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(50,80,120,0.8)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(gx, gy, gr, 0, Math.PI * 2); ctx.stroke();
+    const sa = -Math.PI * 0.85, ea = sa + v * Math.PI * 1.7;
+    ctx.strokeStyle = c; ctx.lineWidth = 3; ctx.shadowBlur = 6; ctx.shadowColor = c;
+    ctx.beginPath(); ctx.arc(gx, gy, gr * 0.72, sa, ea); ctx.stroke();
+    ctx.shadowBlur = 0;
+    const na = sa + v * Math.PI * 1.7;
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(gx, gy);
+    ctx.lineTo(gx + Math.cos(na) * gr * 0.60, gy + Math.sin(na) * gr * 0.60); ctx.stroke();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(gx, gy, 2, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(150,200,255,0.65)';
+    ctx.font = `${Math.max(7, gr * 0.38)}px monospace`; ctx.textAlign = 'center';
+    ctx.fillText(l, gx, panelY + bh * 0.88);
+  });
+
+  [
+    { bx: fw * 0.5,    labels: ['NAV','MAP','SYS'] },
+    { bx: W - fw * 0.5, labels: ['COM','AUX','PWR'] },
+  ].forEach(({ bx, labels }) => {
+    labels.forEach((lbl, i) => {
+      const by = panelY + bh * (0.22 + i * 0.30);
+      ctx.fillStyle = 'rgba(8,20,38,0.95)';
+      ctx.fillRect(bx - fw * 0.38, by - 6, fw * 0.76, 13);
+      ctx.strokeStyle = 'rgba(50,90,130,0.7)'; ctx.lineWidth = 1;
+      ctx.strokeRect(bx - fw * 0.38, by - 6, fw * 0.76, 13);
+      ctx.fillStyle = 'rgba(0,190,255,0.55)';
+      ctx.font = '7px monospace'; ctx.textAlign = 'center';
+      ctx.fillText(lbl, bx, by + 3);
+    });
+  });
+
+  ctx.restore();
+}
+
+function drawTargetingReticle(ctx, cx, cy, r, alpha, t) {
+  if (alpha < 0.01) return;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  const pulse = 0.65 + 0.35 * Math.sin(t * 3.8);
+  const ring  = r + 18;
+
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(t * 0.75);
+  ctx.strokeStyle = `rgba(0,220,255,${(0.60 * pulse).toFixed(3)})`;
+  ctx.lineWidth = 1.8; ctx.shadowBlur = 7; ctx.shadowColor = 'rgba(0,210,255,0.45)';
+  ctx.beginPath(); ctx.arc(0, 0, ring, 0, Math.PI * 1.55); ctx.stroke();
+  ctx.shadowBlur = 0; ctx.restore();
+
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(-t * 0.45);
+  ctx.strokeStyle = `rgba(0,180,255,${(0.30 * pulse).toFixed(3)})`;
+  ctx.lineWidth = 1; ctx.setLineDash([5,5]);
+  ctx.beginPath(); ctx.arc(0, 0, ring * 1.30, 0, Math.PI * 2); ctx.stroke();
+  ctx.setLineDash([]); ctx.restore();
+
+  const bd = ring + 10, bs = 14;
+  ctx.strokeStyle = `rgba(0,230,255,${(0.85 * pulse).toFixed(3)})`;
+  ctx.lineWidth = 2;
+  [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([dx,dy]) => {
+    const bx = cx + dx * bd * 0.72, by = cy + dy * bd * 0.72;
+    ctx.beginPath();
+    ctx.moveTo(bx + dx * bs, by); ctx.lineTo(bx, by); ctx.lineTo(bx, by + dy * bs);
+    ctx.stroke();
+  });
+
+  ctx.fillStyle = `rgba(0,220,255,${(0.90 * pulse).toFixed(3)})`;
+  ctx.font = 'bold 9px monospace'; ctx.textAlign = 'center';
+  ctx.shadowBlur = 5; ctx.shadowColor = 'rgba(0,200,255,0.5)';
+  ctx.fillText('TARGET LOCKED', cx, cy - ring - 12);
+  ctx.shadowBlur = 0;
+  ctx.fillStyle = 'rgba(0,190,255,0.75)';
+  ctx.font = '9px monospace';
+  ctx.fillText('MARS', cx, cy + ring + 16);
+  ctx.restore();
+}
+
+function drawRocketOnTrajectory(ctx, ex, ey, mx, my, progress, t) {
+  if (progress < 0.005 || progress > 0.995) return;
+  const p   = Math.max(0, Math.min(1, progress));
+  const cpx = (ex + mx) / 2, cpy = Math.min(ey, my) - 55;
+  const dp  = 0.012;
+  const p1  = Math.max(0, p - dp), p2 = Math.min(1, p + dp);
+  function bez(pp) {
+    return [(1-pp)*(1-pp)*ex + 2*(1-pp)*pp*cpx + pp*pp*mx,
+            (1-pp)*(1-pp)*ey + 2*(1-pp)*pp*cpy + pp*pp*my];
+  }
+  const [rx, ry]   = bez(p);
+  const [x1, y1]   = bez(p1);
+  const [x2, y2]   = bez(p2);
+  const angle = Math.atan2(y2 - y1, x2 - x1) + Math.PI / 2;
+
+  // Exhaust trail
+  for (let i = 1; i <= 14; i++) {
+    const [tx, ty] = bez(Math.max(0, p - i * 0.022));
+    const ta  = (1 - i / 14) * 0.40;
+    const tr  = Math.max(0.4, 3.8 - i * 0.25);
+    ctx.fillStyle = i < 4 ? `rgba(255,230,120,${ta})` : i < 8 ? `rgba(220,110,30,${ta})` : `rgba(120,38,8,${ta * 0.7})`;
+    ctx.beginPath(); ctx.arc(tx, ty, tr, 0, Math.PI * 2); ctx.fill();
+  }
+
+  ctx.save();
+  ctx.translate(rx, ry);
+  ctx.rotate(angle);
+  drawTinyRocket(ctx, 0, 0, 1, 1.8);
+  ctx.restore();
+}
+
 function drawOrbitPath(ctx, cx, cy, rx, ry, angle, t) {
   const pulse = 0.55 + 0.45 * Math.sin(t * 1.8);
   ctx.save();
@@ -437,7 +656,7 @@ function drawOrbitPath(ctx, cx, cy, rx, ry, angle, t) {
   ctx.restore();
 }
 
-function drawTrajectory(ctx, ex, ey, mx, my, progress, t) {
+function drawTrajectory(ctx, ex, ey, mx, my, progress, t, showDot = true) {
   const pulse = 0.70 + 0.30 * Math.sin(t * 2.5);
   const cpx   = (ex + mx) / 2;
   const cpy   = Math.min(ey, my) - 55;
@@ -462,20 +681,22 @@ function drawTrajectory(ctx, ex, ey, mx, my, progress, t) {
   ctx.stroke();
   ctx.setLineDash([]);
   // travel dot (quadratic interpolation)
-  const p  = Math.max(0, Math.min(1, progress));
-  const dx = (1-p)*(1-p)*ex + 2*(1-p)*p*cpx + p*p*mx;
-  const dy = (1-p)*(1-p)*ey + 2*(1-p)*p*cpy + p*p*my;
-  const dg = ctx.createRadialGradient(dx, dy, 0, dx, dy, 18);
-  dg.addColorStop(0, `rgba(0,230,255,${(0.45*pulse).toFixed(3)})`);
-  dg.addColorStop(1, 'rgba(0,230,255,0)');
-  ctx.fillStyle = dg;
-  ctx.beginPath();
-  ctx.arc(dx, dy, 18, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(dx, dy, 4, 0, Math.PI * 2);
-  ctx.fillStyle = `rgba(255,255,255,${(0.95*pulse).toFixed(3)})`;
-  ctx.fill();
+  if (showDot) {
+    const p  = Math.max(0, Math.min(1, progress));
+    const dx = (1-p)*(1-p)*ex + 2*(1-p)*p*cpx + p*p*mx;
+    const dy = (1-p)*(1-p)*ey + 2*(1-p)*p*cpy + p*p*my;
+    const dg = ctx.createRadialGradient(dx, dy, 0, dx, dy, 18);
+    dg.addColorStop(0, `rgba(0,230,255,${(0.45*pulse).toFixed(3)})`);
+    dg.addColorStop(1, 'rgba(0,230,255,0)');
+    ctx.fillStyle = dg;
+    ctx.beginPath();
+    ctx.arc(dx, dy, 18, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(dx, dy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${(0.95*pulse).toFixed(3)})`;
+    ctx.fill();
+  }
   ctx.restore();
 }
 
@@ -703,78 +924,63 @@ export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
       const isWatch     = tMode === 'watch';
 
       if (isWatch && watchMode === 'pov') {
-        // ── POV MODE: stars rush toward viewer (perspective projection) ──────
         drawSpaceBg(ctx, W, H);
         const povStars = povStarsRef.current;
         const cx2 = W / 2, cy2 = H / 2;
-        const speed = 250 + prog * 400; // accelerates toward Mars
+        const speed = 280 + prog * 450;
+
         ctx.save();
         povStars.forEach((ps) => {
           ps.pz = ps.z;
           ps.z -= delta * speed;
           if (ps.z <= 0) {
-            ps.x  = (Math.random() - 0.5) * W;
-            ps.y  = (Math.random() - 0.5) * H;
-            ps.z  = W;
-            ps.pz = W;
+            ps.x = (Math.random() - 0.5) * W;
+            ps.y = (Math.random() - 0.5) * H;
+            ps.z = W; ps.pz = W;
           }
           const sx  = (ps.x / ps.z)  * W + cx2;
           const sy  = (ps.y / ps.z)  * H + cy2;
-          const px  = (ps.x / ps.pz) * W + cx2;
-          const py  = (ps.y / ps.pz) * H + cy2;
-          const sz  = Math.max(0.5, (1 - ps.z / W) * 3.5);
-          const sa  = Math.min(1, (1 - ps.z / W) * 1.6);
+          const px2 = (ps.x / ps.pz) * W + cx2;
+          const py2 = (ps.y / ps.pz) * H + cy2;
+          const depth = 1 - ps.z / W;
+          const sz  = Math.max(0.3, depth * 4.5);
+          const sa  = Math.min(1, depth * 2.2);
+          const rr2 = 200 + Math.floor(depth * 55);
+          const gg2 = 220 + Math.floor(depth * 35);
           ctx.beginPath();
-          ctx.moveTo(px, py);
-          ctx.lineTo(sx, sy);
-          ctx.strokeStyle = `rgba(210,235,255,${sa.toFixed(3)})`;
+          ctx.moveTo(px2, py2); ctx.lineTo(sx, sy);
+          ctx.strokeStyle = `rgba(${rr2},${gg2},255,${sa.toFixed(3)})`;
           ctx.lineWidth = sz;
           ctx.stroke();
         });
         ctx.restore();
 
-        // cockpit frame overlay
-        const frameA = Math.min(1, prog * 3);
-        if (frameA > 0.01) {
-          ctx.save();
-          ctx.globalAlpha = frameA * 0.55;
-          // HUD corners
-          const pad = 28;
-          [
-            [pad, pad, 40, 0, 0, 40],
-            [W - pad, pad, -40, 0, 0, 40],
-            [pad, H - pad, 40, 0, 0, -40],
-            [W - pad, H - pad, -40, 0, 0, -40],
-          ].forEach(([x, y, dx1, dy1, dx2, dy2]) => {
-            ctx.strokeStyle = 'rgba(0,220,255,0.75)';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(x + dx1, y + dy1); ctx.lineTo(x, y); ctx.lineTo(x + dx2, y + dy2);
-            ctx.stroke();
-          });
-          // crosshair
-          const chR = 22;
-          ctx.strokeStyle = 'rgba(0,220,255,0.40)';
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.arc(cx2, cy2, chR, 0, Math.PI * 2);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(cx2 - chR - 10, cy2); ctx.lineTo(cx2 + chR + 10, cy2);
-          ctx.moveTo(cx2, cy2 - chR - 10); ctx.lineTo(cx2, cy2 + chR + 10);
-          ctx.stroke();
-          ctx.globalAlpha = 1;
-          ctx.restore();
+        // Edge vignette
+        drawEdgeVignette(ctx, W, H, 0.5 + prog * 0.35);
+
+        // Chromatic aberration on edges
+        const caG1 = ctx.createRadialGradient(W * 0.06, H / 2, 0, W * 0.06, H / 2, W * 0.38);
+        caG1.addColorStop(0, 'rgba(255,0,0,0.045)'); caG1.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = caG1; ctx.fillRect(0, 0, W, H);
+        const caG2 = ctx.createRadialGradient(W * 0.94, H / 2, 0, W * 0.94, H / 2, W * 0.38);
+        caG2.addColorStop(0, 'rgba(0,0,255,0.045)'); caG2.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = caG2; ctx.fillRect(0, 0, W, H);
+
+        // Mars approaching center
+        const mProg  = Math.max(0, (prog - 0.04) / 0.96);
+        const marsRPov = lerp(2.5, Math.min(W, H) * 0.20, mProg);
+        drawMars(ctx, cx2, cy2, marsRPov, t);
+
+        // Targeting reticle
+        if (mProg > 0.08) {
+          drawTargetingReticle(ctx, cx2, cy2, marsRPov, Math.min(1, (mProg - 0.08) * 4), t);
         }
 
-        // Mars dot approaching center
-        const mProg  = Math.max(0, (prog - 0.05) / 0.95);
-        const marsRPov = lerp(3, Math.min(W, H) * 0.18, mProg);
-        drawMars(ctx, cx2, cy2, marsRPov, t);
-        if (mProg > 0.05) drawPlanetLabel(ctx, cx2, cy2 + marsRPov + 14, 'MARS', Math.min(1, mProg * 3));
+        // Cockpit overlay
+        drawCockpitFrame(ctx, W, H, Math.min(1, prog * 4));
 
-        // speed readout
-        drawCanvasLabel(ctx, W / 2, 34, `POV · VELOCITY ${Math.round(32500 + prog * 4800).toLocaleString()} m/s`, 1);
+        // Velocity label (inside top HUD bar, so lower y)
+        drawCanvasLabel(ctx, W / 2, H * 0.038, `POV · VELOCITY ${Math.round(32500 + prog * 4800).toLocaleString()} m/s`, Math.min(1, prog * 3));
 
       } else if (isWatch && watchMode === 'third') {
         // ── 3RD-PERSON MODE: rocket visible, planets flanking ────────────────
@@ -820,9 +1026,15 @@ export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
         drawCanvasLabel(ctx, W / 2, 34, 'WATCH · EARTH → MARS TRANSIT', 1);
 
       } else {
-        // ── CINEMATIC / REAL-TIME (unchanged) ────────────────────────────────
+        // Parallax camera drift
+        const camX = Math.sin(t * 0.07) * 14;
+        const camY = Math.cos(t * 0.055) * 8;
+        ctx.save();
+        ctx.translate(camX, camY);
+
         drawStarField(ctx, stars, t, 1);
-        if (isCinematic) drawSpeedLines(ctx, W, H, Math.min(1, prog * 4), t);
+        drawSunGlow(ctx, W, H);
+        if (isCinematic) drawSpeedLines(ctx, W, H, Math.min(0.8, prog * 4), t);
 
         const eR  = lerp(isCinematic ? 85 : 95, 10, prog);
         const eCX = W * 0.15;
@@ -830,17 +1042,21 @@ export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
         drawEarth(ctx, eCX, eCY, eR, t);
         drawPlanetLabel(ctx, eCX, eCY + eR + 14, 'EARTH', 1);
 
-        const mProg = Math.max(0, (prog - 0.08) / 0.92);
-        const mR    = lerp(7, isCinematic ? 68 : 62, mProg);
-        const mCX   = W * 0.85;
-        const mCY   = H * 0.50;
+        const mProg2 = Math.max(0, (prog - 0.08) / 0.92);
+        const mR     = lerp(7, isCinematic ? 68 : 62, mProg2);
+        const mCX    = W * 0.85;
+        const mCY    = H * 0.50;
         drawMars(ctx, mCX, mCY, mR, t);
-        drawPlanetLabel(ctx, mCX, mCY + mR + 14, 'MARS', mProg);
+        drawPlanetLabel(ctx, mCX, mCY + mR + 14, 'MARS', mProg2);
 
-        drawTrajectory(ctx, eCX, eCY, mCX, mCY, prog, t);
+        drawTrajectory(ctx, eCX, eCY, mCX, mCY, prog, t, false);
+        drawRocketOnTrajectory(ctx, eCX, eCY, mCX, mCY, prog, t);
+
+        ctx.restore(); // end parallax
 
         const modeLbl = isCinematic ? 'CINEMATIC TRANSIT' : 'REAL-TIME TRANSIT';
         drawCanvasLabel(ctx, W / 2, 34, `EARTH → MARS · ${modeLbl}`, 1);
+        if (isCinematic) drawLetterbox(ctx, W, H);
       }
 
       // Update telemetry UI every 0.25 s
