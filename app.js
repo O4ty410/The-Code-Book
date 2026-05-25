@@ -6033,10 +6033,10 @@ function renderGamePanel() {
         '</button>' +
       '</div>' +
 
-      '<div class="gh-dark-overlay" id="gh-dark-overlay">' +
+      '<div class="gh-dark-overlay" id="gh-dark-overlay" onclick="toggleGameLight()">' +
         '<div class="gh-sage-dark">' +
           '<div class="gh-sage-owl">' + controllerSVG(64, 48) + '</div>' +
-          '<div class="gh-sage-msg">Switch on the light to reveal the room.</div>' +
+          '<div class="gh-sage-msg">Tap anywhere to reveal the room.</div>' +
         '</div>' +
       '</div>' +
 
@@ -6114,6 +6114,38 @@ function launchGame(gameId) {
     var overlay = document.createElement('div');
     overlay.id = 'gh-game-overlay';
     overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:#000;display:flex;flex-direction:column;';
+
+    var isPortrait = window.innerHeight > window.innerWidth;
+    if (gameId === 'launch-sequence' && isPortrait) {
+      overlay.innerHTML =
+        '<div id="gh-orient-prompt" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:32px;background:#030a15;">' +
+          '<div style="font-size:64px;animation:ghRotateHint 2s ease-in-out infinite;">&#x1F4F1;</div>' +
+          '<div style="font-family:\'Orbitron\',sans-serif;font-size:15px;letter-spacing:2px;color:#c8a96e;text-align:center;">ROTATE YOUR DEVICE</div>' +
+          '<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:rgba(180,210,255,0.65);text-align:center;line-height:1.7;max-width:280px;">This game is designed for landscape mode.<br>Rotate your device for the best experience.</div>' +
+          '<button onclick="document.getElementById(\'gh-orient-prompt\').remove();document.getElementById(\'gh-game-overlay\').style.flexDirection=\'column\';" style="margin-top:8px;background:none;border:1px solid rgba(200,169,80,0.5);color:#c8a96e;font-family:\'Space Mono\',monospace;font-size:11px;letter-spacing:1px;padding:10px 24px;cursor:pointer;border-radius:4px;">PLAY ANYWAY</button>' +
+          '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="background:none;border:none;color:rgba(180,210,255,0.4);font-family:\'Space Mono\',monospace;font-size:11px;cursor:pointer;">&#8592; BACK</button>' +
+        '</div>';
+      document.body.appendChild(overlay);
+      var _orientCheck = setInterval(function() {
+        if (window.innerWidth > window.innerHeight) {
+          clearInterval(_orientCheck);
+          var prompt = document.getElementById('gh-orient-prompt');
+          if (prompt) {
+            prompt.remove();
+            var ov2 = document.getElementById('gh-game-overlay');
+            if (ov2) {
+              ov2.innerHTML =
+                '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
+                  '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="background:none;border:none;color:#c8a96e;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
+                '</div>' +
+                '<iframe src="' + src + '" title="' + gameId + '" allowfullscreen style="flex:1;border:none;width:100%;display:block;"></iframe>';
+            }
+          }
+        }
+      }, 300);
+      return;
+    }
+
     overlay.innerHTML =
       '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
         '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="background:none;border:none;color:#c8a96e;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
