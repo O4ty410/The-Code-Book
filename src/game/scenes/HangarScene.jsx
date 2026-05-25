@@ -33,7 +33,8 @@ const COMMS_SCRIPT = [
 ];
 const ACCEL           = 12;
 const TERMINAL_RADIUS = 80;
-const STAR_COUNT      = 120;
+const IS_TOUCH        = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+const STAR_COUNT      = IS_TOUCH ? 55 : 120;
 
 const TERMINALS = [
   { id: 'power',       label: 'Power Systems',  relX: -0.35 },
@@ -155,7 +156,7 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
       if (!initDone.current) {
         player.current = { x: W / 2, y: H * 0.82, vx: 0 };
         starsRef.current = initStars(STAR_COUNT, W, H);
-        dustRef.current  = initDust(55, W, H);
+        dustRef.current  = initDust(IS_TOUCH ? 20 : 55, W, H);
         initDone.current = true;
       }
     }
@@ -389,20 +390,20 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
         </div>
       )}
 
-      {nearLabel && !activeTerminal && !launchPhase && (
+      {nearLabel && !activeTerminal && !launchPhase && !IS_TOUCH && (
         <div className="interact-prompt"><kbd>E</kbd> Interact · {nearLabel}</div>
       )}
 
       {!launchPhase && <ProgressPanel progress={progress} />}
 
-      {!launchPhase && (
+      {!launchPhase && !IS_TOUCH && (
         <div className="controls-hint">
           <div><kbd className="ck">A</kbd><kbd className="ck">D</kbd> Move</div>
           <div><kbd className="ck">E</kbd> Interact</div>
         </div>
       )}
 
-      {!launchPhase && (
+      {!launchPhase && IS_TOUCH && (
         <div className="mobile-controls">
           <div className="mobile-dpad">
             <button

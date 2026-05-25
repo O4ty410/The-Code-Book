@@ -6134,11 +6134,10 @@ function launchGame(gameId) {
             prompt.remove();
             var ov2 = document.getElementById('gh-game-overlay');
             if (ov2) {
+              ov2.style.cssText = 'position:fixed;inset:0;z-index:500;background:#000;';
               ov2.innerHTML =
-                '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
-                  '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="background:none;border:none;color:#c8a96e;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
-                '</div>' +
-                '<iframe src="' + src + '" title="' + gameId + '" allowfullscreen style="flex:1;border:none;width:100%;display:block;"></iframe>';
+                '<iframe src="' + src + '" title="' + gameId + '" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;display:block;"></iframe>' +
+                '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="position:absolute;top:8px;left:10px;z-index:10;background:rgba(10,10,20,0.75);border:1px solid rgba(200,169,80,0.4);color:#c8a96e;font-size:11px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:5px 10px;border-radius:4px;">&#8592; HUB</button>';
             }
           }
         }
@@ -6146,12 +6145,11 @@ function launchGame(gameId) {
       return;
     }
 
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:500;background:#000;';
     overlay.innerHTML =
-      '<div style="height:44px;flex-shrink:0;background:#0a0a0a;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;padding:0 14px;">' +
-        '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="background:none;border:none;color:#c8a96e;font-size:13px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:0;">&#8592; GAME HUB</button>' +
-      '</div>' +
       '<iframe src="' + src + '" title="' + gameId + '" allowfullscreen ' +
-        'style="flex:1;border:none;width:100%;display:block;"></iframe>';
+        'style="position:absolute;inset:0;width:100%;height:100%;border:none;display:block;"></iframe>' +
+      '<button onclick="document.getElementById(\'gh-game-overlay\').remove()" style="position:absolute;top:8px;left:10px;z-index:10;background:rgba(10,10,20,0.75);border:1px solid rgba(200,169,80,0.4);color:#c8a96e;font-size:11px;cursor:pointer;font-family:\'Space Mono\',monospace;letter-spacing:1px;padding:5px 10px;border-radius:4px;">&#8592; HUB</button>';
     document.body.appendChild(overlay);
     return;
   }
