@@ -18,6 +18,7 @@ import { isMissionComplete } from '../systems/progressionSystem';
 import {
   startAmbientHum, playTerminalOpen, playTerminalClose,
   playCountdownBeep, startEngineRumble, playIgnitionBoom,
+  stopBgMusicGlobal, speakCommsLine,
 } from '../systems/audioSystem';
 
 const SPEED           = 260;
@@ -89,9 +90,10 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
   const [commsLog, setCommsLog] = useState([]);
   useEffect(() => { onLaunchCompleteRef.current = onLaunchComplete; }, [onLaunchComplete]);
 
-  // Launch audio: engine rumble + ignition boom
+  // Launch audio: stop bg music at countdown, engine rumble + ignition boom
   useEffect(() => {
     if (launchPhase === 'countdown') {
+      stopBgMusicGlobal();
       engineRumbleRef.current = startEngineRumble();
     } else if (launchPhase === 'ignition') {
       engineRumbleRef.current?.stop();
@@ -223,6 +225,7 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
         if (!commsShownRef.current.has(key) && launch.countdownTimer <= threshold) {
           commsShownRef.current.add(key);
           setCommsLog((prev) => [...prev.slice(-4), { from, msg, id: key }]);
+          speakCommsLine(msg, from);
         }
       });
       if (launch.phaseTime >= 10 && !launch.phaseTransitioned) {

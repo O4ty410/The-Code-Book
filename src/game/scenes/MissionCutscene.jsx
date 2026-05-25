@@ -853,10 +853,11 @@ export default function MissionCutscene({ missionId, onDone }) {
     timeRef.current += delta;
     const t = timeRef.current;
 
-    // Auto-finish
+    // Auto-finish — call onDone directly; doFinish cannot be used here because
+    // setting doneRef.current=true first causes doFinish to return early.
     if (t >= DURATION && !doneRef.current) {
       doneRef.current = true;
-      setTimeout(doFinish, 50);
+      setTimeout(() => { onDone?.(); }, 50);
       return;
     }
 

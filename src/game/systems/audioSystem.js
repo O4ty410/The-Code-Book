@@ -541,3 +541,30 @@ export function startBackgroundMusic() {
 export function suspendAllAudio() {
   try { if (_ctx) _ctx.suspend().catch(() => {}); } catch (_) {}
 }
+
+// ── Global background-music stop (for launch countdown) ───────────────────────
+let _bgStopFn = null;
+export function registerBgStopFn(fn) { _bgStopFn = fn; }
+export function stopBgMusicGlobal() {
+  if (_bgStopFn) { try { _bgStopFn(); } catch (_) {} _bgStopFn = null; }
+}
+
+// ── Mission-control voice (Web Speech API) ────────────────────────────────────
+export function speakCommsLine(text, from) {
+  try {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utter    = new SpeechSynthesisUtterance(text);
+    utter.rate     = 0.88;
+    utter.pitch    = from === 'control' ? 0.78 : 1.05;
+    utter.volume   = 0.80;
+    // Pick best available English voice
+    const voices   = window.speechSynthesis.getVoices();
+    const voice    = voices.find((v) => v.lang === 'en-US' && v.localService)
+                  || voices.find((v) => v.lang === 'en-US')
+                  || voices.find((v) => v.lang.startsWith('en'))
+                  || null;
+    if (voice) utter.voice = voice;
+    window.speechSynthesis.speak(utter);
+  } catch (_) {}
+}

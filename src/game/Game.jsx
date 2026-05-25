@@ -12,7 +12,7 @@ import {
   clearProgress,
   BUILDER_MISSION_IDS,
 } from './systems/progressionSystem';
-import { toggleMute, isMuted, startBackgroundMusic, suspendAllAudio } from './systems/audioSystem';
+import { toggleMute, isMuted, startBackgroundMusic, suspendAllAudio, registerBgStopFn } from './systems/audioSystem';
 import './styles/game.css';
 
 const MODE = { BUILDER: 'builder', DEBUG: 'debug', VISUAL: 'visual', LAUNCH: 'launch' };
@@ -60,7 +60,8 @@ function MusicButton() {
 
   useEffect(() => {
     stopRef.current = startBackgroundMusic();
-    return () => { stopRef.current?.(); stopRef.current = null; };
+    registerBgStopFn(stopRef.current);
+    return () => { stopRef.current?.(); stopRef.current = null; registerBgStopFn(null); };
   }, []);
 
   const toggle = useCallback(() => {
@@ -70,8 +71,10 @@ function MusicButton() {
     if (nextOff) {
       stopRef.current?.();
       stopRef.current = null;
+      registerBgStopFn(null);
     } else {
       stopRef.current = startBackgroundMusic();
+      registerBgStopFn(stopRef.current);
     }
   }, []);
 
