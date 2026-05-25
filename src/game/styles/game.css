@@ -2133,3 +2133,69 @@
   background: rgba(0, 80, 130, 0.50);
   border-color: rgba(0, 210, 255, 0.70);
 }
+
+/* ── Mobile touch controls ── */
+.mobile-controls {
+  display: none;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  pointer-events: none;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .mobile-controls { display: flex; }
+  .controls-hint   { display: none; }
+  .interact-prompt { display: none; }
+}
+
+.mobile-dpad {
+  display: flex;
+  gap: 12px;
+  pointer-events: all;
+}
+
+.mobile-btn {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 2px solid rgba(125, 211, 252, 0.45);
+  background: rgba(8, 18, 38, 0.82);
+  color: rgba(180, 225, 255, 0.90);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  box-shadow: 0 0 14px rgba(0, 180, 255, 0.18);
+  transition: background 0.1s, border-color 0.1s;
+  pointer-events: all;
+}
+
+.mobile-btn:active {
+  background: rgba(0, 100, 180, 0.55);
+  border-color: rgba(125, 211, 252, 0.90);
+}
+
+.mobile-btn--interact {
+  width: 70px;
+  height: 70px;
+  font-family: 'Orbitron', monospace;
+  font-size: 18px;
+  font-weight: 800;
+  border-color: rgba(200, 169, 80, 0.55);
+  color: #c8a96e;
+  box-shadow: 0 0 18px rgba(200, 169, 80, 0.22);
+}
+
+.mobile-btn--interact:active {
+  background: rgba(120, 80, 0, 0.50);
+  border-color: rgba(200, 169, 80, 0.95);
+}

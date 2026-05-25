@@ -175,6 +175,12 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     return () => window.removeEventListener('keydown', onKey);
   }, [nearTerminal]);
 
+  const handleInteract = useCallback(() => {
+    if (!nearTerminal || overlayOpenRef.current || launchPhaseRef.current) return;
+    const tm = TERMINALS.find((t) => t.id === nearTerminal);
+    setActiveTerminal(getTerminal(nearTerminal, tm?.label));
+  }, [nearTerminal]);
+
   const handleMissionComplete = useCallback((missionId, worldEffect) => {
     onMissionComplete?.(missionId, worldEffect);
   }, [onMissionComplete]);
@@ -393,6 +399,32 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
         <div className="controls-hint">
           <div><kbd className="ck">A</kbd><kbd className="ck">D</kbd> Move</div>
           <div><kbd className="ck">E</kbd> Interact</div>
+        </div>
+      )}
+
+      {!launchPhase && (
+        <div className="mobile-controls">
+          <div className="mobile-dpad">
+            <button
+              className="mobile-btn mobile-btn--left"
+              onTouchStart={(e) => { e.preventDefault(); keys.current['ArrowLeft'] = true; }}
+              onTouchEnd={(e)   => { e.preventDefault(); keys.current['ArrowLeft'] = false; }}
+              onTouchCancel={(e)=> { e.preventDefault(); keys.current['ArrowLeft'] = false; }}
+              aria-label="Move left"
+            >◀</button>
+            <button
+              className="mobile-btn mobile-btn--right"
+              onTouchStart={(e) => { e.preventDefault(); keys.current['ArrowRight'] = true; }}
+              onTouchEnd={(e)   => { e.preventDefault(); keys.current['ArrowRight'] = false; }}
+              onTouchCancel={(e)=> { e.preventDefault(); keys.current['ArrowRight'] = false; }}
+              aria-label="Move right"
+            >▶</button>
+          </div>
+          {nearLabel && !activeTerminal && (
+            <button className="mobile-btn mobile-btn--interact" onTouchStart={(e) => { e.preventDefault(); handleInteract(); }} aria-label="Interact">
+              E
+            </button>
+          )}
         </div>
       )}
 
