@@ -414,7 +414,7 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
-  pointer-events: none;
+  cursor: pointer;
   transition: opacity 0.4s ease;
 }
 
@@ -1736,3 +1736,10 @@ body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-sh
 .ins-srs-due      .ins-srs-n { color: rgba(255,160,80,0.9); }
 .ins-srs-upcoming .ins-srs-n { color: rgba(120,180,255,0.9); }
 .ins-srs-new      .ins-srs-n { color: rgba(255,255,255,0.5); }
+
+@keyframes ghRotateHint {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(90deg); }
+  60%  { transform: rotate(90deg); }
+  100% { transform: rotate(0deg); }
+}
