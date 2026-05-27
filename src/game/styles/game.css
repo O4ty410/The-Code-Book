@@ -2,8 +2,8 @@
 
 .game-root {
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   background: #000;
   font-family: 'Courier New', Courier, monospace;
@@ -27,6 +27,12 @@
   letter-spacing: 0.06em;
   font-family: 'Courier New', Courier, monospace;
   transition: background 0.15s, border-color 0.15s;
+}
+
+@media (pointer: coarse) {
+  .game-pause-btn { left: auto; right: 18px; font-size: 12px; padding: 5px 9px; }
+  .game-music-btn { display: none; }
+  .game-mute-btn  { display: none; }
 }
 .game-pause-btn:hover {
   background: rgba(255, 255, 255, 0.12);

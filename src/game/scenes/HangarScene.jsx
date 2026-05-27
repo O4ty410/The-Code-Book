@@ -33,7 +33,11 @@ const COMMS_SCRIPT = [
 ];
 const ACCEL           = 12;
 const TERMINAL_RADIUS = 80;
-const IS_TOUCH        = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+const IS_TOUCH        = typeof window !== 'undefined' && (
+  window.matchMedia('(pointer: coarse)').matches ||
+  'ontouchstart' in window ||
+  navigator.maxTouchPoints > 0
+);
 const STAR_COUNT      = IS_TOUCH ? 55 : 120;
 
 const TERMINALS = [
