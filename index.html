@@ -507,6 +507,7 @@
     <button class="top-nav-tab" id="tnav-profile" onclick="switchTopNav('profile',this)">👤 Profile</button>
     <button class="top-nav-tab" id="tnav-game" onclick="switchTopNav('game',this)">🎮 Game Hub</button>
     <button class="top-nav-tab" id="tnav-revision" onclick="switchTopNav('revision',this)">🃏 Revision</button>
+    <button class="top-nav-tab" id="tnav-news" onclick="switchTopNav('news',this)">📡 News</button>
   </div>
   <div class="top-right">
     <div class="top-xp-chip" id="top-xp-chip">⚡ 0 XP</div>
@@ -558,6 +559,9 @@
 
   <!-- REVISION PANEL -->
   <div class="top-panel" id="panel-revision"></div>
+
+  <!-- NEWS PANEL -->
+  <div class="top-panel" id="panel-news"></div>
 
   </div>
 
@@ -643,6 +647,9 @@
   </button>
   <button class="mob-nav-btn" id="mob-revision" onclick="switchTopNav('revision',this);setMobActive(this)">
     🃏<span>Revision</span>
+  </button>
+  <button class="mob-nav-btn" id="mob-news" onclick="switchTopNav('news',this);setMobActive(this)">
+    📡<span>News</span>
   </button>
 </div>
 
