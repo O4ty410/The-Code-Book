@@ -126,6 +126,23 @@ function getMobNavIcon(type, sz) {
       '<circle cx="24" cy="7" r="2.8" style="' + sf + '"/>' +
       '<circle cx="5" cy="20" r="2" style="' + sf + '"/>' +
       '<circle cx="43" cy="20" r="2" style="' + sf + '"/>' +
+      close,
+
+    news:
+      open +
+      '<circle cx="24" cy="18" r="13" style="stroke-width:1.5;' + s + '"/>' +
+      '<circle cx="24" cy="18" r="5" style="stroke-width:1;' + s + d + '"/>' +
+      '<circle cx="24" cy="18" r="2" style="' + sf + '"/>' +
+      '<line x1="24" y1="4" x2="24" y2="1" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="24" y1="31" x2="24" y2="35" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="10" y1="18" x2="7" y2="18" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="38" y1="18" x2="41" y2="18" style="stroke-width:2;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="14" y1="8" x2="12" y2="6" style="stroke-width:1.5;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="34" y1="8" x2="36" y2="6" style="stroke-width:1.5;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="14" y1="28" x2="12" y2="30" style="stroke-width:1.5;stroke-linecap:round;' + s + d + '"/>' +
+      '<line x1="34" y1="28" x2="36" y2="30" style="stroke-width:1.5;stroke-linecap:round;' + s + d + '"/>' +
+      '<line x1="16" y1="39" x2="32" y2="39" style="stroke-width:1.8;stroke-linecap:round;' + s + '"/>' +
+      '<line x1="19" y1="43" x2="29" y2="43" style="stroke-width:1.3;stroke-linecap:round;' + s + d + '"/>' +
       close
   };
 
@@ -214,6 +231,7 @@ function renderMobileHub() {
     { color: '#64c8a0', iconType: 'revision',  badge: 'REVISION',   title: 'Revision Centre',  hint: revDue > 0 ? revDue + ' cards due' : 'All caught up',      action: 'mobNavTo(\'revision\')' },
     { color: '#7eb8c8', iconType: 'tools',     badge: 'TOOLS',      title: 'Tools',            hint: 'Speed round & more',                                       action: 'mobNavTo(\'tools\')' },
     { color: '#8888ff', iconType: 'profile',   badge: 'PROFILE',    title: 'Profile',          hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
+    { color: '#00c8e0', iconType: 'news',      badge: 'NEWS',       title: 'News Feed',        hint: 'Dev news · live transmissions',                            action: 'mobNavTo(\'news\')' },
     { color: '#e0c060', iconType: 'premium',   badge: 'PREMIUM',    title: 'Premium',          hint: 'Unlock everything',                                        action: 'mobNavTo(\'premium\')' },
     { color: '#7eb8d4', iconType: 'game',      badge: 'GAME HUB',   title: 'Game Hub',         hint: 'Switch the light on',                                      action: 'mobNavTo(\'game\')',    wide: true },
   ];
