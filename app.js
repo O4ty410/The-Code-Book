@@ -3339,7 +3339,7 @@ function switchTopNav(tab, btn) {
 
   // Update mobile bottom bar
   document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
-  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools', premium: 'mob-premium', profile: 'mob-profile', revision: 'mob-revision' };
+  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools', premium: 'mob-premium', profile: 'mob-profile', revision: 'mob-revision', news: 'mob-news' };
   if (mobMap[tab]) {
     var mb = document.getElementById(mobMap[tab]);
     if (mb) mb.classList.add('active');
@@ -3408,6 +3408,7 @@ function switchTopNav(tab, btn) {
       if (tab === 'profile') renderProfilePanel();
       if (tab === 'game') renderGamePanel();
       if (tab === 'revision') { renderRevisionPanel(); if (!state.badgeFlags.revVisited) { state.badgeFlags.revVisited = true; saveState(); checkAndUnlockBadges(); } }
+      if (tab === 'news') renderNewsPanel();
     }
   }
 
@@ -6945,3 +6946,128 @@ var BADGES = [
   { id: 'graduate',     emoji: '🎓', name: 'Graduate',     desc: 'Complete all floors',
     check: function() { return FLOORS.every(function(f, fi){ return isFloorComplete(fi); }); } }
 ];
+
+// ============================================================
+// NEWS PANEL — Hacker News "Incoming Transmissions"
+// ============================================================
+var _newsCache = null;
+var _newsCacheTime = 0;
+var _newsExpanded = null;
+
+function renderNewsPanel() {
+  var panel = document.getElementById('panel-news');
+  if (!panel) return;
+  panel.innerHTML =
+    '<div class="news-root">' +
+      '<div class="news-header">' +
+        '<div class="news-header-blink"></div>' +
+        '<div class="news-header-title">INCOMING TRANSMISSIONS</div>' +
+        '<div class="news-header-sub">Live feed · Hacker News · Developer Intelligence</div>' +
+      '</div>' +
+      '<div class="news-feed" id="news-feed"><div class="news-loading"><span class="news-scan"></span>Scanning frequencies…</div></div>' +
+    '</div>';
+  _newsExpanded = null;
+  var now = Date.now();
+  if (_newsCache && now - _newsCacheTime < 5 * 60 * 1000) {
+    _renderNewsItems(_newsCache);
+    return;
+  }
+  fetch('https://hacker-news.firebaseio.com/v0/topstories.json')
+    .then(function(r) { return r.json(); })
+    .then(function(ids) {
+      var top = ids.slice(0, 15);
+      return Promise.all(top.map(function(id) {
+        return fetch('https://hacker-news.firebaseio.com/v0/item/' + id + '.json').then(function(r) { return r.json(); });
+      }));
+    })
+    .then(function(items) {
+      _newsCache = items.filter(function(i) { return i && i.title; });
+      _newsCacheTime = Date.now();
+      _renderNewsItems(_newsCache);
+    })
+    .catch(function() {
+      var feed = document.getElementById('news-feed');
+      if (feed) feed.innerHTML = '<div class="news-error">⚠ Signal lost. Check your connection and try again.</div>';
+    });
+}
+
+function _newsTimestamp(unix) {
+  var diff = Math.floor((Date.now() / 1000) - unix);
+  if (diff < 60)  return 'T-' + diff + 'S';
+  if (diff < 3600) return 'T-' + Math.floor(diff / 60) + 'M';
+  if (diff < 86400) return 'T-' + Math.floor(diff / 3600) + 'H';
+  return 'T-' + Math.floor(diff / 86400) + 'D';
+}
+
+function _newsDomain(url) {
+  if (!url) return 'news.ycombinator.com';
+  try { return new URL(url).hostname.replace('www.', ''); } catch(_) { return ''; }
+}
+
+function _newsSignal(score) {
+  if (score >= 300) return { bars: 5, cls: 'news-sig--5' };
+  if (score >= 150) return { bars: 4, cls: 'news-sig--4' };
+  if (score >= 75)  return { bars: 3, cls: 'news-sig--3' };
+  if (score >= 25)  return { bars: 2, cls: 'news-sig--2' };
+  return { bars: 1, cls: 'news-sig--1' };
+}
+
+function _renderNewsItems(items) {
+  var feed = document.getElementById('news-feed');
+  if (!feed) return;
+  feed.innerHTML = items.map(function(item, i) {
+    var sig = _newsSignal(item.score || 0);
+    var bars = '';
+    for (var b = 1; b <= 5; b++) bars += '<span class="ns-bar' + (b <= sig.bars ? ' ns-bar--on' : '') + '"></span>';
+    return '<div class="news-card" id="news-card-' + i + '" onclick="toggleNewsCard(' + i + ')">' +
+      '<div class="news-card-top">' +
+        '<div class="news-sig ' + sig.cls + '">' + bars + '</div>' +
+        '<div class="news-card-meta">' +
+          '<div class="news-card-title">' + item.title + '</div>' +
+          '<div class="news-card-sub">' +
+            '<span class="news-domain">' + _newsDomain(item.url) + '</span>' +
+            '<span class="news-score">SIG: ' + (item.score || 0) + '</span>' +
+            '<span class="news-time">' + _newsTimestamp(item.time) + '</span>' +
+            (item.descendants ? '<span class="news-comms">' + item.descendants + ' COMMS</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="news-card-chevron" id="news-chev-' + i + '">▼</div>' +
+      '</div>' +
+      '<div class="news-card-body" id="news-body-' + i + '">' +
+        '<div class="news-card-desc">' + (item.text ? item.text.replace(/<[^>]+>/g, '').slice(0, 280) + '…' : 'No preview available. Read the full transmission below.') + '</div>' +
+        '<div class="news-card-actions">' +
+          (item.url ? '<a class="news-read-btn" href="' + item.url + '" target="_blank" rel="noopener">READ TRANSMISSION ↗</a>' : '') +
+          '<a class="news-hn-btn" href="https://news.ycombinator.com/item?id=' + item.id + '" target="_blank" rel="noopener">HN DISCUSSION</a>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleNewsCard(i) {
+  var body  = document.getElementById('news-body-' + i);
+  var chev  = document.getElementById('news-chev-' + i);
+  var card  = document.getElementById('news-card-' + i);
+  if (!body) return;
+  var open = body.classList.contains('news-card-body--open');
+  // Close previously expanded
+  if (_newsExpanded !== null && _newsExpanded !== i) {
+    var pb = document.getElementById('news-body-' + _newsExpanded);
+    var pc = document.getElementById('news-chev-' + _newsExpanded);
+    var pk = document.getElementById('news-card-' + _newsExpanded);
+    if (pb) pb.classList.remove('news-card-body--open');
+    if (pc) pc.classList.remove('news-card-chevron--open');
+    if (pk) pk.classList.remove('news-card--open');
+  }
+  if (open) {
+    body.classList.remove('news-card-body--open');
+    chev.classList.remove('news-card-chevron--open');
+    card.classList.remove('news-card--open');
+    _newsExpanded = null;
+  } else {
+    body.classList.add('news-card-body--open');
+    chev.classList.add('news-card-chevron--open');
+    card.classList.add('news-card--open');
+    _newsExpanded = i;
+  }
+}
