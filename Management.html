@@ -5,18 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management Fundamentals</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary: #0f172a;
             --secondary: #1e293b;
             --accent: #3b82f6;
             --success: #10b981;
-            --warning: #f59e0b;
             --text: #f1f5f9;
             --text-muted: #cbd5e1;
             --border: #334155;
@@ -30,16 +25,9 @@
             padding: 16px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        .container { max-width: 900px; margin: 0 auto; }
 
-        header {
-            text-align: center;
-            margin-bottom: 32px;
-            animation: slideDown 0.6s ease-out;
-        }
+        header { text-align: center; margin-bottom: 32px; }
 
         h1 {
             font-size: 28px;
@@ -51,17 +39,13 @@
             background-clip: text;
         }
 
-        .subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
+        .subtitle { font-size: 14px; color: var(--text-muted); }
 
         .progress-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
             margin-bottom: 32px;
-            animation: slideUp 0.6s ease-out 0.1s backwards;
         }
 
         .progress-card {
@@ -69,12 +53,6 @@
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .progress-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
         }
 
         .progress-title {
@@ -98,20 +76,20 @@
             background: linear-gradient(90deg, var(--accent) 0%, #60a5fa 100%);
             transition: width 0.5s ease;
             border-radius: 3px;
+            width: 0%;
         }
 
-        .progress-text {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
+        .progress-text { font-size: 13px; color: var(--text-muted); }
 
         .main-content {
             background: var(--secondary);
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 32px;
-            animation: slideUp 0.6s ease-out 0.2s backwards;
         }
+
+        .module { display: none; }
+        .module.active { display: block; }
 
         .module-badge {
             display: inline-block;
@@ -128,7 +106,7 @@
         .module-title {
             font-size: 24px;
             font-weight: 700;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             line-height: 1.3;
         }
 
@@ -139,24 +117,19 @@
             font-size: 15px;
         }
 
-        .content-section {
-            margin-bottom: 32px;
-        }
+        .content-section { margin-bottom: 28px; }
 
         .section-heading {
             font-size: 16px;
             font-weight: 600;
             color: var(--accent);
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .content-text {
             color: var(--text-muted);
             line-height: 1.7;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             font-size: 14px;
         }
 
@@ -165,13 +138,12 @@
             border-left: 3px solid var(--accent);
             padding: 12px 16px;
             border-radius: 4px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-size: 14px;
+            color: var(--text-muted);
         }
 
-        .key-point strong {
-            color: var(--accent);
-        }
+        .key-point strong { color: var(--accent); }
 
         .template-box {
             background: rgba(16, 185, 129, 0.05);
@@ -181,7 +153,9 @@
             margin-bottom: 16px;
             font-family: 'Courier New', monospace;
             font-size: 13px;
+            white-space: pre;
             overflow-x: auto;
+            color: var(--text-muted);
         }
 
         .template-label {
@@ -190,6 +164,7 @@
             text-transform: uppercase;
             color: var(--success);
             margin-bottom: 8px;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         .quiz-section {
@@ -207,70 +182,64 @@
             color: var(--accent);
         }
 
-        .quiz-question {
-            margin-bottom: 16px;
-        }
-
-        .quiz-question p {
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
+        .quiz-question { margin-bottom: 8px; font-size: 14px; margin-bottom: 12px; }
 
         .quiz-option {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 8px;
+            gap: 10px;
+            padding: 10px 12px;
             margin-bottom: 8px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            transition: background 0.2s;
+            font-size: 14px;
+            color: var(--text-muted);
         }
 
-        .quiz-option:hover {
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .quiz-option input[type="radio"] {
-            cursor: pointer;
-        }
+        .quiz-option:hover { background: rgba(59, 130, 246, 0.1); }
+        .quiz-option input[type="radio"] { cursor: pointer; flex-shrink: 0; }
 
         .quiz-option.correct {
             background: rgba(16, 185, 129, 0.15);
-            border: 1px solid var(--success);
+            border-color: var(--success);
+            color: var(--text);
         }
 
         .quiz-option.incorrect {
             background: rgba(239, 68, 68, 0.1);
-            border: 1px solid #ef4444;
+            border-color: #ef4444;
         }
 
         .quiz-feedback {
-            margin-top: 8px;
+            margin-top: 10px;
             font-size: 13px;
             font-weight: 600;
             padding: 8px 12px;
             border-radius: 4px;
         }
 
-        .quiz-feedback.correct {
-            color: var(--success);
+        .quiz-feedback.correct { color: var(--success); background: rgba(16, 185, 129, 0.1); }
+        .quiz-feedback.incorrect { color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+
+        .completion-banner {
             background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            display: none;
         }
 
-        .quiz-feedback.incorrect {
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.08);
-        }
-
-        .btn-primary.completed {
-            background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);
-        }
+        .completion-banner.show { display: block; }
+        .completion-banner p { color: var(--success); font-weight: 600; font-size: 14px; }
+        .completion-banner span { font-size: 13px; color: var(--text-muted); }
 
         .actions {
             display: flex;
             gap: 12px;
-            margin-top: 32px;
+            margin-top: 28px;
             flex-wrap: wrap;
         }
 
@@ -281,7 +250,7 @@
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -291,650 +260,497 @@
             color: white;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+        .btn-primary:hover { box-shadow: 0 6px 14px rgba(59, 130, 246, 0.35); }
+
+        .btn-primary.completed {
+            background: linear-gradient(135deg, var(--success) 0%, #34d399 100%);
         }
 
-        .btn-secondary {
-            background: var(--border);
-            color: var(--text);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(59, 130, 246, 0.2);
-        }
-
-        .completion-message {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--success);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
-            display: none;
-        }
-
-        .completion-message.show {
-            display: block;
-            animation: slideDown 0.4s ease-out;
-        }
-
-        .completion-message p {
-            color: var(--success);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .next-module {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
+        .btn-secondary { background: var(--border); color: var(--text); }
+        .btn-secondary:hover { background: rgba(59, 130, 246, 0.2); }
 
         footer {
             text-align: center;
             margin-top: 32px;
             color: var(--text-muted);
             font-size: 12px;
-            animation: slideUp 0.6s ease-out 0.3s backwards;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         @media (max-width: 640px) {
-            .main-content {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            .module-title {
-                font-size: 20px;
-            }
-
-            .actions {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-            }
-
-            .progress-container {
-                grid-template-columns: 1fr;
-            }
+            .main-content { padding: 20px; }
+            h1 { font-size: 22px; }
+            .module-title { font-size: 20px; }
+            .actions { flex-direction: column; }
+            button { width: 100%; }
+            .progress-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Management Fundamentals</h1>
-            <p class="subtitle">Learn at your pace. 15 minutes a day.</p>
-        </header>
+<div class="container">
 
-        <div class="progress-container">
-            <div class="progress-card">
-                <div class="progress-title">Finance & Budgeting</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%" id="progress-finance"></div>
-                </div>
-                <div class="progress-text"><span id="count-finance">0</span>/<span id="total-finance">0</span> modules</div>
-            </div>
+    <header>
+        <h1>Management Fundamentals</h1>
+        <p class="subtitle">Learn at your pace. 15 minutes a day.</p>
+    </header>
 
-            <div class="progress-card">
-                <div class="progress-title">People Management</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%" id="progress-people"></div>
-                </div>
-                <div class="progress-text"><span id="count-people">0</span>/<span id="total-people">0</span> modules</div>
-            </div>
-
-            <div class="progress-card">
-                <div class="progress-title">Recruitment</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 0%" id="progress-recruitment"></div>
-                </div>
-                <div class="progress-text"><span id="count-recruitment">0</span>/<span id="total-recruitment">0</span> modules</div>
-            </div>
+    <div class="progress-container">
+        <div class="progress-card">
+            <div class="progress-title">Finance &amp; Budgeting</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-finance"></div></div>
+            <div class="progress-text"><span id="count-finance">0</span>/<span id="total-finance">2</span> modules</div>
         </div>
-
-        <div class="main-content">
-            <div id="completion-message" class="completion-message">
-                <p>✓ Module completed!</p>
-                <span class="next-module">Your progress has been saved. Ready for the next one?</span>
-            </div>
-
-            <div id="module-content"></div>
-
-            <div class="actions">
-                <button class="btn-primary" onclick="completeModule()">Mark as Complete</button>
-                <button class="btn-secondary" onclick="nextModule()">Next Module</button>
-            </div>
+        <div class="progress-card">
+            <div class="progress-title">People Management</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-people"></div></div>
+            <div class="progress-text"><span id="count-people">0</span>/<span id="total-people">2</span> modules</div>
         </div>
-
-        <footer>
-            <p>Built to help you rebuild confidence and master the foundations of management.</p>
-        </footer>
+        <div class="progress-card">
+            <div class="progress-title">Recruitment</div>
+            <div class="progress-bar"><div class="progress-fill" id="progress-recruitment"></div></div>
+            <div class="progress-text"><span id="count-recruitment">0</span>/<span id="total-recruitment">2</span> modules</div>
+        </div>
     </div>
 
-    <script>
-        const modules = [
-            {
-                id: 'finance-1',
-                category: 'Finance & Budgeting',
-                title: 'Understanding P&L (Profit & Loss)',
-                description: 'The foundation of financial management',
-                content: `
-                    <div class="content-section">
-                        <div class="section-heading">📊 What is a P&L?</div>
-                        <p class="content-text">A P&L statement shows whether your business made money or lost money over a period (usually a month, quarter, or year).</p>
-                        <div class="key-point"><strong>Simple formula:</strong> Revenue - Expenses = Profit (or Loss)</div>
-                    </div>
+    <div class="main-content">
+        <div class="completion-banner" id="completion-banner">
+            <p>&#10003; Module completed!</p>
+            <span>Your progress has been saved. Ready for the next one?</span>
+        </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🎯 The Three Parts</div>
-                        <p class="content-text"><strong>1. Revenue (Money In)</strong><br/>All the money your business earned. For a hotel: room sales, food & beverage, events, etc.</p>
-                        <p class="content-text"><strong>2. Expenses (Money Out)</strong><br/>Wages, rent, utilities, stock, cleaning supplies, insurance, etc.</p>
-                        <p class="content-text"><strong>3. Profit/Loss (The Result)</strong><br/>What's left after you subtract expenses from revenue.</p>
-                    </div>
+        <!-- MODULE 1: Finance 1 -->
+        <div class="module active" id="module-finance-1" data-category="finance">
+            <span class="module-badge">Finance &amp; Budgeting</span>
+            <h2 class="module-title">Understanding P&amp;L (Profit &amp; Loss)</h2>
+            <p class="module-description">The foundation of financial management</p>
 
-                    <div class="content-section">
-                        <div class="section-heading">💡 Real Example (£10k/month hotel shift)</div>
-                        <div class="template-box">
-                            <div class="template-label">Monthly P&L - Hotel Restaurant</div>
-                            Revenue:           £10,000
-                            Less:
-                            Staff wages:        £-3,500
-                            Food costs:         £-2,000
-                            Utilities:          £-800
-                            Cleaning:           £-400
-                            ─────────────────
-                            Profit:             £3,300
-                        </div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128202; What is a P&amp;L?</div>
+                <p class="content-text">A P&amp;L statement shows whether your business made money or lost money over a period (usually a month, quarter, or year).</p>
+                <div class="key-point"><strong>Simple formula:</strong> Revenue &minus; Expenses = Profit (or Loss)</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🔍 Why This Matters as a Manager</div>
-                        <p class="content-text">You need to understand P&L because:</p>
-                        <div class="key-point"><strong>1.</strong> You control costs (wages, waste, stock). Better management = higher profit</div>
-                        <div class="key-point"><strong>2.</strong> You drive revenue (customer satisfaction, upselling, retention)</div>
-                        <div class="key-point"><strong>3.</strong> Your boss measures you on it. Understanding the P&L means understanding what you're actually responsible for</div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#127919; The Three Parts</div>
+                <p class="content-text"><strong>1. Revenue (Money In)</strong><br>All the money your business earned. For a hotel: room sales, food &amp; beverage, events, etc.</p>
+                <p class="content-text"><strong>2. Expenses (Money Out)</strong><br>Wages, rent, utilities, stock, cleaning supplies, insurance, etc.</p>
+                <p class="content-text"><strong>3. Profit/Loss (The Result)</strong><br>What's left after you subtract expenses from revenue.</p>
+            </div>
 
-                    <div class="quiz-section">
-                        <div class="quiz-title">Quick Check: Do you understand the basics?</div>
-                        <div class="quiz-question">
-                            <p>If your revenue is £15,000 and expenses are £9,000, what's your profit?</p>
-                            <div class="quiz-option" data-correct="true">
-                                <input type="radio" name="q1" value="a"> £6,000
-                            </div>
-                            <div class="quiz-option">
-                                <input type="radio" name="q1" value="b"> £24,000
-                            </div>
-                            <div class="quiz-option">
-                                <input type="radio" name="q1" value="c"> £9,000
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'people-1',
-                category: 'People Management',
-                title: 'Building Trust with Your Team',
-                description: 'The foundation of effective leadership',
-                content: `
-                    <div class="content-section">
-                        <div class="section-heading">🤝 Why Trust Matters</div>
-                        <p class="content-text">Trust is the difference between a team that works FOR you and a team that works WITH you. Without trust, you spend energy managing instead of leading.</p>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128161; Real Example</div>
+                <div class="template-box"><div class="template-label">Monthly P&amp;L - Hotel Restaurant</div>Revenue:          £10,000
+Less:
+  Staff wages:      £-3,500
+  Food costs:       £-2,000
+  Utilities:        £-800
+  Cleaning:         £-400
+-------------------
+Profit:             £3,300</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">5 Ways to Build Trust (Fast)</div>
-                        <div class="key-point"><strong>1. Be consistent</strong> - Do what you say you'll do. Every time. Small promises matter.</div>
-                        <div class="key-point"><strong>2. Be visible and present</strong> - Be on the floor, not hiding in the office. Know what's actually happening.</div>
-                        <div class="key-point"><strong>3. Admit mistakes</strong> - When you get something wrong, own it. "I made a call on that and it didn't work. Here's what we'll do differently."</div>
-                        <div class="key-point"><strong>4. Give credit, take responsibility</strong> - When things go well, credit your team. When things go wrong, you take it.</div>
-                        <div class="key-point"><strong>5. Listen before you fix</strong> - Ask questions. Understand their perspective. THEN give direction.</div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128269; Why This Matters as a Manager</div>
+                <div class="key-point"><strong>1.</strong> You control costs (wages, waste, stock). Better management = higher profit.</div>
+                <div class="key-point"><strong>2.</strong> You drive revenue (customer satisfaction, upselling, retention).</div>
+                <div class="key-point"><strong>3.</strong> Your boss measures you on it. Understanding the P&amp;L means understanding what you're responsible for.</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">💬 The Trust Conversation</div>
-                        <p class="content-text">When someone on your team is struggling or underperforming, a trust-building conversation looks like:</p>
-                        <div class="template-box">
-                            <div class="template-label">Trust-Building Conversation Script</div>
-                            1. "I've noticed X [specific thing]"
-                            2. "Help me understand what's going on?"
-                            3. [Listen. Don't interrupt.]
-                            4. "Here's what I'm seeing / concerned about"
-                            5. "What do you need from me?"
-                            6. "Here's what I need from you"
-                            7. "Let's check in on Friday"
-                        </div>
-                    </div>
+            <div class="quiz-section">
+                <div class="quiz-title">Quick Check</div>
+                <p class="quiz-question">If your revenue is £15,000 and expenses are £9,000, what's your profit?</p>
+                <div class="quiz-option" data-correct="true"><input type="radio" name="q1"> £6,000</div>
+                <div class="quiz-option"><input type="radio" name="q1"> £24,000</div>
+                <div class="quiz-option"><input type="radio" name="q1"> £9,000</div>
+            </div>
+        </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🚩 Trust Killers (Avoid These)</div>
-                        <div class="key-point"><strong>Making promises you don't keep</strong> - Even small ones ("I'll follow up on that" then you don't)</div>
-                        <div class="key-point"><strong>Blaming your team publicly</strong> - Never. Ever. Always address issues privately first.</div>
-                        <div class="key-point"><strong>Inconsistent rules</strong> - If one person gets away with something, everyone notices. Fair matters.</div>
-                        <div class="key-point"><strong>Not following through on their problems</strong> - If they raise an issue and you ignore it, they stop raising issues.</div>
-                    </div>
+        <!-- MODULE 2: People 1 -->
+        <div class="module" id="module-people-1" data-category="people">
+            <span class="module-badge">People Management</span>
+            <h2 class="module-title">Building Trust with Your Team</h2>
+            <p class="module-description">The foundation of effective leadership</p>
 
-                    <div class="quiz-section">
-                        <div class="quiz-title">Scenario: What would you do?</div>
-                        <div class="quiz-question">
-                            <p>A team member misses a deadline. Your customer is upset. Do you:</p>
-                            <div class="quiz-option">
-                                <input type="radio" name="q2" value="a"> Tell the customer it was their fault
-                            </div>
-                            <div class="quiz-option" data-correct="true">
-                                <input type="radio" name="q2" value="b"> Pull them aside privately, understand why, then handle the customer
-                            </div>
-                            <div class="quiz-option">
-                                <input type="radio" name="q2" value="c"> Ignore it and hope it doesn't happen again
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'recruitment-1',
-                category: 'Recruitment',
-                title: 'Hiring the Right Person',
-                description: 'The most important management decision',
-                content: `
-                    <div class="content-section">
-                        <div class="section-heading">⭐ Why Hiring Well Matters</div>
-                        <p class="content-text">A bad hire costs you 2–3x their annual salary (lost productivity, management time, replacement hiring, training, mistakes).</p>
-                        <p class="content-text">A great hire saves you constantly. They work with you, not against you.</p>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#129309; Why Trust Matters</div>
+                <p class="content-text">Trust is the difference between a team that works FOR you and a team that works WITH you. Without trust, you spend energy managing instead of leading.</p>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🎯 Before You Post the Job</div>
-                        <p class="content-text">Most hiring mistakes start here. You need to be clear about what you're actually looking for.</p>
-                        <div class="template-box">
-                            <div class="template-label">Job Spec Checklist</div>
-                            ☐ What will they DO? (daily/weekly tasks)
-                            ☐ What RESULTS do they need to deliver?
-                            ☐ What skills are essential? (must-have)
-                            ☐ What skills are nice-to-have?
-                            ☐ What's their reporting structure?
-                            ☐ What problems will they solve?
-                            ☐ What's the salary/benefits?
-                        </div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">5 Ways to Build Trust (Fast)</div>
+                <div class="key-point"><strong>1. Be consistent</strong> &mdash; Do what you say you'll do. Every time. Small promises matter.</div>
+                <div class="key-point"><strong>2. Be visible and present</strong> &mdash; Be on the floor, not hiding in the office.</div>
+                <div class="key-point"><strong>3. Admit mistakes</strong> &mdash; When you get something wrong, own it.</div>
+                <div class="key-point"><strong>4. Give credit, take responsibility</strong> &mdash; When things go well, credit your team. When things go wrong, you take it.</div>
+                <div class="key-point"><strong>5. Listen before you fix</strong> &mdash; Ask questions. Understand their perspective. THEN give direction.</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🔍 Interview Red Flags & Green Flags</div>
-                        <div class="key-point"><strong>🚩 RED FLAG:</strong> Blames everyone else for past problems ("My boss didn't understand me", "My team was useless")</div>
-                        <div class="key-point"><strong>🟢 GREEN FLAG:</strong> Takes ownership ("I learned that the hard way", "I'd do that differently now")</div>
-                        <div class="key-point"><strong>🚩 RED FLAG:</strong> Doesn't ask you questions about the role or team</div>
-                        <div class="key-point"><strong>🟢 GREEN FLAG:</strong> Asks smart questions showing they've thought about the role</div>
-                        <div class="key-point"><strong>🚩 RED FLAG:</strong> Vague answers. Can't give specific examples of what they've done</div>
-                        <div class="key-point"><strong>🟢 GREEN FLAG:</strong> Clear, specific examples with context and outcomes</div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128172; The Trust Conversation</div>
+                <div class="template-box"><div class="template-label">Trust-Building Conversation Script</div>1. "I've noticed X [specific thing]"
+2. "Help me understand what's going on?"
+3. [Listen. Don't interrupt.]
+4. "Here's what I'm seeing / concerned about"
+5. "What do you need from me?"
+6. "Here's what I need from you"
+7. "Let's check in on Friday"</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">💬 The Question to Ask Everyone</div>
-                        <p class="content-text">Use this in every interview. Watch how they answer:</p>
-                        <div class="template-box">
-                            <div class="template-label">The STAR Method Question</div>
-                            "Tell me about a time you had to manage a difficult situation with a team member or customer. What was the situation, what did you do, and what was the outcome?"
+            <div class="content-section">
+                <div class="section-heading">&#128681; Trust Killers (Avoid These)</div>
+                <div class="key-point"><strong>Making promises you don't keep</strong> &mdash; Even small ones ("I'll follow up" then you don't).</div>
+                <div class="key-point"><strong>Blaming your team publicly</strong> &mdash; Never. Always address issues privately first.</div>
+                <div class="key-point"><strong>Inconsistent rules</strong> &mdash; If one person gets away with something, everyone notices.</div>
+                <div class="key-point"><strong>Not following through</strong> &mdash; If they raise an issue and you ignore it, they stop raising issues.</div>
+            </div>
 
-                            [Listen for: Specific example, their role/responsibility, how they handled it, what they learned]
-                        </div>
-                    </div>
+            <div class="quiz-section">
+                <div class="quiz-title">Scenario: What would you do?</div>
+                <p class="quiz-question">A team member misses a deadline. Your customer is upset. Do you:</p>
+                <div class="quiz-option"><input type="radio" name="q2"> Tell the customer it was their fault</div>
+                <div class="quiz-option" data-correct="true"><input type="radio" name="q2"> Pull them aside privately, understand why, then handle the customer</div>
+                <div class="quiz-option"><input type="radio" name="q2"> Ignore it and hope it doesn't happen again</div>
+            </div>
+        </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">✅ UK Employment Law (Basics)</div>
-                        <div class="key-point"><strong>You can't ask about:</strong> Age, health, family plans, marital status, religion, ethnicity, sexual orientation</div>
-                        <div class="key-point"><strong>You CAN ask about:</strong> Ability to do the job, relevant experience, availability, references</div>
-                        <div class="key-point"><strong>Probation:</strong> In the UK, employees have employment rights from day 1 (not after 3 months)</div>
-                    </div>
+        <!-- MODULE 3: Recruitment 1 -->
+        <div class="module" id="module-recruitment-1" data-category="recruitment">
+            <span class="module-badge">Recruitment</span>
+            <h2 class="module-title">Hiring the Right Person</h2>
+            <p class="module-description">The most important management decision</p>
 
-                    <div class="quiz-section">
-                        <div class="quiz-title">Quick Check</div>
-                        <div class="quiz-question">
-                            <p>In a UK interview, can you ask a candidate: "Are you planning to have children in the next 3 years?"</p>
-                            <div class="quiz-option">
-                                <input type="radio" name="q3" value="a"> Yes, it's relevant to planning
-                            </div>
-                            <div class="quiz-option" data-correct="true">
-                                <input type="radio" name="q3" value="b"> No, that's discrimination
-                            </div>
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'finance-2',
-                category: 'Finance & Budgeting',
-                title: 'Building and Managing a Budget',
-                description: 'How to forecast and control spend',
-                content: `
-                    <div class="content-section">
-                        <div class="section-heading">📋 What is a Budget?</div>
-                        <p class="content-text">A budget is a forecast of what you expect to happen with money over a period (usually a year, broken into months).</p>
-                        <p class="content-text">It's your management tool. It tells you: "This is what we planned. Are we on track? If not, why not and what do we do?"</p>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#11088; Why Hiring Well Matters</div>
+                <p class="content-text">A bad hire costs you 2&ndash;3x their annual salary in lost productivity, management time, and replacement costs.</p>
+                <p class="content-text">A great hire saves you constantly. They work with you, not against you.</p>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🎯 Basic Budget Steps</div>
-                        <div class="key-point"><strong>1. Start with history</strong> - Look at last year's actual spend. What was predictable? What varied?</div>
-                        <div class="key-point"><strong>2. Build from zero where it matters</strong> - Wages (number of staff × pay). Rent (fixed). Supplies (based on activity).</div>
-                        <div class="key-point"><strong>3. Add contingency</strong> - Things always cost more or happen unexpectedly. Add 5–10%.</div>
-                        <div class="key-point"><strong>4. Review quarterly</strong> - Compare actual to budget. Understand the gaps.</div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#127919; Before You Post the Job</div>
+                <div class="template-box"><div class="template-label">Job Spec Checklist</div>[ ] What will they DO? (daily/weekly tasks)
+[ ] What RESULTS do they need to deliver?
+[ ] What skills are essential? (must-have)
+[ ] What skills are nice-to-have?
+[ ] What's their reporting structure?
+[ ] What problems will they solve?
+[ ] What's the salary/benefits?</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">💰 Budget Template (Small Team/Shift)</div>
-                        <div class="template-box">
-                            <div class="template-label">Monthly Budget Example</div>
-                            REVENUE
-                            Sales:                  £12,000
-                            ─────────────────
-                            Total Revenue:          £12,000
+            <div class="content-section">
+                <div class="section-heading">&#128269; Interview Red Flags &amp; Green Flags</div>
+                <div class="key-point"><strong>Red flag:</strong> Blames everyone else for past problems.</div>
+                <div class="key-point"><strong>Green flag:</strong> Takes ownership ("I'd do that differently now").</div>
+                <div class="key-point"><strong>Red flag:</strong> Doesn't ask you questions about the role or team.</div>
+                <div class="key-point"><strong>Green flag:</strong> Asks smart questions showing they've thought about the role.</div>
+                <div class="key-point"><strong>Red flag:</strong> Vague answers. Can't give specific examples.</div>
+                <div class="key-point"><strong>Green flag:</strong> Clear, specific examples with context and outcomes.</div>
+            </div>
 
-                            EXPENSES
-                            Staff:                  £4,000
-                            Stock/Supplies:         £2,400
-                            Utilities:              £600
-                            Equipment:              £300
-                            Contingency (5%):       £350
-                            ─────────────────
-                            Total Expenses:         £7,650
+            <div class="content-section">
+                <div class="section-heading">&#10003; UK Employment Law (Basics)</div>
+                <div class="key-point"><strong>You can't ask about:</strong> Age, health, family plans, marital status, religion, ethnicity, sexual orientation.</div>
+                <div class="key-point"><strong>You CAN ask about:</strong> Ability to do the job, relevant experience, availability, references.</div>
+                <div class="key-point"><strong>Probation:</strong> UK employees have employment rights from day 1, not after 3 months.</div>
+            </div>
 
-                            PROFIT:                 £4,350
-                        </div>
-                    </div>
+            <div class="quiz-section">
+                <div class="quiz-title">Quick Check</div>
+                <p class="quiz-question">In a UK interview, can you ask: "Are you planning to have children in the next 3 years?"</p>
+                <div class="quiz-option"><input type="radio" name="q3"> Yes, it's relevant to planning</div>
+                <div class="quiz-option" data-correct="true"><input type="radio" name="q3"> No, that's discrimination</div>
+            </div>
+        </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🔴 Budget Variance (What Goes Wrong)</div>
-                        <p class="content-text"><strong>Scenario:</strong> You budgeted £2,000 for stock. You actually spent £2,400.</p>
-                        <p class="content-text"><strong>Question to ask:</strong> Why? Was it:</p>
-                        <div class="key-point">Unexpected waste/damage?</div>
-                        <div class="key-point">More customers than forecast?</div>
-                        <div class="key-point">Prices increased?</div>
-                        <div class="key-point">Poor ordering discipline?</div>
-                        <p class="content-text">The "why" matters. A 20% variance because of customer demand is different from 20% because of waste.</p>
-                    </div>
+        <!-- MODULE 4: Finance 2 -->
+        <div class="module" id="module-finance-2" data-category="finance">
+            <span class="module-badge">Finance &amp; Budgeting</span>
+            <h2 class="module-title">Building and Managing a Budget</h2>
+            <p class="module-description">How to forecast and control spend</p>
 
-                    <div class="content-section">
-                        <div class="section-heading">💡 Your Job as a Manager</div>
-                        <div class="key-point"><strong>Control what you control:</strong> Wages (staffing levels), waste, stock, overtime. You can't control rent or external prices (much).</div>
-                        <div class="key-point"><strong>Report honestly:</strong> If you're going to overspend, flag it early. Surprises are worse than bad news early.</div>
-                        <div class="key-point"><strong>Find the leaks:</strong> A £50/week waste in stock is £2,600/year. Small things add up.</div>
-                    </div>
-                `
-            },
-            {
-                id: 'people-2',
-                category: 'People Management',
-                title: 'Feedback and Performance Conversations',
-                description: 'How to give feedback that sticks',
-                content: `
-                    <div class="content-section">
-                        <div class="section-heading">🎯 Why Feedback Matters</div>
-                        <p class="content-text">Most people want to do well. But if they don't know what "well" looks like or where they're falling short, they can't improve.</p>
-                        <p class="content-text">As a manager, your job is to be clear about expectations and give feedback quickly.</p>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128203; What is a Budget?</div>
+                <p class="content-text">A budget is a forecast of what you expect to happen with money over a period (usually a year, broken into months).</p>
+                <p class="content-text">It's your management tool: "This is what we planned. Are we on track? If not, why not?"</p>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">⭐ Positive Feedback (Do This More)</div>
-                        <p class="content-text">Positive feedback should be specific, immediate, and tie to impact.</p>
-                        <div class="template-box">
-                            <div class="template-label">Good feedback (immediately after)</div>
-                            "That's exactly what I needed. You spotted the customer issue before it escalated and handled it calmly. That's the standard I'm looking for. Keep doing that."
-                        </div>
-                        <p class="content-text" style="margin-top: 12px;"><strong>NOT:</strong> "Good job!" (vague, forgettable)</p>
-                        <p class="content-text"><strong>WHY it works:</strong> They know exactly what they did right. They know it matters to you. They'll repeat it.</p>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#127919; Basic Budget Steps</div>
+                <div class="key-point"><strong>1. Start with history</strong> &mdash; Look at last year's actual spend.</div>
+                <div class="key-point"><strong>2. Build from zero where it matters</strong> &mdash; Wages, rent, supplies based on activity.</div>
+                <div class="key-point"><strong>3. Add contingency</strong> &mdash; Things always cost more. Add 5&ndash;10%.</div>
+                <div class="key-point"><strong>4. Review quarterly</strong> &mdash; Compare actual to budget. Understand the gaps.</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🚨 Corrective Feedback (When They Get It Wrong)</div>
-                        <p class="content-text">Corrective feedback should be prompt, private, specific, and solution-focused.</p>
-                        <div class="template-box">
-                            <div class="template-label">Corrective Feedback Script</div>
-                            1. Private conversation (not in front of others)
-                            2. "I noticed you did X when Y happened"
-                            3. "The impact was Z" (be specific about the problem)
-                            4. "Here's what I need instead" (clear direction)
-                            5. "Do you understand?" (check they get it)
-                            6. "Let's check in Friday" (accountability + support)
-                        </div>
-                        <p class="content-text" style="margin-top: 12px;"><strong>Example:</strong> "I noticed the till wasn't balanced this morning. That means I have to spend time tracking down £50 and it delays my admin. Going forward, I need you to reconcile before you hand over. Can you do that?"</p>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128176; Budget Template</div>
+                <div class="template-box"><div class="template-label">Monthly Budget Example</div>REVENUE
+  Sales:               £12,000
+-------------------
+Total Revenue:         £12,000
 
-                    <div class="content-section">
-                        <div class="section-heading">🚫 Feedback Mistakes (Don't Do These)</div>
-                        <div class="key-point"><strong>Don't make it personal:</strong> "You're disorganised" vs "That report had errors in three rows"</div>
-                        <div class="key-point"><strong>Don't surprise them at review time:</strong> If they're doing something wrong, tell them NOW, not in 3 months</div>
-                        <div class="key-point"><strong>Don't give feedback when you're angry:</strong> Wait 30 mins. Be professional. Be clear.</div>
-                        <div class="key-point"><strong>Don't forget the follow-up:</strong> If you said "let's check in Friday", DO IT. Shows you meant it.</div>
-                    </div>
+EXPENSES
+  Staff:               £4,000
+  Stock/Supplies:      £2,400
+  Utilities:           £600
+  Equipment:           £300
+  Contingency (5%):    £350
+-------------------
+Total Expenses:        £7,650
 
-                    <div class="content-section">
-                        <div class="section-heading">💬 The Development Conversation (Growth Talk)</div>
-                        <p class="content-text">Separate from corrective feedback. Once a quarter, have a "how are you developing?" talk.</p>
-                        <div class="template-box">
-                            <div class="template-label">Development Conversation</div>
-                            1. "What's going well for you right now?"
-                            2. "What would you like to get better at?"
-                            3. "What do you need from me to do that?"
-                            4. "Here's what I see as your strengths / growth areas"
-                            5. "Here's how we can work on that together"
-                        </div>
-                    </div>
-                `
-            },
-            {
-                id: 'recruitment-2',
-                category: 'Recruitment',
-                title: 'Onboarding: Setting New Hires Up for Success',
-                description: 'Your first 30 days as a manager',
-                content: `
-                    <div class="content-section">
-                        <div class="section-heading">⏰ The First 30 Days Matter</div>
-                        <p class="content-text">People decide if they're staying within the first 30 days. A bad onboarding doesn't just waste their time—it costs you.</p>
-                        <p class="content-text">A great onboarding means they're productive faster and they're more likely to stay.</p>
-                    </div>
+PROFIT:                £4,350</div>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">📅 Day 1 Checklist</div>
-                        <div class="template-box">
-                            <div class="template-label">First Day Must-Haves</div>
-                            ☐ Welcome them (don't let them figure it out themselves)
-                            ☐ Show them physical space (lockers, toilets, break room)
-                            ☐ Give them key info (hours, breaks, key contacts, safety)
-                            ☐ Introduce team members (at least 3–4 people)
-                            ☐ Give them ONE clear task (not a firehose)
-                            ☐ Check in at end of day (5 mins. "How was that? Questions?")
-                        </div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128308; Budget Variance</div>
+                <p class="content-text"><strong>Scenario:</strong> You budgeted £2,000 for stock but spent £2,400. Ask why:</p>
+                <div class="key-point">Unexpected waste or damage?</div>
+                <div class="key-point">More customers than forecast?</div>
+                <div class="key-point">Prices increased?</div>
+                <div class="key-point">Poor ordering discipline?</div>
+                <p class="content-text">A 20% variance from demand is very different from 20% because of waste.</p>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">📋 Week 1 (Get Them Stable)</div>
-                        <div class="key-point"><strong>Shadow an experienced team member</strong> - They see how work actually gets done</div>
-                        <div class="key-point"><strong>Cover the basics once</strong> - Procedures, systems, key rules. Don't assume they know.</div>
-                        <div class="key-point"><strong>Give them small, successful wins</strong> - Build confidence. Not big complex tasks yet.</div>
-                        <div class="key-point"><strong>One-on-one daily (5 mins)</strong> - "How's it going? Any questions? Anything blocking you?"</div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#128161; Your Job as a Manager</div>
+                <div class="key-point"><strong>Control what you control:</strong> Wages, waste, stock, overtime.</div>
+                <div class="key-point"><strong>Report honestly:</strong> Flag overspend early. Surprises are worse than bad news.</div>
+                <div class="key-point"><strong>Find the leaks:</strong> £50/week waste in stock = £2,600/year.</div>
+            </div>
+        </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🎯 Week 2–4 (Build Competence)</div>
-                        <div class="key-point"><strong>Gradually increase responsibility</strong> - Not all at once. Let them prove each piece works.</div>
-                        <div class="key-point"><strong>One-on-one weekly now</strong> - Focus on: "What's going well? What's tough? What do you need?"</div>
-                        <div class="key-point"><strong>Give feedback quickly</strong> - They're learning. Correct early, praise specifically.</div>
-                        <div class="key-point"><strong>Check understanding</strong> - Don't assume they know. "Can you walk me through how you'd handle X?"</div>
-                    </div>
+        <!-- MODULE 5: People 2 -->
+        <div class="module" id="module-people-2" data-category="people">
+            <span class="module-badge">People Management</span>
+            <h2 class="module-title">Feedback and Performance Conversations</h2>
+            <p class="module-description">How to give feedback that sticks</p>
 
-                    <div class="content-section">
-                        <div class="section-heading">🚀 30-Day Check-In (The Conversation)</div>
-                        <div class="template-box">
-                            <div class="template-label">30-Day Review Meeting</div>
-                            1. "How's the first month been?"
-                            2. "What's felt manageable? What's been hard?"
-                            3. "Here's what I'm seeing going well: [specific]"
-                            4. "Here's what we need to work on: [specific]"
-                            5. "What do you need from me?"
-                            6. "Here's the plan for month 2"
-                            7. "You're on track / needs improvement" (be clear)
-                        </div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#127919; Why Feedback Matters</div>
+                <p class="content-text">Most people want to do well. But if they don't know what "well" looks like, they can't improve. Your job is to be clear and give feedback quickly.</p>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">🚩 Red Flags During Onboarding</div>
-                        <div class="key-point"><strong>They're not asking questions</strong> - Good sign they understand OR bad sign they're lost and not saying it. Ask: "What are you unsure about?"</div>
-                        <div class="key-point"><strong>They're not showing up on time</strong> - Address day 3, not day 15. Set expectations early.</div>
-                        <div class="key-point"><strong>They're making the same mistakes</strong> - You explained it once. They didn't get it. Try a different approach or pair them with someone again.</div>
-                    </div>
+            <div class="content-section">
+                <div class="section-heading">&#11088; Positive Feedback (Do This More)</div>
+                <div class="template-box"><div class="template-label">Good Feedback Example</div>"That's exactly what I needed. You spotted the
+customer issue before it escalated and handled it
+calmly. That's the standard I'm looking for."</div>
+                <p class="content-text"><strong>NOT:</strong> "Good job!" (vague, forgettable)</p>
+            </div>
 
-                    <div class="content-section">
-                        <div class="section-heading">✅ Probation in the UK</div>
-                        <div class="key-point">Probation doesn't have to be formal, but best practice is 3 months</div>
-                        <div class="key-point">Even in probation, employees have full employment rights</div>
-                        <div class="key-point">If they're not working out, you need to tell them early and clearly</div>
-                    </div>
-                `
-            }
-        ];
+            <div class="content-section">
+                <div class="section-heading">&#128680; Corrective Feedback Script</div>
+                <div class="template-box"><div class="template-label">Corrective Feedback</div>1. Private conversation (not in front of others)
+2. "I noticed you did X when Y happened"
+3. "The impact was Z" (be specific)
+4. "Here's what I need instead"
+5. "Do you understand?"
+6. "Let's check in Friday"</div>
+            </div>
 
-        let currentModuleIndex = 0;
-        let completedModules = JSON.parse(localStorage.getItem('completedModules') || '[]');
+            <div class="content-section">
+                <div class="section-heading">&#128683; Feedback Mistakes</div>
+                <div class="key-point"><strong>Don't make it personal:</strong> "You're disorganised" vs "That report had errors in three rows".</div>
+                <div class="key-point"><strong>Don't surprise them at review time:</strong> Tell them NOW, not in 3 months.</div>
+                <div class="key-point"><strong>Don't give feedback when angry:</strong> Wait 30 mins. Be professional.</div>
+                <div class="key-point"><strong>Don't forget the follow-up:</strong> If you said "check in Friday", DO IT.</div>
+            </div>
 
-        // Maps category name to the short key used in element IDs
-        function categoryKey(cat) {
-            return cat.toLowerCase().split(' ')[0];
+            <div class="content-section">
+                <div class="section-heading">&#128172; Development Conversation (Quarterly)</div>
+                <div class="template-box"><div class="template-label">Growth Talk</div>1. "What's going well for you right now?"
+2. "What would you like to get better at?"
+3. "What do you need from me to do that?"
+4. "Here's what I see as your strengths / growth areas"
+5. "Here's how we can work on that together"</div>
+            </div>
+        </div>
+
+        <!-- MODULE 6: Recruitment 2 -->
+        <div class="module" id="module-recruitment-2" data-category="recruitment">
+            <span class="module-badge">Recruitment</span>
+            <h2 class="module-title">Onboarding: Setting New Hires Up for Success</h2>
+            <p class="module-description">The first 30 days matter most</p>
+
+            <div class="content-section">
+                <div class="section-heading">&#9200; The First 30 Days Matter</div>
+                <p class="content-text">People decide if they're staying within the first 30 days. A bad onboarding costs you. A great one means they're productive faster and more likely to stay.</p>
+            </div>
+
+            <div class="content-section">
+                <div class="section-heading">&#128197; Day 1 Checklist</div>
+                <div class="template-box"><div class="template-label">First Day Must-Haves</div>[ ] Welcome them personally
+[ ] Show them the physical space
+[ ] Give key info (hours, breaks, contacts, safety)
+[ ] Introduce 3-4 team members
+[ ] Give them ONE clear task
+[ ] Check in at end of day (5 mins)</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-heading">&#128203; Week 1 &mdash; Get Them Stable</div>
+                <div class="key-point"><strong>Shadow an experienced team member</strong> &mdash; They see how work actually gets done.</div>
+                <div class="key-point"><strong>Cover the basics</strong> &mdash; Procedures, systems, key rules. Don't assume they know.</div>
+                <div class="key-point"><strong>Give small wins</strong> &mdash; Build confidence. Not big complex tasks yet.</div>
+                <div class="key-point"><strong>Daily 5-min check-in</strong> &mdash; "How's it going? Any questions?"</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-heading">&#128640; 30-Day Check-In</div>
+                <div class="template-box"><div class="template-label">30-Day Review Meeting</div>1. "How's the first month been?"
+2. "What's felt manageable? What's been hard?"
+3. "Here's what I'm seeing going well: [specific]"
+4. "Here's what we need to work on: [specific]"
+5. "What do you need from me?"
+6. "Here's the plan for month 2"
+7. Be clear: "You're on track" or "needs improvement"</div>
+            </div>
+
+            <div class="content-section">
+                <div class="section-heading">&#128681; Red Flags During Onboarding</div>
+                <div class="key-point"><strong>Not asking questions</strong> &mdash; Ask: "What are you unsure about?"</div>
+                <div class="key-point"><strong>Not showing up on time</strong> &mdash; Address day 3, not day 15.</div>
+                <div class="key-point"><strong>Repeating mistakes</strong> &mdash; Try a different approach or re-pair them.</div>
+            </div>
+
+            <div class="quiz-section">
+                <div class="quiz-title">Quick Check</div>
+                <p class="quiz-question">When should you address a new hire who keeps arriving late?</p>
+                <div class="quiz-option"><input type="radio" name="q4"> At their 3-month review</div>
+                <div class="quiz-option" data-correct="true"><input type="radio" name="q4"> By day 3, clearly and privately</div>
+                <div class="quiz-option"><input type="radio" name="q4"> After their probation ends</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn-primary" id="btn-complete" onclick="completeModule()">Mark as Complete</button>
+            <button class="btn-secondary" onclick="nextModule()">Next Module &rsaquo;</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Built to help you rebuild confidence and master the foundations of management.</p>
+    </footer>
+</div>
+
+<script>
+    var moduleOrder = [
+        'module-finance-1',
+        'module-people-1',
+        'module-recruitment-1',
+        'module-finance-2',
+        'module-people-2',
+        'module-recruitment-2'
+    ];
+
+    var categoryTotals = { finance: 2, people: 2, recruitment: 2 };
+
+    var currentIndex = 0;
+    var completed = JSON.parse(localStorage.getItem('mgmt_completed') || '[]');
+
+    function showModule(index) {
+        // Hide all
+        for (var i = 0; i < moduleOrder.length; i++) {
+            document.getElementById(moduleOrder[i]).classList.remove('active');
         }
+        // Show current
+        var el = document.getElementById(moduleOrder[index]);
+        el.classList.add('active');
 
-        function getCurrentModule() {
-            return modules[currentModuleIndex % modules.length];
-        }
-
-        function renderModule() {
-            const module = getCurrentModule();
-            const isCompleted = completedModules.includes(module.id);
-
-            document.getElementById('module-content').innerHTML = `
-                <span class="module-badge">${module.category}</span>
-                <h2 class="module-title">${module.title}</h2>
-                <p class="module-description">${module.description}</p>
-                ${module.content}
-            `;
-
-            updateProgress();
-
-            if (isCompleted) {
-                document.getElementById('completion-message').classList.add('show');
-            } else {
-                document.getElementById('completion-message').classList.remove('show');
-            }
-        }
-
-        function updateProgress() {
-            const categories = ['Finance & Budgeting', 'People Management', 'Recruitment'];
-
-            categories.forEach(cat => {
-                const key = categoryKey(cat);
-                const total = modules.filter(m => m.category === cat).length;
-                const completed = completedModules.filter(id =>
-                    modules.find(m => m.id === id && m.category === cat)
-                ).length;
-                const percentage = total > 0 ? (completed / total) * 100 : 0;
-
-                document.getElementById(`progress-${key}`).style.width = percentage + '%';
-                document.getElementById(`count-${key}`).textContent = completed;
-                document.getElementById(`total-${key}`).textContent = total;
-            });
-        }
-
-        function completeModule() {
-            const module = getCurrentModule();
-            if (!completedModules.includes(module.id)) {
-                completedModules.push(module.id);
-                localStorage.setItem('completedModules', JSON.stringify(completedModules));
-                updateProgress();
-                document.getElementById('completion-message').classList.add('show');
-                document.getElementById('completion-message').scrollIntoView({ behavior: 'smooth' });
-            }
-            const btn = document.querySelector('.btn-primary');
+        // Update complete button
+        var btn = document.getElementById('btn-complete');
+        var isCompleted = completed.indexOf(moduleOrder[index]) !== -1;
+        if (isCompleted) {
             btn.textContent = '✓ Completed';
             btn.classList.add('completed');
+        } else {
+            btn.textContent = 'Mark as Complete';
+            btn.classList.remove('completed');
         }
 
-        function handleQuizClick(e) {
-            const option = e.target.closest('.quiz-option');
-            if (!option) return;
-            const radio = option.querySelector('input[type="radio"]');
-            if (!radio) return;
+        // Show/hide banner
+        var banner = document.getElementById('completion-banner');
+        if (isCompleted) {
+            banner.classList.add('show');
+        } else {
+            banner.classList.remove('show');
+        }
 
-            const name = radio.name;
-            const question = option.closest('.quiz-question');
-            if (!question) return;
+        updateProgress();
+    }
 
-            // Remove previous state for this question
-            question.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.remove('correct', 'incorrect');
-            });
-            const existing = question.querySelector('.quiz-feedback');
-            if (existing) existing.remove();
+    function completeModule() {
+        var id = moduleOrder[currentIndex];
+        if (completed.indexOf(id) === -1) {
+            completed.push(id);
+            localStorage.setItem('mgmt_completed', JSON.stringify(completed));
+        }
+        var btn = document.getElementById('btn-complete');
+        btn.textContent = '✓ Completed';
+        btn.classList.add('completed');
+        document.getElementById('completion-banner').classList.add('show');
+        updateProgress();
+    }
 
-            const isCorrect = option.dataset.correct === 'true';
-            option.classList.add(isCorrect ? 'correct' : 'incorrect');
+    function nextModule() {
+        currentIndex = (currentIndex + 1) % moduleOrder.length;
+        showModule(currentIndex);
+        window.scrollTo(0, 0);
+    }
 
-            if (!isCorrect) {
-                const correctOpt = question.querySelector('.quiz-option[data-correct="true"]');
-                if (correctOpt) correctOpt.classList.add('correct');
+    function updateProgress() {
+        var cats = ['finance', 'people', 'recruitment'];
+        for (var i = 0; i < cats.length; i++) {
+            var cat = cats[i];
+            var total = categoryTotals[cat];
+            var count = 0;
+            for (var j = 0; j < completed.length; j++) {
+                if (completed[j].indexOf(cat) !== -1) count++;
             }
+            var pct = total > 0 ? (count / total) * 100 : 0;
+            document.getElementById('progress-' + cat).style.width = pct + '%';
+            document.getElementById('count-' + cat).textContent = count;
+        }
+    }
 
-            const feedback = document.createElement('div');
-            feedback.className = `quiz-feedback ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedback.textContent = isCorrect ? '✓ Correct!' : '✗ Not quite — the correct answer is highlighted in green.';
-            question.appendChild(feedback);
+    // Quiz click handler
+    document.addEventListener('click', function(e) {
+        var option = e.target.closest ? e.target.closest('.quiz-option') : null;
+        if (!option) return;
+        var radio = option.querySelector('input[type="radio"]');
+        if (!radio) return;
+        radio.checked = true;
+
+        // Find all sibling options in the same quiz section
+        var section = option.parentElement;
+        var allOptions = section.querySelectorAll('.quiz-option');
+        for (var i = 0; i < allOptions.length; i++) {
+            allOptions[i].classList.remove('correct', 'incorrect');
         }
 
-        document.addEventListener('click', handleQuizClick);
+        // Remove old feedback
+        var old = section.querySelector('.quiz-feedback');
+        if (old) old.parentElement.removeChild(old);
 
-        function nextModule() {
-            currentModuleIndex = (currentModuleIndex + 1) % modules.length;
-            renderModule();
-            const btn = document.querySelector('.btn-primary');
-            const module = getCurrentModule();
-            if (completedModules.includes(module.id)) {
-                btn.textContent = '✓ Completed';
-                btn.classList.add('completed');
-            } else {
-                btn.textContent = 'Mark as Complete';
-                btn.classList.remove('completed');
+        var isCorrect = option.getAttribute('data-correct') === 'true';
+        option.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+        if (!isCorrect) {
+            for (var i = 0; i < allOptions.length; i++) {
+                if (allOptions[i].getAttribute('data-correct') === 'true') {
+                    allOptions[i].classList.add('correct');
+                }
             }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initialize
-        renderModule();
-    </script>
+        var feedback = document.createElement('div');
+        feedback.className = 'quiz-feedback ' + (isCorrect ? 'correct' : 'incorrect');
+        feedback.textContent = isCorrect ? '✓ Correct!' : '✗ Not quite — the correct answer is highlighted in green.';
+        section.appendChild(feedback);
+    });
+
+    // Init
+    updateProgress();
+    showModule(0);
+</script>
 </body>
 </html>
