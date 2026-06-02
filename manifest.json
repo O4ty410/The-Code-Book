@@ -2,7 +2,7 @@
   "name": "The Code Book",
   "short_name": "Code Book",
   "description": "A calm path into coding. Seven floors from zero to professional grade — hints, XP, voice narration, offline-ready.",
-  "start_url": "./",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0a0a0f",
