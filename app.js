@@ -4102,11 +4102,21 @@ function renderLearnHub() {
     '</div>';
 
   var html = '<style id="hub-override">' +
-    '.fc-header-title{color:#d0eeff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;text-shadow:0 0 40px rgba(126,184,200,0.45)!important;}' +
-    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;}' +
-    '.fc-card{min-width:130px!important;}' +
-    '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;}' +
-    '.fc-stat{flex:1!important;text-align:center!important;}' +
+    /* Header — bigger, glowing, high contrast */
+    '.fc-header-label{color:rgba(160,220,255,0.88)!important;letter-spacing:4px!important;text-shadow:0 0 14px rgba(100,180,255,0.55)!important;}' +
+    '.fc-header-title{color:#eef6ff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;font-size:clamp(34px,5.5vw,60px)!important;font-weight:900!important;line-height:1.1!important;letter-spacing:-0.5px!important;text-shadow:0 4px 20px rgba(0,0,0,0.95),0 0 50px rgba(126,184,200,0.55),0 0 100px rgba(126,184,200,0.22)!important;}' +
+    '.fc-header-sub{color:rgba(200,228,255,0.78)!important;text-shadow:0 2px 10px rgba(0,0,0,0.92)!important;}' +
+    /* Cards — glassmorphism so they lift off the bloom */
+    '.fc-card{min-width:130px!important;background:rgba(4,8,22,0.72)!important;border:1px solid rgba(255,255,255,0.16)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;box-shadow:0 8px 40px rgba(0,0,0,0.8),0 2px 8px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.12)!important;}' +
+    /* Card text contrast */
+    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;color:rgba(230,242,255,0.93)!important;text-shadow:0 1px 6px rgba(0,0,0,0.88)!important;}' +
+    '.fc-floor-badge{opacity:1!important;text-shadow:0 0 10px rgba(var(--fc-color-rgb,200,169,110),0.7)!important;}' +
+    '.fc-sec-count{color:rgba(180,212,255,0.68)!important;text-shadow:0 1px 4px rgba(0,0,0,0.8)!important;}' +
+    /* Stats bar — glassy panel */
+    '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;background:rgba(4,8,20,0.65)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;border:1px solid rgba(255,255,255,0.08)!important;border-radius:10px!important;}' +
+    '.fc-stat{flex:1!important;text-align:center!important;background:transparent!important;}' +
+    '.fc-stat-val{text-shadow:0 2px 12px rgba(0,0,0,0.92)!important;color:#ffffff!important;}' +
+    '.fc-stat-label{color:rgba(200,228,255,0.78)!important;text-shadow:0 1px 6px rgba(0,0,0,0.8)!important;}' +
     '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
     '.fc-row{justify-content:center!important;}' +
@@ -4129,11 +4139,11 @@ function renderLearnHub() {
       '<div style="margin-top:16px;">' + overallBar + '</div>' +
       '<button class="hub-notes-btn" onclick="openNotesReview()">📝 Review your notes</button>' +
     '</div>' +
-    '<div class="fc-stats" style="display:flex;width:100%;margin:0 auto 28px;border-top:1px solid #0a1828;border-bottom:1px solid #0a1828;padding:14px 0;">' +
-      '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Unlocked</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">XP Earned</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + (state.streak || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
+    '<div class="fc-stats" style="display:flex;width:100%;margin:0 auto 28px;padding:14px 0;">' +
+      '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Unlocked</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">XP Earned</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + (state.streak || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Day Streak</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Complete</div></div>' +
     '</div>' +
     '<div class="fc-row" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;">' + cardsHtml + '</div>' +
     (function() {
