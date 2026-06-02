@@ -347,9 +347,14 @@
     /* Floor grid */
     .floors-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
       margin-bottom: 56px;
+    }
+
+    /* Floor 07 — centre it under Floor 05 */
+    .floor-card:last-child {
+      grid-column: 2;
     }
 
     .floor-card {
@@ -359,7 +364,7 @@
       -webkit-backdrop-filter: blur(14px);
       box-shadow: 0 8px 48px rgba(0, 0, 0, 0.75), 0 2px 10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
       border-radius: 12px;
-      padding: 20px 22px;
+      padding: 26px 28px;
       position: relative;
       overflow: hidden;
       transition: transform 0.2s, border-color 0.2s, background 0.2s;
@@ -689,10 +694,13 @@
 
     @media (max-width: 860px) {
       .games-grid { grid-template-columns: 1fr 1fr; }
+      .floors-grid { grid-template-columns: 1fr 1fr; }
+      .floor-card:last-child { grid-column: auto; }
     }
 
     @media (max-width: 560px) {
       .games-grid { grid-template-columns: 1fr; }
+      .floors-grid { grid-template-columns: 1fr; }
     }
 
     /* ── MOBILE ─────────────────────────────────────────────── */
