@@ -531,6 +531,126 @@
       text-transform: uppercase;
     }
 
+    /* ── GAME HUB ───────────────────────────────────────────── */
+    #games {
+      padding-top: clamp(64px, 10vw, 120px);
+      padding-bottom: clamp(64px, 10vw, 120px);
+    }
+
+    #games .section-header {
+      text-align: center;
+      margin-bottom: clamp(40px, 6vw, 64px);
+    }
+
+    #games .section-header h2 {
+      font-family: var(--font-head);
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    #games .section-header p {
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .game-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .game-card--glitch {
+      border-color: rgba(0, 229, 255, 0.15);
+    }
+
+    .game-card--glitch:hover {
+      border-color: rgba(0, 229, 255, 0.35);
+    }
+
+    .game-card--venus {
+      border-color: rgba(192, 132, 252, 0.15);
+    }
+
+    .game-card--venus:hover {
+      border-color: rgba(192, 132, 252, 0.35);
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--game-line);
+    }
+
+    .game-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--game-color);
+      margin-bottom: 10px;
+    }
+
+    .game-title {
+      font-family: var(--font-head);
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: var(--game-color);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .game-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .game-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 600px) {
+      .games-grid { grid-template-columns: 1fr; }
+    }
+
     /* ── MOBILE ─────────────────────────────────────────────── */
     @media (max-width: 680px) {
       #who .wrap {
@@ -577,6 +697,7 @@
       </p>
       <div class="hero-actions">
         <a class="btn-primary" href="app.html">Start Floor 1 &nbsp;&#8594;</a>
+        <a class="btn-ghost" href="#who">Who this is for</a>
         <a class="btn-ghost" href="#how">See how it works</a>
       </div>
       <p class="hero-note">Free &nbsp;&#183;&nbsp; Offline-ready &nbsp;&#183;&nbsp; No install required</p>
@@ -821,6 +942,58 @@
           <div class="benefit-desc">
             Once loaded, the full app works without an internet connection.
             No account required to start. Your data stays on your device.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── GAME HUB ──────────────────────────────────────────── -->
+  <section id="games">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="label">Game Hub</p>
+        <h2>Learn by playing.<br>Actually.</h2>
+        <p>
+          Two games built into the app. Not decoration — each one is based on a
+          real class of software problem.
+        </p>
+      </div>
+
+      <div class="games-grid">
+
+        <div class="game-card game-card--glitch" style="--game-color:#00e5ff; --game-line: linear-gradient(90deg, #00e5ff, #0055cc);">
+          <div class="game-eyebrow">&#9888; System Breach Detected</div>
+          <div class="game-title">GLITCH</div>
+          <p class="game-desc">
+            A rogue process has corrupted the signal routing network. Rotate the
+            broken pipe tiles to restore the connection from SOURCE to TARGET before
+            the system collapses. Ten levels of escalating corruption — each one
+            mirrors a real class of software bug.
+          </p>
+          <div class="game-tags">
+            <span class="game-tag">Logic puzzles</span>
+            <span class="game-tag">10 levels</span>
+            <span class="game-tag">Escalating difficulty</span>
+          </div>
+        </div>
+
+        <div class="game-card game-card--venus" style="--game-color:#c084fc; --game-line: linear-gradient(90deg, #a855f7, #5b21b6);">
+          <div class="game-eyebrow">Colony Signal Router</div>
+          <div class="game-title">VENUS</div>
+          <p class="game-desc">
+            A transmission from a deep-space colony has been scrambled in transit.
+            Re-route the signal through a corrupted network to restore contact.
+            A harder variant of the Glitch puzzle — same mechanic, higher stakes,
+            bigger grids.
+          </p>
+          <div class="game-tags">
+            <span class="game-tag">Signal routing</span>
+            <span class="game-tag">Larger grids</span>
+            <span class="game-tag">Deep space theme</span>
           </div>
         </div>
 
