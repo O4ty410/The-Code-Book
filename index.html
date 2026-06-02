@@ -1239,7 +1239,7 @@
       return { bg:[L.bg[0],L.bg[1],L.bg[2]], r:L.r, g:L.g, b:L.b, a:L.a, cx:L.cx, cy:L.cy, sa:L.sa };
     }
 
-    var S = 0.008;
+    var S = 0.05;
     var cur = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20, sa:1.0 };
     var tgt = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20, sa:1.0 };
     var bloomEl = document.getElementById('neon-bloom');
@@ -1260,7 +1260,7 @@
       cur.r  = lerp(cur.r,  tgt.r,  S);  cur.g  = lerp(cur.g,  tgt.g,  S);
       cur.b  = lerp(cur.b,  tgt.b,  S);  cur.a  = lerp(cur.a,  tgt.a,  S);
       cur.cx = lerp(cur.cx, tgt.cx, S);  cur.cy = lerp(cur.cy, tgt.cy, S);
-      cur.sa = lerp(cur.sa, tgt.sa, 0.015);
+      cur.sa = lerp(cur.sa, tgt.sa, 0.05);
       if (sc) sc.style.opacity = cur.sa.toFixed(3);
 
       var r = Math.round(cur.r), g = Math.round(cur.g), b = Math.round(cur.b);
