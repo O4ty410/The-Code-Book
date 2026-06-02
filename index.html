@@ -1072,16 +1072,16 @@
   </footer>
 
   <script>
-    // Liquid glass scroll gradient — 60fps lerp loop
-    // Each stop: bg = body colour, r/g/b/a = bloom glow colour
+    // Molten glass scroll gradient — 60fps lerp loop with drifting glow centre
+    // cx/cy = bloom ellipse centre (%) so the glow pools and flows as you scroll
     var STOPS = [
-      { p: 0.00, bg: [5,  7,  12], r: 50,  g: 80,  b: 220, a: 0.00 },
-      { p: 0.14, bg: [3,  9,  42], r: 40,  g: 80,  b: 255, a: 0.30 },
-      { p: 0.30, bg: [16, 4,  46], r: 140, g: 28,  b: 255, a: 0.30 },
-      { p: 0.48, bg: [4,  38, 28], r: 14,  g: 200, b: 130, a: 0.28 },
-      { p: 0.68, bg: [44, 16, 4 ], r: 255, g: 118, b: 14,  a: 0.28 },
-      { p: 0.86, bg: [10, 4,  40], r: 100, g: 40,  b: 220, a: 0.20 },
-      { p: 1.00, bg: [5,  7,  12], r: 50,  g: 80,  b: 220, a: 0.04 },
+      { p: 0.00, bg: [5,  7,  12], r: 50,  g: 80,  b: 220, a: 0.00, cx: 50, cy: 20 },
+      { p: 0.14, bg: [4,  10, 45], r: 40,  g: 75,  b: 255, a: 0.42, cx: 32, cy: 38 },
+      { p: 0.30, bg: [18, 4,  48], r: 155, g: 25,  b: 255, a: 0.42, cx: 68, cy: 45 },
+      { p: 0.48, bg: [4,  40, 30], r: 12,  g: 215, b: 140, a: 0.40, cx: 38, cy: 55 },
+      { p: 0.68, bg: [46, 17, 4 ], r: 255, g: 115, b: 12,  a: 0.40, cx: 62, cy: 52 },
+      { p: 0.86, bg: [10, 4,  42], r: 110, g: 38,  b: 230, a: 0.30, cx: 44, cy: 65 },
+      { p: 1.00, bg: [5,  7,  12], r: 50,  g: 80,  b: 220, a: 0.06, cx: 50, cy: 80 },
     ];
 
     function lerp(a, b, t) { return a + (b - a) * t; }
@@ -1093,17 +1093,18 @@
           var t = (p - s0.p) / (s1.p - s0.p);
           return {
             bg: [lerp(s0.bg[0],s1.bg[0],t), lerp(s0.bg[1],s1.bg[1],t), lerp(s0.bg[2],s1.bg[2],t)],
-            r: lerp(s0.r,s1.r,t), g: lerp(s0.g,s1.g,t), b: lerp(s0.b,s1.b,t), a: lerp(s0.a,s1.a,t)
+            r: lerp(s0.r,s1.r,t), g: lerp(s0.g,s1.g,t), b: lerp(s0.b,s1.b,t), a: lerp(s0.a,s1.a,t),
+            cx: lerp(s0.cx,s1.cx,t), cy: lerp(s0.cy,s1.cy,t)
           };
         }
       }
       var L = STOPS[STOPS.length - 1];
-      return { bg: [L.bg[0],L.bg[1],L.bg[2]], r: L.r, g: L.g, b: L.b, a: L.a };
+      return { bg:[L.bg[0],L.bg[1],L.bg[2]], r:L.r, g:L.g, b:L.b, a:L.a, cx:L.cx, cy:L.cy };
     }
 
-    var S = 0.022; // melt speed per frame — lower = slower/more liquid
-    var cur = { bg: [5,7,12], r: 50, g: 80, b: 220, a: 0.00 };
-    var tgt = { bg: [5,7,12], r: 50, g: 80, b: 220, a: 0.00 };
+    var S = 0.008; // viscosity — 0.008 ≈ molten glass (4-5s to fully settle)
+    var cur = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20 };
+    var tgt = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20 };
     var bloomEl = document.getElementById('neon-bloom');
 
     window.addEventListener('scroll', function() {
@@ -1117,22 +1118,27 @@
       cur.bg[0] = lerp(cur.bg[0], tgt.bg[0], S);
       cur.bg[1] = lerp(cur.bg[1], tgt.bg[1], S);
       cur.bg[2] = lerp(cur.bg[2], tgt.bg[2], S);
-      cur.r = lerp(cur.r, tgt.r, S);
-      cur.g = lerp(cur.g, tgt.g, S);
-      cur.b = lerp(cur.b, tgt.b, S);
-      cur.a = lerp(cur.a, tgt.a, S);
+      cur.r  = lerp(cur.r,  tgt.r,  S);
+      cur.g  = lerp(cur.g,  tgt.g,  S);
+      cur.b  = lerp(cur.b,  tgt.b,  S);
+      cur.a  = lerp(cur.a,  tgt.a,  S);
+      cur.cx = lerp(cur.cx, tgt.cx, S);
+      cur.cy = lerp(cur.cy, tgt.cy, S);
+
+      var r = Math.round(cur.r), g = Math.round(cur.g), b = Math.round(cur.b);
+      var a1 = cur.a.toFixed(3), a2 = (cur.a * 0.38).toFixed(3);
+      var cx = cur.cx.toFixed(1), cy = cur.cy.toFixed(1);
+      var cx2 = (100 - cur.cx).toFixed(1), cy2 = (cur.cy + 22).toFixed(1);
 
       document.body.style.backgroundColor =
         'rgb(' + Math.round(cur.bg[0]) + ',' + Math.round(cur.bg[1]) + ',' + Math.round(cur.bg[2]) + ')';
 
       if (bloomEl) {
         bloomEl.style.background =
-          'radial-gradient(ellipse 160% 110% at 50% 38%,' +
-          ' rgba(' + Math.round(cur.r) + ',' + Math.round(cur.g) + ',' + Math.round(cur.b) + ',' + cur.a.toFixed(3) + ') 0%,' +
-          ' transparent 68%),' +
-          'radial-gradient(ellipse 100% 80% at 50% 62%,' +
-          ' rgba(' + Math.round(cur.r) + ',' + Math.round(cur.g) + ',' + Math.round(cur.b) + ',' + (cur.a * 0.45).toFixed(3) + ') 0%,' +
-          ' transparent 60%)';
+          'radial-gradient(ellipse 200% 150% at ' + cx + '% ' + cy + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + a1 + ') 0%, transparent 62%),' +
+          'radial-gradient(ellipse 140% 120% at ' + cx2 + '% ' + cy2 + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + a2 + ') 0%, transparent 58%)';
       }
     }
     tick();
