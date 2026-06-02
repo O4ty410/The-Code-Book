@@ -60,12 +60,19 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
       will-change: background;
     }
 
+    #stars-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
     /* All content sits above the bloom */
-    nav, section, footer { position: relative; z-index: 1; }
+    nav, section, footer { position: relative; z-index: 2; }
 
     a { color: inherit; text-decoration: none; }
 
@@ -711,6 +718,7 @@
 </head>
 <body>
 
+  <canvas id="stars-bg"></canvas>
   <div id="neon-bloom"></div>
 
   <!-- ── NAV ──────────────────────────────────────────────── -->
@@ -1072,8 +1080,64 @@
   </footer>
 
   <script>
-    // Molten glass scroll gradient — 60fps lerp loop with drifting glow centre
-    // cx/cy = bloom ellipse centre (%) so the glow pools and flows as you scroll
+    // ── STAR FIELD ───────────────────────────────────────────────
+    var sc = document.getElementById('stars-bg');
+    var sx = sc ? sc.getContext('2d') : null;
+    var STARS = [];
+    // Star colours: cold blue-white, pure white, brand gold, warm white
+    var STAR_COLORS = [[220,235,255],[220,235,255],[255,255,255],[255,255,255],[200,169,110],[255,248,210]];
+
+    function initStars() {
+      if (!sc) return;
+      sc.width = window.innerWidth;
+      sc.height = window.innerHeight;
+      STARS.length = 0;
+      for (var i = 0; i < 240; i++) {
+        var bright = i < 6, mid = i < 50;
+        var c = STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)];
+        STARS.push({
+          x: Math.random(), y: Math.random(),
+          r: bright ? (1.5 + Math.random() * 1.0) : mid ? (0.8 + Math.random() * 0.6) : (0.3 + Math.random() * 0.5),
+          base: bright ? (0.55 + Math.random() * 0.3) : mid ? (0.2 + Math.random() * 0.3) : (0.06 + Math.random() * 0.2),
+          amp:  bright ? 0.20 : mid ? 0.09 : 0.03,
+          freq: Math.random() * 0.7 + 0.2,
+          ph:   Math.random() * 6.28,
+          c: c
+        });
+      }
+    }
+
+    function drawStars(t) {
+      if (!sx) return;
+      var W = sc.width, H = sc.height;
+      sx.clearRect(0, 0, W, H);
+      for (var i = 0; i < STARS.length; i++) {
+        var s = STARS[i];
+        var a = Math.max(0, Math.min(1, s.base + Math.sin(t * s.freq + s.ph) * s.amp));
+        sx.beginPath();
+        sx.arc(s.x * W, s.y * H, s.r, 0, 6.2832);
+        sx.fillStyle = 'rgba(' + s.c[0] + ',' + s.c[1] + ',' + s.c[2] + ',' + a.toFixed(2) + ')';
+        sx.fill();
+        // 4-point diffraction spike on the brightest stars
+        if (s.r > 1.8 && a > 0.35) {
+          var sp = s.r * 7;
+          sx.save();
+          sx.globalAlpha = a * 0.22;
+          sx.strokeStyle = 'rgba(' + s.c[0] + ',' + s.c[1] + ',' + s.c[2] + ',1)';
+          sx.lineWidth = 0.7;
+          sx.beginPath();
+          sx.moveTo(s.x * W - sp, s.y * H); sx.lineTo(s.x * W + sp, s.y * H);
+          sx.moveTo(s.x * W, s.y * H - sp * 0.75); sx.lineTo(s.x * W, s.y * H + sp * 0.75);
+          sx.stroke();
+          sx.restore();
+        }
+      }
+    }
+
+    initStars();
+    window.addEventListener('resize', initStars);
+
+    // ── MOLTEN GLASS GRADIENT ────────────────────────────────────
     var STOPS = [
       { p: 0.00, bg: [5,  7,  12], r: 50,  g: 80,  b: 220, a: 0.00, cx: 50, cy: 20 },
       { p: 0.14, bg: [4,  10, 45], r: 40,  g: 75,  b: 255, a: 0.42, cx: 32, cy: 38 },
@@ -1102,7 +1166,7 @@
       return { bg:[L.bg[0],L.bg[1],L.bg[2]], r:L.r, g:L.g, b:L.b, a:L.a, cx:L.cx, cy:L.cy };
     }
 
-    var S = 0.008; // viscosity — 0.008 ≈ molten glass (4-5s to fully settle)
+    var S = 0.008;
     var cur = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20 };
     var tgt = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20 };
     var bloomEl = document.getElementById('neon-bloom');
@@ -1113,17 +1177,16 @@
       tgt = sampleAt(p);
     }, { passive: true });
 
-    function tick() {
+    function tick(time) {
       requestAnimationFrame(tick);
+      var t = (time || 0) * 0.001;
+
       cur.bg[0] = lerp(cur.bg[0], tgt.bg[0], S);
       cur.bg[1] = lerp(cur.bg[1], tgt.bg[1], S);
       cur.bg[2] = lerp(cur.bg[2], tgt.bg[2], S);
-      cur.r  = lerp(cur.r,  tgt.r,  S);
-      cur.g  = lerp(cur.g,  tgt.g,  S);
-      cur.b  = lerp(cur.b,  tgt.b,  S);
-      cur.a  = lerp(cur.a,  tgt.a,  S);
-      cur.cx = lerp(cur.cx, tgt.cx, S);
-      cur.cy = lerp(cur.cy, tgt.cy, S);
+      cur.r  = lerp(cur.r,  tgt.r,  S);  cur.g  = lerp(cur.g,  tgt.g,  S);
+      cur.b  = lerp(cur.b,  tgt.b,  S);  cur.a  = lerp(cur.a,  tgt.a,  S);
+      cur.cx = lerp(cur.cx, tgt.cx, S);  cur.cy = lerp(cur.cy, tgt.cy, S);
 
       var r = Math.round(cur.r), g = Math.round(cur.g), b = Math.round(cur.b);
       var a1 = cur.a.toFixed(3), a2 = (cur.a * 0.38).toFixed(3);
@@ -1140,8 +1203,10 @@
           'radial-gradient(ellipse 140% 120% at ' + cx2 + '% ' + cy2 + '%,' +
           ' rgba(' + r + ',' + g + ',' + b + ',' + a2 + ') 0%, transparent 58%)';
       }
+
+      drawStars(t);
     }
-    tick();
+    requestAnimationFrame(tick);
   </script>
 </body>
 </html>
