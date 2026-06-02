@@ -1948,7 +1948,7 @@ function getEditorDefaults(section) {
         }
 
         var filenameMap = {
-            html: "index.html",
+            html: "app.html",
             css: "style.css",
             js: "script.js"
         };
