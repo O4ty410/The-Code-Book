@@ -1201,11 +1201,23 @@
         'rgb(' + Math.round(cur.bg[0]) + ',' + Math.round(cur.bg[1]) + ',' + Math.round(cur.bg[2]) + ')';
 
       if (bloomEl) {
+        // 4 layers — outer halo → colour body → bright core → white-hot centre
+        var aHalo  = (cur.a * 0.22).toFixed(3);
+        var aCore  = (cur.a * 0.75).toFixed(3);
+        var aWhite = (cur.a * 0.28).toFixed(3);
         bloomEl.style.background =
-          'radial-gradient(ellipse 200% 150% at ' + cx + '% ' + cy + '%,' +
-          ' rgba(' + r + ',' + g + ',' + b + ',' + a1 + ') 0%, transparent 62%),' +
-          'radial-gradient(ellipse 140% 120% at ' + cx2 + '% ' + cy2 + '%,' +
-          ' rgba(' + r + ',' + g + ',' + b + ',' + a2 + ') 0%, transparent 58%)';
+          // 1. Wide outer halo — darkness softly lit from within
+          'radial-gradient(ellipse 240% 190% at ' + cx2 + '% ' + cy2 + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + aHalo + ') 0%, transparent 65%),' +
+          // 2. Main colour body — vivid glowing mass
+          'radial-gradient(ellipse 170% 130% at ' + cx + '% ' + cy + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + a1  + ') 0%, transparent 60%),' +
+          // 3. Tight bright core — the hottest region
+          'radial-gradient(ellipse 65% 50% at ' + cx + '% ' + cy + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + aCore + ') 0%, transparent 50%),' +
+          // 4. White-hot centre point — peak temperature
+          'radial-gradient(ellipse 28% 20% at ' + cx + '% ' + cy + '%,' +
+          ' rgba(255,255,255,' + aWhite + ') 0%, transparent 40%)';
       }
 
       drawStars(t);
