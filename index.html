@@ -52,8 +52,20 @@
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      transition: background-color 1.4s ease;
+      transition: background-color 1.2s ease;
     }
+
+    /* Neon bloom — fixed radial glow that shifts colour with scroll */
+    #neon-bloom {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      transition: background 1.2s ease;
+    }
+
+    /* All content sits above the bloom */
+    nav, section, footer { position: relative; z-index: 1; }
 
     a { color: inherit; text-decoration: none; }
 
@@ -270,8 +282,10 @@
       gap: 14px;
       padding: 16px 18px;
       border-radius: 10px;
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .recognition-icon {
@@ -328,13 +342,15 @@
     }
 
     .floor-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 12px;
       padding: 20px 22px;
       position: relative;
       overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
     }
 
     .floor-card::before {
@@ -378,8 +394,10 @@
 
     /* SAGE block */
     .sage-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 16px;
       padding: clamp(28px, 4vw, 44px);
       display: grid;
@@ -443,15 +461,18 @@
     }
 
     .benefit-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 12px;
       padding: 24px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background 0.2s;
     }
 
     .benefit-card:hover {
-      border-color: rgba(125, 211, 252, 0.2);
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.18);
     }
 
     .benefit-icon {
@@ -563,13 +584,15 @@
     }
 
     .game-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 14px;
       padding: 28px;
       position: relative;
       overflow: hidden;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
     }
 
     .game-card:hover {
@@ -679,6 +702,8 @@
   </style>
 </head>
 <body>
+
+  <div id="neon-bloom"></div>
 
   <!-- ── NAV ──────────────────────────────────────────────── -->
   <nav>
@@ -1039,34 +1064,38 @@
   </footer>
 
   <script>
-    // Scroll-driven background colour shift
-    // Each stop: [scroll progress 0-1, [r, g, b]]
-    var BG_STOPS = [
-      [0.00, [5,   7,  10]],   // neutral dark (hero)
-      [0.18, [5,  20,  55]],   // deep navy (who this is for)
-      [0.38, [28,  8,  55]],   // deep violet (how it works)
-      [0.55, [5,  45,  35]],   // deep teal (sage / benefits)
-      [0.75, [55,  28,   5]],  // warm amber (game hub)
-      [1.00, [5,   7,  10]],   // back to neutral (cta)
+    // Scroll-driven neon background + bloom glow
+    var STOPS = [
+      { p: 0.00, bg: [5, 7, 12],      bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(80,120,255,0.0) 0%, transparent 70%)' },
+      { p: 0.18, bg: [4, 14, 48],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(40,100,255,0.18) 0%, transparent 70%)' },
+      { p: 0.38, bg: [22, 6, 52],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(140,40,255,0.18) 0%, transparent 70%)' },
+      { p: 0.55, bg: [4, 42, 32],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(20,200,140,0.16) 0%, transparent 70%)' },
+      { p: 0.75, bg: [52, 20, 4],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,140,20,0.16) 0%, transparent 70%)' },
+      { p: 1.00, bg: [5, 7, 12],      bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(80,120,255,0.0) 0%, transparent 70%)' },
     ];
 
     function lerp(a, b, t) { return a + (b - a) * t; }
 
-    function bgAtProgress(p) {
-      for (var i = 0; i < BG_STOPS.length - 1; i++) {
-        var s0 = BG_STOPS[i], s1 = BG_STOPS[i + 1];
-        if (p >= s0[0] && p <= s1[0]) {
-          var t = (p - s0[0]) / (s1[0] - s0[0]);
-          return [
-            Math.round(lerp(s0[1][0], s1[1][0], t)),
-            Math.round(lerp(s0[1][1], s1[1][1], t)),
-            Math.round(lerp(s0[1][2], s1[1][2], t))
-          ];
+    function getAtProgress(p) {
+      for (var i = 0; i < STOPS.length - 1; i++) {
+        var s0 = STOPS[i], s1 = STOPS[i + 1];
+        if (p >= s0.p && p <= s1.p) {
+          var t = (p - s0.p) / (s1.p - s0.p);
+          return {
+            bg: [
+              Math.round(lerp(s0.bg[0], s1.bg[0], t)),
+              Math.round(lerp(s0.bg[1], s1.bg[1], t)),
+              Math.round(lerp(s0.bg[2], s1.bg[2], t))
+            ],
+            bloom: t < 0.5 ? s0.bloom : s1.bloom
+          };
         }
       }
-      return BG_STOPS[BG_STOPS.length - 1][1];
+      var last = STOPS[STOPS.length - 1];
+      return { bg: last.bg, bloom: last.bloom };
     }
 
+    var bloom = document.getElementById('neon-bloom');
     var ticking = false;
     window.addEventListener('scroll', function() {
       if (!ticking) {
@@ -1074,8 +1103,9 @@
           var scrolled = window.scrollY;
           var total = document.documentElement.scrollHeight - window.innerHeight;
           var progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
-          var c = bgAtProgress(progress);
-          document.body.style.backgroundColor = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+          var val = getAtProgress(progress);
+          document.body.style.backgroundColor = 'rgb(' + val.bg[0] + ',' + val.bg[1] + ',' + val.bg[2] + ')';
+          if (bloom) bloom.style.background = val.bloom;
           ticking = false;
         });
         ticking = true;
