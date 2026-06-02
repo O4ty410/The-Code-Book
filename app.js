@@ -4121,7 +4121,6 @@ function renderLearnHub() {
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
     '</style>' +
-    '<canvas id="hub-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>' +
     '<div class="fc-hub">' +
     '<div class="fc-header">' +
       '<div class="fc-header-label">Your Learning Path</div>' +
@@ -4177,7 +4176,6 @@ function renderLearnHub() {
 
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
-  startHubCanvas();
 }
 function completeSection(sectionId, fi, si) {
   closeSectionCompletePopup();
