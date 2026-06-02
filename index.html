@@ -52,6 +52,7 @@
       font-size: 16px;
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 1.4s ease;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -962,7 +963,7 @@
         <p class="label">Game Hub</p>
         <h2>Learn by playing.<br>Actually.</h2>
         <p>
-          Two games built into the app. Not decoration — each one is based on a
+          Three games built into the app. Not decoration — each one is based on a
           real class of software problem.
         </p>
       </div>
@@ -1039,5 +1040,50 @@
     <span class="footer-note">Free &nbsp;&#183;&nbsp; Offline-ready &nbsp;&#183;&nbsp; No install required</span>
   </footer>
 
+  <script>
+    // Subtle scroll-driven background colour shift
+    // Each stop: [scroll progress 0-1, [r, g, b]]
+    // All colours are very dark — felt more than seen
+    var BG_STOPS = [
+      [0.00, [5,   7,  10]],   // neutral dark (hero)
+      [0.18, [4,  10,  20]],   // faint deep navy (who)
+      [0.38, [9,   5,  18]],   // faint deep violet (how it works)
+      [0.55, [4,  14,  11]],   // faint deep teal (sage / benefits)
+      [0.75, [16,  10,   4]],  // faint warm amber (game hub)
+      [1.00, [5,   7,  10]],   // back to neutral (cta)
+    ];
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function bgAtProgress(p) {
+      for (var i = 0; i < BG_STOPS.length - 1; i++) {
+        var s0 = BG_STOPS[i], s1 = BG_STOPS[i + 1];
+        if (p >= s0[0] && p <= s1[0]) {
+          var t = (p - s0[0]) / (s1[0] - s0[0]);
+          return [
+            Math.round(lerp(s0[1][0], s1[1][0], t)),
+            Math.round(lerp(s0[1][1], s1[1][1], t)),
+            Math.round(lerp(s0[1][2], s1[1][2], t))
+          ];
+        }
+      }
+      return BG_STOPS[BG_STOPS.length - 1][1];
+    }
+
+    var ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          var scrolled = window.scrollY;
+          var total = document.documentElement.scrollHeight - window.innerHeight;
+          var progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
+          var c = bgAtProgress(progress);
+          document.body.style.backgroundColor = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  </script>
 </body>
 </html>
