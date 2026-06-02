@@ -36,7 +36,11 @@
   <link rel="stylesheet" href="glitch.min.css?v=20260524b">
 
 <style>
-  #app { background: transparent !important; }
+  /* Bloom only shows on the Learn tab */
+  #app-bg-bloom, #app-bg-stars { opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
+  body.learn-mode #app-bg-bloom, body.learn-mode #app-bg-stars { opacity: 1; }
+  /* App background is transparent only on Learn tab so bloom shows through */
+  body.learn-mode #app { background: transparent !important; }
   .fc-overlay { background: transparent !important; }
 </style>
 
