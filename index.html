@@ -1287,7 +1287,9 @@
           ' rgba(' + r + ',' + g + ',' + b + ',' + aCore + ') 0%, transparent 50%),' +
           // 4. White-hot centre point — peak temperature
           'radial-gradient(ellipse 28% 20% at ' + cx + '% ' + cy + '%,' +
-          ' rgba(255,255,255,' + aWhite + ') 0%, transparent 40%)';
+          ' rgba(255,255,255,' + aWhite + ') 0%, transparent 40%),' +
+          // 5. Dark undertone vignette — deep edges for molten depth
+          'radial-gradient(ellipse 120% 110% at 50% 50%,transparent 18%,rgba(0,0,0,0.55) 66%,rgba(0,0,0,0.82) 100%)';
       }
 
       drawStars(t);
