@@ -61,7 +61,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      transition: background 1.2s ease;
+      will-change: background;
     }
 
     /* All content sits above the bloom */
@@ -1069,53 +1069,70 @@
   </footer>
 
   <script>
-    // Scroll-driven neon background + bloom glow
+    // Liquid glass scroll gradient — 60fps lerp loop
+    // Each stop: bg = body colour, r/g/b/a = bloom glow colour
     var STOPS = [
-      { p: 0.00, bg: [5, 7, 12],      bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(80,120,255,0.0) 0%, transparent 70%)' },
-      { p: 0.18, bg: [4, 14, 48],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(40,100,255,0.18) 0%, transparent 70%)' },
-      { p: 0.38, bg: [22, 6, 52],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(140,40,255,0.18) 0%, transparent 70%)' },
-      { p: 0.55, bg: [4, 42, 32],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(20,200,140,0.16) 0%, transparent 70%)' },
-      { p: 0.75, bg: [52, 20, 4],     bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,140,20,0.16) 0%, transparent 70%)' },
-      { p: 1.00, bg: [5, 7, 12],      bloom: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(80,120,255,0.0) 0%, transparent 70%)' },
+      { p: 0.00, bg: [5,  7,  12], r: 50,  g: 80,  b: 220, a: 0.00 },
+      { p: 0.14, bg: [3,  9,  42], r: 40,  g: 80,  b: 255, a: 0.30 },
+      { p: 0.30, bg: [16, 4,  46], r: 140, g: 28,  b: 255, a: 0.30 },
+      { p: 0.48, bg: [4,  38, 28], r: 14,  g: 200, b: 130, a: 0.28 },
+      { p: 0.68, bg: [44, 16, 4 ], r: 255, g: 118, b: 14,  a: 0.28 },
+      { p: 0.86, bg: [10, 4,  40], r: 100, g: 40,  b: 220, a: 0.20 },
+      { p: 1.00, bg: [5,  7,  12], r: 50,  g: 80,  b: 220, a: 0.04 },
     ];
 
     function lerp(a, b, t) { return a + (b - a) * t; }
 
-    function getAtProgress(p) {
+    function sampleAt(p) {
       for (var i = 0; i < STOPS.length - 1; i++) {
         var s0 = STOPS[i], s1 = STOPS[i + 1];
         if (p >= s0.p && p <= s1.p) {
           var t = (p - s0.p) / (s1.p - s0.p);
           return {
-            bg: [
-              Math.round(lerp(s0.bg[0], s1.bg[0], t)),
-              Math.round(lerp(s0.bg[1], s1.bg[1], t)),
-              Math.round(lerp(s0.bg[2], s1.bg[2], t))
-            ],
-            bloom: t < 0.5 ? s0.bloom : s1.bloom
+            bg: [lerp(s0.bg[0],s1.bg[0],t), lerp(s0.bg[1],s1.bg[1],t), lerp(s0.bg[2],s1.bg[2],t)],
+            r: lerp(s0.r,s1.r,t), g: lerp(s0.g,s1.g,t), b: lerp(s0.b,s1.b,t), a: lerp(s0.a,s1.a,t)
           };
         }
       }
-      var last = STOPS[STOPS.length - 1];
-      return { bg: last.bg, bloom: last.bloom };
+      var L = STOPS[STOPS.length - 1];
+      return { bg: [L.bg[0],L.bg[1],L.bg[2]], r: L.r, g: L.g, b: L.b, a: L.a };
     }
 
-    var bloom = document.getElementById('neon-bloom');
-    var ticking = false;
+    var S = 0.022; // melt speed per frame — lower = slower/more liquid
+    var cur = { bg: [5,7,12], r: 50, g: 80, b: 220, a: 0.00 };
+    var tgt = { bg: [5,7,12], r: 50, g: 80, b: 220, a: 0.00 };
+    var bloomEl = document.getElementById('neon-bloom');
+
     window.addEventListener('scroll', function() {
-      if (!ticking) {
-        requestAnimationFrame(function() {
-          var scrolled = window.scrollY;
-          var total = document.documentElement.scrollHeight - window.innerHeight;
-          var progress = total > 0 ? Math.min(scrolled / total, 1) : 0;
-          var val = getAtProgress(progress);
-          document.body.style.backgroundColor = 'rgb(' + val.bg[0] + ',' + val.bg[1] + ',' + val.bg[2] + ')';
-          if (bloom) bloom.style.background = val.bloom;
-          ticking = false;
-        });
-        ticking = true;
-      }
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      var p = total > 0 ? Math.min(window.scrollY / total, 1) : 0;
+      tgt = sampleAt(p);
     }, { passive: true });
+
+    function tick() {
+      requestAnimationFrame(tick);
+      cur.bg[0] = lerp(cur.bg[0], tgt.bg[0], S);
+      cur.bg[1] = lerp(cur.bg[1], tgt.bg[1], S);
+      cur.bg[2] = lerp(cur.bg[2], tgt.bg[2], S);
+      cur.r = lerp(cur.r, tgt.r, S);
+      cur.g = lerp(cur.g, tgt.g, S);
+      cur.b = lerp(cur.b, tgt.b, S);
+      cur.a = lerp(cur.a, tgt.a, S);
+
+      document.body.style.backgroundColor =
+        'rgb(' + Math.round(cur.bg[0]) + ',' + Math.round(cur.bg[1]) + ',' + Math.round(cur.bg[2]) + ')';
+
+      if (bloomEl) {
+        bloomEl.style.background =
+          'radial-gradient(ellipse 160% 110% at 50% 38%,' +
+          ' rgba(' + Math.round(cur.r) + ',' + Math.round(cur.g) + ',' + Math.round(cur.b) + ',' + cur.a.toFixed(3) + ') 0%,' +
+          ' transparent 68%),' +
+          'radial-gradient(ellipse 100% 80% at 50% 62%,' +
+          ' rgba(' + Math.round(cur.r) + ',' + Math.round(cur.g) + ',' + Math.round(cur.b) + ',' + (cur.a * 0.45).toFixed(3) + ') 0%,' +
+          ' transparent 60%)';
+      }
+    }
+    tick();
   </script>
 </body>
 </html>
