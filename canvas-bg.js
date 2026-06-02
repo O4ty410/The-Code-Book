@@ -74,7 +74,7 @@ function startLandingCanvas() {
     return {
       phase:     Math.random() * Math.PI * 2,
       speed:     0.25 + Math.random() * 0.9,
-      baseAlpha: 0.16 + Math.random() * 0.12,
+      baseAlpha: 0.07 + Math.random() * 0.05,
       spark:     0,
       sparkDecay: 1.2 + Math.random() * 1.4,
       sparkColor: Math.random() > 0.5 ? 0 : 1, // 0=cyan, 1=green
@@ -121,17 +121,17 @@ function startLandingCanvas() {
       }
 
       var glowing = s.spark > 0.05;
-      var fa = Math.min(0.95, a + s.spark * 0.75);
+      var fa = Math.min(0.45, a + s.spark * 0.38);
 
       ctx.save();
       if (glowing) {
         ctx.shadowColor = s.sparkColor === 0
-          ? 'rgba(0,230,255,' + (s.spark * 0.95).toFixed(2) + ')'
-          : 'rgba(0,255,160,' + (s.spark * 0.95).toFixed(2) + ')';
-        ctx.shadowBlur = 12 + s.spark * 24;
+          ? 'rgba(0,230,255,' + (s.spark * 0.5).toFixed(2) + ')'
+          : 'rgba(0,255,160,' + (s.spark * 0.5).toFixed(2) + ')';
+        ctx.shadowBlur = 6 + s.spark * 12;
       } else {
-        ctx.shadowColor = 'rgba(80,200,195,0.35)';
-        ctx.shadowBlur = 4;
+        ctx.shadowColor = 'rgba(80,200,195,0.18)';
+        ctx.shadowBlur = 3;
       }
       ctx.fillStyle = 'rgba(80,200,195,' + fa.toFixed(3) + ')';
       ctx.fillText(line[2], line[0] * W, line[1] * H);
