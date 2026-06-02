@@ -35,9 +35,17 @@
   <link rel="stylesheet" href="mobile.min.css?v=20260520h">
   <link rel="stylesheet" href="glitch.min.css?v=20260524b">
 
+<style>
+  #app { background: transparent !important; }
+  .fc-overlay { background: transparent !important; }
+</style>
 
 </head>
 <body>
+
+  <!-- Molten glass bloom — body level (shows through transparent #app) -->
+  <canvas id="app-bg-stars" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></canvas>
+  <div id="app-bg-bloom" style="position:fixed;inset:0;pointer-events:none;z-index:1;will-change:background;"></div>
 
   <div id="floor-nav" class="compat-hidden" style="display:none!important;visibility:hidden;pointer-events:none;"></div>
   <div id="timer-display" class="compat-hidden">25:00</div>
@@ -452,10 +460,9 @@
 
 <!-- NEW USER LANDING -->
 <div id="new-user-landing" style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;overflow:hidden;">
-  <!-- Animated twinkling code canvas -->
-  <canvas id="landing-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
-  <!-- Dark centre vignette so text is readable -->
-  <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 55% 65% at 50% 50%,rgba(0,8,20,0.72) 0%,transparent 100%);pointer-events:none;"></div>
+  <!-- Molten glass bloom — landing level -->
+  <canvas id="app-landing-stars" style="position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+  <div id="app-landing-bloom" style="position:absolute;inset:0;z-index:1;pointer-events:none;will-change:background;"></div>
   <!-- Main landing content -->
   <div class="landing-content" style="position:relative;z-index:2;">
     <div class="landing-label">A calm path into coding</div>
@@ -656,6 +663,105 @@
 </div>
 <!-- END APP -->
 
+<script>
+/* Molten glass bloom — app version (time-based auto-cycle) */
+(function(){
+  var STOPS=[
+    {p:0.00,bg:[5,7,12],  r:0,  g:80, b:180,a:0.00,cx:50,cy:50,sa:1.0},
+    {p:0.16,bg:[3,12,32], r:0,  g:200,b:255,a:0.45,cx:33,cy:36,sa:0.0},
+    {p:0.34,bg:[3,28,22], r:0,  g:229,b:176,a:0.42,cx:66,cy:44,sa:0.0},
+    {p:0.52,bg:[18,6,40], r:168,g:85, b:247,a:0.45,cx:36,cy:52,sa:0.0},
+    {p:0.70,bg:[40,7,7],  r:255,g:85, b:85, a:0.42,cx:64,cy:56,sa:0.0},
+    {p:0.86,bg:[36,26,6], r:232,g:200,b:120,a:0.40,cx:44,cy:64,sa:0.0},
+    {p:1.00,bg:[5,7,12],  r:0,  g:80, b:180,a:0.00,cx:50,cy:50,sa:1.0}
+  ];
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function sampleAt(p){
+    for(var i=0;i<STOPS.length-1;i++){
+      var s0=STOPS[i],s1=STOPS[i+1];
+      if(p>=s0.p&&p<=s1.p){
+        var t=(p-s0.p)/(s1.p-s0.p);
+        return{bg:[lerp(s0.bg[0],s1.bg[0],t),lerp(s0.bg[1],s1.bg[1],t),lerp(s0.bg[2],s1.bg[2],t)],
+          r:lerp(s0.r,s1.r,t),g:lerp(s0.g,s1.g,t),b:lerp(s0.b,s1.b,t),a:lerp(s0.a,s1.a,t),
+          cx:lerp(s0.cx,s1.cx,t),cy:lerp(s0.cy,s1.cy,t),sa:lerp(s0.sa,s1.sa,t)};
+      }
+    }
+    var L=STOPS[STOPS.length-1];
+    return{bg:[L.bg[0],L.bg[1],L.bg[2]],r:L.r,g:L.g,b:L.b,a:L.a,cx:L.cx,cy:L.cy,sa:L.sa};
+  }
+
+  var SC=[[220,235,255],[220,235,255],[255,255,255],[255,255,255],[200,169,110],[255,248,210]];
+  var bgStars=[],lndStars=[];
+  function buildStars(arr){
+    arr.length=0;
+    for(var i=0;i<200;i++){
+      var br=i<5,md=i<40,c=SC[Math.floor(Math.random()*SC.length)];
+      arr.push({x:Math.random(),y:Math.random(),
+        r:br?(1.4+Math.random()*0.9):md?(0.7+Math.random()*0.5):(0.25+Math.random()*0.4),
+        base:br?(0.5+Math.random()*0.3):md?(0.18+Math.random()*0.22):(0.05+Math.random()*0.15),
+        amp:br?0.18:md?0.08:0.03,freq:Math.random()*0.7+0.2,ph:Math.random()*6.28,c:c});
+    }
+  }
+  function drawStars(sc,sx,t,sa,arr){
+    if(!sx||sa<0.005){if(sx)sx.clearRect(0,0,sc.width,sc.height);return;}
+    sx.clearRect(0,0,sc.width,sc.height);
+    for(var i=0;i<arr.length;i++){
+      var s=arr[i],a=Math.max(0,Math.min(1,s.base+Math.sin(t*s.freq+s.ph)*s.amp))*sa;
+      sx.beginPath();sx.arc(s.x*sc.width,s.y*sc.height,s.r,0,6.2832);
+      sx.fillStyle='rgba('+s.c[0]+','+s.c[1]+','+s.c[2]+','+a.toFixed(2)+')';sx.fill();
+      if(s.r>1.5&&a>0.28){
+        var sp=s.r*6;sx.save();sx.globalAlpha=a*0.2;
+        sx.strokeStyle='rgba('+s.c[0]+','+s.c[1]+','+s.c[2]+',1)';sx.lineWidth=0.6;
+        sx.beginPath();sx.moveTo(s.x*sc.width-sp,s.y*sc.height);sx.lineTo(s.x*sc.width+sp,s.y*sc.height);
+        sx.moveTo(s.x*sc.width,s.y*sc.height-sp*0.75);sx.lineTo(s.x*sc.width,s.y*sc.height+sp*0.75);
+        sx.stroke();sx.restore();
+      }
+    }
+  }
+
+  var S=0.028,CYCLE=50;
+  var cur={bg:[5,7,12],r:10,g:20,b:50,a:0.0,cx:50,cy:50,sa:1.0};
+  var tgt={bg:[5,7,12],r:10,g:20,b:50,a:0.0,cx:50,cy:50,sa:1.0};
+  var bgSc=null,bgSx=null,lSc=null,lSx=null;
+
+  function tick(ts){
+    requestAnimationFrame(tick);
+    var t=(ts||0)*0.001;
+    tgt=sampleAt((t/CYCLE)%1.0);
+    cur.bg[0]=lerp(cur.bg[0],tgt.bg[0],S);cur.bg[1]=lerp(cur.bg[1],tgt.bg[1],S);cur.bg[2]=lerp(cur.bg[2],tgt.bg[2],S);
+    cur.r=lerp(cur.r,tgt.r,S);cur.g=lerp(cur.g,tgt.g,S);cur.b=lerp(cur.b,tgt.b,S);
+    cur.a=lerp(cur.a,tgt.a,S);cur.cx=lerp(cur.cx,tgt.cx,S);cur.cy=lerp(cur.cy,tgt.cy,S);
+    cur.sa=lerp(cur.sa,tgt.sa,0.04);
+
+    var r=Math.round(cur.r),g=Math.round(cur.g),b=Math.round(cur.b);
+    var a1=cur.a.toFixed(3),cx=cur.cx.toFixed(1),cy=cur.cy.toFixed(1);
+    var cx2=(100-cur.cx).toFixed(1),cy2=(cur.cy+22).toFixed(1);
+    var aH=(cur.a*0.22).toFixed(3),aC=(cur.a*0.75).toFixed(3),aW=(cur.a*0.28).toFixed(3);
+    var bloom=
+      'radial-gradient(ellipse 240% 190% at '+cx2+'% '+cy2+'%,rgba('+r+','+g+','+b+','+aH+') 0%,transparent 65%),'+
+      'radial-gradient(ellipse 170% 130% at '+cx+'% '+cy+'%,rgba('+r+','+g+','+b+','+a1+') 0%,transparent 60%),'+
+      'radial-gradient(ellipse 65% 50% at '+cx+'% '+cy+'%,rgba('+r+','+g+','+b+','+aC+') 0%,transparent 50%),'+
+      'radial-gradient(ellipse 28% 20% at '+cx+'% '+cy+'%,rgba(255,255,255,'+aW+') 0%,transparent 40%)';
+
+    var bEl=document.getElementById('app-bg-bloom');
+    if(bEl)bEl.style.background=bloom;
+    var lEl=document.getElementById('app-landing-bloom');
+    if(lEl)lEl.style.background=bloom;
+
+    document.body.style.background='rgb('+Math.round(cur.bg[0])+','+Math.round(cur.bg[1])+','+Math.round(cur.bg[2])+')';
+
+    var sc1=document.getElementById('app-bg-stars');
+    if(sc1){if(sc1!==bgSc){bgSc=sc1;bgSx=sc1.getContext('2d');sc1.width=window.innerWidth;sc1.height=window.innerHeight;buildStars(bgStars);}drawStars(bgSc,bgSx,t,cur.sa,bgStars);}
+    var sc2=document.getElementById('app-landing-stars');
+    if(sc2){if(sc2!==lSc){lSc=sc2;lSx=sc2.getContext('2d');sc2.width=window.innerWidth;sc2.height=window.innerHeight;buildStars(lndStars);}drawStars(lSc,lSx,t,cur.sa,lndStars);}
+  }
+  window.addEventListener('resize',function(){
+    if(bgSc){bgSc.width=window.innerWidth;bgSc.height=window.innerHeight;buildStars(bgStars);}
+    if(lSc){lSc.width=window.innerWidth;lSc.height=window.innerHeight;buildStars(lndStars);}
+  });
+  requestAnimationFrame(tick);
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="supabase-client.js?v=20260524a" defer></script>
 <script src="helpers.js?v=20260519p" defer></script>
