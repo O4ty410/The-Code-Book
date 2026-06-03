@@ -1462,6 +1462,22 @@ const NPC_WALK_SPEED = 55;            // px / s
 const NPC_WORK_TIMES = [3.8, 4.5, 3.2]; // s per terminal visit (per NPC)
 const NPC_REACT_DUR  = 1.1;           // s for arm-raise gesture
 
+// Per-NPC suit palettes — deliberately NOT blue so they're distinct from the player
+const NPC_SUITS = [
+  // NPC 0: orange
+  { body0:'rgba(225,108,32,0.92)', body1:'rgba(152,60,10,0.92)',
+    legs:'rgba(170,76,15,0.90)',   boots:'rgba(112,46,8,0.92)',
+    pack:'rgba(122,46,10,0.85)',   helm:'rgba(66,34,12,0.95)', arms:'rgba(160,70,14,0.90)' },
+  // NPC 1: grey / silver
+  { body0:'rgba(136,150,166,0.92)', body1:'rgba(74,84,96,0.92)',
+    legs:'rgba(84,94,108,0.90)',    boots:'rgba(52,58,70,0.92)',
+    pack:'rgba(54,64,76,0.85)',     helm:'rgba(44,54,64,0.95)', arms:'rgba(76,86,102,0.90)' },
+  // NPC 2: amber / gold
+  { body0:'rgba(208,175,34,0.92)', body1:'rgba(140,110,8,0.92)',
+    legs:'rgba(152,128,14,0.90)',  boots:'rgba(102,80,6,0.92)',
+    pack:'rgba(112,90,8,0.85)',    helm:'rgba(70,54,10,0.95)', arms:'rgba(142,118,12,0.90)' },
+];
+
 export function initNpcs(W, H) {
   return NPC_ROUTES.map((route, i) => {
     const rIdx = i % route.length;
@@ -1544,24 +1560,29 @@ export function triggerNpcReaction(npcs, rocketX) {
 }
 
 function drawNpc(ctx, npc, t) {
-  const { x, y, state, seed, facing, reactDir } = npc;
-  const S = 0.70;
+  const { x, y, state, seed, facing, reactDir, id } = npc;
+  const S    = 0.65;  // noticeably smaller than the player (S=1.3)
+  const suit = NPC_SUITS[id % NPC_SUITS.length];
 
   ctx.save();
-  ctx.globalAlpha = 0.85;
+  ctx.globalAlpha = 0.86;
 
-  // ground shadow
+  // Ground shadow
   ctx.beginPath();
-  ctx.ellipse(x, y + 3, 14 * S, 3.5, 0, 0, Math.PI * 2);
+  ctx.ellipse(x, y + 3, 12 * S, 3, 0, 0, Math.PI * 2);
   ctx.fillStyle = 'rgba(0,0,0,0.28)';
   ctx.fill();
 
   const isWalking = state === 'walking';
   const bob       = isWalking ? Math.sin(t * 6 + seed) * 2.5 : 0;
-  const py        = y + bob;
 
-  // Forward lean while working
-  const leanAmt = state === 'working' ? 0.13 + Math.sin(t * 1.8 + seed) * 0.04 : 0;
+  // Tapping phase drives the arm cycle and a micro head-nod while working
+  const tapPhase = state === 'working' ? Math.sin(t * 7.5 + seed * 2.1) : 0;
+  const workNod  = tapPhase * 0.5;
+  const py       = y + bob + workNod;
+
+  // Forward lean toward terminal while working
+  const leanAmt = state === 'working' ? 0.15 + Math.sin(t * 1.4 + seed) * 0.03 : 0;
   ctx.save();
   if (leanAmt > 0) {
     ctx.translate(x, py);
@@ -1569,34 +1590,35 @@ function drawNpc(ctx, npc, t) {
     ctx.translate(-x, -py);
   }
 
-  // Legs
+  // Legs — swing when walking, planted when working/reacting
   const legSwing = isWalking ? Math.sin(t * 6 + seed) * 5 : 0;
   [[-6 * S, legSwing], [6 * S, -legSwing]].forEach(([lx, swing]) => {
     roundRect(ctx, x + lx - 4 * S, py - 2 + 14 * S + Math.abs(swing * 0.25), 9 * S, 5, 2);
-    ctx.fillStyle = 'rgba(22,42,88,0.92)';
+    ctx.fillStyle = suit.boots;
     ctx.fill();
-    ctx.fillStyle = 'rgba(45,80,150,0.90)';
+    ctx.fillStyle = suit.legs;
     ctx.fillRect(x + lx - 3.5 * S, py - 2, 7 * S, 14 * S + Math.abs(swing * 0.2));
   });
 
-  // Body (radial gradient matching the player's suit)
-  const bodyGrad = ctx.createRadialGradient(x, py - 14 * S, 1, x, py - 14 * S, 16 * S);
-  bodyGrad.addColorStop(0, 'rgba(110,160,220,0.92)');
-  bodyGrad.addColorStop(1, 'rgba(40,80,150,0.92)');
+  // Body
+  const bodyGrad = ctx.createRadialGradient(x, py - 14 * S, 1, x, py - 14 * S, 15 * S);
+  bodyGrad.addColorStop(0, suit.body0);
+  bodyGrad.addColorStop(1, suit.body1);
   ctx.fillStyle = bodyGrad;
   roundRect(ctx, x - 11 * S, py - 26 * S, 22 * S, 24 * S, 5);
   ctx.fill();
 
-  // Backpack (on the side opposite to facing direction)
-  ctx.fillStyle = 'rgba(25,50,105,0.85)';
+  // Backpack (opposite side to facing)
+  ctx.fillStyle = suit.pack;
   roundRect(ctx, x + (facing >= 0 ? -14 * S : 3 * S), py - 24 * S, 5 * S, 18 * S, 2);
   ctx.fill();
 
   // Arms
-  ctx.fillStyle = 'rgba(40,75,145,0.90)';
+  ctx.fillStyle = suit.arms;
   if (state === 'reacting') {
-    const rd   = reactDir || 1;
-    const frac = 1 - Math.max(0, npc.reactTimer / NPC_REACT_DUR);
+    // Arm raised toward rocket
+    const rd         = reactDir || 1;
+    const frac       = 1 - Math.max(0, npc.reactTimer / NPC_REACT_DUR);
     const raiseAngle = -1.05 * Math.min(1, frac * 2.5);
     ctx.save();
     ctx.translate(x + rd * 10 * S, py - 24 * S);
@@ -1604,15 +1626,25 @@ function drawNpc(ctx, npc, t) {
     ctx.fillRect(-3 * S, 0, 6 * S, 12 * S);
     ctx.restore();
     ctx.fillRect(x - rd * 10 * S - 3 * S, py - 24 * S, 6 * S, 12 * S);
+
   } else if (state === 'working') {
-    const reachAngle = Math.sin(t * 1.8 + seed) * 0.20 + 0.18;
+    // Dominant arm taps at terminal — fast oscillation (typing/button-press rhythm)
+    const tapAngle   = 0.26 + tapPhase * 0.18;  // sweeps 0.08 → 0.44 rad
+    // Off-hand braces against the console edge, slow idle sway
+    const braceAngle = -(0.10 + Math.sin(t * 0.9 + seed) * 0.05);
     ctx.save();
     ctx.translate(x + facing * 10 * S, py - 24 * S);
-    ctx.rotate(reachAngle);
+    ctx.rotate(tapAngle);
     ctx.fillRect(-3 * S, 0, 6 * S, 12 * S);
     ctx.restore();
-    ctx.fillRect(x - facing * 10 * S - 3 * S, py - 24 * S, 6 * S, 12 * S);
+    ctx.save();
+    ctx.translate(x - facing * 10 * S, py - 24 * S);
+    ctx.rotate(braceAngle);
+    ctx.fillRect(-3 * S, 0, 6 * S, 12 * S);
+    ctx.restore();
+
   } else {
+    // Walking arm swing
     const armSwing = Math.sin(t * 6 + seed) * 0.22;
     [[-1, armSwing], [1, -armSwing]].forEach(([side, swing]) => {
       ctx.save();
@@ -1627,23 +1659,24 @@ function drawNpc(ctx, npc, t) {
 
   // Helmet
   ctx.beginPath();
-  ctx.arc(x, py - 32 * S, 11 * S, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(35,65,125,0.95)';
+  ctx.arc(x, py - 32 * S, 10 * S, 0, Math.PI * 2);
+  ctx.fillStyle = suit.helm;
   ctx.fill();
 
-  // Visor — shift toward facing dir; shift toward rocket during reaction
+  // Visor — same cyan across all NPCs (recognisable crew aesthetic),
+  // shifted toward facing dir; shifts toward rocket during reaction
   const visorShift = state === 'reacting'
-    ? (reactDir || 1) * 1.5 * S
-    : facing * 1.5 * S;
+    ? (reactDir || 1) * 1.4 * S
+    : facing * 1.4 * S;
   ctx.beginPath();
-  ctx.ellipse(x + visorShift, py - 32 * S, 7.5 * S, 6.5 * S, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(10,190,255,0.52)';
+  ctx.ellipse(x + visorShift, py - 32 * S, 6.5 * S, 5.5 * S, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(10,190,255,0.50)';
   ctx.fill();
 
   // Visor highlight
   ctx.beginPath();
-  ctx.ellipse(x + visorShift - 2, py - 34 * S, 2.5, 2, -0.3, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.ellipse(x + visorShift - 2, py - 33 * S, 2, 1.5, -0.3, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.52)';
   ctx.fill();
 
   ctx.restore();
