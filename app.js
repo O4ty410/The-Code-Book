@@ -3384,6 +3384,7 @@ function switchTopNav(tab, btn) {
     }
   } else {
     stopHubCanvas();
+    stopHubBgCycle();
     if (mainContent) mainContent.style.display = 'none';
     if (ls) ls.style.display = 'none';
     var panel = document.getElementById('panel-' + tab);
@@ -3835,17 +3836,18 @@ function closeFloorModal() {
   document.body.style.overflow = '';
 }
 
-function getFloorIcon(fi, sz) {
+function getFloorIcon(fi, sz, color) {
   sz = sz || 44;
-  var fid = 'hfi' + fi;
+  var c = color || 'var(--fc-color)';
+  var fid = (color ? 'hfib' : 'hfi') + fi;
   var flt = '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
     '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
     '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
     '</filter></defs>';
   var open = '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" class="holo-icon" style="display:block;margin:0 auto;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
   var close = '</g></svg>';
-  var s  = ';fill:none;stroke:var(--fc-color)';
-  var sf = 'fill:var(--fc-color)';
+  var s  = ';fill:none;stroke:' + c;
+  var sf = 'fill:' + c;
   var d  = ';opacity:0.4';
 
   var icons = [
@@ -4020,6 +4022,75 @@ function getChallengeIcon(type, color, sz) {
   }
 }
 
+// ── Hub background icon cycle ──────────────────────────────────────────────
+var _hubBgTimer = null;
+var _hubBgFloor = 0;
+var HUB_BG_FC = [
+  {h:'#c8a96e',r:200,g:169,b:110},
+  {h:'#7eb8c8',r:126,g:184,b:200},
+  {h:'#c87e9a',r:200,g:126,b:154},
+  {h:'#9a7ec8',r:154,g:126,b:200},
+  {h:'#7ec8a9',r:126,g:200,b:169},
+  {h:'#c8967e',r:200,g:150,b:126},
+  {h:'#e8d5a0',r:232,g:213,b:160}
+];
+
+function _applyHubBgFloor(fi) {
+  var fc = HUB_BG_FC[fi];
+  var el = document.getElementById('hub-bg-icon');
+  var gl = document.getElementById('hub-bg-glow');
+  if (el) {
+    el.innerHTML = getFloorIcon(fi, 480, fc.h);
+    el.style.filter = 'drop-shadow(0 0 40px ' + fc.h + ')';
+    el.style.opacity = '0';
+  }
+  if (gl) {
+    gl.style.background = 'radial-gradient(ellipse 65% 65% at 50% 50%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.25) 0%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.09) 40%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.03) 58%,transparent 72%)';
+    gl.style.opacity = '0';
+  }
+}
+
+function stopHubBgCycle() {
+  if (_hubBgTimer) { clearTimeout(_hubBgTimer); _hubBgTimer = null; }
+  var el = document.getElementById('hub-bg-icon');
+  var gl = document.getElementById('hub-bg-glow');
+  if (el) el.style.opacity = '0';
+  if (gl) gl.style.opacity = '0';
+  document.body.classList.remove('learn-hub');
+}
+
+function startHubBgCycle() {
+  stopHubBgCycle();
+  document.body.classList.add('learn-hub');
+  _hubBgFloor = 0;
+  _applyHubBgFloor(_hubBgFloor);
+  requestAnimationFrame(function() {
+    var el = document.getElementById('hub-bg-icon');
+    var gl = document.getElementById('hub-bg-glow');
+    if (el) el.style.opacity = '0.22';
+    if (gl) gl.style.opacity = '1';
+    function advance() {
+      var el = document.getElementById('hub-bg-icon');
+      var gl = document.getElementById('hub-bg-glow');
+      if (!el) return;
+      el.style.opacity = '0';
+      if (gl) gl.style.opacity = '0';
+      _hubBgTimer = setTimeout(function() {
+        _hubBgFloor = (_hubBgFloor + 1) % 7;
+        _applyHubBgFloor(_hubBgFloor);
+        requestAnimationFrame(function() {
+          var el2 = document.getElementById('hub-bg-icon');
+          var gl2 = document.getElementById('hub-bg-glow');
+          if (el2) el2.style.opacity = '0.22';
+          if (gl2) gl2.style.opacity = '1';
+          _hubBgTimer = setTimeout(advance, 7000);
+        });
+      }, 1500);
+    }
+    _hubBgTimer = setTimeout(advance, 7000);
+  });
+}
+
 function renderLearnHub() {
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
@@ -4175,6 +4246,7 @@ function renderLearnHub() {
 
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
+  startHubBgCycle();
 }
 function completeSection(sectionId, fi, si) {
   closeSectionCompletePopup();
@@ -4621,6 +4693,7 @@ function f2Ascend() {
 let lastFloorIndex = 0;
 function renderFloor(fi, si) {
   stopHubCanvas();
+  stopHubBgCycle();
   var ls = document.getElementById('left-sidebar');
   if (ls) ls.style.display = typeof isMobile === 'function' && isMobile() ? 'none' : 'flex';
   var floor = FLOORS[fi];
