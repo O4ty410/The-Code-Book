@@ -182,7 +182,7 @@ function showAuthFromLanding() {
   if (isLoggedIn) {
     // Authenticated logged-in user — go straight into the app
     var _streakExtended = updateStreak();
-    stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
+    stopLandingCanvas(); var _nl=document.getElementById('new-user-landing'); if(_nl)_nl.style.display='none';
     document.body.style.overflow = '';
     document.getElementById('app').style.display = 'block';
     applyTheme();
@@ -193,7 +193,7 @@ function showAuthFromLanding() {
     updateChallengeDot();
   } else {
     // Guest or new user — always show onboarding or auth screen
-    stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
+    stopLandingCanvas(); var _nl=document.getElementById('new-user-landing'); if(_nl)_nl.style.display='none';
     const hasOnboarded = localStorage.getItem('codebook_onboarded');
     if (!hasOnboarded) {
       showOnboarding();
@@ -297,19 +297,8 @@ function populateDashboard() {
   // Apply saved cover screen theme (independent from app theme)
   applyCoverTheme(getCoverTheme());
 
-  // Show the landing overlay and start animated canvas
-  var landing = document.getElementById('new-user-landing');
-  if (landing) {
-    landing.style.display = 'block';
-    landing.style.position = 'fixed';
-    landing.style.top = '0';
-    landing.style.left = '0';
-    landing.style.width = '100vw';
-    landing.style.height = '100vh';
-    landing.style.zIndex = '99999';
-    landing.style.background = 'transparent';
-    startLandingCanvas();
-  }
+  // Go straight to auth/app — no landing screen
+  showAuthFromLanding();
   var cover = document.getElementById('cover');
   if (cover) cover.style.display = 'none';
 }
@@ -467,7 +456,7 @@ async function onUserLoggedIn() {
   updateStreak();
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('cover').style.display = 'none';
-  stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
+  stopLandingCanvas(); var _nl=document.getElementById('new-user-landing'); if(_nl)_nl.style.display='none';
   document.body.style.overflow = '';
   document.getElementById('app').style.display = 'block';
   applyTheme();
@@ -536,7 +525,7 @@ async function signOut() {
   document.getElementById('app').style.display = 'none';
   var ag = document.querySelector('.app-grid'); if (ag) ag.style.display = 'none';
   document.getElementById('cover').style.display = 'none';
-  document.getElementById('cover-user').style.display = 'none';
+  var _cu = document.getElementById('cover-user'); if (_cu) _cu.style.display = 'none';
   document.getElementById('auth-screen').style.display = 'flex';
   document.getElementById('auth-email').value = '';
   document.getElementById('auth-password').value = '';
@@ -1948,7 +1937,7 @@ function getEditorDefaults(section) {
         }
 
         var filenameMap = {
-            html: "index.html",
+            html: "app.html",
             css: "style.css",
             js: "script.js"
         };
@@ -3395,6 +3384,7 @@ function switchTopNav(tab, btn) {
     }
   } else {
     stopHubCanvas();
+    stopHubBgCycle();
     if (mainContent) mainContent.style.display = 'none';
     if (ls) ls.style.display = 'none';
     var panel = document.getElementById('panel-' + tab);
@@ -3846,17 +3836,26 @@ function closeFloorModal() {
   document.body.style.overflow = '';
 }
 
-function getFloorIcon(fi, sz) {
+function getFloorIcon(fi, sz, color) {
   sz = sz || 44;
-  var fid = 'hfi' + fi;
-  var flt = '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
-    '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
-    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
-    '</filter></defs>';
+  var c = color || 'var(--fc-color)';
+  var fid = (color ? 'hfib' : 'hfi') + fi;
+  var flt = color
+    ? '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">' +
+        '<feMorphology in="SourceGraphic" operator="dilate" radius="1.4" result="dilated"/>' +
+        '<feFlood flood-color="white" flood-opacity="0.88" result="white"/>' +
+        '<feComposite in="white" in2="dilated" operator="in" result="whiteEdge"/>' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="2" result="glow"/>' +
+        '<feMerge><feMergeNode in="glow"/><feMergeNode in="whiteEdge"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter></defs>'
+    : '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
+        '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter></defs>';
   var open = '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" class="holo-icon" style="display:block;margin:0 auto;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
   var close = '</g></svg>';
-  var s  = ';fill:none;stroke:var(--fc-color)';
-  var sf = 'fill:var(--fc-color)';
+  var s  = ';fill:none;stroke:' + c;
+  var sf = 'fill:' + c;
   var d  = ';opacity:0.4';
 
   var icons = [
@@ -4031,6 +4030,81 @@ function getChallengeIcon(type, color, sz) {
   }
 }
 
+
+// ── Hub background icon cycle ──────────────────────────────────────────────
+var _hubBgTimer = null;
+var _hubBgFloor = 0;
+var _hubBgGen = 0;
+var HUB_BG_FC = [
+  {h:'#ffc844',r:255,g:200,b:68},
+  {h:'#00e5ff',r:0,  g:229,b:255},
+  {h:'#ff44aa',r:255,g:68, b:170},
+  {h:'#bb66ff',r:187,g:102,b:255},
+  {h:'#00ffaa',r:0,  g:255,b:170},
+  {h:'#ff8844',r:255,g:136,b:68},
+  {h:'#ffe566',r:255,g:229,b:102}
+];
+
+function _applyHubBgFloor(fi) {
+  var fc = HUB_BG_FC[fi];
+  var el = document.getElementById('hub-bg-icon');
+  var gl = document.getElementById('hub-bg-glow');
+  if (el) {
+    el.innerHTML = getFloorIcon(fi, 480, fc.h);
+    el.style.filter = 'drop-shadow(0 0 60px ' + fc.h + ') drop-shadow(0 0 20px ' + fc.h + ')';
+    el.style.opacity = '0';
+  }
+  if (gl) {
+    gl.style.background = 'radial-gradient(ellipse 70% 70% at 50% 50%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.55) 0%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.22) 38%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.07) 58%,transparent 72%)';
+    gl.style.opacity = '0';
+  }
+}
+
+function stopHubBgCycle() {
+  _hubBgGen++;
+  if (_hubBgTimer) { clearTimeout(_hubBgTimer); _hubBgTimer = null; }
+  var el = document.getElementById('hub-bg-icon');
+  var gl = document.getElementById('hub-bg-glow');
+  if (el) el.style.opacity = '0';
+  if (gl) gl.style.opacity = '0';
+}
+
+function startHubBgCycle() {
+  stopHubBgCycle();
+  var gen = _hubBgGen;
+  _hubBgFloor = 0;
+  _applyHubBgFloor(_hubBgFloor);
+  requestAnimationFrame(function() {
+    if (_hubBgGen !== gen) return;
+    var el = document.getElementById('hub-bg-icon');
+    var gl = document.getElementById('hub-bg-glow');
+    if (el) el.style.opacity = '0.65';
+    if (gl) gl.style.opacity = '1';
+    function advance() {
+      if (_hubBgGen !== gen) return;
+      var el = document.getElementById('hub-bg-icon');
+      var gl = document.getElementById('hub-bg-glow');
+      if (!el) return;
+      el.style.opacity = '0';
+      if (gl) gl.style.opacity = '0';
+      _hubBgTimer = setTimeout(function() {
+        if (_hubBgGen !== gen) return;
+        _hubBgFloor = (_hubBgFloor + 1) % 7;
+        _applyHubBgFloor(_hubBgFloor);
+        requestAnimationFrame(function() {
+          if (_hubBgGen !== gen) return;
+          var el2 = document.getElementById('hub-bg-icon');
+          var gl2 = document.getElementById('hub-bg-glow');
+          if (el2) el2.style.opacity = '0.65';
+          if (gl2) gl2.style.opacity = '1';
+          _hubBgTimer = setTimeout(advance, 7000);
+        });
+      }, 1500);
+    }
+    _hubBgTimer = setTimeout(advance, 7000);
+  });
+}
+
 function renderLearnHub() {
   var rs = document.getElementById('right-sidebar');
   if (rs) rs.style.display = 'none';
@@ -4102,11 +4176,21 @@ function renderLearnHub() {
     '</div>';
 
   var html = '<style id="hub-override">' +
-    '.fc-header-title{color:#d0eeff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;text-shadow:0 0 40px rgba(126,184,200,0.45)!important;}' +
-    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;}' +
-    '.fc-card{min-width:130px!important;}' +
-    '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;}' +
-    '.fc-stat{flex:1!important;text-align:center!important;}' +
+    /* Header — bigger, glowing, high contrast */
+    '.fc-header-label{color:rgba(160,220,255,0.88)!important;letter-spacing:4px!important;text-shadow:0 0 14px rgba(100,180,255,0.55)!important;}' +
+    '.fc-header-title{color:#eef6ff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;font-size:clamp(34px,5.5vw,60px)!important;font-weight:900!important;line-height:1.1!important;letter-spacing:-0.5px!important;text-shadow:0 4px 20px rgba(0,0,0,0.95),0 0 50px rgba(126,184,200,0.55),0 0 100px rgba(126,184,200,0.22)!important;}' +
+    '.fc-header-sub{color:rgba(200,228,255,0.78)!important;text-shadow:0 2px 10px rgba(0,0,0,0.92)!important;}' +
+    /* Cards — glassmorphism so they lift off the bloom */
+    '.fc-card{min-width:130px!important;background:rgba(4,8,22,0.72)!important;border:1px solid rgba(255,255,255,0.16)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;box-shadow:0 8px 40px rgba(0,0,0,0.8),0 2px 8px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.12)!important;}' +
+    /* Card text contrast */
+    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;color:rgba(230,242,255,0.93)!important;text-shadow:0 1px 6px rgba(0,0,0,0.88)!important;}' +
+    '.fc-floor-badge{opacity:1!important;text-shadow:0 0 10px rgba(var(--fc-color-rgb,200,169,110),0.7)!important;}' +
+    '.fc-sec-count{color:rgba(180,212,255,0.68)!important;text-shadow:0 1px 4px rgba(0,0,0,0.8)!important;}' +
+    /* Stats bar — glassy panel */
+    '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;background:rgba(4,8,20,0.65)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;border:1px solid rgba(255,255,255,0.08)!important;border-radius:10px!important;}' +
+    '.fc-stat{flex:1!important;text-align:center!important;background:transparent!important;}' +
+    '.fc-stat-val{text-shadow:0 2px 12px rgba(0,0,0,0.92)!important;color:#ffffff!important;}' +
+    '.fc-stat-label{color:rgba(200,228,255,0.78)!important;text-shadow:0 1px 6px rgba(0,0,0,0.8)!important;}' +
     '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
     '.fc-row{justify-content:center!important;}' +
@@ -4121,7 +4205,6 @@ function renderLearnHub() {
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
     '</style>' +
-    '<canvas id="hub-canvas" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>' +
     '<div class="fc-hub">' +
     '<div class="fc-header">' +
       '<div class="fc-header-label">Your Learning Path</div>' +
@@ -4130,11 +4213,11 @@ function renderLearnHub() {
       '<div style="margin-top:16px;">' + overallBar + '</div>' +
       '<button class="hub-notes-btn" onclick="openNotesReview()">📝 Review your notes</button>' +
     '</div>' +
-    '<div class="fc-stats" style="display:flex;width:100%;margin:0 auto 28px;border-top:1px solid #0a1828;border-bottom:1px solid #0a1828;padding:14px 0;">' +
-      '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Unlocked</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">XP Earned</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + (state.streak || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.06);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,220,255,0.7);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
+    '<div class="fc-stats" style="display:flex;width:100%;margin:0 auto 28px;padding:14px 0;">' +
+      '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Unlocked</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">XP Earned</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + (state.streak || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Day Streak</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Complete</div></div>' +
     '</div>' +
     '<div class="fc-row" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;">' + cardsHtml + '</div>' +
     (function() {
@@ -4177,7 +4260,7 @@ function renderLearnHub() {
 
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
-  startHubCanvas();
+  startHubBgCycle();
 }
 function completeSection(sectionId, fi, si) {
   closeSectionCompletePopup();
@@ -4624,6 +4707,7 @@ function f2Ascend() {
 let lastFloorIndex = 0;
 function renderFloor(fi, si) {
   stopHubCanvas();
+  stopHubBgCycle();
   var ls = document.getElementById('left-sidebar');
   if (ls) ls.style.display = typeof isMobile === 'function' && isMobile() ? 'none' : 'flex';
   var floor = FLOORS[fi];

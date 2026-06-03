@@ -9,6 +9,7 @@ var CACHE = 'codebook-v34';
 var SHELL = [
   './',
   './index.html',
+  './app.html',
   './manifest.json',
   './helpers.js',
   './canvas-bg.js',

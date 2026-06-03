@@ -1,682 +1,1300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#c8a96e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="The Code Book">
-<link rel="manifest" href="./manifest.json">
-<meta name="description" content="A calm path into coding. Seven floors from zero to professional grade — with hints, progress tracking, XP, and voice narration. Free to use, offline-ready.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A calm path into coding. Seven floors from zero to professional grade — no hype, no tutorials that abandon you halfway. Free to use, offline-ready.">
+  <title>The Code Book — A calm path into coding</title>
 
-<!-- Open Graph -->
-<meta property="og:type"        content="website">
-<meta property="og:url"         content="https://o4ty410.github.io/The-Code-Book/">
-<meta property="og:title"       content="The Code Book">
-<meta property="og:description" content="A calm path into coding. Seven floors from zero to professional grade — hints, XP, voice narration, offline-ready.">
-<meta name="twitter:card"        content="summary">
-<meta name="twitter:title"       content="The Code Book">
-<meta name="twitter:description" content="A calm path into coding. Seven floors from zero to professional grade.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
 
-<title>The Code Book</title>
+  <style>
+    /* ── Reset & base ───────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-<!-- Font preconnect + load (moved from variables.css @import for faster render) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+    :root {
+      --bg:          #05070a;
+      --surface:     #0c111d;
+      --surface2:    #111827;
+      --border:      #1e293b;
+      --accent:      #7dd3fc;
+      --accent2:     #c084fc;
+      --gold:        #c8a96e;
+      --text:        #f1f5f9;
+      --text-muted:  #7d96b4;
+      --text-dim:    #b0c4db;
+      --success:     #4ade80;
 
-  <link rel="stylesheet" href="variables.min.css?v=20260519e">
-  <link rel="stylesheet" href="animations.min.css?v=20260518s">
-  <link rel="stylesheet" href="layout.min.css?v=20260519e">
-  <link rel="stylesheet" href="cover.min.css?v=20260518s">
-  <link rel="stylesheet" href="components.min.css?v=20260524a">
-  <link rel="stylesheet" href="panels.min.css?v=20260524a">
-  <link rel="stylesheet" href="overlays.min.css?v=20260520e">
-  <link rel="stylesheet" href="mobile.min.css?v=20260520h">
-  <link rel="stylesheet" href="glitch.min.css?v=20260524b">
+      --f1: #c8a96e;
+      --f2: #7eb8c8;
+      --f3: #9c8dc0;
+      --f4: #c08d8d;
+      --f5: #8dc0a4;
+      --f6: #c0b38d;
+      --f7: #a96ec8;
 
+      --font-head:  'Orbitron', sans-serif;
+      --font-body:  'Space Grotesk', sans-serif;
+      --font-mono:  'Space Mono', monospace;
 
+      --max: 960px;
+      --gutter: clamp(20px, 5vw, 48px);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 1.2s ease;
+    }
+
+    /* Neon bloom — fixed radial glow that shifts colour with scroll */
+    #neon-bloom {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      will-change: background;
+    }
+
+    #stars-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* All content sits above the bloom */
+    nav, section, footer { position: relative; z-index: 2; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Layout helpers ─────────────────────────────────────── */
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    section { padding: clamp(64px, 10vw, 120px) 0; }
+
+    .label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 16px var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(5, 7, 10, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+    }
+
+    .nav-logo {
+      font-family: var(--font-head);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+    }
+
+    .nav-cta {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 6px;
+      background: var(--gold);
+      color: #05070a;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    #hero {
+      padding-top: calc(clamp(64px, 10vw, 120px) + 60px);
+      padding-bottom: clamp(64px, 10vw, 120px);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* Subtle radial glow behind hero text */
+    #hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse at center, rgba(200, 169, 110, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0.9;
+    }
+
+    .hero-h1 {
+      font-family: var(--font-head);
+      font-size: clamp(32px, 6vw, 64px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero-h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--gold) 0%, #e8c878 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.2vw, 20px);
+      color: var(--text-dim);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 32px;
+      border-radius: 8px;
+      background: var(--gold);
+      color: #05070a;
+      letter-spacing: 0.02em;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+
+    .hero-note {
+      margin-top: 20px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ── DIVIDER ────────────────────────────────────────────── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--border) 30%, var(--border) 70%, transparent 100%);
+    }
+
+    /* ── WHO THIS IS FOR ────────────────────────────────────── */
+    #who {
+    }
+
+    #who .wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: center;
+    }
+
+    .who-left h2 {
+      font-family: var(--font-head);
+      font-size: clamp(22px, 3.5vw, 36px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    .who-left p {
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+
+    .who-left p strong {
+      color: var(--text);
+    }
+
+    .who-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .recognition-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 18px;
+      border-radius: 10px;
+      background: rgba(4, 8, 20, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.75), 0 2px 10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    .recognition-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+      width: 22px;
+      height: 22px;
+    }
+    .recognition-icon svg { width: 22px; height: 22px; display: block; }
+
+    .recognition-text {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+
+    .recognition-text strong {
+      display: block;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    /* ── HOW IT WORKS ───────────────────────────────────────── */
+    #how {
+      padding-top: clamp(64px, 10vw, 120px);
+      padding-bottom: clamp(64px, 10vw, 120px);
+    }
+
+    #how .section-header {
+      text-align: center;
+      margin-bottom: clamp(40px, 6vw, 64px);
+    }
+
+    #how .section-header h2 {
+      font-family: var(--font-head);
+      font-size: clamp(38px, 6.5vw, 72px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 14px rgba(0,0,0,0.95), 0 0 28px rgba(125,211,252,0.60), 0 0 60px rgba(125,211,252,0.30), 0 0 110px rgba(125,211,252,0.14);
+    }
+
+    #how .section-header p {
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* Floor grid */
+    .floors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-bottom: 56px;
+    }
+
+    /* Floor 07 — centre it under Floor 05 */
+    .floor-card:last-child {
+      grid-column: 2;
+    }
+
+    .floor-card {
+      background: rgba(4, 8, 20, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.75), 0 2px 10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 26px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .floor-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--floor-color);
+      border-radius: 12px 0 0 12px;
+    }
+
+    .floor-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200, 169, 110, 0.2);
+    }
+
+    .floor-num {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--floor-color);
+      margin-bottom: 6px;
+    }
+
+    .floor-name {
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .floor-sub {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.45;
+    }
+
+    /* SAGE block */
+    .sage-block {
+      background: rgba(4, 8, 20, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 10px 52px rgba(0, 0, 0, 0.75), 0 2px 10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: clamp(28px, 4vw, 44px);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .sage-owl {
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+    }
+
+    .sage-owl svg { width: 100%; height: 100%; }
+
+    .sage-text h3 {
+      font-family: var(--font-head);
+      font-size: clamp(16px, 2.2vw, 20px);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .sage-text p {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      max-width: 580px;
+    }
+
+    /* ── BENEFITS ───────────────────────────────────────────── */
+    #benefits {
+    }
+
+    #benefits .section-header {
+      text-align: center;
+      margin-bottom: clamp(40px, 6vw, 64px);
+    }
+
+    #benefits .section-header h2 {
+      font-family: var(--font-head);
+      font-size: clamp(38px, 6.5vw, 72px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 14px rgba(0,0,0,0.95), 0 0 28px rgba(74,222,128,0.60), 0 0 60px rgba(74,222,128,0.30), 0 0 110px rgba(74,222,128,0.14);
+    }
+
+    #benefits .section-header p {
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .benefit-card {
+      background: rgba(4, 8, 20, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.75), 0 2px 10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .benefit-card:hover {
+      background: rgba(4, 8, 20, 0.75);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .benefit-icon {
+      width: 42px;
+      height: 42px;
+      margin-bottom: 18px;
+    }
+    .benefit-icon svg { width: 42px; height: 42px; display: block; }
+
+    .benefit-title {
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .benefit-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ── FINAL CTA ──────────────────────────────────────────── */
+    #cta-bottom {
+      text-align: center;
+    }
+
+    #cta-bottom h2 {
+      font-family: var(--font-head);
+      font-size: clamp(24px, 4vw, 44px);
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    #cta-bottom h2 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--gold) 0%, #e8c878 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    #cta-bottom p {
+      font-size: 16px;
+      color: var(--text-dim);
+      max-width: 480px;
+      margin: 0 auto 36px;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+    }
+
+    .footer-note {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ── GAME HUB ───────────────────────────────────────────── */
+    #games {
+      padding-top: clamp(64px, 10vw, 120px);
+      padding-bottom: clamp(64px, 10vw, 120px);
+    }
+
+    #games .section-header {
+      text-align: center;
+      margin-bottom: clamp(40px, 6vw, 64px);
+    }
+
+    #games .section-header h2 {
+      font-family: var(--font-head);
+      font-size: clamp(38px, 6.5vw, 72px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 14px rgba(0,0,0,0.95), 0 0 28px rgba(251,146,60,0.60), 0 0 60px rgba(251,146,60,0.30), 0 0 110px rgba(251,146,60,0.14);
+    }
+
+    #games .section-header p {
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .game-card {
+      background: rgba(4, 8, 20, 0.62);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.75), 0 2px 10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    .game-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .game-card--glitch {
+      border-color: rgba(0, 229, 255, 0.15);
+    }
+
+    .game-card--glitch:hover {
+      border-color: rgba(0, 229, 255, 0.35);
+    }
+
+    .game-card--venus {
+      border-color: rgba(192, 132, 252, 0.15);
+    }
+
+    .game-card--venus:hover {
+      border-color: rgba(192, 132, 252, 0.35);
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--game-line);
+    }
+
+    .game-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--game-color);
+      margin-bottom: 10px;
+    }
+
+    .game-title {
+      font-family: var(--font-head);
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: var(--game-color);
+      margin-bottom: 12px;
+      line-height: 1.1;
+    }
+
+    .game-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .game-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 860px) {
+      .games-grid { grid-template-columns: 1fr 1fr; }
+      .floors-grid { grid-template-columns: 1fr 1fr; }
+      .floor-card:last-child { grid-column: auto; }
+    }
+
+    @media (max-width: 560px) {
+      .games-grid { grid-template-columns: 1fr; }
+      .floors-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 680px) {
+      #who .wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .sage-block {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .sage-owl {
+        margin: 0 auto;
+      }
+
+      .sage-text p { max-width: 100%; }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <div id="floor-nav" class="compat-hidden" style="display:none!important;visibility:hidden;pointer-events:none;"></div>
-  <div id="timer-display" class="compat-hidden">25:00</div>
-  <div id="timer-btn" class="compat-hidden"></div>
-  <div id="user-bar" class="compat-hidden"></div>
-  <div id="user-email" class="compat-hidden"></div>
-  <div id="xp-panel" class="compat-hidden"></div>
-  <div id="current-xp" class="compat-hidden">0</div>
-  <div id="current-level" class="compat-hidden">1</div>
-  <div id="level-fill" class="compat-hidden" style="width:0%"></div>
-  <div id="xp-to-next" class="compat-hidden"></div>
-  <div id="streak-count" class="compat-hidden">0</div>
-  <div id="time-log" class="compat-hidden">0m total</div>
-  <div id="progress-fill" style="width:0%"></div>
-  <div id="progress-pct">0%</div>
-  <div id="sage-bubble"></div>
-  <div id="building-map"></div>
-  <div id="panel-learn" style="display:none"></div>
+  <canvas id="stars-bg"></canvas>
+  <div id="neon-bloom"></div>
 
-<!-- COMPAT SHIMS: original JS looks for these IDs -->
-<div class="compat-hidden" aria-hidden="true"></div>
+  <!-- ── NAV ──────────────────────────────────────────────── -->
+  <nav>
+    <span class="nav-logo">THE CODE BOOK</span>
+  </nav>
 
-<!-- AUTH SCREEN -->
-<div id="auth-screen" style="display:none;">
-  <div class="cover-theme-orbs">
-    <button class="cover-orb" data-theme="cosmic-blue"   title="Cosmic Blue"   onclick="switchCoverTheme('cosmic-blue')"   style="--orb-dot:linear-gradient(135deg,#00c8ff,#0055cc);--orb-glow:rgba(0,180,255,0.55)"></button>
-    <button class="cover-orb" data-theme="aurora-teal"   title="Aurora Teal"   onclick="switchCoverTheme('aurora-teal')"   style="--orb-dot:linear-gradient(135deg,#00e5b0,#007a60);--orb-glow:rgba(0,220,160,0.55)"></button>
-    <button class="cover-orb" data-theme="royal-violet"  title="Royal Violet"  onclick="switchCoverTheme('royal-violet')"  style="--orb-dot:linear-gradient(135deg,#a855f7,#5b21b6);--orb-glow:rgba(168,85,247,0.55)"></button>
-    <button class="cover-orb" data-theme="ember-crimson" title="Ember Crimson" onclick="switchCoverTheme('ember-crimson')" style="--orb-dot:linear-gradient(135deg,#ff5555,#cc2200);--orb-glow:rgba(255,80,80,0.55)"></button>
-    <button class="cover-orb" data-theme="obsidian-gold" title="Obsidian Gold" onclick="switchCoverTheme('obsidian-gold')" style="--orb-dot:linear-gradient(135deg,#e8c878,#9a7030);--orb-glow:rgba(200,169,110,0.55)"></button>
-  </div>
-  <div class="auth-title">The Code Book</div>
-  <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
-  <div class="auth-box">
-    <div class="auth-tabs">
-      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
-      <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
-    </div>
-    <div class="auth-form">
-      <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
-      <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
-      <div style="position:relative;">
-        <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)" style="padding-right:48px;width:100%;">
-        <button type="button" onclick="togglePasswordVisibility('auth-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="wrap">
+      <p class="hero-eyebrow">Seven floors &nbsp;&#8212;&nbsp; Zero to professional grade</p>
+      <h1 class="hero-h1">
+        A calm path<br>
+        <em>into coding</em>
+      </h1>
+      <p class="hero-sub">
+        No tutorials that abandon you halfway. No jargon dropped without explanation.
+        Just a clear building to climb, one floor at a time.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="app.html">Open the App &nbsp;&#8594;</a>
+        <a class="btn-ghost" href="#who">Who this is for</a>
+        <a class="btn-ghost" href="#how">See how it works</a>
       </div>
-      <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
-      <div id="forgot-link" class="forgot-link" onclick="handleForgotPassword()">Forgot your password?</div>
-      <div class="auth-google-wrap" style="margin-top:10px;">
-        <button class="auth-btn auth-btn--google" onclick="signInWithGoogle()">Sign in with Google</button>
-      </div>
-      <div class="auth-message" id="auth-message"></div>
+      <p class="hero-note">Free &nbsp;&#183;&nbsp; Offline-ready &nbsp;&#183;&nbsp; No install required</p>
     </div>
-    <div class="auth-actions-row">
-      <button onclick="showLeaderboard()" class="auth-link-btn">🏆 Leaderboard</button>
-      <button onclick="showPrivacy()" class="auth-link-btn">Privacy Policy</button>
-    </div>
-    <div style="text-align:center;margin:4px 0 8px;">
-      <button onclick="showTerms()" class="auth-link-btn" style="font-size:11px;letter-spacing:1px;">Terms &amp; Conditions</button>
-    </div>
-    <div class="auth-divider"><span>or continue with email</span></div>
-    <div class="auth-start-wrap">
-      <button onclick="showGuestNamePrompt()" class="auth-link-btn">Continue as Guest</button>
-    </div>
-  </div>
-</div><!-- end #auth-screen -->
+  </section>
 
+  <div class="divider"></div>
 
-<!-- GUEST NAME OVERLAY -->
-<div id="guest-name-overlay" class="overlay-base" style="display:none;">
-  <div class="overlay-inner-sm" style="text-align:center;">
-    <div class="onboarding-owl">&#128100;</div>
-    <div class="onboarding-title">What should we call you?</div>
-    <input class="auth-input" id="guest-name-input" type="text" placeholder="Enter your name" maxlength="30" style="text-align:center;margin-bottom:16px;">
-    <button class="auth-btn" onclick="confirmGuestName()">Start Exploring</button>
-    <div style="margin-top:16px;font-family:'Space Mono',monospace;font-size:13px;color:rgba(200,169,80,0.85);line-height:1.7;letter-spacing:0.2px;max-width:300px;margin-left:auto;margin-right:auto;">
-      Guest progress and XP are stored locally in your browser only. They will be lost if you clear your browser data. Create a free account to save your progress permanently.
-    </div>
-    <div style="margin-top:12px;">
-      <button onclick="hideGuestNamePrompt()" class="auth-link-btn">&#8592; Back to Sign In</button>
-    </div>
-  </div>
-</div>
+  <!-- ── WHO THIS IS FOR ──────────────────────────────────── -->
+  <section id="who">
+    <div class="wrap">
+      <div class="who-left">
+        <p class="label">Who this is for</p>
+        <h2>You've tried to learn<br>to code before.</h2>
+        <p>
+          You watched the tutorials. You followed along. Then the instructor
+          moved on and you were left holding a half-working project with no idea
+          why it worked — or didn't.
+        </p>
+        <p>
+          <strong>That wasn't a failure of effort.</strong> Most learning resources
+          are built for people who already think like developers. They teach syntax
+          before understanding. They skip the mental models that make everything
+          else click.
+        </p>
+        <p>
+          The Code Book starts where you actually are — not where it's convenient
+          to assume you are.
+        </p>
+      </div>
 
-<!-- GUEST LOCK POPUP -->
-<div id="guest-lock-overlay" class="overlay-base" style="display:none;">
-  <div class="overlay-inner-md" style="text-align:center;">
-    <div style="font-size:48px;margin-bottom:16px;">&#128274;</div>
-    <div class="onboarding-title">Floor Locked</div>
-    <div class="onboarding-body">Floors 3 and above are available to registered users. Create a free account to unlock everything and save your progress.</div>
-    <button class="auth-btn" onclick="hideGuestLockPopup();document.getElementById('auth-screen').style.display='flex';">Create Free Account</button>
-    <div style="margin-top:12px;">
-      <button onclick="hideGuestLockPopup()" class="auth-link-btn">Keep exploring as guest</button>
-    </div>
-  </div>
-</div>
-
-<!-- LEADERBOARD OVERLAY -->
-<div id="leaderboard-overlay" class="overlay-base scrollable" style="z-index:9993;">
-  <div class="overlay-inner-md">
-    <div class="overlay-header">
-      <div class="overlay-title-serif overlay-title-lg">Leaderboard</div>
-      <button onclick="hideLeaderboard()" class="overlay-close-btn">Close</button>
-    </div>
-    <div class="overlay-mono-label">TOP LEARNERS — ALL TIME</div>
-    <div id="leaderboard-list" class="leaderboard-list">
-      <div class="leaderboard-loading">Loading...</div>
-    </div>
-  </div>
-</div>
-
-<!-- PRIVACY POLICY OVERLAY -->
-<div id="privacy-overlay" class="overlay-base scrollable" style="z-index:9993;">
-  <div class="overlay-inner-xl">
-    <div class="overlay-header overlay-header-spaced">
-      <div class="overlay-title-serif overlay-title-md">Privacy Policy</div>
-      <button onclick="hidePrivacy()" class="overlay-close-btn">Close</button>
-    </div>
-    <div class="overlay-mono-label">LAST UPDATED: APRIL 2025</div>
-    <div class="privacy-body">
-      <div>
-        <div class="privacy-section-title">Who we are</div>
-        <div>The Code Book is a free interactive coding curriculum built and maintained by an independent developer based in the United Kingdom. We are committed to handling your data with the same care and respect we would want for our own.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">What data we collect</div>
-        <div>When you create an account we collect your email address and the display name you choose. We also store your learning progress — completed sections, XP, streak, and focus time. We do not collect your real name, phone number, location, or any payment information.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Why we collect it</div>
-        <div>Your email is used solely to create and secure your account and to send password reset emails if you request one. Your progress data is stored so your learning journey is saved across devices. We do not use your data for advertising or marketing of any kind.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">What is public</div>
-        <div>Your display name, XP score and streak count appear on the public leaderboard. Your email address is never visible to other users or shown publicly anywhere on the platform.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Who we share data with</div>
-        <div>We do not sell, share or rent your personal data to any third party. Your data is stored securely using Supabase, a trusted infrastructure provider compliant with SOC 2 Type II. You can read Supabase's privacy policy at supabase.com/privacy.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Security measures we have implemented</div>
-        <div class="privacy-security-list">
-          <div class="privacy-security-item">
-            <div class="privacy-security-item-title">Password Encryption</div>
-            <div>Your password is never stored in plain text. It is immediately hashed using bcrypt — an industry standard one-way encryption algorithm. This means nobody, including us, can ever see or recover your password.</div>
+      <div class="who-right">
+        <div class="recognition-item">
+          <span class="recognition-icon"><svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 3 L11 19" stroke="#c8a96e" stroke-width="1.2"/>
+            <path d="M3 4 C3 4 7 3 11 3 L11 19 C11 19 7 18 3 19 Z" stroke="#c8a96e" stroke-width="1.3" stroke-linejoin="round"/>
+            <path d="M19 4 C19 4 15 3 11 3 L11 19 C11 19 15 18 19 19 Z" stroke="#c8a96e" stroke-width="1.3" stroke-linejoin="round"/>
+            <line x1="5" y1="9"  x2="9"  y2="9"  stroke="#c8a96e" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+            <line x1="5" y1="12" x2="9"  y2="12" stroke="#c8a96e" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+            <path d="M13.5 9 Q14.5 8 15.5 9 Q16.5 10 15 11 L15 12.2" stroke="#c8a96e" stroke-width="1.2" stroke-linecap="round"/>
+            <circle cx="15" cy="13.8" r="0.8" fill="#c8a96e"/>
+          </svg></span>
+          <div class="recognition-text">
+            <strong>You followed a tutorial, then couldn't do it alone.</strong>
+            That's the most common stuck point. You understood the steps but not the
+            thinking behind them. Each floor here builds the thinking first.
           </div>
-          <div class="privacy-security-item">
-            <div class="privacy-security-item-title">Encrypted Connections</div>
-            <div>All data transmitted between your browser and our servers uses HTTPS — the same encryption standard used by banks and major financial institutions. Your credentials and progress data are always encrypted in transit.</div>
+        </div>
+        <div class="recognition-item">
+          <span class="recognition-icon"><svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 3 C6 3 6 5 6 6 C6 7 5 8 4 8.5 C5 9 6 10 6 11 C6 12 6 14 8 14" stroke="#7dd3fc" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M14 3 C16 3 16 5 16 6 C16 7 17 8 18 8.5 C17 9 16 10 16 11 C16 12 16 14 14 14" stroke="#7dd3fc" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M12.5 5.5 L10 9 L12 9 L9.5 13.5" stroke="#7dd3fc" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg></span>
+          <div class="recognition-text">
+            <strong>JavaScript made you feel stupid.</strong>
+            It does that. It's a real programming language with real logic. The
+            difficulty is normal and expected — not a sign you're not cut out for this.
           </div>
-          <div class="privacy-security-item">
-            <div class="privacy-security-item-title">Row Level Security</div>
-            <div>We have implemented database-level Row Level Security policies. This means that even if someone gained access to the database directly, they could only ever see their own data — never another user's records. Each user's data is locked to their unique account ID.</div>
+        </div>
+        <div class="recognition-item">
+          <span class="recognition-icon"><svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="8" stroke="#c084fc" stroke-width="1.4"/>
+            <line x1="11" y1="11" x2="11" y2="5"  stroke="#c084fc" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="11" y1="11" x2="15" y2="13" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="11" cy="11" r="1.2" fill="#c084fc"/>
+            <path d="M11 3 A8 8 0 0 1 19 11" stroke="#c084fc" stroke-width="2.5" stroke-linecap="round" opacity="0.22"/>
+          </svg></span>
+          <div class="recognition-text">
+            <strong>You don't have big blocks of time to commit.</strong>
+            Each section is designed to be completed in one sitting.
+            Fifteen minutes a day compounds into real skill.
           </div>
-          <div class="privacy-security-item">
-            <div class="privacy-security-item-title">Session Security</div>
-            <div>When you sign out, your session token is invalidated server-side immediately. This means your account cannot be accessed from the same device after signing out, even if someone gained access to your browser.</div>
-          </div>
-          <div class="privacy-security-item">
-            <div class="privacy-security-item-title">Rate Limiting</div>
-            <div>We limit sign-in attempts to 4 per 5 minutes per IP address. This prevents automated attacks where someone attempts thousands of password combinations rapidly. After the limit is reached, further attempts are temporarily blocked.</div>
-          </div>
-          <div class="privacy-security-item">
-            <div class="privacy-security-item-title">Leaderboard Privacy</div>
-            <div>The public leaderboard is served from a restricted database view that only exposes display names, XP scores and streak counts. It is technically impossible for the leaderboard to reveal email addresses or any other private information.</div>
+        </div>
+        <div class="recognition-item">
+          <span class="recognition-icon"><svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 19 L3 15 L7 15 L7 11 L11 11 L11 7 L15 7 L15 4" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="15" y1="4" x2="15" y2="9" stroke="#c8a96e" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M15 4 L19.5 6 L15 8 Z" fill="#c8a96e" opacity="0.75"/>
+          </svg></span>
+          <div class="recognition-text">
+            <strong>You want to get somewhere, not just learn forever.</strong>
+            Floor 7 is a real destination: job-ready, portfolio-ready, decided on
+            a direction and deep enough to be valuable in it.
           </div>
         </div>
       </div>
-      <div>
-        <div class="privacy-section-title">Your rights under UK GDPR</div>
-        <div>You have the right to access your data, correct it, or request that it be deleted entirely. You can also object to how we process your data or request that we restrict processing. To exercise any of these rights contact us directly through the app and we will respond within 30 days.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Deleting your account</div>
-        <div>If you would like your account and all associated data permanently removed, contact us and we will delete everything within 7 days and confirm when it is done.</div>
-      </div>
-      <div class="privacy-contact-box">
-        This policy applies to all users of The Code Book. For users in the UK and European Union we comply with the UK GDPR and the Data Protection Act 2018. This policy was last reviewed in April 2025.
-      </div>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- TERMS & CONDITIONS OVERLAY -->
-<div id="terms-overlay" class="overlay-base scrollable" style="z-index:9993;display:none;">
-  <div class="overlay-inner-xl">
-    <div class="overlay-header overlay-header-spaced">
-      <div class="overlay-title-serif overlay-title-md">Terms &amp; Conditions</div>
-      <button onclick="hideTerms()" class="overlay-close-btn">Close</button>
-    </div>
-    <div class="overlay-mono-label">LAST UPDATED: MAY 2025</div>
-    <div class="privacy-body">
-      <div>
-        <div class="privacy-section-title">About The Code Book</div>
-        <div>The Code Book is a free interactive coding curriculum built and maintained by an independent developer based in the United Kingdom. It covers seven floors of learning — from absolute beginner to professional-grade programming — and includes lessons, games, XP tracking, a leaderboard, spaced repetition revision, and a focus timer. By using The Code Book you agree to these terms. If you do not agree, please do not use the service.</div>
+  <!-- ── HOW IT WORKS ─────────────────────────────────────── -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="label">How it works</p>
+        <h2>Seven floors.<br>One building.</h2>
+        <p>
+          Each floor is a self-contained phase of your journey. You don't move up
+          until the current floor is solid. No skipping. No guessing.
+        </p>
       </div>
-      <div>
-        <div class="privacy-section-title">Your account</div>
-        <div>You can create a free account using your email and password or by signing in with Google. You are responsible for keeping your account credentials secure and for all activity that occurs under your account. You may not create multiple accounts to manipulate leaderboard rankings or gain an unfair advantage. We reserve the right to suspend or remove any account that breaches these terms.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Guest access</div>
-        <div>You may explore Floors 1 and 2 as a guest without creating an account. Guest progress — including XP earned and sections completed — is stored in your browser's local storage only. It is not backed up to our servers and will be permanently lost if you clear your browser data or switch devices. Creating a free account is the only way to save your progress permanently.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Acceptable use</div>
-        <div>You agree to use The Code Book for personal learning purposes only. You must not attempt to copy, scrape, or reproduce any curriculum content, games, or design for redistribution. You must not attempt to reverse-engineer the platform, gain unauthorised access to other users' data, or use the platform for any unlawful purpose. Automated access or bots are not permitted.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">XP, streaks and the leaderboard</div>
-        <div>Your display name, XP score and streak count are visible to all users on the public leaderboard. Your email address is never shown publicly. XP and streaks are tied to your account and reset to zero if your account is deleted. We reserve the right to adjust or reset scores in cases of abuse or manipulation.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Games and curriculum content</div>
-        <div>The Code Book includes games — Launch Sequence, Venus Mode, and Glitch Mode — alongside structured learning sections across seven floors. All curriculum content, game mechanics, visuals, and audio are original work owned by The Code Book. Nothing on the platform may be reproduced or redistributed without explicit written permission.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">No warranty</div>
-        <div>The Code Book is provided free of charge on an "as-is" and "as-available" basis. We make no guarantees about uptime, accuracy of content, or fitness for any particular purpose. Learning outcomes depend entirely on your own effort and engagement with the material.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Limitation of liability</div>
-        <div>To the fullest extent permitted by law, The Code Book and its developer shall not be liable for any loss of data, learning progress, or any direct, indirect, or consequential damages arising from your use of the platform. This includes but is not limited to loss of guest progress due to browser data being cleared.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Age requirement</div>
-        <div>You must be at least 13 years old to create an account. If you are under 16 and based in the UK or European Union, you must have verifiable parental or guardian consent before creating an account. Guest access is available to users of all ages.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Privacy</div>
-        <div>How we collect, store, and protect your personal data is described in our Privacy Policy, accessible from the sign-in screen. By creating an account you also agree to our Privacy Policy.</div>
-      </div>
-      <div>
-        <div class="privacy-section-title">Changes to these terms</div>
-        <div>We may update these terms at any time. When we do, the "last updated" date at the top of this document will change. Continued use of The Code Book after any changes constitutes your acceptance of the updated terms. We recommend checking this page periodically.</div>
-      </div>
-      <div class="privacy-contact-box">
-        These terms apply to all users of The Code Book. For users in the UK and European Union we operate in compliance with the UK GDPR and the Data Protection Act 2018. For any questions about these terms, please contact us through the platform.
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- PASSWORD RESET OVERLAY -->
-<div id="reset-overlay" class="overlay-base" style="z-index:9999;background:var(--bg);">
-  <div class="reset-inner">
-    <div class="reset-title">New Password</div>
-    <div class="reset-sub">CHOOSE A STRONG PASSWORD</div>
-    <div class="reset-form">
-      <div style="position:relative;">
-        <input id="reset-password" class="auth-input" type="password" placeholder="New password (min 6 characters)" style="padding-right:48px;width:100%;">
-        <button type="button" onclick="togglePasswordVisibility('reset-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
-      </div>
-      <div style="position:relative;">
-        <input id="reset-password-confirm" class="auth-input" type="password" placeholder="Confirm new password" style="padding-right:48px;width:100%;">
-        <button type="button" onclick="togglePasswordVisibility('reset-password-confirm', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
-      </div>
-      <button onclick="submitNewPassword()" class="auth-btn">Update Password</button>
-      <div id="reset-message" class="auth-message"></div>
-    </div>
-  </div>
-</div>
+      <div class="floors-grid">
 
-<!-- ONBOARDING OVERLAY -->
-<div id="onboarding" class="overlay-base" style="z-index:9995;background:var(--bg);">
-  <div class="overlay-inner-lg">
-    <div class="ob-progress" id="ob-progress">01 / 03</div>
-    <div class="onboarding-owl"><svg viewBox="0 0 100 110" width="56" height="62" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible"><defs><radialGradient id="sob-o" cx="44" cy="34" r="62" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22eeff"/><stop offset="38%" stop-color="#0070cc"/><stop offset="72%" stop-color="#002c68"/><stop offset="100%" stop-color="#000d22"/></radialGradient><filter id="sgf-o" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" result="bl"/><feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="sef-o" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="bl"/><feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="url(#sob-o)"/><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="rgba(160,60,255,0.09)"/><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="none" stroke="rgba(0,210,255,0.65)" stroke-width="2.5" filter="url(#sgf-o)"/><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="none" stroke="rgba(0,220,255,0.5)" stroke-width="1"/><ellipse cx="50" cy="47" rx="24" ry="22" fill="rgba(0,10,36,0.52)" stroke="rgba(0,150,255,0.15)" stroke-width="0.8"/><circle cx="36" cy="43" r="11" fill="#000800"/><g filter="url(#sef-o)"><circle cx="36" cy="43" r="11" fill="none" stroke="#00ff88" stroke-width="1.6"/><circle cx="36" cy="43" r="7.5" fill="none" stroke="#00dd66" stroke-width="1"/><circle cx="36" cy="43" r="4.2" fill="#00cc55"/></g><circle cx="36" cy="43" r="2" fill="#000800"/><circle cx="38.5" cy="40.5" r="1.3" fill="rgba(255,255,255,0.88)"/><circle cx="64" cy="43" r="11" fill="#000800"/><g filter="url(#sef-o)"><circle cx="64" cy="43" r="11" fill="none" stroke="#00ff88" stroke-width="1.6"/><circle cx="64" cy="43" r="7.5" fill="none" stroke="#00dd66" stroke-width="1"/><circle cx="64" cy="43" r="4.2" fill="#00cc55"/></g><circle cx="64" cy="43" r="2" fill="#000800"/><circle cx="66.5" cy="40.5" r="1.3" fill="rgba(255,255,255,0.88)"/><polygon points="50,55 44,63 56,63" fill="#cce6f4" stroke="rgba(0,130,200,0.3)" stroke-width="0.5"/><line x1="50" y1="68" x2="50" y2="84" stroke="#00ff88" stroke-width="1.2" stroke-opacity="0.72"/><line x1="50" y1="72" x2="38" y2="72" stroke="#00ff88" stroke-width="1" stroke-opacity="0.62"/><line x1="38" y1="72" x2="33" y2="77" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/><line x1="50" y1="72" x2="62" y2="72" stroke="#00ff88" stroke-width="1" stroke-opacity="0.62"/><line x1="62" y1="72" x2="67" y2="77" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/><line x1="50" y1="79" x2="41" y2="79" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/><line x1="50" y1="79" x2="59" y2="79" stroke="#00ff88" stroke-width="0.8" stroke-opacity="0.52"/><circle cx="50" cy="72" r="2" fill="#00ff88" fill-opacity="0.85"/><circle cx="38" cy="72" r="1.5" fill="#00ff88" fill-opacity="0.72"/><circle cx="62" cy="72" r="1.5" fill="#00ff88" fill-opacity="0.72"/><circle cx="50" cy="79" r="2" fill="#00ff88" fill-opacity="0.85"/><circle cx="41" cy="79" r="1.2" fill="#00ff88" fill-opacity="0.62"/><circle cx="59" cy="79" r="1.2" fill="#00ff88" fill-opacity="0.62"/><circle cx="50" cy="84" r="1.5" fill="#00ff88" fill-opacity="0.72"/></svg></div>
-    <div class="onboarding-title" id="onboarding-title">Hey. I'm Sage.</div>
-    <div class="onboarding-body" id="onboarding-body">I'm here to make sure this time is different. No rushing. No overwhelm. Just one step at a time.<br><br>Before we start — three quick questions.</div>
-    <div id="onboarding-step-1">
-      <div class="onboarding-label">WHAT'S YOUR NAME?</div>
-      <input id="onboarding-name" class="auth-input onboarding-name-input" type="text" placeholder="First name">
-      <button class="auth-btn" onclick="onboardingNext(1)">Continue</button>
-    </div>
-    <div id="onboarding-step-2" style="display:none;">
-      <div class="onboarding-label">HAVE YOU TRIED CODING BEFORE?</div>
-      <div class="onboarding-options">
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('experience','never')">No — complete beginner</button>
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('experience','tried')">Yes — but I stopped or got stuck</button>
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('experience','some')">I know a little but want structure</button>
-      </div>
-    </div>
-    <div id="onboarding-step-3" style="display:none;">
-      <div class="onboarding-label">WHAT DO YOU HOPE TO GET OUT OF THIS?</div>
-      <div class="onboarding-options">
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','job')">Get a job in tech</button>
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','project')">Build my own project or idea</button>
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','understand')">Just understand how it all works</button>
-        <button class="auth-btn onboarding-option-btn" onclick="onboardingSelect('goal','unsure')">I'm not sure yet</button>
-      </div>
-    </div>
-    <div id="onboarding-step-4" style="display:none;">
-      <div class="ob-clearance">
-        <div class="ob-clearance-ring">✓</div>
-        <div class="ob-clearance-label">// PROFILE INITIALISED</div>
-      </div>
-      <div class="onboarding-welcome-title" id="onboarding-welcome"></div>
-      <div class="onboarding-welcome-msg" id="onboarding-message"></div>
-      <button class="auth-btn ob-enter-btn" onclick="finishOnboarding()">ENTER THE CODE BOOK</button>
-    </div>
-  </div>
-</div>
-
-<!-- END OF SESSION SCREEN -->
-<div id="session-complete" class="overlay-base" style="z-index:9991;">
-  <div class="overlay-inner-lg">
-    <div class="session-complete-icon">✅</div>
-    <div class="session-complete-label">DAILY GOAL REACHED</div>
-    <div class="session-complete-title" id="session-title"></div>
-    <div class="session-complete-msg" id="session-message"></div>
-    <div class="session-stats-box">
-      <div class="session-stat">
-        <div class="session-stat-value" id="session-xp-earned"></div>
-        <div class="session-stat-label">XP TODAY</div>
-      </div>
-      <div class="session-divider"></div>
-      <div class="session-stat">
-        <div class="session-stat-value streak" id="session-streak"></div>
-        <div class="session-stat-label">DAY STREAK</div>
-      </div>
-      <div class="session-divider"></div>
-      <div class="session-stat">
-        <div class="session-stat-value sections" id="session-sections"></div>
-        <div class="session-stat-label">SECTIONS</div>
-      </div>
-    </div>
-    <div class="session-tomorrow-box">
-      <div class="session-tomorrow-label">TOMORROW</div>
-      <div class="session-tomorrow-title" id="session-tomorrow"></div>
-    </div>
-    <button class="auth-btn dashboard-continue-btn" onclick="closeSessionComplete()">Keep going →</button>
-    <button class="session-done-btn" onclick="closeSessionComplete(true)">That's enough for today</button>
-  </div>
-</div>
-
-<!-- CHALLENGE INTRO ANIMATION -->
-<div id="challenge-intro" style="display:none">
-  <div class="ci-card">
-    <div class="ci-label">CHALLENGE INITIATED</div>
-    <div class="ci-icon" id="ci-icon">⚡</div>
-    <div class="ci-name" id="ci-name"></div>
-    <div class="ci-divider"></div>
-    <div class="ci-rule" id="ci-rule"></div>
-    <div class="ci-countdown" id="ci-countdown"></div>
-    <button class="ci-skip" onclick="skipChallengeIntro()">TAP TO BEGIN</button>
-  </div>
-</div>
-
-<!-- DAILY CHALLENGE OVERLAY -->
-<div id="daily-challenge" class="overlay-base scrollable" style="z-index:9990;">
-  <div class="overlay-inner-lg">
-    <div class="challenge-label">⚡ DAILY CHALLENGE</div>
-    <div class="challenge-title" id="challenge-title">Today's Challenge</div>
-    <div class="challenge-body" id="challenge-body"></div>
-    <div class="challenge-question-box" id="challenge-question"></div>
-    <div class="challenge-options" id="challenge-options"></div>
-    <div id="challenge-result" class="challenge-result"></div>
-    <div class="challenge-actions">
-      <button onclick="closeDailyChallenge()" class="challenge-skip-btn">Skip</button>
-    </div>
-  </div>
-</div>
-
-<!-- FLOOR COMPLETE CELEBRATION -->
-<div id="floor-celebration" class="overlay-base" style="z-index:9992;padding:0;"></div>
-
-<!-- NOTES REVIEW -->
-<div id="notes-review-overlay" style="display:none;position:fixed;inset:0;z-index:9996;background:rgba(10,10,10,0.92);overflow-y:auto;"></div>
-<div id="cover" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 20px;">
-
-  <!-- RETURNING USER DASHBOARD -->
-  <div id="dashboard" style="display:none;width:100%;max-width:640px;text-align:left;">
-    <div class="dashboard-header">
-      <div>
-        <div class="dashboard-title">The Code Book</div>
-        <div id="dashboard-greeting" class="dashboard-greeting"></div>
-      </div>
-      <div>
-        <div id="dashboard-level-label" class="dashboard-level-label"></div>
-        <div id="dashboard-xp" class="dashboard-xp"></div>
-      </div>
-    </div>
-    <div class="dashboard-card dashboard-streak-row">
-      <div id="dashboard-streak-icon" class="dashboard-streak-icon">🔥</div>
-      <div style="flex:1;">
-        <div id="dashboard-streak-text" class="dashboard-streak-text"></div>
-        <div id="dashboard-streak-sub" class="dashboard-streak-sub"></div>
-      </div>
-    </div>
-    <div class="dashboard-card">
-      <div class="dashboard-goal-header">
-        <div class="dashboard-goal-label">TODAY'S GOAL</div>
-        <div id="dashboard-goal-text" class="top-xp-chip"></div>
-      </div>
-      <div class="dashboard-goal-track">
-        <div id="dashboard-goal-bar" style="height:100%;background:var(--accent);border-radius:6px;transition:width 0.6s ease;width:0%;"></div>
-      </div>
-    </div>
-    <div class="dashboard-card" style="margin-bottom:24px;">
-      <div class="dashboard-goal-label" style="margin-bottom:8px;">WHERE YOU LEFT OFF</div>
-      <div id="dashboard-position" class="dashboard-position"></div>
-      <div id="dashboard-next-preview" class="dashboard-next-preview"></div>
-    </div>
-    <button class="start-btn dashboard-continue-btn" onclick="startBook()">Continue →</button>
-    <div class="dashboard-signout-wrap">
-      <span onclick="signOut()" class="dashboard-signout">Sign out</span>
-    </div>
-  </div>
-
-</div>
-
-<!-- NEW USER LANDING -->
-<div id="new-user-landing" style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;overflow:hidden;">
-  <!-- Animated twinkling code canvas -->
-  <canvas id="landing-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;"></canvas>
-  <!-- Dark centre vignette so text is readable -->
-  <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 55% 65% at 50% 50%,rgba(0,8,20,0.72) 0%,transparent 100%);pointer-events:none;"></div>
-  <!-- Main landing content -->
-  <div class="landing-content" style="position:relative;z-index:2;">
-    <div class="landing-label">A calm path into coding</div>
-    <div class="landing-title">The Code <span>Book.</span></div>
-    <div class="landing-tagline">Learn coding without overwhelm.<br>One clear step at a time.</div>
-    <button class="landing-begin-btn" onclick="showAuthFromLanding()">BEGIN JOURNEY</button>
-    <div class="landing-human">Built for people who overthink, lose focus, or get stuck in tutorials.<br>This is built differently.</div>
-  </div>
-  <div id="cover-user" class="cover-user-badge" style="position:absolute;z-index:3;">
-    Signed in as <span id="cover-user-email"></span> &nbsp;·&nbsp;
-    <span onclick="signOut()" class="cover-signout-link">Sign out</span>
-  </div>
-</div>
-
-<!-- PREMIUM NOTIFY OVERLAY -->
-<div id="premium-notify-overlay" class="overlay-base" style="display:none;z-index:9994;">
-  <div class="overlay-inner-sm" style="text-align:center;">
-    <div class="overlay-header" style="justify-content:flex-end;margin-bottom:20px;">
-      <button onclick="hidePremiumNotify()" class="overlay-close-btn">✕ Close</button>
-    </div>
-    <div class="overlay-title-serif overlay-title-md" style="margin-bottom:8px;">Stay in the Loop</div>
-    <div style="font-size:14px;color:var(--text-muted);margin-bottom:24px;line-height:1.6;">We'll send you one email when Premium launches. No spam, ever.</div>
-    <div id="premium-notify-form">
-      <input class="auth-input" id="premium-notify-email" type="email" placeholder="Your email address" style="margin-bottom:12px;">
-      <button class="auth-btn" onclick="submitPremiumNotify()">Notify Me</button>
-    </div>
-    <div id="premium-notify-confirm" style="display:none;">
-      <div style="font-size:32px;margin-bottom:12px;">✓</div>
-      <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--accent);margin-bottom:8px;">You're on the list.</div>
-      <div style="font-size:13px;color:var(--text-muted);">We'll email you the moment Premium is available.</div>
-    </div>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="app">
-
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div style="display:flex;align-items:center;gap:10px;">
-    <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
-    <div class="top-logo">The Code Book</div>
-  </div>
-  <div class="top-nav-tabs">
-    <button class="top-nav-tab active" id="tnav-learn" onclick="switchTopNav('learn',this)">Learn</button>
-    <button class="top-nav-tab" id="tnav-challenge" onclick="switchTopNav('challenge',this)">⚡ Challenges</button>
-    <button class="top-nav-tab" id="tnav-tools" onclick="switchTopNav('tools',this)">⚙ Tools</button>
-    <button class="top-nav-tab" id="tnav-premium" onclick="switchTopNav('premium',this)">♛ Premium</button>
-    <button class="top-nav-tab" id="tnav-profile" onclick="switchTopNav('profile',this)">👤 Profile</button>
-    <button class="top-nav-tab" id="tnav-game" onclick="switchTopNav('game',this)">🎮 Game Hub</button>
-    <button class="top-nav-tab" id="tnav-revision" onclick="switchTopNav('revision',this)">🃏 Revision</button>
-    <button class="top-nav-tab" id="tnav-news" onclick="switchTopNav('news',this)">📡 News</button>
-  </div>
-  <div class="top-right">
-    <div class="top-xp-chip" id="top-xp-chip">⚡ 0 XP</div>
-    <div class="top-streak-chip" id="top-streak-chip">🔥 0</div>
-    <button onclick="signOut()" class="top-signout-btn">SIGN OUT</button>
-  </div>
-</div>
-
-<!-- SIDEBAR OVERLAY (mobile) -->
-<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
-
-<!-- Sidebar stubs — permanently hidden, IDs kept so JS doesn't error -->
-<div id="left-sidebar" style="display:none!important;position:absolute;pointer-events:none;visibility:hidden;">
-  <div id="vb-building"></div>
-  <span id="ls-level"></span><span id="ls-xp-bar"></span>
-  <span id="ls-streak"></span><span id="ls-progress"></span>
-  <div id="left-floor-nav"></div>
-</div>
-
-<!-- THREE COLUMN GRID -->
-<div class="app-grid">
-
-  <!-- MAIN CONTENT -->
-  <div class="main-col" id="main-col">
-    <div id="main-content">
-      <!-- section content injected here -->
-    </div>
-
-  <!-- BUILD PANEL -->
-  <div class="top-panel" id="panel-build"></div>
-
-  <!-- CHALLENGE PANEL -->
-  <div class="top-panel" id="panel-challenge"></div>
-
-  <!-- MAP PANEL -->
-  <div class="top-panel" id="panel-map"></div>
-
-  <!-- TOOLS PANEL -->
-  <div class="top-panel" id="panel-tools"></div>
-
-  <!-- PREMIUM PANEL -->
-  <div class="top-panel" id="panel-premium"></div>
-
-  <!-- PROFILE PANEL -->
-  <div class="top-panel" id="panel-profile"></div>
-
-  <!-- GAME PANEL -->
-  <div class="top-panel" id="panel-game"></div>
-
-  <!-- REVISION PANEL -->
-  <div class="top-panel" id="panel-revision"></div>
-
-  <!-- NEWS PANEL -->
-  <div class="top-panel" id="panel-news"></div>
-
-  </div>
-
-  <!-- RIGHT SIDEBAR — hidden when floor-specific layout is active -->
-  <div class="right-sidebar" id="right-sidebar" style="display:none;">
-
-    <!-- SECTION PROGRESS -->
-    <div class="right-section">
-      <div class="right-section-label" id="rs-floor-label">FLOOR 1 — SECTIONS</div>
-      <div class="sec-progress-list" id="rs-section-list">
-        <!-- injected by renderRightNav() -->
-      </div>
-    </div>
-
-    <!-- SAGE -->
-    <div class="right-section">
-      <div class="right-section-label">SAGE</div>
-      <div class="sage-card">
-        <div class="sage-card-header">
-          <div class="sage-avatar-sm"><svg viewBox="0 0 100 110" width="20" height="22" xmlns="http://www.w3.org/2000/svg" style="display:block;overflow:visible"><defs><radialGradient id="sob-s" cx="44" cy="34" r="62" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#22eeff"/><stop offset="38%" stop-color="#0070cc"/><stop offset="72%" stop-color="#002c68"/><stop offset="100%" stop-color="#000d22"/></radialGradient><filter id="sgf-s" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" result="bl"/><feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="sef-s" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="bl"/><feMerge><feMergeNode in="bl"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="url(#sob-s)"/><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="rgba(160,60,255,0.09)"/><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="none" stroke="rgba(0,210,255,0.65)" stroke-width="2.5" filter="url(#sgf-s)"/><path d="M22,22 L14,4 L30,17 Q50,11 70,17 L86,4 L78,22 Q92,36 90,57 Q86,78 50,88 Q14,78 10,57 Q8,36 22,22 Z" fill="none" stroke="rgba(0,220,255,0.5)" stroke-width="1"/><ellipse cx="50" cy="47" rx="24" ry="22" fill="rgba(0,10,36,0.52)" stroke="rgba(0,150,255,0.15)" stroke-width="0.8"/><circle cx="36" cy="43" r="11" fill="#000800"/><g filter="url(#sef-s)"><circle cx="36" cy="43" r="11" fill="none" stroke="#00ff88" stroke-width="1.6"/><circle cx="36" cy="43" r="7.5" fill="none" stroke="#00dd66" stroke-width="1"/><circle cx="36" cy="43" r="4.2" fill="#00cc55"/></g><circle cx="36" cy="43" r="2" fill="#000800"/><circle cx="38.5" cy="40.5" r="1.3" fill="rgba(255,255,255,0.88)"/><circle cx="64" cy="43" r="11" fill="#000800"/><g filter="url(#sef-s)"><circle cx="64" cy="43" r="11" fill="none" stroke="#00ff88" stroke-width="1.6"/><circle cx="64" cy="43" r="7.5" fill="none" stroke="#00dd66" stroke-width="1"/><circle cx="64" cy="43" r="4.2" fill="#00cc55"/></g><circle cx="64" cy="43" r="2" fill="#000800"/><circle cx="66.5" cy="40.5" r="1.3" fill="rgba(255,255,255,0.88)"/><polygon points="50,55 44,63 56,63" fill="#cce6f4" stroke="rgba(0,130,200,0.3)" stroke-width="0.5"/></svg></div>
-          <div class="sage-card-name">YOUR GUIDE</div>
+        <div class="floor-card" style="--floor-color: var(--f1)">
+          <div class="floor-num">Floor 01</div>
+          <div class="floor-name">Foundation</div>
+          <div class="floor-sub">How code actually thinks — the mental models behind every program ever written.</div>
         </div>
-        <div id="sage-sidebar-text">
-          Every expert was once a beginner who refused to quit.
+
+        <div class="floor-card" style="--floor-color: var(--f2)">
+          <div class="floor-num">Floor 02</div>
+          <div class="floor-name">Structure</div>
+          <div class="floor-sub">HTML, CSS and the browser — build real things you can see on screen.</div>
+        </div>
+
+        <div class="floor-card" style="--floor-color: var(--f3)">
+          <div class="floor-num">Floor 03</div>
+          <div class="floor-name">JavaScript</div>
+          <div class="floor-sub">The language of the web — logic, behaviour, and making things respond.</div>
+        </div>
+
+        <div class="floor-card" style="--floor-color: var(--f4)">
+          <div class="floor-num">Floor 04</div>
+          <div class="floor-name">Independence</div>
+          <div class="floor-sub">APIs, async, and the developer mindset — no step-by-step, just a brief and a blank editor.</div>
+        </div>
+
+        <div class="floor-card" style="--floor-color: var(--f5)">
+          <div class="floor-num">Floor 05</div>
+          <div class="floor-name">Full Stack</div>
+          <div class="floor-sub">Backend, databases, authentication, deployment — you build the whole thing.</div>
+        </div>
+
+        <div class="floor-card" style="--floor-color: var(--f6)">
+          <div class="floor-num">Floor 06</div>
+          <div class="floor-name">Direction</div>
+          <div class="floor-sub">Finding your lane and going deep — generalists are useful, specialists are sought after.</div>
+        </div>
+
+        <div class="floor-card" style="--floor-color: var(--f7)">
+          <div class="floor-num">Floor 07</div>
+          <div class="floor-name">Arrival</div>
+          <div class="floor-sub">The destination. Job-ready, portfolio-ready, clear on who you are as a developer.</div>
+        </div>
+
+      </div>
+
+      <!-- SAGE -->
+      <div class="sage-block">
+        <div class="sage-owl">
+          <!-- Owl SVG — matches the in-app SAGE character style -->
+          <svg viewBox="0 0 90 99" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="SAGE the owl guide">
+            <!-- Body -->
+            <ellipse cx="45" cy="62" rx="26" ry="30" fill="#1e293b"/>
+            <!-- Head -->
+            <ellipse cx="45" cy="34" rx="22" ry="20" fill="#1e293b"/>
+            <!-- Ear tufts -->
+            <polygon points="28,18 23,6 33,14" fill="#0c111d"/>
+            <polygon points="62,18 67,6 57,14" fill="#0c111d"/>
+            <!-- Face disc -->
+            <ellipse cx="45" cy="36" rx="16" ry="14" fill="#0c111d"/>
+            <!-- Eyes -->
+            <circle cx="37" cy="33" r="7" fill="#7dd3fc" opacity="0.95"/>
+            <circle cx="53" cy="33" r="7" fill="#7dd3fc" opacity="0.95"/>
+            <circle cx="37" cy="33" r="4" fill="#05070a"/>
+            <circle cx="53" cy="33" r="4" fill="#05070a"/>
+            <circle cx="38.5" cy="31.5" r="1.5" fill="white" opacity="0.8"/>
+            <circle cx="54.5" cy="31.5" r="1.5" fill="white" opacity="0.8"/>
+            <!-- Beak -->
+            <polygon points="45,39 41,44 49,44" fill="#c8a96e"/>
+            <!-- Wing marks -->
+            <path d="M20 72 Q30 58 45 62 Q30 78 20 72Z" fill="#111827" opacity="0.7"/>
+            <path d="M70 72 Q60 58 45 62 Q60 78 70 72Z" fill="#111827" opacity="0.7"/>
+            <!-- Chest pattern -->
+            <ellipse cx="45" cy="72" rx="14" ry="18" fill="#0c111d" opacity="0.5"/>
+            <!-- Feet -->
+            <line x1="36" y1="90" x2="28" y2="98" stroke="#7d96b4" stroke-width="2" stroke-linecap="round"/>
+            <line x1="36" y1="90" x2="36" y2="99" stroke="#7d96b4" stroke-width="2" stroke-linecap="round"/>
+            <line x1="36" y1="90" x2="44" y2="98" stroke="#7d96b4" stroke-width="2" stroke-linecap="round"/>
+            <line x1="54" y1="90" x2="46" y2="98" stroke="#7d96b4" stroke-width="2" stroke-linecap="round"/>
+            <line x1="54" y1="90" x2="54" y2="99" stroke="#7d96b4" stroke-width="2" stroke-linecap="round"/>
+            <line x1="54" y1="90" x2="62" y2="98" stroke="#7d96b4" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="sage-text">
+          <h3>Meet SAGE</h3>
+          <p>
+            SAGE is your guide through the building. When you're stuck, SAGE offers a
+            hint — not the answer, just enough to unblock you. When you finish a floor,
+            SAGE marks the distance. Through every floor check and every debugging
+            session, SAGE is watching. Not to judge. Just to keep you moving.
+          </p>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- DAILY GOAL -->
-    <div class="right-section">
-      <div class="right-section-label">TODAY'S GOAL</div>
-      <div>
-        <div class="daily-goal-row">
-          <span class="daily-goal-sub" id="rs-goal-text">0 of 5 sections</span>
-          <span class="top-xp-chip" id="rs-goal-pct">0%</span>
+  <div class="divider"></div>
+
+  <!-- ── BENEFITS ─────────────────────────────────────────── -->
+  <section id="benefits">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="label">What you get</p>
+        <h2>Built differently,<br>on purpose.</h2>
+        <p>
+          Every design decision was made for one person:
+          the person who tried before and stopped.
+        </p>
+      </div>
+
+      <div class="benefits-grid">
+
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(200,169,110,0.07)"/>
+            <line x1="10" y1="9" x2="30" y2="9" stroke="#c8a96e" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="10" y1="31" x2="30" y2="31" stroke="#c8a96e" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M10 9 C10 9 20 14 20 20 C20 26 10 31 10 31" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M30 9 C30 9 20 14 20 20 C20 26 30 31 30 31" stroke="#c8a96e" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="18" cy="26" r="1" fill="#c8a96e" opacity="0.45"/>
+            <circle cx="20" cy="28.5" r="1.3" fill="#c8a96e" opacity="0.65"/>
+            <circle cx="22" cy="26" r="1" fill="#c8a96e" opacity="0.45"/>
+          </svg></div>
+          <div class="benefit-title">No deadlines. No schedule.</div>
+          <div class="benefit-desc">
+            Move at whatever pace fits your life. Pick up exactly where you
+            left off. Progress saves automatically.
+          </div>
         </div>
-        <div class="daily-goal-track">
-          <div class="daily-goal-fill" id="rs-goal-bar" style="width:0%"></div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(125,211,252,0.07)"/>
+            <circle cx="16" cy="17" r="7" stroke="#7dd3fc" stroke-width="1.6"/>
+            <circle cx="16" cy="17" r="2.5" fill="rgba(125,211,252,0.25)" stroke="#7dd3fc" stroke-width="1"/>
+            <line x1="21.5" y1="22.5" x2="31" y2="32" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="27" y1="28" x2="29.5" y2="25.5" stroke="#7dd3fc" stroke-width="1.6" stroke-linecap="round"/>
+            <line x1="29.5" y1="31" x2="32" y2="28.5" stroke="#7dd3fc" stroke-width="1.6" stroke-linecap="round"/>
+          </svg></div>
+          <div class="benefit-title">Hints when you're stuck.</div>
+          <div class="benefit-desc">
+            Every challenge has a hint. It won't give you the answer —
+            it gives you just enough to get unstuck yourself. That's
+            the skill being built.
+          </div>
         </div>
-        <div class="daily-goal-sub" id="rs-goal-sub">Complete sections to hit your daily goal</div>
-        <div class="goal-selector">
-          <button class="goal-btn" data-goal="1" onclick="setDailyGoal(1)">1</button>
-          <button class="goal-btn" data-goal="2" onclick="setDailyGoal(2)">2</button>
-          <button class="goal-btn" data-goal="3" onclick="setDailyGoal(3)">3</button>
-          <button class="goal-btn" data-goal="5" onclick="setDailyGoal(5)">5</button>
-          <span class="goal-btn-label">sections / day</span>
+
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(192,132,252,0.07)"/>
+            <rect x="8"  y="27" width="6" height="5"  rx="1.5" fill="#c084fc" opacity="0.45"/>
+            <rect x="17" y="21" width="6" height="11" rx="1.5" fill="#c084fc" opacity="0.70"/>
+            <rect x="26" y="13" width="6" height="19" rx="1.5" fill="#c084fc"/>
+            <circle cx="29" cy="10" r="2.5" fill="rgba(192,132,252,0.3)"/>
+            <circle cx="29" cy="10" r="1.2" fill="#c084fc"/>
+          </svg></div>
+          <div class="benefit-title">You can see how far you've come.</div>
+          <div class="benefit-desc">
+            XP, floor completion, streak tracking. Not gamification for
+            its own sake — a record of actual distance covered.
+          </div>
         </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(74,222,128,0.07)"/>
+            <path d="M20 8 L32 20 L20 32 L8 20 Z" stroke="#4ade80" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M14.5 20.5 L18.5 24.5 L25.5 16" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg></div>
+          <div class="benefit-title">Floor checks before you climb.</div>
+          <div class="benefit-desc">
+            Before each new floor, a checkpoint. Not a test to pass —
+            an honest look at what's solid and what needs another pass.
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(251,146,60,0.07)"/>
+            <rect x="8"  y="18" width="3.5" height="5"  rx="1.75" fill="#fb923c"/>
+            <rect x="13" y="13" width="3.5" height="15" rx="1.75" fill="#fb923c"/>
+            <rect x="18" y="16" width="3.5" height="9"  rx="1.75" fill="#fb923c"/>
+            <rect x="23" y="10" width="3.5" height="21" rx="1.75" fill="#fb923c"/>
+            <rect x="28" y="15" width="3.5" height="11" rx="1.75" fill="#fb923c"/>
+          </svg></div>
+          <div class="benefit-title">Listen, don't just read.</div>
+          <div class="benefit-desc">
+            Every section can be narrated aloud. Good for commutes,
+            for different learning styles, or for when your eyes are tired.
+          </div>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18" fill="rgba(125,211,252,0.07)"/>
+            <path d="M20 9 L30 13.5 L30 22 C30 27.5 25.5 32 20 34 C14.5 32 10 27.5 10 22 L10 13.5 Z" stroke="#7dd3fc" stroke-width="1.6" stroke-linejoin="round"/>
+            <path d="M15 22 L18.5 25.5 L25.5 17.5" stroke="#7dd3fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg></div>
+          <div class="benefit-title">Works offline.</div>
+          <div class="benefit-desc">
+            Once loaded, the full app works without an internet connection.
+            No account required to start. Your data stays on your device.
+          </div>
+        </div>
+
       </div>
     </div>
+  </section>
 
-    <!-- ACHIEVEMENTS -->
-    <div class="right-section">
-      <div class="right-section-label">ACHIEVEMENTS</div>
-      <div class="achievement-grid" id="rs-achievements"></div>
+  <div class="divider"></div>
+
+  <!-- ── GAME HUB ──────────────────────────────────────────── -->
+  <section id="games">
+    <div class="wrap">
+      <div class="section-header">
+        <p class="label">Game Hub</p>
+        <h2>Learn by playing.<br>Actually.</h2>
+        <p>
+          Three games built into the app. Not decoration — each one is based on a
+          real class of software problem.
+        </p>
+      </div>
+
+      <div class="games-grid">
+
+        <div class="game-card" style="--game-color:#c8a96e; --game-line: linear-gradient(90deg, #c8a96e, #e8c878);">
+          <div class="game-eyebrow">&#128640; Mars Mission Briefing</div>
+          <div class="game-title">LAUNCH SEQUENCE</div>
+          <p class="game-desc">
+            An educational sci-fi mission. Repair rocket systems, debug code faults,
+            and launch to Mars. Designed for landscape mode — best experienced on
+            a tablet or desktop.
+          </p>
+          <div class="game-tags">
+            <span class="game-tag">Sci-fi mission</span>
+            <span class="game-tag">Rocket systems</span>
+            <span class="game-tag">Code debugging</span>
+          </div>
+        </div>
+
+        <div class="game-card game-card--venus" style="--game-color:#c084fc; --game-line: linear-gradient(90deg, #a855f7, #5b21b6);">
+          <div class="game-eyebrow">&#128268; Colony Signal Router</div>
+          <div class="game-title">VENUS</div>
+          <p class="game-desc">
+            The colony's infrastructure is failing. Route the signal through damaged
+            conduit nodes to keep life support online. Every connection you restore
+            teaches a real coding pattern.
+          </p>
+          <div class="game-tags">
+            <span class="game-tag">Signal routing</span>
+            <span class="game-tag">Coding patterns</span>
+            <span class="game-tag">Larger grids</span>
+          </div>
+        </div>
+
+        <div class="game-card game-card--glitch" style="--game-color:#00e5ff; --game-line: linear-gradient(90deg, #00e5ff, #0055cc);">
+          <div class="game-eyebrow">&#9889; Debug Under Fire</div>
+          <div class="game-title">GLITCH</div>
+          <p class="game-desc">
+            The colony AI has corrupted itself and is fighting your repairs.
+            REVERSE. CORRUPT. FLICKER. Real bugs. Real consequences. Can you
+            debug faster than it breaks?
+          </p>
+          <div class="game-tags">
+            <span class="game-tag">Real bug classes</span>
+            <span class="game-tag">10 levels</span>
+            <span class="game-tag">Escalating chaos</span>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </section>
 
-  </div>
+  <!-- ── FINAL CTA ─────────────────────────────────────────── -->
+  <section id="cta-bottom">
+    <div class="wrap">
+      <h2>
+        The building<br>is already there.<br>
+        <em>Start climbing.</em>
+      </h2>
+      <p>
+        Floor 1 is free. No sign-up required to begin.
+        You can create an account later to save your progress across devices.
+      </p>
+      <a class="btn-primary" href="app.html">Open The Code Book &nbsp;&#8594;</a>
+    </div>
+  </section>
 
-</div>
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer>
+    <span class="footer-logo">THE CODE BOOK</span>
+    <span class="footer-note">Free &nbsp;&#183;&nbsp; Offline-ready &nbsp;&#183;&nbsp; No install required</span>
+  </footer>
 
-<!-- MOBILE BOTTOM BAR -->
-<div class="mobile-bottom-bar" id="mobile-bottom-bar">
-  <button class="mob-nav-btn active" id="mob-learn" onclick="switchTopNav('learn',this);setMobActive(this)">
-    📖<span>Learn</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-build" onclick="switchTopNav('build',this);setMobActive(this)">
-    🔨<span>Build</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-challenge" onclick="switchTopNav('challenge',this);setMobActive(this)">
-    ⚡<span>Challenge</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-map" onclick="switchTopNav('map',this);setMobActive(this)">
-    🗺️<span>Map</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-tools" onclick="switchTopNav('tools',this);setMobActive(this)">
-    ⚙<span>Tools</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-premium" onclick="switchTopNav('premium',this);setMobActive(this)" style="color:var(--accent);">
-    ♛<span>Premium</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-profile" onclick="switchTopNav('profile',this);setMobActive(this)">
-    👤<span>Profile</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-revision" onclick="switchTopNav('revision',this);setMobActive(this)">
-    🃏<span>Revision</span>
-  </button>
-  <button class="mob-nav-btn" id="mob-news" onclick="switchTopNav('news',this);setMobActive(this)">
-    📡<span>News</span>
-  </button>
-</div>
+  <script>
+    // ── STAR FIELD ───────────────────────────────────────────────
+    var sc = document.getElementById('stars-bg');
+    var sx = sc ? sc.getContext('2d') : null;
+    var STARS = [];
+    // Star colours: cold blue-white, pure white, brand gold, warm white
+    var STAR_COLORS = [[220,235,255],[220,235,255],[255,255,255],[255,255,255],[200,169,110],[255,248,210]];
 
-</div>
-<!-- END APP -->
+    function initStars() {
+      if (!sc) return;
+      sc.width = window.innerWidth;
+      sc.height = window.innerHeight;
+      STARS.length = 0;
+      for (var i = 0; i < 240; i++) {
+        var bright = i < 6, mid = i < 50;
+        var c = STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)];
+        STARS.push({
+          x: Math.random(), y: Math.random(),
+          r: bright ? (1.5 + Math.random() * 1.0) : mid ? (0.8 + Math.random() * 0.6) : (0.3 + Math.random() * 0.5),
+          base: bright ? (0.55 + Math.random() * 0.3) : mid ? (0.2 + Math.random() * 0.3) : (0.06 + Math.random() * 0.2),
+          amp:  bright ? 0.20 : mid ? 0.09 : 0.03,
+          freq: Math.random() * 0.7 + 0.2,
+          ph:   Math.random() * 6.28,
+          c: c
+        });
+      }
+    }
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-<script src="supabase-client.js?v=20260524a" defer></script>
-<script src="helpers.js?v=20260519p" defer></script>
-<script src="canvas-bg.js?v=20260522a" defer></script>
-<script src="srs.js?v=20260519p" defer></script>
-<script src="challenges.js?v=20260519p" defer></script>
-<script src="terms.js?v=20260519p" defer></script>
-<script src="mobile.js?v=20260524a" defer></script>
-<script src="levels.js?v=20260524b" defer></script>
-<script src="glitch.js?v=20260524d" defer></script>
-<script src="chaos-levels.js?v=20260524b" defer></script>
-<script src="chaos.js?v=20260523c" defer></script>
-<script src="lore.js?v=20260523a" defer></script>
-<script src="curriculum.js?v=20260524b" defer></script>
-<script src="app.js?v=20260524e" defer></script>
+    function drawStars(t) {
+      if (!sx) return;
+      var W = sc.width, H = sc.height;
+      sx.clearRect(0, 0, W, H);
+      for (var i = 0; i < STARS.length; i++) {
+        var s = STARS[i];
+        var a = Math.max(0, Math.min(1, s.base + Math.sin(t * s.freq + s.ph) * s.amp));
+        sx.beginPath();
+        sx.arc(s.x * W, s.y * H, s.r, 0, 6.2832);
+        sx.fillStyle = 'rgba(' + s.c[0] + ',' + s.c[1] + ',' + s.c[2] + ',' + a.toFixed(2) + ')';
+        sx.fill();
+        // 4-point diffraction spike on the brightest stars
+        if (s.r > 1.8 && a > 0.35) {
+          var sp = s.r * 7;
+          sx.save();
+          sx.globalAlpha = a * 0.22;
+          sx.strokeStyle = 'rgba(' + s.c[0] + ',' + s.c[1] + ',' + s.c[2] + ',1)';
+          sx.lineWidth = 0.7;
+          sx.beginPath();
+          sx.moveTo(s.x * W - sp, s.y * H); sx.lineTo(s.x * W + sp, s.y * H);
+          sx.moveTo(s.x * W, s.y * H - sp * 0.75); sx.lineTo(s.x * W, s.y * H + sp * 0.75);
+          sx.stroke();
+          sx.restore();
+        }
+      }
+    }
+
+    initStars();
+    window.addEventListener('resize', initStars);
+
+    // ── MOLTEN GLASS GRADIENT ────────────────────────────────────
+    // Stops mirror the 5 in-app profile themes: Cosmic Blue → Aurora Teal → Royal Violet → Ember Crimson → Obsidian Gold
+    // sa = star alpha: 1 on the two black ends, 0 through all colour zones
+    var STOPS = [
+      { p: 0.00, bg: [5,  7,  12], r:   0, g:  80, b: 180, a: 0.00, cx: 50, cy: 20, sa: 1.0 }, // black
+      { p: 0.16, bg: [3,  12, 32], r:   0, g: 200, b: 255, a: 0.42, cx: 33, cy: 36, sa: 0.0 }, // Cosmic Blue
+      { p: 0.34, bg: [3,  28, 22], r:   0, g: 229, b: 176, a: 0.40, cx: 66, cy: 44, sa: 0.0 }, // Aurora Teal
+      { p: 0.52, bg: [18, 6,  40], r: 168, g:  85, b: 247, a: 0.42, cx: 36, cy: 52, sa: 0.0 }, // Royal Violet
+      { p: 0.70, bg: [40, 7,  7 ], r: 255, g:  85, b:  85, a: 0.40, cx: 64, cy: 56, sa: 0.0 }, // Ember Crimson
+      { p: 0.86, bg: [36, 26, 6 ], r: 232, g: 200, b: 120, a: 0.38, cx: 44, cy: 64, sa: 0.0 }, // Obsidian Gold
+      { p: 1.00, bg: [5,  7,  12], r:   0, g:  80, b: 180, a: 0.04, cx: 50, cy: 80, sa: 1.0 }, // black
+    ];
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function sampleAt(p) {
+      for (var i = 0; i < STOPS.length - 1; i++) {
+        var s0 = STOPS[i], s1 = STOPS[i + 1];
+        if (p >= s0.p && p <= s1.p) {
+          var t = (p - s0.p) / (s1.p - s0.p);
+          return {
+            bg: [lerp(s0.bg[0],s1.bg[0],t), lerp(s0.bg[1],s1.bg[1],t), lerp(s0.bg[2],s1.bg[2],t)],
+            r: lerp(s0.r,s1.r,t), g: lerp(s0.g,s1.g,t), b: lerp(s0.b,s1.b,t), a: lerp(s0.a,s1.a,t),
+            cx: lerp(s0.cx,s1.cx,t), cy: lerp(s0.cy,s1.cy,t), sa: lerp(s0.sa,s1.sa,t)
+          };
+        }
+      }
+      var L = STOPS[STOPS.length - 1];
+      return { bg:[L.bg[0],L.bg[1],L.bg[2]], r:L.r, g:L.g, b:L.b, a:L.a, cx:L.cx, cy:L.cy, sa:L.sa };
+    }
+
+    var S = 0.05;
+    var cur = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20, sa:1.0 };
+    var tgt = { bg:[5,7,12], r:50, g:80, b:220, a:0.00, cx:50, cy:20, sa:1.0 };
+    var bloomEl = document.getElementById('neon-bloom');
+
+    window.addEventListener('scroll', function() {
+      var total = document.documentElement.scrollHeight - window.innerHeight;
+      var p = total > 0 ? Math.min(window.scrollY / total, 1) : 0;
+      tgt = sampleAt(p);
+    }, { passive: true });
+
+    function tick(time) {
+      requestAnimationFrame(tick);
+      var t = (time || 0) * 0.001;
+
+      cur.bg[0] = lerp(cur.bg[0], tgt.bg[0], S);
+      cur.bg[1] = lerp(cur.bg[1], tgt.bg[1], S);
+      cur.bg[2] = lerp(cur.bg[2], tgt.bg[2], S);
+      cur.r  = lerp(cur.r,  tgt.r,  S);  cur.g  = lerp(cur.g,  tgt.g,  S);
+      cur.b  = lerp(cur.b,  tgt.b,  S);  cur.a  = lerp(cur.a,  tgt.a,  S);
+      cur.cx = lerp(cur.cx, tgt.cx, S);  cur.cy = lerp(cur.cy, tgt.cy, S);
+      cur.sa = lerp(cur.sa, tgt.sa, 0.05);
+      if (sc) sc.style.opacity = cur.sa.toFixed(3);
+
+      var r = Math.round(cur.r), g = Math.round(cur.g), b = Math.round(cur.b);
+      var a1 = cur.a.toFixed(3), a2 = (cur.a * 0.38).toFixed(3);
+      var cx = cur.cx.toFixed(1), cy = cur.cy.toFixed(1);
+      var cx2 = (100 - cur.cx).toFixed(1), cy2 = (cur.cy + 22).toFixed(1);
+
+      document.body.style.backgroundColor =
+        'rgb(' + Math.round(cur.bg[0]) + ',' + Math.round(cur.bg[1]) + ',' + Math.round(cur.bg[2]) + ')';
+
+      if (bloomEl) {
+        // 4 layers — outer halo → colour body → bright core → white-hot centre
+        var aHalo  = (cur.a * 0.22).toFixed(3);
+        var aCore  = (cur.a * 0.75).toFixed(3);
+        var aWhite = (cur.a * 0.28).toFixed(3);
+        bloomEl.style.background =
+          // 1. Wide outer halo — darkness softly lit from within
+          'radial-gradient(ellipse 240% 190% at ' + cx2 + '% ' + cy2 + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + aHalo + ') 0%, transparent 65%),' +
+          // 2. Main colour body — vivid glowing mass
+          'radial-gradient(ellipse 170% 130% at ' + cx + '% ' + cy + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + a1  + ') 0%, transparent 60%),' +
+          // 3. Tight bright core — the hottest region
+          'radial-gradient(ellipse 65% 50% at ' + cx + '% ' + cy + '%,' +
+          ' rgba(' + r + ',' + g + ',' + b + ',' + aCore + ') 0%, transparent 50%),' +
+          // 4. White-hot centre point — peak temperature
+          'radial-gradient(ellipse 28% 20% at ' + cx + '% ' + cy + '%,' +
+          ' rgba(255,255,255,' + aWhite + ') 0%, transparent 40%),' +
+          // 5. Dark undertone vignette — deep edges for molten depth
+          'radial-gradient(ellipse 120% 110% at 50% 50%,transparent 18%,rgba(0,0,0,0.55) 66%,rgba(0,0,0,0.82) 100%)';
+      }
+
+      drawStars(t);
+    }
+    requestAnimationFrame(tick);
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-  
