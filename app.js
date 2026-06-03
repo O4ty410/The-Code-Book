@@ -4176,23 +4176,27 @@ function renderLearnHub() {
     '</div>';
 
   var html = '<style id="hub-override">' +
-    /* Header — bigger, glowing, high contrast */
-    '.fc-header-label{color:rgba(160,220,255,0.88)!important;letter-spacing:4px!important;text-shadow:0 0 14px rgba(100,180,255,0.55)!important;}' +
-    '.fc-header-title{color:#eef6ff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;font-size:clamp(34px,5.5vw,60px)!important;font-weight:900!important;line-height:1.1!important;letter-spacing:-0.5px!important;text-shadow:0 4px 20px rgba(0,0,0,0.95),0 0 50px rgba(126,184,200,0.55),0 0 100px rgba(126,184,200,0.22)!important;}' +
-    '.fc-header-sub{color:rgba(200,228,255,0.78)!important;text-shadow:0 2px 10px rgba(0,0,0,0.92)!important;}' +
-    /* Cards — glassmorphism so they lift off the bloom */
-    '.fc-card{min-width:130px!important;background:rgba(4,8,22,0.72)!important;border:1px solid rgba(255,255,255,0.16)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;box-shadow:0 8px 40px rgba(0,0,0,0.8),0 2px 8px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.12)!important;}' +
-    /* Card text contrast */
-    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;color:rgba(230,242,255,0.93)!important;text-shadow:0 1px 6px rgba(0,0,0,0.88)!important;}' +
-    '.fc-floor-badge{opacity:1!important;text-shadow:0 0 10px rgba(var(--fc-color-rgb,200,169,110),0.7)!important;}' +
-    '.fc-sec-count{color:rgba(180,212,255,0.68)!important;text-shadow:0 1px 4px rgba(0,0,0,0.8)!important;}' +
-    /* Stats bar — glassy panel */
-    '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;background:rgba(4,8,20,0.65)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;border:1px solid rgba(255,255,255,0.08)!important;border-radius:10px!important;}' +
-    '.fc-stat{flex:1!important;text-align:center!important;background:transparent!important;}' +
-    '.fc-stat-val{text-shadow:0 2px 12px rgba(0,0,0,0.92)!important;color:#ffffff!important;}' +
-    '.fc-stat-label{color:rgba(200,228,255,0.78)!important;text-shadow:0 1px 6px rgba(0,0,0,0.8)!important;}' +
-    '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
+    /* Dark scrim between background icon and content — keeps icon visible at edges, creates depth in centre */
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
+    '.fc-hub::before{content:"";position:absolute;inset:-80px -30px -40px;background:radial-gradient(ellipse 72% 78% at 50% 38%,rgba(0,0,0,0.68) 0%,rgba(0,0,0,0.44) 42%,rgba(0,0,0,0.16) 66%,transparent 82%);pointer-events:none;z-index:-1;}' +
+    /* Header label — dark halo so it reads over any icon colour */
+    '.fc-header-label{color:rgba(160,220,255,0.92)!important;letter-spacing:4px!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 14px rgba(0,0,0,0.96),0 0 22px rgba(100,180,255,0.50)!important;}' +
+    /* Main title — stacked full-black halos give solid contrast, then coloured glow on top */
+    '.fc-header-title{color:#eef6ff!important;background:none!important;-webkit-text-fill-color:unset!important;animation:none!important;font-size:clamp(34px,5.5vw,60px)!important;font-weight:900!important;line-height:1.1!important;letter-spacing:-0.5px!important;text-shadow:0 0 5px rgba(0,0,0,1),0 0 12px rgba(0,0,0,1),0 0 24px rgba(0,0,0,0.98),0 4px 18px rgba(0,0,0,0.95),0 0 55px rgba(126,184,200,0.48),0 0 90px rgba(126,184,200,0.20)!important;}' +
+    /* Subtitle */
+    '.fc-header-sub{color:rgba(215,235,255,0.90)!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 12px rgba(0,0,0,0.96),0 2px 8px rgba(0,0,0,0.92)!important;}' +
+    /* Cards — high-opacity dark glass, multi-layer shadow for clear elevation */
+    '.fc-card{min-width:130px!important;background:rgba(4,8,22,0.88)!important;border:1px solid rgba(255,255,255,0.12)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;box-shadow:0 20px 56px rgba(0,0,0,0.94),0 6px 18px rgba(0,0,0,0.88),0 2px 4px rgba(0,0,0,0.72),inset 0 1px 0 rgba(255,255,255,0.13)!important;}' +
+    /* Card text */
+    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;color:rgba(235,246,255,0.97)!important;text-shadow:0 1px 6px rgba(0,0,0,0.97)!important;}' +
+    '.fc-floor-badge{opacity:1!important;text-shadow:0 0 10px rgba(var(--fc-color-rgb,200,169,110),0.7)!important;}' +
+    '.fc-sec-count{color:rgba(185,215,255,0.76)!important;text-shadow:0 1px 5px rgba(0,0,0,0.94)!important;}' +
+    /* Stats panel — opaque dark glass with clear lift */
+    '.fc-stats{width:100%!important;display:flex!important;justify-content:center!important;text-align:center!important;background:rgba(4,8,20,0.90)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;border:1px solid rgba(255,255,255,0.09)!important;border-radius:10px!important;box-shadow:0 12px 44px rgba(0,0,0,0.90),0 2px 8px rgba(0,0,0,0.78),inset 0 1px 0 rgba(255,255,255,0.06)!important;}' +
+    '.fc-stat{flex:1!important;text-align:center!important;background:transparent!important;}' +
+    '.fc-stat-val{text-shadow:0 0 6px rgba(0,0,0,0.9),0 2px 10px rgba(0,0,0,0.96)!important;color:#ffffff!important;}' +
+    '.fc-stat-label{color:rgba(200,228,255,0.84)!important;text-shadow:0 1px 6px rgba(0,0,0,0.94)!important;}' +
+    '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
     '.fc-row{justify-content:center!important;}' +
     '.fc-icon{font-size:0!important;line-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;height:52px!important;}' +
     '@keyframes holo-pulse{0%,100%{opacity:0.78;}50%{opacity:1;}}' +
