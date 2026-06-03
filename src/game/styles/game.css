@@ -163,10 +163,11 @@
 /* ── HUD overlay ── */
 .hud-overlay {
   position: absolute;
-  top: 20px;
-  left: 24px;
+  top: 14px;
+  left: 116px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  flex-wrap: wrap;
   pointer-events: none;
   z-index: 2;
 }
