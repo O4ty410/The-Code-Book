@@ -46,9 +46,9 @@
 
   <!-- Stars background — body level -->
   <canvas id="app-bg-stars" style="position:fixed;inset:0;pointer-events:none;z-index:0;"></canvas>
-  <!-- Hub background cycle — colored glow + large floor icon -->
-  <div id="hub-bg-glow" style="position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0;transition:opacity 1.5s ease;"></div>
-  <div id="hub-bg-icon" style="position:fixed;top:50vh;left:50%;transform:translate(-50%,-50%);width:min(68vw,480px);height:min(68vw,480px);pointer-events:none;z-index:2;opacity:0;transition:opacity 1.5s ease;"></div>
+  <!-- Hub background cycle — colored glow + large floor icon (above #app z-index:10) -->
+  <div id="hub-bg-glow" style="position:fixed;inset:0;pointer-events:none;z-index:11;opacity:0;transition:opacity 1.5s ease;"></div>
+  <div id="hub-bg-icon" style="position:fixed;top:50vh;left:50%;transform:translate(-50%,-50%);width:min(68vw,480px);height:min(68vw,480px);pointer-events:none;z-index:12;opacity:0;transition:opacity 1.5s ease;"></div>
 
   <div id="floor-nav" class="compat-hidden" style="display:none!important;visibility:hidden;pointer-events:none;"></div>
   <div id="timer-display" class="compat-hidden">25:00</div>

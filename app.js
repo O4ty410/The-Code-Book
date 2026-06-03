@@ -4067,15 +4067,11 @@ function stopHubBgCycle() {
   var gl = document.getElementById('hub-bg-glow');
   if (el) el.style.opacity = '0';
   if (gl) gl.style.opacity = '0';
-  var appEl = document.getElementById('app');
-  if (appEl) appEl.style.background = '';
 }
 
 function startHubBgCycle() {
   stopHubBgCycle();
   var gen = _hubBgGen;
-  var appEl = document.getElementById('app');
-  if (appEl) appEl.style.background = 'transparent';
   _hubBgFloor = 0;
   _applyHubBgFloor(_hubBgFloor);
   requestAnimationFrame(function() {
