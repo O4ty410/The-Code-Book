@@ -8,6 +8,7 @@ import {
   drawGantry, drawAtmosphere,
   drawRocketLightCone, drawRocketAmbientParticles, drawLaunchPadRing,
   initNpcs, updateNpcs, triggerNpcReaction, drawNpcs,
+  initVehicles, updateVehicles, drawVehicles,
 } from '../systems/renderSystem';
 import {
   createLaunchState, spawnSmoke, spawnExhaust, spawnContrail,
@@ -100,6 +101,7 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
   const engineRumbleRef     = useRef(null);
   const commsShownRef       = useRef(new Set());
   const npcsRef             = useRef(null);
+  const vehiclesRef         = useRef(null);
   const prevWorldRef        = useRef({});
   const [commsLog, setCommsLog] = useState([]);
   const [systemTime, setSystemTime] = useState('--:--:--');
@@ -350,6 +352,9 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     }
     updateNpcs(npcsRef.current, delta, W, H, npcPaused);
 
+    if (!vehiclesRef.current) vehiclesRef.current = initVehicles(W, H);
+    if (!phase) updateVehicles(vehiclesRef.current, delta, W, H);
+
     drawBackground(ctx, W, H, t);
     if (launch.alarmAlpha > 0.005) drawAlarmFlash(ctx, W, H, launch.alarmAlpha);
 
@@ -363,7 +368,10 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     drawFloor(ctx, W, H, W / 2, t);
     drawRocketLightCone(ctx, W / 2, rocketGroundY, H, t);
     drawLaunchPadRing(ctx, W / 2, rocketGroundY, t);
-    if (!phase) drawNpcs(ctx, npcsRef.current, t);
+    if (!phase) {
+      drawNpcs(ctx, npcsRef.current, t);
+      drawVehicles(ctx, vehiclesRef.current, t);
+    }
     if (powered) drawPoweredAmbient(ctx, W, H, t);
 
     if (!phase || phase === 'countdown') {

@@ -1902,6 +1902,215 @@ export function drawNpcs(ctx, npcs, t) {
   npcs.forEach(npc => drawNpc(ctx, npc, t));
 }
 
+// ── Ground vehicle system ──────────────────────────────────────────────────
+// Fuel tanker and utility buggy patrol the hangar floor.
+// dir: 1 = facing right, -1 = facing left.
+
+export function initVehicles(W, H) {
+  return [
+    { type:'tanker', x:W*0.14, y:H*0.76, dir:1,  speed:30, state:'driving', stopTimer:0 },
+    { type:'buggy',  x:W*0.80, y:H*0.76, dir:-1, speed:56, state:'driving', stopTimer:0 },
+  ];
+}
+
+export function updateVehicles(vehicles, delta, W, H) {
+  if (!vehicles) return;
+  vehicles.forEach(v => {
+    v.y = H * 0.76;
+    if (v.state === 'stopped') {
+      v.stopTimer -= delta;
+      if (v.stopTimer <= 0) { v.state = 'driving'; v.dir *= -1; }
+      return;
+    }
+    v.x += v.dir * v.speed * delta;
+    const margin = v.type === 'tanker' ? 88 : 60;
+    if (v.x < margin || v.x > W - margin) {
+      v.x         = Math.max(margin, Math.min(W - margin, v.x));
+      v.state     = 'stopped';
+      v.stopTimer = 2.5 + Math.random() * 3.5;
+    } else if (Math.random() < delta * 0.18) {
+      v.state     = 'stopped';
+      v.stopTimer = 1.8 + Math.random() * 2.8;
+    }
+  });
+}
+
+export function drawVehicles(ctx, vehicles, t) {
+  if (!vehicles) return;
+  vehicles.forEach(v => {
+    if (v.type === 'tanker') drawFuelTanker(ctx, v.x, v.y, v.dir, t, v.state === 'stopped');
+    else                     drawUtilityBuggy(ctx, v.x, v.y, v.dir, t, v.state === 'stopped');
+  });
+}
+
+function drawFuelTanker(ctx, cx, groundY, dir, t, stopped) {
+  ctx.save();
+  ctx.globalAlpha = 0.91;
+
+  // Ground shadow (drawn before any flip so it stays centred)
+  ctx.beginPath();
+  ctx.ellipse(cx, groundY + 3, 44, 5, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.30)';
+  ctx.fill();
+
+  // Flip coordinate space so we always draw facing right
+  if (dir < 0) { ctx.translate(cx * 2, 0); ctx.scale(-1, 1); }
+
+  const wR = 10;
+  const bodyTop = groundY - wR - 16;
+
+  // Rear dual tyres
+  [cx - 30, cx - 20].forEach(wx => {
+    ctx.beginPath(); ctx.arc(wx, groundY - wR, wR, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(26,26,30,0.96)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(wx, groundY - wR, wR * 0.44, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(168,174,186,0.90)'; ctx.fill();
+  });
+
+  // Front tyre
+  ctx.beginPath(); ctx.arc(cx + 26, groundY - wR, wR, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(26,26,30,0.96)'; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx + 26, groundY - wR, wR * 0.44, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(168,174,186,0.90)'; ctx.fill();
+
+  // Chassis / bed
+  ctx.fillStyle = 'rgba(192,200,215,0.95)';
+  roundRect(ctx, cx - 38, bodyTop, 76, 16, 3);
+  ctx.fill();
+
+  // Tank cylinder
+  const tL = cx - 36, tT = bodyTop - 13, tW = 52, tH = 13;
+  const tGrad = ctx.createLinearGradient(cx, tT, cx, tT + tH);
+  tGrad.addColorStop(0,    'rgba(212,220,230,0.97)');
+  tGrad.addColorStop(0.55, 'rgba(172,182,195,0.97)');
+  tGrad.addColorStop(1,    'rgba(130,140,155,0.97)');
+  ctx.fillStyle = tGrad;
+  roundRect(ctx, tL, tT, tW, tH, tH * 0.5);
+  ctx.fill();
+
+  // Warning stripes on tank
+  ctx.save();
+  ctx.beginPath(); roundRect(ctx, tL, tT, tW, tH, tH * 0.5); ctx.clip();
+  ctx.fillStyle = 'rgba(255,190,0,0.46)';
+  for (let i = 0; i < 6; i++) ctx.fillRect(tL + i * 16, tT, 9, tH);
+  ctx.restore();
+
+  // Tank end caps
+  [tL, tL + tW].forEach(ex => {
+    ctx.beginPath(); ctx.arc(ex, tT + tH * 0.5, tH * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(178,186,200,0.97)'; ctx.fill();
+  });
+
+  // Cab (front / right side)
+  const cGrad = ctx.createLinearGradient(cx + 17, 0, cx + 40, 0);
+  cGrad.addColorStop(0, 'rgba(30,58,118,0.96)');
+  cGrad.addColorStop(1, 'rgba(16,36,82,0.96)');
+  ctx.fillStyle = cGrad;
+  roundRect(ctx, cx + 17, bodyTop - 12, 23, 28, 4);
+  ctx.fill();
+
+  // Windshield
+  ctx.fillStyle = 'rgba(128,200,255,0.46)';
+  roundRect(ctx, cx + 20, bodyTop - 9, 15, 9, 2);
+  ctx.fill();
+
+  // Side mirror nub
+  ctx.fillStyle = 'rgba(96,106,128,0.85)';
+  ctx.fillRect(cx + 38, bodyTop - 7, 5, 3);
+
+  // Exhaust stack (rear)
+  ctx.fillStyle = 'rgba(48,50,56,0.90)';
+  ctx.fillRect(cx - 36, bodyTop - 8, 4, 10);
+
+  // Amber beacon (flashes when driving)
+  const blink = Math.sin(t * 3.8) > 0 && !stopped;
+  ctx.beginPath();
+  ctx.arc(cx - 2, tT - 5, 3, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(255,155,0,${0.32 + (blink ? 0.68 : 0)})`;
+  ctx.fill();
+  if (blink) {
+    ctx.beginPath();
+    ctx.arc(cx - 2, tT - 5, 9, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,155,0,0.13)'; ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawUtilityBuggy(ctx, cx, groundY, dir, t, stopped) {
+  ctx.save();
+  ctx.globalAlpha = 0.89;
+
+  // Ground shadow
+  ctx.beginPath();
+  ctx.ellipse(cx, groundY + 2, 28, 4, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  ctx.fill();
+
+  // Flip so we always draw facing right
+  if (dir < 0) { ctx.translate(cx * 2, 0); ctx.scale(-1, 1); }
+
+  const wR = 7;
+  const bodyTop = groundY - wR - 13;
+
+  // Wheels (rear left, front right)
+  [-18, 18].forEach(ox => {
+    ctx.beginPath(); ctx.arc(cx + ox, groundY - wR, wR, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(26,26,30,0.95)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx + ox, groundY - wR, wR * 0.42, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(152,158,172,0.88)'; ctx.fill();
+  });
+
+  // Body
+  const bGrad = ctx.createLinearGradient(cx, bodyTop, cx, bodyTop + 13);
+  bGrad.addColorStop(0, 'rgba(240,120,28,0.95)');
+  bGrad.addColorStop(1, 'rgba(170,62,10,0.95)');
+  ctx.fillStyle = bGrad;
+  roundRect(ctx, cx - 23, bodyTop, 46, 13, 4);
+  ctx.fill();
+
+  // Roll cage frame
+  ctx.strokeStyle = 'rgba(186,192,206,0.88)';
+  ctx.lineWidth   = 2.5;
+  ctx.lineJoin    = 'round';
+  ctx.beginPath();
+  ctx.moveTo(cx - 16, bodyTop);
+  ctx.lineTo(cx - 16, bodyTop - 15);
+  ctx.lineTo(cx + 16, bodyTop - 15);
+  ctx.lineTo(cx + 16, bodyTop);
+  ctx.stroke();
+  // Diagonal brace (rear-bottom to front-top for rollover strength look)
+  ctx.beginPath();
+  ctx.moveTo(cx - 8, bodyTop);
+  ctx.lineTo(cx + 14, bodyTop - 15);
+  ctx.stroke();
+
+  // Driver helmet
+  ctx.fillStyle = 'rgba(36,46,60,0.88)';
+  ctx.beginPath();
+  ctx.arc(cx - 3, bodyTop - 2, 6, Math.PI, 0);
+  ctx.fill();
+  // Visor
+  ctx.fillStyle = 'rgba(118,208,255,0.44)';
+  ctx.beginPath();
+  ctx.ellipse(cx - 3, bodyTop - 2, 4.5, 3.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Front windshield
+  ctx.fillStyle = 'rgba(138,215,255,0.36)';
+  roundRect(ctx, cx + 8, bodyTop + 2, 11, 8, 2);
+  ctx.fill();
+
+  // Green status blink (antenna tip)
+  const blink = Math.sin(t * 5.5 + 1.8) > 0.38 && !stopped;
+  ctx.beginPath();
+  ctx.arc(cx + 14, bodyTop - 16, 2.5, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(55,220,85,${0.30 + (blink ? 0.62 : 0)})`;
+  ctx.fill();
+
+  ctx.restore();
+}
+
 // ── hangar walls / structure ───────────────────────────────────────────────
 
 export function drawHangar(ctx, W, H) {
