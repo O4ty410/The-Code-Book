@@ -6,7 +6,7 @@ import {
   drawPowerIndicators, drawPoweredAmbient, drawAlarmFlash,
   drawTrajectoryArc, initDust, updateDust, drawDust,
   drawGantry, drawAtmosphere,
-  drawRocketLightCone, drawRocketAmbientParticles,
+  drawRocketLightCone, drawRocketAmbientParticles, drawLaunchPadRing,
   initNpcs, updateNpcs, triggerNpcReaction, drawNpcs,
 } from '../systems/renderSystem';
 import {
@@ -50,6 +50,11 @@ const TERMINALS = [
   { id: 'diagnostics', label: 'Diagnostics',     relX:  0.21 },
   { id: 'engine',      label: 'Engine Core',     relX:  0.35 },
 ];
+
+const SYSTEM_ONLINE_MAP = {
+  power: 'powerRestored', fuel: 'fuelOnline', nav: 'navCalibrated',
+  comms: 'commsOnline', diagnostics: 'diagnosticsOnline', engine: 'engineOnline',
+};
 
 function countdownStatusText(timer) {
   if (timer > 8) return 'SYSTEMS CHECK';
@@ -97,7 +102,20 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
   const npcsRef             = useRef(null);
   const prevWorldRef        = useRef({});
   const [commsLog, setCommsLog] = useState([]);
+  const [systemTime, setSystemTime] = useState('--:--:--');
   useEffect(() => { onLaunchCompleteRef.current = onLaunchComplete; }, [onLaunchComplete]);
+  useEffect(() => {
+    const tick = () => {
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2, '0');
+      const mm = String(d.getMinutes()).padStart(2, '0');
+      const ss = String(d.getSeconds()).padStart(2, '0');
+      setSystemTime(`${hh}:${mm}:${ss}`);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
 
   // Launch audio: stop bg music at countdown, engine rumble + ignition boom
   useEffect(() => {
@@ -344,6 +362,7 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     drawCeilingLights(ctx, W, powered);
     drawFloor(ctx, W, H, W / 2, t);
     drawRocketLightCone(ctx, W / 2, rocketGroundY, H, t);
+    drawLaunchPadRing(ctx, W / 2, rocketGroundY, t);
     if (!phase) drawNpcs(ctx, npcsRef.current, t);
     if (powered) drawPoweredAmbient(ctx, W, H, t);
 
@@ -366,7 +385,8 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
 
     if (!phase || phase === 'countdown') {
       tPositions.forEach((tm) => {
-        drawTerminal(ctx, tm.x, tm.y, tm.label, !phase && tm.id === nearTerminal, t);
+        const isOnline = !!ws[SYSTEM_ONLINE_MAP[tm.id]];
+        drawTerminal(ctx, tm.x, tm.y, tm.label, !phase && tm.id === nearTerminal, t, isOnline);
       });
       if (ws.powerRestored) drawPowerIndicators(ctx, tPositions, t);
     }
@@ -486,6 +506,13 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
         onClose={() => setActiveTerminal(null)}
         onMissionComplete={handleMissionComplete}
       />
+
+      {!launchPhase && (
+        <div className="game-status-bar">
+          <span className="gsb-left">MISSION STATUS: <em>STANDBY</em></span>
+          <span className="gsb-right">SYSTEM TIME: <em>{systemTime}</em></span>
+        </div>
+      )}
     </div>
   );
 }
