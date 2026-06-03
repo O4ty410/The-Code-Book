@@ -182,7 +182,7 @@ function showAuthFromLanding() {
   if (isLoggedIn) {
     // Authenticated logged-in user — go straight into the app
     var _streakExtended = updateStreak();
-    stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
+    stopLandingCanvas(); var _nl=document.getElementById('new-user-landing'); if(_nl)_nl.style.display='none';
     document.body.style.overflow = '';
     document.getElementById('app').style.display = 'block';
     applyTheme();
@@ -193,7 +193,7 @@ function showAuthFromLanding() {
     updateChallengeDot();
   } else {
     // Guest or new user — always show onboarding or auth screen
-    stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
+    stopLandingCanvas(); var _nl=document.getElementById('new-user-landing'); if(_nl)_nl.style.display='none';
     const hasOnboarded = localStorage.getItem('codebook_onboarded');
     if (!hasOnboarded) {
       showOnboarding();
@@ -456,7 +456,7 @@ async function onUserLoggedIn() {
   updateStreak();
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('cover').style.display = 'none';
-  stopLandingCanvas(); document.getElementById('new-user-landing').style.display = 'none';
+  stopLandingCanvas(); var _nl=document.getElementById('new-user-landing'); if(_nl)_nl.style.display='none';
   document.body.style.overflow = '';
   document.getElementById('app').style.display = 'block';
   applyTheme();
