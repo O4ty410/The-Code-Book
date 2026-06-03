@@ -3840,10 +3840,18 @@ function getFloorIcon(fi, sz, color) {
   sz = sz || 44;
   var c = color || 'var(--fc-color)';
   var fid = (color ? 'hfib' : 'hfi') + fi;
-  var flt = '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
-    '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
-    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
-    '</filter></defs>';
+  var flt = color
+    ? '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%" color-interpolation-filters="sRGB">' +
+        '<feMorphology in="SourceGraphic" operator="dilate" radius="1.4" result="dilated"/>' +
+        '<feFlood flood-color="white" flood-opacity="0.88" result="white"/>' +
+        '<feComposite in="white" in2="dilated" operator="in" result="whiteEdge"/>' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="2" result="glow"/>' +
+        '<feMerge><feMergeNode in="glow"/><feMergeNode in="whiteEdge"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter></defs>'
+    : '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
+        '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
+        '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+      '</filter></defs>';
   var open = '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" class="holo-icon" style="display:block;margin:0 auto;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
   var close = '</g></svg>';
   var s  = ';fill:none;stroke:' + c;
