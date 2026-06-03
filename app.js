@@ -4027,13 +4027,13 @@ function getChallengeIcon(type, color, sz) {
 var _hubBgTimer = null;
 var _hubBgFloor = 0;
 var HUB_BG_FC = [
-  {h:'#c8a96e',r:200,g:169,b:110},
-  {h:'#7eb8c8',r:126,g:184,b:200},
-  {h:'#c87e9a',r:200,g:126,b:154},
-  {h:'#9a7ec8',r:154,g:126,b:200},
-  {h:'#7ec8a9',r:126,g:200,b:169},
-  {h:'#c8967e',r:200,g:150,b:126},
-  {h:'#e8d5a0',r:232,g:213,b:160}
+  {h:'#ffc844',r:255,g:200,b:68},
+  {h:'#00e5ff',r:0,  g:229,b:255},
+  {h:'#ff44aa',r:255,g:68, b:170},
+  {h:'#bb66ff',r:187,g:102,b:255},
+  {h:'#00ffaa',r:0,  g:255,b:170},
+  {h:'#ff8844',r:255,g:136,b:68},
+  {h:'#ffe566',r:255,g:229,b:102}
 ];
 
 function _applyHubBgFloor(fi) {
@@ -4068,7 +4068,7 @@ function startHubBgCycle() {
   requestAnimationFrame(function() {
     var el = document.getElementById('hub-bg-icon');
     var gl = document.getElementById('hub-bg-glow');
-    if (el) el.style.opacity = '0.55';
+    if (el) el.style.opacity = '0.65';
     if (gl) gl.style.opacity = '1';
     function advance() {
       var el = document.getElementById('hub-bg-icon');
