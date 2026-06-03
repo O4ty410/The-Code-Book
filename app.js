@@ -4034,6 +4034,7 @@ function getChallengeIcon(type, color, sz) {
 // ── Hub background icon cycle ──────────────────────────────────────────────
 var _hubBgTimer = null;
 var _hubBgFloor = 0;
+var _hubBgGen = 0;
 var HUB_BG_FC = [
   {h:'#ffc844',r:255,g:200,b:68},
   {h:'#00e5ff',r:0,  g:229,b:255},
@@ -4060,6 +4061,7 @@ function _applyHubBgFloor(fi) {
 }
 
 function stopHubBgCycle() {
+  _hubBgGen++;
   if (_hubBgTimer) { clearTimeout(_hubBgTimer); _hubBgTimer = null; }
   var el = document.getElementById('hub-bg-icon');
   var gl = document.getElementById('hub-bg-glow');
@@ -4070,27 +4072,32 @@ function stopHubBgCycle() {
 
 function startHubBgCycle() {
   stopHubBgCycle();
+  var gen = _hubBgGen;
   document.body.classList.add('learn-hub');
   _hubBgFloor = 0;
   _applyHubBgFloor(_hubBgFloor);
   requestAnimationFrame(function() {
+    if (_hubBgGen !== gen) return;
     var el = document.getElementById('hub-bg-icon');
     var gl = document.getElementById('hub-bg-glow');
     if (el) el.style.opacity = '0.65';
     if (gl) gl.style.opacity = '1';
     function advance() {
+      if (_hubBgGen !== gen) return;
       var el = document.getElementById('hub-bg-icon');
       var gl = document.getElementById('hub-bg-glow');
       if (!el) return;
       el.style.opacity = '0';
       if (gl) gl.style.opacity = '0';
       _hubBgTimer = setTimeout(function() {
+        if (_hubBgGen !== gen) return;
         _hubBgFloor = (_hubBgFloor + 1) % 7;
         _applyHubBgFloor(_hubBgFloor);
         requestAnimationFrame(function() {
+          if (_hubBgGen !== gen) return;
           var el2 = document.getElementById('hub-bg-icon');
           var gl2 = document.getElementById('hub-bg-glow');
-          if (el2) el2.style.opacity = '0.55';
+          if (el2) el2.style.opacity = '0.65';
           if (gl2) gl2.style.opacity = '1';
           _hubBgTimer = setTimeout(advance, 7000);
         });
