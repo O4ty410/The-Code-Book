@@ -180,6 +180,20 @@ export function drawFloor(ctx, W, H, cx, t) {
   ctx.fillStyle = grad;
   ctx.fillRect(0, horizon, W, H - horizon);
 
+  // horizon darkening band — depth cue at the vanishing point
+  const horizonDark = ctx.createLinearGradient(0, horizon, 0, horizon + (H - horizon) * 0.28);
+  horizonDark.addColorStop(0, 'rgba(2, 5, 18, 0.52)');
+  horizonDark.addColorStop(1, 'rgba(0, 0, 0, 0.00)');
+  ctx.fillStyle = horizonDark;
+  ctx.fillRect(0, horizon, W, (H - horizon) * 0.28);
+  // edge fade — grid fades toward left/right edges
+  const edgeFade = ctx.createRadialGradient(W / 2, horizon + (H - horizon) * 0.5, (H - horizon) * 0.1, W / 2, horizon + (H - horizon) * 0.5, Math.max(W / 2, H - horizon) * 1.05);
+  edgeFade.addColorStop(0,    'rgba(0, 0, 0, 0.00)');
+  edgeFade.addColorStop(0.55, 'rgba(0, 0, 0, 0.00)');
+  edgeFade.addColorStop(1,    'rgba(2, 5, 20, 0.58)');
+  ctx.fillStyle = edgeFade;
+  ctx.fillRect(0, horizon, W, H - horizon);
+
   // ── concrete texture dots ──────────────────────────────────────────────
   const dots = getFloorDots(W, H);
   dots.forEach(({ x, y }) => {
@@ -995,6 +1009,15 @@ const TERMINAL_MODEL_NUMBERS = {
   comms: 'COMM-04', diagnostics: 'DIAG-07', engine: 'ENG-03',
 };
 
+const TERMINAL_GLOW_CONFIG = {
+  power:       { intensity: 0.30, flicker: false },
+  fuel:        { intensity: 0.34, flicker: false },
+  nav:         { intensity: 0.26, flicker: false },
+  comms:       { intensity: 0.32, flicker: true,  flickerFreq: 3.8 },
+  diagnostics: { intensity: 0.36, flicker: false },
+  engine:      { intensity: 0.44, flicker: true,  flickerFreq: 5.2 },
+};
+
 export function drawTerminal(ctx, x, y, label, isNear, t) {
   // Derive id from label for content lookup
   const idGuess = Object.keys(TERMINAL_SCREEN_CONTENT).find(
@@ -1003,7 +1026,24 @@ export function drawTerminal(ctx, x, y, label, isNear, t) {
 
   const w = 68;
   const h = 80;
-  const pulse = 0.6 + 0.4 * Math.sin(t * 2.2);
+  const cfg = TERMINAL_GLOW_CONFIG[idGuess] || { intensity: 0.30, flicker: false };
+  const flickerMod = cfg.flicker
+    ? (0.72 + 0.28 * Math.sin(t * cfg.flickerFreq) * (0.6 + 0.4 * Math.sin(t * 19.1)))
+    : 1.0;
+  const pulse = (0.6 + 0.4 * Math.sin(t * 2.2)) * flickerMod;
+  const glowRadius = 80 + cfg.intensity * 40;
+
+  // ambient terminal glow (always-on, intensity varies by terminal type)
+  {
+    const ambientA = cfg.intensity * 0.50 * (0.5 + 0.5 * pulse);
+    const ambG = ctx.createRadialGradient(x, y - h * 0.45, 0, x, y - h * 0.45, glowRadius);
+    ambG.addColorStop(0, `rgba(0, 185, 255, ${ambientA.toFixed(3)})`);
+    ambG.addColorStop(1, 'rgba(0, 185, 255, 0.00)');
+    ctx.fillStyle = ambG;
+    ctx.beginPath();
+    ctx.ellipse(x, y - h * 0.45, glowRadius, glowRadius * 0.75, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // outer glow when near
   if (isNear) {
@@ -1038,7 +1078,7 @@ export function drawTerminal(ctx, x, y, label, isNear, t) {
   ctx.fill();
 
   // screen border glow
-  const borderAlpha = isNear ? (0.55 + 0.45 * pulse).toFixed(2) : '0.30';
+  const borderAlpha = isNear ? (0.55 + 0.45 * pulse).toFixed(2) : (cfg.intensity * pulse).toFixed(2);
   ctx.strokeStyle = `rgba(0, 200, 255, ${borderAlpha})`;
   ctx.lineWidth   = 1.5;
   roundRect(ctx, x - w / 2, y - h, w, h, 6);
@@ -1246,19 +1286,22 @@ export function drawBackground(ctx, W, H, t) {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  // nebula blobs
+  // nebula blobs — animated slow drift with richer deep purple/blue washes
   const nebulae = [
-    { x: W * 0.15, y: H * 0.18, rx: 200, ry: 120, r: 'rgba(40,20,90,0.22)' },
-    { x: W * 0.80, y: H * 0.10, rx: 180, ry: 100, r: 'rgba(10,50,110,0.20)' },
-    { x: W * 0.50, y: H * 0.30, rx: 250, ry: 140, r: 'rgba(20,15,70,0.15)' },
+    { x: W * 0.15, y: H * 0.18, rx: 220, ry: 130, r: 'rgba(60,15,120,0.28)', phase: 0.0 },
+    { x: W * 0.80, y: H * 0.10, rx: 200, ry: 115, r: 'rgba(8,45,140,0.26)',  phase: 1.3 },
+    { x: W * 0.50, y: H * 0.30, rx: 270, ry: 155, r: 'rgba(28,10,95,0.20)',  phase: 2.1 },
+    { x: W * 0.32, y: H * 0.22, rx: 180, ry: 100, r: 'rgba(12,65,160,0.18)', phase: 0.8 },
+    { x: W * 0.68, y: H * 0.36, rx: 165, ry: 95,  r: 'rgba(75,8,130,0.16)',  phase: 1.7 },
   ];
-  nebulae.forEach(({ x, y, rx, ry, r }) => {
-    const g = ctx.createRadialGradient(x, y, 0, x, y, Math.max(rx, ry));
+  nebulae.forEach(({ x, y, rx, ry, r, phase }) => {
+    const driftX = x + Math.sin(t * 0.011 + phase) * 10;
+    const g = ctx.createRadialGradient(driftX, y, 0, driftX, y, Math.max(rx, ry));
     g.addColorStop(0, r);
     g.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = g;
     ctx.beginPath();
-    ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+    ctx.ellipse(driftX, y, rx, ry, 0, 0, Math.PI * 2);
     ctx.fill();
   });
 
@@ -1305,15 +1348,183 @@ export function drawBackground(ctx, W, H, t) {
 
   ctx.restore();
 
-  // Limb glow around planet edge
-  const limbGlow = ctx.createRadialGradient(planetX, planetY, planetR * 0.85, planetX, planetY, planetR * 1.15);
-  limbGlow.addColorStop(0, 'rgba(100, 150, 255, 0)');
-  limbGlow.addColorStop(0.6, 'rgba(100, 150, 255, 0.12)');
-  limbGlow.addColorStop(1, 'rgba(100, 150, 255, 0)');
-  ctx.fillStyle = limbGlow;
+  // Atmospheric halo around moon — soft layered glow
+  const atmosHalo = ctx.createRadialGradient(planetX, planetY, planetR * 0.90, planetX, planetY, planetR * 1.55);
+  atmosHalo.addColorStop(0,    'rgba(130, 175, 255, 0.00)');
+  atmosHalo.addColorStop(0.22, 'rgba(110, 160, 255, 0.28)');
+  atmosHalo.addColorStop(0.55, 'rgba(80,  130, 220, 0.14)');
+  atmosHalo.addColorStop(0.80, 'rgba(60,  100, 190, 0.06)');
+  atmosHalo.addColorStop(1,    'rgba(0,   0,   0,   0.00)');
+  ctx.fillStyle = atmosHalo;
   ctx.beginPath();
-  ctx.arc(planetX, planetY, planetR * 1.15, 0, Math.PI * 2);
+  ctx.arc(planetX, planetY, planetR * 1.55, 0, Math.PI * 2);
   ctx.fill();
+  const rimGlow = ctx.createRadialGradient(planetX, planetY, planetR * 0.82, planetX, planetY, planetR * 1.12);
+  rimGlow.addColorStop(0,   'rgba(150, 200, 255, 0.00)');
+  rimGlow.addColorStop(0.5, 'rgba(120, 170, 255, 0.18)');
+  rimGlow.addColorStop(1,   'rgba(80,  130, 220, 0.00)');
+  ctx.fillStyle = rimGlow;
+  ctx.beginPath();
+  ctx.arc(planetX, planetY, planetR * 1.12, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// ── rocket light cone — connects engine bell to floor with heat glow ──────
+
+export function drawRocketLightCone(ctx, cx, groundY, H, t) {
+  const floorY   = H * 0.55;
+  const coneTopY = groundY + 14;
+  if (coneTopY >= floorY) return;
+
+  const topW    = 14;
+  const bottomW = 70;
+
+  // outer cone
+  const coneOuter = ctx.createLinearGradient(cx, coneTopY, cx, floorY);
+  coneOuter.addColorStop(0, 'rgba(255, 200, 80, 0.22)');
+  coneOuter.addColorStop(0.5, 'rgba(255, 150, 40, 0.12)');
+  coneOuter.addColorStop(1, 'rgba(255, 100, 10, 0.04)');
+  ctx.fillStyle = coneOuter;
+  ctx.beginPath();
+  ctx.moveTo(cx - topW, coneTopY);
+  ctx.lineTo(cx + topW, coneTopY);
+  ctx.lineTo(cx + bottomW, floorY);
+  ctx.lineTo(cx - bottomW, floorY);
+  ctx.closePath();
+  ctx.fill();
+
+  // bright inner core
+  const coneInner = ctx.createLinearGradient(cx, coneTopY, cx, floorY);
+  coneInner.addColorStop(0, 'rgba(255, 245, 200, 0.40)');
+  coneInner.addColorStop(0.3, 'rgba(255, 210, 120, 0.20)');
+  coneInner.addColorStop(1, 'rgba(255, 160, 60, 0.06)');
+  ctx.fillStyle = coneInner;
+  ctx.beginPath();
+  ctx.moveTo(cx - topW * 0.35, coneTopY);
+  ctx.lineTo(cx + topW * 0.35, coneTopY);
+  ctx.lineTo(cx + bottomW * 0.30, floorY);
+  ctx.lineTo(cx - bottomW * 0.30, floorY);
+  ctx.closePath();
+  ctx.fill();
+
+  // heat pool where cone meets floor
+  const poolA = (0.22 + 0.08 * Math.sin(t * 4.2)) * 1;
+  const poolGrad = ctx.createRadialGradient(cx, floorY, 0, cx, floorY, bottomW * 1.5);
+  poolGrad.addColorStop(0, `rgba(255, 190, 60, ${poolA.toFixed(3)})`);
+  poolGrad.addColorStop(0.4, `rgba(255, 110, 20, ${(poolA * 0.55).toFixed(3)})`);
+  poolGrad.addColorStop(1, 'rgba(200, 50, 0, 0.00)');
+  ctx.fillStyle = poolGrad;
+  ctx.beginPath();
+  ctx.ellipse(cx, floorY, bottomW * 1.5, 16, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// ── ambient particles rising from rocket base ──────────────────────────────
+
+export function drawRocketAmbientParticles(ctx, cx, groundY, t) {
+  for (let i = 0; i < 24; i++) {
+    const seed    = i * 137.508;
+    const cycle   = (t * (1.8 + (i % 5) * 0.35) + seed * 0.01) % 3.5;
+    const progress = cycle / 3.5;
+    if (progress > 0.88) continue;
+
+    const alpha = progress < 0.18
+      ? (progress / 0.18) * 0.45
+      : (1 - (progress - 0.18) / 0.70) * 0.45;
+    if (alpha < 0.01) continue;
+
+    const spread = (Math.sin(seed * 0.13) * 0.5 + 0.5) * 50 - 25;
+    const rise   = progress * 55;
+    const wobble = Math.sin(t * 1.3 + seed * 0.07) * 4;
+    const px = cx + spread + wobble;
+    const py = groundY + 8 - rise;
+    const r  = 0.7 + (1 - progress) * 1.8;
+    const g2 = Math.floor(180 + progress * 50);
+    const b2 = Math.floor(80 + progress * 80);
+
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, ${g2}, ${b2}, ${alpha.toFixed(3)})`;
+    ctx.fill();
+  }
+}
+
+// ── background crew silhouettes ────────────────────────────────────────────
+
+function drawSilhouetteFigure(ctx, x, baseY, t, lookUp, seed) {
+  ctx.save();
+  ctx.globalAlpha = 0.68;
+
+  const S = 0.78;
+
+  // ground shadow
+  ctx.beginPath();
+  ctx.ellipse(x, baseY + 2, 10 * S, 3, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.30)';
+  ctx.fill();
+
+  // legs with idle sway
+  const legBob = Math.sin(t * 0.9 + seed * 0.7) * 1.5;
+  ctx.fillStyle = '#070d1b';
+  ctx.fillRect(x - 6 * S, baseY - 16 * S, 5 * S, 16 * S + legBob);
+  ctx.fillRect(x + 1 * S,  baseY - 16 * S, 5 * S, 16 * S - legBob);
+
+  // body
+  ctx.fillStyle = '#0b1628';
+  roundRect(ctx, x - 8 * S, baseY - 38 * S, 16 * S, 22 * S, 3);
+  ctx.fill();
+
+  // arms
+  if (lookUp) {
+    ctx.fillStyle = '#091320';
+    ctx.fillRect(x - 12 * S, baseY - 34 * S, 5 * S, 12 * S);
+    ctx.save();
+    ctx.translate(x + 8 * S, baseY - 36 * S);
+    ctx.rotate(-1.1 + Math.sin(t * 0.6 + seed) * 0.05);
+    ctx.fillRect(-2.5 * S, 0, 5 * S, 14 * S);
+    ctx.restore();
+  } else {
+    const armSway = Math.sin(t * 0.9 + seed * 0.7) * 0.14;
+    ctx.fillStyle = '#091320';
+    ctx.save();
+    ctx.translate(x - 10 * S, baseY - 36 * S);
+    ctx.rotate(armSway);
+    ctx.fillRect(-2.5 * S, 0, 5 * S, 13 * S);
+    ctx.restore();
+    ctx.save();
+    ctx.translate(x + 10 * S, baseY - 36 * S);
+    ctx.rotate(-armSway);
+    ctx.fillRect(-2.5 * S, 0, 5 * S, 13 * S);
+    ctx.restore();
+  }
+
+  // head / helmet
+  ctx.beginPath();
+  ctx.arc(x, baseY - 44 * S, 7 * S, 0, Math.PI * 2);
+  ctx.fillStyle = '#0b1628';
+  ctx.fill();
+
+  // visor glint
+  const visorA = 0.18 + 0.07 * Math.sin(t * 1.5 + seed);
+  ctx.beginPath();
+  ctx.ellipse(x, baseY - 44 * S, 4 * S, 3.5 * S, lookUp ? -0.32 : 0, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(30, 110, 200, ${visorA.toFixed(3)})`;
+  ctx.fill();
+
+  ctx.restore();
+}
+
+export function drawCrewFigures(ctx, W, H, t) {
+  const baseY = H * 0.70;
+  const figures = [
+    { x: W * 0.062,                                   lookUp: true,  seed: 1.1 },
+    { x: W * 0.230 + Math.sin(t * 0.22) * W * 0.018, lookUp: false, seed: 3.7 },
+    { x: W * 0.660,                                   lookUp: false, seed: 5.3 },
+    { x: W * 0.928,                                   lookUp: true,  seed: 2.9 },
+  ];
+  figures.forEach(({ x, lookUp, seed }) => {
+    drawSilhouetteFigure(ctx, x, baseY, t, lookUp, seed);
+  });
 }
 
 // ── hangar walls / structure ───────────────────────────────────────────────
