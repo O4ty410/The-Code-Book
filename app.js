@@ -297,19 +297,8 @@ function populateDashboard() {
   // Apply saved cover screen theme (independent from app theme)
   applyCoverTheme(getCoverTheme());
 
-  // Show the landing overlay and start animated canvas
-  var landing = document.getElementById('new-user-landing');
-  if (landing) {
-    landing.style.display = 'block';
-    landing.style.position = 'fixed';
-    landing.style.top = '0';
-    landing.style.left = '0';
-    landing.style.width = '100vw';
-    landing.style.height = '100vh';
-    landing.style.zIndex = '99999';
-    landing.style.background = 'transparent';
-    startLandingCanvas();
-  }
+  // Go straight to auth/app — no landing screen
+  showAuthFromLanding();
   var cover = document.getElementById('cover');
   if (cover) cover.style.display = 'none';
 }
@@ -536,7 +525,7 @@ async function signOut() {
   document.getElementById('app').style.display = 'none';
   var ag = document.querySelector('.app-grid'); if (ag) ag.style.display = 'none';
   document.getElementById('cover').style.display = 'none';
-  document.getElementById('cover-user').style.display = 'none';
+  var _cu = document.getElementById('cover-user'); if (_cu) _cu.style.display = 'none';
   document.getElementById('auth-screen').style.display = 'flex';
   document.getElementById('auth-email').value = '';
   document.getElementById('auth-password').value = '';
