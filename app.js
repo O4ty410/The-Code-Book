@@ -4041,11 +4041,11 @@ function _applyHubBgFloor(fi) {
   var gl = document.getElementById('hub-bg-glow');
   if (el) {
     el.innerHTML = getFloorIcon(fi, 480, fc.h);
-    el.style.filter = 'drop-shadow(0 0 40px ' + fc.h + ')';
+    el.style.filter = 'drop-shadow(0 0 60px ' + fc.h + ') drop-shadow(0 0 20px ' + fc.h + ')';
     el.style.opacity = '0';
   }
   if (gl) {
-    gl.style.background = 'radial-gradient(ellipse 65% 65% at 50% 50%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.25) 0%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.09) 40%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.03) 58%,transparent 72%)';
+    gl.style.background = 'radial-gradient(ellipse 70% 70% at 50% 50%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.55) 0%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.22) 38%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.07) 58%,transparent 72%)';
     gl.style.opacity = '0';
   }
 }
@@ -4067,7 +4067,7 @@ function startHubBgCycle() {
   requestAnimationFrame(function() {
     var el = document.getElementById('hub-bg-icon');
     var gl = document.getElementById('hub-bg-glow');
-    if (el) el.style.opacity = '0.22';
+    if (el) el.style.opacity = '0.55';
     if (gl) gl.style.opacity = '1';
     function advance() {
       var el = document.getElementById('hub-bg-icon');
@@ -4081,7 +4081,7 @@ function startHubBgCycle() {
         requestAnimationFrame(function() {
           var el2 = document.getElementById('hub-bg-icon');
           var gl2 = document.getElementById('hub-bg-glow');
-          if (el2) el2.style.opacity = '0.22';
+          if (el2) el2.style.opacity = '0.55';
           if (gl2) gl2.style.opacity = '1';
           _hubBgTimer = setTimeout(advance, 7000);
         });
