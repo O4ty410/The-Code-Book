@@ -6,7 +6,8 @@ import {
   drawPowerIndicators, drawPoweredAmbient, drawAlarmFlash,
   drawTrajectoryArc, initDust, updateDust, drawDust,
   drawGantry, drawAtmosphere,
-  drawRocketLightCone, drawRocketAmbientParticles, drawCrewFigures,
+  drawRocketLightCone, drawRocketAmbientParticles,
+  initNpcs, updateNpcs, triggerNpcReaction, drawNpcs,
 } from '../systems/renderSystem';
 import {
   createLaunchState, spawnSmoke, spawnExhaust, spawnContrail,
@@ -93,6 +94,8 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
   const onLaunchCompleteRef = useRef(onLaunchComplete);
   const engineRumbleRef     = useRef(null);
   const commsShownRef       = useRef(new Set());
+  const npcsRef             = useRef(null);
+  const prevWorldRef        = useRef({});
   const [commsLog, setCommsLog] = useState([]);
   useEffect(() => { onLaunchCompleteRef.current = onLaunchComplete; }, [onLaunchComplete]);
 
@@ -313,6 +316,22 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     const powered = ws.powerRestored || !!phase;
     const rocketGroundY = H * 0.55 + launch.rocketAscent;
 
+    // NPC crew — init on first frame, detect world-state changes to trigger reactions
+    if (!npcsRef.current) npcsRef.current = initNpcs(W, H);
+    const npcPaused = overlayOpenRef.current || !!phase;
+    if (!npcPaused) {
+      const prev = prevWorldRef.current;
+      const keys = ['powerRestored','fuelOnline','navCalibrated','commsOnline','diagnosticsOnline','engineOnline'];
+      for (let k = 0; k < keys.length; k++) {
+        if (ws[keys[k]] && !prev[keys[k]]) {
+          triggerNpcReaction(npcsRef.current, W / 2);
+          break;
+        }
+      }
+      prevWorldRef.current = { ...ws };
+    }
+    updateNpcs(npcsRef.current, delta, W, H, npcPaused);
+
     drawBackground(ctx, W, H, t);
     if (launch.alarmAlpha > 0.005) drawAlarmFlash(ctx, W, H, launch.alarmAlpha);
 
@@ -325,7 +344,7 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     drawCeilingLights(ctx, W, powered);
     drawFloor(ctx, W, H, W / 2, t);
     drawRocketLightCone(ctx, W / 2, rocketGroundY, H, t);
-    if (!phase) drawCrewFigures(ctx, W, H, t);
+    if (!phase) drawNpcs(ctx, npcsRef.current, t);
     if (powered) drawPoweredAmbient(ctx, W, H, t);
 
     if (!phase || phase === 'countdown') {

@@ -1449,82 +1449,209 @@ export function drawRocketAmbientParticles(ctx, cx, groundY, t) {
   }
 }
 
-// ── background crew silhouettes ────────────────────────────────────────────
+// ── NPC crew system ───────────────────────────────────────────────────────
+// Three crew members with walking→working→walking state loops.
+// Each visits a different subset of terminals and starts phase-offset so
+// they are never synchronised. triggerNpcReaction() makes the nearest NPC
+// raise their arm toward the rocket when a system comes online.
 
-function drawSilhouetteFigure(ctx, x, baseY, t, lookUp, seed) {
+const NPC_TERM_RELX  = [-0.35, -0.21, -0.07, 0.07, 0.21, 0.35];
+const NPC_ROUTES     = [[0, 2, 4], [1, 3, 5], [3, 1, 4]];
+const NPC_SEEDS      = [1.3, 4.1, 7.6];
+const NPC_WALK_SPEED = 55;            // px / s
+const NPC_WORK_TIMES = [3.8, 4.5, 3.2]; // s per terminal visit (per NPC)
+const NPC_REACT_DUR  = 1.1;           // s for arm-raise gesture
+
+export function initNpcs(W, H) {
+  return NPC_ROUTES.map((route, i) => {
+    const rIdx = i % route.length;
+    const tIdx = route[rIdx];
+    const tx   = W * 0.5 + NPC_TERM_RELX[tIdx] * W;
+    // Stagger start states so they're never in sync
+    const startWalking = i === 1;
+    // Facing: lean toward scene centre when working at a terminal
+    const initFacing   = NPC_TERM_RELX[tIdx] < 0 ? 1 : -1;
+    return {
+      id:         i,
+      x:          startWalking ? tx - 55 : tx,
+      y:          H * 0.70,
+      route,
+      routeIdx:   rIdx,
+      state:      startWalking ? 'walking' : 'working',
+      workTimer:  startWalking ? 0 : NPC_WORK_TIMES[i] * (i === 2 ? 0.55 : 1.0),
+      reactTimer: 0,
+      reactDir:   1,
+      facing:     startWalking ? 1 : initFacing,
+      seed:       NPC_SEEDS[i],
+    };
+  });
+}
+
+export function updateNpcs(npcs, delta, W, H, paused) {
+  if (paused || !npcs) return;
+  npcs.forEach(npc => {
+    npc.y = H * 0.70;
+
+    if (npc.state === 'reacting') {
+      npc.reactTimer -= delta;
+      if (npc.reactTimer <= 0) {
+        npc.state     = 'working';
+        npc.workTimer = NPC_WORK_TIMES[npc.id] * 0.35;
+      }
+      return;
+    }
+
+    if (npc.state === 'working') {
+      npc.workTimer -= delta;
+      if (npc.workTimer <= 0) {
+        npc.routeIdx = (npc.routeIdx + 1) % npc.route.length;
+        npc.state    = 'walking';
+      }
+      return;
+    }
+
+    if (npc.state === 'walking') {
+      const tIdx = npc.route[npc.routeIdx];
+      const tx   = W * 0.5 + NPC_TERM_RELX[tIdx] * W;
+      const dx   = tx - npc.x;
+      if (Math.abs(dx) < 3) {
+        npc.x         = tx;
+        npc.state     = 'working';
+        npc.workTimer = NPC_WORK_TIMES[npc.id];
+        // Face toward scene centre to interact with the terminal
+        npc.facing    = NPC_TERM_RELX[tIdx] < 0 ? 1 : -1;
+      } else {
+        const step = Math.sign(dx) * NPC_WALK_SPEED * delta;
+        npc.x     += Math.abs(step) > Math.abs(dx) ? dx : step;
+        npc.facing = dx > 0 ? 1 : -1;
+      }
+    }
+  });
+}
+
+export function triggerNpcReaction(npcs, rocketX) {
+  if (!npcs) return;
+  let nearest = null, bestDist = Infinity;
+  npcs.forEach(npc => {
+    const d = Math.abs(npc.x - rocketX);
+    if (d < bestDist) { bestDist = d; nearest = npc; }
+  });
+  if (nearest && nearest.state !== 'reacting') {
+    nearest.state      = 'reacting';
+    nearest.reactTimer = NPC_REACT_DUR;
+    nearest.reactDir   = rocketX > nearest.x ? 1 : -1;
+  }
+}
+
+function drawNpc(ctx, npc, t) {
+  const { x, y, state, seed, facing, reactDir } = npc;
+  const S = 0.70;
+
   ctx.save();
-  ctx.globalAlpha = 0.68;
-
-  const S = 0.78;
+  ctx.globalAlpha = 0.85;
 
   // ground shadow
   ctx.beginPath();
-  ctx.ellipse(x, baseY + 2, 10 * S, 3, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.30)';
+  ctx.ellipse(x, y + 3, 14 * S, 3.5, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
   ctx.fill();
 
-  // legs with idle sway
-  const legBob = Math.sin(t * 0.9 + seed * 0.7) * 1.5;
-  ctx.fillStyle = '#070d1b';
-  ctx.fillRect(x - 6 * S, baseY - 16 * S, 5 * S, 16 * S + legBob);
-  ctx.fillRect(x + 1 * S,  baseY - 16 * S, 5 * S, 16 * S - legBob);
+  const isWalking = state === 'walking';
+  const bob       = isWalking ? Math.sin(t * 6 + seed) * 2.5 : 0;
+  const py        = y + bob;
 
-  // body
-  ctx.fillStyle = '#0b1628';
-  roundRect(ctx, x - 8 * S, baseY - 38 * S, 16 * S, 22 * S, 3);
-  ctx.fill();
-
-  // arms
-  if (lookUp) {
-    ctx.fillStyle = '#091320';
-    ctx.fillRect(x - 12 * S, baseY - 34 * S, 5 * S, 12 * S);
-    ctx.save();
-    ctx.translate(x + 8 * S, baseY - 36 * S);
-    ctx.rotate(-1.1 + Math.sin(t * 0.6 + seed) * 0.05);
-    ctx.fillRect(-2.5 * S, 0, 5 * S, 14 * S);
-    ctx.restore();
-  } else {
-    const armSway = Math.sin(t * 0.9 + seed * 0.7) * 0.14;
-    ctx.fillStyle = '#091320';
-    ctx.save();
-    ctx.translate(x - 10 * S, baseY - 36 * S);
-    ctx.rotate(armSway);
-    ctx.fillRect(-2.5 * S, 0, 5 * S, 13 * S);
-    ctx.restore();
-    ctx.save();
-    ctx.translate(x + 10 * S, baseY - 36 * S);
-    ctx.rotate(-armSway);
-    ctx.fillRect(-2.5 * S, 0, 5 * S, 13 * S);
-    ctx.restore();
+  // Forward lean while working
+  const leanAmt = state === 'working' ? 0.13 + Math.sin(t * 1.8 + seed) * 0.04 : 0;
+  ctx.save();
+  if (leanAmt > 0) {
+    ctx.translate(x, py);
+    ctx.rotate(facing * leanAmt);
+    ctx.translate(-x, -py);
   }
 
-  // head / helmet
-  ctx.beginPath();
-  ctx.arc(x, baseY - 44 * S, 7 * S, 0, Math.PI * 2);
-  ctx.fillStyle = '#0b1628';
+  // Legs
+  const legSwing = isWalking ? Math.sin(t * 6 + seed) * 5 : 0;
+  [[-6 * S, legSwing], [6 * S, -legSwing]].forEach(([lx, swing]) => {
+    roundRect(ctx, x + lx - 4 * S, py - 2 + 14 * S + Math.abs(swing * 0.25), 9 * S, 5, 2);
+    ctx.fillStyle = 'rgba(22,42,88,0.92)';
+    ctx.fill();
+    ctx.fillStyle = 'rgba(45,80,150,0.90)';
+    ctx.fillRect(x + lx - 3.5 * S, py - 2, 7 * S, 14 * S + Math.abs(swing * 0.2));
+  });
+
+  // Body (radial gradient matching the player's suit)
+  const bodyGrad = ctx.createRadialGradient(x, py - 14 * S, 1, x, py - 14 * S, 16 * S);
+  bodyGrad.addColorStop(0, 'rgba(110,160,220,0.92)');
+  bodyGrad.addColorStop(1, 'rgba(40,80,150,0.92)');
+  ctx.fillStyle = bodyGrad;
+  roundRect(ctx, x - 11 * S, py - 26 * S, 22 * S, 24 * S, 5);
   ctx.fill();
 
-  // visor glint
-  const visorA = 0.18 + 0.07 * Math.sin(t * 1.5 + seed);
+  // Backpack (on the side opposite to facing direction)
+  ctx.fillStyle = 'rgba(25,50,105,0.85)';
+  roundRect(ctx, x + (facing >= 0 ? -14 * S : 3 * S), py - 24 * S, 5 * S, 18 * S, 2);
+  ctx.fill();
+
+  // Arms
+  ctx.fillStyle = 'rgba(40,75,145,0.90)';
+  if (state === 'reacting') {
+    const rd   = reactDir || 1;
+    const frac = 1 - Math.max(0, npc.reactTimer / NPC_REACT_DUR);
+    const raiseAngle = -1.05 * Math.min(1, frac * 2.5);
+    ctx.save();
+    ctx.translate(x + rd * 10 * S, py - 24 * S);
+    ctx.rotate(raiseAngle);
+    ctx.fillRect(-3 * S, 0, 6 * S, 12 * S);
+    ctx.restore();
+    ctx.fillRect(x - rd * 10 * S - 3 * S, py - 24 * S, 6 * S, 12 * S);
+  } else if (state === 'working') {
+    const reachAngle = Math.sin(t * 1.8 + seed) * 0.20 + 0.18;
+    ctx.save();
+    ctx.translate(x + facing * 10 * S, py - 24 * S);
+    ctx.rotate(reachAngle);
+    ctx.fillRect(-3 * S, 0, 6 * S, 12 * S);
+    ctx.restore();
+    ctx.fillRect(x - facing * 10 * S - 3 * S, py - 24 * S, 6 * S, 12 * S);
+  } else {
+    const armSwing = Math.sin(t * 6 + seed) * 0.22;
+    [[-1, armSwing], [1, -armSwing]].forEach(([side, swing]) => {
+      ctx.save();
+      ctx.translate(x + side * 10 * S, py - 24 * S);
+      ctx.rotate(swing);
+      ctx.fillRect(-3 * S, 0, 6 * S, 12 * S);
+      ctx.restore();
+    });
+  }
+
+  ctx.restore(); // lean
+
+  // Helmet
   ctx.beginPath();
-  ctx.ellipse(x, baseY - 44 * S, 4 * S, 3.5 * S, lookUp ? -0.32 : 0, 0, Math.PI * 2);
-  ctx.fillStyle = `rgba(30, 110, 200, ${visorA.toFixed(3)})`;
+  ctx.arc(x, py - 32 * S, 11 * S, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(35,65,125,0.95)';
+  ctx.fill();
+
+  // Visor — shift toward facing dir; shift toward rocket during reaction
+  const visorShift = state === 'reacting'
+    ? (reactDir || 1) * 1.5 * S
+    : facing * 1.5 * S;
+  ctx.beginPath();
+  ctx.ellipse(x + visorShift, py - 32 * S, 7.5 * S, 6.5 * S, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(10,190,255,0.52)';
+  ctx.fill();
+
+  // Visor highlight
+  ctx.beginPath();
+  ctx.ellipse(x + visorShift - 2, py - 34 * S, 2.5, 2, -0.3, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
   ctx.fill();
 
   ctx.restore();
 }
 
-export function drawCrewFigures(ctx, W, H, t) {
-  const baseY = H * 0.70;
-  const figures = [
-    { x: W * 0.062,                                   lookUp: true,  seed: 1.1 },
-    { x: W * 0.230 + Math.sin(t * 0.22) * W * 0.018, lookUp: false, seed: 3.7 },
-    { x: W * 0.660,                                   lookUp: false, seed: 5.3 },
-    { x: W * 0.928,                                   lookUp: true,  seed: 2.9 },
-  ];
-  figures.forEach(({ x, lookUp, seed }) => {
-    drawSilhouetteFigure(ctx, x, baseY, t, lookUp, seed);
-  });
+export function drawNpcs(ctx, npcs, t) {
+  if (!npcs) return;
+  npcs.forEach(npc => drawNpc(ctx, npc, t));
 }
 
 // ── hangar walls / structure ───────────────────────────────────────────────
