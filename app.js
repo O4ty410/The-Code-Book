@@ -4049,29 +4049,24 @@ function _applyHubBgFloor(fi) {
   var fc = HUB_BG_FC[fi];
   var el = document.getElementById('hub-bg-icon');
   var gl = document.getElementById('hub-bg-glow');
-  var rr = document.getElementById('hub-rings-svg');
   if (el) {
     el.innerHTML = getFloorIcon(fi, 480, fc.h);
-    // Watermark — blurred ghost behind the rings
-    el.style.filter = 'blur(2px) drop-shadow(0 0 10px ' + fc.h + ')';
+    el.style.filter = 'drop-shadow(0 0 60px ' + fc.h + ') drop-shadow(0 0 20px ' + fc.h + ')';
     el.style.opacity = '0';
   }
   if (gl) {
-    gl.style.background = 'radial-gradient(ellipse 70% 70% at 50% 50%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.40) 0%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.16) 38%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.05) 58%,transparent 72%)';
+    gl.style.background = 'radial-gradient(ellipse 70% 70% at 50% 50%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.55) 0%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.22) 38%,rgba(' + fc.r + ',' + fc.g + ',' + fc.b + ',0.07) 58%,transparent 72%)';
     gl.style.opacity = '0';
   }
-  if (rr) rr.setAttribute('stroke', fc.h);
 }
 
 function stopHubBgCycle() {
   _hubBgGen++;
   if (_hubBgTimer) { clearTimeout(_hubBgTimer); _hubBgTimer = null; }
-  var el    = document.getElementById('hub-bg-icon');
-  var gl    = document.getElementById('hub-bg-glow');
-  var rings = document.getElementById('hub-rings');
-  if (el)    el.style.opacity = '0';
-  if (gl)    gl.style.opacity = '0';
-  if (rings) rings.style.opacity = '0';
+  var el = document.getElementById('hub-bg-icon');
+  var gl = document.getElementById('hub-bg-glow');
+  if (el) el.style.opacity = '0';
+  if (gl) gl.style.opacity = '0';
 }
 
 function startHubBgCycle() {
@@ -4081,33 +4076,27 @@ function startHubBgCycle() {
   _applyHubBgFloor(_hubBgFloor);
   requestAnimationFrame(function() {
     if (_hubBgGen !== gen) return;
-    var el    = document.getElementById('hub-bg-icon');
-    var gl    = document.getElementById('hub-bg-glow');
-    var rings = document.getElementById('hub-rings');
-    if (el)    el.style.opacity = '0.14';  // watermark — faint ghost behind rings
-    if (gl)    gl.style.opacity = '1';
-    if (rings) rings.style.opacity = '1';
+    var el = document.getElementById('hub-bg-icon');
+    var gl = document.getElementById('hub-bg-glow');
+    if (el) el.style.opacity = '0.65';
+    if (gl) gl.style.opacity = '1';
     function advance() {
       if (_hubBgGen !== gen) return;
-      var el    = document.getElementById('hub-bg-icon');
-      var gl    = document.getElementById('hub-bg-glow');
-      var rings = document.getElementById('hub-rings');
+      var el = document.getElementById('hub-bg-icon');
+      var gl = document.getElementById('hub-bg-glow');
       if (!el) return;
-      el.style.opacity    = '0';
-      if (gl)    gl.style.opacity    = '0';
-      if (rings) rings.style.opacity = '0';
+      el.style.opacity = '0';
+      if (gl) gl.style.opacity = '0';
       _hubBgTimer = setTimeout(function() {
         if (_hubBgGen !== gen) return;
         _hubBgFloor = (_hubBgFloor + 1) % 7;
         _applyHubBgFloor(_hubBgFloor);
         requestAnimationFrame(function() {
           if (_hubBgGen !== gen) return;
-          var el2    = document.getElementById('hub-bg-icon');
-          var gl2    = document.getElementById('hub-bg-glow');
-          var rings2 = document.getElementById('hub-rings');
-          if (el2)    el2.style.opacity    = '0.14';
-          if (gl2)    gl2.style.opacity    = '1';
-          if (rings2) rings2.style.opacity = '1';
+          var el2 = document.getElementById('hub-bg-icon');
+          var gl2 = document.getElementById('hub-bg-glow');
+          if (el2) el2.style.opacity = '0.65';
+          if (gl2) gl2.style.opacity = '1';
           _hubBgTimer = setTimeout(advance, 7000);
         });
       }, 1500);
@@ -4220,14 +4209,6 @@ function renderLearnHub() {
     '.fc-card:nth-child(5) .holo-icon{animation-duration:3.0s;}' +
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
-    /* Hexagonal concentric ring animations — outer rings brighter (near), inner rings dimmer (far) */
-    '@keyframes hub-ring-breathe{0%,100%{opacity:0.32;}50%{opacity:0.56;}}' +
-    '@keyframes hub-ring-breathe-in{0%,100%{opacity:0.14;}50%{opacity:0.26;}}' +
-    '#hub-ring-0{opacity:0.68;}' +
-    '#hub-ring-1{opacity:0.50;}' +
-    '#hub-ring-2{animation:hub-ring-breathe 5.5s ease-in-out infinite;}' +
-    '#hub-ring-3{opacity:0.30;}' +
-    '#hub-ring-4{animation:hub-ring-breathe-in 3.8s ease-in-out infinite 1.2s;}' +
     '</style>' +
     '<div class="fc-hub">' +
     '<div class="fc-header">' +
