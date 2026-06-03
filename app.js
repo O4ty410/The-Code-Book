@@ -3839,23 +3839,16 @@ function closeFloorModal() {
 function getFloorIcon(fi, sz, color) {
   sz = sz || 44;
   var c = color || 'var(--fc-color)';
-  var isBg = !!color;
-  var fid = (isBg ? 'hfib' : 'hfi') + fi;
-  var flt = isBg
-    ? '<defs><filter id="' + fid + '" x="-100%" y="-100%" width="300%" height="300%">' +
-        '<feGaussianBlur in="SourceGraphic" stdDeviation="5" result="outerGlow"/>' +
-        '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="innerGlow"/>' +
-        '<feMerge><feMergeNode in="outerGlow"/><feMergeNode in="innerGlow"/><feMergeNode in="SourceGraphic"/></feMerge>' +
-      '</filter></defs>'
-    : '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
-        '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
-        '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
-      '</filter></defs>';
+  var fid = (color ? 'hfib' : 'hfi') + fi;
+  var flt = '<defs><filter id="' + fid + '" x="-60%" y="-60%" width="220%" height="220%">' +
+    '<feGaussianBlur in="SourceGraphic" stdDeviation="1.8" result="b"/>' +
+    '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+    '</filter></defs>';
   var open = '<svg viewBox="0 0 48 48" width="' + sz + '" height="' + sz + '" class="holo-icon" style="display:block;margin:0 auto;overflow:visible">' + flt + '<g filter="url(#' + fid + ')">';
   var close = '</g></svg>';
   var s  = ';fill:none;stroke:' + c;
   var sf = 'fill:' + c;
-  var d  = isBg ? ';opacity:0.7' : ';opacity:0.4';
+  var d  = ';opacity:0.4';
 
   var icons = [
     // 0 — Neural Core: hexagonal neural lattice with nodes
@@ -4029,14 +4022,6 @@ function getChallengeIcon(type, color, sz) {
   }
 }
 
-function getFloorIconBg(fi, sz, color) {
-  var svg = getFloorIcon(fi, sz, color);
-  // Double all stroke-width values for the background large icon
-  return svg.replace(/stroke-width[=:]["']?([\d.]+)["']?/g, function(m, w) {
-    var thick = (parseFloat(w) * 2.2).toFixed(1);
-    return m.replace(w, thick);
-  });
-}
 
 // ── Hub background icon cycle ──────────────────────────────────────────────
 var _hubBgTimer = null;
@@ -4056,7 +4041,7 @@ function _applyHubBgFloor(fi) {
   var el = document.getElementById('hub-bg-icon');
   var gl = document.getElementById('hub-bg-glow');
   if (el) {
-    el.innerHTML = getFloorIconBg(fi, 480, fc.h);
+    el.innerHTML = getFloorIcon(fi, 480, fc.h);
     el.style.filter = 'drop-shadow(0 0 60px ' + fc.h + ') drop-shadow(0 0 20px ' + fc.h + ')';
     el.style.opacity = '0';
   }
