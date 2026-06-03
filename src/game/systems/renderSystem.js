@@ -994,19 +994,13 @@ export function drawTrajectoryArc(ctx, cx, rocketGroundY, W, H, t) {
 
 // ── terminal ───────────────────────────────────────────────────────────────
 
-// Terminal screen content lines by terminal id
-const TERMINAL_SCREEN_CONTENT = {
-  power:       ['> STATUS OK',  '> VOLT 24.0V', '> AMP  12.4A', 'ERR 0x00'],
-  fuel:        ['> FUEL  94%',  '> FLOW  OK',   '> PRES 340kPa', 'ERR 0x00'],
-  nav:         ['> LOCK  GPS',  '> ALT  0m',    '> HDG 090°',   'ERR 0x00'],
-  comms:       ['> SIGNAL OK',  '> FREQ 420MHz','> TX READY',   'ERR 0x00'],
-  diagnostics: ['> SCAN  OK',   '> THRM  OK',   '> STRCT OK',   'ERR 0x00'],
-  engine:      ['> IGN  ARMED', '> TEMP  COOL', '> PRES  OK',   'ERR 0x00'],
-};
-
-const TERMINAL_MODEL_NUMBERS = {
-  power: 'TCB-MK2', fuel: 'UNIT-02', nav: 'NAV-01',
-  comms: 'COMM-04', diagnostics: 'DIAG-07', engine: 'ENG-03',
+const TERMINAL_TELEMETRY = {
+  power:       { rows: [['VOLT','11.4kV'],['LOAD','68%'],['AMP','12.4A']], status: 'STANDBY' },
+  fuel:        { rows: [['PRESS','245kPa'],['TEMP','18°C'],['FLOW','OK']], status: 'STANDBY' },
+  nav:         { rows: [['COORD','X-042'],['ALT','000m'],['HDG','090°']], status: 'LOCKED' },
+  comms:       { rows: [['FREQ','24.8GHz'],['SIG','98%'],['TX','READY']], status: 'OFFLINE' },
+  diagnostics: { rows: [['TEMP','62°C'],['CORE','NOM'],['STRCT','OK']], status: 'SCANNING' },
+  engine:      { rows: [['THRUST','000%'],['PRES','OK'],['FUEL','100%']], status: 'IDLE' },
 };
 
 const TERMINAL_GLOW_CONFIG = {
@@ -1018,144 +1012,320 @@ const TERMINAL_GLOW_CONFIG = {
   engine:      { intensity: 0.44, flicker: true,  flickerFreq: 5.2 },
 };
 
-export function drawTerminal(ctx, x, y, label, isNear, t) {
-  // Derive id from label for content lookup
-  const idGuess = Object.keys(TERMINAL_SCREEN_CONTENT).find(
+export function drawTerminal(ctx, x, y, label, isNear, t, isOnline = false) {
+  const idGuess = Object.keys(TERMINAL_TELEMETRY).find(
     (k) => label.toLowerCase().includes(k)
   ) || 'power';
 
-  const w = 68;
-  const h = 80;
+  const w = 90, h = 110;
   const cfg = TERMINAL_GLOW_CONFIG[idGuess] || { intensity: 0.30, flicker: false };
   const flickerMod = cfg.flicker
     ? (0.72 + 0.28 * Math.sin(t * cfg.flickerFreq) * (0.6 + 0.4 * Math.sin(t * 19.1)))
     : 1.0;
   const pulse = (0.6 + 0.4 * Math.sin(t * 2.2)) * flickerMod;
-  const glowRadius = 80 + cfg.intensity * 40;
+  const seed  = idGuess.charCodeAt(0) * 0.41;
 
-  // ambient terminal glow (always-on, intensity varies by terminal type)
+  // Color scheme: amber=near, green=online, blue=idle
+  let cr, cg, cb, vr, vg, vb;
+  if (isNear)        { [cr,cg,cb]=[255,179,71];  [vr,vg,vb]=[255,215,140]; }
+  else if (isOnline) { [cr,cg,cb]=[34,255,136];  [vr,vg,vb]=[110,255,185]; }
+  else               { [cr,cg,cb]=[0,175,255];   [vr,vg,vb]=[140,215,255]; }
+
+  const glowRadius = 90 + cfg.intensity * 50;
+
+  // Ambient glow bloom
   {
-    const ambientA = cfg.intensity * 0.50 * (0.5 + 0.5 * pulse);
+    const ambA = cfg.intensity * 0.45 * (0.5 + 0.5 * pulse);
     const ambG = ctx.createRadialGradient(x, y - h * 0.45, 0, x, y - h * 0.45, glowRadius);
-    ambG.addColorStop(0, `rgba(0, 185, 255, ${ambientA.toFixed(3)})`);
-    ambG.addColorStop(1, 'rgba(0, 185, 255, 0.00)');
+    ambG.addColorStop(0, `rgba(${cr},${cg},${cb},${ambA.toFixed(3)})`);
+    ambG.addColorStop(1, `rgba(${cr},${cg},${cb},0.000)`);
     ctx.fillStyle = ambG;
     ctx.beginPath();
-    ctx.ellipse(x, y - h * 0.45, glowRadius, glowRadius * 0.75, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y - h * 0.45, glowRadius, glowRadius * 0.7, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // outer glow when near
+  // Proximity halo
   if (isNear) {
-    const g = ctx.createRadialGradient(x, y, 0, x, y, 90);
-    g.addColorStop(0, `rgba(0, 220, 255, ${(0.18 * pulse).toFixed(2)})`);
-    g.addColorStop(1, 'rgba(0, 220, 255, 0.00)');
-    ctx.fillStyle = g;
+    const hg = ctx.createRadialGradient(x, y, 0, x, y, 110);
+    hg.addColorStop(0, `rgba(${cr},${cg},${cb},${(0.14 * pulse).toFixed(2)})`);
+    hg.addColorStop(1, `rgba(${cr},${cg},${cb},0.000)`);
+    ctx.fillStyle = hg;
     ctx.beginPath();
-    ctx.ellipse(x, y, 90, 70, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y, 110, 80, 0, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // stand
-  ctx.fillStyle = 'rgba(30, 55, 100, 0.90)';
-  ctx.fillRect(x - 5, y, 10, 30);
-  ctx.fillRect(x - 18, y + 26, 36, 8);
+  // ── Pedestal ─────────────────────────────────────────────────────────────
+  const stemG = ctx.createLinearGradient(x - 5, 0, x + 5, 0);
+  stemG.addColorStop(0, 'rgba(18,45,88,0.95)');
+  stemG.addColorStop(0.5, 'rgba(38,75,138,0.95)');
+  stemG.addColorStop(1, 'rgba(18,45,88,0.95)');
+  ctx.fillStyle = stemG;
+  ctx.fillRect(x - 4, y, 8, 26);
 
-  // ── cable from terminal base ─────────────────────────────────────────────
-  ctx.strokeStyle = 'rgba(40, 60, 80, 0.6)';
+  ctx.fillStyle = 'rgba(28,58,106,0.92)';
+  ctx.beginPath();
+  ctx.moveTo(x - 4, y + 2); ctx.lineTo(x - 18, y + 20); ctx.lineTo(x - 18, y + 27);
+  ctx.lineTo(x - 14, y + 27); ctx.lineTo(x - 2, y + 8); ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(x + 4, y + 2); ctx.lineTo(x + 18, y + 20); ctx.lineTo(x + 18, y + 27);
+  ctx.lineTo(x + 14, y + 27); ctx.lineTo(x + 2, y + 8); ctx.closePath();
+  ctx.fill();
+
+  const baseG = ctx.createLinearGradient(x - 24, y + 22, x + 24, y + 32);
+  baseG.addColorStop(0, 'rgba(12,32,72,0.98)');
+  baseG.addColorStop(0.5, `rgba(${cr},${cg},${cb},0.12)`);
+  baseG.addColorStop(1, 'rgba(12,32,72,0.98)');
+  ctx.fillStyle = baseG;
+  roundRect(ctx, x - 24, y + 22, 48, 10, 3);
+  ctx.fill();
+  ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.22)`;
+  ctx.lineWidth = 1;
+  roundRect(ctx, x - 24, y + 22, 48, 10, 3);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(28,48,72,0.50)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(x, y + 34);
-  ctx.quadraticCurveTo(x + 20, y + 60, x + 40, y + 80);
+  ctx.moveTo(x, y + 32);
+  ctx.quadraticCurveTo(x + 20, y + 55, x + 40, y + 78);
   ctx.stroke();
 
-  // screen body
-  const bodyGrad = ctx.createLinearGradient(x - w / 2, y - h, x + w / 2, y);
-  bodyGrad.addColorStop(0, 'rgba(20, 50, 100, 0.95)');
-  bodyGrad.addColorStop(1, 'rgba(15, 35, 75,  0.95)');
-  ctx.fillStyle = bodyGrad;
-  roundRect(ctx, x - w / 2, y - h, w, h, 6);
+  // ── Panel body ────────────────────────────────────────────────────────────
+  const bx = x - w / 2, by = y - h;
+  const panelG = ctx.createLinearGradient(bx, by, bx + w, by + h);
+  panelG.addColorStop(0, 'rgba(6,18,46,0.97)');
+  panelG.addColorStop(0.5, 'rgba(9,22,54,0.97)');
+  panelG.addColorStop(1, 'rgba(5,13,38,0.97)');
+  ctx.fillStyle = panelG;
+  roundRect(ctx, bx, by, w, h, 7);
   ctx.fill();
 
-  // screen border glow
-  const borderAlpha = isNear ? (0.55 + 0.45 * pulse).toFixed(2) : (cfg.intensity * pulse).toFixed(2);
-  ctx.strokeStyle = `rgba(0, 200, 255, ${borderAlpha})`;
-  ctx.lineWidth   = 1.5;
-  roundRect(ctx, x - w / 2, y - h, w, h, 6);
+  const borderA = isNear ? Math.min(0.95, 0.75 + 0.25 * pulse)
+    : isOnline ? (0.50 + 0.22 * pulse)
+    : (cfg.intensity * 0.9 * pulse);
+  ctx.strokeStyle = `rgba(${cr},${cg},${cb},${borderA.toFixed(2)})`;
+  ctx.lineWidth = isNear ? 1.8 : 1.5;
+  roundRect(ctx, bx, by, w, h, 7);
   ctx.stroke();
 
-  // screen interior
-  const screenGrad = ctx.createLinearGradient(x - w / 2 + 6, y - h + 6, x + w / 2 - 6, y - 6);
-  screenGrad.addColorStop(0, 'rgba(0, 60, 100, 0.90)');
-  screenGrad.addColorStop(1, 'rgba(0, 30, 60,  0.90)');
-  ctx.fillStyle = screenGrad;
-  roundRect(ctx, x - w / 2 + 6, y - h + 6, w - 12, h - 12, 4);
-  ctx.fill();
+  // Top highlight
+  ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.10)`;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(bx + 8, by + 1);
+  ctx.lineTo(bx + w - 8, by + 1);
+  ctx.stroke();
 
-  // scan lines
-  ctx.fillStyle = 'rgba(0, 200, 255, 0.05)';
-  for (let ly = y - h + 8; ly < y - 8; ly += 4) {
-    ctx.fillRect(x - w / 2 + 7, ly, w - 14, 2);
-  }
-
-  // ── code lines on screen ─────────────────────────────────────────────────
-  const lines = TERMINAL_SCREEN_CONTENT[idGuess] || TERMINAL_SCREEN_CONTENT.power;
-  ctx.font = '8px Courier New, monospace';
-  ctx.textAlign = 'left';
-  lines.forEach((line, i) => {
-    const lineAlpha = isNear ? 0.80 : 0.55;
-    const isErr = line.startsWith('ERR');
-    ctx.fillStyle = isErr
-      ? `rgba(255, 80, 80, ${lineAlpha})`
-      : `rgba(0, 255, 180, ${lineAlpha})`;
-    ctx.fillText(line, x - w / 2 + 8, y - h + 14 + i * 12);
+  // Corner accent marks
+  const cl = 6;
+  ctx.strokeStyle = `rgba(${cr},${cg},${cb},${(0.22 * pulse).toFixed(2)})`;
+  ctx.lineWidth = 1;
+  [[bx,by],[bx+w,by],[bx,by+h],[bx+w,by+h]].forEach(([cx_,cy_],i) => {
+    const sx_ = i === 1 || i === 3 ? -1 : 1;
+    const sy_ = i === 2 || i === 3 ? -1 : 1;
+    ctx.beginPath();
+    ctx.moveTo(cx_ + sx_ * 1, cy_ + sy_ * (cl + 1));
+    ctx.lineTo(cx_ + sx_ * 1, cy_ + sy_ * 1);
+    ctx.lineTo(cx_ + sx_ * (cl + 1), cy_ + sy_ * 1);
+    ctx.stroke();
   });
 
-  // blinking cursor (kept for compatibility, drawn after code lines)
-  const blink = Math.floor(t * 1.5) % 2 === 0;
-  if (blink) {
-    ctx.fillStyle = `rgba(0, 220, 255, ${isNear ? '0.9' : '0.55'})`;
-    ctx.fillRect(x - 14, y - 20, 8, 2);
-  }
-
-  // ── status LED top-right of screen ───────────────────────────────────────
-  const ledX = x + w / 2 - 10;
-  const ledY  = y - h + 10;
-  let ledColor;
-  if (isNear) {
-    // Rapidly blinking amber when player is right next to it
-    const rapidBlink = Math.floor(t * 4) % 2 === 0;
-    ledColor = rapidBlink ? 'rgba(255, 180, 0, 0.95)' : 'rgba(255, 180, 0, 0.20)';
-  } else {
-    ledColor = 'rgba(0, 220, 80, 0.85)'; // green when idle
-  }
-  ctx.beginPath();
-  ctx.arc(ledX, ledY, 3, 0, Math.PI * 2);
-  ctx.fillStyle = ledColor;
+  // ── Screen interior ───────────────────────────────────────────────────────
+  const sx = bx + 6, sy = by + 6, sw = w - 12, sh = h - 12;
+  const screenG = ctx.createLinearGradient(sx, sy, sx + sw, sy + sh);
+  screenG.addColorStop(0, 'rgba(0,16,48,0.96)');
+  screenG.addColorStop(1, 'rgba(0,9,28,0.96)');
+  ctx.fillStyle = screenG;
+  roundRect(ctx, sx, sy, sw, sh, 4);
   ctx.fill();
 
-  // ── screen glare ellipse ─────────────────────────────────────────────────
-  ctx.save();
-  ctx.translate(x - w / 2 + 12, y - h + 14);
-  ctx.rotate(-0.52); // ~30 deg
+  // Horizontal scanlines
+  ctx.fillStyle = `rgba(${cr},${cg},${cb},0.022)`;
+  for (let ly = sy + 2; ly < sy + sh - 2; ly += 3) {
+    ctx.fillRect(sx + 2, ly, sw - 4, 1.5);
+  }
+
+  // Vertical scan sweep
+  const sweepY = sy + ((t * 26) % sh);
+  const sweepG = ctx.createLinearGradient(0, sweepY - 8, 0, sweepY + 8);
+  sweepG.addColorStop(0, `rgba(${cr},${cg},${cb},0.000)`);
+  sweepG.addColorStop(0.5, `rgba(${cr},${cg},${cb},0.055)`);
+  sweepG.addColorStop(1, `rgba(${cr},${cg},${cb},0.000)`);
+  ctx.fillStyle = sweepG;
+  ctx.fillRect(sx, Math.max(sy, sweepY - 8), sw, 16);
+
+  // ── Header ───────────────────────────────────────────────────────────────
+  const hdrY = sy + 12;
+  const sysName = idGuess === 'diagnostics' ? 'DIAG' : idGuess.toUpperCase();
+  ctx.font = 'bold 7px Courier New, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = `rgba(${cr},${cg},${cb},${isNear ? 0.95 : 0.72})`;
+  ctx.fillText(sysName, sx + 5, hdrY);
+
+  const telData = TERMINAL_TELEMETRY[idGuess];
+  const statusTxt = isOnline ? 'ONLINE' : (telData ? telData.status : 'STANDBY');
+  const [stR, stG, stB] = isOnline ? [34,255,136] : [255,179,71];
+  ctx.font = '6px Courier New, monospace';
+  ctx.textAlign = 'right';
+  ctx.fillStyle = `rgba(${stR},${stG},${stB},0.80)`;
+  ctx.fillText(statusTxt, sx + sw - 4, hdrY);
+
+  ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.18)`;
+  ctx.lineWidth = 0.75;
   ctx.beginPath();
-  ctx.ellipse(0, 0, 8, 4, 0, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+  ctx.moveTo(sx + 4, hdrY + 4);
+  ctx.lineTo(sx + sw - 4, hdrY + 4);
+  ctx.stroke();
+
+  // ── Telemetry rows ────────────────────────────────────────────────────────
+  const rows = telData ? telData.rows : [['--','---'],['--','---'],['--','---']];
+  const rowStartY = hdrY + 16;
+  const rowH = 13;
+  rows.forEach(([key, val], i) => {
+    const ry = rowStartY + i * rowH;
+    ctx.font = '6px Courier New, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = `rgba(${cr},${cg},${cb},0.45)`;
+    ctx.fillText(key, sx + 5, ry);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = `rgba(${vr},${vg},${vb},${isNear ? 0.95 : 0.82})`;
+    ctx.fillText(val, sx + sw - 5, ry);
+    if (i < rows.length - 1) {
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.07)`;
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(sx + 4, ry + 5);
+      ctx.lineTo(sx + sw - 4, ry + 5);
+      ctx.stroke();
+    }
+  });
+
+  // ── Waveform graph ────────────────────────────────────────────────────────
+  const wfTop = rowStartY + rows.length * rowH + 6;
+  const wfHgt = 16;
+  const wfMid = wfTop + wfHgt / 2;
+  ctx.fillStyle = `rgba(${cr},${cg},${cb},0.055)`;
+  roundRect(ctx, sx + 3, wfTop, sw - 6, wfHgt, 2);
+  ctx.fill();
+
+  const wfX0 = sx + 5, wfX1 = sx + sw - 5;
+  const wfWidth = wfX1 - wfX0;
+  const amp = wfHgt * 0.34 * (isOnline ? 1.0 : 0.38);
+  for (let pass = 0; pass < 2; pass++) {
+    ctx.beginPath();
+    for (let i = 0; i <= 30; i++) {
+      const px = wfX0 + (i / 30) * wfWidth;
+      const ph = (i / 30) * Math.PI * 5 + t * 2.1 + seed;
+      const py = wfMid + Math.sin(ph) * amp * (0.8 + 0.2 * Math.sin(ph * 0.6 + t * 0.7));
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    if (pass === 0) {
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},${isNear ? 0.90 : isOnline ? 0.75 : 0.40})`;
+      ctx.lineWidth = 1.2;
+    } else {
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.12)`;
+      ctx.lineWidth = 3;
+    }
+    ctx.stroke();
+  }
+  ctx.lineWidth = 1;
+
+  // ── LED indicator ─────────────────────────────────────────────────────────
+  const ledX = bx + w - 10, ledY = by + 10;
+  let ledClr;
+  if (isNear) {
+    const blinkLed = Math.floor(t * 4) % 2 === 0;
+    ledClr = blinkLed ? 'rgba(255,179,71,0.95)' : 'rgba(255,179,71,0.12)';
+  } else if (isOnline) {
+    ledClr = `rgba(34,255,136,${(0.80 + 0.20 * pulse).toFixed(2)})`;
+  } else {
+    ledClr = `rgba(0,175,255,${(0.55 + 0.25 * pulse).toFixed(2)})`;
+  }
+  const ledGlowG = ctx.createRadialGradient(ledX, ledY, 0, ledX, ledY, 7);
+  ledGlowG.addColorStop(0, ledClr);
+  ledGlowG.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = ledGlowG;
+  ctx.beginPath();
+  ctx.arc(ledX, ledY, 7, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(ledX, ledY, 2.5, 0, Math.PI * 2);
+  ctx.fillStyle = ledClr;
+  ctx.fill();
+
+  // Screen glare
+  ctx.save();
+  ctx.translate(sx + 14, sy + 10);
+  ctx.rotate(-0.52);
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 10, 5, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.045)';
   ctx.fill();
   ctx.restore();
 
-  // label
-  ctx.fillStyle = `rgba(160, 220, 255, ${isNear ? '0.90' : '0.55'})`;
-  ctx.font      = `bold 9px 'Courier New', monospace`;
+  // ── Label ─────────────────────────────────────────────────────────────────
+  ctx.fillStyle = `rgba(${cr},${cg},${cb},${isNear ? 0.95 : isOnline ? 0.70 : 0.50})`;
+  ctx.font = `bold 8px 'Courier New', monospace`;
   ctx.textAlign = 'center';
   ctx.fillText(label.toUpperCase(), x, y + 42);
+}
 
-  // ── model number text below label ────────────────────────────────────────
-  const modelNum = TERMINAL_MODEL_NUMBERS[idGuess] || 'UNIT-01';
-  ctx.fillStyle = 'rgba(100, 130, 180, 0.4)';
-  ctx.font = '7px Courier New, monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(modelNum, x, y + 52);
+// Glowing elliptical halo ring at the launch pad base
+export function drawLaunchPadRing(ctx, cx, groundY, t) {
+  const rx = 88, ry = 20;
+  const pulse = 0.65 + 0.35 * Math.sin(t * 1.6);
+
+  // Layered outer glow
+  for (let i = 4; i >= 1; i--) {
+    ctx.beginPath();
+    ctx.ellipse(cx, groundY, rx + i * 14, ry + i * 3, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(0,175,255,${(0.04 * pulse / i).toFixed(3)})`;
+    ctx.lineWidth = i * 5;
+    ctx.stroke();
+  }
+
+  // Core ring with horizontal gradient fade
+  ctx.beginPath();
+  ctx.ellipse(cx, groundY, rx, ry, 0, 0, Math.PI * 2);
+  const ringG = ctx.createLinearGradient(cx - rx, groundY, cx + rx, groundY);
+  ringG.addColorStop(0.00, 'rgba(0,175,255,0.00)');
+  ringG.addColorStop(0.20, `rgba(0,175,255,${(0.85 * pulse).toFixed(2)})`);
+  ringG.addColorStop(0.50, `rgba(100,220,255,${(0.95 * pulse).toFixed(2)})`);
+  ringG.addColorStop(0.80, `rgba(0,175,255,${(0.85 * pulse).toFixed(2)})`);
+  ringG.addColorStop(1.00, 'rgba(0,175,255,0.00)');
+  ctx.strokeStyle = ringG;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Inner fill
+  const fillG = ctx.createRadialGradient(cx, groundY, 0, cx, groundY, rx);
+  fillG.addColorStop(0, `rgba(0,175,255,${(0.06 * pulse).toFixed(3)})`);
+  fillG.addColorStop(0.6, `rgba(0,175,255,${(0.025 * pulse).toFixed(3)})`);
+  fillG.addColorStop(1, 'rgba(0,175,255,0.000)');
+  ctx.fillStyle = fillG;
+  ctx.beginPath();
+  ctx.ellipse(cx, groundY, rx, ry, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Tick marks
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 12; i++) {
+    const ang = (i / 12) * Math.PI * 2;
+    const tx0 = cx + Math.cos(ang) * rx;
+    const ty0 = groundY + Math.sin(ang) * ry;
+    const tx1 = cx + Math.cos(ang) * (rx - 5);
+    const ty1 = groundY + Math.sin(ang) * (ry - 1.5);
+    ctx.beginPath();
+    ctx.moveTo(tx0, ty0);
+    ctx.lineTo(tx1, ty1);
+    ctx.strokeStyle = `rgba(0,175,255,${(0.45 * pulse).toFixed(2)})`;
+    ctx.lineWidth = i % 3 === 0 ? 1.5 : 0.75;
+    ctx.stroke();
+  }
+  ctx.lineWidth = 1;
 }
 
 // ── player (astronaut) ─────────────────────────────────────────────────────
