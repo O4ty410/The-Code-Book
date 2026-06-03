@@ -151,22 +151,26 @@ export function drawFloor(ctx, W, H, cx, t) {
   const cols    = 20;
   const vp      = { x: W / 2, y: horizon };
 
-  ctx.strokeStyle = 'rgba(40, 100, 180, 0.22)';
-  ctx.lineWidth   = 1;
-
-  // horizontal lines
+  // horizontal lines — brighter near camera, fade toward horizon
   for (let i = 0; i <= lines; i++) {
     const ti = i / lines;
     const y  = horizon + (H - horizon) * Math.pow(ti, 1.8);
+    const alpha = 0.12 + 0.38 * Math.pow(ti, 0.6);
+    ctx.strokeStyle = `rgba(40,140,255,${alpha.toFixed(2)})`;
+    ctx.lineWidth   = 0.8 + ti * 0.6;
     ctx.beginPath();
     ctx.moveTo(0, y);
     ctx.lineTo(W, y);
     ctx.stroke();
   }
 
-  // vertical lines converging at vp
+  // vertical lines converging at vp — brighter toward centre
   for (let i = 0; i <= cols; i++) {
     const x = (i / cols) * W;
+    const distCentre = Math.abs(i / cols - 0.5) * 2;
+    const alpha = 0.30 - distCentre * 0.14;
+    ctx.strokeStyle = `rgba(40,140,255,${Math.max(0.06, alpha).toFixed(2)})`;
+    ctx.lineWidth = 0.75;
     ctx.beginPath();
     ctx.moveTo(vp.x + (x - vp.x) * 0.01, horizon);
     ctx.lineTo(x, H);
@@ -995,12 +999,12 @@ export function drawTrajectoryArc(ctx, cx, rocketGroundY, W, H, t) {
 // ── terminal ───────────────────────────────────────────────────────────────
 
 const TERMINAL_TELEMETRY = {
-  power:       { rows: [['VOLT','11.4kV'],['LOAD','68%'],['AMP','12.4A']], status: 'STANDBY' },
-  fuel:        { rows: [['PRESS','245kPa'],['TEMP','18°C'],['FLOW','OK']], status: 'STANDBY' },
-  nav:         { rows: [['COORD','X-042'],['ALT','000m'],['HDG','090°']], status: 'LOCKED' },
-  comms:       { rows: [['FREQ','24.8GHz'],['SIG','98%'],['TX','READY']], status: 'OFFLINE' },
-  diagnostics: { rows: [['TEMP','62°C'],['CORE','NOM'],['STRCT','OK']], status: 'SCANNING' },
-  engine:      { rows: [['THRUST','000%'],['PRES','OK'],['FUEL','100%']], status: 'IDLE' },
+  power:       { rows: [['VOLT','11.4kV'],['LOAD','68%']],   status: 'STANDBY',  onlineStatus: 'ONLINE'     },
+  fuel:        { rows: [['PRESS','245kPa'],['TEMP','18°C']], status: 'STANDBY',  onlineStatus: 'ONLINE'     },
+  nav:         { rows: [['COORD','X-42'],['SPEED','000']],   status: 'LOCKED',   onlineStatus: 'CALIBRATED' },
+  comms:       { rows: [['FREQ','24.8GHz'],['SIG','98%']],   status: 'OFFLINE',  onlineStatus: 'ONLINE'     },
+  diagnostics: { rows: [['TEMP','62°C'],['CORE','NOMINAL']], status: 'HEALTHY',  onlineStatus: 'NOMINAL'    },
+  engine:      { rows: [['THRUST','000%'],['FUEL','100%']],  status: 'IDLE',     onlineStatus: 'ARMED'      },
 };
 
 const TERMINAL_GLOW_CONFIG = {
@@ -1180,32 +1184,58 @@ export function drawTerminal(ctx, x, y, label, isNear, t, isOnline = false) {
   ctx.lineTo(sx + sw - 4, hdrY + 4);
   ctx.stroke();
 
-  // ── Telemetry rows ────────────────────────────────────────────────────────
-  const rows = telData ? telData.rows : [['--','---'],['--','---'],['--','---']];
+  // ── Telemetry rows (2 rows with bullet dots) ─────────────────────────────
+  const rows = telData ? telData.rows : [['--','---'],['--','---']];
   const rowStartY = hdrY + 16;
-  const rowH = 13;
-  rows.forEach(([key, val], i) => {
+  const rowH = 14;
+  rows.slice(0, 2).forEach(([key, val], i) => {
     const ry = rowStartY + i * rowH;
+    ctx.beginPath();
+    ctx.arc(sx + 7, ry - 2.5, 1.8, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${cr},${cg},${cb},0.60)`;
+    ctx.fill();
     ctx.font = '6px Courier New, monospace';
     ctx.textAlign = 'left';
-    ctx.fillStyle = `rgba(${cr},${cg},${cb},0.45)`;
-    ctx.fillText(key, sx + 5, ry);
+    ctx.fillStyle = `rgba(${cr},${cg},${cb},0.48)`;
+    ctx.fillText(key, sx + 13, ry);
     ctx.textAlign = 'right';
-    ctx.fillStyle = `rgba(${vr},${vg},${vb},${isNear ? 0.95 : 0.82})`;
+    ctx.fillStyle = `rgba(${vr},${vg},${vb},${isNear ? 0.98 : 0.90})`;
     ctx.fillText(val, sx + sw - 5, ry);
-    if (i < rows.length - 1) {
-      ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.07)`;
-      ctx.lineWidth = 0.5;
-      ctx.beginPath();
-      ctx.moveTo(sx + 4, ry + 5);
-      ctx.lineTo(sx + sw - 4, ry + 5);
-      ctx.stroke();
-    }
+    ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.08)`;
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(sx + 4, ry + 6);
+    ctx.lineTo(sx + sw - 4, ry + 6);
+    ctx.stroke();
   });
 
-  // ── Waveform graph ────────────────────────────────────────────────────────
-  const wfTop = rowStartY + rows.length * rowH + 6;
-  const wfHgt = 16;
+  // ── STATUS row ────────────────────────────────────────────────────────────
+  const statusRowY = rowStartY + 2 * rowH + 5;
+  const displayStatus = isOnline
+    ? (telData ? telData.onlineStatus : 'ONLINE')
+    : (telData ? telData.status : 'STANDBY');
+  ctx.beginPath();
+  ctx.arc(sx + 7, statusRowY - 2.5, 1.8, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(${stR},${stG},${stB},0.70)`;
+  ctx.fill();
+  ctx.font = '6px Courier New, monospace';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = `rgba(${cr},${cg},${cb},0.48)`;
+  ctx.fillText('STATUS', sx + 13, statusRowY);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = `rgba(${stR},${stG},${stB},${isNear ? 0.98 : 0.90})`;
+  ctx.fillText(displayStatus, sx + sw - 5, statusRowY);
+
+  ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.14)`;
+  ctx.lineWidth = 0.75;
+  ctx.beginPath();
+  ctx.moveTo(sx + 4, statusRowY + 5);
+  ctx.lineTo(sx + sw - 4, statusRowY + 5);
+  ctx.stroke();
+
+  // ── Waveform / bar chart ──────────────────────────────────────────────────
+  const wfTop = statusRowY + 8;
+  const wfHgt = 14;
   const wfMid = wfTop + wfHgt / 2;
   ctx.fillStyle = `rgba(${cr},${cg},${cb},0.055)`;
   roundRect(ctx, sx + 3, wfTop, sw - 6, wfHgt, 2);
@@ -1213,25 +1243,40 @@ export function drawTerminal(ctx, x, y, label, isNear, t, isOnline = false) {
 
   const wfX0 = sx + 5, wfX1 = sx + sw - 5;
   const wfWidth = wfX1 - wfX0;
-  const amp = wfHgt * 0.34 * (isOnline ? 1.0 : 0.38);
-  for (let pass = 0; pass < 2; pass++) {
-    ctx.beginPath();
-    for (let i = 0; i <= 30; i++) {
-      const px = wfX0 + (i / 30) * wfWidth;
-      const ph = (i / 30) * Math.PI * 5 + t * 2.1 + seed;
-      const py = wfMid + Math.sin(ph) * amp * (0.8 + 0.2 * Math.sin(ph * 0.6 + t * 0.7));
-      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+
+  if (idGuess === 'fuel') {
+    const numBars = 10;
+    const barW = (wfWidth - (numBars - 1)) / numBars;
+    const maxBarH = wfHgt - 3;
+    const barAlpha = isNear ? 0.80 : isOnline ? 0.65 : 0.28;
+    for (let i = 0; i < numBars; i++) {
+      const bx_ = wfX0 + i * (barW + 1);
+      const barH = Math.max(2, (0.3 + 0.7 * Math.abs(Math.sin(i * 0.95 + t * 0.5 + seed))) * maxBarH * (isOnline ? 1.0 : 0.4));
+      ctx.fillStyle = `rgba(${cr},${cg},${cb},${barAlpha})`;
+      roundRect(ctx, bx_, wfMid + wfHgt / 2 - 1 - barH, barW, barH, 1);
+      ctx.fill();
     }
-    if (pass === 0) {
-      ctx.strokeStyle = `rgba(${cr},${cg},${cb},${isNear ? 0.90 : isOnline ? 0.75 : 0.40})`;
-      ctx.lineWidth = 1.2;
-    } else {
-      ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.12)`;
-      ctx.lineWidth = 3;
+  } else {
+    const amp = wfHgt * 0.33 * (isOnline ? 1.0 : 0.38);
+    for (let pass = 0; pass < 2; pass++) {
+      ctx.beginPath();
+      for (let i = 0; i <= 30; i++) {
+        const px = wfX0 + (i / 30) * wfWidth;
+        const ph = (i / 30) * Math.PI * 5 + t * 2.1 + seed;
+        const py = wfMid + Math.sin(ph) * amp * (0.8 + 0.2 * Math.sin(ph * 0.6 + t * 0.7));
+        i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+      }
+      if (pass === 0) {
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},${isNear ? 0.90 : isOnline ? 0.75 : 0.40})`;
+        ctx.lineWidth = 1.2;
+      } else {
+        ctx.strokeStyle = `rgba(${cr},${cg},${cb},0.12)`;
+        ctx.lineWidth = 3;
+      }
+      ctx.stroke();
     }
-    ctx.stroke();
+    ctx.lineWidth = 1;
   }
-  ctx.lineWidth = 1;
 
   // ── LED indicator ─────────────────────────────────────────────────────────
   const ledX = bx + w - 10, ledY = by + 10;
