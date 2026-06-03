@@ -4078,8 +4078,8 @@ function startHubBgCycle() {
     if (_hubBgGen !== gen) return;
     var el = document.getElementById('hub-bg-icon');
     var gl = document.getElementById('hub-bg-glow');
-    if (el) el.style.opacity = '0.65';
-    if (gl) gl.style.opacity = '1';
+    if (el) el.style.opacity = '0.22';
+    if (gl) gl.style.opacity = '0.55';
     function advance() {
       if (_hubBgGen !== gen) return;
       var el = document.getElementById('hub-bg-icon');
@@ -4095,8 +4095,8 @@ function startHubBgCycle() {
           if (_hubBgGen !== gen) return;
           var el2 = document.getElementById('hub-bg-icon');
           var gl2 = document.getElementById('hub-bg-glow');
-          if (el2) el2.style.opacity = '0.65';
-          if (gl2) gl2.style.opacity = '1';
+          if (el2) el2.style.opacity = '0.22';
+          if (gl2) gl2.style.opacity = '0.55';
           _hubBgTimer = setTimeout(advance, 7000);
         });
       }, 1500);
@@ -4178,7 +4178,7 @@ function renderLearnHub() {
   var html = '<style id="hub-override">' +
     /* Dark scrim between background icon and content — keeps icon visible at edges, creates depth in centre */
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
-    '.fc-hub::before{content:"";position:absolute;inset:-80px -30px -40px;background:radial-gradient(ellipse 72% 78% at 50% 38%,rgba(0,0,0,0.68) 0%,rgba(0,0,0,0.44) 42%,rgba(0,0,0,0.16) 66%,transparent 82%);pointer-events:none;z-index:-1;}' +
+    '.fc-hub::before{content:"";position:absolute;inset:-80px -30px -40px;background:radial-gradient(ellipse 72% 82% at 50% 38%,rgba(0,0,0,0.94) 0%,rgba(0,0,0,0.82) 28%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.20) 70%,transparent 86%);pointer-events:none;z-index:-1;}' +
     /* Header label — dark halo so it reads over any icon colour */
     '.fc-header-label{color:rgba(160,220,255,0.92)!important;letter-spacing:4px!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 14px rgba(0,0,0,0.96),0 0 22px rgba(100,180,255,0.50)!important;}' +
     /* Main title — 3D extruded depth with stacked offset layers + strong glow */
