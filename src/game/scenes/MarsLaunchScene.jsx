@@ -228,18 +228,27 @@ function drawEarth(ctx, cx, cy, r, t) {
       });
       ctx.globalAlpha=1;
     }
+    // ── Shadow terminator (sun top-left → shadow on right) ──
+    ctx.globalAlpha=1;
+    const eShG=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
+    eShG.addColorStop(0,'rgba(0,0,0,0)'); eShG.addColorStop(0.32,'rgba(0,0,0,0)');
+    eShG.addColorStop(0.50,'rgba(0,0,8,0.48)'); eShG.addColorStop(0.70,'rgba(0,0,5,0.78)'); eShG.addColorStop(1,'rgba(0,0,2,0.93)');
+    ctx.fillStyle=eShG; ctx.fillRect(cx-r,cy-r,r*2,r*2);
+    // ── Specular highlight (sun glint, top-left) ──
+    if(r>12){const espx=cx-r*0.26,espy=cy-r*0.28;const espG=ctx.createRadialGradient(espx,espy,0,espx,espy,r*0.54);espG.addColorStop(0,'rgba(255,255,255,0.58)');espG.addColorStop(0.18,'rgba(255,255,255,0.22)');espG.addColorStop(0.48,'rgba(255,255,255,0.04)');espG.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=espG;ctx.fillRect(cx-r,cy-r,r*2,r*2);}
     ctx.restore();
   }
 
-  const at=ctx.createRadialGradient(cx,cy,r*0.82,cx,cy,r*1.36);
-  at.addColorStop(0,'rgba(40,100,255,0.00)'); at.addColorStop(0.25,'rgba(60,150,255,0.26)');
-  at.addColorStop(0.60,'rgba(30,90,210,0.14)'); at.addColorStop(1,'rgba(0,0,0,0.00)');
-  ctx.beginPath(); ctx.arc(cx,cy,r*1.36,0,Math.PI*2); ctx.fillStyle=at; ctx.fill();
+  // ── Atmosphere — bright cyan/blue limb ──
+  const at=ctx.createRadialGradient(cx,cy,r*0.88,cx,cy,r*1.44);
+  at.addColorStop(0,'rgba(40,100,255,0.00)'); at.addColorStop(0.08,'rgba(90,190,255,0.65)');
+  at.addColorStop(0.28,'rgba(55,145,255,0.32)'); at.addColorStop(0.60,'rgba(25,80,200,0.12)'); at.addColorStop(1,'rgba(0,0,0,0.00)');
+  ctx.beginPath(); ctx.arc(cx,cy,r*1.44,0,Math.PI*2); ctx.fillStyle=at; ctx.fill();
 
   if (r>8) {
-    const bl=ctx.createRadialGradient(cx,cy,r*1.05,cx,cy,r*1.65);
-    bl.addColorStop(0,'rgba(40,120,255,0.08)'); bl.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=bl; ctx.beginPath(); ctx.arc(cx,cy,r*1.65,0,Math.PI*2); ctx.fill();
+    const bl=ctx.createRadialGradient(cx,cy,r*1.06,cx,cy,r*1.85);
+    bl.addColorStop(0,'rgba(60,160,255,0.20)'); bl.addColorStop(0.40,'rgba(30,100,220,0.07)'); bl.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=bl; ctx.beginPath(); ctx.arc(cx,cy,r*1.85,0,Math.PI*2); ctx.fill();
   }
 }
 
@@ -275,17 +284,25 @@ function drawMars(ctx, cx, cy, r, t) {
     const dA=0.10+0.06*Math.sin(t*0.38);
     ctx.beginPath(); ctx.ellipse(cx-r*0.08,cy+r*0.12,r*0.62,r*0.22,0.2,0,Math.PI*2);
     ctx.fillStyle=`rgba(218,125,55,${dA.toFixed(3)})`; ctx.fill();
+    // ── Shadow terminator ──
+    const mShG=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
+    mShG.addColorStop(0,'rgba(0,0,0,0)'); mShG.addColorStop(0.34,'rgba(0,0,0,0)');
+    mShG.addColorStop(0.52,'rgba(0,0,0,0.42)'); mShG.addColorStop(0.72,'rgba(0,0,0,0.74)'); mShG.addColorStop(1,'rgba(0,0,0,0.92)');
+    ctx.fillStyle=mShG; ctx.fillRect(cx-r,cy-r,r*2,r*2);
+    // ── Specular highlight (warm sun glint) ──
+    if(r>12){const mspx=cx-r*0.24,mspy=cy-r*0.26;const mspG=ctx.createRadialGradient(mspx,mspy,0,mspx,mspy,r*0.52);mspG.addColorStop(0,'rgba(255,210,160,0.48)');mspG.addColorStop(0.20,'rgba(255,190,130,0.15)');mspG.addColorStop(0.52,'rgba(255,160,80,0.03)');mspG.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=mspG;ctx.fillRect(cx-r,cy-r,r*2,r*2);}
     ctx.restore();
   }
 
-  const ma=ctx.createRadialGradient(cx,cy,r*0.86,cx,cy,r*1.22);
-  ma.addColorStop(0,'rgba(205,82,32,0.00)'); ma.addColorStop(0.35,'rgba(200,75,28,0.15)');
-  ma.addColorStop(0.70,'rgba(180,58,18,0.07)'); ma.addColorStop(1,'rgba(0,0,0,0.00)');
-  ctx.beginPath(); ctx.arc(cx,cy,r*1.22,0,Math.PI*2); ctx.fillStyle=ma; ctx.fill();
+  // ── Atmosphere — warm orange limb ──
+  const ma=ctx.createRadialGradient(cx,cy,r*0.90,cx,cy,r*1.32);
+  ma.addColorStop(0,'rgba(205,82,32,0.00)'); ma.addColorStop(0.10,'rgba(230,100,40,0.55)');
+  ma.addColorStop(0.34,'rgba(200,70,24,0.25)'); ma.addColorStop(0.68,'rgba(160,48,14,0.09)'); ma.addColorStop(1,'rgba(0,0,0,0.00)');
+  ctx.beginPath(); ctx.arc(cx,cy,r*1.32,0,Math.PI*2); ctx.fillStyle=ma; ctx.fill();
   if (r>8) {
-    const mb=ctx.createRadialGradient(cx,cy,r*1.05,cx,cy,r*1.55);
-    mb.addColorStop(0,'rgba(180,60,20,0.10)'); mb.addColorStop(1,'rgba(0,0,0,0)');
-    ctx.fillStyle=mb; ctx.beginPath(); ctx.arc(cx,cy,r*1.55,0,Math.PI*2); ctx.fill();
+    const mb=ctx.createRadialGradient(cx,cy,r*1.06,cx,cy,r*1.65);
+    mb.addColorStop(0,'rgba(210,75,22,0.18)'); mb.addColorStop(0.42,'rgba(160,50,14,0.06)'); mb.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=mb; ctx.beginPath(); ctx.arc(cx,cy,r*1.65,0,Math.PI*2); ctx.fill();
   }
 }
 
@@ -438,22 +455,134 @@ function drawSpeedLines(ctx, W, H, alpha, t) {
     ctx.beginPath(); ctx.moveTo((sd*23.7)%W,y); ctx.lineTo(((sd*23.7)%W)-len,y); ctx.stroke(); }
 }
 
+function drawFilmGrain(ctx, W, H) {
+  ctx.fillStyle='rgba(255,255,255,0.042)';
+  for(let i=0;i<1400;i++) ctx.fillRect(Math.random()*W|0, Math.random()*H|0, 1, 1);
+  ctx.fillStyle='rgba(0,0,0,0.028)';
+  for(let i=0;i<700;i++) ctx.fillRect(Math.random()*W|0, Math.random()*H|0, 1, 1);
+}
+
+function drawGauge(ctx, cx, cy, r, pct, label, valStr, color) {
+  const sa=-Math.PI*0.78, sweep=Math.PI*1.56;
+  ctx.beginPath(); ctx.arc(cx,cy,r,sa,sa+sweep);
+  ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=r*0.20; ctx.lineCap='butt'; ctx.stroke();
+  if(pct>0.005){
+    ctx.beginPath(); ctx.arc(cx,cy,r,sa,sa+pct*sweep);
+    ctx.strokeStyle=color; ctx.lineWidth=r*0.20; ctx.lineCap='round';
+    ctx.shadowBlur=8; ctx.shadowColor=color; ctx.stroke(); ctx.shadowBlur=0;
+  }
+  ctx.fillStyle='rgba(210,235,255,0.92)'; ctx.font=`bold ${Math.round(r*0.38)}px monospace`;
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(valStr,cx,cy);
+  ctx.fillStyle='rgba(100,150,190,0.60)'; ctx.font=`${Math.round(r*0.28)}px monospace`;
+  ctx.textBaseline='alphabetic'; ctx.fillText(label,cx,cy+r*1.22);
+}
+
+function drawGaugeCluster(ctx, W, H, velocity, prog) {
+  const bh=H*0.175, by=H-bh, gr=Math.min(bh*0.30, W*0.030);
+  const gy=by+bh*0.44;
+  const xs=[W*0.345, W*0.425, W*0.505, W*0.585, W*0.665];
+  const velPct=clamp(velocity/37300,0,1);
+  const fuelPct=clamp(0.84-prog*0.09,0,1);
+  const thrPct=clamp(0.76-prog*0.05,0,1);
+  const o2Pct=0.94; const tmpC=21+Math.round(prog*4);
+  drawGauge(ctx,xs[0],gy,gr,velPct,'VEL',`${(velocity/1000).toFixed(1)}k`,'#00e8a4');
+  drawGauge(ctx,xs[1],gy,gr*0.88,fuelPct,'FUEL',`${Math.round(fuelPct*100)}%`,'#00d4ff');
+  drawGauge(ctx,xs[2],gy,gr*1.12,thrPct,'THR',`${Math.round(thrPct*100)}%`,'#f59e0b');
+  drawGauge(ctx,xs[3],gy,gr*0.88,o2Pct,'O2','94%','#22c55e');
+  drawGauge(ctx,xs[4],gy,gr*0.88,0.55+prog*0.10,'TMP',`${tmpC}°C`,'#a78bfa');
+  // Side button columns
+  const fc='rgba(0,180,255,0.14)', bc='rgba(0,200,255,0.60)', bw=W*0.054, tbh=bh*0.23;
+  [['NAV',W*0.226],['HUD',W*0.226],['SYS',W*0.226]].forEach(([l,x],i) => {
+    const ty=by+bh*(0.14+i*0.29);
+    ctx.fillStyle=fc; ctx.fillRect(x,ty,bw,tbh);
+    ctx.strokeStyle='rgba(0,180,255,0.32)'; ctx.lineWidth=0.8; ctx.strokeRect(x,ty,bw,tbh);
+    ctx.fillStyle=bc; ctx.font=`${Math.round(bw*0.22)}px monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(l,x+bw/2,ty+tbh/2);
+  });
+  [['COM',W-W*0.226-bw],['AUX',W-W*0.226-bw],['PWR',W-W*0.226-bw]].forEach(([l,x],i) => {
+    const ty=by+bh*(0.14+i*0.29);
+    ctx.fillStyle=fc; ctx.fillRect(x,ty,bw,tbh);
+    ctx.strokeStyle='rgba(0,180,255,0.32)'; ctx.lineWidth=0.8; ctx.strokeRect(x,ty,bw,tbh);
+    ctx.fillStyle=bc; ctx.font=`${Math.round(bw*0.22)}px monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(l,x+bw/2,ty+tbh/2);
+  });
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // COCKPIT + RETICLE
 // ─────────────────────────────────────────────────────────────────────────────
-function drawCockpit(ctx, W, H, alpha) {
+function drawCockpit(ctx, W, H, alpha, t) {
   if (alpha<0.01) return;
   ctx.save(); ctx.globalAlpha=alpha;
-  const fw=W*0.05,th=H*0.062,bh=H*0.19,fc='rgba(18,28,44,0.97)',rim='rgba(0,200,255,0.30)';
-  ctx.fillStyle=fc; ctx.fillRect(0,0,W,th); ctx.fillRect(0,H-bh,W,bh); ctx.fillRect(0,th,fw,H-th-bh); ctx.fillRect(W-fw,th,fw,H-th-bh);
-  ctx.strokeStyle=rim; ctx.lineWidth=1.5; ctx.shadowBlur=10; ctx.shadowColor='rgba(0,200,255,0.35)';
-  ctx.strokeRect(fw+1,th+1,W-fw*2-2,H-th-bh-2); ctx.shadowBlur=0;
-  [{x:fw+20,c:'#22c55e',l:'SYS'},{x:fw+48,c:'#22c55e',l:'NAV'},{x:fw+76,c:'#f59e0b',l:'THR'},
-   {x:W-fw-76,c:'#22c55e',l:'O2'},{x:W-fw-48,c:'#22c55e',l:'FUL'},{x:W-fw-20,c:'#22c55e',l:'ENG'}]
+  const fc='rgba(5,9,20,0.97)';
+
+  // Window dimensions — wide panoramic
+  const wl=W*0.220, wr=W-W*0.220, wt=H*0.068, wb=H-H*0.175, cr=16;
+
+  // Draw frame with window hole (evenodd composite)
+  ctx.beginPath();
+  ctx.rect(0,0,W,H);
+  ctx.moveTo(wl+cr,wt); ctx.lineTo(wr-cr,wt);
+  ctx.quadraticCurveTo(wr,wt,wr,wt+cr);
+  ctx.lineTo(wr,wb-cr); ctx.quadraticCurveTo(wr,wb,wr-cr,wb);
+  ctx.lineTo(wl+cr,wb); ctx.quadraticCurveTo(wl,wb,wl,wb-cr);
+  ctx.lineTo(wl,wt+cr); ctx.quadraticCurveTo(wl,wt,wl+cr,wt);
+  ctx.closePath();
+  ctx.fillStyle=fc; ctx.fill('evenodd');
+
+  // Window inner rim glow
+  ctx.strokeStyle='rgba(0,190,255,0.38)'; ctx.lineWidth=1.6;
+  ctx.shadowBlur=14; ctx.shadowColor='rgba(0,190,255,0.40)';
+  ctx.beginPath();
+  ctx.moveTo(wl+cr,wt); ctx.lineTo(wr-cr,wt);
+  ctx.quadraticCurveTo(wr,wt,wr,wt+cr);
+  ctx.lineTo(wr,wb-cr); ctx.quadraticCurveTo(wr,wb,wr-cr,wb);
+  ctx.lineTo(wl+cr,wb); ctx.quadraticCurveTo(wl,wb,wl,wb-cr);
+  ctx.lineTo(wl,wt+cr); ctx.quadraticCurveTo(wl,wt,wl+cr,wt);
+  ctx.closePath(); ctx.stroke(); ctx.shadowBlur=0;
+
+  // Left panel — secondary Earth viewport
+  const evx=wl*0.08, evy=H*0.12, evw=wl*0.84, evh=H*0.54, evcr=10;
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(evx+evcr,evy); ctx.lineTo(evx+evw-evcr,evy);
+  ctx.quadraticCurveTo(evx+evw,evy,evx+evw,evy+evcr);
+  ctx.lineTo(evx+evw,evy+evh-evcr); ctx.quadraticCurveTo(evx+evw,evy+evh,evx+evw-evcr,evy+evh);
+  ctx.lineTo(evx+evcr,evy+evh); ctx.quadraticCurveTo(evx,evy+evh,evx,evy+evh-evcr);
+  ctx.lineTo(evx,evy+evcr); ctx.quadraticCurveTo(evx,evy,evx+evcr,evy);
+  ctx.closePath(); ctx.clip();
+  // Stars in viewport
+  ctx.fillStyle='#010610'; ctx.fillRect(evx,evy,evw,evh);
+  for(let i=0;i<55;i++){const sx=(i*47.3+13)%evw+evx,sy=(i*31.7+7)%evh+evy,sr=0.3+((i*7)%10)*0.08;ctx.fillStyle=`rgba(200,220,255,${0.2+(i%5)*0.08})`;ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);ctx.fill();}
+  drawEarth(ctx, evx+evw*0.28, evy+evh*0.68, evw*0.90, t);
+  ctx.restore();
+  // Viewport border
+  ctx.strokeStyle='rgba(0,160,255,0.32)'; ctx.lineWidth=1; ctx.shadowBlur=6; ctx.shadowColor='rgba(0,160,255,0.28)';
+  ctx.beginPath();
+  ctx.moveTo(evx+evcr,evy); ctx.lineTo(evx+evw-evcr,evy);
+  ctx.quadraticCurveTo(evx+evw,evy,evx+evw,evy+evcr);
+  ctx.lineTo(evx+evw,evy+evh-evcr); ctx.quadraticCurveTo(evx+evw,evy+evh,evx+evw-evcr,evy+evh);
+  ctx.lineTo(evx+evcr,evy+evh); ctx.quadraticCurveTo(evx,evy+evh,evx,evy+evh-evcr);
+  ctx.lineTo(evx,evy+evcr); ctx.quadraticCurveTo(evx,evy,evx+evcr,evy);
+  ctx.closePath(); ctx.stroke(); ctx.shadowBlur=0;
+  // EARTH label inside viewport
+  ctx.fillStyle='rgba(0,190,255,0.42)'; ctx.font="8px 'Courier New',monospace"; ctx.textAlign='left';
+  ctx.fillText('EARTH',evx+7,evy+evh-8);
+  // Status lights above viewport
+  [{x:evx+evw*0.20,c:'#22c55e',l:'PWR'},{x:evx+evw*0.50,c:'#22c55e',l:'NAV'},{x:evx+evw*0.80,c:'#f59e0b',l:'THR'}]
   .forEach(({x,c,l}) => {
-    ctx.fillStyle=c; ctx.shadowBlur=5; ctx.shadowColor=c; ctx.beginPath(); ctx.arc(x,th*0.42,3.5,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
-    ctx.fillStyle='rgba(200,220,255,0.50)'; ctx.font='6px monospace'; ctx.textAlign='center'; ctx.fillText(l,x,th*0.82);
+    const iy=evy-18;
+    ctx.fillStyle=c; ctx.shadowBlur=6; ctx.shadowColor=c;
+    ctx.beginPath(); ctx.arc(x,iy,3.5,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
+    ctx.fillStyle='rgba(180,210,240,0.55)'; ctx.font='7px monospace'; ctx.textAlign='center'; ctx.fillText(l,x,iy+11);
   });
+
+  // Frame surface detail — subtle panel lines
+  ctx.strokeStyle='rgba(0,150,220,0.10)'; ctx.lineWidth=0.5;
+  [H*0.25,H*0.50,H*0.75].forEach(y => {
+    if(y<wt||y>wb){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+  });
+
   ctx.restore();
 }
 
@@ -644,12 +773,17 @@ export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
         drawPov(ctx,povR.current,W,H,rawDelta,prog);
         drawChromatic(ctx,W,H,0.035+prog*0.025);
         const mR=lerp(2,Math.min(W,H)*0.22,clamp((prog-0.04)/0.96,0,1));
-        drawMars(ctx,W/2+Math.sin(t*0.08)*W*0.012,H/2+Math.cos(t*0.065)*H*0.008,mR,t);
+        const mPovX=W/2+Math.sin(t*0.08)*W*0.012+cx2*0.05;
+        const mPovY=H/2+Math.cos(t*0.065)*H*0.008+cy2*0.05;
+        drawMars(ctx,mPovX,mPovY,mR,t);
         const mProg=clamp((prog-0.04)/0.96,0,1);
-        if (mProg>0.08) drawReticle(ctx,W/2,H/2,mR,clamp((mProg-0.08)*4,0,1),t);
-        drawCockpit(ctx,W,H,clamp(prog*4,0,1));
-        drawVignette(ctx,W,H,0.45+prog*0.25);
-        drawLabel(ctx,W/2,H*0.042,`POV · VELOCITY ${Math.round(32500+prog*4800).toLocaleString()} m/s`,clamp(prog*3,0,1));
+        if (mProg>0.08) drawReticle(ctx,mPovX,mPovY,mR,clamp((mProg-0.08)*4,0,1),t);
+        const cptA=clamp(prog*4,0,1);
+        drawCockpit(ctx,W,H,cptA,t);
+        if(cptA>0.05) drawGaugeCluster(ctx,W,H,Math.round(32500+prog*4800),prog);
+        drawVignette(ctx,W,H,0.45+prog*0.20);
+        drawFilmGrain(ctx,W,H);
+        drawLabel(ctx,W/2,H*0.036,`POV  ·  VELOCITY ${Math.round(32500+prog*4800).toLocaleString()} m/s`,clamp(prog*3,0,1));
       }
 
       else if (effectiveCam===CAM_FLYBY) {
@@ -666,6 +800,7 @@ export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
         drawRocketOnArc(ctx,W*0.14,H*0.50,W*0.86,H*0.50,prog,t);
         drawSpeedLines(ctx,W,H,clamp(prog*2.5,0,0.6),t);
         drawVignette(ctx,W,H,0.55); drawLetterbox(ctx,W,H);
+        drawFilmGrain(ctx,W,H);
         drawLabel(ctx,W/2,H*0.105,'FLYBY · EARTH–MARS CORRIDOR',0.9);
       }
 
@@ -686,7 +821,7 @@ export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
         osg.addColorStop(0,'rgba(0,220,255,0.7)'); osg.addColorStop(1,'rgba(0,0,0,0)');
         ctx.fillStyle=osg; ctx.beginPath(); ctx.arc(osx,osy,18,0,Math.PI*2); ctx.fill();
         ctx.beginPath(); ctx.arc(osx,osy,4,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.90)'; ctx.fill();
-        drawVignette(ctx,W,H,0.48);
+        drawVignette(ctx,W,H,0.48); drawFilmGrain(ctx,W,H);
         drawLabel(ctx,W/2,34,'ORBITAL OVERVIEW · SOLAR PLANE',0.9);
       }
 
@@ -703,24 +838,27 @@ export default function MarsLaunchScene({ onComplete, onPlayAgain }) {
         const rX2=W/2+Math.sin(t*0.38)*8, rY2=H*0.54+Math.cos(t*0.55)*5;
         ctx.save(); ctx.translate(rX2,rY2); ctx.rotate(-0.10+Math.sin(t*0.28)*0.04);
         drawSpacecraft(ctx,0,0,0,3.0,t); ctx.restore();
-        drawVignette(ctx,W,H,0.52);
+        drawVignette(ctx,W,H,0.52); drawFilmGrain(ctx,W,H);
         drawLabel(ctx,W/2,34,'CHASE CAM · EARTH–MARS TRANSIT',1);
       }
 
-      else { // WIDE
+      else { // WIDE — cinematic: massive Earth left, rocket departing, Mars far right
         drawSpaceBg(ctx,W,H); drawNebula(ctx,W,H,t); drawGalaxies(ctx,W,H);
         drawStarLayer(ctx,s0.current,t,1,cx2*0.15,cy2*0.15);
         drawStarLayer(ctx,s1.current,t,1,cx2*0.08,cy2*0.08);
         drawStarLayer(ctx,s2.current,t,1,cx2*0.03,cy2*0.03);
         drawSun(ctx,W,H,t); drawLightStreaks(ctx,W,H,t,0.5); drawDust(ctx,dustR.current,t,rawDelta,W,H);
-        const eR4=lerp(88,10,prog), eCX4=W*0.15, eCY4=H*0.50;
-        const mP4=clamp((prog-0.08)/0.92,0,1), mR4=lerp(6,70,mP4), mCX4=W*0.85, mCY4=H*0.50;
-        drawEarth(ctx,eCX4,eCY4,eR4,t); drawPlanetLabel(ctx,eCX4,eCY4+eR4+14,'EARTH',1);
+        // Earth: huge at departure, shrinks to small by arrival
+        const eR4=lerp(H*0.64,H*0.07,prog), eCX4=W*0.10+cx2*0.05, eCY4=H*0.53+cy2*0.05;
+        const mP4=clamp((prog-0.06)/0.94,0,1), mR4=lerp(8,H*0.26,mP4), mCX4=W*0.86, mCY4=H*0.46;
+        drawEarth(ctx,eCX4,eCY4,eR4,t);
+        if(eR4<H*0.25) drawPlanetLabel(ctx,eCX4,eCY4+eR4+14,'EARTH',clamp((H*0.25-eR4)/(H*0.10),0,1));
         drawMars(ctx,mCX4,mCY4,mR4,t); drawPlanetLabel(ctx,mCX4,mCY4+mR4+14,'MARS',mP4);
         drawTrajectory(ctx,eCX4,eCY4,mCX4,mCY4,prog,t);
         drawRocketOnArc(ctx,eCX4,eCY4,mCX4,mCY4,prog,t);
         drawVignette(ctx,W,H,0.52); drawLetterbox(ctx,W,H);
-        drawLabel(ctx,W/2,H*0.105,'WIDE SHOT · EARTH → MARS',0.9);
+        drawFilmGrain(ctx,W,H);
+        drawLabel(ctx,W/2,H*0.052,'EARTH – MARS / CINEMATIC TRANSIT',0.9);
       }
 
       // Cinematic events
