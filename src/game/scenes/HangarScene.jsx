@@ -38,8 +38,11 @@ const ACCEL           = 12;
 const TERMINAL_RADIUS = 80;
 const IS_TOUCH        = typeof window !== 'undefined' && (
   window.matchMedia('(pointer: coarse)').matches ||
+  window.matchMedia('(hover: none)').matches ||
   'ontouchstart' in window ||
-  navigator.maxTouchPoints > 0
+  navigator.maxTouchPoints > 0 ||
+  (navigator.msMaxTouchPoints > 0) ||
+  /Android|iPhone|iPad|iPod|Samsung|SamsungBrowser/i.test(navigator.userAgent)
 );
 const STAR_COUNT      = IS_TOUCH ? 55 : 120;
 

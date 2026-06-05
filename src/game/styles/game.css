@@ -2176,11 +2176,14 @@
   border-color: rgba(0, 210, 255, 0.70);
 }
 
-/* ── Mobile touch controls ── */
+/* ── Mobile touch controls ──
+   JS gates rendering via IS_TOUCH, so display:flex by default is correct.
+   Samsung Internet & some Android browsers don't match (pointer:coarse) even
+   on a touchscreen, so we cannot rely on a media query to show this. */
 .mobile-controls {
-  display: none;
+  display: flex;
   position: absolute;
-  bottom: 38px;   /* sit above the 30px status bar */
+  bottom: 38px;
   left: 0;
   right: 0;
   padding: 0 22px;
@@ -2190,12 +2193,11 @@
   z-index: 3;
 }
 
-@media (hover: none) and (pointer: coarse) {
-  .mobile-controls { display: flex; }
+/* On confirmed touch devices also hide the keyboard hint and reposition progress */
+@media (hover: none), (pointer: coarse) {
   .controls-hint   { display: none; }
   .interact-prompt { display: none; }
 
-  /* Move progress panel to top-right so joystick area (bottom-left) is clear */
   .progress-panel {
     bottom: auto;
     top: 56px;
