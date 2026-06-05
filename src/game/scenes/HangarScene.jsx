@@ -105,6 +105,8 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
   const prevWorldRef        = useRef({});
   const [commsLog, setCommsLog] = useState([]);
   const [systemTime, setSystemTime] = useState('--:--:--');
+  const [joyOffset,  setJoyOffset]  = useState({ x: 0, y: 0 });
+  const joyStateRef = useRef({ active: false, cx: 0, cy: 0 });
   useEffect(() => { onLaunchCompleteRef.current = onLaunchComplete; }, [onLaunchComplete]);
   useEffect(() => {
     const tick = () => {
@@ -203,6 +205,45 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [nearTerminal]);
+
+  const JOY_MAX  = 30;
+  const JOY_DEAD = 9;
+
+  const applyJoy = useCallback((tx, ty, cx, cy) => {
+    const dx = tx - cx;
+    const dy = ty - cy;
+    const d  = Math.sqrt(dx * dx + dy * dy);
+    const nx = d > JOY_MAX ? (dx / d) * JOY_MAX : dx;
+    const ny = d > JOY_MAX ? (dy / d) * JOY_MAX : dy;
+    setJoyOffset({ x: nx, y: ny });
+    keys.current['ArrowLeft']  = dx < -JOY_DEAD;
+    keys.current['ArrowRight'] = dx >  JOY_DEAD;
+  }, [keys]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleJoyStart = useCallback((e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect  = e.currentTarget.getBoundingClientRect();
+    const cx    = rect.left + rect.width  / 2;
+    const cy    = rect.top  + rect.height / 2;
+    joyStateRef.current = { active: true, cx, cy };
+    applyJoy(touch.clientX, touch.clientY, cx, cy);
+  }, [applyJoy]);
+
+  const handleJoyMove = useCallback((e) => {
+    e.preventDefault();
+    const j = joyStateRef.current;
+    if (!j.active) return;
+    applyJoy(e.touches[0].clientX, e.touches[0].clientY, j.cx, j.cy);
+  }, [applyJoy]);
+
+  const handleJoyEnd = useCallback((e) => {
+    e.preventDefault();
+    joyStateRef.current.active = false;
+    keys.current['ArrowLeft']  = false;
+    keys.current['ArrowRight'] = false;
+    setJoyOffset({ x: 0, y: 0 });
+  }, [keys]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInteract = useCallback(() => {
     if (!nearTerminal || overlayOpenRef.current || launchPhaseRef.current) return;
@@ -460,26 +501,25 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
 
       {!launchPhase && IS_TOUCH && (
         <div className="mobile-controls">
-          <div className="mobile-dpad">
-            <button
-              className="mobile-btn mobile-btn--left"
-              onTouchStart={(e) => { e.preventDefault(); keys.current['ArrowLeft'] = true; }}
-              onTouchEnd={(e)   => { e.preventDefault(); keys.current['ArrowLeft'] = false; }}
-              onTouchCancel={(e)=> { e.preventDefault(); keys.current['ArrowLeft'] = false; }}
-              aria-label="Move left"
-            >◀</button>
-            <button
-              className="mobile-btn mobile-btn--right"
-              onTouchStart={(e) => { e.preventDefault(); keys.current['ArrowRight'] = true; }}
-              onTouchEnd={(e)   => { e.preventDefault(); keys.current['ArrowRight'] = false; }}
-              onTouchCancel={(e)=> { e.preventDefault(); keys.current['ArrowRight'] = false; }}
-              aria-label="Move right"
-            >▶</button>
+          <div
+            className="mobile-joystick"
+            onTouchStart={handleJoyStart}
+            onTouchMove={handleJoyMove}
+            onTouchEnd={handleJoyEnd}
+            onTouchCancel={handleJoyEnd}
+            aria-label="Move character"
+          >
+            <div
+              className="joystick-nub"
+              style={{ transform: `translate(${joyOffset.x}px, ${joyOffset.y}px)` }}
+            />
           </div>
           {nearLabel && !activeTerminal && (
-            <button className="mobile-btn mobile-btn--interact" onTouchStart={(e) => { e.preventDefault(); handleInteract(); }} aria-label="Interact">
-              E
-            </button>
+            <button
+              className="mobile-btn mobile-btn--interact"
+              onTouchStart={(e) => { e.preventDefault(); handleInteract(); }}
+              aria-label="Interact"
+            >E</button>
           )}
         </div>
       )}
