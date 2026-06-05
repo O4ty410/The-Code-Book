@@ -186,11 +186,16 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
       const W = canvas.clientWidth, H = canvas.clientHeight;
       canvas.width = W; canvas.height = H;
       sizeRef.current = { W, H };
+      const floorY = H * 0.82;
       if (!initDone.current) {
-        player.current = { x: W / 2, y: H * 0.82, vx: 0 };
+        player.current = { x: W / 2, y: floorY, vx: 0 };
         starsRef.current = initStars(STAR_COUNT, W, H);
         dustRef.current  = initDust(IS_TOUCH ? 20 : 55, W, H);
         initDone.current = true;
+      } else {
+        // Re-clamp player to floor whenever canvas resizes (zoom, orientation change)
+        player.current.y = floorY;
+        player.current.x = Math.max(30, Math.min(W - 30, player.current.x));
       }
     }
     resize();
@@ -491,27 +496,21 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
       <canvas ref={canvasRef} className="hangar-canvas" />
       <div className="game-vignette" />
 
-      {/* DEV toggle — remove before shipping */}
-      {!launchPhase && (
-        <button
-          onClick={triggerLaunchNow}
-          style={{
-            position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)',
-            zIndex: 99, padding: '6px 18px',
-            background: 'rgba(255,60,60,0.18)', border: '1px solid rgba(255,80,80,0.55)',
-            color: '#ff7070', fontFamily: 'monospace', fontSize: 11,
-            letterSpacing: 2, textTransform: 'uppercase', borderRadius: 4,
-            cursor: 'pointer', pointerEvents: 'all',
-          }}
-        >
-          ▶ Launch Test
-        </button>
-      )}
-
       {!launchPhase && (
         <div className="hud-overlay">
           <div className="hud-chip">Phase <span>Rocket Builder</span></div>
           <div className="hud-chip">Bay <span>Hangar 1</span></div>
+          {/* DEV toggle — remove before shipping */}
+          <button
+            onClick={triggerLaunchNow}
+            style={{
+              padding: '4px 12px',
+              background: 'rgba(255,60,60,0.18)', border: '1px solid rgba(255,80,80,0.55)',
+              color: '#ff7070', fontFamily: 'monospace', fontSize: 11,
+              letterSpacing: 2, textTransform: 'uppercase', borderRadius: 6,
+              cursor: 'pointer', pointerEvents: 'all',
+            }}
+          >▶ Launch</button>
           {ws.powerRestored     && <div className="hud-chip hud-chip--online">Power       <span>Online</span></div>}
           {ws.fuelOnline        && <div className="hud-chip hud-chip--online">Fuel        <span>Online</span></div>}
           {ws.navCalibrated     && <div className="hud-chip hud-chip--online">Navigation  <span>Online</span></div>}
