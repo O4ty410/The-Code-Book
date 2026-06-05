@@ -270,11 +270,12 @@ function buildScene() {
       pos[i*3]   = r * Math.sin(phi) * Math.cos(theta);
       pos[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
       pos[i*3+2] = r * Math.cos(phi);
-      const warm = Math.random() < 0.07;
-      const cool = Math.random() < 0.06;
-      col[i*3]   = warm ? 1.0 : cool ? 0.72 : 0.88;
-      col[i*3+1] = warm ? 0.80 : cool ? 0.82 : 0.90;
-      col[i*3+2] = warm ? 0.50 : cool ? 1.0 : 1.0;
+      const rnd = Math.random();
+      if(rnd<0.09){col[i*3]=1.0;col[i*3+1]=0.72;col[i*3+2]=0.38;} // orange
+      else if(rnd<0.18){col[i*3]=0.62;col[i*3+1]=0.75;col[i*3+2]=1.0;} // blue
+      else if(rnd<0.25){col[i*3]=0.82;col[i*3+1]=0.48;col[i*3+2]=1.0;} // purple
+      else if(rnd<0.30){col[i*3]=1.0;col[i*3+1]=0.90;col[i*3+2]=0.60;} // warm white
+      else{col[i*3]=0.88;col[i*3+1]=0.90;col[i*3+2]=0.96;} // neutral
     }
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
@@ -373,50 +374,69 @@ function buildScene() {
   );
   mars.add(marsAtm);
 
-  // Spacecraft
+  // Spacecraft — interplanetary design with solar panels and gold MLI wrap
   function buildSpacecraft() {
     const g = new THREE.Group();
-    const silvMat = new THREE.MeshPhongMaterial({ color:0xc8d0e0, specular:0x8899aa, shininess:120 });
-    const redMat  = new THREE.MeshPhongMaterial({ color:0xcc2222, specular:0x441111, shininess:60 });
-    // Body
-    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.10, 0.12, 0.60, 16), silvMat);
-    body.rotation.z = Math.PI/2; g.add(body);
-    // Red stripe
-    const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.101, 0.121, 0.08, 16), redMat);
-    stripe.rotation.z = Math.PI/2; stripe.position.x = -0.10; g.add(stripe);
-    // Nose
-    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.10, 0.28, 16), silvMat);
-    nose.rotation.z = Math.PI/2; nose.position.x = 0.44; g.add(nose);
-    // Engine bell
-    const bell = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.10, 0.14, 16),
-      new THREE.MeshPhongMaterial({color:0x778899, specular:0xaabbcc, shininess:150}));
-    bell.rotation.z = Math.PI/2; bell.position.x = -0.37; g.add(bell);
-    // Fins
-    const finShape = new THREE.Shape();
-    finShape.moveTo(0,0); finShape.lineTo(-0.22,0); finShape.lineTo(-0.22,0.22); finShape.lineTo(0,0.10); finShape.closePath();
-    const finGeo = new THREE.ShapeGeometry(finShape);
-    const finMat = new THREE.MeshPhongMaterial({color:0x8899aa, side:THREE.DoubleSide});
-    [0, Math.PI/2, Math.PI, Math.PI*1.5].forEach(ang => {
-      const fin = new THREE.Mesh(finGeo, finMat);
-      fin.position.x = -0.24; fin.rotation.y = Math.PI/2; fin.rotation.x = ang; g.add(fin);
+    const whiteMat = new THREE.MeshPhongMaterial({color:0xdce8f2,specular:0x99bbcc,shininess:110});
+    const goldMat  = new THREE.MeshPhongMaterial({color:0xc8952a,specular:0xddbb44,shininess:75});
+    const darkMat  = new THREE.MeshPhongMaterial({color:0x384858,specular:0x667788,shininess:65});
+    const bellMat  = new THREE.MeshPhongMaterial({color:0x7a8a9a,specular:0xaabbcc,shininess:190});
+    const panelMat = new THREE.MeshPhongMaterial({color:0x14265a,specular:0x3355aa,shininess:210,side:THREE.DoubleSide});
+    const frameMat = new THREE.MeshPhongMaterial({color:0x6a7800,specular:0x99bb00,shininess:90});
+    // Nose cone
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(0.078,0.22,14),whiteMat);
+    nose.rotation.z=Math.PI/2; nose.position.x=0.58; g.add(nose);
+    // Command module
+    const cmd = new THREE.Mesh(new THREE.CylinderGeometry(0.078,0.078,0.22,14),whiteMat);
+    cmd.rotation.z=Math.PI/2; cmd.position.x=0.36; g.add(cmd);
+    // Connector ring
+    const conn = new THREE.Mesh(new THREE.CylinderGeometry(0.072,0.072,0.09,14),darkMat);
+    conn.rotation.z=Math.PI/2; conn.position.x=0.21; g.add(conn);
+    // Propellant tank — gold MLI insulation wrap
+    const tank = new THREE.Mesh(new THREE.CylinderGeometry(0.130,0.130,0.44,16),goldMat);
+    tank.rotation.z=Math.PI/2; tank.position.x=-0.04; g.add(tank);
+    // Collar ring at tank midpoint (solar panel mount)
+    const collar = new THREE.Mesh(new THREE.CylinderGeometry(0.138,0.138,0.046,16),darkMat);
+    collar.rotation.z=Math.PI/2; collar.position.x=-0.04; g.add(collar);
+    // Service/engine module
+    const svc = new THREE.Mesh(new THREE.CylinderGeometry(0.098,0.118,0.28,14),darkMat);
+    svc.rotation.z=Math.PI/2; svc.position.x=-0.40; g.add(svc);
+    // Solar panels — two wings each side
+    [-1,1].forEach(side => {
+      // Inner panel
+      const pA = new THREE.Mesh(new THREE.BoxGeometry(0.38,0.007,0.18),panelMat);
+      pA.position.set(-0.04,0,side*0.28); g.add(pA);
+      const fA = new THREE.Mesh(new THREE.BoxGeometry(0.40,0.012,0.20),frameMat);
+      fA.position.set(-0.04,0,side*0.28); g.add(fA);
+      // Outer panel (offset further)
+      const pB = new THREE.Mesh(new THREE.BoxGeometry(0.34,0.007,0.17),panelMat);
+      pB.position.set(-0.04,0,side*0.54); g.add(pB);
+      const fB = new THREE.Mesh(new THREE.BoxGeometry(0.36,0.012,0.19),frameMat);
+      fB.position.set(-0.04,0,side*0.54); g.add(fB);
+      // Boom connecting inner to outer
+      const boom = new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,0.18,6),darkMat);
+      boom.position.set(-0.04,0,side*0.41); boom.rotation.x=Math.PI/2; g.add(boom);
+      // Root arm (body to inner panel)
+      const root = new THREE.Mesh(new THREE.CylinderGeometry(0.008,0.008,Math.abs(side*0.14),6),darkMat);
+      root.position.set(-0.04,0,side*0.14); root.rotation.x=Math.PI/2; g.add(root);
     });
-    // Engine plume (dual)
-    const plumeMat = new THREE.MeshBasicMaterial({color:0xff9940, transparent:true, opacity:0.88});
-    [-0.06, 0.06].forEach(oy => {
-      const pGeo = new THREE.ConeGeometry(0.055, 0.45, 8);
-      const pl = new THREE.Mesh(pGeo, plumeMat);
-      pl.position.set(-0.60, oy, 0); pl.rotation.z = Math.PI/2; pl.name='plume'; g.add(pl);
+    // Dual engine bells
+    [-0.055,0.055].forEach(oy => {
+      const bell = new THREE.Mesh(new THREE.CylinderGeometry(0.068,0.046,0.14,14),bellMat);
+      bell.rotation.z=Math.PI/2; bell.position.set(-0.58,oy,0); g.add(bell);
     });
-    // Inner plume (bright core)
-    const innerMat = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.75});
-    [-0.06, 0.06].forEach(oy => {
-      const iGeo = new THREE.ConeGeometry(0.025, 0.22, 8);
-      const ip = new THREE.Mesh(iGeo, innerMat);
-      ip.position.set(-0.52, oy, 0); ip.rotation.z = Math.PI/2; ip.name='plume'; g.add(ip);
+    // Engine plumes (outer + bright core)
+    const plumeMat = new THREE.MeshBasicMaterial({color:0xff8020,transparent:true,opacity:0.88});
+    const innerMat = new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.72});
+    [-0.055,0.055].forEach(oy => {
+      const pl = new THREE.Mesh(new THREE.ConeGeometry(0.054,0.48,8),plumeMat);
+      pl.position.set(-0.84,oy,0); pl.rotation.z=Math.PI/2; pl.name='plume'; g.add(pl);
+      const ip = new THREE.Mesh(new THREE.ConeGeometry(0.023,0.23,8),innerMat);
+      ip.position.set(-0.75,oy,0); ip.rotation.z=Math.PI/2; ip.name='plume'; g.add(ip);
     });
-    // Engine point lights
-    const el1 = new THREE.PointLight(0xff7730, 5.0, 3.5); el1.position.set(-0.65,-0.06,0); g.add(el1);
-    const el2 = new THREE.PointLight(0xff7730, 5.0, 3.5); el2.position.set(-0.65, 0.06,0); g.add(el2);
+    // Engine glow lights
+    const el1=new THREE.PointLight(0xff6010,7.0,5.0); el1.position.set(-0.84,-0.055,0); g.add(el1);
+    const el2=new THREE.PointLight(0xff6010,7.0,5.0); el2.position.set(-0.84, 0.055,0); g.add(el2);
     return g;
   }
   const spacecraft = buildSpacecraft();
@@ -504,6 +524,30 @@ function drawGaugeCluster(ctx, W, H, velocity, prog) {
     ctx.fillStyle=bc; ctx.font=`${Math.round(bw*0.22)}px monospace`; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(l,x+bw/2,ty+tbh/2);
   });
+}
+
+function drawPOVNebula(ctx, W, H, t) {
+  const clouds=[
+    {cx:0.10,cy:0.20,r:0.35,ic:'rgba(95,15,210,0.20)',oc:'rgba(55,5,135,0)',ph:0.0},
+    {cx:0.88,cy:0.54,r:0.32,ic:'rgba(218,68,18,0.18)',oc:'rgba(148,30,6,0)',ph:1.9},
+    {cx:0.48,cy:0.06,r:0.30,ic:'rgba(72,10,192,0.16)',oc:'rgba(40,2,122,0)',ph:3.3},
+    {cx:0.93,cy:0.27,r:0.26,ic:'rgba(225,85,22,0.15)',oc:'rgba(160,42,8,0)',ph:4.8},
+    {cx:0.05,cy:0.80,r:0.28,ic:'rgba(140,28,232,0.17)',oc:'rgba(80,8,165,0)',ph:2.2},
+    {cx:0.66,cy:0.92,r:0.24,ic:'rgba(200,95,30,0.14)',oc:'rgba(130,50,12,0)',ph:5.5},
+    {cx:0.28,cy:0.94,r:0.22,ic:'rgba(118,20,218,0.15)',oc:'rgba(68,6,150,0)',ph:1.3},
+    {cx:0.80,cy:0.03,r:0.28,ic:'rgba(192,78,28,0.15)',oc:'rgba(120,38,10,0)',ph:3.9},
+    {cx:0.50,cy:0.50,r:0.18,ic:'rgba(80,18,180,0.08)',oc:'rgba(40,5,110,0)',ph:6.1},
+  ];
+  ctx.save();
+  ctx.globalCompositeOperation='screen';
+  clouds.forEach(({cx,cy,r,ic,oc,ph})=>{
+    const pulse=0.88+0.12*Math.sin(t*0.22+ph);
+    const x=cx*W,y=cy*H,rad=r*W*pulse;
+    const g=ctx.createRadialGradient(x,y,rad*0.04,x,y,rad);
+    g.addColorStop(0,ic); g.addColorStop(1,oc);
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  });
+  ctx.restore();
 }
 
 function drawCockpitFrame(ctx, W, H, alpha, t) {
@@ -728,10 +772,12 @@ export default function MarsLaunchScene({ onPlayAgain }) {
 
       // Camera per mode
       if(effectiveCam===CAM_POV){
-        const tgtPos=shipPos.clone().add(new THREE.Vector3(0.3,0.15,0));
-        const tgtLook=MARS_POS.clone();
-        camPosRef.current.lerp(tgtPos,lf*0.8); camTgtRef.current.lerp(tgtLook,lf);
-        camera.fov=lerp(52,48,prog); camera.updateProjectionMatrix();
+        // First-person: hide rocket, look straight ahead into the void
+        spacecraft.visible=false;
+        const ahead=trajectoryPos(Math.min(1,prog+0.10));
+        camPosRef.current.lerp(shipPos,Math.min(rawDelta*10,1));
+        camTgtRef.current.lerp(ahead,lf*1.4);
+        camera.fov=40; camera.updateProjectionMatrix();
       }else if(effectiveCam===CAM_CHASE){
         const behind=trajectoryPos(Math.max(0,prog-0.04));
         const tgtPos=new THREE.Vector3(behind.x,behind.y+1.5,behind.z+4.5);
@@ -821,12 +867,8 @@ export default function MarsLaunchScene({ onPlayAgain }) {
     octx.clearRect(0,0,W,H);
 
     if(curPhase==='transit'||curPhase==='approach'){
-      if(effectiveCam===CAM_POV||curPhase==='approach'){
-        const cptA=clamp(progRef.current*4,0,1);
-        if(cptA>0.05&&effectiveCam===CAM_POV){
-          drawCockpitFrame(octx,W,H,cptA,t);
-          drawGaugeCluster(octx,W,H,Math.round(32500+progRef.current*4800),progRef.current);
-        }
+      if(effectiveCam===CAM_POV){
+        drawPOVNebula(octx,W,H,t);
       }
       drawFilmGrain(octx,W,H);
     }else if(curPhase==='emerge'||curPhase==='orbit'){
