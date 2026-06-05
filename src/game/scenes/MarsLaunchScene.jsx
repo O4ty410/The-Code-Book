@@ -19,8 +19,7 @@ const CAM_CHASE   = 'CHASE';
 const CAM_POV     = 'POV';
 const CAM_FLYBY   = 'FLYBY';
 const CAM_ORBITAL = 'ORBITAL';
-const CAM_VORTEX  = 'VORTEX';
-const ALL_CAMS    = [CAM_AUTO, CAM_WIDE, CAM_CHASE, CAM_POV, CAM_FLYBY, CAM_ORBITAL, CAM_VORTEX];
+const ALL_CAMS    = [CAM_AUTO, CAM_WIDE, CAM_CHASE, CAM_POV, CAM_FLYBY, CAM_ORBITAL];
 
 const CINEMATIC_EVENTS = [
   { id:'burn',   prog:0.28, label:'MID-COURSE CORRECTION BURN',    sub:'Δv = +4.2 m/s  ·  Duration: 8.3 sec',           color:'#f59e0b', duration:5 },
@@ -527,70 +526,6 @@ function drawGaugeCluster(ctx, W, H, velocity, prog) {
   });
 }
 
-function drawTimeVortex(ctx, W, H, t) {
-  const cx=W*0.5, cy=H*0.5, baseR=Math.min(cx,cy);
-  // Dark base — let a sliver of stars bleed through
-  ctx.fillStyle='rgba(0,0,12,0.94)'; ctx.fillRect(0,0,W,H);
-
-  // Tunnel rings — perspective-bunched, moving inward
-  const numRings=30;
-  for(let i=0;i<numRings;i++){
-    const phase=((i/numRings)+t*0.18)%1;
-    const nr=(1-phase)*(1-phase);
-    const rx=nr*baseR*1.50, ry=nr*baseR*0.72;
-    if(rx<3) continue;
-    let r2,g2,b2,alpha;
-    if(phase<0.35){
-      const p=phase/0.35;
-      r2=(255-215*p)|0; g2=(160-120*p)|0; b2=(10+245*p)|0; alpha=0.62-p*0.15;
-    } else if(phase<0.72){
-      const p=(phase-0.35)/0.37;
-      r2=(40+110*p)|0; g2=(40-40*p)|0; b2=255; alpha=0.47+p*0.10;
-    } else {
-      const p=(phase-0.72)/0.28;
-      r2=(150-150*p)|0; g2=0; b2=(255-80*p)|0; alpha=0.57-p*0.57;
-    }
-    ctx.save();
-    ctx.translate(cx,cy);
-    ctx.rotate(t*0.9*(1.2-phase)+i*0.28);
-    ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);
-    ctx.strokeStyle=`rgba(${r2},${g2},${b2},${alpha})`;
-    ctx.lineWidth=Math.max(1.5,rx*0.09);
-    ctx.shadowBlur=rx*0.20; ctx.shadowColor=`rgba(${r2},${g2},${b2},0.9)`;
-    ctx.stroke(); ctx.shadowBlur=0; ctx.restore();
-  }
-
-  // Three spiral arms: gold, electric blue, deep purple
-  const ARMS=[
-    {ph:0,           col:'255,140,15', dir: 1},
-    {ph:Math.PI*2/3, col:'40,120,255', dir:-1},
-    {ph:Math.PI*4/3, col:'170,20,255', dir: 1},
-  ];
-  ARMS.forEach(({ph,col,dir})=>{
-    ctx.save(); ctx.translate(cx,cy);
-    ctx.beginPath();
-    for(let j=0;j<=160;j++){
-      const tt=j/160;
-      const ang=ph+dir*(tt*3.2*Math.PI*2-t*2.2);
-      const r3=tt*baseR*1.42;
-      const x=Math.cos(ang)*r3, y=Math.sin(ang)*r3*0.55;
-      j===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-    }
-    ctx.strokeStyle=`rgba(${col},0.58)`;
-    ctx.lineWidth=2.0;
-    ctx.shadowBlur=16; ctx.shadowColor=`rgba(${col},1)`;
-    ctx.stroke(); ctx.shadowBlur=0; ctx.restore();
-  });
-
-  // Dark vortex center
-  const hole=ctx.createRadialGradient(cx,cy,0,cx,cy,baseR*0.22);
-  hole.addColorStop(0,'rgba(0,0,8,1)'); hole.addColorStop(0.8,'rgba(0,0,8,0.85)'); hole.addColorStop(1,'rgba(0,0,8,0)');
-  ctx.fillStyle=hole; ctx.fillRect(0,0,W,H);
-  // Outer vignette
-  const vig=ctx.createRadialGradient(cx,cy,baseR*0.55,cx,cy,baseR*1.6);
-  vig.addColorStop(0,'rgba(0,0,0,0)'); vig.addColorStop(1,'rgba(0,0,12,0.90)');
-  ctx.fillStyle=vig; ctx.fillRect(0,0,W,H);
-}
 
 function drawPOVNebula(ctx, W, H, t) {
   const clouds=[
@@ -843,12 +778,6 @@ export default function MarsLaunchScene({ onPlayAgain }) {
         camPosRef.current.lerp(shipPos,Math.min(rawDelta*10,1));
         camTgtRef.current.lerp(ahead,lf*1.4);
         camera.fov=40; camera.updateProjectionMatrix();
-      }else if(effectiveCam===CAM_VORTEX){
-        spacecraft.visible=false;
-        const mid=EARTH_POS.clone().lerp(MARS_POS,prog);
-        const tgtPos=new THREE.Vector3(mid.x,4+Math.sin(t*0.28)*2,10);
-        camPosRef.current.lerp(tgtPos,lf*0.3); camTgtRef.current.lerp(mid,lf*0.3);
-        camera.fov=55; camera.updateProjectionMatrix();
       }else if(effectiveCam===CAM_CHASE){
         const behind=trajectoryPos(Math.max(0,prog-0.04));
         const tgtPos=new THREE.Vector3(behind.x,behind.y+1.5,behind.z+4.5);
@@ -945,8 +874,6 @@ export default function MarsLaunchScene({ onPlayAgain }) {
           drawCockpitFrame(octx,W,H,cptA,t);
           drawGaugeCluster(octx,W,H,Math.round(32500+progRef.current*4800),progRef.current);
         }
-      } else if(effectiveCam===CAM_VORTEX){
-        drawTimeVortex(octx,W,H,t);
       }
       drawFilmGrain(octx,W,H);
     }else if(curPhase==='emerge'||curPhase==='orbit'){
@@ -997,7 +924,7 @@ export default function MarsLaunchScene({ onPlayAgain }) {
           <div className="mdir-row">
             {ALL_CAMS.map(m=>(
               <button key={m} className={`mdir-btn${camMode===m?' mdir-btn--on':''}`} onClick={()=>handleCam(m)}>
-                {m==='AUTO'?'⟳ AUTO':m==='WIDE'?'⊞ WIDE':m==='CHASE'?'⊿ CHASE':m==='POV'?'⊙ POV':m==='FLYBY'?'⤢ FLYBY':m==='ORBITAL'?'◎ ORBITAL':'⦿ VORTEX'}
+                {m==='AUTO'?'⟳ AUTO':m==='WIDE'?'⊞ WIDE':m==='CHASE'?'⊿ CHASE':m==='POV'?'⊙ POV':m==='FLYBY'?'⤢ FLYBY':'◎ ORBITAL'}
               </button>
             ))}
           </div>
