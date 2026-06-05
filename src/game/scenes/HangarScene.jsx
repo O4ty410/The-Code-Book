@@ -500,17 +500,6 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
         <div className="hud-overlay">
           <div className="hud-chip">Phase <span>Rocket Builder</span></div>
           <div className="hud-chip">Bay <span>Hangar 1</span></div>
-          {/* DEV toggle — remove before shipping */}
-          <button
-            onClick={triggerLaunchNow}
-            style={{
-              padding: '4px 12px',
-              background: 'rgba(255,60,60,0.18)', border: '1px solid rgba(255,80,80,0.55)',
-              color: '#ff7070', fontFamily: 'monospace', fontSize: 11,
-              letterSpacing: 2, textTransform: 'uppercase', borderRadius: 6,
-              cursor: 'pointer', pointerEvents: 'all',
-            }}
-          >▶ Launch</button>
           {ws.powerRestored     && <div className="hud-chip hud-chip--online">Power       <span>Online</span></div>}
           {ws.fuelOnline        && <div className="hud-chip hud-chip--online">Fuel        <span>Online</span></div>}
           {ws.navCalibrated     && <div className="hud-chip hud-chip--online">Navigation  <span>Online</span></div>}
@@ -522,6 +511,11 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
 
       {nearLabel && !activeTerminal && !launchPhase && !IS_TOUCH && (
         <div className="interact-prompt"><kbd>E</kbd> Interact · {nearLabel}</div>
+      )}
+
+      {/* DEV — remove before shipping */}
+      {!launchPhase && (
+        <button className="dev-launch-btn" onClick={triggerLaunchNow}>▶ BEGIN LAUNCH</button>
       )}
 
       {!launchPhase && <ProgressPanel progress={progress} />}
