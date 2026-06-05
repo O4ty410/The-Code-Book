@@ -467,6 +467,21 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
   useGameLoop(tick);
 
   const nearLabel   = nearTerminal ? TERMINALS.find((t) => t.id === nearTerminal)?.label : null;
+  const triggerLaunchNow = () => {
+    if (launchTriggeredRef.current) return;
+    const ls = launchRef.current;
+    ls.phaseTime = 0; ls.countdownTimer = 10; ls.rocketAscent = 0;
+    ls.cameraOffset = 0; ls.shakeX = 0; ls.shakeY = 0;
+    ls.flashAlpha = 0; ls.alarmAlpha = 0; ls.fadeAlpha = 0;
+    ls.ignitionLevel = 0.3; ls.particles = []; ls.phaseTransitioned = false;
+    lastCountdownRef.current = 10;
+    launchTriggeredRef.current = true;
+    commsShownRef.current = new Set();
+    setCommsLog([]);
+    setCountdownDisplay(10);
+    setLaunchPhase('countdown');
+  };
+
   const isLaunching = launchPhase && launchPhase !== 'complete';
   const isCritical  = countdownDisplay <= 3;
   const ws          = worldState;
@@ -475,6 +490,23 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas ref={canvasRef} className="hangar-canvas" />
       <div className="game-vignette" />
+
+      {/* DEV toggle — remove before shipping */}
+      {!launchPhase && (
+        <button
+          onClick={triggerLaunchNow}
+          style={{
+            position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)',
+            zIndex: 99, padding: '6px 18px',
+            background: 'rgba(255,60,60,0.18)', border: '1px solid rgba(255,80,80,0.55)',
+            color: '#ff7070', fontFamily: 'monospace', fontSize: 11,
+            letterSpacing: 2, textTransform: 'uppercase', borderRadius: 4,
+            cursor: 'pointer', pointerEvents: 'all',
+          }}
+        >
+          ▶ Launch Test
+        </button>
+      )}
 
       {!launchPhase && (
         <div className="hud-overlay">
