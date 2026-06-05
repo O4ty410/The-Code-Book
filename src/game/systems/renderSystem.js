@@ -269,10 +269,26 @@ export function drawFloor(ctx, W, H, cx, t) {
 // ── ceiling lights ─────────────────────────────────────────────────────────
 
 export function drawCeilingLights(ctx, W, powered = false) {
-  const positions = powered ? [0.1, 0.25, 0.5, 0.75, 0.9] : [0.2, 0.5, 0.8];
+  // Amber industrial work lights (always on)
+  [0.14, 0.36, 0.64, 0.86].forEach(px => {
+    const x = W * px;
+    const ab = ctx.createRadialGradient(x, 0, 0, x, 0, 100);
+    ab.addColorStop(0, 'rgba(255,158,38,0.20)');
+    ab.addColorStop(1, 'rgba(255,140,0,0.00)');
+    ctx.fillStyle = ab;
+    ctx.fillRect(x - 100, 0, 200, 100);
+    // Fixture body
+    ctx.fillStyle = 'rgba(36,40,50,0.92)';
+    ctx.fillRect(x - 14, 0, 28, 7);
+    // Lamp strip
+    ctx.fillStyle = 'rgba(255,178,58,0.88)';
+    ctx.fillRect(x - 10, 5, 20, 4);
+  });
+
+  // Blue tech lights (powered)
+  const positions  = powered ? [0.1, 0.25, 0.5, 0.75, 0.9] : [0.2, 0.5, 0.8];
   const bloomAlpha = powered ? 0.28 : 0.18;
   const bloomR     = powered ? 150  : 120;
-
   positions.forEach((px) => {
     const x = W * px;
     const bloom = ctx.createRadialGradient(x, 0, 0, x, 0, bloomR);
@@ -280,7 +296,6 @@ export function drawCeilingLights(ctx, W, powered = false) {
     bloom.addColorStop(1, 'rgba(80, 160, 255, 0.00)');
     ctx.fillStyle = bloom;
     ctx.fillRect(x - bloomR, 0, bloomR * 2, bloomR);
-
     ctx.fillStyle = powered ? 'rgba(200, 235, 255, 0.90)' : 'rgba(160, 210, 255, 0.65)';
     ctx.fillRect(x - 30, 0, 60, 3);
   });
@@ -1872,14 +1887,52 @@ function drawNpc(ctx, npc, t) {
 
   ctx.restore(); // lean
 
+  // Shoulder pads
+  ctx.fillStyle = suit.arms;
+  ctx.beginPath(); ctx.ellipse(x - 11 * S, py - 24 * S, 5 * S, 3.5 * S, -0.2, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(x + 11 * S, py - 24 * S, 5 * S, 3.5 * S,  0.2, 0, Math.PI * 2); ctx.fill();
+
+  // Chest patch / mission badge
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  roundRect(ctx, x - 5 * S, py - 22 * S, 10 * S, 7 * S, 1);
+  ctx.fill();
+  // Patch colour strip (unique per NPC using suit body colour)
+  ctx.fillStyle = suit.body0;
+  ctx.fillRect(x - 4 * S, py - 22 * S, 8 * S, 2 * S);
+
+  // Suit highlight (left shoulder rim light)
+  ctx.fillStyle = 'rgba(160,200,255,0.14)';
+  ctx.fillRect(x - 11 * S, py - 26 * S, 3 * S, 22 * S);
+
+  // Belt / utility strap
+  ctx.fillStyle = suit.pack;
+  ctx.fillRect(x - 11 * S, py - 4 * S, 22 * S, 3 * S);
+  // Belt buckle
+  ctx.fillStyle = 'rgba(200,210,230,0.70)';
+  ctx.fillRect(x - 2 * S, py - 4 * S, 4 * S, 3 * S);
+
   // Helmet
   ctx.beginPath();
   ctx.arc(x, py - 32 * S, 10 * S, 0, Math.PI * 2);
   ctx.fillStyle = suit.helm;
   ctx.fill();
 
-  // Visor — same cyan across all NPCs (recognisable crew aesthetic),
-  // shifted toward facing dir; shifts toward rocket during reaction
+  // Helmet rim band
+  ctx.beginPath();
+  ctx.arc(x, py - 32 * S, 10 * S, Math.PI * 0.7, Math.PI * 2.3);
+  ctx.strokeStyle = 'rgba(80,100,140,0.55)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Helmet antenna (small nub on top)
+  ctx.fillStyle = 'rgba(180,190,210,0.80)';
+  ctx.fillRect(x + 6 * S, py - 42 * S, 2, 6 * S);
+  ctx.beginPath();
+  ctx.arc(x + 7 * S, py - 42 * S, 2, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(80,220,255,0.75)';
+  ctx.fill();
+
+  // Visor
   const visorShift = state === 'reacting'
     ? (reactDir || 1) * 1.4 * S
     : facing * 1.4 * S;
@@ -1888,10 +1941,16 @@ function drawNpc(ctx, npc, t) {
   ctx.fillStyle = 'rgba(10,190,255,0.50)';
   ctx.fill();
 
+  // Visor inner tint
+  ctx.beginPath();
+  ctx.ellipse(x + visorShift, py - 32 * S, 5 * S, 4 * S, 0, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(0,140,220,0.20)';
+  ctx.fill();
+
   // Visor highlight
   ctx.beginPath();
   ctx.ellipse(x + visorShift - 2, py - 33 * S, 2, 1.5, -0.3, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(255,255,255,0.52)';
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
   ctx.fill();
 
   ctx.restore();
@@ -2021,6 +2080,28 @@ function drawFuelTanker(ctx, cx, groundY, dir, t, stopped) {
   // Exhaust stack (rear)
   ctx.fillStyle = 'rgba(48,50,56,0.90)';
   ctx.fillRect(cx - 36, bodyTop - 8, 4, 10);
+  // Exhaust tip cap
+  ctx.fillStyle = 'rgba(68,70,78,0.85)';
+  ctx.fillRect(cx - 37, bodyTop - 9, 6, 3);
+
+  // Fuel level gauge on tank side (small vertical bar)
+  const gaugeX = tL + tW * 0.78, gaugeY = tT + 2;
+  ctx.fillStyle = 'rgba(20,24,34,0.88)';
+  ctx.fillRect(gaugeX, gaugeY, 5, tH - 4);
+  ctx.fillStyle = 'rgba(80,220,120,0.90)';
+  ctx.fillRect(gaugeX + 1, gaugeY + 1, 3, (tH - 6) * 0.92); // 92% full
+
+  // Chassis side detail — horizontal ribs
+  [bodyTop + 4, bodyTop + 10].forEach(ry => {
+    ctx.fillStyle = 'rgba(160,168,182,0.30)';
+    ctx.fillRect(cx - 38, ry, 52, 1.5);
+  });
+
+  // Wheel brake disc detail
+  [[cx - 30, groundY - wR], [cx - 20, groundY - wR], [cx + 26, groundY - wR]].forEach(([wx, wy]) => {
+    ctx.beginPath(); ctx.arc(wx, wy, wR * 0.28, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(80,86,100,0.70)'; ctx.fill();
+  });
 
   // Amber beacon (flashes when driving)
   const blink = Math.sin(t * 3.8) > 0 && !stopped;
@@ -2100,6 +2181,28 @@ function drawUtilityBuggy(ctx, cx, groundY, dir, t, stopped) {
   ctx.fillStyle = 'rgba(138,215,255,0.36)';
   roundRect(ctx, cx + 8, bodyTop + 2, 11, 8, 2);
   ctx.fill();
+  // Windshield reflection
+  ctx.fillStyle = 'rgba(255,255,255,0.14)';
+  ctx.fillRect(cx + 9, bodyTop + 3, 3, 4);
+
+  // Hazard stripes on body front bumper
+  ctx.save();
+  ctx.beginPath(); roundRect(ctx, cx + 16, bodyTop + 6, 7, 6, 1); ctx.clip();
+  for (let si = 0; si < 4; si++) {
+    ctx.fillStyle = si % 2 === 0 ? 'rgba(255,200,0,0.65)' : 'rgba(20,20,24,0.65)';
+    ctx.fillRect(cx + 16 + si * 2, bodyTop + 6, 2, 6);
+  }
+  ctx.restore();
+
+  // Wheel brake discs
+  [-18, 18].forEach(ox => {
+    ctx.beginPath(); ctx.arc(cx + ox, groundY - wR, wR * 0.30, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(72,78,94,0.68)'; ctx.fill();
+  });
+
+  // Body side rib detail
+  ctx.fillStyle = 'rgba(255,140,50,0.22)';
+  ctx.fillRect(cx - 22, bodyTop + 4, 30, 1.5);
 
   // Green status blink (antenna tip)
   const blink = Math.sin(t * 5.5 + 1.8) > 0.38 && !stopped;
@@ -2115,33 +2218,136 @@ function drawUtilityBuggy(ctx, cx, groundY, dir, t, stopped) {
 
 export function drawHangar(ctx, W, H) {
   const horizon = H * 0.55;
+  const wallW   = W * 0.19;
+  const floorY  = H * 0.78;
 
-  // left wall
-  const leftWall = ctx.createLinearGradient(0, 0, 80, 0);
-  leftWall.addColorStop(0, 'rgba(10, 30, 70, 0.90)');
-  leftWall.addColorStop(1, 'rgba(10, 30, 70, 0.00)');
-  ctx.fillStyle = leftWall;
-  ctx.fillRect(0, 0, 80, H);
+  // ── draw one wall panel, called for left then mirrored for right ──────────
+  function drawWallPanel(x0) {
+    const x1 = x0 + wallW;
+    const isLeft = x0 === 0;
+    const innerX = isLeft ? x1 : x0;
 
-  // right wall
-  const rightWall = ctx.createLinearGradient(W - 80, 0, W, 0);
-  rightWall.addColorStop(0, 'rgba(10, 30, 70, 0.00)');
-  rightWall.addColorStop(1, 'rgba(10, 30, 70, 0.90)');
-  ctx.fillStyle = rightWall;
-  ctx.fillRect(W - 80, 0, 80, H);
+    // Base metal panel
+    const base = isLeft
+      ? ctx.createLinearGradient(x0, 0, x1, 0)
+      : ctx.createLinearGradient(x0, 0, x1, 0);
+    base.addColorStop(0,   isLeft ? 'rgba(10,18,42,0.98)' : 'rgba(22,36,72,0.55)');
+    base.addColorStop(0.6, isLeft ? 'rgba(16,28,58,0.94)' : 'rgba(16,28,58,0.94)');
+    base.addColorStop(1,   isLeft ? 'rgba(22,36,72,0.55)' : 'rgba(10,18,42,0.98)');
+    ctx.fillStyle = base;
+    ctx.fillRect(x0, 0, wallW, H);
 
-  // ceiling gradient
-  const ceiling = ctx.createLinearGradient(0, 0, 0, 80);
-  ceiling.addColorStop(0, 'rgba(8, 20, 55, 0.95)');
-  ceiling.addColorStop(1, 'rgba(8, 20, 55, 0.00)');
-  ctx.fillStyle = ceiling;
-  ctx.fillRect(0, 0, W, 80);
+    // Horizontal panel seam lines
+    ctx.strokeStyle = 'rgba(35,55,95,0.42)';
+    ctx.lineWidth   = 1;
+    for (let py = H * 0.08; py < H; py += H * 0.115) {
+      ctx.beginPath();
+      ctx.moveTo(x0, py);
+      ctx.lineTo(isLeft ? innerX - wallW * 0.08 : x0 + wallW * 0.08, py);
+      ctx.stroke();
+    }
 
-  // horizon accent line
-  ctx.strokeStyle = 'rgba(40, 100, 200, 0.30)';
+    // Vertical structural I-beams
+    const beamXs = isLeft
+      ? [x0 + wallW * 0.28, x0 + wallW * 0.60, x0 + wallW * 0.92]
+      : [x0 + wallW * 0.08, x0 + wallW * 0.40, x0 + wallW * 0.72];
+    beamXs.forEach(bx => {
+      // Shadow
+      ctx.fillStyle = 'rgba(4,8,22,0.75)';
+      ctx.fillRect(bx - 8, 0, 16, H);
+      // Face gradient
+      const bg = ctx.createLinearGradient(bx - 7, 0, bx + 7, 0);
+      bg.addColorStop(0,    'rgba(24,36,65,0.96)');
+      bg.addColorStop(0.38, 'rgba(42,58,95,0.96)');
+      bg.addColorStop(0.62, 'rgba(42,58,95,0.96)');
+      bg.addColorStop(1,    'rgba(24,36,65,0.96)');
+      ctx.fillStyle = bg;
+      ctx.fillRect(bx - 6, 0, 12, H);
+      // Highlight edge
+      ctx.fillStyle = 'rgba(72,105,165,0.30)';
+      ctx.fillRect(isLeft ? bx - 6 : bx + 4, 0, 2, H);
+    });
+
+    // Horizontal trusses / cross-beams
+    [H * 0.11, H * 0.26, H * 0.42, H * 0.58].forEach(ty => {
+      ctx.fillStyle = 'rgba(16,26,52,0.90)';
+      ctx.fillRect(x0, ty - 5, wallW * 0.94, 10);
+      ctx.fillStyle = 'rgba(38,55,92,0.55)';
+      ctx.fillRect(x0, ty - 5, wallW * 0.94, 2);
+    });
+
+    // Wall-mounted amber work light
+    const lx = isLeft ? x0 + wallW * 0.70 : x0 + wallW * 0.30;
+    const ly = H * 0.26;
+    // Cone of light (triangle pointing to floor)
+    const cone = ctx.createLinearGradient(lx, ly, lx, floorY);
+    cone.addColorStop(0, 'rgba(255,165,45,0.22)');
+    cone.addColorStop(1, 'rgba(255,140,0,0.00)');
+    ctx.fillStyle = cone;
+    ctx.beginPath();
+    ctx.moveTo(lx - 6, ly + 8);
+    ctx.lineTo(isLeft ? lx - 65 : lx - 55, floorY);
+    ctx.lineTo(isLeft ? lx + 55 : lx + 65, floorY);
+    ctx.lineTo(lx + 6, ly + 8);
+    ctx.closePath();
+    ctx.fill();
+    // Fixture housing
+    ctx.fillStyle = 'rgba(34,38,50,0.95)';
+    ctx.fillRect(lx - 12, ly - 5, 24, 10);
+    // Lamp face
+    ctx.fillStyle = 'rgba(255,175,55,0.90)';
+    ctx.fillRect(lx - 8, ly + 3, 16, 5);
+    // Small glow dot
+    ctx.beginPath();
+    ctx.arc(lx, ly + 5, 5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,190,80,0.35)';
+    ctx.fill();
+
+    // Amber floor pool
+    const pool = ctx.createRadialGradient(lx, floorY, 0, lx, floorY, wallW * 0.9);
+    pool.addColorStop(0, 'rgba(255,155,35,0.12)');
+    pool.addColorStop(1, 'rgba(255,130,0,0.00)');
+    ctx.fillStyle = pool;
+    ctx.fillRect(x0, floorY - 10, wallW * 1.5, H - floorY + 10);
+  }
+
+  drawWallPanel(0);           // left wall
+  drawWallPanel(W - wallW);   // right wall
+
+  // ── ceiling ───────────────────────────────────────────────────────────────
+  // Structural header beam (full width)
+  ctx.fillStyle = 'rgba(12,20,48,0.95)';
+  ctx.fillRect(0, 0, W, 20);
+  ctx.fillStyle = 'rgba(32,50,90,0.55)';
+  ctx.fillRect(0, 0, W, 3);
+
+  // Overhead truss lattice (diagonal cross-bracing)
+  ctx.strokeStyle = 'rgba(28,44,80,0.60)';
+  ctx.lineWidth   = 1.5;
+  const step = W / 10;
+  for (let i = 0; i <= 10; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * step, 0);
+    ctx.lineTo(i * step + step, 20);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(i * step + step, 0);
+    ctx.lineTo(i * step, 20);
+    ctx.stroke();
+  }
+
+  // Ceiling fade gradient
+  const ceilFade = ctx.createLinearGradient(0, 20, 0, 90);
+  ceilFade.addColorStop(0, 'rgba(8,18,50,0.88)');
+  ceilFade.addColorStop(1, 'rgba(8,18,50,0.00)');
+  ctx.fillStyle = ceilFade;
+  ctx.fillRect(0, 20, W, 70);
+
+  // Horizon accent
+  ctx.strokeStyle = 'rgba(40,100,200,0.28)';
   ctx.lineWidth   = 1;
   ctx.beginPath();
-  ctx.moveTo(0,  horizon);
+  ctx.moveTo(0, horizon);
   ctx.lineTo(W, horizon);
   ctx.stroke();
 }
