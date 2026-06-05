@@ -199,7 +199,7 @@ export default function Game() {
           progress={progress}
           onMissionComplete={handleBuilderMission}
           autoLaunch={gameMode === MODE.LAUNCH}
-          onLaunchComplete={gameMode === MODE.LAUNCH ? handleLaunchComplete : undefined}
+          onLaunchComplete={handleLaunchComplete}
         />
       )}
 
