@@ -2176,6 +2176,33 @@
   border-color: rgba(0, 210, 255, 0.70);
 }
 
+/* ── Dev launch button (fixed center-bottom, remove before shipping) ─────────── */
+
+.dev-launch-btn {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 28px;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: #ff8080;
+  background: rgba(180, 30, 30, 0.18);
+  border: 1px solid rgba(255, 80, 80, 0.50);
+  border-radius: 6px;
+  cursor: pointer;
+  pointer-events: all;
+  z-index: 30;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.dev-launch-btn:hover {
+  background: rgba(220, 40, 40, 0.30);
+  border-color: rgba(255, 100, 100, 0.80);
+}
+
 /* ── Director Mode panel ─────────────────────────────────────────────────────── */
 
 .mars-director {
