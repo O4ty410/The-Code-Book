@@ -769,6 +769,23 @@
   padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
 }
 
+/* Reduce floor-hero top padding on mobile — the fixed header already
+   accounts for the top offset so 56px internal padding creates a
+   visible dark gap. */
+.is-mobile .floor-hero {
+  padding: 20px 20px 28px;
+}
+.is-mobile .floor-hero::before {
+  font-size: 100px;
+  top: -10px;
+}
+
+/* Sticky tab bar must clear the fixed mobile header so it doesn't
+   scroll behind it and create a gap. */
+.is-mobile .section-sticky-header {
+  top: calc(52px + env(safe-area-inset-top, 0px));
+}
+
 /* ============================================================
    BOTTOM SHEET — section picker
    ============================================================ */
