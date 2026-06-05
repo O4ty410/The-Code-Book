@@ -6747,7 +6747,7 @@ function renderProfilePanel() {
     '<div class="pf-section">' +
       '<div class="pf-section-hdr">// DISPLAY</div>' +
 
-      '<div class="pf-display-row">' +
+      '<div class="pf-display-row" style="margin-top:14px">' +
         '<span class="pf-display-label">Narrator Voice</span>' +
         '<div class="pf-toggle-group">' +
           '<button class="pf-toggle-btn' + ((!state.narratorGender || state.narratorGender === 'female') ? ' pf-toggle-active' : '') + '" onclick="setNarratorGender(\'female\')">♀ Female</button>' +
