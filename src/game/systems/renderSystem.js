@@ -2218,134 +2218,247 @@ function drawUtilityBuggy(ctx, cx, groundY, dir, t, stopped) {
 
 export function drawHangar(ctx, W, H) {
   const horizon = H * 0.55;
-  const wallW   = W * 0.19;
   const floorY  = H * 0.78;
+  // Wall widens toward the bottom (perspective: closer = wider)
+  const wBot    = W * 0.20;   // wall width at floor level
+  const wTop    = W * 0.085;  // wall width at ceiling (recedes into distance)
 
-  // ── draw one wall panel, called for left then mirrored for right ──────────
-  function drawWallPanel(x0) {
-    const x1 = x0 + wallW;
-    const isLeft = x0 === 0;
-    const innerX = isLeft ? x1 : x0;
+  // Helper: inner-edge x of a wall at a given y
+  // Left wall outer = 0, inner tapers from wTop→wBot as y goes 0→H
+  const leftInner  = (y) => wTop + (wBot - wTop) * (y / H);
+  // Right wall outer = W, inner tapers from W-wTop→W-wBot
+  const rightInner = (y) => W - wTop - (wBot - wTop) * (y / H);
 
-    // Base metal panel
-    const base = isLeft
-      ? ctx.createLinearGradient(x0, 0, x1, 0)
-      : ctx.createLinearGradient(x0, 0, x1, 0);
-    base.addColorStop(0,   isLeft ? 'rgba(10,18,42,0.98)' : 'rgba(22,36,72,0.55)');
-    base.addColorStop(0.6, isLeft ? 'rgba(16,28,58,0.94)' : 'rgba(16,28,58,0.94)');
-    base.addColorStop(1,   isLeft ? 'rgba(22,36,72,0.55)' : 'rgba(10,18,42,0.98)');
-    ctx.fillStyle = base;
-    ctx.fillRect(x0, 0, wallW, H);
+  // ── LEFT WALL ─────────────────────────────────────────────────────────────
+  ctx.save();
+  // Clip to perspective trapezoid
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(leftInner(0), 0);
+  ctx.lineTo(leftInner(H), H);
+  ctx.lineTo(0, H);
+  ctx.closePath();
+  ctx.clip();
 
-    // Horizontal panel seam lines
-    ctx.strokeStyle = 'rgba(35,55,95,0.42)';
-    ctx.lineWidth   = 1;
-    for (let py = H * 0.08; py < H; py += H * 0.115) {
-      ctx.beginPath();
-      ctx.moveTo(x0, py);
-      ctx.lineTo(isLeft ? innerX - wallW * 0.08 : x0 + wallW * 0.08, py);
-      ctx.stroke();
-    }
+  // Base metal fill
+  const lBase = ctx.createLinearGradient(0, 0, wBot, 0);
+  lBase.addColorStop(0,    'rgba(7,12,30,0.99)');
+  lBase.addColorStop(0.55, 'rgba(14,24,52,0.96)');
+  lBase.addColorStop(1,    'rgba(22,38,72,0.40)');
+  ctx.fillStyle = lBase;
+  ctx.fillRect(0, 0, wBot + 4, H);
 
-    // Vertical structural I-beams
-    const beamXs = isLeft
-      ? [x0 + wallW * 0.28, x0 + wallW * 0.60, x0 + wallW * 0.92]
-      : [x0 + wallW * 0.08, x0 + wallW * 0.40, x0 + wallW * 0.72];
-    beamXs.forEach(bx => {
-      // Shadow
-      ctx.fillStyle = 'rgba(4,8,22,0.75)';
-      ctx.fillRect(bx - 8, 0, 16, H);
-      // Face gradient
-      const bg = ctx.createLinearGradient(bx - 7, 0, bx + 7, 0);
-      bg.addColorStop(0,    'rgba(24,36,65,0.96)');
-      bg.addColorStop(0.38, 'rgba(42,58,95,0.96)');
-      bg.addColorStop(0.62, 'rgba(42,58,95,0.96)');
-      bg.addColorStop(1,    'rgba(24,36,65,0.96)');
-      ctx.fillStyle = bg;
-      ctx.fillRect(bx - 6, 0, 12, H);
-      // Highlight edge
-      ctx.fillStyle = 'rgba(72,105,165,0.30)';
-      ctx.fillRect(isLeft ? bx - 6 : bx + 4, 0, 2, H);
-    });
-
-    // Horizontal trusses / cross-beams
-    [H * 0.11, H * 0.26, H * 0.42, H * 0.58].forEach(ty => {
-      ctx.fillStyle = 'rgba(16,26,52,0.90)';
-      ctx.fillRect(x0, ty - 5, wallW * 0.94, 10);
-      ctx.fillStyle = 'rgba(38,55,92,0.55)';
-      ctx.fillRect(x0, ty - 5, wallW * 0.94, 2);
-    });
-
-    // Wall-mounted amber work light
-    const lx = isLeft ? x0 + wallW * 0.70 : x0 + wallW * 0.30;
-    const ly = H * 0.26;
-    // Cone of light (triangle pointing to floor)
-    const cone = ctx.createLinearGradient(lx, ly, lx, floorY);
-    cone.addColorStop(0, 'rgba(255,165,45,0.22)');
-    cone.addColorStop(1, 'rgba(255,140,0,0.00)');
-    ctx.fillStyle = cone;
-    ctx.beginPath();
-    ctx.moveTo(lx - 6, ly + 8);
-    ctx.lineTo(isLeft ? lx - 65 : lx - 55, floorY);
-    ctx.lineTo(isLeft ? lx + 55 : lx + 65, floorY);
-    ctx.lineTo(lx + 6, ly + 8);
-    ctx.closePath();
-    ctx.fill();
-    // Fixture housing
-    ctx.fillStyle = 'rgba(34,38,50,0.95)';
-    ctx.fillRect(lx - 12, ly - 5, 24, 10);
-    // Lamp face
-    ctx.fillStyle = 'rgba(255,175,55,0.90)';
-    ctx.fillRect(lx - 8, ly + 3, 16, 5);
-    // Small glow dot
-    ctx.beginPath();
-    ctx.arc(lx, ly + 5, 5, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255,190,80,0.35)';
-    ctx.fill();
-
-    // Amber floor pool
-    const pool = ctx.createRadialGradient(lx, floorY, 0, lx, floorY, wallW * 0.9);
-    pool.addColorStop(0, 'rgba(255,155,35,0.12)');
-    pool.addColorStop(1, 'rgba(255,130,0,0.00)');
-    ctx.fillStyle = pool;
-    ctx.fillRect(x0, floorY - 10, wallW * 1.5, H - floorY + 10);
+  // Perspective panel seams — horizontal lines that show wall going away
+  ctx.strokeStyle = 'rgba(32,52,90,0.38)';
+  ctx.lineWidth   = 1;
+  for (let i = 1; i < 9; i++) {
+    const y = (i / 9) * H;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(leftInner(y) - 2, y); ctx.stroke();
   }
 
-  drawWallPanel(0);           // left wall
-  drawWallPanel(W - wallW);   // right wall
+  // Structural I-beams — they converge with the wall perspective
+  [0.30, 0.62, 0.92].forEach(f => {
+    const botX = leftInner(H) * f;
+    const topX = leftInner(0) * f;
+    // Shadow band
+    ctx.fillStyle = 'rgba(3,5,16,0.72)';
+    ctx.beginPath();
+    ctx.moveTo(topX - 9, 0); ctx.lineTo(botX - 9, H);
+    ctx.lineTo(botX + 9, H); ctx.lineTo(topX + 9, 0);
+    ctx.closePath(); ctx.fill();
+    // Face
+    const bg = ctx.createLinearGradient(topX - 6, 0, topX + 6, 0);
+    bg.addColorStop(0,   'rgba(20,32,60,0.97)');
+    bg.addColorStop(0.4, 'rgba(38,56,92,0.97)');
+    bg.addColorStop(0.6, 'rgba(38,56,92,0.97)');
+    bg.addColorStop(1,   'rgba(20,32,60,0.97)');
+    ctx.fillStyle = bg;
+    ctx.beginPath();
+    ctx.moveTo(topX - 6, 0); ctx.lineTo(botX - 6, H);
+    ctx.lineTo(botX + 6, H); ctx.lineTo(topX + 6, 0);
+    ctx.closePath(); ctx.fill();
+    // Specular edge highlight
+    ctx.fillStyle = 'rgba(60,95,155,0.30)';
+    ctx.beginPath();
+    ctx.moveTo(topX - 6, 0); ctx.lineTo(botX - 6, H);
+    ctx.lineTo(botX - 3, H); ctx.lineTo(topX - 3, 0);
+    ctx.closePath(); ctx.fill();
+  });
 
-  // ── ceiling ───────────────────────────────────────────────────────────────
-  // Structural header beam (full width)
-  ctx.fillStyle = 'rgba(12,20,48,0.95)';
-  ctx.fillRect(0, 0, W, 20);
-  ctx.fillStyle = 'rgba(32,50,90,0.55)';
-  ctx.fillRect(0, 0, W, 3);
+  // Horizontal cross-trusses
+  [H * 0.13, H * 0.28, H * 0.44, H * 0.60].forEach(ty => {
+    const ix = leftInner(ty);
+    ctx.fillStyle = 'rgba(12,22,48,0.90)';
+    ctx.fillRect(0, ty - 5, ix, 10);
+    ctx.fillStyle = 'rgba(36,54,90,0.52)';
+    ctx.fillRect(0, ty - 5, ix, 2);
+    // Under-beam shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(0, ty + 5, ix, 4);
+  });
 
-  // Overhead truss lattice (diagonal cross-bracing)
-  ctx.strokeStyle = 'rgba(28,44,80,0.60)';
-  ctx.lineWidth   = 1.5;
+  // Wall amber work light
+  const llx = leftInner(H) * 0.68, lly = H * 0.25;
+  const lCone = ctx.createLinearGradient(llx, lly, llx, floorY);
+  lCone.addColorStop(0, 'rgba(255,165,48,0.28)');
+  lCone.addColorStop(1, 'rgba(255,140,0,0.00)');
+  ctx.fillStyle = lCone;
+  ctx.beginPath();
+  ctx.moveTo(llx - 5, lly + 8);
+  ctx.lineTo(llx - 72, floorY);
+  ctx.lineTo(llx + 58, floorY);
+  ctx.lineTo(llx + 5, lly + 8);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(28,34,48,0.96)';
+  ctx.fillRect(llx - 13, lly - 5, 26, 10);
+  ctx.fillStyle = 'rgba(255,175,55,0.92)';
+  ctx.fillRect(llx - 9, lly + 3, 18, 5);
+
+  ctx.restore();
+
+  // Amber floor pool (outside clip)
+  const lPool = ctx.createRadialGradient(llx, floorY, 0, llx, floorY, wBot * 1.1);
+  lPool.addColorStop(0, 'rgba(255,150,30,0.16)');
+  lPool.addColorStop(1, 'rgba(255,130,0,0.00)');
+  ctx.fillStyle = lPool;
+  ctx.fillRect(0, floorY - 8, wBot * 1.6, H - floorY + 8);
+
+  // ── RIGHT WALL ────────────────────────────────────────────────────────────
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(rightInner(0), 0);
+  ctx.lineTo(W, 0);
+  ctx.lineTo(W, H);
+  ctx.lineTo(rightInner(H), H);
+  ctx.closePath();
+  ctx.clip();
+
+  const rBase = ctx.createLinearGradient(W - wBot - 4, 0, W, 0);
+  rBase.addColorStop(0,    'rgba(22,38,72,0.40)');
+  rBase.addColorStop(0.45, 'rgba(14,24,52,0.96)');
+  rBase.addColorStop(1,    'rgba(7,12,30,0.99)');
+  ctx.fillStyle = rBase;
+  ctx.fillRect(W - wBot - 4, 0, wBot + 4, H);
+
+  ctx.strokeStyle = 'rgba(32,52,90,0.38)';
+  ctx.lineWidth = 1;
+  for (let i = 1; i < 9; i++) {
+    const y = (i / 9) * H;
+    ctx.beginPath(); ctx.moveTo(rightInner(y) + 2, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  [0.08, 0.38, 0.70].forEach(f => {
+    const botX = rightInner(H) + (W - rightInner(H)) * f;
+    const topX = rightInner(0) + (W - rightInner(0)) * f;
+    ctx.fillStyle = 'rgba(3,5,16,0.72)';
+    ctx.beginPath();
+    ctx.moveTo(topX - 9, 0); ctx.lineTo(botX - 9, H);
+    ctx.lineTo(botX + 9, H); ctx.lineTo(topX + 9, 0);
+    ctx.closePath(); ctx.fill();
+    const bg2 = ctx.createLinearGradient(topX - 6, 0, topX + 6, 0);
+    bg2.addColorStop(0, 'rgba(20,32,60,0.97)');
+    bg2.addColorStop(0.4, 'rgba(38,56,92,0.97)');
+    bg2.addColorStop(0.6, 'rgba(38,56,92,0.97)');
+    bg2.addColorStop(1, 'rgba(20,32,60,0.97)');
+    ctx.fillStyle = bg2;
+    ctx.beginPath();
+    ctx.moveTo(topX - 6, 0); ctx.lineTo(botX - 6, H);
+    ctx.lineTo(botX + 6, H); ctx.lineTo(topX + 6, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(60,95,155,0.30)';
+    ctx.beginPath();
+    ctx.moveTo(topX + 3, 0); ctx.lineTo(botX + 3, H);
+    ctx.lineTo(botX + 6, H); ctx.lineTo(topX + 6, 0);
+    ctx.closePath(); ctx.fill();
+  });
+
+  [H * 0.13, H * 0.28, H * 0.44, H * 0.60].forEach(ty => {
+    const ix = rightInner(ty);
+    ctx.fillStyle = 'rgba(12,22,48,0.90)';
+    ctx.fillRect(ix, ty - 5, W - ix, 10);
+    ctx.fillStyle = 'rgba(36,54,90,0.52)';
+    ctx.fillRect(ix, ty - 5, W - ix, 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillRect(ix, ty + 5, W - ix, 4);
+  });
+
+  const rlx = rightInner(H) + (W - rightInner(H)) * 0.32, rly = H * 0.25;
+  const rCone = ctx.createLinearGradient(rlx, rly, rlx, floorY);
+  rCone.addColorStop(0, 'rgba(255,165,48,0.28)');
+  rCone.addColorStop(1, 'rgba(255,140,0,0.00)');
+  ctx.fillStyle = rCone;
+  ctx.beginPath();
+  ctx.moveTo(rlx - 5, rly + 8);
+  ctx.lineTo(rlx - 58, floorY);
+  ctx.lineTo(rlx + 72, floorY);
+  ctx.lineTo(rlx + 5, rly + 8);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(28,34,48,0.96)';
+  ctx.fillRect(rlx - 13, rly - 5, 26, 10);
+  ctx.fillStyle = 'rgba(255,175,55,0.92)';
+  ctx.fillRect(rlx - 9, rly + 3, 18, 5);
+
+  ctx.restore();
+
+  const rPool = ctx.createRadialGradient(rlx, floorY, 0, rlx, floorY, wBot * 1.1);
+  rPool.addColorStop(0, 'rgba(255,150,30,0.16)');
+  rPool.addColorStop(1, 'rgba(255,130,0,0.00)');
+  ctx.fillStyle = rPool;
+  ctx.fillRect(W - wBot * 1.6, floorY - 8, wBot * 1.6, H - floorY + 8);
+
+  // ── VOLUMETRIC LIGHT SHAFTS (god rays from ceiling fixtures) ─────────────
+  [W * 0.22, W * 0.78].forEach(sx => {
+    const sg = ctx.createLinearGradient(sx, 0, sx, H * 0.68);
+    sg.addColorStop(0, 'rgba(255,168,45,0.12)');
+    sg.addColorStop(0.5, 'rgba(255,150,30,0.05)');
+    sg.addColorStop(1, 'rgba(255,130,0,0.00)');
+    ctx.fillStyle = sg;
+    ctx.beginPath();
+    ctx.moveTo(sx - 6, 0);
+    ctx.lineTo(sx - 50, H * 0.68);
+    ctx.lineTo(sx + 50, H * 0.68);
+    ctx.lineTo(sx + 6, 0);
+    ctx.closePath(); ctx.fill();
+  });
+
+  // ── FLOOR EDGE SPECULAR (polished surface near walls) ────────────────────
+  const lfSpec = ctx.createLinearGradient(0, floorY, wBot, floorY);
+  lfSpec.addColorStop(0, 'rgba(38,75,155,0.18)');
+  lfSpec.addColorStop(1, 'rgba(38,75,155,0.00)');
+  ctx.fillStyle = lfSpec;
+  ctx.fillRect(0, floorY, wBot * 1.3, H - floorY);
+
+  const rfSpec = ctx.createLinearGradient(W, floorY, W - wBot, floorY);
+  rfSpec.addColorStop(0, 'rgba(38,75,155,0.18)');
+  rfSpec.addColorStop(1, 'rgba(38,75,155,0.00)');
+  ctx.fillStyle = rfSpec;
+  ctx.fillRect(W - wBot * 1.3, floorY, wBot * 1.3, H - floorY);
+
+  // ── CEILING STRUCTURE ─────────────────────────────────────────────────────
+  // Solid header
+  ctx.fillStyle = 'rgba(9,16,42,0.97)';
+  ctx.fillRect(0, 0, W, 24);
+  // Truss cross-bracing
+  ctx.strokeStyle = 'rgba(24,40,76,0.65)';
+  ctx.lineWidth = 1.5;
   const step = W / 10;
   for (let i = 0; i <= 10; i++) {
-    ctx.beginPath();
-    ctx.moveTo(i * step, 0);
-    ctx.lineTo(i * step + step, 20);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(i * step + step, 0);
-    ctx.lineTo(i * step, 20);
-    ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(i * step, 0); ctx.lineTo(i * step + step, 24); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(i * step + step, 0); ctx.lineTo(i * step, 24); ctx.stroke();
   }
-
-  // Ceiling fade gradient
-  const ceilFade = ctx.createLinearGradient(0, 20, 0, 90);
-  ceilFade.addColorStop(0, 'rgba(8,18,50,0.88)');
-  ceilFade.addColorStop(1, 'rgba(8,18,50,0.00)');
-  ctx.fillStyle = ceilFade;
-  ctx.fillRect(0, 20, W, 70);
+  // Bottom edge highlight
+  ctx.fillStyle = 'rgba(40,62,108,0.45)';
+  ctx.fillRect(0, 22, W, 2);
+  // Ceiling fade
+  const cFade = ctx.createLinearGradient(0, 24, 0, 98);
+  cFade.addColorStop(0, 'rgba(8,15,46,0.84)');
+  cFade.addColorStop(1, 'rgba(8,15,46,0.00)');
+  ctx.fillStyle = cFade;
+  ctx.fillRect(0, 24, W, 74);
 
   // Horizon accent
-  ctx.strokeStyle = 'rgba(40,100,200,0.28)';
-  ctx.lineWidth   = 1;
+  ctx.strokeStyle = 'rgba(40,100,200,0.25)';
+  ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(0, horizon);
   ctx.lineTo(W, horizon);
