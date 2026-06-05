@@ -786,6 +786,12 @@
   top: calc(52px + env(safe-area-inset-top, 0px));
 }
 
+/* Remove top gap on the profile panel header — the fixed ← Home bar
+   already provides spacing so 28px internal top padding is excess. */
+.is-mobile .pf-header {
+  padding-top: 10px;
+}
+
 /* ============================================================
    BOTTOM SHEET — section picker
    ============================================================ */
