@@ -156,7 +156,7 @@ function stopLandingCanvas() {
 // ── Hub canvas: twinkling code background (theme-coloured) ─────────────────
 
 var _hubRAF = null;
-var _hubCanvasOpacity = 1.0;
+var _hubCanvasOpacity = 0;
 
 function getHubThemeRGB() {
   var id = getProfTheme();

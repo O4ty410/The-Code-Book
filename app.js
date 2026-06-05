@@ -6748,13 +6748,6 @@ function renderProfilePanel() {
       '<div class="pf-section-hdr">// DISPLAY</div>' +
 
       '<div class="pf-display-row">' +
-        '<span class="pf-display-label">Code Background</span>' +
-        '<span class="pf-display-val" id="canvas-opacity-val">' + (state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100) + '%</span>' +
-      '</div>' +
-      '<input type="range" class="pf-opacity-slider" min="0" max="100" value="' + (state.codeCanvasOpacity !== undefined ? state.codeCanvasOpacity : 100) + '" oninput="setCodeCanvasOpacity(this.value)">' +
-      '<div class="pf-display-hints"><span>Off</span><span>Full</span></div>' +
-
-      '<div class="pf-display-row" style="margin-top:14px">' +
         '<span class="pf-display-label">Narrator Voice</span>' +
         '<div class="pf-toggle-group">' +
           '<button class="pf-toggle-btn' + ((!state.narratorGender || state.narratorGender === 'female') ? ' pf-toggle-active' : '') + '" onclick="setNarratorGender(\'female\')">♀ Female</button>' +
