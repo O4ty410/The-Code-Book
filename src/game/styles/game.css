@@ -2176,6 +2176,143 @@
   border-color: rgba(0, 210, 255, 0.70);
 }
 
+/* ── Director Mode panel ─────────────────────────────────────────────────────── */
+
+.mars-director {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  background: rgba(4, 12, 35, 0.88);
+  border: 1px solid rgba(0, 180, 255, 0.28);
+  border-radius: 6px;
+  padding: 18px 18px 16px;
+  min-width: 210px;
+  backdrop-filter: blur(8px);
+  animation: telem-in 0.4s ease forwards;
+  z-index: 20;
+  pointer-events: all;
+}
+
+.mdir-title {
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: rgba(0, 200, 255, 0.60);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.mdir-section {
+  font-size: 7px;
+  letter-spacing: 3px;
+  color: rgba(100, 160, 200, 0.50);
+  text-transform: uppercase;
+  margin: 10px 0 6px;
+}
+
+.mdir-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.mdir-btn {
+  flex: 1;
+  min-width: 56px;
+  padding: 6px 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: rgba(140, 190, 230, 0.75);
+  background: rgba(0, 80, 160, 0.10);
+  border: 1px solid rgba(0, 150, 220, 0.22);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mdir-btn:hover {
+  background: rgba(0, 120, 220, 0.20);
+  border-color: rgba(0, 180, 255, 0.45);
+  color: rgba(180, 225, 255, 0.95);
+}
+
+.mdir-btn--on {
+  background: rgba(0, 160, 255, 0.22) !important;
+  border-color: rgba(0, 210, 255, 0.65) !important;
+  color: rgba(0, 230, 255, 0.95) !important;
+  box-shadow: 0 0 8px rgba(0, 200, 255, 0.20);
+}
+
+/* ── Director toggle button ──────────────────────────────────────────────────── */
+
+.mdir-toggle {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(0, 210, 255, 0.80);
+  background: rgba(4, 12, 35, 0.75);
+  border: 1px solid rgba(0, 180, 255, 0.30);
+  border-radius: 4px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  backdrop-filter: blur(6px);
+  z-index: 19;
+}
+
+.mdir-toggle:hover {
+  background: rgba(0, 40, 100, 0.75);
+  border-color: rgba(0, 210, 255, 0.55);
+}
+
+/* ── Cinematic event toast ───────────────────────────────────────────────────── */
+
+.mars-event {
+  position: absolute;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(4, 12, 35, 0.90);
+  border: 1px solid rgba(0, 180, 255, 0.28);
+  border-top-width: 2px;
+  border-radius: 5px;
+  padding: 12px 24px;
+  min-width: 280px;
+  max-width: 480px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  animation: event-in 0.35s ease forwards;
+  z-index: 25;
+}
+
+@keyframes event-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.mevent-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.mevent-sub {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: rgba(140, 185, 220, 0.60);
+  text-transform: uppercase;
+}
+
 /* ── Mobile touch controls ──
    JS gates rendering via IS_TOUCH, so display:flex by default is correct.
    Samsung Internet & some Android browsers don't match (pointer:coarse) even
