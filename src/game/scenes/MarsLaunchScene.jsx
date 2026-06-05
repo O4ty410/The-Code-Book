@@ -228,13 +228,12 @@ function drawEarth(ctx, cx, cy, r, t) {
       });
       ctx.globalAlpha=1;
     }
-    // ── Shadow terminator (sun top-left → shadow on right) ──
+    // Shadow terminator + specular
     ctx.globalAlpha=1;
     const eShG=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
     eShG.addColorStop(0,'rgba(0,0,0,0)'); eShG.addColorStop(0.32,'rgba(0,0,0,0)');
     eShG.addColorStop(0.50,'rgba(0,0,8,0.48)'); eShG.addColorStop(0.70,'rgba(0,0,5,0.78)'); eShG.addColorStop(1,'rgba(0,0,2,0.93)');
     ctx.fillStyle=eShG; ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    // ── Specular highlight (sun glint, top-left) ──
     if(r>12){const espx=cx-r*0.26,espy=cy-r*0.28;const espG=ctx.createRadialGradient(espx,espy,0,espx,espy,r*0.54);espG.addColorStop(0,'rgba(255,255,255,0.58)');espG.addColorStop(0.18,'rgba(255,255,255,0.22)');espG.addColorStop(0.48,'rgba(255,255,255,0.04)');espG.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=espG;ctx.fillRect(cx-r,cy-r,r*2,r*2);}
     ctx.restore();
   }
@@ -284,12 +283,11 @@ function drawMars(ctx, cx, cy, r, t) {
     const dA=0.10+0.06*Math.sin(t*0.38);
     ctx.beginPath(); ctx.ellipse(cx-r*0.08,cy+r*0.12,r*0.62,r*0.22,0.2,0,Math.PI*2);
     ctx.fillStyle=`rgba(218,125,55,${dA.toFixed(3)})`; ctx.fill();
-    // ── Shadow terminator ──
+    // Shadow terminator + specular
     const mShG=ctx.createLinearGradient(cx-r,cy,cx+r,cy);
     mShG.addColorStop(0,'rgba(0,0,0,0)'); mShG.addColorStop(0.34,'rgba(0,0,0,0)');
     mShG.addColorStop(0.52,'rgba(0,0,0,0.42)'); mShG.addColorStop(0.72,'rgba(0,0,0,0.74)'); mShG.addColorStop(1,'rgba(0,0,0,0.92)');
     ctx.fillStyle=mShG; ctx.fillRect(cx-r,cy-r,r*2,r*2);
-    // ── Specular highlight (warm sun glint) ──
     if(r>12){const mspx=cx-r*0.24,mspy=cy-r*0.26;const mspG=ctx.createRadialGradient(mspx,mspy,0,mspx,mspy,r*0.52);mspG.addColorStop(0,'rgba(255,210,160,0.48)');mspG.addColorStop(0.20,'rgba(255,190,130,0.15)');mspG.addColorStop(0.52,'rgba(255,160,80,0.03)');mspG.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=mspG;ctx.fillRect(cx-r,cy-r,r*2,r*2);}
     ctx.restore();
   }
