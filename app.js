@@ -4071,7 +4071,7 @@ function stopHubBgCycle() {
   var gl = document.getElementById('hub-bg-glow');
   if (el) el.style.opacity = '0';
   if (gl) gl.style.opacity = '0';
-  if (window.HubIcon3D) HubIcon3D.stop();
+  if (window.HubIcon3D) { HubIcon3D.stop(); HubIcon3D.disposeCards(); }
 }
 
 function startHubBgCycle() {
@@ -4162,14 +4162,16 @@ function renderLearnHub() {
       (!unlocked ? ' fc-card-locked' : '') +
       (isActive  ? ' fc-card-active' : '');
     var clickAttr  = unlocked ? ' onclick="' + (fi === 0 ? 'showSageFloorIntro(0)' : 'goToFloor(' + fi + ')') + '"' : '';
-    var icon       = getFloorIcon(fi);
+    var iconHtml   = window.HubIcon3D
+      ? '<canvas class="fc-icon-canvas" data-floor="' + fi + '" data-color="' + encodeURIComponent(color) + '" width="52" height="52" style="display:block;"></canvas>'
+      : getFloorIcon(fi);
     var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
     return '<div class="' + cardClasses + '" style="--fc-color:' + color + ';--fc-glow:' + glow + ';min-width:118px;flex:1;max-width:160px;"' + clickAttr + '>' +
       '<div class="fc-accent"></div>' +
       infoBtn +
       '<div class="fc-floor-badge">Floor ' + (fi + 1) + '</div>' +
-      '<div class="fc-icon">' + icon + '</div>' +
+      '<div class="fc-icon">' + iconHtml + '</div>' +
       '<div class="fc-title" style="font-size:11px;width:100%;word-break:normal;">' + f.title + '</div>' +
       '<div class="fc-sec-count">' + floorDone + '/' + floorTotal + ' sections</div>' +
       '<span class="' + statusClass + '">' + statusText + '</span>' +
@@ -4272,6 +4274,14 @@ function renderLearnHub() {
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
   startHubBgCycle();
+  if (window.HubIcon3D && mc) {
+    var cvs = mc.querySelectorAll('.fc-icon-canvas');
+    Array.prototype.forEach.call(cvs, function(cv) {
+      var fi = parseInt(cv.getAttribute('data-floor'), 10);
+      var col = decodeURIComponent(cv.getAttribute('data-color'));
+      HubIcon3D.showInCard(cv, fi, col);
+    });
+  }
 }
 function completeSection(sectionId, fi, si) {
   closeSectionCompletePopup();
