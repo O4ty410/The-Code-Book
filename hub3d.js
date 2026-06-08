@@ -391,7 +391,12 @@
 
   function animateCard(card) {
     card.raf = requestAnimationFrame(function() { animateCard(card); });
-    if (card.mesh) card.mesh.rotation.y += 0.012;
+    if (card.mesh) {
+      card.mesh.rotation.y += 0.012;
+      // Gentle tilt oscillation so the flat wireframe reveals depth as it spins
+      card.mesh.rotation.x = Math.sin(card.tick * 0.018) * 0.32;
+      card.tick = (card.tick || 0) + 1;
+    }
     card.renderer.render(card.scene, card.camera);
   }
 
@@ -414,11 +419,11 @@
       _scene.add(_mesh);
     },
 
-    showInCard: function(canvas, fi, color) {
+    showInCard: function(canvas, fi) {
       if (!window.THREE) return;
       fi = fi || 0;
       var cfg = FLOORS[fi] || FLOORS[0];
-      var col = color || cfg.color;
+      var col = cfg.color; // always use the vivid hub3d floor colour
 
       var old = _cards[fi];
       if (old) {
@@ -434,15 +439,18 @@
       renderer.setClearColor(0x000000, 0);
 
       var scene = new THREE.Scene();
+      // Tilted camera so the flat wireframe shows real 3-D depth as it rotates
       var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
-      camera.position.set(0, 0, 3.6);
+      camera.position.set(1.1, 0.9, 3.1);
+      camera.lookAt(0, 0, 0);
 
       setCardLights(scene, col);
 
       var mesh = cfg.build(col);
+      mesh.rotation.y = Math.PI / 6; // start at a natural 3/4 angle
       scene.add(mesh);
 
-      var card = { renderer: renderer, scene: scene, camera: camera, mesh: mesh, raf: null };
+      var card = { renderer: renderer, scene: scene, camera: camera, mesh: mesh, raf: null, tick: 0 };
       animateCard(card);
       _cards[fi] = card;
     },
