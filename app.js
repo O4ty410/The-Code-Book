@@ -4163,7 +4163,7 @@ function renderLearnHub() {
       (isActive  ? ' fc-card-active' : '');
     var clickAttr  = unlocked ? ' onclick="' + (fi === 0 ? 'showSageFloorIntro(0)' : 'goToFloor(' + fi + ')') + '"' : '';
     var iconHtml   = window.HubIcon3D
-      ? '<canvas class="fc-icon-canvas" data-floor="' + fi + '" data-color="' + encodeURIComponent(color) + '" width="52" height="52" style="display:block;"></canvas>'
+      ? '<canvas class="fc-icon-canvas" data-floor="' + fi + '" width="52" height="52" style="display:block;"></canvas>'
       : getFloorIcon(fi);
     var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
@@ -4278,8 +4278,7 @@ function renderLearnHub() {
     var cvs = mc.querySelectorAll('.fc-icon-canvas');
     Array.prototype.forEach.call(cvs, function(cv) {
       var fi = parseInt(cv.getAttribute('data-floor'), 10);
-      var col = decodeURIComponent(cv.getAttribute('data-color'));
-      HubIcon3D.showInCard(cv, fi, col);
+      HubIcon3D.showInCard(cv, fi);
     });
   }
 }
