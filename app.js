@@ -4050,8 +4050,12 @@ function _applyHubBgFloor(fi) {
   var el = document.getElementById('hub-bg-icon');
   var gl = document.getElementById('hub-bg-glow');
   if (el) {
-    el.innerHTML = getFloorIcon(fi, 480, fc.h);
-    el.style.filter = 'drop-shadow(0 0 60px ' + fc.h + ') drop-shadow(0 0 20px ' + fc.h + ')';
+    if (window.HubIcon3D) {
+      HubIcon3D.show(el, fi);
+    } else {
+      el.innerHTML = getFloorIcon(fi, 480, fc.h);
+      el.style.filter = 'drop-shadow(0 0 60px ' + fc.h + ') drop-shadow(0 0 20px ' + fc.h + ')';
+    }
     el.style.opacity = '0';
   }
   if (gl) {
@@ -4067,6 +4071,7 @@ function stopHubBgCycle() {
   var gl = document.getElementById('hub-bg-glow');
   if (el) el.style.opacity = '0';
   if (gl) gl.style.opacity = '0';
+  if (window.HubIcon3D) HubIcon3D.stop();
 }
 
 function startHubBgCycle() {
@@ -4074,6 +4079,7 @@ function startHubBgCycle() {
   var gen = _hubBgGen;
   _hubBgFloor = 0;
   _applyHubBgFloor(_hubBgFloor);
+  if (window.HubIcon3D) HubIcon3D.resume();
   requestAnimationFrame(function() {
     if (_hubBgGen !== gen) return;
     var el = document.getElementById('hub-bg-icon');
