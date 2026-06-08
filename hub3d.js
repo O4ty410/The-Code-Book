@@ -371,6 +371,30 @@
     _renderer.render(_scene, _camera);
   }
 
+  // ── Card canvas renderers (one per floor card) ────────────────────────────
+
+  var _cards = {};
+
+  function setCardLights(scene, color) {
+    var c = toHex(color);
+    scene.add(new THREE.AmbientLight(0x223344, 2.5));
+    var key = new THREE.DirectionalLight(0xffffff, 3.5);
+    key.position.set(3, 4, 5);
+    scene.add(key);
+    var fill = new THREE.PointLight(c, 5, 14);
+    fill.position.set(-2.5, 1.5, 2);
+    scene.add(fill);
+    var rim = new THREE.DirectionalLight(c, 2.5);
+    rim.position.set(-1.5, -2, -4);
+    scene.add(rim);
+  }
+
+  function animateCard(card) {
+    card.raf = requestAnimationFrame(function() { animateCard(card); });
+    if (card.mesh) card.mesh.rotation.y += 0.012;
+    card.renderer.render(card.scene, card.camera);
+  }
+
   // ── Public API ────────────────────────────────────────────────────────────
 
   window.HubIcon3D = {
@@ -388,6 +412,49 @@
       _mesh = cfg.build(cfg.color);
       setLights(cfg.color);
       _scene.add(_mesh);
+    },
+
+    showInCard: function(canvas, fi, color) {
+      if (!window.THREE) return;
+      fi = fi || 0;
+      var cfg = FLOORS[fi] || FLOORS[0];
+      var col = color || cfg.color;
+
+      var old = _cards[fi];
+      if (old) {
+        if (old.raf) cancelAnimationFrame(old.raf);
+        if (old.mesh) { old.scene.remove(old.mesh); disposeMesh(old.mesh); }
+        old.renderer.dispose();
+        delete _cards[fi];
+      }
+
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(52, 52);
+      renderer.setClearColor(0x000000, 0);
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
+      camera.position.set(0, 0, 3.6);
+
+      setCardLights(scene, col);
+
+      var mesh = cfg.build(col);
+      scene.add(mesh);
+
+      var card = { renderer: renderer, scene: scene, camera: camera, mesh: mesh, raf: null };
+      animateCard(card);
+      _cards[fi] = card;
+    },
+
+    disposeCards: function() {
+      Object.keys(_cards).forEach(function(k) {
+        var card = _cards[k];
+        if (card.raf) cancelAnimationFrame(card.raf);
+        if (card.mesh) { card.scene.remove(card.mesh); disposeMesh(card.mesh); }
+        card.renderer.dispose();
+      });
+      _cards = {};
     },
 
     stop:   function() { if (_raf) { cancelAnimationFrame(_raf); _raf = null; } },
