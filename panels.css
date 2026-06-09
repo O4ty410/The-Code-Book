@@ -2433,3 +2433,85 @@ body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-sh
 .bgt-name { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700; color: var(--text,#fff); }
 .bgt-desc { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-muted); line-height: 1.4; }
 .bgt-earned { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 1px; color: #48bb78; margin-top: 2px; }
+
+/* ── Support tab ── */
+.support-root { display: flex; justify-content: center; padding: 8px 0 40px; }
+.support-card {
+  background: rgba(4,8,24,0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(200,169,110,0.3);
+  border-radius: 20px;
+  padding: 36px 32px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(200,169,110,0.1), inset 0 1px 0 rgba(255,255,255,0.12);
+}
+.support-coffee { font-size: 52px; margin-bottom: 16px; }
+.support-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--text, #fff);
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+.support-sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.support-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin-bottom: 20px;
+}
+.support-what-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--accent, #c8a96e);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.support-perks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+.support-perk {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--text, #fff);
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+}
+.support-btn {
+  display: block;
+  background: var(--accent, #c8a96e);
+  color: #000;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.support-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.support-btn:active { transform: scale(0.98); }
+.support-note {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3px;
+}

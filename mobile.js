@@ -250,7 +250,7 @@ function renderMobileHub() {
     { color: '#7eb8c8', iconType: 'tools',     badge: 'TOOLS',      title: 'Tools',            hint: 'Speed round & more',                                       action: 'mobNavTo(\'tools\')' },
     { color: '#8888ff', iconType: 'profile',   badge: 'PROFILE',    title: 'Profile',          hint: 'Stats, notes & badges',                                    action: 'mobNavTo(\'profile\')' },
     { color: '#00c8e0', iconType: 'news',      badge: 'NEWS',       title: 'News Feed',        hint: 'Dev news · live transmissions',                            action: 'mobNavTo(\'news\')' },
-    { color: '#a78bfa', iconType: 'premium',   badge: 'ARCADE',     title: 'Arcade',           hint: 'Code, compete, challenge',                                  action: 'mobNavTo(\'premium\')' },
+    { color: '#a78bfa', iconType: 'premium',   badge: 'ARCADE',     title: 'Arcade',           hint: 'Playground · challenges · support',                         action: 'mobNavTo(\'premium\')' },
     { color: '#7eb8d4', iconType: 'game',      badge: 'GAME HUB',   title: 'Game Hub',         hint: 'Switch the light on',                                      action: 'mobNavTo(\'game\')',    wide: true },
   ];
 
