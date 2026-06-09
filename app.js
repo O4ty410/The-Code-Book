@@ -6849,171 +6849,437 @@ function exportNotes() {
   setTimeout(function() { URL.revokeObjectURL(url); a.remove(); }, 1000);
 }
 
+// ============================================================
+// ARCADE PANEL — Interactive Zone (replaces Premium)
+// ============================================================
+var BOSS_CHALLENGES = [
+  { floor: 0, subtitle: 'Understanding Before Touching', questions: [
+    { q: 'What does HTTP stand for?', opts: ['HyperText Transfer Protocol','Hyper Transfer Text Process','High Text Transfer Port','HyperType Transport Protocol'], correct: 0 },
+    { q: "What is a browser's primary job?", opts: ['Store data on servers','Request, receive, and display web content','Run JavaScript on servers','Write HTML files'], correct: 1 },
+    { q: 'What does a variable do in code?', opts: ['Runs a set of instructions','Stores a piece of information with a name','Styles a webpage','Connects to the internet'], correct: 1 },
+    { q: 'What does an "if" statement do?', opts: ['Repeats code multiple times','Stores data for later','Runs code only when a condition is true','Connects two pieces of data'], correct: 2 },
+    { q: 'Which of these is a loop?', opts: ['if (score > 10) { win(); }','let name = "Alice";','for (let i = 0; i < 5; i++) { draw(); }','function greet() {}'], correct: 2 }
+  ]},
+  { floor: 1, subtitle: 'Seeing It Come Alive', questions: [
+    { q: 'What does HTML stand for?', opts: ['HyperText Markup Language','Hyperlink Text Making Language','High Transfer Markup Language','HyperType Module Language'], correct: 0 },
+    { q: 'What does a CSS selector target?', opts: ['A server request','A JavaScript function','An HTML element to style','A database entry'], correct: 2 },
+    { q: 'What CSS property makes text bold?', opts: ['text-weight: bold','font-bold: true','font-weight: bold','bold: font'], correct: 2 },
+    { q: 'What does the div tag do?', opts: ['Creates a hyperlink','Displays an image','Plays a video','Groups HTML elements into a block'], correct: 3 },
+    { q: 'What does "display: flex" do?', opts: ['Makes an element transparent','Removes an element','Creates a flexible layout container','Applies a bold font'], correct: 2 }
+  ]},
+  { floor: 2, subtitle: 'JavaScript Fundamentals', questions: [
+    { q: 'How do you declare a variable in JavaScript?', opts: ['var name = "Alice";','variable name = "Alice";','let: name = "Alice";','store name = "Alice";'], correct: 0 },
+    { q: 'What does a function do?', opts: ['Styles a webpage','Groups reusable code that runs when called','Connects to a database','Stores a number'], correct: 1 },
+    { q: 'What does console.log() do?', opts: ['Saves data to a file','Sends a request to a server','Prints output to the developer console','Runs a loop'], correct: 2 },
+    { q: 'Which starts a comment in JavaScript?', opts: ['#','/* only','// or /* */','--'], correct: 2 },
+    { q: 'What is an array?', opts: ['A type of loop','An ordered list of values','A CSS rule','A server function'], correct: 1 }
+  ]},
+  { floor: 3, subtitle: 'Data & Collections', questions: [
+    { q: 'What does array.length return?', opts: ['The last item','The first item','The number of items','The sum of all items'], correct: 2 },
+    { q: 'What does array.push() do?', opts: ['Removes the last item','Adds an item to the end','Sorts the array','Returns the first item'], correct: 1 },
+    { q: 'How do you get the first element of array "items"?', opts: ['items[1]','items.first()','items[0]','items.get(0)'], correct: 2 },
+    { q: 'What is an object in JavaScript?', opts: ['A type of loop','A key-value pair data structure','A CSS class','An HTML element'], correct: 1 },
+    { q: 'How do you access property "age" on object "person"?', opts: ['person->age','person::age','person.age','person[age]'], correct: 2 }
+  ]},
+  { floor: 4, subtitle: 'Events & The DOM', questions: [
+    { q: 'What does DOM stand for?', opts: ['Document Object Model','Data Object Method','Display Output Module','Dynamic Object Manager'], correct: 0 },
+    { q: 'What does document.getElementById() do?', opts: ['Creates a new element','Deletes an element','Finds an element by ID','Changes the page title'], correct: 2 },
+    { q: 'What event fires when a user clicks a button?', opts: ['hover','keypress','load','click'], correct: 3 },
+    { q: 'How do you attach a click handler to an element?', opts: ['element.onHover = fn','element.addEventListener("click", fn)','element.click()','element.trigger("click")'], correct: 1 },
+    { q: 'What does innerHTML let you do?', opts: ['Load a new page','Change the font size','Read or write HTML inside an element','Set the element ID'], correct: 2 }
+  ]},
+  { floor: 5, subtitle: 'APIs & Fetch', questions: [
+    { q: 'What does API stand for?', opts: ['Application Programming Interface','Automated Process Input','Advanced Program Integration','Application Protocol Interface'], correct: 0 },
+    { q: 'What does fetch() do?', opts: ['Stores data in localStorage','Makes a network request to a URL','Runs a CSS animation','Creates an HTML element'], correct: 1 },
+    { q: 'What format do most APIs use to send data?', opts: ['CSV','XML','JSON','HTML'], correct: 2 },
+    { q: 'What does HTTP status code 404 mean?', opts: ['Server error','Unauthorised','Resource not found','Request successful'], correct: 2 },
+    { q: 'What is a Promise in JavaScript?', opts: ['A type of HTML element','A CSS animation','An object representing a future value','A server-side script'], correct: 2 }
+  ]},
+  { floor: 6, subtitle: 'Full Stack Foundations', questions: [
+    { q: 'What is version control used for?', opts: ['Styling HTML pages','Making API requests','Tracking changes to code over time','Running JavaScript in the browser'], correct: 2 },
+    { q: 'What does "git commit" do?', opts: ['Uploads code to GitHub','Saves a snapshot of your changes','Creates a new branch','Deletes old code'], correct: 1 },
+    { q: 'What is the difference between front-end and back-end?', opts: ['Front-end runs on servers, back-end in browsers','Front-end is what users see, back-end is server logic','Front-end uses Python, back-end uses JavaScript','There is no difference'], correct: 1 },
+    { q: 'What does "npm install" do?', opts: ['Starts a server','Downloads project dependencies','Compiles JavaScript','Pushes code to GitHub'], correct: 1 },
+    { q: 'What is a database used for?', opts: ['Styling web pages','Running animations','Storing and retrieving structured data','Making API requests'], correct: 2 }
+  ]}
+];
+
+var PG_EXAMPLES = {
+  hello:    '// Hello World\nconsole.log("Hello, world!");\nconsole.log("Welcome to The Code Book!");',
+  loop:     '// For Loop\nfor (var i = 1; i <= 5; i++) {\n  console.log("Number: " + i);\n}\nconsole.log("Loop complete!");',
+  fn:       '// Functions\nfunction greet(name) {\n  return "Hello, " + name + "!";\n}\nconsole.log(greet("Alice"));\nconsole.log(greet("Bob"));',
+  array:    '// Arrays\nvar fruits = ["apple", "banana", "cherry"];\nconsole.log("Total: " + fruits.length);\nfruits.forEach(function(f) {\n  console.log("- " + f);\n});',
+  object:   '// Objects\nvar person = { name: "Alice", age: 28, role: "Developer" };\nconsole.log(person.name + " is " + person.age);\nconsole.log("Role: " + person.role);'
+};
+
+var _arcadeTab = 'playground';
+var _bossActive = null;
+
 function renderPremiumPanel() {
   var panel = document.getElementById('panel-premium');
   if (!panel) return;
-
-  var alreadyNotified = !!localStorage.getItem('codebook_premium_notify');
-
-  var features = [
-    {
-      id: 'floors', name: 'All 7 Floors Unlocked',
-      desc: 'Every floor available from day one — no waiting, no gates.',
-      fullDesc: 'Free users access Floors 1 and 2. Premium unlocks all seven immediately so you move at your own pace without hitting walls. No floor is hidden from you on day one.',
-      problem: 'Solves: hitting a paywall mid-momentum.'
-    },
-    {
-      id: 'mentorship', name: 'Mentorship Sessions',
-      desc: 'Live 1-on-1 calls with an experienced developer, booked on your schedule.',
-      fullDesc: 'Book a 45-minute video call with a working developer whenever you need a second opinion. Bring a project, a problem, or just questions — we\'ll talk through it. Included every month.',
-      problem: 'Solves: learning alone with no one to ask.'
-    },
-    {
-      id: 'reviews', name: 'Code Reviews',
-      desc: 'Submit any project and get written, line-by-line feedback within 48 hours.',
-      fullDesc: 'Submit any project you\'ve built and receive written feedback within 48 hours. Comments are specific and actionable — not generic. Real code, real notes, real improvement.',
-      problem: 'Solves: never knowing if your code is actually good.'
-    },
-    {
-      id: 'certificate', name: 'Completion Certificate',
-      desc: 'A verifiable certificate issued when you finish all seven floors.',
-      fullDesc: 'Finishing all seven floors earns you a certificate with a unique verification link. Share it on your CV or LinkedIn. Employers can confirm it is genuine with one click.',
-      problem: 'Solves: having no credential to show for your effort.'
-    },
-    {
-      id: 'community', name: 'Private Community',
-      desc: 'Access to a members-only space for questions, accountability, and feedback.',
-      fullDesc: 'A members-only space where premium learners share progress, ask questions, and give each other feedback. No noise — just people doing the same work as you.',
-      problem: 'Solves: learning in isolation with no peers to compare notes with.'
-    },
-    {
-      id: 'career', name: 'Career Coaching',
-      desc: 'CV review, portfolio feedback, and mock interview prep included.',
-      fullDesc: 'One session focused entirely on your job search: CV review, portfolio critique, and a mock technical interview. Practical, specific, and honest.',
-      problem: 'Solves: not knowing if you\'re actually ready to apply.'
-    },
-    {
-      id: 'support', name: 'Priority Support',
-      desc: 'Any question answered by a human within 24 hours, guaranteed.',
-      fullDesc: 'Post any question — about the curriculum, your code, or your career — and a human responds within 24 hours. Not a bot. Not a forum. A person.',
-      problem: 'Solves: getting stuck with nowhere to turn.'
-    },
-    {
-      id: 'resources', name: 'Resource Packs',
-      desc: 'Cheat sheets, starter templates, and reference guides for every floor.',
-      fullDesc: 'Floor-by-floor cheat sheets, reusable HTML/CSS/JS starter templates, and quick-reference cards for every major concept. Download them, keep them, use them forever.',
-      problem: 'Solves: rebuilding from scratch every time you start something new.'
-    },
-    {
-      id: 'paths', name: 'Adaptive Paths',
-      desc: 'Personalized learning paths that adjust based on performance.',
-      fullDesc: 'Dynamically adjusts what you learn next based on your strengths, weaknesses, and completed tools. Keeps you in an optimal challenge zone and removes wasted time.',
-      problem: 'Solves: following a fixed path that doesn\'t match where you actually are.'
-    },
-    {
-      id: 'deepwork', name: 'Deep Work Mode',
-      desc: 'Distraction-free learning sessions with focus tracking.',
-      fullDesc: 'Locks the interface into a clean, minimal mode, tracks uninterrupted focus time, and rewards longer deep work sessions with bonus XP.',
-      problem: 'Solves: short, scattered sessions that never build momentum.'
-    },
-    {
-      id: 'projects', name: 'Project Builder',
-      desc: 'Guided real-world projects to apply your skills.',
-      fullDesc: 'Step-by-step project workflows that turn your knowledge into portfolio-ready work. Includes milestones, checkpoints, and completion validation.',
-      problem: 'Solves: knowing the theory but not knowing how to build something real.'
-    },
-    {
-      id: 'benchmarking', name: 'Skill Benchmarking',
-      desc: 'Compare your progress against real-world standards.',
-      fullDesc: 'Shows how your current skill level compares to industry expectations. Highlights gaps and suggests what to improve next.',
-      problem: 'Solves: not knowing if you\'re actually job-ready.'
-    },
-    {
-      id: 'ai', name: 'AI Code Review',
-      desc: 'Instant feedback on your code and projects.',
-      fullDesc: 'Analyzes your work and gives actionable feedback on structure, readability, and best practices — like having a senior developer review your code.',
-      problem: 'Solves: submitting work with no idea if it\'s any good.'
-    },
-    {
-      id: 'momentum', name: 'Momentum Boost',
-      desc: 'Temporary XP boosts for consistent progress.',
-      fullDesc: 'Rewards streaks and consistent activity with short-term XP multipliers, encouraging daily engagement and habit building.',
-      problem: 'Solves: losing motivation between sessions.'
-    },
-    {
-      id: 'opportunities', name: 'Opportunity Board',
-      desc: 'Unlock real opportunities as you progress.',
-      fullDesc: 'Access curated internships, freelance gigs, and job leads once you reach certain milestones, turning learning into real-world outcomes.',
-      problem: 'Solves: finishing the curriculum with no idea what to do next.'
-    }
-  ];
-
-  var html = '<div class="panel-hero" style="text-align:center;padding:60px 32px 40px;">' +
-    '<div style="font-size:48px;margin-bottom:20px;">♛</div>' +
-    '<div class="panel-hero-label">PREMIUM</div>' +
-    '<div class="panel-hero-title">Unlock The Full Book</div>' +
-    '<div class="panel-hero-sub" style="max-width:480px;margin:0 auto 32px;">Everything in the free tier, plus the tools that turn learning into a career.</div>' +
-    '<div style="display:flex;flex-direction:column;align-items:center;gap:14px;">' +
-    '<button class="build-mark-done" disabled style="opacity:0.4;cursor:not-allowed;font-size:14px;padding:14px 32px;letter-spacing:1px;">Join Premium — Coming Soon</button>' +
-    (alreadyNotified
-      ? '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;color:var(--success,#48bb78);letter-spacing:1px;">✓ You\'re on the notify list</div>'
-      : '<button onclick="showPremiumNotify()" style="background:none;border:none;color:var(--accent);font-family:\'IBM Plex Mono\',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;text-decoration:underline;text-underline-offset:4px;">Notify me when it\'s ready</button>'
-    ) +
-    '</div>' +
-    '</div>' +
-    '<div class="premium-grid">';
-
-  features.forEach(function(f) {
-    html += '<div class="premium-feature-card" onclick="togglePremiumTooltip(this)">' +
-      '<div class="premium-card-lock">♛</div>' +
-      '<div class="premium-card-icon">' + premiumIconSVG(f.id, 52, 52) + '</div>' +
-      '<div class="premium-card-name">' + f.name + '</div>' +
-      '<div class="premium-card-desc">' + f.desc + '</div>' +
-      '<div class="premium-card-tooltip">' +
-      '<div class="premium-tooltip-full">' + f.fullDesc + '</div>' +
-      '<div class="premium-tooltip-problem">' + f.problem + '</div>' +
-      '<div class="premium-tooltip-badge">♛ Available with Premium</div>' +
+  if (!state.bossResults) state.bossResults = {};
+  panel.innerHTML =
+    '<div class="arcade-root">' +
+      '<div class="arcade-header">' +
+        '<div class="arcade-header-label">INTERACTIVE ZONE</div>' +
+        '<div class="arcade-header-title">Arcade</div>' +
+        '<div class="arcade-header-sub">Code, compete, and prove what you know.</div>' +
       '</div>' +
-      '</div>';
-  });
-
-  html += '</div>';
-
-  panel.innerHTML = html;
+      '<div class="arcade-tabs">' +
+        '<button class="arcade-tab-btn' + (_arcadeTab==='playground'?' active':'') + '" onclick="setArcadeTab(\'playground\',this)">🖥 Playground</button>' +
+        '<button class="arcade-tab-btn' + (_arcadeTab==='boss'?' active':'') + '" onclick="setArcadeTab(\'boss\',this)">⚔ Boss Challenges</button>' +
+        '<button class="arcade-tab-btn' + (_arcadeTab==='leaderboard'?' active':'') + '" onclick="setArcadeTab(\'leaderboard\',this)">🏆 Leaderboard</button>' +
+        '<button class="arcade-tab-btn' + (_arcadeTab==='badges'?' active':'') + '" onclick="setArcadeTab(\'badges\',this)">🏅 Badges</button>' +
+      '</div>' +
+      '<div class="arcade-tab-content" id="arcade-tab-content"></div>' +
+    '</div>';
+  _renderArcadeTabContent(_arcadeTab);
 }
 
-function showPremiumNotify() {
-  var overlay = document.getElementById('premium-notify-overlay');
-  if (overlay) overlay.style.display = 'flex';
+function setArcadeTab(tab, btn) {
+  _arcadeTab = tab;
+  var btns = document.querySelectorAll('.arcade-tab-btn');
+  Array.prototype.forEach.call(btns, function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  _renderArcadeTabContent(tab);
 }
 
-function hidePremiumNotify() {
-  var overlay = document.getElementById('premium-notify-overlay');
-  if (overlay) overlay.style.display = 'none';
+function _renderArcadeTabContent(tab) {
+  var el = document.getElementById('arcade-tab-content');
+  if (!el) return;
+  if (tab === 'playground')  { el.innerHTML = _pgHtml(); _initPlayground(); }
+  else if (tab === 'boss')   { el.innerHTML = _bossHtml(); }
+  else if (tab === 'leaderboard') { el.innerHTML = _lbTabHtml(); _loadLbTab(); }
+  else if (tab === 'badges') { el.innerHTML = _badgesTabHtml(); }
 }
 
-function submitPremiumNotify() {
-  var input = document.getElementById('premium-notify-email');
-  var email = input ? input.value.trim() : '';
-  if (!email || !email.includes('@')) {
-    if (input) { input.style.borderColor = '#e53e3e'; input.focus(); }
-    return;
+// ─────────── Playground ───────────
+function _pgHtml() {
+  return '<div class="pg-root">' +
+    '<div class="pg-toolbar-top">' +
+      '<span class="pg-label">JavaScript Playground</span>' +
+      '<select class="pg-examples-select" onchange="loadPgExample(this.value);this.value=\'\';">' +
+        '<option value="">Load example…</option>' +
+        '<option value="hello">Hello World</option>' +
+        '<option value="loop">For Loop</option>' +
+        '<option value="fn">Functions</option>' +
+        '<option value="array">Arrays</option>' +
+        '<option value="object">Objects</option>' +
+      '</select>' +
+    '</div>' +
+    '<div class="pg-editor-wrap">' +
+      '<textarea id="pg-editor" class="pg-editor" spellcheck="false" autocorrect="off" autocapitalize="off">console.log("Hello, world!");</textarea>' +
+    '</div>' +
+    '<div class="pg-toolbar-bottom">' +
+      '<button class="pg-run-btn" onclick="runPlayground()">&#9654; Run</button>' +
+      '<button class="pg-clear-btn" onclick="clearPgOutput()">&#10005; Clear</button>' +
+      '<span class="pg-hint">Use console.log() to print</span>' +
+    '</div>' +
+    '<div class="pg-output-wrap">' +
+      '<div class="pg-output-label">OUTPUT</div>' +
+      '<div id="pg-output" class="pg-output"><div class="pg-output-empty">Run your code to see output here.</div></div>' +
+    '</div>' +
+  '</div>';
+}
+
+function _initPlayground() {
+  var ed = document.getElementById('pg-editor');
+  if (ed && state.playgroundCode) ed.value = state.playgroundCode;
+  if (ed) {
+    ed.addEventListener('keydown', function(e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        var s = this.selectionStart;
+        this.value = this.value.substring(0, s) + '  ' + this.value.substring(this.selectionEnd);
+        this.selectionStart = this.selectionEnd = s + 2;
+      }
+    });
   }
-  localStorage.setItem('codebook_premium_notify', email);
-  var form = document.getElementById('premium-notify-form');
-  var confirm = document.getElementById('premium-notify-confirm');
-  if (form) form.style.display = 'none';
-  if (confirm) confirm.style.display = 'block';
-  renderPremiumPanel();
 }
 
-function togglePremiumTooltip(card) {
-  var isOpen = card.classList.contains('tooltip-open');
-  document.querySelectorAll('.premium-feature-card.tooltip-open').forEach(function(c) {
-    c.classList.remove('tooltip-open');
-  });
-  if (!isOpen) card.classList.add('tooltip-open');
+function loadPgExample(key) {
+  if (!key || !PG_EXAMPLES[key]) return;
+  var ed = document.getElementById('pg-editor');
+  if (ed) ed.value = PG_EXAMPLES[key];
+  clearPgOutput();
 }
+
+function clearPgOutput() {
+  var out = document.getElementById('pg-output');
+  if (out) out.innerHTML = '<div class="pg-output-empty">Run your code to see output here.</div>';
+}
+
+function runPlayground() {
+  var ed = document.getElementById('pg-editor');
+  if (!ed) return;
+  var code = ed.value;
+  var out = document.getElementById('pg-output');
+  if (!out) return;
+  state.playgroundCode = code;
+  out.innerHTML = '';
+  if (!state.badgeFlags) state.badgeFlags = {};
+  if (!state.badgeFlags.playgroundUsed) {
+    state.badgeFlags.playgroundUsed = true;
+    saveState();
+    checkAndUnlockBadges();
+  }
+  if (window._pgMsgH) window.removeEventListener('message', window._pgMsgH);
+  window._pgMsgH = function(e) {
+    if (!e.data || e.data._src !== 'pg') return;
+    if (e.data.type === 'log' || e.data.type === 'warn') {
+      var line = document.createElement('div');
+      line.className = 'pg-log';
+      line.textContent = e.data.text;
+      out.appendChild(line);
+    } else if (e.data.type === 'error') {
+      var line = document.createElement('div');
+      line.className = 'pg-error';
+      line.textContent = '⚠ ' + e.data.text;
+      out.appendChild(line);
+    } else if (e.data.type === 'done') {
+      window.removeEventListener('message', window._pgMsgH);
+      var f = document.getElementById('pg-sandbox');
+      if (f) f.remove();
+      if (!out.children.length) out.innerHTML = '<div class="pg-output-empty">No output — use console.log() to print values.</div>';
+    }
+  };
+  window.addEventListener('message', window._pgMsgH);
+  var old = document.getElementById('pg-sandbox');
+  if (old) old.remove();
+  var iframe = document.createElement('iframe');
+  iframe.id = 'pg-sandbox';
+  iframe.sandbox = 'allow-scripts';
+  iframe.style.display = 'none';
+  var safe = code.replace(/<\/script>/gi, '<\\/script>');
+  iframe.srcdoc = '<!DOCTYPE html><html><body><script>(function(){' +
+    'var _c={' +
+    'log:function(){var t=[].slice.call(arguments).map(function(a){try{return typeof a==="object"?JSON.stringify(a):String(a);}catch(e){return String(a);}}).join(" ");parent.postMessage({_src:"pg",type:"log",text:t},"*");},' +
+    'warn:function(){var t=[].slice.call(arguments).map(String).join(" ");parent.postMessage({_src:"pg",type:"warn",text:"⚠ "+t},"*");},' +
+    'error:function(){var t=[].slice.call(arguments).map(String).join(" ");parent.postMessage({_src:"pg",type:"error",text:t},"*");}' +
+    '};try{(function(console){' + safe + '}(_c));}catch(e){parent.postMessage({_src:"pg",type:"error",text:e.message},"*");}' +
+    'parent.postMessage({_src:"pg",type:"done"},"*");' +
+    '})();<\/script></body></html>';
+  document.body.appendChild(iframe);
+  setTimeout(function() {
+    window.removeEventListener('message', window._pgMsgH);
+    var f = document.getElementById('pg-sandbox');
+    if (f) f.remove();
+  }, 6000);
+}
+
+// ─────────── Boss Challenges ───────────
+function _bossHtml() {
+  if (!state.bossResults) state.bossResults = {};
+  var html = '<div class="boss-root">' +
+    '<div class="boss-intro">' +
+      '<div class="boss-intro-title">Floor Boss Challenges</div>' +
+      '<div class="boss-intro-sub">Complete a floor to unlock its boss. Answer 4 out of 5 correctly to pass and earn 150 XP.</div>' +
+    '</div><div class="boss-grid">';
+  BOSS_CHALLENGES.forEach(function(bc) {
+    var done = typeof isFloorComplete === 'function' && isFloorComplete(bc.floor);
+    var res = state.bossResults[bc.floor];
+    var passed = res && res.passed;
+    var fc = (typeof FLOORS !== 'undefined' && FLOORS[bc.floor]) ? FLOORS[bc.floor].color : '#c8a96e';
+    var statusClass = passed ? 'boss-card-passed' : (done ? 'boss-card-available' : 'boss-card-locked');
+    var badge = passed
+      ? '<span class="boss-status-badge boss-status-pass">✓ PASSED — ' + res.score + '/5</span>'
+      : (done
+        ? '<span class="boss-status-badge boss-status-avail">CHALLENGE READY</span>'
+        : '<span class="boss-status-badge boss-status-lock">🔒 Complete Floor ' + (bc.floor + 1) + ' First</span>');
+    html += '<div class="boss-card ' + statusClass + '" style="--bc:' + fc + '"' +
+      (done && !passed ? ' onclick="startBossChallenge(' + bc.floor + ')"' : '') + '>' +
+      '<div class="boss-card-floor">FLOOR ' + (bc.floor + 1) + '</div>' +
+      '<div class="boss-card-title">' + bc.subtitle + '</div>' +
+      badge +
+      (done && !passed ? '<button class="boss-start-btn">Start Challenge →</button>' : '') +
+      (passed ? '<button class="boss-retry-btn" onclick="event.stopPropagation();startBossChallenge(' + bc.floor + ')">Retry</button>' : '') +
+    '</div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function startBossChallenge(fi) {
+  var bc = BOSS_CHALLENGES[fi];
+  if (!bc) return;
+  if (_bossActive && _bossActive.interval) clearInterval(_bossActive.interval);
+  var qs = bc.questions.slice();
+  for (var i = qs.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = qs[i]; qs[i] = qs[j]; qs[j] = tmp;
+  }
+  _bossActive = { fi: fi, qs: qs, qi: 0, answers: [], timerSecs: 90, interval: null };
+  _showBossModal(fi);
+  _renderBossQ();
+  _bossActive.interval = setInterval(function() {
+    _bossActive.timerSecs--;
+    var el = document.getElementById('boss-timer');
+    var m = Math.floor(_bossActive.timerSecs / 60);
+    var s = _bossActive.timerSecs % 60;
+    if (el) { el.textContent = m + ':' + (s < 10 ? '0' : '') + s; }
+    if (_bossActive.timerSecs <= 10 && el) el.classList.add('boss-timer-urgent');
+    if (_bossActive.timerSecs <= 0) { clearInterval(_bossActive.interval); _finishBoss(); }
+  }, 1000);
+}
+
+function _showBossModal(fi) {
+  var ex = document.getElementById('boss-overlay');
+  if (ex) ex.remove();
+  var ov = document.createElement('div');
+  ov.id = 'boss-overlay';
+  ov.className = 'boss-overlay';
+  ov.innerHTML = '<div class="boss-modal">' +
+    '<button class="boss-modal-close" onclick="closeBossChallenge()">✕</button>' +
+    '<div class="boss-modal-header">' +
+      '<div class="boss-modal-label">FLOOR ' + (fi + 1) + ' BOSS CHALLENGE</div>' +
+      '<div class="boss-modal-timer" id="boss-timer">1:30</div>' +
+    '</div>' +
+    '<div class="boss-modal-progress" id="boss-progress"></div>' +
+    '<div id="boss-modal-body"></div>' +
+  '</div>';
+  document.body.appendChild(ov);
+  setTimeout(function() { ov.classList.add('boss-overlay--open'); }, 20);
+}
+
+function _renderBossQ() {
+  if (!_bossActive) return;
+  var body = document.getElementById('boss-modal-body');
+  var prog = document.getElementById('boss-progress');
+  if (!body) return;
+  var q = _bossActive.qs[_bossActive.qi];
+  if (prog) {
+    prog.innerHTML = _bossActive.qs.map(function(_, i) {
+      return '<span class="boss-dot' + (i < _bossActive.qi ? ' bp-done' : i === _bossActive.qi ? ' bp-current' : '') + '"></span>';
+    }).join('');
+  }
+  body.innerHTML =
+    '<div class="boss-q-num">Question ' + (_bossActive.qi + 1) + ' of ' + _bossActive.qs.length + '</div>' +
+    '<div class="boss-question">' + (typeof escHtml === 'function' ? escHtml(q.q) : q.q) + '</div>' +
+    '<div class="boss-opts">' +
+      q.opts.map(function(opt, i) {
+        return '<button class="boss-opt" onclick="answerBoss(' + i + ')">' +
+          '<span class="boss-opt-letter">' + 'ABCD'[i] + '</span>' +
+          (typeof escHtml === 'function' ? escHtml(opt) : opt) +
+        '</button>';
+      }).join('') +
+    '</div>';
+}
+
+function answerBoss(idx) {
+  if (!_bossActive) return;
+  var q = _bossActive.qs[_bossActive.qi];
+  var correct = idx === q.correct;
+  _bossActive.answers.push({ correct: correct });
+  var opts = document.querySelectorAll('.boss-opt');
+  Array.prototype.forEach.call(opts, function(btn, i) {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('boss-opt-correct');
+    if (i === idx && !correct) btn.classList.add('boss-opt-wrong');
+  });
+  setTimeout(function() {
+    _bossActive.qi++;
+    if (_bossActive.qi >= _bossActive.qs.length) _finishBoss();
+    else _renderBossQ();
+  }, 600);
+}
+
+function _finishBoss() {
+  if (!_bossActive) return;
+  if (_bossActive.interval) clearInterval(_bossActive.interval);
+  var score = _bossActive.answers.filter(function(a) { return a.correct; }).length;
+  var passed = score >= 4;
+  var fi = _bossActive.fi;
+  if (!state.bossResults) state.bossResults = {};
+  if (passed || !state.bossResults[fi]) state.bossResults[fi] = { passed: passed, score: score };
+  saveState();
+  if (passed) { if (typeof awardXP === 'function') awardXP(150, 'boss-' + fi, window.innerWidth / 2, 200); checkAndUnlockBadges(); }
+  var body = document.getElementById('boss-modal-body');
+  var prog = document.getElementById('boss-progress');
+  if (prog) prog.innerHTML = '';
+  if (body) {
+    body.innerHTML = '<div class="boss-result">' +
+      '<div class="boss-result-icon">' + (passed ? '🏆' : '💀') + '</div>' +
+      '<div class="boss-result-title">' + (passed ? 'CHALLENGE PASSED!' : 'CHALLENGE FAILED') + '</div>' +
+      '<div class="boss-result-score">' + score + ' / 5 correct</div>' +
+      (passed ? '<div class="boss-result-xp">+150 XP awarded</div>' : '<div class="boss-result-retry">Need 4/5 to pass. Try again!</div>') +
+      '<div class="boss-result-btns">' +
+        '<button class="boss-result-btn" onclick="closeBossChallenge()">' + (passed ? 'Back to Arcade' : 'Close') + '</button>' +
+        (!passed ? '<button class="boss-result-btn boss-result-btn-retry" onclick="startBossChallenge(' + fi + ')">Retry →</button>' : '') +
+      '</div></div>';
+  }
+  _bossActive = null;
+}
+
+function closeBossChallenge() {
+  if (_bossActive && _bossActive.interval) clearInterval(_bossActive.interval);
+  _bossActive = null;
+  var ov = document.getElementById('boss-overlay');
+  if (ov) { ov.classList.remove('boss-overlay--open'); setTimeout(function() { if (ov.parentElement) ov.remove(); }, 300); }
+  if (_arcadeTab === 'boss') { var el = document.getElementById('arcade-tab-content'); if (el) el.innerHTML = _bossHtml(); }
+}
+
+// ─────────── Leaderboard tab ───────────
+function _lbTabHtml() {
+  return '<div class="lb-tab-root">' +
+    '<div class="lb-tab-intro">Top learners ranked by total XP. Powered by The Code Book community.</div>' +
+    '<div id="lb-tab-list" class="lb-tab-list"><div class="lb-tab-loading">Loading rankings…</div></div>' +
+  '</div>';
+}
+
+async function _loadLbTab() {
+  var list = document.getElementById('lb-tab-list');
+  if (!list) return;
+  try {
+    if (!window.sb) throw new Error('no client');
+    var result = await window.sb.from('profiles').select('username,xp,streak').order('xp', { ascending: false }).limit(20);
+    var rows = result.data;
+    if (!rows || !rows.length) { list.innerHTML = '<div class="lb-tab-empty">No entries yet — be the first!</div>'; return; }
+    var myXp = state ? (state.xp || 0) : 0;
+    var medals = ['🥇','🥈','🥉'];
+    var myRank = -1;
+    rows.forEach(function(r, i) { if (r.xp === myXp && myRank === -1) myRank = i; });
+    list.innerHTML = rows.map(function(r, i) {
+      var isMe = i === myRank;
+      return '<div class="lb-row' + (isMe ? ' lb-row-me' : '') + '">' +
+        '<div class="lb-rank">' + (medals[i] || (i + 1)) + '</div>' +
+        '<div class="lb-info">' +
+          '<div class="lb-name">' + (typeof escHtml === 'function' ? escHtml(r.username || 'Anonymous') : (r.username || 'Anonymous')) + (isMe ? ' (you)' : '') + '</div>' +
+          '<div class="lb-streak">🔥 ' + (r.streak || 0) + ' day streak</div>' +
+        '</div>' +
+        '<div class="lb-xp">' + (r.xp || 0) + '<span class="lb-xp-label"> XP</span></div>' +
+      '</div>';
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="lb-tab-empty">Could not load leaderboard.</div>';
+  }
+}
+
+// ─────────── Badges tab ───────────
+function _badgesTabHtml() {
+  if (typeof BADGES === 'undefined') return '<div class="lb-tab-empty">Badges not loaded.</div>';
+  var earned = state.earnedBadges || [];
+  return '<div class="bgt-root">' +
+    '<div class="bgt-intro">Earn badges by hitting milestones. ' + earned.length + ' of ' + BADGES.length + ' unlocked.</div>' +
+    '<div class="bgt-grid">' +
+      BADGES.map(function(b) {
+        var u = earned.indexOf(b.id) !== -1;
+        return '<div class="bgt-card ' + (u ? 'bgt-unlocked' : 'bgt-locked') + '">' +
+          '<div class="bgt-emoji">' + (u ? b.emoji : '🔒') + '</div>' +
+          '<div class="bgt-name">' + b.name + '</div>' +
+          '<div class="bgt-desc">' + b.desc + '</div>' +
+          (u ? '<div class="bgt-earned">✓ EARNED</div>' : '') +
+        '</div>';
+      }).join('') +
+    '</div></div>';
+}
+
+// ── legacy stubs (keep to avoid reference errors) ──
+function showPremiumNotify() {}
+function hidePremiumNotify() {}
+function submitPremiumNotify() {}
+function togglePremiumTooltip() {}
+
 // ============================================
 // BADGE DEFINITIONS
 // ============================================
@@ -7041,7 +7307,21 @@ var BADGES = [
   { id: 'unstoppable',  emoji: '🏆', name: 'Unstoppable',  desc: '30-day streak',
     check: function() { return (state.streak || 0) >= 30; } },
   { id: 'graduate',     emoji: '🎓', name: 'Graduate',     desc: 'Complete all floors',
-    check: function() { return FLOORS.every(function(f, fi){ return isFloorComplete(fi); }); } }
+    check: function() { return FLOORS.every(function(f, fi){ return isFloorComplete(fi); }); } },
+  { id: 'floor-3',     emoji: '🔧', name: 'Floor 3',      desc: 'Complete Floor 3',
+    check: function() { return isFloorComplete(2); } },
+  { id: 'floor-4',     emoji: '⚙️', name: 'Floor 4',      desc: 'Complete Floor 4',
+    check: function() { return isFloorComplete(3); } },
+  { id: 'century',     emoji: '💯', name: 'Century',      desc: 'Reach 1,000 XP',
+    check: function() { return (state.xp || 0) >= 1000; } },
+  { id: 'high-scorer', emoji: '🚀', name: 'High Scorer',  desc: 'Reach 3,000 XP',
+    check: function() { return (state.xp || 0) >= 3000; } },
+  { id: 'playground',  emoji: '🖥', name: 'Coder',        desc: 'Run code in the Playground',
+    check: function() { return !!(state.badgeFlags && state.badgeFlags.playgroundUsed); } },
+  { id: 'boss-beater', emoji: '⚔️', name: 'Boss Beater',  desc: 'Pass your first Floor Boss Challenge',
+    check: function() { return Object.keys(state.bossResults || {}).some(function(k){ return state.bossResults[k] && state.bossResults[k].passed; }); } },
+  { id: 'boss-master', emoji: '👑', name: 'Boss Master',  desc: 'Pass all 7 Floor Boss Challenges',
+    check: function() { var r = state.bossResults || {}; return [0,1,2,3,4,5,6].every(function(i){ return r[i] && r[i].passed; }); } }
 ];
 
 // ============================================================
