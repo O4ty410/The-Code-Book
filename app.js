@@ -1916,6 +1916,10 @@ function showSageFloorIntro(fi) {
 }
 
 function goToFloor(fi) {
+  if (isGuest && fi > 0) {
+    showGuestLockPopup('Floor Locked', 'Floors 2–7 are for registered users. Create a free account to unlock everything and save your progress.');
+    return;
+  }
   stopNarration();
 
   // Capture prevFloor BEFORE mutating state so direction is calculated correctly
@@ -4212,28 +4216,31 @@ function renderLearnHub() {
   var cardsHtml = FLOORS.map(function(f, fi) {
     var color    = f.color || '#c8a96e';
     var glow     = hexGlow(color);
-    var done     = isFloorComplete(fi);
-    var unlocked = true; // all floors unlocked
-    var isActive = !done && fi === currentFloorIdx;
+    var done           = isFloorComplete(fi);
+    var guestLocked    = isGuest && fi > 0;
+    var unlocked       = !guestLocked;
+    var isActive       = unlocked && !done && fi === currentFloorIdx;
 
     var floorDone  = f.sections.filter(function(s) { return state.completed[s.id]; }).length;
     var floorTotal = f.sections.length;
 
     var statusClass, statusText;
-    if (done) {
+    if (guestLocked) {
+      statusClass = 'fc-status fc-status-locked';  statusText = '&#128274; Sign up to unlock';
+    } else if (done) {
       statusClass = 'fc-status fc-status-done';   statusText = '&#10003; Complete';
     } else if (isActive) {
       statusClass = 'fc-status fc-status-active';  statusText = 'In Progress';
-    } else if (unlocked) {
-      statusClass = 'fc-status fc-status-open';    statusText = 'Available';
     } else {
-      statusClass = 'fc-status fc-status-locked';  statusText = '&#128274; Locked';
+      statusClass = 'fc-status fc-status-open';    statusText = 'Available';
     }
 
     var cardClasses = 'fc-card' +
-      (!unlocked ? ' fc-card-locked' : '') +
-      (isActive  ? ' fc-card-active' : '');
-    var clickAttr  = unlocked ? ' onclick="' + (fi === 0 ? 'showSageFloorIntro(0)' : 'goToFloor(' + fi + ')') + '"' : '';
+      (guestLocked ? ' fc-card-locked' : '') +
+      (isActive    ? ' fc-card-active' : '');
+    var clickAttr = guestLocked
+      ? ' onclick="showGuestLockPopup(\'Floor Locked\',\'Floors 2–7 are for registered users. Create a free account to unlock everything.\')"'
+      : ' onclick="' + (fi === 0 ? 'showSageFloorIntro(0)' : 'goToFloor(' + fi + ')') + '"';
     var iconHtml   = window.HubIcon3D
       ? '<canvas class="fc-icon-canvas" data-floor="' + fi + '" width="52" height="52" style="display:block;"></canvas>'
       : getFloorIcon(fi);
