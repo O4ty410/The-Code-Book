@@ -692,6 +692,45 @@
       color: var(--text-muted);
     }
 
+    /* ── Game screenshots ── */
+    .game-shots {
+      margin-top: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .game-shot-main {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.5),
+        0 4px 24px rgba(0,0,0,0.7),
+        0 0 32px var(--game-glow, rgba(200,169,110,0.18));
+      display: block;
+      object-fit: cover;
+    }
+
+    .game-shot-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .game-shot-row img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.5),
+        0 4px 16px rgba(0,0,0,0.65),
+        0 0 20px var(--game-glow, rgba(200,169,110,0.12));
+      display: block;
+      object-fit: cover;
+      aspect-ratio: 16/9;
+    }
+
     @media (max-width: 860px) {
       .games-grid { grid-template-columns: 1fr 1fr; }
       .floors-grid { grid-template-columns: 1fr 1fr; }
@@ -1079,7 +1118,7 @@
 
       <div class="games-grid">
 
-        <div class="game-card" style="--game-color:#c8a96e; --game-line: linear-gradient(90deg, #c8a96e, #e8c878);">
+        <div class="game-card" style="--game-color:#c8a96e; --game-line: linear-gradient(90deg, #c8a96e, #e8c878); --game-glow: rgba(200,169,110,0.22);">
           <div class="game-eyebrow">&#128640; Mars Mission Briefing</div>
           <div class="game-title">LAUNCH SEQUENCE</div>
           <p class="game-desc">
@@ -1091,6 +1130,13 @@
             <span class="game-tag">Sci-fi mission</span>
             <span class="game-tag">Rocket systems</span>
             <span class="game-tag">Code debugging</span>
+          </div>
+          <div class="game-shots">
+            <img src="screenshots/launch-rocket.png" class="game-shot-main" alt="Launch Sequence — rocket builder">
+            <div class="game-shot-row">
+              <img src="screenshots/launch-space.png" alt="Launch Sequence — Mars approach">
+              <img src="screenshots/launch-mission.png" alt="Launch Sequence — code mission">
+            </div>
           </div>
         </div>
 
