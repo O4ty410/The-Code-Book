@@ -396,14 +396,9 @@ async function handleForgotPassword() {
 }
 
 function continueAsGuest() {
-  loadState();
-  updateStreak();
   document.getElementById('auth-screen').style.display = 'none';
   document.body.style.overflow = '';
-  document.getElementById('cover').style.display = 'flex';
-  const coverUser = document.getElementById('cover-user');
-  if (coverUser) coverUser.style.display = 'none';
-  populateDashboard();
+  showGuestWelcome();
 }
 
 async function handleAuth() {
@@ -1750,12 +1745,25 @@ function confirmGuestName() {
   document.getElementById('onboarding').style.display = 'flex';
 }
 
-function showGuestLockPopup() {
+function showGuestLockPopup(title, body) {
+  var t = document.getElementById('guest-lock-title');
+  var b = document.getElementById('guest-lock-body');
+  if (t) t.textContent = title || 'Locked';
+  if (b) b.textContent = body || 'Create a free account to unlock everything and save your progress.';
   document.getElementById('guest-lock-overlay').style.display = 'flex';
 }
 
 function hideGuestLockPopup() {
   document.getElementById('guest-lock-overlay').style.display = 'none';
+}
+
+function showGuestWelcome() {
+  document.getElementById('guest-welcome-overlay').style.display = 'flex';
+}
+
+function hideGuestWelcome() {
+  document.getElementById('guest-welcome-overlay').style.display = 'none';
+  startAsGuest();
 }
 
 function startAsGuest() {
@@ -1807,19 +1815,22 @@ function renderNav() {
   const nav = document.getElementById('floor-nav');
   if (!nav) return;
   nav.innerHTML = FLOORS.map(function(f, fi) {
-    var isUnlocked = true; // all floors unlocked
-    var isGuestLocked = false;
-    var isActive = fi === state.currentFloor - 1;
+    var isGuestLocked = isGuest && fi > 0;
+    var isUnlocked = !isGuestLocked;
+    var isActive = !isGuestLocked && fi === state.currentFloor - 1;
     var isComplete = isFloorComplete(fi);
     var sections = isActive ? f.sections.map(function(s, si) {
       var isDone = state.completed[s.id];
       var isActiveSec = si === state.currentSection;
       return '<span class="section-link ' + (isDone ? 'done' : '') + ' ' + (isActiveSec ? 'active' : '') + '" onclick="goToSection(' + fi + ',' + si + ')">' + s.title + '</span>';
     }).join('') : '';
-    return '<div class="floor-nav-item ' + (isUnlocked ? 'unlocked' : '') + ' ' + (isActive ? 'active' : '') + ' ' + (isComplete ? 'completed' : '') + ' ' + (isGuestLocked ? 'guest-locked' : '') + '" onclick="goToFloor(' + fi + ')">' +
+    var clickHandler = isGuestLocked
+      ? 'showGuestLockPopup(\'Floor Locked\',\'Floors 2\u20137 are for registered users. Create a free account to unlock everything and save your progress.\')'
+      : 'goToFloor(' + fi + ')';
+    return '<div class="floor-nav-item ' + (isUnlocked ? 'unlocked' : '') + ' ' + (isActive ? 'active' : '') + ' ' + (isComplete ? 'completed' : '') + ' ' + (isGuestLocked ? 'guest-locked' : '') + '" onclick="' + clickHandler + '">' +
       '<div class="floor-nav-header">' +
       '<div class="floor-num" style="color:' + f.color + '">' + (isGuestLocked ? '&#128274;' : isComplete ? '\u2713' : fi + 1) + '</div>' +
-      '<div class="floor-nav-label">' + f.title + (isGuestLocked ? ' \u2014 Account required' : '') + '</div>' +
+      '<div class="floor-nav-label">' + f.title + (isGuestLocked ? ' \u2014 Sign up to unlock' : '') + '</div>' +
       '</div>' +
       (isActive ? '<div class="floor-sections">' + sections + '</div>' : '') +
       '</div>';
@@ -3340,6 +3351,13 @@ function handleEditorTab(e) {
 
 
 function switchTopNav(tab, btn) {
+  // Guest mode — block locked tabs
+  var guestLockedTabs = { profile: 'Profile', revision: 'Revision', news: 'News Feed', tools: 'Tools', premium: 'Arcade', game: 'Game Hub' };
+  if (isGuest && guestLockedTabs[tab]) {
+    showGuestLockPopup(guestLockedTabs[tab] + ' Locked', guestLockedTabs[tab] + ' is only available to registered users. Create a free account to unlock everything and save your progress.');
+    return;
+  }
+
   // Update top bar tabs
   document.querySelectorAll('.top-nav-tab').forEach(function(b){ b.classList.remove('active'); });
   if (btn && btn.classList && btn.classList.contains('top-nav-tab')) btn.classList.add('active');

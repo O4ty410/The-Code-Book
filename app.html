@@ -139,11 +139,34 @@
 <div id="guest-lock-overlay" class="overlay-base" style="display:none;">
   <div class="overlay-inner-md" style="text-align:center;">
     <div style="font-size:48px;margin-bottom:16px;">&#128274;</div>
-    <div class="onboarding-title">Floor Locked</div>
-    <div class="onboarding-body">Floors 3 and above are available to registered users. Create a free account to unlock everything and save your progress.</div>
+    <div class="onboarding-title" id="guest-lock-title">Locked</div>
+    <div class="onboarding-body" id="guest-lock-body">Create a free account to unlock everything and save your progress.</div>
     <button class="auth-btn" onclick="hideGuestLockPopup();document.getElementById('auth-screen').style.display='flex';">Create Free Account</button>
     <div style="margin-top:12px;">
       <button onclick="hideGuestLockPopup()" class="auth-link-btn">Keep exploring as guest</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUEST WELCOME POPUP -->
+<div id="guest-welcome-overlay" class="overlay-base" style="display:none;">
+  <div class="overlay-inner-md" style="text-align:center;">
+    <div style="font-size:48px;margin-bottom:16px;">👋</div>
+    <div class="onboarding-title">Welcome, Guest</div>
+    <div class="onboarding-body" style="text-align:left;">
+      <p style="margin:0 0 12px;">Here's what's available in guest mode:</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+        <div>✅ &nbsp;<strong>Floor 1</strong> — fully open</div>
+        <div>✅ &nbsp;<strong>Daily Challenge &amp; Speed Round</strong> — available</div>
+        <div>✅ &nbsp;<strong>Support</strong> — always open</div>
+        <div>🔒 &nbsp;<strong>Floors 2–7</strong> — account required</div>
+        <div>🔒 &nbsp;<strong>Profile, Revision, News, Tools, Arcade</strong> — account required</div>
+      </div>
+      <p style="margin:0;color:var(--text-muted);font-size:13px;">Complete Floor 1 to unlock a bonus reward. 🚀</p>
+    </div>
+    <button class="auth-btn" onclick="hideGuestWelcome();document.getElementById('auth-screen').style.display='flex';">Create Free Account</button>
+    <div style="margin-top:12px;">
+      <button onclick="hideGuestWelcome()" class="auth-link-btn">Start as Guest</button>
     </div>
   </div>
 </div>
