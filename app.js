@@ -1784,11 +1784,9 @@ function hideGuestEndOfContent() {
 
 function launchSequenceFromGuest() {
   hideGuestFloor1Reward();
-  // Go straight into the Launch Sequence game
+  localStorage.setItem('guest_launch_unlocked', 'true');
   switchTopNav('game', document.getElementById('tnav-game'));
   renderGamePanel();
-  // After the game panel loads, show the end-of-content prompt when they return
-  localStorage.setItem('guest_launch_unlocked', 'true');
 }
 
 function startAsGuest() {
@@ -1804,37 +1802,6 @@ function startAsGuest() {
   launchApp();
 }
 
-function checkGuestSavePrompt() {
-  const isGuest = localStorage.getItem('codebook_guest');
-  const prompted = localStorage.getItem('codebook_guest_prompted');
-  if (isGuest && !prompted) {
-    // Count only real section completions, not checklist items
-    const sectionIds = new Set();
-    FLOORS.forEach(function(f) { f.sections.forEach(function(s) { sectionIds.add(s.id); }); });
-    const completedSections = Object.keys(state.completed).filter(function(k) {
-      return sectionIds.has(k) && state.completed[k];
-    }).length;
-    if (completedSections >= 3) {
-      localStorage.setItem('codebook_guest_prompted', 'true');
-      showGuestSavePrompt();
-    }
-  }
-}
-
-function showGuestSavePrompt() {
-  const prompt = document.createElement('div');
-  prompt.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;`;
-  prompt.innerHTML = `
-    <div style="background:var(--surface);border:1px solid var(--accent);border-radius:16px;padding:32px;max-width:340px;text-align:center;">
-      <div style="margin-bottom:16px;display:flex;justify-content:center;">${sageOwlSVG(46, 51)}</div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:900;color:var(--accent);font-style:italic;margin-bottom:12px;">Save your progress?</div>
-      <div style="font-size:14px;color:var(--text-dim);line-height:1.8;margin-bottom:24px;">You\'ve completed 3 sections. Create a free account to make sure you never lose your progress.</div>
-      <button onclick="this.closest('div[style*=fixed]').remove();document.getElementById('auth-screen').style.display='flex';switchTab('signup');" style="width:100%;padding:16px;background:var(--accent);border:none;border-radius:8px;color:var(--bg);font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;">CREATE FREE ACCOUNT</button>
-      <button onclick="this.closest('div[style*=fixed]').remove();" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-muted);background:transparent;border:none;cursor:pointer;">Continue without saving</button>
-    </div>
-  `;
-  document.body.appendChild(prompt);
-}
 
 function renderNav() {
   const nav = document.getElementById('floor-nav');
@@ -4398,7 +4365,6 @@ function completeSection(sectionId, fi, si) {
     awardXP(getFloorXP(fi), 'floor-' + fi, window.innerWidth / 2, 250);
   }
   saveState();
-  checkGuestSavePrompt();
   var _prevBadges = (state.earnedBadges || []).slice();
   updateAchievements();
   var _newBadges = (state.earnedBadges || []).filter(function(id) { return _prevBadges.indexOf(id) === -1; }).map(function(id) { return BADGES.find(function(b) { return b.id === id; }); }).filter(Boolean);
