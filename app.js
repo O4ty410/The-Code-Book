@@ -7378,11 +7378,6 @@ function _supportTabHtml() {
   '</div>';
 }
 
-// ── legacy stubs (keep to avoid reference errors) ──
-function showPremiumNotify() {}
-function hidePremiumNotify() {}
-function submitPremiumNotify() {}
-function togglePremiumTooltip() {}
 
 // ============================================
 // BADGE DEFINITIONS
