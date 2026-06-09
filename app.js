@@ -466,14 +466,25 @@ async function onUserLoggedIn() {
 async function saveToSupabase() {
   if (!window.sb || !window.currentUser) return;
   try {
+    var uname = (window.currentUser.user_metadata && window.currentUser.user_metadata.username)
+      || state.playerName
+      || window.currentUser.email.split('@')[0];
     await window.sb.from('profiles').upsert({
       id: window.currentUser.id,
+      username: uname,
       xp: state.xp,
       level: state.level,
       streak: state.streak,
       last_active: new Date().toISOString().split('T')[0]
     });
   } catch (e) {}
+}
+
+// Debounced version so rapid XP awards don't hammer the API
+var _saveSupabaseTimer = null;
+function saveToSupabaseDebounced() {
+  clearTimeout(_saveSupabaseTimer);
+  _saveSupabaseTimer = setTimeout(saveToSupabase, 3000);
 }
 
 async function loadUserFromSupabase(user) {
@@ -485,6 +496,10 @@ async function loadUserFromSupabase(user) {
       state.xp = p.xp || 0;
       state.level = p.level || 1;
       state.streak = p.streak || 0;
+      if (p.username) state.playerName = p.username;
+    } else {
+      // New user — create their profile row immediately
+      await saveToSupabase();
     }
     var progressRes = await window.sb.from('user_progress').select('section_id').eq('user_id', user.id);
     if (progressRes.data) {
@@ -517,7 +532,9 @@ async function signOut() {
   await saveToSupabase();
   if (window.sb) await window.sb.auth.signOut();
   currentUser = null;
+  window.currentUser = null;
   isLoggedIn = false;
+  window.isLoggedIn = false;
   localStorage.removeItem('codebook_user');
   localStorage.removeItem('codebook_v1');
   localStorage.removeItem('codebook_guest');
@@ -612,6 +629,7 @@ function awardXP(amount, key, x, y) {
   state.xp += earned;
   if (key) state.xpAwarded[key] = true;
   saveState();
+  saveToSupabaseDebounced();
   updateXPPanel();
   showFloatingXP('+' + (earned) + ' XP', x, y);
   const newLevel = getCurrentLevel().level;
