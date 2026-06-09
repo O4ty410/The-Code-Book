@@ -710,6 +710,16 @@
         0 0 32px var(--game-glow, rgba(200,169,110,0.18));
       display: block;
       object-fit: cover;
+      cursor: zoom-in;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    .game-shot-main:hover {
+      transform: scale(1.015);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.18),
+        0 8px 32px rgba(0,0,0,0.85),
+        0 0 48px var(--game-glow, rgba(200,169,110,0.30));
     }
 
     .game-shot-row {
@@ -729,6 +739,67 @@
       display: block;
       object-fit: cover;
       aspect-ratio: 16/9;
+      cursor: zoom-in;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    .game-shot-row img:hover {
+      transform: scale(1.03);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.15),
+        0 6px 24px rgba(0,0,0,0.80),
+        0 0 32px var(--game-glow, rgba(200,169,110,0.22));
+    }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    #lightbox.open {
+      display: flex;
+    }
+
+    #lightbox img {
+      max-width: 92vw;
+      max-height: 88vh;
+      border-radius: 10px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 24px 80px rgba(0,0,0,0.95);
+      cursor: zoom-out;
+      animation: lb-in 0.2s ease;
+    }
+
+    #lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 18px;
+      line-height: 36px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    #lightbox-close:hover { background: rgba(255,255,255,0.22); }
+
+    @keyframes lb-in {
+      from { opacity: 0; transform: scale(0.94); }
+      to   { opacity: 1; transform: scale(1); }
     }
 
     @media (max-width: 860px) {
@@ -1209,7 +1280,31 @@
     <span class="footer-note">Free &nbsp;&#183;&nbsp; Offline-ready &nbsp;&#183;&nbsp; No install required</span>
   </footer>
 
+  <!-- ── LIGHTBOX ─────────────────────────────────────────────── -->
+  <div id="lightbox">
+    <span id="lightbox-close">&#x2715;</span>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
   <script>
+    // ── LIGHTBOX ─────────────────────────────────────────────────
+    var lb     = document.getElementById('lightbox');
+    var lbImg  = document.getElementById('lightbox-img');
+    var lbClose = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('.game-shot-main, .game-shot-row img').forEach(function(img) {
+      img.addEventListener('click', function() {
+        lbImg.src = this.src;
+        lbImg.alt = this.alt;
+        lb.classList.add('open');
+      });
+    });
+
+    function closeLightbox() { lb.classList.remove('open'); lbImg.src = ''; }
+    lb.addEventListener('click', function(e) { if (e.target !== lbImg) closeLightbox(); });
+    lbClose.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+
     // ── STAR FIELD ───────────────────────────────────────────────
     var sc = document.getElementById('stars-bg');
     var sx = sc ? sc.getContext('2d') : null;
