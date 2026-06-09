@@ -125,6 +125,51 @@
   line-height: 1.4;
 }
 
+/* ── Star background + transparent main-col when mob hub is active ── */
+body.is-mobile.mob-hub-active #app-bg-stars { opacity: 1; }
+body.is-mobile.mob-hub-active #main-col     { background: none !important; }
+
+/* ── Ambient bloom overlay ── */
+#mob-hub-bloom {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: background 1s ease;
+}
+
+/* ── Hub eyebrow header ── */
+.mob-hub-eyebrow {
+  padding: 20px 16px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mob-hub-eyebrow-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--eyebrow-color, #7eb8c8);
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+.mob-hub-eyebrow-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+}
+.mob-hub-eyebrow-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(200,220,255,0.45);
+  margin-top: 3px;
+  letter-spacing: 0.3px;
+}
+
 /* ============================================================
    GRID TILES — match desktop fc-card aesthetic
    ============================================================ */
@@ -139,8 +184,9 @@
   position: relative;
   background:
     radial-gradient(ellipse 80% 55% at 50% 0%, var(--mg-bg, rgba(200,169,110,0.10)) 0%, transparent 70%),
-    linear-gradient(180deg, var(--mg-bg, rgba(200,169,110,0.05)) 0%, transparent 55%),
-    linear-gradient(180deg, #060f22 0%, #040b18 100%);
+    rgba(4, 8, 24, 0.54);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--mg-border, rgba(200,169,110,0.28));
   border-radius: 14px;
   padding: 10px 12px 10px;
@@ -152,9 +198,9 @@
   overflow: hidden;
   transition: border-color 0.22s, box-shadow 0.22s, transform 0.18s;
   box-shadow:
-    0 0 14px var(--mg-glow, rgba(200,169,110,0.14)),
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 2px 16px rgba(0,0,0,0.50);
+    0 0 18px var(--mg-glow, rgba(200,169,110,0.16)),
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 2px 20px rgba(0,0,0,0.60);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -187,7 +233,9 @@
 /* Hero card */
 .mob-hero-card {
   margin: 8px 12px 6px;
-  background: linear-gradient(160deg, #060f20 0%, #040b18 100%);
+  background: rgba(4, 8, 24, 0.60);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid var(--mg-color, #c8a96e);
   border-radius: 16px;
   padding: 14px 16px 12px;
@@ -195,9 +243,11 @@
   position: relative;
   overflow: hidden;
   box-shadow:
-    0 0 24px var(--mg-glow, rgba(200,169,110,0.3)),
-    0 0 60px var(--mg-glow, rgba(200,169,110,0.1)),
-    inset 0 0 30px rgba(0,0,0,0.4);
+    0 0 36px var(--mg-glow, rgba(200,169,110,0.35)),
+    0 0 80px var(--mg-glow, rgba(200,169,110,0.12)),
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    inset 0 0 30px rgba(0,0,0,0.30),
+    0 4px 28px rgba(0,0,0,0.60);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -211,12 +261,14 @@
 }
 
 .mob-hero-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 20px;
-  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
   color: var(--text, #fff);
   line-height: 1.15;
   margin-bottom: 8px;
+  letter-spacing: 0.3px;
+  text-shadow: 0 0 18px var(--mg-glow, rgba(200,169,110,0.4));
 }
 
 .mob-hero-icon {
