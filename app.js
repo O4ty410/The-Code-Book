@@ -401,6 +401,18 @@ function continueAsGuest() {
   showGuestWelcome();
 }
 
+function returnToLoginFromGuest() {
+  localStorage.removeItem('codebook_guest');
+  localStorage.removeItem('codebook_guest_prompted');
+  localStorage.removeItem('guest_launch_unlocked');
+  localStorage.removeItem('guest_endofcontent_shown');
+  isGuest = false;
+  document.getElementById('app').style.display = 'none';
+  var ag = document.querySelector('.app-grid'); if (ag) ag.style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.body.style.overflow = '';
+}
+
 async function handleAuth() {
   var email = document.getElementById('auth-email').value.trim();
   var password = document.getElementById('auth-password').value;

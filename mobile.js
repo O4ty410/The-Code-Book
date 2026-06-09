@@ -282,6 +282,13 @@ function renderMobileHub() {
   });
   html += '</div>';
 
+  if (typeof isGuest !== 'undefined' && isGuest) {
+    html +=
+      '<div style="padding:20px 16px 8px;text-align:center;">' +
+        '<button onclick="returnToLoginFromGuest()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:var(--text-muted);font-family:\'IBM Plex Mono\',monospace;font-size:11px;letter-spacing:1.5px;padding:10px 24px;cursor:pointer;width:100%;">← Return to Login</button>' +
+      '</div>';
+  }
+
   html += '</div>';
   panel.innerHTML = html;
   panel.scrollTop = 0;
