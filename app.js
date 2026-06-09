@@ -7397,26 +7397,29 @@ function renderSupportPanel() {
   var panel = document.getElementById('panel-support');
   if (!panel) return;
   panel.innerHTML =
-    '<div class="support-panel-root">' +
-      '<div class="support-panel-hero">' +
-        '<div class="support-panel-coffee">☕</div>' +
-        '<div class="support-panel-eyebrow">SUPPORT THE PROJECT</div>' +
-        '<div class="support-panel-title">Keep The Code Book Free</div>' +
-        '<div class="support-panel-sub">The Code Book is 100% free — no paywalls, no subscriptions, no catch. If it\'s helped you learn something, a small contribution keeps it going and means a lot.</div>' +
+    '<div class="sp-root">' +
+      '<div class="sp-bloom"></div>' +
+      '<div class="sp-hero">' +
+        '<div class="sp-coffee">☕</div>' +
+        '<div class="sp-eyebrow">SUPPORT THE PROJECT</div>' +
+        '<div class="sp-title">Keep The Code Book Free</div>' +
+        '<div class="sp-sub">Built by one person. Free for everyone. No paywalls, no subscriptions, no catch.<br>If it\'s helped you learn something, a coffee means a lot.</div>' +
       '</div>' +
-      '<div class="support-panel-card">' +
-        '<div class="support-perks">' +
-          '<div class="support-perk">⚡ Keeps the app free for every beginner</div>' +
-          '<div class="support-perk">🏗 Funds new floors and content</div>' +
-          '<div class="support-perk">🎮 More games and challenges</div>' +
-          '<div class="support-perk">🌍 Helps more people start coding</div>' +
+      '<div class="sp-card">' +
+        '<div class="sp-card-label">WHAT YOUR SUPPORT DOES</div>' +
+        '<div class="sp-perks">' +
+          '<div class="sp-perk"><span class="sp-perk-icon">⚡</span><div><div class="sp-perk-title">Keeps it free</div><div class="sp-perk-sub">No learner ever hits a paywall</div></div></div>' +
+          '<div class="sp-perk"><span class="sp-perk-icon">🏗</span><div><div class="sp-perk-title">New floors & content</div><div class="sp-perk-sub">Funds development of future floors</div></div></div>' +
+          '<div class="sp-perk"><span class="sp-perk-icon">🎮</span><div><div class="sp-perk-title">More games</div><div class="sp-perk-sub">New challenges and game modes</div></div></div>' +
+          '<div class="sp-perk"><span class="sp-perk-icon">🌍</span><div><div class="sp-perk-title">More beginners reached</div><div class="sp-perk-sub">Helps keep the app visible and growing</div></div></div>' +
         '</div>' +
-        '<a class="support-btn" href="https://ko-fi.com/thecodebookapp" target="_blank" rel="noopener">☕ Support on Ko-fi</a>' +
-        '<div class="support-note">Opens Ko-fi · One-off donation · No account needed · From £3</div>' +
+        '<a class="sp-btn" href="https://ko-fi.com/thecodebookapp" target="_blank" rel="noopener">☕ &nbsp;Support on Ko-fi</a>' +
+        '<div class="sp-note">Opens Ko-fi &nbsp;·&nbsp; One-off &nbsp;·&nbsp; No account needed &nbsp;·&nbsp; From £3</div>' +
       '</div>' +
-      '<div class="support-panel-thankyou">' +
-        '<div class="support-ty-title">Already supported?</div>' +
-        '<div class="support-ty-sub">Thank you — it genuinely makes a difference. Every contribution helps keep this completely free for the next person who needs it.</div>' +
+      '<div class="sp-thankyou">' +
+        '<div class="sp-ty-icon">🙏</div>' +
+        '<div class="sp-ty-title">Already supported?</div>' +
+        '<div class="sp-ty-sub">Thank you — it genuinely makes a difference and keeps this free for the next person who needs it.</div>' +
       '</div>' +
     '</div>';
 }
