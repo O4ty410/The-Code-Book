@@ -171,6 +171,33 @@
   </div>
 </div>
 
+<!-- GUEST FLOOR 1 REWARD POPUP -->
+<div id="guest-floor1-reward" class="overlay-base" style="display:none;">
+  <div class="overlay-inner-md" style="text-align:center;">
+    <div style="font-size:52px;margin-bottom:16px;">🚀</div>
+    <div class="onboarding-title">Floor 1 Complete!</div>
+    <div class="onboarding-body">For your dedication to completing this floor, we've unlocked the <strong>Launch Sequence</strong> game for you — an interactive sci-fi mission that teaches real coding skills. Ready to launch?</div>
+    <button class="auth-btn" style="margin-top:20px;" onclick="hideGuestFloor1Reward(); launchSequenceFromGuest();">Try Launch Sequence 🚀</button>
+    <button class="auth-btn" style="margin-top:10px;background:transparent;border:1px solid rgba(200,169,110,0.4);color:var(--accent);" onclick="hideGuestFloor1Reward();document.getElementById('auth-screen').style.display='flex';">Create an Account</button>
+    <div style="margin-top:12px;">
+      <button onclick="hideGuestFloor1Reward()" class="auth-link-btn">Maybe later</button>
+    </div>
+  </div>
+</div>
+
+<!-- GUEST END OF CONTENT POPUP -->
+<div id="guest-endofcontent" class="overlay-base" style="display:none;">
+  <div class="overlay-inner-md" style="text-align:center;">
+    <div style="font-size:52px;margin-bottom:16px;">⭐</div>
+    <div class="onboarding-title">That's All For Now</div>
+    <div class="onboarding-body">You've seen everything guest mode has to offer. Create a free account to unlock all 7 floors, save your progress across devices, earn badges, and climb the leaderboard.</div>
+    <button class="auth-btn" style="margin-top:20px;" onclick="hideGuestEndOfContent();document.getElementById('auth-screen').style.display='flex';">Create a Free Account</button>
+    <div style="margin-top:12px;">
+      <button onclick="hideGuestEndOfContent()" class="auth-link-btn">Continue as Guest</button>
+    </div>
+  </div>
+</div>
+
 <!-- LEADERBOARD OVERLAY -->
 <div id="leaderboard-overlay" class="overlay-base scrollable" style="z-index:9993;">
   <div class="overlay-inner-md">
