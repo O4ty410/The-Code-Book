@@ -1766,6 +1766,31 @@ function hideGuestWelcome() {
   startAsGuest();
 }
 
+function showGuestFloor1Reward() {
+  document.getElementById('guest-floor1-reward').style.display = 'flex';
+}
+
+function hideGuestFloor1Reward() {
+  document.getElementById('guest-floor1-reward').style.display = 'none';
+}
+
+function showGuestEndOfContent() {
+  document.getElementById('guest-endofcontent').style.display = 'flex';
+}
+
+function hideGuestEndOfContent() {
+  document.getElementById('guest-endofcontent').style.display = 'none';
+}
+
+function launchSequenceFromGuest() {
+  hideGuestFloor1Reward();
+  // Go straight into the Launch Sequence game
+  switchTopNav('game', document.getElementById('tnav-game'));
+  renderGamePanel();
+  // After the game panel loads, show the end-of-content prompt when they return
+  localStorage.setItem('guest_launch_unlocked', 'true');
+}
+
 function startAsGuest() {
   localStorage.setItem('codebook_guest', 'true');
   isGuest = true;
@@ -3352,9 +3377,14 @@ function handleEditorTab(e) {
 
 function switchTopNav(tab, btn) {
   // Guest mode — block locked tabs
-  var guestLockedTabs = { profile: 'Profile', revision: 'Revision', news: 'News Feed', tools: 'Tools', premium: 'Arcade', game: 'Game Hub' };
+  var guestLockedTabs = { profile: 'Profile', revision: 'Revision', news: 'News Feed', tools: 'Tools', premium: 'Arcade' };
   if (isGuest && guestLockedTabs[tab]) {
     showGuestLockPopup(guestLockedTabs[tab] + ' Locked', guestLockedTabs[tab] + ' is only available to registered users. Create a free account to unlock everything and save your progress.');
+    return;
+  }
+  // Game Hub locked for guests unless they unlocked Launch Sequence as a reward
+  if (isGuest && tab === 'game' && !localStorage.getItem('guest_launch_unlocked')) {
+    showGuestLockPopup('Game Hub Locked', 'Complete Floor 1 to unlock Launch Sequence as a guest reward, or create an account to access all games.');
     return;
   }
 
@@ -3397,6 +3427,11 @@ function switchTopNav(tab, btn) {
   } else {
     document.body.classList.remove('game-mode');
     stopAllGameMusic();
+    // Guest leaving the game after playing Launch Sequence — show end-of-content prompt
+    if (isGuest && localStorage.getItem('guest_launch_unlocked') && !localStorage.getItem('guest_endofcontent_shown')) {
+      localStorage.setItem('guest_endofcontent_shown', 'true');
+      setTimeout(showGuestEndOfContent, 600);
+    }
   }
 
   // Reset revision deck when navigating away
@@ -4400,7 +4435,11 @@ function completeSection(sectionId, fi, si) {
         }, 40);
       }
       if (isNowComplete) {
-        setTimeout(function() { showFloorCelebration(fi, _newBadges); }, 700);
+        if (isGuest && fi === 0) {
+          setTimeout(function() { showGuestFloor1Reward(); }, 900);
+        } else {
+          setTimeout(function() { showFloorCelebration(fi, _newBadges); }, 700);
+        }
       }
     }, 180);
   });
