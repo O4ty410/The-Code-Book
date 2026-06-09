@@ -513,11 +513,6 @@ export default function HangarScene({ progress, onMissionComplete, autoLaunch, o
         <div className="interact-prompt"><kbd>E</kbd> Interact · {nearLabel}</div>
       )}
 
-      {/* DEV — remove before shipping */}
-      {!launchPhase && (
-        <button className="dev-launch-btn" onClick={triggerLaunchNow}>▶ BEGIN LAUNCH</button>
-      )}
-
       {!launchPhase && <ProgressPanel progress={progress} />}
 
       {!launchPhase && !IS_TOUCH && (
