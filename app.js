@@ -3328,7 +3328,7 @@ function switchTopNav(tab, btn) {
 
   // Update mobile bottom bar
   document.querySelectorAll('.mob-nav-btn').forEach(function(b){ b.classList.remove('active'); });
-  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools', premium: 'mob-premium', profile: 'mob-profile', revision: 'mob-revision', news: 'mob-news' };
+  var mobMap = { learn: 'mob-learn', build: 'mob-build', challenge: 'mob-challenge', map: 'mob-map', tools: 'mob-tools', premium: 'mob-premium', profile: 'mob-profile', revision: 'mob-revision', news: 'mob-news', support: 'mob-support' };
   if (mobMap[tab]) {
     var mb = document.getElementById(mobMap[tab]);
     if (mb) mb.classList.add('active');
@@ -3399,6 +3399,7 @@ function switchTopNav(tab, btn) {
       if (tab === 'game') renderGamePanel();
       if (tab === 'revision') { renderRevisionPanel(); if (!state.badgeFlags.revVisited) { state.badgeFlags.revVisited = true; saveState(); checkAndUnlockBadges(); } }
       if (tab === 'news') renderNewsPanel();
+      if (tab === 'support') renderSupportPanel();
     }
   }
 
@@ -6931,7 +6932,6 @@ function renderPremiumPanel() {
         '<button class="arcade-tab-btn' + (_arcadeTab==='boss'?' active':'') + '" onclick="setArcadeTab(\'boss\',this)">⚔ Boss Challenges</button>' +
         '<button class="arcade-tab-btn' + (_arcadeTab==='leaderboard'?' active':'') + '" onclick="setArcadeTab(\'leaderboard\',this)">🏆 Leaderboard</button>' +
         '<button class="arcade-tab-btn' + (_arcadeTab==='badges'?' active':'') + '" onclick="setArcadeTab(\'badges\',this)">🏅 Badges</button>' +
-        '<button class="arcade-tab-btn' + (_arcadeTab==='support'?' active':'') + '" onclick="setArcadeTab(\'support\',this)">☕ Support</button>' +
       '</div>' +
       '<div class="arcade-tab-content" id="arcade-tab-content"></div>' +
     '</div>';
@@ -6953,7 +6953,6 @@ function _renderArcadeTabContent(tab) {
   else if (tab === 'boss')   { el.innerHTML = _bossHtml(); }
   else if (tab === 'leaderboard') { el.innerHTML = _lbTabHtml(); _loadLbTab(); }
   else if (tab === 'badges') { el.innerHTML = _badgesTabHtml(); }
-  else if (tab === 'support') { el.innerHTML = _supportTabHtml(); }
 }
 
 // ─────────── Playground ───────────
@@ -7389,6 +7388,37 @@ function renderNewsPanel() {
       var feed = document.getElementById('news-feed');
       if (feed) feed.innerHTML = '<div class="news-error">⚠ Signal lost. Check your connection and try again.</div>';
     });
+}
+
+// ============================================================
+// SUPPORT PANEL
+// ============================================================
+function renderSupportPanel() {
+  var panel = document.getElementById('panel-support');
+  if (!panel) return;
+  panel.innerHTML =
+    '<div class="support-panel-root">' +
+      '<div class="support-panel-hero">' +
+        '<div class="support-panel-coffee">☕</div>' +
+        '<div class="support-panel-eyebrow">SUPPORT THE PROJECT</div>' +
+        '<div class="support-panel-title">Keep The Code Book Free</div>' +
+        '<div class="support-panel-sub">The Code Book is 100% free — no paywalls, no subscriptions, no catch. If it\'s helped you learn something, a small contribution keeps it going and means a lot.</div>' +
+      '</div>' +
+      '<div class="support-panel-card">' +
+        '<div class="support-perks">' +
+          '<div class="support-perk">⚡ Keeps the app free for every beginner</div>' +
+          '<div class="support-perk">🏗 Funds new floors and content</div>' +
+          '<div class="support-perk">🎮 More games and challenges</div>' +
+          '<div class="support-perk">🌍 Helps more people start coding</div>' +
+        '</div>' +
+        '<a class="support-btn" href="https://ko-fi.com/thecodebookapp" target="_blank" rel="noopener">☕ Support on Ko-fi</a>' +
+        '<div class="support-note">Opens Ko-fi · One-off donation · No account needed · From £3</div>' +
+      '</div>' +
+      '<div class="support-panel-thankyou">' +
+        '<div class="support-ty-title">Already supported?</div>' +
+        '<div class="support-ty-sub">Thank you — it genuinely makes a difference. Every contribution helps keep this completely free for the next person who needs it.</div>' +
+      '</div>' +
+    '</div>';
 }
 
 function _newsTimestamp(unix) {
