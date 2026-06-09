@@ -6931,6 +6931,7 @@ function renderPremiumPanel() {
         '<button class="arcade-tab-btn' + (_arcadeTab==='boss'?' active':'') + '" onclick="setArcadeTab(\'boss\',this)">⚔ Boss Challenges</button>' +
         '<button class="arcade-tab-btn' + (_arcadeTab==='leaderboard'?' active':'') + '" onclick="setArcadeTab(\'leaderboard\',this)">🏆 Leaderboard</button>' +
         '<button class="arcade-tab-btn' + (_arcadeTab==='badges'?' active':'') + '" onclick="setArcadeTab(\'badges\',this)">🏅 Badges</button>' +
+        '<button class="arcade-tab-btn' + (_arcadeTab==='support'?' active':'') + '" onclick="setArcadeTab(\'support\',this)">☕ Support</button>' +
       '</div>' +
       '<div class="arcade-tab-content" id="arcade-tab-content"></div>' +
     '</div>';
@@ -6952,6 +6953,7 @@ function _renderArcadeTabContent(tab) {
   else if (tab === 'boss')   { el.innerHTML = _bossHtml(); }
   else if (tab === 'leaderboard') { el.innerHTML = _lbTabHtml(); _loadLbTab(); }
   else if (tab === 'badges') { el.innerHTML = _badgesTabHtml(); }
+  else if (tab === 'support') { el.innerHTML = _supportTabHtml(); }
 }
 
 // ─────────── Playground ───────────
@@ -7272,6 +7274,27 @@ function _badgesTabHtml() {
         '</div>';
       }).join('') +
     '</div></div>';
+}
+
+// ─────────── Support tab ───────────
+function _supportTabHtml() {
+  return '<div class="support-root">' +
+    '<div class="support-card">' +
+      '<div class="support-coffee">☕</div>' +
+      '<div class="support-title">Support The Code Book</div>' +
+      '<div class="support-sub">The Code Book is completely free — no paywalls, no subscriptions. If it\'s helped you learn something, a small contribution keeps it going and means a lot.</div>' +
+      '<div class="support-divider"></div>' +
+      '<div class="support-what-label">What your support does</div>' +
+      '<div class="support-perks">' +
+        '<div class="support-perk">⚡ Keeps the app free for everyone</div>' +
+        '<div class="support-perk">🏗 Funds new floors and features</div>' +
+        '<div class="support-perk">🎮 More games and challenges</div>' +
+        '<div class="support-perk">🌍 Helps more beginners start coding</div>' +
+      '</div>' +
+      '<a class="support-btn" href="https://ko-fi.com/thecodebookapp" target="_blank" rel="noopener">☕ Buy Me a Coffee — Ko-fi</a>' +
+      '<div class="support-note">Opens Ko-fi · One-off · No account needed · From £3</div>' +
+    '</div>' +
+  '</div>';
 }
 
 // ── legacy stubs (keep to avoid reference errors) ──
