@@ -159,6 +159,7 @@ function renderMobileHub() {
 
   _removeMobileSectionChrome();
   document.body.classList.remove('mob-in-section');
+  document.body.classList.add('mob-hub-active');
   if (typeof stopHubCanvas === 'function') stopHubCanvas();
 
   var xp     = (typeof state !== 'undefined' && state.xp)     || 0;
@@ -207,7 +208,24 @@ function renderMobileHub() {
   var glow = _hexGlow(learnColor, 0.35);
   var icon = (typeof getFloorIcon === 'function' && currentFloor) ? getFloorIcon(fi, 56) : '';
 
+  // Ambient bloom overlay
+  var bloom = document.getElementById('mob-hub-bloom');
+  if (!bloom) {
+    bloom = document.createElement('div');
+    bloom.id = 'mob-hub-bloom';
+    document.body.appendChild(bloom);
+  }
+  bloom.style.background = 'radial-gradient(ellipse 70% 38% at 50% 18%, ' + _hexGlow(learnColor, 0.13) + ' 0%, transparent 70%)';
+
   var html = '<div class="mob-grid-wrap">';
+
+  // Eyebrow header
+  html +=
+    '<div class="mob-hub-eyebrow" style="--eyebrow-color:' + learnColor + '">' +
+      '<div class="mob-hub-eyebrow-label">The Code Book</div>' +
+      '<div class="mob-hub-eyebrow-title">Select Your Path</div>' +
+      '<div class="mob-hub-eyebrow-sub">Seven floors. One goal. Master one, unlock the next.</div>' +
+    '</div>';
 
   // Hero card
   html +=
@@ -273,7 +291,14 @@ function renderMobileHub() {
 // ============================================================
 // NAV HELPER — tap non-Learn tile
 // ============================================================
+function _clearMobHubActive() {
+  document.body.classList.remove('mob-hub-active');
+  var bloom = document.getElementById('mob-hub-bloom');
+  if (bloom) bloom.remove();
+}
+
 function mobNavTo(tab) {
+  _clearMobHubActive();
   if (typeof switchTopNav === 'function') {
     switchTopNav(tab, document.getElementById('tnav-' + tab));
   }
@@ -330,6 +355,7 @@ function renderMobileFloorList() {
   if (!isMobile()) return;
   var panel = document.getElementById('main-content');
   if (!panel) return;
+  _clearMobHubActive();
   if (typeof stopHubCanvas === 'function') stopHubCanvas();
 
   function _hexGlow(hex, a) {
