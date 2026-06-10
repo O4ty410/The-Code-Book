@@ -4225,12 +4225,13 @@ function renderLearnHub() {
       : getFloorIcon(fi);
     var infoBtn    = '<button class="fc-info-btn" onclick="event.stopPropagation();toggleFloorInfo(' + fi + ')">&#x2139;</button>';
 
-    return '<div class="' + cardClasses + '" style="--fc-color:' + color + ';--fc-glow:' + glow + ';min-width:118px;flex:1;max-width:160px;"' + clickAttr + '>' +
+    var cr = parseInt(color.slice(1,3),16), cg = parseInt(color.slice(3,5),16), cb = parseInt(color.slice(5,7),16);
+    return '<div class="' + cardClasses + '" style="--fc-color:' + color + ';--fc-glow:' + glow + ';--fc-rgb:' + cr+','+cg+','+cb + ';min-width:118px;flex:1;max-width:160px;"' + clickAttr + '>' +
       '<div class="fc-accent"></div>' +
       infoBtn +
-      '<div class="fc-floor-badge">Floor ' + (fi + 1) + '</div>' +
-      '<div class="fc-icon">' + iconHtml + '</div>' +
-      '<div class="fc-title" style="font-size:11px;width:100%;word-break:normal;">' + f.title + '</div>' +
+      '<div class="fc-floor-badge">FLOOR ' + (fi + 1) + '</div>' +
+      '<div class="fc-book-rule"></div>' +
+      '<div class="fc-title">' + f.title + '</div>' +
       '<div class="fc-sec-count">' + floorDone + '/' + floorTotal + ' sections</div>' +
       '<span class="' + statusClass + '">' + statusText + '</span>' +
     '</div>';
@@ -4251,15 +4252,18 @@ function renderLearnHub() {
     '.fc-header-title{color:#f0f8ff!important;background:none!important;-webkit-text-fill-color:unset!important;-webkit-text-stroke:1.5px rgba(200,240,255,0.70)!important;animation:none!important;font-size:clamp(42px,7vw,78px)!important;font-weight:900!important;line-height:1.05!important;letter-spacing:-0.5px!important;text-shadow:0 0 2px rgba(255,255,255,0.4),0 0 4px rgba(0,0,0,1),0 0 10px rgba(0,0,0,1),1px 1px 0 rgba(22,65,148,1),2px 2px 0 rgba(18,54,130,1),3px 3px 0 rgba(14,44,114,1),4px 4px 0 rgba(11,35,98,1),5px 5px 0 rgba(8,27,84,1),6px 6px 0 rgba(6,20,70,1),7px 7px 0 rgba(4,14,56,1),8px 8px 0 rgba(3,10,44,1),9px 9px 2px rgba(0,0,0,0.92),11px 11px 8px rgba(0,0,0,0.88),16px 16px 24px rgba(0,0,0,0.94),0 0 55px rgba(90,200,255,0.90),0 0 100px rgba(90,200,255,0.55),0 0 160px rgba(90,200,255,0.25)!important;}' +
     /* Subtitle */
     '.fc-header-sub{color:rgba(215,235,255,0.90)!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 12px rgba(0,0,0,0.96),0 2px 8px rgba(0,0,0,0.92)!important;}' +
-    /* Cards — dark leather book spine aesthetic */
-    '.fc-card{min-width:130px!important;background:linear-gradient(160deg,#1e1409 0%,#140e06 30%,#0c0804 65%,#070502 100%)!important;border:1px solid rgba(190,150,55,0.50)!important;border-left:3px solid rgba(210,165,60,0.75)!important;border-bottom:5px solid rgba(60,38,8,0.95)!important;border-radius:3px 8px 8px 3px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:inset 0 1px 0 rgba(255,215,90,0.10),inset 4px 0 10px rgba(0,0,0,0.55),-2px 2px 0 rgba(40,22,4,0.92),0 6px 20px rgba(0,0,0,0.92),0 18px 40px rgba(0,0,0,0.80),0 32px 56px rgba(0,0,0,0.55)!important;transform:translateY(-2px)!important;}' +
-    '.fc-card:hover:not(.fc-card-locked){border-left-color:rgba(255,200,70,0.95)!important;border-color:rgba(220,175,65,0.75)!important;box-shadow:inset 0 1px 0 rgba(255,215,90,0.18),inset 4px 0 10px rgba(0,0,0,0.45),-2px 2px 0 rgba(40,22,4,0.92),0 0 22px rgba(200,155,40,0.30),0 10px 30px rgba(0,0,0,0.90),0 24px 50px rgba(0,0,0,0.75)!important;transform:translateY(-6px)!important;}' +
-    '.fc-card-active{border-left-color:rgba(255,210,80,1)!important;border-color:rgba(230,185,70,0.85)!important;box-shadow:inset 0 1px 0 rgba(255,220,100,0.22),inset 4px 0 10px rgba(0,0,0,0.40),-2px 2px 0 rgba(50,28,4,0.92),0 0 28px rgba(215,165,40,0.35),0 12px 32px rgba(0,0,0,0.88)!important;}' +
-    '.fc-accent{background:linear-gradient(90deg,rgba(210,165,55,0.90) 0%,rgba(255,210,80,0.70) 50%,rgba(190,145,45,0.55) 100%)!important;height:2px!important;}' +
+    /* Cards — front-facing illuminated book covers */
+    '.fc-card{min-width:118px!important;flex:1!important;max-width:160px!important;min-height:190px!important;background:linear-gradient(160deg,rgba(var(--fc-rgb,200,169,110),0.18) 0%,rgba(var(--fc-rgb,200,169,110),0.06) 35%,rgba(3,4,10,0.98) 80%)!important;border:1.5px solid var(--fc-color,#c8a96e)!important;border-left:4px solid var(--fc-color,#c8a96e)!important;border-radius:2px 8px 8px 2px!important;padding:12px 10px 11px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 0 16px var(--fc-glow,rgba(200,169,110,0.28)),0 0 42px var(--fc-glow,rgba(200,169,110,0.12)),inset 0 0 20px rgba(var(--fc-rgb,200,169,110),0.05),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;transform:translateY(-2px)!important;}' +
+    '.fc-card::before{content:""!important;position:absolute!important;inset:6px 5px!important;border:1px solid rgba(var(--fc-rgb,200,169,110),0.28)!important;border-radius:2px!important;pointer-events:none!important;z-index:0!important;}' +
+    '.fc-card:hover:not(.fc-card-locked){box-shadow:0 0 28px var(--fc-glow,rgba(200,169,110,0.45)),0 0 70px var(--fc-glow,rgba(200,169,110,0.22)),inset 0 0 24px rgba(var(--fc-rgb,200,169,110),0.08),-3px 4px 10px rgba(0,0,0,0.75),0 18px 45px rgba(0,0,0,0.85)!important;transform:translateY(-7px)!important;}' +
+    '.fc-card-active{box-shadow:0 0 24px var(--fc-glow,rgba(200,169,110,0.40)),0 0 60px var(--fc-glow,rgba(200,169,110,0.20)),inset 0 0 22px rgba(var(--fc-rgb,200,169,110),0.07),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;}' +
+    '.fc-accent{background:var(--fc-color,#c8a96e)!important;height:2px!important;opacity:0.85!important;}' +
+    '.fc-floor-badge{font-size:9px!important;letter-spacing:0.18em!important;color:var(--fc-color,#c8a96e)!important;opacity:1!important;text-transform:uppercase!important;margin-bottom:5px!important;font-weight:700!important;font-family:"Space Mono",monospace!important;text-shadow:0 0 10px var(--fc-glow,rgba(200,169,110,0.50))!important;}' +
+    '.fc-book-rule{width:65%!important;height:1px!important;background:linear-gradient(90deg,transparent,var(--fc-color,#c8a96e),transparent)!important;margin:4px auto 9px!important;opacity:0.55!important;display:block!important;flex-shrink:0!important;}' +
     /* Card text */
-    '.fc-title{font-size:11px!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;color:rgba(240,228,200,0.97)!important;text-shadow:0 1px 4px rgba(0,0,0,0.97)!important;}' +
-    '.fc-floor-badge{color:rgba(210,165,55,0.95)!important;opacity:1!important;text-shadow:0 0 8px rgba(180,130,30,0.55)!important;}' +
-    '.fc-sec-count{color:rgba(170,135,75,0.72)!important;text-shadow:0 1px 4px rgba(0,0,0,0.90)!important;}' +
+    '.fc-title{font-size:11px!important;font-weight:700!important;width:100%!important;word-break:normal!important;overflow-wrap:normal!important;display:block!important;color:rgba(235,226,210,0.97)!important;text-shadow:0 1px 5px rgba(0,0,0,0.97)!important;line-height:1.4!important;margin-bottom:7px!important;}' +
+    '.fc-sec-count{color:rgba(var(--fc-rgb,160,130,80),0.60)!important;text-shadow:none!important;font-size:9px!important;margin-bottom:10px!important;}' +
+    '.fc-icon{display:none!important;height:0!important;margin:0!important;padding:0!important;}' +
     /* Stats panel — elevated 3D card with layered depth shadows and thick lift */
     '.fc-stats{width:100%!important;position:relative!important;overflow:hidden!important;display:flex!important;justify-content:center!important;text-align:center!important;background:rgba(6,12,32,0.92)!important;backdrop-filter:blur(28px)!important;-webkit-backdrop-filter:blur(28px)!important;border:1px solid rgba(140,210,255,0.28)!important;border-bottom:3px solid rgba(0,0,0,0.80)!important;border-radius:14px!important;box-shadow:inset 0 1px 0 rgba(255,255,255,0.20),0 2px 0 rgba(0,0,0,0.82),0 4px 0 rgba(0,0,0,0.74),0 6px 0 rgba(0,0,0,0.64),0 8px 0 rgba(0,0,0,0.52),0 18px 28px rgba(0,0,0,0.97),0 36px 56px rgba(0,0,0,0.78),0 56px 90px rgba(0,0,0,0.44),0 0 0 1px rgba(140,210,255,0.14)!important;}' +
     '.fc-stats::before{content:""!important;position:absolute!important;top:0!important;left:0!important;right:0!important;height:1px!important;background:linear-gradient(90deg,transparent 5%,rgba(140,215,255,0.60) 30%,rgba(200,240,255,0.78) 50%,rgba(140,215,255,0.60) 70%,transparent 95%)!important;pointer-events:none!important;}' +
