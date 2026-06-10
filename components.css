@@ -1940,23 +1940,21 @@ input, textarea, select {
 
 /* Body: 3 columns */
 .auth-body {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr 340px 1fr;
   align-items: center;
   flex: 1;
   width: 100%;
   padding: 0 32px 32px;
   box-sizing: border-box;
-  gap: 0;
 }
 
 /* Left: brand */
 .auth-brand-panel {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 32px;
+  padding: 0 40px 0 0;
 }
 
 .auth-brand-logo {
@@ -2057,10 +2055,10 @@ input, textarea, select {
 
 /* Center: form */
 .auth-form-col {
-  flex: 0 0 340px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .auth-mobile-home {
@@ -2169,7 +2167,7 @@ input, textarea, select {
 /* Mobile: single column, stacked */
 @media (max-width: 759px) {
   #auth-screen { flex-direction: column; }
-  .auth-body   { flex-direction: column; padding: 16px 24px 32px; gap: 24px; }
+  .auth-body   { display: flex; flex-direction: column; padding: 16px 24px 32px; gap: 24px; }
   .auth-brand-panel { display: none; }
   .auth-owl-wrap    { display: none; }
   .auth-form-col    { width: 100%; }
