@@ -2037,6 +2037,23 @@ input, textarea, select {
   align-items: center;
   justify-content: flex-end;
   pointer-events: none;
+  position: relative;
+}
+
+@keyframes owl-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.2); }
+  50%       { opacity: 0.85; transform: scale(1); }
+}
+
+.owl-spark {
+  position: absolute;
+  width: var(--sz, 4px);
+  height: var(--sz, 4px);
+  border-radius: 50%;
+  background: var(--accent, #00e5b0);
+  box-shadow: 0 0 6px 2px var(--auth-box-glow, rgba(0,220,160,0.7));
+  animation: owl-twinkle 3s ease-in-out var(--d, 0s) infinite;
+  pointer-events: none;
 }
 
 .auth-owl-img {
