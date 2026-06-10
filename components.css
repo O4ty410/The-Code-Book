@@ -1927,13 +1927,24 @@ input, textarea, select {
   text-align: center;
 }
 
-/* ── Desktop landscape split layout ── */
+/* ── Desktop: centred landscape card ── */
 @media (min-width: 760px) {
   #auth-screen {
+    padding: 24px;
+  }
+
+  .auth-landscape-card {
+    display: flex;
     flex-direction: row;
     align-items: stretch;
-    padding: 0;
-    text-align: left;
+    width: 100%;
+    max-width: 820px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.09);
+    background: var(--auth-box-bg, rgba(8,12,22,0.90));
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    overflow: hidden;
   }
 
   .auth-brand-panel {
@@ -1941,57 +1952,56 @@ input, textarea, select {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 60px 56px;
+    padding: 44px 40px;
     border-right: 1px solid rgba(255,255,255,0.07);
     position: relative;
     overflow: hidden;
+    text-align: left;
   }
 
-  .auth-brand-panel::before {
+  .auth-brand-panel::after {
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(ellipse 90% 60% at 20% 30%, var(--auth-box-glow, rgba(0,180,255,0.10)) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 40% at 80% 80%, var(--auth-box-glow, rgba(0,180,255,0.06)) 0%, transparent 60%);
+    background: radial-gradient(ellipse 100% 70% at 10% 40%, var(--auth-box-glow, rgba(0,180,255,0.12)) 0%, transparent 70%);
     pointer-events: none;
   }
 
   .auth-brand-logo {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(32px, 3.5vw, 52px);
+    font-size: clamp(22px, 2.4vw, 34px);
     font-weight: 900;
     color: var(--accent);
     letter-spacing: -0.5px;
     text-shadow: 0 0 40px var(--auth-box-glow, rgba(125,211,252,0.30));
-    margin-bottom: 16px;
+    margin-bottom: 10px;
     line-height: 1.1;
   }
 
   .auth-brand-tagline {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 16px;
+    font-size: 13px;
     color: var(--text-dim);
     line-height: 1.7;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
 
   .auth-brand-features {
     list-style: none;
     padding: 0;
-    margin: 0 0 48px;
+    margin: 0 0 32px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 11px;
   }
 
   .auth-brand-features li {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     opacity: 0.85;
   }
 
@@ -2016,31 +2026,30 @@ input, textarea, select {
   .auth-brand-home-link:hover { color: rgba(200,230,255,0.88); }
 
   .auth-form-panel {
-    flex: 0 0 420px;
+    flex: 0 0 320px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 48px 40px;
+    padding: 32px 28px;
     text-align: center;
   }
 
   .auth-mobile-home { display: none; }
 
-  .auth-box {
-    width: 100%;
-    max-width: 340px;
-  }
+  .auth-box { width: 100%; max-width: 280px; }
 
-  .auth-title { font-size: clamp(20px, 2vw, 26px); margin-bottom: 6px; }
-  .auth-sub   { margin-bottom: 20px; }
+  .auth-title { font-size: 20px; margin-bottom: 4px; }
+  .auth-sub   { font-size: 10px; margin-bottom: 14px; }
+  .cover-theme-orbs { margin-bottom: 16px; }
 }
 
-/* Mobile: hide brand panel, show inline home link */
+/* Mobile: single column, brand panel hidden */
 @media (max-width: 759px) {
-  .auth-brand-panel { display: none; }
-  .auth-mobile-home { text-align: center; margin: -2px 0 14px; }
-  .auth-form-panel  { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .auth-landscape-card { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .auth-brand-panel    { display: none; }
+  .auth-mobile-home    { text-align: center; margin: -2px 0 14px; }
+  .auth-form-panel     { width: 100%; display: flex; flex-direction: column; align-items: center; }
 }
 
 #auth-screen .auth-form {
