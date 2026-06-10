@@ -1955,7 +1955,7 @@ input, textarea, select {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   padding: 0 40px 0 0;
 }
 
@@ -1965,7 +1965,7 @@ input, textarea, select {
   font-weight: 900;
   color: var(--accent);
   text-shadow: 0 0 40px var(--auth-box-glow, rgba(125,211,252,0.30));
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   line-height: 1.15;
 }
 
@@ -1974,7 +1974,9 @@ input, textarea, select {
   font-size: 13px;
   color: var(--text-dim);
   line-height: 1.7;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .auth-brand-features {
@@ -2038,9 +2040,10 @@ input, textarea, select {
 }
 
 .auth-owl-img {
-  width: clamp(200px, 28vw, 380px);
+  width: clamp(260px, 34vw, 460px);
   height: auto;
-  opacity: 0.93;
+  opacity: 0.95;
+  mix-blend-mode: screen;
   filter: hue-rotate(0deg) saturate(1.2) brightness(1.05);
   transition: filter 0.5s ease;
   display: block;
