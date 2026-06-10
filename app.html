@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="animations.min.css?v=20260518s">
   <link rel="stylesheet" href="layout.min.css?v=20260519e">
   <link rel="stylesheet" href="cover.min.css?v=20260518s">
-  <link rel="stylesheet" href="components.min.css?v=20260610d">
+  <link rel="stylesheet" href="components.min.css?v=20260610e">
   <link rel="stylesheet" href="panels.min.css?v=20260524a">
   <link rel="stylesheet" href="overlays.min.css?v=20260520e">
   <link rel="stylesheet" href="mobile.min.css?v=20260520h">
@@ -85,7 +85,6 @@
     </div>
     <div class="auth-title">The Code Book</div>
     <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
-    <div class="auth-progress-tag">• progress_loaded...</div>
   </div>
 
   <!-- BODY — 3 columns: brand | form | owl -->
@@ -105,12 +104,7 @@
         <li><span class="auth-feat-dot"></span>Launch Sequence game &amp; Arcade</li>
         <li><span class="auth-feat-dot"></span>Free forever — no credit card needed</li>
       </ul>
-      <div class="auth-code-snippet"><pre>const floors = [
-  floor_1, floor_2,
-  floor_3, floor_4, ...
-]
-owl.guide()</pre></div>
-      <a href="index.html" class="auth-brand-home-link">&#8592; Return to Home</a>
+      <a href="index.html" class="auth-brand-home-link" style="display:none;"></a>
     </div>
 
     <!-- Center: form -->
@@ -154,20 +148,6 @@ owl.guide()</pre></div>
     <!-- Right: owl + book -->
     <div class="auth-owl-wrap">
       <img src="assets/sage-owl-book.png" class="auth-owl-img" alt="">
-      <span class="owl-spark" style="top:18%;left:44%;--d:0s;--sz:4px;"></span>
-      <span class="owl-spark" style="top:22%;left:56%;--d:1.2s;--sz:3px;"></span>
-      <span class="owl-spark" style="top:35%;left:30%;--d:2.5s;--sz:5px;"></span>
-      <span class="owl-spark" style="top:40%;left:68%;--d:0.7s;--sz:3px;"></span>
-      <span class="owl-spark" style="top:55%;left:38%;--d:3.1s;--sz:4px;"></span>
-      <span class="owl-spark" style="top:60%;left:60%;--d:1.8s;--sz:3px;"></span>
-      <span class="owl-spark" style="top:72%;left:48%;--d:4.0s;--sz:5px;"></span>
-      <span class="owl-spark" style="top:80%;left:35%;--d:2.2s;--sz:3px;"></span>
-      <div class="auth-code-bg-right"><pre>floor.unlock()
-sage.speaks()
-const xp = 0
-while(learning) {
-  xp += 1
-}</pre></div>
       <div class="auth-floors-label">FLOORS</div>
     </div>
 
