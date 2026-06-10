@@ -4254,6 +4254,8 @@ function renderLearnHub() {
 
   var html = '<style id="hub-override">' +
     /* Dark scrim between background icon and content — keeps icon visible at edges, creates depth in centre */
+    /* Kill the blue bottom-glow gradient on the body while on the learn tab */
+    'body.learn-mode{background:#04060e!important;background-attachment:fixed!important;}' +
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;overflow:hidden!important;}' +
     '.fc-hub::before{content:"";position:absolute;inset:-80px -30px -40px;background:radial-gradient(ellipse 72% 82% at 50% 38%,rgba(0,0,0,0.94) 0%,rgba(0,0,0,0.82) 28%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.20) 70%,transparent 86%);pointer-events:none;z-index:-1;}' +
     /* Ensure all hub content sits above the owl image */
