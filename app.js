@@ -4254,6 +4254,8 @@ function renderLearnHub() {
 
   var html = '<style id="hub-override">' +
     /* Dark scrim between background icon and content — keeps icon visible at edges, creates depth in centre */
+    /* Kill the blue bottom-glow gradient on the body while on the learn tab */
+    'body.learn-mode{background:#04060e!important;background-attachment:fixed!important;}' +
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;overflow:hidden!important;}' +
     '.fc-hub::before{content:"";position:absolute;inset:-80px -30px -40px;background:radial-gradient(ellipse 72% 82% at 50% 38%,rgba(0,0,0,0.94) 0%,rgba(0,0,0,0.82) 28%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.20) 70%,transparent 86%);pointer-events:none;z-index:-1;}' +
     /* Ensure all hub content sits above the owl image */
@@ -4296,11 +4298,26 @@ function renderLearnHub() {
     '.fc-card:nth-child(5) .holo-icon{animation-duration:3.0s;}' +
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
-    /* Owl + book background image — right-anchored, behind content */
-    '.fc-hub-owl{position:absolute!important;left:50%!important;top:-30px!important;transform:translateX(-50%)!important;width:clamp(900px,115%,1500px)!important;height:auto!important;opacity:0.55!important;pointer-events:none!important;z-index:0!important;user-select:none!important;clip-path:inset(0 7% 17% 0)!important;}' +
+    /* Owl + book background image wrapper */
+    '.fc-hub-owl-wrap{position:absolute!important;left:50%!important;top:-30px!important;transform:translateX(-50%)!important;width:clamp(900px,115%,1500px)!important;pointer-events:none!important;z-index:0!important;user-select:none!important;}' +
+    '.fc-hub-owl{position:relative!important;width:100%!important;height:auto!important;opacity:0.55!important;display:block!important;clip-path:inset(0 7% 17% 0)!important;}' +
     '</style>' +
     '<div class="fc-hub">' +
-    '<img class="fc-hub-owl" src="assets/sage-owl-book.png" alt="" aria-hidden="true" style="filter:' + _owlFilter + '">' +
+    '<div class="fc-hub-owl-wrap">' +
+      '<span class="owl-spark" style="top:14%;left:20%;--d:0.4s;--sz:4px;"></span>' +
+      '<span class="owl-spark" style="top:22%;left:38%;--d:1.8s;--sz:3px;"></span>' +
+      '<span class="owl-spark" style="top:18%;left:55%;--d:0.9s;--sz:5px;"></span>' +
+      '<span class="owl-spark" style="top:30%;left:12%;--d:2.5s;--sz:3px;"></span>' +
+      '<span class="owl-spark" style="top:38%;left:48%;--d:1.2s;--sz:4px;"></span>' +
+      '<span class="owl-spark" style="top:25%;left:68%;--d:3.1s;--sz:3px;"></span>' +
+      '<span class="owl-spark" style="top:42%;left:75%;--d:0.6s;--sz:5px;"></span>' +
+      '<span class="owl-spark" style="top:52%;left:28%;--d:2.0s;--sz:3px;"></span>' +
+      '<span class="owl-spark" style="top:55%;left:62%;--d:1.5s;--sz:4px;"></span>' +
+      '<span class="owl-spark" style="top:60%;left:82%;--d:3.8s;--sz:3px;"></span>' +
+      '<span class="owl-spark" style="top:10%;left:72%;--d:2.8s;--sz:4px;"></span>' +
+      '<span class="owl-spark" style="top:35%;left:88%;--d:1.1s;--sz:3px;"></span>' +
+      '<img class="fc-hub-owl" src="assets/sage-owl-book.png" alt="" aria-hidden="true" style="filter:' + _owlFilter + '">' +
+    '</div>' +
     '<div class="fc-header">' +
       '<div class="fc-header-label">Your Learning Path</div>' +
       '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
