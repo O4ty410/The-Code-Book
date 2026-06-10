@@ -4242,6 +4242,16 @@ function renderLearnHub() {
     '<span class="ch-overall-label">' + pct + '% complete</span>' +
     '</div>';
 
+  var _coverTheme = getCoverTheme();
+  var _OWL_FILTERS = {
+    'obsidian-gold': 'hue-rotate(0deg)   saturate(0.9) brightness(1.20) drop-shadow(0 0 28px rgba(255,190,40,0.55)) drop-shadow(0 0 55px rgba(220,160,20,0.28))',
+    'cosmic-blue':   'hue-rotate(165deg) saturate(1.3) brightness(1.10) drop-shadow(0 0 28px rgba(0,180,255,0.55)) drop-shadow(0 0 55px rgba(0,140,220,0.28))',
+    'aurora-teal':   'hue-rotate(130deg) saturate(1.2) brightness(1.05) drop-shadow(0 0 28px rgba(0,220,160,0.55)) drop-shadow(0 0 55px rgba(0,180,130,0.28))',
+    'royal-violet':  'hue-rotate(235deg) saturate(1.4) brightness(1.00) drop-shadow(0 0 28px rgba(160,80,255,0.55)) drop-shadow(0 0 55px rgba(130,50,220,0.28))',
+    'ember-crimson': 'hue-rotate(315deg) saturate(1.5) brightness(1.00) drop-shadow(0 0 28px rgba(255,70,70,0.55))  drop-shadow(0 0 55px rgba(220,40,40,0.28))',
+  };
+  var _owlFilter = _OWL_FILTERS[_coverTheme] || _OWL_FILTERS['obsidian-gold'];
+
   var html = '<style id="hub-override">' +
     /* Dark scrim between background icon and content — keeps icon visible at edges, creates depth in centre */
     '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
@@ -4253,7 +4263,7 @@ function renderLearnHub() {
     /* Subtitle */
     '.fc-header-sub{color:rgba(215,235,255,0.90)!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 12px rgba(0,0,0,0.96),0 2px 8px rgba(0,0,0,0.92)!important;}' +
     /* Cards — front-facing illuminated book covers */
-    '.fc-card{min-width:118px!important;flex:1!important;max-width:160px!important;min-height:190px!important;background:linear-gradient(160deg,rgba(var(--fc-rgb,200,169,110),0.18) 0%,rgba(var(--fc-rgb,200,169,110),0.06) 35%,rgba(3,4,10,0.98) 80%)!important;border:1.5px solid var(--fc-color,#c8a96e)!important;border-left:4px solid var(--fc-color,#c8a96e)!important;border-radius:2px 8px 8px 2px!important;padding:12px 10px 11px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 0 16px var(--fc-glow,rgba(200,169,110,0.28)),0 0 42px var(--fc-glow,rgba(200,169,110,0.12)),inset 0 0 20px rgba(var(--fc-rgb,200,169,110),0.05),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;transform:translateY(-2px)!important;}' +
+    '.fc-card{min-width:118px!important;flex:1!important;max-width:160px!important;min-height:190px!important;background:linear-gradient(180deg,rgba(var(--fc-rgb,200,169,110),0.10) 0%,rgba(5,7,16,1) 22%,rgba(3,5,12,1) 100%)!important;border:1.5px solid var(--fc-color,#c8a96e)!important;border-left:4px solid var(--fc-color,#c8a96e)!important;border-radius:2px 8px 8px 2px!important;padding:12px 10px 11px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 0 16px var(--fc-glow,rgba(200,169,110,0.28)),0 0 42px var(--fc-glow,rgba(200,169,110,0.12)),inset 0 0 20px rgba(var(--fc-rgb,200,169,110),0.05),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;transform:translateY(-2px)!important;}' +
     '.fc-card::before{content:""!important;position:absolute!important;inset:6px 5px!important;border:1px solid rgba(var(--fc-rgb,200,169,110),0.28)!important;border-radius:2px!important;pointer-events:none!important;z-index:0!important;}' +
     '.fc-card:hover:not(.fc-card-locked){box-shadow:0 0 28px var(--fc-glow,rgba(200,169,110,0.45)),0 0 70px var(--fc-glow,rgba(200,169,110,0.22)),inset 0 0 24px rgba(var(--fc-rgb,200,169,110),0.08),-3px 4px 10px rgba(0,0,0,0.75),0 18px 45px rgba(0,0,0,0.85)!important;transform:translateY(-7px)!important;}' +
     '.fc-card-active{box-shadow:0 0 24px var(--fc-glow,rgba(200,169,110,0.40)),0 0 60px var(--fc-glow,rgba(200,169,110,0.20)),inset 0 0 22px rgba(var(--fc-rgb,200,169,110),0.07),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;}' +
@@ -4283,10 +4293,10 @@ function renderLearnHub() {
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
     /* Owl + book background image — right-anchored, behind content */
-    '.fc-hub-owl{position:absolute!important;right:-40px!important;top:50%!important;transform:translateY(-52%)!important;width:clamp(320px,48vw,620px)!important;height:auto!important;opacity:0.28!important;pointer-events:none!important;z-index:0!important;user-select:none!important;filter:brightness(1.05) saturate(1.1)!important;}' +
+    '.fc-hub-owl{position:absolute!important;left:50%!important;top:-30px!important;transform:translateX(-50%)!important;width:clamp(860px,108%,1400px)!important;height:auto!important;opacity:0.52!important;pointer-events:none!important;z-index:0!important;user-select:none!important;}' +
     '</style>' +
     '<div class="fc-hub">' +
-    '<img class="fc-hub-owl" src="assets/sage-owl-book.png" alt="" aria-hidden="true">' +
+    '<img class="fc-hub-owl" src="assets/sage-owl-book.png" alt="" aria-hidden="true" style="filter:' + _owlFilter + '">' +
     '<div class="fc-header">' +
       '<div class="fc-header-label">Your Learning Path</div>' +
       '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
@@ -4341,7 +4351,7 @@ function renderLearnHub() {
 
   var mc = document.getElementById('main-content');
   if (mc) { mc.style.display = ''; mc.innerHTML = html; }
-  startHubBgCycle();
+  stopHubBgCycle();
   if (window.HubIcon3D && mc) {
     var cvs = mc.querySelectorAll('.fc-icon-canvas');
     Array.prototype.forEach.call(cvs, function(cv) {
