@@ -4278,8 +4278,11 @@ function renderLearnHub() {
     '.fc-card:nth-child(5) .holo-icon{animation-duration:3.0s;}' +
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
+    /* Owl + book background image — right-anchored, behind content */
+    '.fc-hub-owl{position:absolute!important;right:-40px!important;top:50%!important;transform:translateY(-52%)!important;width:clamp(320px,48vw,620px)!important;height:auto!important;opacity:0.28!important;pointer-events:none!important;z-index:0!important;user-select:none!important;filter:brightness(1.05) saturate(1.1)!important;}' +
     '</style>' +
     '<div class="fc-hub">' +
+    '<img class="fc-hub-owl" src="assets/sage-owl-book.png" alt="" aria-hidden="true">' +
     '<div class="fc-header">' +
       '<div class="fc-header-label">Your Learning Path</div>' +
       '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
