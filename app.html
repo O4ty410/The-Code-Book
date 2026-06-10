@@ -74,27 +74,8 @@
 <!-- AUTH SCREEN -->
 <div id="auth-screen" style="display:none;">
 
-  <!-- LEFT BRAND PANEL — desktop only -->
-  <div class="auth-brand-panel">
-    <div class="auth-brand-logo">The Code Book</div>
-    <div class="auth-brand-tagline">Seven floors. One goal.<br>Master one, unlock the next.</div>
-    <ul class="auth-brand-features">
-      <li><span class="auth-feat-dot"></span>Track XP and progress across 7 floors</li>
-      <li><span class="auth-feat-dot"></span>Voice narration, focus timer &amp; tools</li>
-      <li><span class="auth-feat-dot"></span>Daily challenges, badges &amp; leaderboard</li>
-      <li><span class="auth-feat-dot"></span>Launch Sequence game &amp; Arcade</li>
-      <li><span class="auth-feat-dot"></span>Free forever — no credit card needed</li>
-    </ul>
-    <a href="index.html" class="auth-brand-home-link">&#8592; Return to Home</a>
-  </div>
-
-  <!-- OWL — decorative, sits between brand and form -->
-  <div class="auth-owl-wrap">
-    <img src="assets/sage-owl.png" class="auth-owl-img" alt="">
-  </div>
-
-  <!-- RIGHT FORM PANEL -->
-  <div class="auth-right-panel">
+  <!-- TOP — orbs + title centered across full width -->
+  <div class="auth-top">
     <div class="cover-theme-orbs">
       <button class="cover-orb" data-theme="cosmic-blue"   title="Cosmic Blue"   onclick="switchCoverTheme('cosmic-blue')"   style="--orb-dot:linear-gradient(135deg,#00c8ff,#0055cc);--orb-glow:rgba(0,180,255,0.55)"></button>
       <button class="cover-orb" data-theme="aurora-teal"   title="Aurora Teal"   onclick="switchCoverTheme('aurora-teal')"   style="--orb-dot:linear-gradient(135deg,#00e5b0,#007a60);--orb-glow:rgba(0,220,160,0.55)"></button>
@@ -104,41 +85,69 @@
     </div>
     <div class="auth-title">The Code Book</div>
     <div class="auth-sub">SIGN IN TO SAVE YOUR PROGRESS</div>
-    <div class="auth-mobile-home">
-      <a href="index.html" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;color:rgba(150,195,255,0.55);text-decoration:none;text-transform:uppercase;" onmouseover="this.style.color='rgba(200,230,255,0.88)'" onmouseout="this.style.color='rgba(150,195,255,0.55)'">&#8592; Return to Home</a>
-    </div>
-    <div class="auth-box">
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
-        <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
-      </div>
-      <div class="auth-form">
-        <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
-        <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
-        <div style="position:relative;">
-          <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)" style="padding-right:48px;width:100%;">
-          <button type="button" onclick="togglePasswordVisibility('auth-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
-        </div>
-        <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
-        <div id="forgot-link" class="forgot-link" onclick="handleForgotPassword()">Forgot your password?</div>
-        <div class="auth-google-wrap" style="margin-top:10px;">
-          <button class="auth-btn auth-btn--google" onclick="signInWithGoogle()">Sign in with Google</button>
-        </div>
-        <div class="auth-message" id="auth-message"></div>
-      </div>
-      <div class="auth-actions-row">
-        <button onclick="showLeaderboard()" class="auth-link-btn">🏆 Leaderboard</button>
-        <button onclick="showPrivacy()" class="auth-link-btn">Privacy Policy</button>
-      </div>
-      <div style="text-align:center;margin:4px 0 8px;">
-        <button onclick="showTerms()" class="auth-link-btn" style="font-size:11px;letter-spacing:1px;">Terms &amp; Conditions</button>
-      </div>
-      <div class="auth-divider"><span>or continue with email</span></div>
-      <div class="auth-start-wrap">
-        <button onclick="showGuestNamePrompt()" class="auth-link-btn">Continue as Guest</button>
-      </div>
-    </div>
   </div>
+
+  <!-- BODY — 3 columns: brand | form | owl -->
+  <div class="auth-body">
+
+    <!-- Left: brand -->
+    <div class="auth-brand-panel">
+      <div class="auth-brand-logo">The Code Book</div>
+      <div class="auth-brand-tagline">Seven floors. One goal.<br>Master one, unlock the next.</div>
+      <ul class="auth-brand-features">
+        <li><span class="auth-feat-dot"></span>Track XP and progress across 7 floors</li>
+        <li><span class="auth-feat-dot"></span>Voice narration, focus timer &amp; tools</li>
+        <li><span class="auth-feat-dot"></span>Daily challenges, badges &amp; leaderboard</li>
+        <li><span class="auth-feat-dot"></span>Launch Sequence game &amp; Arcade</li>
+        <li><span class="auth-feat-dot"></span>Free forever — no credit card needed</li>
+      </ul>
+      <a href="index.html" class="auth-brand-home-link">&#8592; Return to Home</a>
+    </div>
+
+    <!-- Center: form -->
+    <div class="auth-form-col">
+      <div class="auth-mobile-home">
+        <a href="index.html" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;color:rgba(150,195,255,0.55);text-decoration:none;text-transform:uppercase;" onmouseover="this.style.color='rgba(200,230,255,0.88)'" onmouseout="this.style.color='rgba(150,195,255,0.55)'">&#8592; Return to Home</a>
+      </div>
+      <div class="auth-box">
+        <div class="auth-tabs">
+          <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+          <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+        <div class="auth-form">
+          <input class="auth-input" id="auth-username" type="text" placeholder="Choose a display name" style="display:none;">
+          <input class="auth-input" id="auth-email" type="email" placeholder="Your email address">
+          <div style="position:relative;">
+            <input class="auth-input" id="auth-password" type="password" placeholder="Password (min 6 characters)" style="padding-right:48px;width:100%;">
+            <button type="button" onclick="togglePasswordVisibility('auth-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:16px;padding:4px;" title="Show/hide password">👁</button>
+          </div>
+          <button class="auth-btn" id="auth-submit" onclick="handleAuth()">Sign In</button>
+          <div id="forgot-link" class="forgot-link" onclick="handleForgotPassword()">Forgot your password?</div>
+          <div class="auth-google-wrap" style="margin-top:10px;">
+            <button class="auth-btn auth-btn--google" onclick="signInWithGoogle()">Sign in with Google</button>
+          </div>
+          <div class="auth-message" id="auth-message"></div>
+        </div>
+        <div class="auth-actions-row">
+          <button onclick="showLeaderboard()" class="auth-link-btn">🏆 Leaderboard</button>
+          <button onclick="showPrivacy()" class="auth-link-btn">Privacy Policy</button>
+        </div>
+        <div style="text-align:center;margin:4px 0 8px;">
+          <button onclick="showTerms()" class="auth-link-btn" style="font-size:11px;letter-spacing:1px;">Terms &amp; Conditions</button>
+        </div>
+        <div class="auth-divider"><span>or continue with email</span></div>
+        <div class="auth-start-wrap">
+          <button onclick="showGuestNamePrompt()" class="auth-link-btn">Continue as Guest</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: owl -->
+    <div class="auth-owl-wrap">
+      <img src="assets/sage-owl.png" class="auth-owl-img" alt="">
+    </div>
+
+  </div><!-- end .auth-body -->
 
 </div><!-- end #auth-screen -->
 
