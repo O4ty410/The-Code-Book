@@ -2587,8 +2587,11 @@ body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-sh
 #panel-support {
   height: calc(100vh - 52px);
   overflow: hidden;
-  display: flex;
   align-items: stretch;
+}
+
+#panel-support.active {
+  display: flex;
 }
 
 /* Root: fills the full panel height, distributes sections evenly */
