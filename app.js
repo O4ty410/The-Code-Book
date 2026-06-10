@@ -5267,6 +5267,10 @@ if ('serviceWorker' in navigator) {
     }).catch(function(err) {
       console.warn('[SW] registration failed:', err);
     });
+    // Force a full reload when a new SW takes control so stale CSS/HTML is never shown
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      window.location.reload();
+    });
   });
 }
 
