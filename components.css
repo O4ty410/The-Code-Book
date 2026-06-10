@@ -3622,8 +3622,10 @@ body.learn-mode #main-col {
 .fc-card {
   flex: 1;
   min-width: 160px;
-  background: linear-gradient(180deg, #050e1e 0%, #040b18 100%);
-  border: 1px solid rgba(var(--fc-color-rgb, 200,169,110), 0.25);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 35%),
+    linear-gradient(180deg, #0e2040 0%, #071428 60%, #040e20 100%);
+  border: 1px solid rgba(var(--fc-color-rgb, 200,169,110), 0.55);
   border-radius: 14px;
   padding: 16px 12px 14px;
   position: relative;
@@ -3632,34 +3634,40 @@ body.learn-mode #main-col {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.22s;
   overflow: visible;
-  box-shadow: 0 0 10px var(--fc-glow, rgba(200,169,110,0.12)),
-              0 2px 12px rgba(0,0,0,0.45);
+  box-shadow:
+    0 0 18px var(--fc-glow, rgba(200,169,110,0.18)),
+    0 8px 32px rgba(0,0,0,0.65),
+    0 2px 0 rgba(255,255,255,0.04) inset;
 }
 
 .fc-card:hover:not(.fc-card-locked) {
   border-color: var(--fc-color, #c8a96e);
-  box-shadow: 0 0 30px var(--fc-glow, rgba(200,169,110,0.40)),
-              0 0 12px var(--fc-glow, rgba(200,169,110,0.20)),
-              0 6px 28px rgba(0,0,0,0.55);
-  transform: translateY(-4px);
+  box-shadow:
+    0 0 40px var(--fc-glow, rgba(200,169,110,0.45)),
+    0 0 14px var(--fc-glow, rgba(200,169,110,0.22)),
+    0 16px 40px rgba(0,0,0,0.75),
+    0 2px 0 rgba(255,255,255,0.06) inset;
+  transform: translateY(-6px);
 }
 
 /* Active floor card — always glowing */
 .fc-card-active {
   border-color: var(--fc-color, #00d4ff) !important;
-  box-shadow: 0 0 18px var(--fc-glow, rgba(0,212,255,0.25)),
-              0 4px 20px rgba(0,0,0,0.5) !important;
+  box-shadow:
+    0 0 28px var(--fc-glow, rgba(0,212,255,0.35)),
+    0 10px 36px rgba(0,0,0,0.70),
+    0 2px 0 rgba(255,255,255,0.06) inset !important;
 }
 
 .fc-card-locked {
-  opacity: 0.50;
+  opacity: 0.38;
   cursor: default;
-  box-shadow: none !important;
-  border-color: #0c1c30 !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5) !important;
+  border-color: rgba(255,255,255,0.08) !important;
 }
-.fc-card-locked:hover { transform: none !important; box-shadow: none !important; border-color: #0c1c30 !important; }
+.fc-card-locked:hover { transform: none !important; }
 
 /* Top accent line */
 .fc-accent {
