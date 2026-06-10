@@ -4254,8 +4254,12 @@ function renderLearnHub() {
 
   var html = '<style id="hub-override">' +
     /* Dark scrim between background icon and content — keeps icon visible at edges, creates depth in centre */
-    '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;}' +
+    '.fc-hub{text-align:center!important;position:relative!important;z-index:1!important;overflow:hidden!important;}' +
     '.fc-hub::before{content:"";position:absolute;inset:-80px -30px -40px;background:radial-gradient(ellipse 72% 82% at 50% 38%,rgba(0,0,0,0.94) 0%,rgba(0,0,0,0.82) 28%,rgba(0,0,0,0.55) 50%,rgba(0,0,0,0.20) 70%,transparent 86%);pointer-events:none;z-index:-1;}' +
+    /* Ensure all hub content sits above the owl image */
+    '.fc-header,.fc-stats,.fc-row,.hub-tracks-section,.ch-overall-bar-wrap,.hub-notes-btn{position:relative!important;z-index:2!important;}' +
+    /* Kill the cycling 3D background icon entirely */
+    '#hub-bg-icon,#hub-bg-glow{display:none!important;}' +
     /* Header label — dark halo so it reads over any icon colour */
     '.fc-header-label{color:rgba(160,220,255,0.92)!important;letter-spacing:4px!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 14px rgba(0,0,0,0.96),0 0 22px rgba(100,180,255,0.50)!important;}' +
     /* Main title — deep diagonal extrusion, letter face clearly above the depth layers */
@@ -4263,7 +4267,7 @@ function renderLearnHub() {
     /* Subtitle */
     '.fc-header-sub{color:rgba(215,235,255,0.90)!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 12px rgba(0,0,0,0.96),0 2px 8px rgba(0,0,0,0.92)!important;}' +
     /* Cards — front-facing illuminated book covers */
-    '.fc-card{min-width:118px!important;flex:1!important;max-width:160px!important;min-height:190px!important;background:linear-gradient(180deg,rgba(var(--fc-rgb,200,169,110),0.10) 0%,rgba(5,7,16,1) 22%,rgba(3,5,12,1) 100%)!important;border:1.5px solid var(--fc-color,#c8a96e)!important;border-left:4px solid var(--fc-color,#c8a96e)!important;border-radius:2px 8px 8px 2px!important;padding:12px 10px 11px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 0 16px var(--fc-glow,rgba(200,169,110,0.28)),0 0 42px var(--fc-glow,rgba(200,169,110,0.12)),inset 0 0 20px rgba(var(--fc-rgb,200,169,110),0.05),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;transform:translateY(-2px)!important;}' +
+    '.fc-card{min-width:118px!important;flex:1!important;max-width:160px!important;min-height:190px!important;background:linear-gradient(180deg,#0e1020 0%,#080a14 40%,#04060e 100%)!important;border:1.5px solid var(--fc-color,#c8a96e)!important;border-left:4px solid var(--fc-color,#c8a96e)!important;border-radius:2px 8px 8px 2px!important;padding:12px 10px 11px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 0 16px var(--fc-glow,rgba(200,169,110,0.28)),0 0 42px var(--fc-glow,rgba(200,169,110,0.12)),inset 0 0 20px rgba(var(--fc-rgb,200,169,110),0.05),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;transform:translateY(-2px)!important;}' +
     '.fc-card::before{content:""!important;position:absolute!important;inset:6px 5px!important;border:1px solid rgba(var(--fc-rgb,200,169,110),0.28)!important;border-radius:2px!important;pointer-events:none!important;z-index:0!important;}' +
     '.fc-card:hover:not(.fc-card-locked){box-shadow:0 0 28px var(--fc-glow,rgba(200,169,110,0.45)),0 0 70px var(--fc-glow,rgba(200,169,110,0.22)),inset 0 0 24px rgba(var(--fc-rgb,200,169,110),0.08),-3px 4px 10px rgba(0,0,0,0.75),0 18px 45px rgba(0,0,0,0.85)!important;transform:translateY(-7px)!important;}' +
     '.fc-card-active{box-shadow:0 0 24px var(--fc-glow,rgba(200,169,110,0.40)),0 0 60px var(--fc-glow,rgba(200,169,110,0.20)),inset 0 0 22px rgba(var(--fc-rgb,200,169,110),0.07),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;}' +
@@ -4293,7 +4297,7 @@ function renderLearnHub() {
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
     /* Owl + book background image — right-anchored, behind content */
-    '.fc-hub-owl{position:absolute!important;left:50%!important;top:-30px!important;transform:translateX(-50%)!important;width:clamp(860px,108%,1400px)!important;height:auto!important;opacity:0.52!important;pointer-events:none!important;z-index:0!important;user-select:none!important;}' +
+    '.fc-hub-owl{position:absolute!important;left:50%!important;top:-30px!important;transform:translateX(-50%)!important;width:clamp(900px,115%,1500px)!important;height:auto!important;opacity:0.55!important;pointer-events:none!important;z-index:0!important;user-select:none!important;clip-path:inset(0 7% 17% 0)!important;}' +
     '</style>' +
     '<div class="fc-hub">' +
     '<img class="fc-hub-owl" src="assets/sage-owl-book.png" alt="" aria-hidden="true" style="filter:' + _owlFilter + '">' +
