@@ -1960,23 +1960,20 @@ input, textarea, select {
 }
 
 .auth-brand-logo {
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(20px, 2.2vw, 32px);
-  font-weight: 900;
-  color: var(--accent);
-  text-shadow: 0 0 40px var(--auth-box-glow, rgba(125,211,252,0.30));
-  margin-bottom: 8px;
-  line-height: 1.15;
+  display: none;
 }
 
 .auth-brand-tagline {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 13px;
-  color: var(--text-dim);
-  line-height: 1.7;
+  font-size: clamp(28px, 3.8vw, 52px);
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 40px var(--auth-box-glow, rgba(200,169,110,0.4));
+  line-height: 1.15;
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(255,255,255,0.07);
+  text-align: left;
 }
 
 .auth-brand-features {
@@ -1995,7 +1992,8 @@ input, textarea, select {
   display: flex;
   align-items: center;
   gap: 10px;
-  opacity: 0.85;
+  opacity: 0.75;
+  text-align: left;
 }
 
 .auth-feat-dot {
@@ -2024,6 +2022,11 @@ input, textarea, select {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.auth-mobile-home {
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .auth-box { width: 100%; max-width: 340px; }
