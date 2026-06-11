@@ -80,6 +80,8 @@ var REV_CODE_SYMS = [
   'fn','if','for','try','new','let','var','$','_','~','|>','::',':='
 ];
 
+var FLOOR_COLORS = ['', '#7dd3fc', '#4ade80', '#f59e0b', '#a78bfa', '#f472b6', '#fb923c', '#e879f9'];
+
 // ── SM-2 Spaced Repetition ──────────────────────────────────────
 function sm2Update(data, gotIt) {
   var q  = gotIt ? 4 : 1;
@@ -114,12 +116,54 @@ function srsCounts() {
   var due = 0, mastered = 0, upcoming = 0, fresh = 0;
   for (var i = 0; i < REVISION_CARDS.length; i++) {
     var s = srsStatus(i);
-    if (s === 'due')      due++;
-    else if (s === 'mastered')  mastered++;
-    else if (s === 'upcoming')  upcoming++;
-    else                        fresh++;
+    if (s === 'due')           due++;
+    else if (s === 'mastered') mastered++;
+    else if (s === 'upcoming') upcoming++;
+    else                       fresh++;
   }
   return { due: due, mastered: mastered, upcoming: upcoming, fresh: fresh };
+}
+
+// ── Floor mastery & unlock gates ─────────────────────────────────
+function floorStats(f) {
+  var total = 0, learned = 0;
+  for (var i = 0; i < REVISION_CARDS.length; i++) {
+    if (REVISION_CARDS[i].floor !== f) continue;
+    total++;
+    var d = (state.srsData || {})[i];
+    if (d && d.reps >= 1) learned++;
+  }
+  var threshold = Math.ceil(total * 0.6);
+  return { total: total, learned: learned, threshold: threshold,
+           pct: total ? Math.round(learned / total * 100) : 0 };
+}
+
+function isFloorUnlocked(f) {
+  if (f <= 1) return true;
+  var prev = floorStats(f - 1);
+  return prev.learned >= prev.threshold;
+}
+
+function _renderFloorMap() {
+  var html = '<div class="rev-floor-map">';
+  for (var f = 1; f <= 7; f++) {
+    var st  = floorStats(f);
+    var open = isFloorUnlocked(f);
+    var cls = 'rev-floor-item' +
+      (!open ? ' rev-floor-locked' : st.learned >= st.total ? ' rev-floor-complete' : ' rev-floor-open');
+    html += '<div class="' + cls + '" style="--fc:' + FLOOR_COLORS[f] + ';--pct:' + st.pct + '">';
+    html +=   '<div class="rev-floor-ring-wrap">';
+    html +=     '<div class="rev-floor-ring"></div>';
+    html +=     open
+      ? '<span class="rev-floor-num">' + f + '</span>'
+      : '<span class="rev-floor-lock-icon">&#128274;</span>';
+    html +=   '</div>';
+    html +=   '<div class="rev-floor-label">F' + f + '</div>';
+    if (open) html += '<div class="rev-floor-score">' + st.learned + '/' + st.total + '</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
 }
 // ────────────────────────────────────────────────────────────────
 
@@ -151,6 +195,7 @@ function _renderRevDeck(panel) {
       '<div class="rev-srs-stat"><span class="rev-srs-num srs-up">' + c.upcoming + '</span><span class="rev-srs-lbl">scheduled</span></div>' +
       '<div class="rev-srs-stat"><span class="rev-srs-num srs-done">' + c.mastered + '</span><span class="rev-srs-lbl">mastered</span></div>' +
     '</div>' +
+    _renderFloorMap() +
     '<div class="rev-deck-scene" onclick="startRevSession()">' +
       '<div class="rev-deck-stack">' +
         '<div class="rev-deck-slab rev-deck-s5"></div>' +
@@ -325,16 +370,19 @@ function markRevCard(i, gotIt) {
 function startRevSession() {
   var due = [], fresh = [];
   for (var i = 0; i < REVISION_CARDS.length; i++) {
+    if (!isFloorUnlocked(REVISION_CARDS[i].floor)) continue;
     var s = srsStatus(i);
-    if (s === 'due') due.push(i);
+    if (s === 'due')      due.push(i);
     else if (s === 'new') fresh.push(i);
   }
   var cards = due.concat(fresh.slice(0, Math.max(0, 20 - due.length)));
   if (!cards.length) {
-    for (var j = 0; j < REVISION_CARDS.length; j++) cards.push(j);
+    for (var j = 0; j < REVISION_CARDS.length; j++) {
+      if (isFloorUnlocked(REVISION_CARDS[j].floor)) cards.push(j);
+    }
     cards = cards.slice(0, 20);
   }
-  _revSession = { cards: cards, idx: 0, results: [] };
+  _revSession = { cards: cards, idx: 0, results: [], newUnlocks: [] };
   _revSessionFlipped = false;
   var panel = document.getElementById('panel-revision');
   if (panel) _renderRevSession(panel);
@@ -428,8 +476,18 @@ function _sessionFlip() {
 function _sessionMark(gotIt) {
   if (!_revSession || !_revSessionFlipped) return;
   var cardIdx = _revSession.cards[_revSession.idx];
+
+  var wasUnlocked = {};
+  for (var f = 2; f <= 7; f++) wasUnlocked[f] = isFloorUnlocked(f);
+
   _srsMarkCard(cardIdx, gotIt);
   _revSession.results.push({ idx: cardIdx, gotIt: gotIt });
+
+  for (var f = 2; f <= 7; f++) {
+    if (!wasUnlocked[f] && isFloorUnlocked(f)) {
+      _revSession.newUnlocks.push(f);
+    }
+  }
 
   var cardEl = document.getElementById('rev-sess-card');
   if (cardEl) {
@@ -454,16 +512,28 @@ function _sessionMark(gotIt) {
 }
 
 function _sessionComplete(panel) {
-  var results = _revSession ? _revSession.results : [];
-  var passed  = results.filter(function(r) { return r.gotIt; }).length;
-  var failed  = results.length - passed;
+  var results  = _revSession ? _revSession.results : [];
+  var unlocks  = _revSession ? (_revSession.newUnlocks || []) : [];
+  var passed   = results.filter(function(r) { return r.gotIt; }).length;
+  var failed   = results.length - passed;
   var c = srsCounts();
+
+  var unlockHtml = '';
+  if (unlocks.length > 0) {
+    unlockHtml = '<div class="rev-sess-unlock-banner">';
+    for (var u = 0; u < unlocks.length; u++) {
+      unlockHtml += '<div class="rev-sess-unlock-item" style="--fc:' + FLOOR_COLORS[unlocks[u]] + '">' +
+        '&#128275; Floor ' + unlocks[u] + ' unlocked!</div>';
+    }
+    unlockHtml += '</div>';
+  }
 
   panel.innerHTML =
     '<div class="rev-session-wrap rev-sess-complete-wrap">' +
       '<div class="rev-sess-complete-owl">' + sageOwlSVG(72, 79) + '</div>' +
       '<div class="rev-sess-complete-title">Session Complete</div>' +
       '<div class="rev-sess-complete-sub">You reviewed ' + results.length + ' card' + (results.length !== 1 ? 's' : '') + '</div>' +
+      unlockHtml +
       '<div class="rev-sess-result-row">' +
         '<div class="rev-sess-result-stat">' +
           '<div class="rev-sess-result-n rev-sess-n-pass">' + passed + '</div>' +
