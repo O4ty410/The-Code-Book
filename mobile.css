@@ -186,7 +186,7 @@ body.is-mobile.mob-hub-active #main-col     { background: none !important; }
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  padding-bottom: 26px;
+  padding-bottom: 8px;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -223,34 +223,33 @@ body.is-mobile.mob-hub-active #main-col     { background: none !important; }
 
 /* Pages / book spine strip below the card face */
 .mob-book-spine {
-  height: 22px;
+  height: 16px;
   margin: 0 3px;
   background:
     repeating-linear-gradient(
       0deg,
-      rgba(255,255,255,0.09) 0px,
-      rgba(255,255,255,0.09) 1px,
+      rgba(255,255,255,0.07) 0px,
+      rgba(255,255,255,0.07) 1px,
       transparent 1px,
       transparent 3px
     ),
     rgba(3, 5, 15, 0.98);
-  border: 1px solid var(--mg-border, rgba(200,169,110,0.28));
+  border: 1px solid var(--mg-border, rgba(200,169,110,0.25));
   border-top: none;
-  border-radius: 0 0 8px 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.55);
+  border-radius: 0 0 6px 6px;
 }
 
-/* Bookmark ribbon — starts at spine top, extends below */
+/* Bookmark ribbon — spans the spine height then a small triangular tip below */
 .mob-book-ribbon {
   position: absolute;
   bottom: 0;
   left: 10px;
-  width: 18px;
-  height: 48px;
+  width: 14px;
+  height: 24px;
   background: var(--mg-color, #c8a96e);
-  clip-path: polygon(0 0, 100% 0, 100% 76%, 50% 100%, 0 76%);
+  clip-path: polygon(0 0, 100% 0, 100% 67%, 50% 100%, 0 67%);
   opacity: 0.92;
-  filter: drop-shadow(0 3px 6px var(--mg-glow, rgba(200,169,110,0.65)));
+  filter: drop-shadow(0 2px 4px var(--mg-glow, rgba(200,169,110,0.55)));
 }
 
 /* Top accent line */
