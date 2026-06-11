@@ -2451,6 +2451,7 @@ function switchSectionTab(tab, sectionId, btn) {
   var panel = document.getElementById('spanel-' + tab + '-' + sectionId);
   if (panel) panel.classList.add('active');
   if (tab === 'code') {
+    if (typeof isMobile === 'function' && isMobile()) showEditorRotatePrompt();
     var fi = state.currentFloor - 1;
     var section = FLOORS[fi].sections[state.currentSection];
     setTimeout(function() {
@@ -3333,6 +3334,28 @@ function resetEditor(sectionId) {
     updateEditorLines(sectionId);
     runEditorCode(sectionId);
   }
+}
+
+function showEditorRotatePrompt() {
+  if (window.innerWidth >= window.innerHeight) return; // already landscape
+  var existing = document.getElementById('editor-rotate-prompt');
+  if (existing) return;
+  var el = document.createElement('div');
+  el.id = 'editor-rotate-prompt';
+  el.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#030a15;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;padding:32px;text-align:center;';
+  el.innerHTML =
+    '<div style="font-size:72px;animation:editorRotateHint 2s ease-in-out infinite;">&#x1F4F1;</div>' +
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:16px;letter-spacing:3px;color:var(--accent,#c8a96e);">ROTATE YOUR DEVICE</div>' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:12px;color:rgba(180,210,255,0.65);line-height:1.8;max-width:260px;">The code editor works best in landscape mode.<br>Turn your phone sideways for the best experience.</div>' +
+    '<button onclick="document.getElementById(\'editor-rotate-prompt\').remove()" style="margin-top:8px;background:none;border:1px solid rgba(200,169,80,0.4);color:var(--accent,#c8a96e);font-family:\'Space Mono\',monospace;font-size:11px;letter-spacing:1px;padding:10px 24px;cursor:pointer;border-radius:4px;">CONTINUE ANYWAY</button>';
+  document.body.appendChild(el);
+  var _check = setInterval(function() {
+    if (window.innerWidth > window.innerHeight) {
+      clearInterval(_check);
+      var p = document.getElementById('editor-rotate-prompt');
+      if (p) p.remove();
+    }
+  }, 300);
 }
 
 function updateEditorLines(sectionId) {
