@@ -7064,6 +7064,49 @@ body.learn-mode #main-col {
 }
 .rev-sess-browse-btn:hover { color: rgba(226,232,240,0.65); }
 
+/* ── Daily streak ── */
+.rev-streak {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0 6px;
+}
+.rev-streak-flame { font-size: 22px; line-height: 1; }
+.rev-streak-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fb923c;
+  text-shadow: 0 0 12px rgba(251,146,60,0.55);
+  line-height: 1;
+}
+.rev-streak-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: rgba(226,232,240,0.50);
+  letter-spacing: 0.04em;
+}
+
+.rev-sess-streak-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 20px;
+  border-radius: 10px;
+  background: rgba(251,146,60,0.10);
+  border: 1px solid rgba(251,146,60,0.28);
+  color: #fb923c;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: 100%;
+  max-width: 280px;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+
 /* ── Floor progress map ── */
 .rev-floor-map {
   display: flex;
