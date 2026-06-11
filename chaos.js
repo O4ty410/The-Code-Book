@@ -168,6 +168,59 @@
     };
   }
 
+  // ── Countdown timer ─────────────────────────────────────
+
+  var _chaosTimer = null;
+  var _chaosTimerSec = 90;
+
+  function _chaosTimerLimit(idx) {
+    if (idx < 3) return 90;
+    if (idx < 6) return 75;
+    if (idx < 9) return 60;
+    return 45;
+  }
+
+  function _updateTimerDisplay() {
+    var el = document.getElementById('chaos-timer-val');
+    if (!el) return;
+    var sec = Math.max(0, _chaosTimerSec);
+    el.textContent = sec;
+    if (sec <= 10) {
+      el.style.color = '#ff3050';
+      el.style.animation = sec % 2 === 0 ? 'none' : 'chaos-timer-flash 0.5s step-end infinite';
+    } else if (sec <= 20) {
+      el.style.color = '#fb923c';
+      el.style.animation = '';
+    } else {
+      el.style.color = '';
+      el.style.animation = '';
+    }
+  }
+
+  function _startChaosTimer(idx) {
+    _stopChaosTimer();
+    _chaosTimerSec = _chaosTimerLimit(idx);
+    _updateTimerDisplay();
+    _chaosTimer = setInterval(function () {
+      var complete = document.getElementById('glitch-complete');
+      if (complete && complete.classList.contains('active')) return;
+      _chaosTimerSec--;
+      _updateTimerDisplay();
+      if (_chaosTimerSec <= 0) {
+        _stopChaosTimer();
+        var loreEl = document.getElementById('lore-ticker');
+        if (loreEl) loreEl.textContent = 'SYSTEM RESET INITIATED — RESTARTING SEQUENCE';
+        setTimeout(function () { if (window.ChaosGame) window.ChaosGame.restart(); }, 1200);
+      }
+    }, 1000);
+  }
+
+  function _stopChaosTimer() {
+    if (_chaosTimer) { clearInterval(_chaosTimer); _chaosTimer = null; }
+    var el = document.getElementById('chaos-timer-val');
+    if (el) el.style.animation = '';
+  }
+
   // ── ChaosGame public API ─────────────────────────────────
 
   var currentIdx = 0;
@@ -184,18 +237,22 @@
       GlitchGame.setMode('chaos');
       GlitchGame.init(canvasId);
       applyMods(0);
+      _startChaosTimer(0);
     },
     restart: function () {
       GlitchGame.restart();
       applyMods(currentIdx);
+      _startChaosTimer(currentIdx);
     },
     nextLevel: function () {
       var len = (window.ChaosLevels || []).length;
       currentIdx = currentIdx >= len - 1 ? 0 : currentIdx + 1;
       GlitchGame.nextLevel();
       applyMods(currentIdx);
+      _startChaosTimer(currentIdx);
     },
     destroy: function () {
+      _stopChaosTimer();
       GlitchGame.setModifiers(null);
       GlitchGame.setLevels(window.GlitchLevels || []);
       GlitchGame.setMode('venus');

@@ -6671,6 +6671,7 @@ function launchChaosMode() {
           '<div class="glitch-stat"><span class="glitch-stat-lbl">LVL</span><span class="glitch-stat-val" id="glitch-level">1</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">SCORE</span><span class="glitch-stat-val" id="glitch-score">0</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">MOVES</span><span class="glitch-stat-val" id="glitch-moves">0</span></div>' +
+          '<div class="glitch-stat" id="chaos-timer-stat"><span class="glitch-stat-lbl">TIME</span><span class="glitch-stat-val" id="chaos-timer-val">90</span></div>' +
           '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" style="color:rgba(255,60,80,0.70);border-color:rgba(255,40,80,0.30)" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635;</button></div>' +
         '</div>' +
       '</div>' +
