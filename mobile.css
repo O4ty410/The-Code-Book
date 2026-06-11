@@ -202,8 +202,15 @@ body.is-mobile.mob-hub-active #main-col     { background: none !important; }
 .mob-grid-tile {
   position: relative;
   background:
+    repeating-linear-gradient(
+      -50deg,
+      transparent,
+      transparent 3px,
+      rgba(255,255,255,0.012) 3px,
+      rgba(255,255,255,0.012) 4px
+    ),
     radial-gradient(ellipse 80% 55% at 50% 0%, var(--mg-bg, rgba(200,169,110,0.10)) 0%, transparent 70%),
-    rgba(4, 8, 24, 0.72);
+    rgba(4, 8, 24, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--mg-border, rgba(200,169,110,0.28));
@@ -244,13 +251,15 @@ body.is-mobile.mob-hub-active #main-col     { background: none !important; }
   background:
     repeating-linear-gradient(
       0deg,
-      rgba(255,255,255,0.09) 0px,
-      rgba(255,255,255,0.09) 1px,
-      transparent 1px,
-      transparent 3px
+      rgba(255,255,255,0.13) 0px,
+      rgba(255,255,255,0.13) 1px,
+      rgba(255,255,255,0.03) 1px,
+      rgba(255,255,255,0.03) 2px,
+      transparent 2px,
+      transparent 4px
     ),
-    rgba(5, 8, 22, 0.96);
-  border: 1px solid var(--mg-border, rgba(200,169,110,0.28));
+    rgba(6, 9, 24, 0.97);
+  border: 1px solid var(--mg-border, rgba(200,169,110,0.30));
   border-top: none;
 }
 
@@ -903,6 +912,20 @@ body.is-mobile.mob-hub-active #main-col     { background: none !important; }
 .is-mobile.mob-in-section .main-col {
   padding-top: 0;
   padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+  max-height: 100vh;
+}
+
+/* Hub fills the full screen — hide desktop top bar and clear all top offsets.
+   !important overrides the :has(.mob-panel-back) lingering-back-button rule. */
+.is-mobile.mob-hub-active .top-bar {
+  display: none !important;
+}
+.is-mobile.mob-hub-active .app-grid {
+  padding-top: 0;
+}
+.is-mobile.mob-hub-active #main-content,
+.is-mobile.mob-hub-active .main-col {
+  padding-top: 0 !important;
   max-height: 100vh;
 }
 
