@@ -7276,6 +7276,23 @@ function _studioEditorHtml(t, code, savedName) {
   var col = catCol[t ? t.category : ''] || '#c8a96e';
   var cat = t ? t.category : '';
   var title = savedName || (t ? t.name : '');
+  var tips = (t && t.tips) ? t.tips : [];
+
+  var swatches = [
+    {name:'Mint',   hex:'#00ff88'},{name:'Sky',    hex:'#7dd3fc'},{name:'Violet',  hex:'#a78bfa'},
+    {name:'Amber',  hex:'#f59e0b'},{name:'Pink',   hex:'#f472b6'},{name:'Coral',   hex:'#ff6b6b'},
+    {name:'Indigo', hex:'#6366f1'},{name:'Teal',   hex:'#2dd4bf'},{name:'Orange',  hex:'#fb923c'},
+    {name:'Fuchsia',hex:'#e879f9'},{name:'Yellow', hex:'#fbbf24'},{name:'Green',   hex:'#4ade80'}
+  ];
+
+  var swatchHtml = swatches.map(function(s) {
+    return '<button class="st-swatch" title="' + s.name + ' ' + s.hex + '" style="background:' + s.hex + '" onclick="studioInsertColor(\'' + s.hex + '\',this)"></button>';
+  }).join('');
+
+  var tipsHtml = tips.length
+    ? '<div class="st-tips"><span class="st-tips-icon">💡</span>' + tips.map(function(t){return '<span class="st-tip">'+t+'</span>';}).join('') + '</div>'
+    : '';
+
   return '<div class="st-edit-root">' +
     '<div class="st-edit-bar">' +
       '<button class="st-back-btn" onclick="backToStudio()">← Studio</button>' +
@@ -7294,7 +7311,12 @@ function _studioEditorHtml(t, code, savedName) {
       '<button class="st-btn st-btn-save" onclick="saveStudio()">💾 Save</button>' +
       '<button class="st-btn st-btn-dl" onclick="downloadStudio()">⬇ Download</button>' +
       '<button class="st-btn st-btn-reset" onclick="resetStudio()">↺ Reset</button>' +
-    '</div></div>';
+    '</div>' +
+    '<div class="st-helpers">' +
+      '<div class="st-helper-row"><span class="st-helper-lbl">🎨 Colours</span>' + swatchHtml + '<span class="st-helper-hint">Click to insert hex at cursor</span></div>' +
+      tipsHtml +
+    '</div>' +
+  '</div>';
 }
 
 function openStudioTemplate(id) {
@@ -7372,6 +7394,20 @@ function deleteSavedCreation(idx) {
   if (!confirm('Delete this creation?')) return;
   if (state.studioCreations) { state.studioCreations.splice(idx, 1); saveState(); }
   backToStudio();
+}
+
+function studioInsertColor(hex, btn) {
+  var ed = document.getElementById('st-editor');
+  if (!ed) { if (navigator.clipboard) navigator.clipboard.writeText(hex); return; }
+  ed.focus();
+  var s = ed.selectionStart, e = ed.selectionEnd;
+  ed.value = ed.value.substring(0, s) + hex + ed.value.substring(e);
+  ed.selectionStart = ed.selectionEnd = s + hex.length;
+  if (btn) {
+    btn.style.outline = '2px solid rgba(255,255,255,0.85)';
+    btn.style.transform = 'scale(1.3)';
+    setTimeout(function() { btn.style.outline = ''; btn.style.transform = ''; }, 350);
+  }
 }
 
 // ─────────── Boss Challenges ───────────
