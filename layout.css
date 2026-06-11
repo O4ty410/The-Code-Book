@@ -640,3 +640,20 @@ body.celebrating .top-bar,
 body.celebrating .mobile-bottom-bar {
   display: none !important;
 }
+
+/* ============================================================
+   LANDSCAPE SHORT-VIEWPORT (desktop mode on phone, landscape)
+   Applies when height < 520px and desktop mode is active (> 900px wide)
+   ============================================================ */
+
+@media (min-width: 901px) and (max-height: 520px) {
+  .top-bar {
+    height: 44px;
+  }
+  .app-grid {
+    padding-top: 44px;
+  }
+  .main-col {
+    max-height: calc(100vh - 44px);
+  }
+}

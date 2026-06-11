@@ -4045,6 +4045,18 @@ body.learn-mode #main-col {
   .fc-header-title { font-size: 26px; }
 }
 
+/* ── Desktop-on-mobile: 901–1300px (Request Desktop Site on phones/tablets) ── */
+@media (min-width: 901px) and (max-width: 1300px) {
+  /* Floor cards: reduce min-width so all 7 fit in one row at ~860px container */
+  .fc-card { min-width: 110px; }
+  /* Allow wrapping as a fallback if viewport is very narrow in this range */
+  .fc-row  { flex-wrap: wrap; overflow-x: visible; }
+  /* Tighten hub padding */
+  .fc-hub  { padding: 32px 20px 60px; }
+  /* Slightly reduce section inner padding */
+  .section-inner-pad { padding: 20px 24px; }
+}
+
 /* ── End Floor Cards Hub ── */
 
 /* ── Sage Floor Intro Overlay ── */
