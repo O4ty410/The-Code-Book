@@ -8695,3 +8695,70 @@ body.learn-mode #main-col {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.15; }
 }
+
+/* ── Creation Studio ─────────────────────────────────────── */
+
+.st-root { padding: 0 0 48px; }
+.st-header { text-align: center; padding: 20px 0 18px; }
+.st-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.st-sub { font-size: 11px; color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; letter-spacing: .3px; }
+
+.st-cats { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 24px; }
+.st-cat { padding: 6px 16px; background: none; border: 1px solid var(--border); color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; cursor: pointer; border-radius: 3px; transition: border-color .15s, color .15s; }
+.st-cat.active, .st-cat:hover { border-color: var(--accent); color: var(--accent); }
+
+.st-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+
+.st-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 16px; cursor: pointer; transition: border-color .15s, transform .15s; position: relative; }
+.st-card:hover { border-color: var(--tc, var(--accent)); transform: translateY(-2px); }
+.st-card-icon { font-size: 26px; margin-bottom: 10px; }
+.st-card-cat { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; color: var(--tc, var(--accent)); margin-bottom: 6px; opacity: .8; }
+.st-card-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.st-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+.st-card-cta { margin-top: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--tc, var(--accent)); letter-spacing: 1px; }
+
+/* Editor */
+.st-edit-root { display: flex; flex-direction: column; }
+.st-edit-bar { display: flex; align-items: center; gap: 12px; padding: 10px 0 16px; }
+.st-back-btn { background: none; border: 1px solid var(--border); color: var(--text-muted); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 7px 14px; cursor: pointer; border-radius: 3px; white-space: nowrap; transition: border-color .15s, color .15s; }
+.st-back-btn:hover { border-color: var(--accent); color: var(--accent); }
+.st-edit-title { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st-edit-badge { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 2px; padding: 4px 10px; border: 1px solid; border-radius: 2px; white-space: nowrap; }
+
+.st-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; height: 420px; }
+.st-code-pane { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.st-code-hint { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent); background: rgba(200,169,110,.06); padding: 7px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.st-textarea { flex: 1; background: var(--surface); color: var(--text); font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; line-height: 1.65; padding: 12px; border: none; outline: none; resize: none; overflow-y: auto; tab-size: 2; }
+.st-preview-pane { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fff; }
+.st-preview-pane iframe { width: 100%; height: 100%; display: block; border: none; }
+
+.st-actions { display: flex; gap: 10px; padding: 12px 0 0; flex-wrap: wrap; }
+.st-btn { padding: 9px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; border-radius: 3px; cursor: pointer; border: 1px solid; transition: all .15s; }
+.st-btn-run { background: var(--accent); color: #0a0a0a; border-color: var(--accent); font-weight: 700; }
+.st-btn-run:hover { opacity: .85; }
+.st-btn-save, .st-btn-dl { background: none; border-color: var(--border); color: var(--text-muted); }
+.st-btn-save:hover, .st-btn-dl:hover { border-color: var(--accent); color: var(--accent); }
+.st-btn-reset { background: none; border-color: transparent; color: var(--text-muted); font-size: 10px; }
+.st-btn-reset:hover { color: #ff3050; }
+
+/* Saved Creations */
+.st-saved-section { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--border); }
+.st-saved-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+.st-saved-count { background: var(--surface); border: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 8px; color: var(--text-muted); }
+.st-saved-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+.st-saved-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 12px; }
+.st-saved-icon { font-size: 20px; margin-bottom: 7px; }
+.st-saved-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st-saved-cat { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 10px; }
+.st-saved-actions { display: flex; gap: 6px; }
+.st-saved-open { flex: 1; padding: 5px 0; background: var(--accent); color: #0a0a0a; border: none; font-family: 'IBM Plex Mono', monospace; font-size: 10px; cursor: pointer; border-radius: 2px; font-weight: 700; }
+.st-saved-del { padding: 5px 8px; background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 12px; cursor: pointer; border-radius: 2px; }
+.st-saved-del:hover { border-color: #ff3050; color: #ff3050; }
+.st-empty { text-align: center; padding: 40px 0; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-muted); }
+
+@media (max-width: 640px) {
+  .st-split { grid-template-columns: 1fr; height: auto; }
+  .st-code-pane { height: 260px; }
+  .st-preview-pane { height: 300px; }
+  .st-grid { grid-template-columns: 1fr 1fr; }
+}

@@ -7076,7 +7076,7 @@ function renderPremiumPanel() {
         '<div class="arcade-header-sub">Code, compete, and prove what you know.</div>' +
       '</div>' +
       '<div class="arcade-tabs">' +
-        '<button class="arcade-tab-btn' + (_arcadeTab==='playground'?' active':'') + '" onclick="setArcadeTab(\'playground\',this)">🖥 Playground</button>' +
+        '<button class="arcade-tab-btn' + (_arcadeTab==='playground'?' active':'') + '" onclick="setArcadeTab(\'playground\',this)">🎨 Studio</button>' +
         '<button class="arcade-tab-btn' + (_arcadeTab==='boss'?' active':'') + '" onclick="setArcadeTab(\'boss\',this)">⚔ Boss Challenges</button>' +
         '<button class="arcade-tab-btn' + (_arcadeTab==='leaderboard'?' active':'') + '" onclick="setArcadeTab(\'leaderboard\',this)">🏆 Leaderboard</button>' +
         '<button class="arcade-tab-btn' + (_arcadeTab==='badges'?' active':'') + '" onclick="setArcadeTab(\'badges\',this)">🏅 Badges</button>' +
@@ -7097,7 +7097,7 @@ function setArcadeTab(tab, btn) {
 function _renderArcadeTabContent(tab) {
   var el = document.getElementById('arcade-tab-content');
   if (!el) return;
-  if (tab === 'playground')  { el.innerHTML = _pgHtml(); _initPlayground(); }
+  if (tab === 'playground')  { el.innerHTML = _studioPickerHtml(); }
   else if (tab === 'boss')   { el.innerHTML = _bossHtml(); }
   else if (tab === 'leaderboard') { el.innerHTML = _lbTabHtml(); _loadLbTab(); }
   else if (tab === 'badges') { el.innerHTML = _badgesTabHtml(); }
@@ -7215,6 +7215,163 @@ function runPlayground() {
     var f = document.getElementById('pg-sandbox');
     if (f) f.remove();
   }, 6000);
+}
+
+// ─────────── Creation Studio ───────────
+var _studioFilter = 'all';
+var _studioCurrentId = null;
+
+function _studioPickerHtml() {
+  if (typeof STUDIO_TEMPLATES === 'undefined') return '<div class="st-empty">Templates loading…</div>';
+  var cats = ['all','website','app','game','animation','widget'];
+  var labels = {all:'All',website:'Website',app:'App',game:'Game',animation:'Animation',widget:'Widget'};
+  var html = '<div class="st-root">' +
+    '<div class="st-header"><div class="st-title">Creation Studio</div>' +
+    '<div class="st-sub">Pick a template. Edit the highlighted section. Click Run to see it live.</div></div>' +
+    '<div class="st-cats">' +
+    cats.map(function(c){return '<button class="st-cat'+(_studioFilter===c?' active':'')+'" onclick="studioFilter(\''+c+'\',this)">'+labels[c]+'</button>';}).join('') +
+    '</div><div class="st-grid" id="st-grid">' + _studioGridHtml() + '</div>';
+  var saved = state.studioCreations || [];
+  if (saved.length) {
+    html += '<div class="st-saved-section"><div class="st-saved-title">My Creations <span class="st-saved-count">'+saved.length+'</span></div>' +
+      '<div class="st-saved-grid">' +
+      saved.map(function(c,i){
+        return '<div class="st-saved-card">' +
+          '<div class="st-saved-icon">'+(c.icon||'📄')+'</div>' +
+          '<div class="st-saved-name">'+escHtml(c.name)+'</div>' +
+          '<div class="st-saved-cat">'+((c.category||'').toUpperCase())+'</div>' +
+          '<div class="st-saved-actions">' +
+            '<button class="st-saved-open" onclick="openSavedCreation('+i+')">Open</button>' +
+            '<button class="st-saved-del" onclick="deleteSavedCreation('+i+')">×</button>' +
+          '</div></div>';
+      }).join('') + '</div></div>';
+  }
+  return html + '</div>';
+}
+
+function _studioGridHtml() {
+  var tpls = (window.STUDIO_TEMPLATES || []).filter(function(t){return _studioFilter==='all'||t.category===_studioFilter;});
+  if (!tpls.length) return '<div class="st-empty">No templates in this category yet.</div>';
+  var catCol = {website:'#7dd3fc',app:'#4ade80',game:'#f472b6',animation:'#a78bfa',widget:'#f59e0b'};
+  return tpls.map(function(t){
+    var col = catCol[t.category]||'#c8a96e';
+    return '<div class="st-card" onclick="openStudioTemplate(\''+t.id+'\')" style="--tc:'+col+'">' +
+      '<div class="st-card-icon">'+t.icon+'</div>' +
+      '<div class="st-card-cat">'+t.category.toUpperCase()+'</div>' +
+      '<div class="st-card-name">'+t.name+'</div>' +
+      '<div class="st-card-desc">'+t.desc+'</div>' +
+      '<div class="st-card-cta">Open →</div></div>';
+  }).join('');
+}
+
+function studioFilter(cat, el) {
+  _studioFilter = cat;
+  document.querySelectorAll('.st-cat').forEach(function(b){b.classList.remove('active');});
+  if (el) el.classList.add('active');
+  var g = document.getElementById('st-grid'); if (g) g.innerHTML = _studioGridHtml();
+}
+
+function _studioEditorHtml(t, code, savedName) {
+  var catCol = {website:'#7dd3fc',app:'#4ade80',game:'#f472b6',animation:'#a78bfa',widget:'#f59e0b'};
+  var col = catCol[t ? t.category : ''] || '#c8a96e';
+  var cat = t ? t.category : '';
+  var title = savedName || (t ? t.name : '');
+  return '<div class="st-edit-root">' +
+    '<div class="st-edit-bar">' +
+      '<button class="st-back-btn" onclick="backToStudio()">← Studio</button>' +
+      '<div class="st-edit-title">'+escHtml(title)+'</div>' +
+      '<div class="st-edit-badge" style="color:'+col+';border-color:'+col+'">'+cat.toUpperCase()+'</div>' +
+    '</div>' +
+    '<div class="st-split">' +
+      '<div class="st-code-pane">' +
+        '<div class="st-code-hint">✏️  Edit between the ══ markers, then click Run</div>' +
+        '<textarea class="st-textarea" id="st-editor" spellcheck="false"></textarea>' +
+      '</div>' +
+      '<div class="st-preview-pane"><iframe id="st-iframe" sandbox="allow-scripts" frameborder="0"></iframe></div>' +
+    '</div>' +
+    '<div class="st-actions">' +
+      '<button class="st-btn st-btn-run" onclick="runStudio()">▶ Run</button>' +
+      '<button class="st-btn st-btn-save" onclick="saveStudio()">💾 Save</button>' +
+      '<button class="st-btn st-btn-dl" onclick="downloadStudio()">⬇ Download</button>' +
+      '<button class="st-btn st-btn-reset" onclick="resetStudio()">↺ Reset</button>' +
+    '</div></div>';
+}
+
+function openStudioTemplate(id) {
+  var t = (window.STUDIO_TEMPLATES||[]).find(function(x){return x.id===id;});
+  if (!t) return;
+  _studioCurrentId = id;
+  var el = document.getElementById('arcade-tab-content'); if (!el) return;
+  el.innerHTML = _studioEditorHtml(t, t.code, null);
+  _studioInitEditor(t.code);
+  runStudio();
+}
+
+function _studioInitEditor(code) {
+  var ed = document.getElementById('st-editor'); if (!ed) return;
+  ed.value = code;
+  ed.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') { e.preventDefault(); var s=this.selectionStart; this.value=this.value.substring(0,s)+'  '+this.value.substring(this.selectionEnd); this.selectionStart=this.selectionEnd=s+2; }
+  });
+  var idx = code.indexOf('✏️'); if (idx === -1) idx = code.indexOf('EDIT HERE');
+  if (idx > -1) { var lines = code.substring(0, idx).split('\n').length - 2; setTimeout(function(){ed.scrollTop = lines * 19;}, 60); }
+}
+
+function runStudio() {
+  var ed = document.getElementById('st-editor'), fr = document.getElementById('st-iframe');
+  if (!ed || !fr) return;
+  fr.srcdoc = ed.value;
+}
+
+function saveStudio() {
+  var ed = document.getElementById('st-editor'); if (!ed) return;
+  var t = (window.STUDIO_TEMPLATES||[]).find(function(x){return x.id===_studioCurrentId;});
+  var defaultName = t ? t.name : 'My Creation';
+  var name = prompt('Name your creation:', defaultName); if (!name) return;
+  if (!state.studioCreations) state.studioCreations = [];
+  if (state.studioCreations.length >= 20) { alert('Max 20 creations saved. Delete one first.'); return; }
+  state.studioCreations.push({ name: name, templateId: _studioCurrentId, category: t?t.category:'', icon: t?t.icon:'📄', code: ed.value, savedAt: new Date().toISOString() });
+  saveState();
+  var btn = document.querySelector('.st-btn-save');
+  if (btn) { btn.textContent = '✓ Saved'; setTimeout(function(){btn.textContent='💾 Save';}, 1600); }
+}
+
+function downloadStudio() {
+  var ed = document.getElementById('st-editor'); if (!ed) return;
+  var t = (window.STUDIO_TEMPLATES||[]).find(function(x){return x.id===_studioCurrentId;});
+  var name = (t ? t.name : 'creation').toLowerCase().replace(/\s+/g,'-');
+  var blob = new Blob([ed.value], {type:'text/html'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name+'.html'; a.click(); URL.revokeObjectURL(a.href);
+}
+
+function resetStudio() {
+  var t = (window.STUDIO_TEMPLATES||[]).find(function(x){return x.id===_studioCurrentId;});
+  if (!t) return;
+  if (!confirm('Reset to the original template? Your edits will be lost.')) return;
+  var ed = document.getElementById('st-editor'); if (ed) ed.value = t.code;
+  runStudio();
+}
+
+function backToStudio() {
+  _studioCurrentId = null;
+  var el = document.getElementById('arcade-tab-content');
+  if (el) el.innerHTML = _studioPickerHtml();
+}
+
+function openSavedCreation(idx) {
+  var saved = (state.studioCreations||[])[idx]; if (!saved) return;
+  _studioCurrentId = saved.templateId || null;
+  var t = _studioCurrentId ? (window.STUDIO_TEMPLATES||[]).find(function(x){return x.id===_studioCurrentId;}) : null;
+  var el = document.getElementById('arcade-tab-content'); if (!el) return;
+  el.innerHTML = _studioEditorHtml(t||{category:saved.category||'',name:saved.name}, saved.code, saved.name);
+  _studioInitEditor(saved.code);
+  runStudio();
+}
+
+function deleteSavedCreation(idx) {
+  if (!confirm('Delete this creation?')) return;
+  if (state.studioCreations) { state.studioCreations.splice(idx, 1); saveState(); }
+  backToStudio();
 }
 
 // ─────────── Boss Challenges ───────────
