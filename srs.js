@@ -64,6 +64,9 @@ var REVISION_CARDS = [
 
 var _revDealtSession = false;
 var _revModalIndex = null;
+var _revSession = null;        // { cards:[idx,...], idx:0, results:[{idx,gotIt}] }
+var _revSessionFlipped = false;
+var _revSessionTouchX  = null;
 
 var REV_CARD_RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 var REV_CODE_SYMS = [
@@ -123,7 +126,9 @@ function srsCounts() {
 function renderRevisionPanel() {
   var panel = document.getElementById('panel-revision');
   if (!panel) return;
-  if (!_revDealtSession) {
+  if (_revSession) {
+    _renderRevSession(panel);
+  } else if (!_revDealtSession) {
     _renderRevDeck(panel);
   } else {
     _renderRevGrid(panel, false);
@@ -146,7 +151,7 @@ function _renderRevDeck(panel) {
       '<div class="rev-srs-stat"><span class="rev-srs-num srs-up">' + c.upcoming + '</span><span class="rev-srs-lbl">scheduled</span></div>' +
       '<div class="rev-srs-stat"><span class="rev-srs-num srs-done">' + c.mastered + '</span><span class="rev-srs-lbl">mastered</span></div>' +
     '</div>' +
-    '<div class="rev-deck-scene" onclick="dealRevisionCards()">' +
+    '<div class="rev-deck-scene" onclick="startRevSession()">' +
       '<div class="rev-deck-stack">' +
         '<div class="rev-deck-slab rev-deck-s5"></div>' +
         '<div class="rev-deck-slab rev-deck-s4"></div>' +
@@ -160,9 +165,11 @@ function _renderRevDeck(panel) {
           '<div class="rev-cc rev-cc-br"><span class="rev-cc-rank">A</span><span class="rev-cc-sym">{}</span></div>' +
         '</div>' +
       '</div>' +
-      '<div class="rev-deal-hint">' + (c.due > 0 ? 'Tap to review ' + c.due + ' due card' + (c.due !== 1 ? 's' : '') : 'Tap to review all cards') + '</div>' +
+      '<div class="rev-deal-hint">' + (c.due > 0 ? 'Tap to start — ' + c.due + ' card' + (c.due !== 1 ? 's' : '') + ' due' : 'Tap to start session') + '</div>' +
     '</div>' +
   '</div>';
+  html += '<button class="rev-browse-link" onclick="event.stopPropagation();dealRevisionCards()">Browse all 52 cards →</button>';
+  html += '</div>';
   panel.innerHTML = html;
 }
 
@@ -297,17 +304,185 @@ function closeRevCard() {
   _revModalIndex = null;
 }
 
-function markRevCard(i, gotIt) {
+function _srsMarkCard(i, gotIt) {
   if (!state.srsData) state.srsData = {};
   state.srsData[i] = sm2Update(state.srsData[i] || { ef: 2.5, interval: 0, reps: 0 }, gotIt);
-  // Keep legacy revKnown in sync for badge checks
   if (!state.revKnown) state.revKnown = {};
   if (state.srsData[i].interval >= 21) state.revKnown[i] = true;
   else delete state.revKnown[i];
   saveState();
+}
+
+function markRevCard(i, gotIt) {
+  _srsMarkCard(i, gotIt);
   closeRevCard();
   var panel = document.getElementById('panel-revision');
   if (panel) _renderRevGrid(panel, false);
+}
+
+// ── Session Mode ─────────────────────────────────────────────────
+
+function startRevSession() {
+  var due = [], fresh = [];
+  for (var i = 0; i < REVISION_CARDS.length; i++) {
+    var s = srsStatus(i);
+    if (s === 'due') due.push(i);
+    else if (s === 'new') fresh.push(i);
+  }
+  var cards = due.concat(fresh.slice(0, Math.max(0, 20 - due.length)));
+  if (!cards.length) {
+    for (var j = 0; j < REVISION_CARDS.length; j++) cards.push(j);
+    cards = cards.slice(0, 20);
+  }
+  _revSession = { cards: cards, idx: 0, results: [] };
+  _revSessionFlipped = false;
+  var panel = document.getElementById('panel-revision');
+  if (panel) _renderRevSession(panel);
+}
+
+function endRevSession() {
+  _revSession = null;
+  _revSessionFlipped = false;
+  _revDealtSession = false;
+  var panel = document.getElementById('panel-revision');
+  if (panel) _renderRevDeck(panel);
+}
+
+function _renderRevSession(panel) {
+  if (!_revSession) return;
+  var s = _revSession;
+  var cardIdx = s.cards[s.idx];
+  var card    = REVISION_CARDS[cardIdx];
+  var total   = s.cards.length;
+  var pct     = Math.round((s.idx / total) * 100);
+  var status  = srsStatus(cardIdx);
+  var d       = (state.srsData || {})[cardIdx];
+  var nextPass = sm2Update(d || { ef: 2.5, interval: 0, reps: 0 }, true);
+  var nextFail = sm2Update(d || { ef: 2.5, interval: 0, reps: 0 }, false);
+  var statusTag = status === 'due' ? '<span class="rev-sess-tag rev-sess-tag-due">DUE</span>'
+                : status === 'new' ? '<span class="rev-sess-tag rev-sess-tag-new">NEW</span>'
+                : '<span class="rev-sess-tag rev-sess-tag-up">+' + srsDaysUntil(cardIdx) + 'd</span>';
+
+  panel.innerHTML =
+    '<div class="rev-session-wrap">' +
+      '<div class="rev-sess-hdr">' +
+        '<button class="rev-sess-exit" onclick="endRevSession()">&#10005;</button>' +
+        '<div class="rev-sess-bar"><div class="rev-sess-bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<span class="rev-sess-count">' + (s.idx + 1) + ' / ' + total + '</span>' +
+      '</div>' +
+
+      '<div class="rev-sess-card" id="rev-sess-card" onclick="_sessionFlip()">' +
+        '<div class="rev-sess-card-inner" id="rev-sess-inner">' +
+          '<div class="rev-sess-face rev-sess-front">' +
+            '<div class="rev-sess-floor">FLOOR ' + card.floor + ' &nbsp;' + statusTag + '</div>' +
+            '<div class="rev-sess-term">' + card.term + '</div>' +
+            '<div class="rev-sess-tap-hint">Tap to reveal</div>' +
+          '</div>' +
+          '<div class="rev-sess-face rev-sess-back">' +
+            '<div class="rev-sess-term-sm">' + card.term + '</div>' +
+            '<div class="rev-sess-def">' + card.def + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="rev-sess-actions" id="rev-sess-actions">' +
+        '<button class="rev-sess-fail" onclick="_sessionMark(false)">' +
+          '<span>✕ Review Again</span><span class="rev-sess-interval">+' + nextFail.interval + 'd</span>' +
+        '</button>' +
+        '<button class="rev-sess-pass" onclick="_sessionMark(true)">' +
+          '<span>✓ Got it</span><span class="rev-sess-interval">+' + nextPass.interval + 'd</span>' +
+        '</button>' +
+      '</div>' +
+
+      '<div class="rev-sess-swipe-hint">← Review Again &nbsp;&nbsp; Got it →</div>' +
+    '</div>';
+
+  var cardEl = document.getElementById('rev-sess-card');
+  if (cardEl) {
+    cardEl.addEventListener('touchstart', function(e) {
+      _revSessionTouchX = e.touches[0].clientX;
+    }, { passive: true });
+    cardEl.addEventListener('touchend', function(e) {
+      if (_revSessionTouchX === null || !_revSessionFlipped) return;
+      var dx = e.changedTouches[0].clientX - _revSessionTouchX;
+      _revSessionTouchX = null;
+      if (dx > 60) _sessionMark(true);
+      else if (dx < -60) _sessionMark(false);
+    });
+  }
+}
+
+function _sessionFlip() {
+  if (_revSessionFlipped) return;
+  var inner   = document.getElementById('rev-sess-inner');
+  var actions = document.getElementById('rev-sess-actions');
+  if (!inner) return;
+  inner.classList.add('flipped');
+  _revSessionFlipped = true;
+  if (actions) {
+    actions.style.display = 'flex';
+    requestAnimationFrame(function() { actions.classList.add('visible'); });
+  }
+}
+
+function _sessionMark(gotIt) {
+  if (!_revSession || !_revSessionFlipped) return;
+  var cardIdx = _revSession.cards[_revSession.idx];
+  _srsMarkCard(cardIdx, gotIt);
+  _revSession.results.push({ idx: cardIdx, gotIt: gotIt });
+
+  var cardEl = document.getElementById('rev-sess-card');
+  if (cardEl) {
+    cardEl.style.transition = 'transform 0.28s ease, opacity 0.28s ease';
+    cardEl.style.transform = gotIt ? 'translateX(110%) rotate(12deg)' : 'translateX(-110%) rotate(-12deg)';
+    cardEl.style.opacity = '0';
+    cardEl.style.pointerEvents = 'none';
+  }
+
+  setTimeout(function() {
+    if (!_revSession) return;
+    _revSession.idx++;
+    _revSessionFlipped = false;
+    var panel = document.getElementById('panel-revision');
+    if (!panel) return;
+    if (_revSession.idx >= _revSession.cards.length) {
+      _sessionComplete(panel);
+    } else {
+      _renderRevSession(panel);
+    }
+  }, 260);
+}
+
+function _sessionComplete(panel) {
+  var results = _revSession ? _revSession.results : [];
+  var passed  = results.filter(function(r) { return r.gotIt; }).length;
+  var failed  = results.length - passed;
+  var c = srsCounts();
+
+  panel.innerHTML =
+    '<div class="rev-session-wrap rev-sess-complete-wrap">' +
+      '<div class="rev-sess-complete-owl">' + sageOwlSVG(72, 79) + '</div>' +
+      '<div class="rev-sess-complete-title">Session Complete</div>' +
+      '<div class="rev-sess-complete-sub">You reviewed ' + results.length + ' card' + (results.length !== 1 ? 's' : '') + '</div>' +
+      '<div class="rev-sess-result-row">' +
+        '<div class="rev-sess-result-stat">' +
+          '<div class="rev-sess-result-n rev-sess-n-pass">' + passed + '</div>' +
+          '<div class="rev-sess-result-l">Got it</div>' +
+        '</div>' +
+        '<div class="rev-sess-result-div"></div>' +
+        '<div class="rev-sess-result-stat">' +
+          '<div class="rev-sess-result-n rev-sess-n-fail">' + failed + '</div>' +
+          '<div class="rev-sess-result-l">Review Again</div>' +
+        '</div>' +
+      '</div>' +
+      (c.due > 0
+        ? '<button class="rev-sess-cta-btn" onclick="startRevSession()">Review ' + c.due + ' Remaining →</button>'
+        : '<button class="rev-sess-cta-btn" onclick="endRevSession()">Done ✓</button>'
+      ) +
+      '<button class="rev-sess-browse-btn" onclick="dealRevisionCards()">Browse all cards</button>' +
+    '</div>';
+
+  _revSession = null;
 }
 
 function resetRevisionCards() {

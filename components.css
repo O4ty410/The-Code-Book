@@ -6725,6 +6725,362 @@ body.learn-mode #main-col {
 .rev-cc-lg.rev-cc-br { bottom: 14px; right: 18px; }
 
 /* =============================================
+   SESSION MODE
+   ============================================= */
+.rev-session-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 16px 24px;
+  min-height: 100%;
+  box-sizing: border-box;
+  gap: 0;
+}
+
+/* Header row: exit × | progress bar | count */
+.rev-sess-hdr {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.rev-sess-exit {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+  color: rgba(226,232,240,0.65);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.rev-sess-exit:hover { background: rgba(255,255,255,0.13); color: #e2e8f0; }
+
+.rev-sess-bar {
+  flex: 1;
+  height: 5px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.rev-sess-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7dd3fc, #a78bfa);
+  border-radius: 99px;
+  transition: width 0.35s ease;
+}
+
+.rev-sess-count {
+  flex-shrink: 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: rgba(226,232,240,0.50);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── Card flip ── */
+.rev-sess-card {
+  width: 100%;
+  max-width: 360px;
+  min-height: 220px;
+  perspective: 900px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+
+.rev-sess-card-inner {
+  position: relative;
+  width: 100%;
+  min-height: 220px;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rev-sess-card-inner.flipped {
+  transform: rotateY(180deg);
+}
+
+.rev-sess-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 14px;
+  background: rgba(4, 8, 24, 0.80);
+  border: 1px solid rgba(125,211,252,0.16);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 20px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 1px 0 rgba(255,255,255,0.04) inset;
+}
+
+.rev-sess-back {
+  transform: rotateY(180deg);
+  justify-content: flex-start;
+  padding-top: 20px;
+}
+
+/* Front face content */
+.rev-sess-floor {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: rgba(226,232,240,0.40);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rev-sess-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+.rev-sess-tag-due { background: rgba(251,146,60,0.18); color: #fb923c; }
+.rev-sess-tag-new { background: rgba(125,211,252,0.15); color: #7dd3fc; }
+.rev-sess-tag-up  { background: rgba(167,139,250,0.15); color: #a78bfa; }
+
+.rev-sess-term {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  text-align: center;
+  line-height: 1.15;
+  text-shadow: 0 0 18px rgba(125,211,252,0.25);
+  word-break: break-word;
+}
+
+.rev-sess-tap-hint {
+  margin-top: 20px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: rgba(226,232,240,0.28);
+  letter-spacing: 0.05em;
+}
+
+/* Back face content */
+.rev-sess-term-sm {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #7dd3fc;
+  text-shadow: 0 0 8px rgba(125,211,252,0.50);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.rev-sess-def {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(226,232,240,0.85);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ── Action buttons ── */
+.rev-sess-actions {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  margin-top: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.rev-sess-actions.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.rev-sess-fail,
+.rev-sess-pass {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px 10px;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rev-sess-fail {
+  background: rgba(239,68,68,0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.25);
+}
+.rev-sess-fail:active { transform: scale(0.96); filter: brightness(0.9); }
+
+.rev-sess-pass {
+  background: rgba(74,222,128,0.12);
+  color: #86efac;
+  border: 1px solid rgba(74,222,128,0.25);
+}
+.rev-sess-pass:active { transform: scale(0.96); filter: brightness(0.9); }
+
+.rev-sess-interval {
+  font-size: 0.72rem;
+  opacity: 0.60;
+  font-family: 'Space Mono', monospace;
+}
+
+/* Swipe hint */
+.rev-sess-swipe-hint {
+  margin-top: 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: rgba(226,232,240,0.22);
+  letter-spacing: 0.04em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ── Completion screen ── */
+.rev-sess-complete-wrap {
+  justify-content: center;
+  gap: 6px;
+}
+
+.rev-sess-complete-owl {
+  margin-bottom: 8px;
+}
+
+.rev-sess-complete-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+.rev-sess-complete-sub {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  color: rgba(226,232,240,0.55);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.rev-sess-result-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 260px;
+  margin-bottom: 24px;
+}
+
+.rev-sess-result-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.rev-sess-result-n {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.rev-sess-n-pass { color: #4ade80; text-shadow: 0 0 14px rgba(74,222,128,0.50); }
+.rev-sess-n-fail { color: #fb923c; text-shadow: 0 0 14px rgba(251,146,60,0.50); }
+
+.rev-sess-result-div {
+  width: 1px;
+  height: 40px;
+  background: rgba(255,255,255,0.12);
+}
+
+.rev-sess-result-l {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: rgba(226,232,240,0.45);
+  text-align: center;
+}
+
+.rev-sess-cta-btn {
+  width: 100%;
+  max-width: 280px;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, rgba(125,211,252,0.18), rgba(167,139,250,0.18));
+  border: 1px solid rgba(125,211,252,0.28);
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.rev-sess-cta-btn:hover  { background: linear-gradient(135deg, rgba(125,211,252,0.26), rgba(167,139,250,0.26)); }
+.rev-sess-cta-btn:active { transform: scale(0.97); }
+
+.rev-sess-browse-btn {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: rgba(226,232,240,0.38);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 6px 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+.rev-sess-browse-btn:hover { color: rgba(226,232,240,0.65); }
+
+/* Browse all link on deck screen */
+.rev-browse-link {
+  display: block;
+  margin: 12px auto 0;
+  background: none;
+  border: none;
+  color: rgba(226,232,240,0.38);
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 6px 12px;
+  -webkit-tap-highlight-color: transparent;
+  text-align: center;
+}
+.rev-browse-link:hover { color: rgba(226,232,240,0.65); }
+
+/* =============================================
    KEY-TERM TOOLTIP SYSTEM
    ============================================= */
 .kt-hl {
