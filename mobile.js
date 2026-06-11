@@ -277,10 +277,15 @@ function renderMobileHub() {
     html +=
       '<div class="mob-book-tile" style="' + cssVars + '" onclick="' + t.action + '">' +
         '<div class="mob-grid-tile"' + (tileStyle ? ' style="' + tileStyle + '"' : '') + '>' +
+          '<div class="mob-book-left-spine"></div>' +
           '<div class="mg-accent"></div>' +
           inner +
         '</div>' +
-        '<div class="mob-book-spine"></div>' +
+        '<div class="mob-book-pages">' +
+          '<div class="mob-page-edge e1"></div>' +
+          '<div class="mob-page-edge e2"></div>' +
+          '<div class="mob-page-edge e3"></div>' +
+        '</div>' +
         '<div class="mob-book-ribbon"></div>' +
       '</div>';
   });
