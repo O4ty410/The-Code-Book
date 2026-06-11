@@ -260,8 +260,8 @@ function renderMobileHub() {
     var tglow   = _hexGlow(t.color, 0.18);
     var tborder = _hexGlow(t.color, 0.30);
     var tbg     = _hexGlow(t.color, 0.08);
-    var tileStyle = (t.wide ? 'grid-column:1/-1;flex-direction:row;align-items:center;gap:16px;' : '') +
-      '--mg-color:' + t.color + ';--mg-glow:' + tglow + ';--mg-border:' + tborder + ';--mg-bg:' + tbg;
+    var cssVars = '--mg-color:' + t.color + ';--mg-glow:' + tglow + ';--mg-border:' + tborder + ';--mg-bg:' + tbg;
+    var tileStyle = t.wide ? 'grid-column:1/-1;flex-direction:row;align-items:center;gap:16px;' : '';
     var iconSz = t.wide ? 44 : 38;
     var inner = t.wide
       ? '<div class="mg-icon-lg">' + getMobNavIcon(t.iconType, iconSz) + '</div>' +
@@ -275,9 +275,13 @@ function renderMobileHub() {
         '<div class="mg-title-lg">' + t.title + '</div>' +
         '<div class="mg-hint">' + t.hint + '</div>';
     html +=
-      '<div class="mob-grid-tile" style="' + tileStyle + '" onclick="' + t.action + '">' +
-        '<div class="mg-accent"></div>' +
-        inner +
+      '<div class="mob-book-tile" style="' + cssVars + '" onclick="' + t.action + '">' +
+        '<div class="mob-grid-tile"' + (tileStyle ? ' style="' + tileStyle + '"' : '') + '>' +
+          '<div class="mg-accent"></div>' +
+          inner +
+        '</div>' +
+        '<div class="mob-book-spine"></div>' +
+        '<div class="mob-book-ribbon"></div>' +
       '</div>';
   });
   html += '</div>';
