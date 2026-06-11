@@ -42,19 +42,15 @@ function _ensureTooltip() {
   document.addEventListener('touchstart', function(e) {
     var el = e.target.closest ? e.target.closest('.kt-hl') : null;
     if (!el) { t.classList.remove('kt-visible'); return; }
-    var def = getTermMap()[el.dataset.kt] || '';
-    if (!def) return;
     e.preventDefault();
-    t.textContent = def;
-    t.classList.add('kt-visible');
-    var r = el.getBoundingClientRect();
-    var top = r.top - t.offsetHeight - 8;
-    if (top < 6) top = r.bottom + 8;
-    var left = r.left + r.width / 2 - t.offsetWidth / 2;
-    left = Math.max(8, Math.min(left, window.innerWidth - t.offsetWidth - 8));
-    t.style.left = left + 'px';
-    t.style.top = top + 'px';
+    t.classList.remove('kt-visible');
+    if (typeof openRevQuickCard === 'function') openRevQuickCard(el.dataset.kt);
   }, { passive: false });
+  document.addEventListener('click', function(e) {
+    var el = e.target.closest ? e.target.closest('.kt-hl') : null;
+    if (!el) return;
+    if (typeof openRevQuickCard === 'function') openRevQuickCard(el.dataset.kt);
+  });
   return t;
 }
 

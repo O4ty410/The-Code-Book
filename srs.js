@@ -589,3 +589,106 @@ function resetRevisionCards() {
   var panel = document.getElementById('panel-revision');
   if (panel) _renderRevGrid(panel, true);
 }
+
+// ── Quick-card overlay (triggered from key-term highlights) ───────
+var _qcCardIdx  = null;
+var _qcFlipped  = false;
+
+function openRevQuickCard(termKey) {
+  var idx = -1;
+  for (var i = 0; i < REVISION_CARDS.length; i++) {
+    if (REVISION_CARDS[i].term.toLowerCase() === termKey) { idx = i; break; }
+  }
+  if (idx === -1) return;
+  _qcCardIdx = idx;
+  _qcFlipped  = false;
+
+  var bg = document.getElementById('rev-qc-bg');
+  if (!bg) {
+    bg = document.createElement('div');
+    bg.id = 'rev-qc-bg';
+    bg.className = 'rev-qc-bg';
+    bg.addEventListener('click', function(e) { if (e.target === bg) closeRevQuickCard(); });
+    document.body.appendChild(bg);
+  }
+
+  var card    = REVISION_CARDS[idx];
+  var status  = srsStatus(idx);
+  var d       = (state.srsData || {})[idx];
+  var nextP   = sm2Update(d || { ef: 2.5, interval: 0, reps: 0 }, true);
+  var nextF   = sm2Update(d || { ef: 2.5, interval: 0, reps: 0 }, false);
+  var statusTag = status === 'due'      ? '<span class="rev-sess-tag rev-sess-tag-due">DUE</span>'
+                : status === 'new'      ? '<span class="rev-sess-tag rev-sess-tag-new">NEW</span>'
+                : status === 'mastered' ? '<span class="rev-sess-tag" style="background:rgba(74,222,128,0.15);color:#4ade80">&#10003; MASTERED</span>'
+                : '<span class="rev-sess-tag rev-sess-tag-up">+' + srsDaysUntil(idx) + 'd</span>';
+
+  bg.innerHTML =
+    '<div class="rev-qc-box">' +
+      '<div class="rev-qc-hdr">' +
+        '<span class="rev-qc-pill">REVISION CARD</span>' +
+        '<button class="rev-qc-close" onclick="closeRevQuickCard()">&#10005;</button>' +
+      '</div>' +
+      '<div class="rev-sess-card" id="rev-qc-card" onclick="_qcFlip()">' +
+        '<div class="rev-sess-card-inner" id="rev-qc-inner">' +
+          '<div class="rev-sess-face rev-sess-front">' +
+            '<div class="rev-sess-floor">FLOOR ' + card.floor + ' &nbsp;' + statusTag + '</div>' +
+            '<div class="rev-sess-term">' + card.term + '</div>' +
+            '<div class="rev-sess-tap-hint">Tap to reveal</div>' +
+          '</div>' +
+          '<div class="rev-sess-face rev-sess-back">' +
+            '<div class="rev-sess-term-sm">' + card.term + '</div>' +
+            '<div class="rev-sess-def">' + card.def + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="rev-sess-actions" id="rev-qc-actions">' +
+        '<button class="rev-sess-fail" onclick="_qcMark(false)">' +
+          '<span>&#10005; Review Again</span><span class="rev-sess-interval">+' + nextF.interval + 'd</span>' +
+        '</button>' +
+        '<button class="rev-sess-pass" onclick="_qcMark(true)">' +
+          '<span>&#10003; Got it</span><span class="rev-sess-interval">+' + nextP.interval + 'd</span>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+
+  requestAnimationFrame(function() { bg.classList.add('rev-qc-active'); });
+}
+
+function closeRevQuickCard() {
+  var bg = document.getElementById('rev-qc-bg');
+  if (bg) bg.classList.remove('rev-qc-active');
+  _qcCardIdx = null;
+  _qcFlipped  = false;
+}
+
+function _qcFlip() {
+  if (_qcFlipped) return;
+  var inner   = document.getElementById('rev-qc-inner');
+  var actions = document.getElementById('rev-qc-actions');
+  if (!inner) return;
+  inner.classList.add('flipped');
+  _qcFlipped = true;
+  if (actions) requestAnimationFrame(function() { actions.classList.add('visible'); });
+}
+
+function _qcMark(gotIt) {
+  if (_qcCardIdx === null || !_qcFlipped) return;
+  _srsMarkCard(_qcCardIdx, gotIt);
+  _updateStreak();
+  var box = document.querySelector('#rev-qc-bg .rev-qc-box');
+  if (box) {
+    box.style.transition = 'transform 0.22s ease, opacity 0.22s ease';
+    box.style.transform  = gotIt ? 'translateX(50px) scale(0.94)' : 'translateX(-50px) scale(0.94)';
+    box.style.opacity    = '0';
+  }
+  var savedIdx = _qcCardIdx;
+  setTimeout(function() {
+    closeRevQuickCard();
+    var panel = document.getElementById('panel-revision');
+    if (panel && !_revSession) {
+      if (_revDealtSession) _renderRevGrid(panel, false);
+      else _renderRevDeck(panel);
+    }
+  }, 230);
+}
+// ─────────────────────────────────────────────────────────────────
