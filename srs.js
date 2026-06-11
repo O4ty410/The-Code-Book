@@ -184,6 +184,8 @@ function _updateStreak() {
   saveState();
 }
 // ─────────────────────────────────────────────────────────────────
+
+function renderRevisionPanel() {
   var panel = document.getElementById('panel-revision');
   if (!panel) return;
   if (_revSession) {
