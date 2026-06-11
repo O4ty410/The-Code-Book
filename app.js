@@ -481,7 +481,7 @@ async function saveToSupabase() {
       username: uname,
       xp: state.xp,
       level: state.level,
-      streak: state.streak,
+      streak: (state.streak && typeof state.streak === 'object') ? (state.streak.count || 0) : (state.streak || 0),
       last_active: new Date().toISOString().split('T')[0]
     });
   } catch (e) {}
@@ -502,7 +502,10 @@ async function loadUserFromSupabase(user) {
       var p = profileRes.data;
       state.xp = p.xp || 0;
       state.level = p.level || 1;
-      state.streak = p.streak || 0;
+      var dbStreak = p.streak || 0;
+      state.streak = (state.streak && typeof state.streak === 'object')
+        ? state.streak
+        : { count: typeof dbStreak === 'number' ? dbStreak : 0, lastDate: '' };
       if (p.username) state.playerName = p.username;
     } else {
       // New user — create their profile row immediately
