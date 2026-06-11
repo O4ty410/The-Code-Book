@@ -182,6 +182,7 @@ function _updateStreak() {
   state.streak.count = (state.streak.lastDate === yest) ? state.streak.count + 1 : 1;
   state.streak.lastDate = today;
   saveState();
+  if (typeof saveToSupabaseDebounced === 'function') saveToSupabaseDebounced();
 }
 // ─────────────────────────────────────────────────────────────────
 

@@ -481,7 +481,7 @@ async function saveToSupabase() {
       username: uname,
       xp: state.xp,
       level: state.level,
-      streak: state.streak,
+      streak: (state.streak && typeof state.streak === 'object') ? (state.streak.count || 0) : (state.streak || 0),
       last_active: new Date().toISOString().split('T')[0]
     });
   } catch (e) {}
@@ -502,7 +502,10 @@ async function loadUserFromSupabase(user) {
       var p = profileRes.data;
       state.xp = p.xp || 0;
       state.level = p.level || 1;
-      state.streak = p.streak || 0;
+      var dbStreak = p.streak || 0;
+      state.streak = (state.streak && typeof state.streak === 'object')
+        ? state.streak
+        : { count: typeof dbStreak === 'number' ? dbStreak : 0, lastDate: '' };
       if (p.username) state.playerName = p.username;
     } else {
       // New user — create their profile row immediately
@@ -6668,6 +6671,7 @@ function launchChaosMode() {
           '<div class="glitch-stat"><span class="glitch-stat-lbl">LVL</span><span class="glitch-stat-val" id="glitch-level">1</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">SCORE</span><span class="glitch-stat-val" id="glitch-score">0</span></div>' +
           '<div class="glitch-stat"><span class="glitch-stat-lbl">MOVES</span><span class="glitch-stat-val" id="glitch-moves">0</span></div>' +
+          '<div class="glitch-stat" id="chaos-timer-stat"><span class="glitch-stat-lbl">TIME</span><span class="glitch-stat-val" id="chaos-timer-val">90</span></div>' +
           '<div class="glitch-stat glitch-stat--restart"><button class="glitch-restart-btn" style="color:rgba(255,60,80,0.70);border-color:rgba(255,40,80,0.30)" onclick="if(typeof ChaosGame!==\'undefined\')ChaosGame.restart()" title="Restart level">&#8635;</button></div>' +
         '</div>' +
       '</div>' +

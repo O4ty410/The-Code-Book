@@ -8690,3 +8690,8 @@ body.learn-mode #main-col {
   cursor: pointer;
   backdrop-filter: blur(6px);
 }
+
+@keyframes chaos-timer-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
