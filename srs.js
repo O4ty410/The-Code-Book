@@ -167,7 +167,23 @@ function _renderFloorMap() {
 }
 // ────────────────────────────────────────────────────────────────
 
-function renderRevisionPanel() {
+// ── Daily streak ──────────────────────────────────────────────────
+function _pad2(n) { return n < 10 ? '0' + n : '' + n; }
+function _todayStr() {
+  var d = new Date();
+  return d.getFullYear() + '-' + _pad2(d.getMonth() + 1) + '-' + _pad2(d.getDate());
+}
+function _updateStreak() {
+  if (!state.streak) state.streak = { count: 0, lastDate: '' };
+  var today = _todayStr();
+  if (state.streak.lastDate === today) return;
+  var prev = new Date(); prev.setDate(prev.getDate() - 1);
+  var yest = prev.getFullYear() + '-' + _pad2(prev.getMonth() + 1) + '-' + _pad2(prev.getDate());
+  state.streak.count = (state.streak.lastDate === yest) ? state.streak.count + 1 : 1;
+  state.streak.lastDate = today;
+  saveState();
+}
+// ─────────────────────────────────────────────────────────────────
   var panel = document.getElementById('panel-revision');
   if (!panel) return;
   if (_revSession) {
@@ -184,11 +200,16 @@ function _renderRevDeck(panel) {
   var dueLabel = c.due > 0
     ? '<span class="rev-srs-due-badge">' + c.due + ' due today</span>'
     : (c.mastered === REVISION_CARDS.length ? '<span class="rev-srs-all-done">All ' + REVISION_CARDS.length + ' cards mastered ✓</span>' : '');
+  var sk = state.streak || {};
+  var streakHtml = sk.count > 0
+    ? '<div class="rev-streak"><span class="rev-streak-flame">&#128293;</span><span class="rev-streak-num">' + sk.count + '</span><span class="rev-streak-label">day streak</span></div>'
+    : '';
   var html = '<div class="rev-wrap">' +
     '<div class="rev-header">' +
       '<h2 class="rev-title">Revision Centre</h2>' +
       '<p class="rev-subtitle">52 key concepts — reviewed with spaced repetition</p>' +
     '</div>' +
+    streakHtml +
     '<div class="rev-srs-overview">' +
       '<div class="rev-srs-stat"><span class="rev-srs-num srs-due">' + c.due + '</span><span class="rev-srs-lbl">due</span></div>' +
       '<div class="rev-srs-stat"><span class="rev-srs-num srs-new">' + c.fresh + '</span><span class="rev-srs-lbl">new</span></div>' +
@@ -360,6 +381,7 @@ function _srsMarkCard(i, gotIt) {
 
 function markRevCard(i, gotIt) {
   _srsMarkCard(i, gotIt);
+  _updateStreak();
   closeRevCard();
   var panel = document.getElementById('panel-revision');
   if (panel) _renderRevGrid(panel, false);
@@ -516,6 +538,8 @@ function _sessionComplete(panel) {
   var unlocks  = _revSession ? (_revSession.newUnlocks || []) : [];
   var passed   = results.filter(function(r) { return r.gotIt; }).length;
   var failed   = results.length - passed;
+  _updateStreak();
+  var sk = state.streak || {};
   var c = srsCounts();
 
   var unlockHtml = '';
@@ -533,6 +557,7 @@ function _sessionComplete(panel) {
       '<div class="rev-sess-complete-owl">' + sageOwlSVG(72, 79) + '</div>' +
       '<div class="rev-sess-complete-title">Session Complete</div>' +
       '<div class="rev-sess-complete-sub">You reviewed ' + results.length + ' card' + (results.length !== 1 ? 's' : '') + '</div>' +
+      (sk.count > 0 ? '<div class="rev-sess-streak-line">&#128293; ' + sk.count + ' day streak</div>' : '') +
       unlockHtml +
       '<div class="rev-sess-result-row">' +
         '<div class="rev-sess-result-stat">' +
