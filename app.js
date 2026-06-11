@@ -223,7 +223,7 @@ async function showLeaderboard() {
   list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">Loading...</div>';
   try {
     if (!window.sb) throw new Error('no client');
-    var result = await window.sb.from('profiles').select('username,xp,streak').order('xp', { ascending: false }).limit(20);
+    var result = await window.sb.from('profiles').select('username,xp,streak,level').order('xp', { ascending: false }).limit(20);
     var rows = result.data;
     if (!rows || rows.length === 0) {
       list.innerHTML = '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--text-muted);text-align:center;padding:40px 0;">No entries yet. Be the first!</div>';
@@ -231,10 +231,11 @@ async function showLeaderboard() {
     }
     var medals = ['\uD83E\uDD47', '\uD83E\uDD48', '\uD83E\uDD49'];
     list.innerHTML = rows.map(function (r, i) {
+      var floorLabel = r.level ? 'Floor ' + r.level : '';
       return '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:var(--surface);border:1px solid ' + (i === 0 ? '#c8a96e' : i === 1 ? '#aaaaaa' : i === 2 ? '#cd7f32' : 'var(--border)') + ';border-radius:10px;' + (i === 0 ? 'box-shadow:0 0 20px rgba(200,169,110,0.15);' : '') + '">' +
         '<div style="font-size:' + (i < 3 ? '24px' : '14px') + ';width:36px;text-align:center;font-family:\'IBM Plex Mono\',monospace;color:var(--text-muted);">' + (medals[i] || (i + 1)) + '</div>' +
         '<div style="flex:1;"><div style="font-family:\'Lato\',sans-serif;font-weight:700;color:var(--text);font-size:15px;">' + (r.username || 'Anonymous') + '</div>' +
-        '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--floor3);margin-top:4px;">\uD83D\uDD25 ' + (r.streak || 0) + ' day streak</div></div>' +
+        '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--floor3);margin-top:4px;">\uD83D\uDD25 ' + (r.streak || 0) + ' day streak' + (floorLabel ? ' &nbsp;\u00B7&nbsp; ' + floorLabel : '') + '</div></div>' +
         '<div style="text-align:right;"><div style="font-family:\'IBM Plex Mono\',monospace;font-size:18px;color:var(--accent);font-weight:700;">' + (r.xp || 0) + '</div>' +
         '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--text-muted);letter-spacing:1px;">XP</div></div></div>';
     }).join('');
@@ -870,7 +871,7 @@ function onboardingNext(step) {
     document.getElementById('onboarding-step-2').style.display = 'block';
     document.getElementById('onboarding-title').textContent = 'Nice to meet you, ' + (name) + '.';
     document.getElementById('onboarding-body').textContent = 'Let me understand where you\'re starting from.';
-    var _obp = document.getElementById('ob-progress'); if (_obp) _obp.textContent = '02 / 03';
+    var _obp = document.getElementById('ob-progress'); if (_obp) _obp.textContent = '02 / 04';
   }
 }
 
@@ -879,16 +880,23 @@ function onboardingSelect(field, value) {
   if (field === 'experience') {
     document.getElementById('onboarding-step-2').style.display = 'none';
     document.getElementById('onboarding-step-3').style.display = 'block';
-    document.getElementById('onboarding-title').textContent = 'Almost there.';
-    document.getElementById('onboarding-body').textContent = 'Last question \u2014 and then we begin.';
-    var _obp2 = document.getElementById('ob-progress'); if (_obp2) _obp2.textContent = '03 / 03';
+    document.getElementById('onboarding-title').textContent = 'Two more.';
+    document.getElementById('onboarding-body').textContent = 'Quick ones, I promise.';
+    var _obp2 = document.getElementById('ob-progress'); if (_obp2) _obp2.textContent = '03 / 04';
+  } else if (field === 'time') {
+    localStorage.setItem('codebook_time', value);
+    document.getElementById('onboarding-step-3').style.display = 'none';
+    document.getElementById('onboarding-step-4').style.display = 'block';
+    document.getElementById('onboarding-title').textContent = 'Last one.';
+    document.getElementById('onboarding-body').textContent = 'Then we begin.';
+    var _obp3 = document.getElementById('ob-progress'); if (_obp3) _obp3.textContent = '04 / 04';
   } else if (field === 'goal') {
     onboardingData.goal = value;
     localStorage.setItem('codebook_goal', value);
 
-    document.getElementById('onboarding-step-3').style.display = 'none';
-    document.getElementById('onboarding-step-4').style.display = 'block';
-    var _obp3 = document.getElementById('ob-progress'); if (_obp3) _obp3.style.visibility = 'hidden';
+    document.getElementById('onboarding-step-4').style.display = 'none';
+    document.getElementById('onboarding-step-5').style.display = 'block';
+    var _obp4 = document.getElementById('ob-progress'); if (_obp4) _obp4.style.visibility = 'hidden';
 
     const messages = {
       never: { title: 'You\'re in the right place, ' + onboardingData.name + '.', msg: 'Starting from zero is actually an advantage. No bad habits to unlearn. We\'ll build everything from the ground up, one clear step at a time.' },
@@ -903,9 +911,17 @@ function onboardingSelect(field, value) {
       unsure:    'That\'s fine. Most people start there. Keep going and it\'ll become clear.'
     };
 
+    const timeMessages = {
+      light:  '30 minutes a day compounds. You\'ll be further than you think in a month.',
+      medium: 'An hour or two is plenty to build real momentum.',
+      full:   'All in \u2014 let\'s not slow down.',
+      unsure: 'No pressure on pace. Show up when you can.'
+    };
+
     const m = messages[onboardingData.experience] || messages.never;
+    const tMsg = timeMessages[onboardingData.time] || '';
     document.getElementById('onboarding-welcome').textContent = m.title;
-    document.getElementById('onboarding-message').textContent = goalMessages[value] + ' ' + m.msg;
+    document.getElementById('onboarding-message').textContent = goalMessages[value] + ' ' + m.msg + (tMsg ? ' ' + tMsg : '');
   }
 }
 
@@ -1090,9 +1106,7 @@ function showFloorCelebration(floorIndex, newBadges) {
         (floorIndex === 1
           ? '<button class="fc-btn-cert" onclick="issueAndShowCertificate(1)">&#8659; Download Certificate</button>' +
             '<button class="fc-btn-download" onclick="downloadFloor2Code()">&#8681; Download Your Code</button>'
-          : floorIndex === 6
-            ? '<button class="fc-btn-cert" onclick="issueAndShowCertificate(6)">&#8659; Download Certificate</button>'
-            : '<button class="fc-btn-cert" onclick="generateFloorCertificate(' + floorIndex + ')">&#8681; Download Certificate</button>'
+          : '<button class="fc-btn-cert" onclick="issueAndShowCertificate(' + floorIndex + ')">&#8659; Download Certificate</button>'
         ) +
         '<button class="fc-btn-share" onclick="shareAchievement()">Share this achievement</button>' +
       '</div>' +
@@ -7367,7 +7381,7 @@ async function _loadLbTab() {
   if (!list) return;
   try {
     if (!window.sb) throw new Error('no client');
-    var result = await window.sb.from('profiles').select('username,xp,streak').order('xp', { ascending: false }).limit(20);
+    var result = await window.sb.from('profiles').select('username,xp,streak,level').order('xp', { ascending: false }).limit(20);
     var rows = result.data;
     if (!rows || !rows.length) { list.innerHTML = '<div class="lb-tab-empty">No entries yet — be the first!</div>'; return; }
     var myXp = state ? (state.xp || 0) : 0;
@@ -7376,11 +7390,12 @@ async function _loadLbTab() {
     rows.forEach(function(r, i) { if (r.xp === myXp && myRank === -1) myRank = i; });
     list.innerHTML = rows.map(function(r, i) {
       var isMe = i === myRank;
+      var floorLabel = r.level ? 'Floor ' + r.level : '';
       return '<div class="lb-row' + (isMe ? ' lb-row-me' : '') + '">' +
         '<div class="lb-rank">' + (medals[i] || (i + 1)) + '</div>' +
         '<div class="lb-info">' +
           '<div class="lb-name">' + (typeof escHtml === 'function' ? escHtml(r.username || 'Anonymous') : (r.username || 'Anonymous')) + (isMe ? ' (you)' : '') + '</div>' +
-          '<div class="lb-streak">🔥 ' + (r.streak || 0) + ' day streak</div>' +
+          '<div class="lb-streak">🔥 ' + (r.streak || 0) + ' day streak' + (floorLabel ? ' · ' + floorLabel : '') + '</div>' +
         '</div>' +
         '<div class="lb-xp">' + (r.xp || 0) + '<span class="lb-xp-label"> XP</span></div>' +
       '</div>';
