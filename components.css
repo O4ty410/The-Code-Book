@@ -8039,3 +8039,11 @@ body.learn-mode #main-col {
   font-style: italic;
   line-height: 1.5;
 }
+
+
+@keyframes editorRotateHint {
+  0%, 100% { transform: rotate(0deg); }
+  30%       { transform: rotate(-90deg); }
+  60%       { transform: rotate(-90deg); }
+  80%       { transform: rotate(0deg); }
+}
