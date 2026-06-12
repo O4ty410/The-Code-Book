@@ -4310,11 +4310,40 @@ function renderLearnHub() {
     '.fc-header-title{color:#f0f8ff!important;background:none!important;-webkit-text-fill-color:unset!important;-webkit-text-stroke:1.5px rgba(200,240,255,0.70)!important;animation:none!important;font-size:clamp(42px,7vw,78px)!important;font-weight:900!important;line-height:1.05!important;letter-spacing:-0.5px!important;text-shadow:0 0 2px rgba(255,255,255,0.4),0 0 4px rgba(0,0,0,1),0 0 10px rgba(0,0,0,1),1px 1px 0 rgba(22,65,148,1),2px 2px 0 rgba(18,54,130,1),3px 3px 0 rgba(14,44,114,1),4px 4px 0 rgba(11,35,98,1),5px 5px 0 rgba(8,27,84,1),6px 6px 0 rgba(6,20,70,1),7px 7px 0 rgba(4,14,56,1),8px 8px 0 rgba(3,10,44,1),9px 9px 2px rgba(0,0,0,0.92),11px 11px 8px rgba(0,0,0,0.88),16px 16px 24px rgba(0,0,0,0.94),0 0 55px rgba(90,200,255,0.90),0 0 100px rgba(90,200,255,0.55),0 0 160px rgba(90,200,255,0.25)!important;}' +
     /* Subtitle */
     '.fc-header-sub{color:rgba(215,235,255,0.90)!important;text-shadow:0 0 6px rgba(0,0,0,1),0 0 12px rgba(0,0,0,0.96),0 2px 8px rgba(0,0,0,0.92)!important;}' +
-    /* Cards — front-facing illuminated book covers */
-    '.fc-card{min-width:108px!important;flex:1!important;max-width:152px!important;min-height:190px!important;background:linear-gradient(180deg,#0e1020 0%,#080a14 40%,#04060e 100%)!important;border:1.5px solid var(--fc-color,#c8a96e)!important;border-left:4px solid var(--fc-color,#c8a96e)!important;border-radius:2px 8px 8px 2px!important;padding:12px 10px 11px!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:0 0 16px var(--fc-glow,rgba(200,169,110,0.28)),0 0 42px var(--fc-glow,rgba(200,169,110,0.12)),inset 0 0 20px rgba(var(--fc-rgb,200,169,110),0.05),-3px 4px 10px rgba(0,0,0,0.75),0 14px 36px rgba(0,0,0,0.88)!important;transform:translateY(-2px)!important;}' +
-    '.fc-card::before{content:""!important;position:absolute!important;inset:6px 5px!important;border:1px solid rgba(var(--fc-rgb,200,169,110),0.28)!important;border-radius:2px!important;pointer-events:none!important;z-index:0!important;}' +
-    '.fc-card:hover:not(.fc-card-locked){box-shadow:0 0 28px var(--fc-glow,rgba(200,169,110,0.45)),0 0 70px var(--fc-glow,rgba(200,169,110,0.22)),inset 0 0 24px rgba(var(--fc-rgb,200,169,110),0.08),-3px 4px 10px rgba(0,0,0,0.75),0 18px 45px rgba(0,0,0,0.85)!important;transform:translateY(-7px)!important;}' +
-    '.fc-card-active{flex:1.35!important;min-width:135px!important;max-width:185px!important;min-height:210px!important;transform:translateY(-10px) scale(1.04)!important;z-index:3!important;box-shadow:0 0 36px var(--fc-glow,rgba(200,169,110,0.55)),0 0 80px var(--fc-glow,rgba(200,169,110,0.28)),0 0 140px var(--fc-glow,rgba(200,169,110,0.12)),inset 0 0 28px rgba(var(--fc-rgb,200,169,110),0.10),-3px 4px 10px rgba(0,0,0,0.75),0 20px 48px rgba(0,0,0,0.92)!important;border-width:2px!important;border-left-width:5px!important;}' +
+    /* Cards — 3D book: leather spine + dark cover + page stack */
+    '.fc-card{min-width:108px!important;flex:1!important;max-width:152px!important;min-height:195px!important;' +
+    'padding:10px 8px 11px 22px!important;' +
+    'background:' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/9px 2px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/2px 10px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 0/9px 2px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 0/2px 10px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 100%/9px 2px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px calc(100% - 10px)/2px 10px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 100%/9px 2px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) calc(100% - 10px)/2px 10px no-repeat,' +
+      'linear-gradient(170deg,#0c0f1a 0%,#06080f 55%,#030507 100%)' +
+    '!important;' +
+    'border:1px solid rgba(var(--fc-rgb,200,169,110),0.2)!important;' +
+    'border-radius:2px 5px 5px 2px!important;' +
+    'transform:perspective(500px) rotateY(-5deg)!important;transform-origin:center center!important;' +
+    'box-shadow:5px 8px 24px rgba(0,0,0,0.82),0 16px 42px rgba(0,0,0,0.72),0 0 10px var(--fc-glow,rgba(200,169,110,0.08))!important;' +
+    'backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:transform 0.25s,box-shadow 0.25s!important;}' +
+    /* Spine: dark leather with horizontal ridges */
+    '.fc-card::before{content:""!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;width:15px!important;' +
+    'background:repeating-linear-gradient(180deg,rgba(255,255,255,0.055) 0px,rgba(255,255,255,0.055) 1px,rgba(0,0,0,0.18) 1px,rgba(0,0,0,0.18) 8px),linear-gradient(180deg,#2e1e0c 0%,#1c1208 40%,#100c06 100%)!important;' +
+    'border-radius:2px 0 0 2px!important;border-right:1px solid rgba(180,140,60,0.22)!important;pointer-events:none!important;z-index:1!important;}' +
+    /* Page stack: cream strip on right edge */
+    '.fc-card::after{content:""!important;position:absolute!important;right:0!important;top:3px!important;bottom:3px!important;width:5px!important;' +
+    'background:repeating-linear-gradient(180deg,rgba(0,0,0,0.14) 0px,rgba(0,0,0,0.14) 1px,transparent 1px,transparent 3px),linear-gradient(90deg,#c4b688,#b0a270)!important;' +
+    'border-radius:0 3px 3px 0!important;z-index:1!important;}' +
+    '.fc-card:hover:not(.fc-card-locked){transform:perspective(500px) rotateY(-7deg) translateY(-6px) scale(1.03)!important;' +
+    'box-shadow:7px 14px 32px rgba(0,0,0,0.88),0 0 28px var(--fc-glow,rgba(200,169,110,0.38)),0 0 60px var(--fc-glow,rgba(200,169,110,0.16))!important;}' +
+    '.fc-card-locked{opacity:0.38!important;filter:saturate(0.25)!important;}' +
+    '.fc-card-active{flex:1.35!important;min-width:135px!important;max-width:185px!important;min-height:212px!important;' +
+    'transform:perspective(500px) rotateY(-7deg) translateY(-12px) scale(1.04)!important;z-index:3!important;' +
+    'box-shadow:7px 18px 44px rgba(0,0,0,0.92),0 0 40px var(--fc-glow,rgba(200,169,110,0.55)),0 0 90px var(--fc-glow,rgba(200,169,110,0.25))!important;' +
+    'border-color:rgba(var(--fc-rgb,200,169,110),0.38)!important;}' +
     '.fc-accent{background:var(--fc-color,#c8a96e)!important;height:2px!important;opacity:0.85!important;}' +
     '.fc-floor-badge{font-size:9px!important;letter-spacing:0.18em!important;color:var(--fc-color,#c8a96e)!important;opacity:1!important;text-transform:uppercase!important;margin-bottom:5px!important;font-weight:700!important;font-family:"Space Mono",monospace!important;text-shadow:0 0 10px var(--fc-glow,rgba(200,169,110,0.50))!important;}' +
     '.fc-book-rule{width:65%!important;height:1px!important;background:linear-gradient(90deg,transparent,var(--fc-color,#c8a96e),transparent)!important;margin:4px auto 9px!important;opacity:0.55!important;display:block!important;flex-shrink:0!important;}' +
@@ -4372,7 +4401,7 @@ function renderLearnHub() {
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:22px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + _streakVal() + ' 🔥</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.65);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:20px;font-weight:600;color:rgba(200,228,255,0.65);text-shadow:0 2px 8px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.50);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
     '</div>' +
-    '<div class="fc-row" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;">' + cardsHtml + '</div>' +
+    '<div class="fc-row" style="display:flex;gap:12px;overflow-x:auto;padding:10px 10px 20px;">' + cardsHtml + '</div>' +
     (function() {
       var unlocked = isTrackUnlocked();
       var tracksHtml = (typeof TRACKS !== 'undefined' ? TRACKS : []).map(function(t) {
