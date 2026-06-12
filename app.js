@@ -7286,7 +7286,7 @@ function _studioEditorHtml(t, code, savedName) {
   ];
 
   var swatchHtml = swatches.map(function(s) {
-    return '<button class="st-swatch" title="' + s.name + ' ' + s.hex + '" style="background:' + s.hex + '" onclick="studioInsertColor(\'' + s.hex + '\',this)"></button>';
+    return '<button class="st-swatch" title="' + s.name + ' ' + s.hex + '" style="background:' + s.hex + '" onmousedown="event.preventDefault()" onclick="studioInsertColor(\'' + s.hex + '\',this)"></button>';
   }).join('');
 
   var tipsHtml = tips.length
@@ -7399,15 +7399,16 @@ function deleteSavedCreation(idx) {
 function studioInsertColor(hex, btn) {
   var ed = document.getElementById('st-editor');
   if (!ed) { if (navigator.clipboard) navigator.clipboard.writeText(hex); return; }
-  ed.focus();
   var s = ed.selectionStart, e = ed.selectionEnd;
   ed.value = ed.value.substring(0, s) + hex + ed.value.substring(e);
   ed.selectionStart = ed.selectionEnd = s + hex.length;
+  ed.focus();
   if (btn) {
     btn.style.outline = '2px solid rgba(255,255,255,0.85)';
     btn.style.transform = 'scale(1.3)';
     setTimeout(function() { btn.style.outline = ''; btn.style.transform = ''; }, 350);
   }
+  runStudio();
 }
 
 // ─────────── Boss Challenges ───────────
