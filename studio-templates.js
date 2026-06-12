@@ -432,7 +432,7 @@ function loop(){
 
   ctx.fillStyle=BG_COLOR;ctx.fillRect(0,0,W,H);
   ctx.fillStyle='rgba(255,255,255,.5)';ctx.font='11px monospace';ctx.fillText('SURVIVED: '+score+'s',10,22);
-  var best=parseInt(localStorage.getItem('dodge_best')||0);if(score>best){best=score;localStorage.setItem('dodge_best',best);}
+  var best=0;try{best=parseInt(localStorage.getItem('dodge_best')||0)||0;}catch(e){}if(score>best){best=score;try{localStorage.setItem('dodge_best',best);}catch(e){}}
   ctx.fillText('BEST: '+best+'s',W-75,22);
 
   obstacles.forEach(function(o){
