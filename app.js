@@ -4314,17 +4314,17 @@ function renderLearnHub() {
     '.fc-card{min-width:108px!important;flex:1!important;max-width:152px!important;min-height:195px!important;' +
     'padding:10px 8px 11px 22px!important;' +
     'background:' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/9px 2px no-repeat,' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/2px 10px no-repeat,' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 0/9px 2px no-repeat,' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 0/2px 10px no-repeat,' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 100%/9px 2px no-repeat,' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px calc(100% - 10px)/2px 10px no-repeat,' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 100%/9px 2px no-repeat,' +
-      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) calc(100% - 10px)/2px 10px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/13px 3px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/3px 13px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 0/13px 3px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 0/3px 13px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 100%/13px 3px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px calc(100% - 13px)/3px 13px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 100%/13px 3px no-repeat,' +
+      'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) calc(100% - 13px)/3px 13px no-repeat,' +
       'linear-gradient(170deg,#0c0f1a 0%,#06080f 55%,#030507 100%)' +
     '!important;' +
-    'border:1px solid rgba(var(--fc-rgb,200,169,110),0.2)!important;' +
+    'border:2px solid rgba(var(--fc-rgb,200,169,110),0.5)!important;' +
     'border-radius:2px 5px 5px 2px!important;' +
     'transform:perspective(500px) rotateY(-5deg)!important;transform-origin:center center!important;' +
     'box-shadow:5px 8px 24px rgba(0,0,0,0.82),0 16px 42px rgba(0,0,0,0.72),0 0 10px var(--fc-glow,rgba(200,169,110,0.08))!important;' +
@@ -4332,7 +4332,7 @@ function renderLearnHub() {
     /* Spine: dark leather with horizontal ridges */
     '.fc-card::before{content:""!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;width:15px!important;' +
     'background:repeating-linear-gradient(180deg,rgba(255,255,255,0.055) 0px,rgba(255,255,255,0.055) 1px,rgba(0,0,0,0.18) 1px,rgba(0,0,0,0.18) 8px),linear-gradient(180deg,#2e1e0c 0%,#1c1208 40%,#100c06 100%)!important;' +
-    'border-radius:2px 0 0 2px!important;border-right:1px solid rgba(180,140,60,0.22)!important;pointer-events:none!important;z-index:1!important;}' +
+    'border-radius:2px 0 0 2px!important;border-right:1px solid rgba(180,140,60,0.55)!important;pointer-events:none!important;z-index:1!important;}' +
     /* Page stack: cream strip on right edge */
     '.fc-card::after{content:""!important;position:absolute!important;right:0!important;top:3px!important;bottom:3px!important;width:5px!important;' +
     'background:repeating-linear-gradient(180deg,rgba(0,0,0,0.14) 0px,rgba(0,0,0,0.14) 1px,transparent 1px,transparent 3px),linear-gradient(90deg,#c4b688,#b0a270)!important;' +
@@ -4343,7 +4343,7 @@ function renderLearnHub() {
     '.fc-card-active{flex:1.35!important;min-width:135px!important;max-width:185px!important;min-height:212px!important;' +
     'transform:perspective(500px) rotateY(-7deg) translateY(-12px) scale(1.04)!important;z-index:3!important;' +
     'box-shadow:7px 18px 44px rgba(0,0,0,0.92),0 0 40px var(--fc-glow,rgba(200,169,110,0.55)),0 0 90px var(--fc-glow,rgba(200,169,110,0.25))!important;' +
-    'border-color:rgba(var(--fc-rgb,200,169,110),0.38)!important;}' +
+    'border-color:rgba(var(--fc-rgb,200,169,110),0.75)!important;}' +
     '.fc-accent{background:var(--fc-color,#c8a96e)!important;height:2px!important;opacity:0.85!important;}' +
     '.fc-floor-badge{font-size:9px!important;letter-spacing:0.18em!important;color:var(--fc-color,#c8a96e)!important;opacity:1!important;text-transform:uppercase!important;margin-bottom:5px!important;font-weight:700!important;font-family:"Space Mono",monospace!important;text-shadow:0 0 10px var(--fc-glow,rgba(200,169,110,0.50))!important;}' +
     '.fc-book-rule{width:65%!important;height:1px!important;background:linear-gradient(90deg,transparent,var(--fc-color,#c8a96e),transparent)!important;margin:4px auto 9px!important;opacity:0.55!important;display:block!important;flex-shrink:0!important;}' +
@@ -4401,7 +4401,7 @@ function renderLearnHub() {
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:22px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + _streakVal() + ' 🔥</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.65);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:20px;font-weight:600;color:rgba(200,228,255,0.65);text-shadow:0 2px 8px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.50);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
     '</div>' +
-    '<div class="fc-row" style="display:flex;gap:12px;overflow-x:auto;padding:10px 10px 20px;">' + cardsHtml + '</div>' +
+    '<div class="fc-row" style="display:flex;gap:22px;overflow-x:auto;padding:10px 10px 20px;">' + cardsHtml + '</div>' +
     (function() {
       var unlocked = isTrackUnlocked();
       var tracksHtml = (typeof TRACKS !== 'undefined' ? TRACKS : []).map(function(t) {
