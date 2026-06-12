@@ -7278,19 +7278,8 @@ function _studioEditorHtml(t, code, savedName) {
   var title = savedName || (t ? t.name : '');
   var tips = (t && t.tips) ? t.tips : [];
 
-  var swatches = [
-    {name:'Mint',   hex:'#00ff88'},{name:'Sky',    hex:'#7dd3fc'},{name:'Violet',  hex:'#a78bfa'},
-    {name:'Amber',  hex:'#f59e0b'},{name:'Pink',   hex:'#f472b6'},{name:'Coral',   hex:'#ff6b6b'},
-    {name:'Indigo', hex:'#6366f1'},{name:'Teal',   hex:'#2dd4bf'},{name:'Orange',  hex:'#fb923c'},
-    {name:'Fuchsia',hex:'#e879f9'},{name:'Yellow', hex:'#fbbf24'},{name:'Green',   hex:'#4ade80'}
-  ];
-
-  var swatchHtml = swatches.map(function(s) {
-    return '<button class="st-swatch" title="' + s.name + ' ' + s.hex + '" style="background:' + s.hex + '" onmousedown="event.preventDefault()" onclick="studioInsertColor(\'' + s.hex + '\',this)"></button>';
-  }).join('');
-
   var tipsHtml = tips.length
-    ? '<div class="st-tips"><span class="st-tips-icon">💡</span>' + tips.map(function(t){return '<span class="st-tip">'+t+'</span>';}).join('') + '</div>'
+    ? '<div class="st-tips"><span class="st-tips-icon">💡</span>' + tips.map(function(tip){return '<span class="st-tip">'+tip+'</span>';}).join('') + '</div>'
     : '';
 
   return '<div class="st-edit-root">' +
@@ -7311,11 +7300,10 @@ function _studioEditorHtml(t, code, savedName) {
       '<button class="st-btn st-btn-save" onclick="saveStudio()">💾 Save</button>' +
       '<button class="st-btn st-btn-dl" onclick="downloadStudio()">⬇ Download</button>' +
       '<button class="st-btn st-btn-reset" onclick="resetStudio()">↺ Reset</button>' +
+      '<button class="st-btn st-cs-open-btn" onclick="openCheatSheet()">📋 Cheat Sheet</button>' +
     '</div>' +
-    '<div class="st-helpers">' +
-      '<div class="st-helper-row"><span class="st-helper-lbl">🎨 Colours</span>' + swatchHtml + '<span class="st-helper-hint">Click to insert hex at cursor</span></div>' +
-      tipsHtml +
-    '</div>' +
+    (tipsHtml ? '<div class="st-helpers">'+tipsHtml+'</div>' : '') +
+    _cheatSheetHtml() +
   '</div>';
 }
 
@@ -7394,6 +7382,90 @@ function deleteSavedCreation(idx) {
   if (!confirm('Delete this creation?')) return;
   if (state.studioCreations) { state.studioCreations.splice(idx, 1); saveState(); }
   backToStudio();
+}
+
+function _cheatSheetHtml() {
+  var colours = [
+    {name:'Mint',      hex:'#00ff88'},{name:'Sky Blue',  hex:'#7dd3fc'},
+    {name:'Violet',    hex:'#a78bfa'},{name:'Amber',     hex:'#f59e0b'},
+    {name:'Pink',      hex:'#f472b6'},{name:'Coral',     hex:'#ff6b6b'},
+    {name:'Indigo',    hex:'#6366f1'},{name:'Teal',      hex:'#2dd4bf'},
+    {name:'Orange',    hex:'#fb923c'},{name:'Fuchsia',   hex:'#e879f9'},
+    {name:'Lime',      hex:'#4ade80'},{name:'Red',       hex:'#ef4444'},
+    {name:'Yellow',    hex:'#fbbf24'},{name:'White',     hex:'#ffffff'},
+    {name:'Silver',    hex:'#94a3b8'},{name:'Dark Navy', hex:'#0f172a'}
+  ];
+  var rgbas = [
+    {name:'Faint white',    val:'rgba(255,255,255,0.1)'},
+    {name:'Light overlay',  val:'rgba(255,255,255,0.25)'},
+    {name:'Dark overlay',   val:'rgba(0,0,0,0.5)'},
+    {name:'Mint glow',      val:'rgba(0,255,136,0.4)'},
+    {name:'Red glow',       val:'rgba(255,48,80,0.5)'},
+    {name:'Sky glow',       val:'rgba(125,211,252,0.4)'},
+    {name:'Gold glow',      val:'rgba(251,191,36,0.45)'},
+    {name:'Purple glow',    val:'rgba(167,139,250,0.4)'}
+  ];
+  var cRows = colours.map(function(c) {
+    return '<div class="st-cs-row">' +
+      '<span class="st-cs-swatch" style="background:'+c.hex+'"></span>' +
+      '<span class="st-cs-name">'+c.name+'</span>' +
+      '<code class="st-cs-val">'+c.hex+'</code>' +
+      '<button class="st-cs-copy" onclick="copyCheatItem(\''+c.hex+'\',this)">⎘ Copy</button>' +
+    '</div>';
+  }).join('');
+  var rRows = rgbas.map(function(r) {
+    var safe = r.val.replace(/'/g, '\\\'');
+    return '<div class="st-cs-row">' +
+      '<span class="st-cs-swatch" style="background:'+r.val+';border:1px solid rgba(255,255,255,0.18)"></span>' +
+      '<span class="st-cs-name">'+r.name+'</span>' +
+      '<code class="st-cs-val">'+r.val+'</code>' +
+      '<button class="st-cs-copy" onclick="copyCheatItem(\''+safe+'\',this)">⎘ Copy</button>' +
+    '</div>';
+  }).join('');
+  return '<div id="st-cheatsheet" class="st-cs-overlay" style="display:none" onclick="closeCheatSheet()">' +
+    '<div class="st-cs-panel" onclick="event.stopPropagation()">' +
+      '<div class="st-cs-header">' +
+        '<span class="st-cs-title">📋 Cheat Sheet</span>' +
+        '<button class="st-cs-close" onclick="closeCheatSheet()">✕</button>' +
+      '</div>' +
+      '<div class="st-cs-body">' +
+        '<p class="st-cs-desc">Copy any value and paste it into the editor.</p>' +
+        '<div class="st-cs-section">🎨 Colours</div>' +
+        cRows +
+        '<div class="st-cs-section">🌫️ Transparent &amp; Glow</div>' +
+        rRows +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function openCheatSheet() {
+  var el = document.getElementById('st-cheatsheet');
+  if (el) el.style.display = 'flex';
+}
+
+function closeCheatSheet() {
+  var el = document.getElementById('st-cheatsheet');
+  if (el) el.style.display = 'none';
+}
+
+function copyCheatItem(text, btn) {
+  function flash() {
+    if (!btn) return;
+    var orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    btn.classList.add('st-cs-copied');
+    setTimeout(function() { btn.textContent = orig; btn.classList.remove('st-cs-copied'); }, 1200);
+  }
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(flash);
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+    flash();
+  }
 }
 
 function studioInsertColor(hex, btn) {
