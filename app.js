@@ -4314,6 +4314,7 @@ function renderLearnHub() {
     '.fc-card{min-width:108px!important;flex:1!important;max-width:152px!important;min-height:195px!important;' +
     'padding:10px 8px 11px 22px!important;' +
     'background:' +
+      'linear-gradient(145deg,rgba(255,255,255,0.07) 0%,transparent 42%),' +
       'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/13px 3px no-repeat,' +
       'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px 0/3px 13px no-repeat,' +
       'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 0/13px 3px no-repeat,' +
@@ -4322,12 +4323,12 @@ function renderLearnHub() {
       'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) 15px calc(100% - 13px)/3px 13px no-repeat,' +
       'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) 100%/13px 3px no-repeat,' +
       'linear-gradient(var(--fc-color,#c8a96e),var(--fc-color,#c8a96e)) calc(100% - 5px) calc(100% - 13px)/3px 13px no-repeat,' +
-      'linear-gradient(170deg,#0c0f1a 0%,#06080f 55%,#030507 100%)' +
+      'linear-gradient(170deg,#111623 0%,#090d18 55%,#060910 100%)' +
     '!important;' +
     'border:2px solid rgba(var(--fc-rgb,200,169,110),0.5)!important;' +
     'border-radius:2px 5px 5px 2px!important;' +
     'transform:perspective(500px) rotateY(-5deg)!important;transform-origin:center center!important;' +
-    'box-shadow:5px 8px 24px rgba(0,0,0,0.82),0 16px 42px rgba(0,0,0,0.72),0 0 10px var(--fc-glow,rgba(200,169,110,0.08))!important;' +
+    'box-shadow:5px 8px 24px rgba(0,0,0,0.82),0 16px 42px rgba(0,0,0,0.72),0 0 22px var(--fc-glow,rgba(200,169,110,0.22)),0 0 48px var(--fc-glow,rgba(200,169,110,0.08))!important;' +
     'backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:transform 0.25s,box-shadow 0.25s!important;}' +
     /* Spine: dark leather with horizontal ridges */
     '.fc-card::before{content:""!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;width:15px!important;' +
@@ -4370,20 +4371,28 @@ function renderLearnHub() {
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
     /* Bookshelf */
-    '.fc-shelf{width:100%!important;height:22px!important;position:relative!important;z-index:5!important;' +
-    'background:linear-gradient(180deg,#4a3018 0%,#2e1c0a 45%,#1a0e05 100%)!important;' +
-    'box-shadow:0 6px 28px rgba(0,0,0,0.92),0 2px 8px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,180,80,0.20)!important;}' +
-    '.fc-shelf::before{content:""!important;position:absolute!important;top:0!important;left:0!important;right:0!important;height:2px!important;' +
-    'background:linear-gradient(90deg,transparent 2%,rgba(200,140,60,0.50) 15%,rgba(220,165,80,0.65) 50%,rgba(200,140,60,0.50) 85%,transparent 98%)!important;}' +
-    '.fc-shelf::after{content:""!important;position:absolute!important;bottom:-12px!important;left:0!important;right:0!important;height:12px!important;' +
-    'background:linear-gradient(180deg,#1a0e05 0%,#0a0602 100%)!important;' +
-    'box-shadow:0 6px 18px rgba(0,0,0,0.90)!important;}' +
+    '.fc-shelf{width:100%!important;height:30px!important;position:relative!important;z-index:5!important;' +
+    'background:' +
+      'repeating-linear-gradient(90deg,rgba(0,0,0,0.12) 0px,rgba(0,0,0,0.12) 1px,transparent 1px,transparent 28px),' +
+      'linear-gradient(180deg,#5c3a1e 0%,#3d2410 35%,#271608 70%,#160c04 100%)!important;' +
+    'box-shadow:0 8px 32px rgba(0,0,0,0.96),0 2px 0 rgba(0,0,0,0.6),inset 0 -1px 0 rgba(0,0,0,0.5)!important;}' +
+    '.fc-shelf::before{content:""!important;position:absolute!important;top:0!important;left:0!important;right:0!important;height:3px!important;' +
+    'background:linear-gradient(90deg,rgba(80,50,20,0.4) 0%,rgba(210,155,70,0.85) 15%,rgba(240,185,90,0.95) 50%,rgba(210,155,70,0.85) 85%,rgba(80,50,20,0.4) 100%)!important;}' +
+    '.fc-shelf::after{content:""!important;position:absolute!important;bottom:-16px!important;left:0!important;right:0!important;height:16px!important;' +
+    'background:linear-gradient(180deg,#1a0e05 0%,#0a0602 60%,transparent 100%)!important;' +
+    'box-shadow:0 8px 24px rgba(0,0,0,0.95)!important;}' +
+    /* Owl animations */
+    '@keyframes owl-float{0%,100%{transform:translateX(-50%) translateY(0px);}50%{transform:translateX(-50%) translateY(-10px);}}' +
+    '@keyframes owl-glow{0%,100%{opacity:0.55;filter:brightness(1);}50%{opacity:0.72;filter:brightness(1.22) saturate(1.15);}}' +
+    '@keyframes owl-eye-pulse{0%,100%{opacity:0.55;transform:scale(0.85);}50%{opacity:1;transform:scale(1.25);}}' +
     /* Owl + book background image wrapper */
-    '.fc-hub-owl-wrap{position:absolute!important;left:50%!important;top:-30px!important;transform:translateX(-50%)!important;width:clamp(900px,115%,1500px)!important;pointer-events:none!important;z-index:0!important;user-select:none!important;}' +
-    '.fc-hub-owl{position:relative!important;width:100%!important;height:auto!important;opacity:0.55!important;display:block!important;clip-path:inset(0 7% 17% 0)!important;}' +
+    '.fc-hub-owl-wrap{position:absolute!important;left:50%!important;top:-30px!important;width:clamp(900px,115%,1500px)!important;pointer-events:none!important;z-index:0!important;user-select:none!important;animation:owl-float 7s ease-in-out infinite!important;}' +
+    '.fc-hub-owl{position:relative!important;width:100%!important;height:auto!important;display:block!important;clip-path:inset(0 7% 17% 0)!important;animation:owl-glow 4s ease-in-out infinite!important;}' +
+    '.owl-eye-glow{position:absolute!important;border-radius:50%!important;background:radial-gradient(circle,rgba(80,220,255,0.95) 0%,rgba(0,180,255,0.5) 40%,transparent 70%)!important;animation:owl-eye-pulse 3s ease-in-out var(--d,0s) infinite!important;pointer-events:none!important;}' +
     '</style>' +
     '<div class="fc-hub">' +
     '<div class="fc-hub-owl-wrap">' +
+      /* teal sparks */
       '<span class="owl-spark" style="top:14%;left:20%;--d:0.4s;--sz:4px;"></span>' +
       '<span class="owl-spark" style="top:22%;left:38%;--d:1.8s;--sz:3px;"></span>' +
       '<span class="owl-spark" style="top:18%;left:55%;--d:0.9s;--sz:5px;"></span>' +
@@ -4396,6 +4405,15 @@ function renderLearnHub() {
       '<span class="owl-spark" style="top:60%;left:82%;--d:3.8s;--sz:3px;"></span>' +
       '<span class="owl-spark" style="top:10%;left:72%;--d:2.8s;--sz:4px;"></span>' +
       '<span class="owl-spark" style="top:35%;left:88%;--d:1.1s;--sz:3px;"></span>' +
+      /* extra gold sparks near owl */
+      '<span class="owl-spark" style="top:28%;left:78%;--d:0.7s;--sz:4px;--accent:#f5c842;--auth-box-glow:rgba(245,200,66,0.7);"></span>' +
+      '<span class="owl-spark" style="top:45%;left:85%;--d:2.3s;--sz:3px;--accent:#f5c842;--auth-box-glow:rgba(245,200,66,0.7);"></span>' +
+      '<span class="owl-spark" style="top:20%;left:62%;--d:1.4s;--sz:3px;--accent:#f5c842;--auth-box-glow:rgba(245,200,66,0.7);"></span>' +
+      '<span class="owl-spark" style="top:32%;left:92%;--d:3.5s;--sz:5px;"></span>' +
+      '<span class="owl-spark" style="top:16%;left:82%;--d:4.2s;--sz:3px;"></span>' +
+      /* eye glows — approximate position of the owl eyes in the image */
+      '<span class="owl-eye-glow" style="top:36%;left:66%;width:14px;height:14px;--d:0s;"></span>' +
+      '<span class="owl-eye-glow" style="top:34%;left:72%;width:11px;height:11px;--d:1.5s;"></span>' +
       '<img class="fc-hub-owl" src="assets/sage-owl-book.png" alt="" aria-hidden="true" style="filter:' + _owlFilter + '">' +
     '</div>' +
     '<div class="fc-header">' +
@@ -4410,7 +4428,7 @@ function renderLearnHub() {
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:22px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + _streakVal() + ' 🔥</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.65);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:20px;font-weight:600;color:rgba(200,228,255,0.65);text-shadow:0 2px 8px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.50);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
     '</div>' +
-    '<div class="fc-row" style="display:flex;gap:22px;overflow-x:auto;padding:10px 28px 6px;align-items:flex-end;">' + cardsHtml + '</div>' +
+    '<div class="fc-row" style="display:flex;gap:22px;overflow-x:auto;padding:24px 28px 6px;align-items:flex-end;">' + cardsHtml + '</div>' +
     '<div class="fc-shelf"></div>' +
     (function() {
       var unlocked = isTrackUnlocked();
