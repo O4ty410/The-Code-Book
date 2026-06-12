@@ -1391,18 +1391,21 @@ body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-sh
 }
 
 .hub-tracks-title {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: rgba(200,220,255,0.5);
-  text-transform: uppercase;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(200,220,255,0.75);
   margin-bottom: 6px;
 }
 
 .hub-tracks-sub {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 13px;
-  color: rgba(200,220,255,0.4);
+  color: rgba(200,220,255,0.45);
+  max-width: 380px;
+  margin: 0 auto;
+  line-height: 1.5;
 }
 
 .hub-tracks-row {
@@ -1471,10 +1474,11 @@ body.light #panel-premium .premium-tooltip-badge { color: var(--accent); text-sh
 }
 
 .trk-locked {
-  opacity: 0.38;
+  opacity: 0.45;
   cursor: default;
   pointer-events: none;
-  filter: grayscale(0.5);
+  filter: grayscale(0.6);
+  border-style: dashed !important;
 }
 
 .trk-lock-badge {
