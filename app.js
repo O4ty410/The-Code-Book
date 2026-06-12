@@ -4369,6 +4369,15 @@ function renderLearnHub() {
     '.fc-card:nth-child(5) .holo-icon{animation-duration:3.0s;}' +
     '.fc-card:nth-child(6) .holo-icon{animation-duration:2.8s;}' +
     '.fc-card:nth-child(7) .holo-icon{animation-duration:3.2s;}' +
+    /* Bookshelf */
+    '.fc-shelf{width:100%!important;height:22px!important;position:relative!important;z-index:5!important;' +
+    'background:linear-gradient(180deg,#4a3018 0%,#2e1c0a 45%,#1a0e05 100%)!important;' +
+    'box-shadow:0 6px 28px rgba(0,0,0,0.92),0 2px 8px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,180,80,0.20)!important;}' +
+    '.fc-shelf::before{content:""!important;position:absolute!important;top:0!important;left:0!important;right:0!important;height:2px!important;' +
+    'background:linear-gradient(90deg,transparent 2%,rgba(200,140,60,0.50) 15%,rgba(220,165,80,0.65) 50%,rgba(200,140,60,0.50) 85%,transparent 98%)!important;}' +
+    '.fc-shelf::after{content:""!important;position:absolute!important;bottom:-12px!important;left:0!important;right:0!important;height:12px!important;' +
+    'background:linear-gradient(180deg,#1a0e05 0%,#0a0602 100%)!important;' +
+    'box-shadow:0 6px 18px rgba(0,0,0,0.90)!important;}' +
     /* Owl + book background image wrapper */
     '.fc-hub-owl-wrap{position:absolute!important;left:50%!important;top:-30px!important;transform:translateX(-50%)!important;width:clamp(900px,115%,1500px)!important;pointer-events:none!important;z-index:0!important;user-select:none!important;}' +
     '.fc-hub-owl{position:relative!important;width:100%!important;height:auto!important;opacity:0.55!important;display:block!important;clip-path:inset(0 7% 17% 0)!important;}' +
@@ -4401,7 +4410,8 @@ function renderLearnHub() {
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:22px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + _streakVal() + ' 🔥</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.65);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:20px;font-weight:600;color:rgba(200,228,255,0.65);text-shadow:0 2px 8px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.50);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
     '</div>' +
-    '<div class="fc-row" style="display:flex;gap:22px;overflow-x:auto;padding:10px 10px 20px;">' + cardsHtml + '</div>' +
+    '<div class="fc-row" style="display:flex;gap:22px;overflow-x:auto;padding:10px 28px 6px;align-items:flex-end;">' + cardsHtml + '</div>' +
+    '<div class="fc-shelf"></div>' +
     (function() {
       var unlocked = isTrackUnlocked();
       var tracksHtml = (typeof TRACKS !== 'undefined' ? TRACKS : []).map(function(t) {
