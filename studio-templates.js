@@ -307,7 +307,7 @@ var FIRE_RATE    = 14;   // lower = faster fire (8–22)
 /* ══════════════════════════════════════ */
 
 var cv=document.getElementById('c'),ctx=cv.getContext('2d');
-var W=Math.min(window.innerWidth,420),H=Math.min(window.innerHeight,580);
+var W=Math.min(window.innerWidth,420),H=Math.min(window.innerHeight,400);
 cv.width=W;cv.height=H;
 var px,py,bullets,enemies,parts,score,lives,frame,over,fireT,animId;
 var keys={};
@@ -388,7 +388,7 @@ var PLAYER_SPEED   = 5;    // movement speed (3–8)
 /* ══════════════════════════════════════ */
 
 var cv=document.getElementById('c'),ctx=cv.getContext('2d');
-var W=Math.min(window.innerWidth,420),H=Math.min(window.innerHeight,580);
+var W=Math.min(window.innerWidth,420),H=Math.min(window.innerHeight,400);
 cv.width=W;cv.height=H;
 
 var px,py,obstacles,score,over,frame,animId,trail;
