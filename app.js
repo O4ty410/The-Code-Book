@@ -48,6 +48,8 @@ function matchClick(mid, side, idx) {
   }
 }
 
+function _streakVal() { var s = state.streak; return s && typeof s === 'object' ? +(s.count || 0) : +(s || 0); }
+
 let state = {
   currentFloor: 1,
   currentSection: 0,
@@ -188,7 +190,7 @@ function showAuthFromLanding() {
     applyTheme();
     launchApp();
     if (_streakExtended && state.streak >= 2) {
-      setTimeout(function() { showStreakWelcome(state.streak); }, 1400);
+      setTimeout(function() { showStreakWelcome(_streakVal()); }, 1400);
     }
     updateChallengeDot();
   } else {
@@ -345,7 +347,7 @@ function showSessionComplete(sectionsToday) {
   document.getElementById('session-title').textContent = greetings[Math.floor(Math.random() * greetings.length)];
   document.getElementById('session-message').textContent = 'Your daily goal is done. Come back tomorrow and keep the momentum going.';
   document.getElementById('session-xp-earned').textContent = '+' + (Math.max(0, xpToday)) + '';
-  document.getElementById('session-streak').textContent = '' + (state.streak) + '\uD83D\uDD25';
+  document.getElementById('session-streak').textContent = '' + _streakVal() + '\uD83D\uDD25';
   document.getElementById('session-sections').textContent = sectionsToday;
   document.getElementById('session-tomorrow').textContent = tomorrowText;
   document.getElementById('session-complete').style.display = 'flex';
@@ -504,9 +506,7 @@ async function loadUserFromSupabase(user) {
       state.xp = p.xp || 0;
       state.level = p.level || 1;
       var dbStreak = p.streak || 0;
-      state.streak = (state.streak && typeof state.streak === 'object')
-        ? state.streak
-        : { count: typeof dbStreak === 'number' ? dbStreak : 0, lastDate: '' };
+      state.streak = typeof dbStreak === 'number' ? dbStreak : 0;
       if (p.username) state.playerName = p.username;
     } else {
       // New user — create their profile row immediately
@@ -603,9 +603,9 @@ const LEVELS = [
 ];
 
 function getStreakMultiplier() {
-  if (state.streak >= 10) return 2;
-  if (state.streak >= 6)  return 1.5;
-  if (state.streak >= 3)  return 1.2;
+  if (_streakVal() >= 10) return 2;
+  if (_streakVal() >= 6)  return 1.5;
+  if (_streakVal() >= 3)  return 1.2;
   return 1;
 }
 
@@ -680,7 +680,7 @@ function updateXPPanel() {
   const streakEl = document.getElementById('streak-count');
   if (xpEl) xpEl.textContent = state.xp;
   if (lvlEl) lvlEl.textContent = cur.level;
-  if (streakEl) streakEl.textContent = state.streak;
+  if (streakEl) streakEl.textContent = _streakVal();
   if (next) {
     const range = next.xp - cur.xp;
     const progress = state.xp - cur.xp;
@@ -1062,7 +1062,7 @@ function showFloorCelebration(floorIndex, newBadges) {
           '<div class="fc-stat-label">XP this floor</div>' +
         '</div>' +
         '<div class="fc-stat">' +
-          '<div class="fc-stat-val">' + state.streak + '\uD83D\uDD25</div>' +
+          '<div class="fc-stat-val">' + _streakVal() + '\uD83D\uDD25</div>' +
           '<div class="fc-stat-label">Day streak</div>' +
         '</div>' +
         '<div class="fc-stat">' +
@@ -1702,7 +1702,7 @@ function showStreakRecovery() {
   banner.innerHTML = `
     <div style="font-size:24px;margin-bottom:8px;">\uD83D\uDD25</div>
     <div style="font-family:'Lato',sans-serif;font-weight:700;color:var(--text);font-size:14px;margin-bottom:6px;">Streak in danger</div>
-    <div style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Complete one section today to keep your ${state.streak} day streak alive.</div>
+    <div style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Complete one section today to keep your ${_streakVal()} day streak alive.</div>
     <button onclick="this.parentElement.remove()" style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;padding:10px 20px;background:var(--floor3);border:none;color:white;border-radius:6px;cursor:pointer;">Protect my streak</button>
   `;
   document.body.appendChild(banner);
@@ -3619,7 +3619,7 @@ function updateTopChips() {
   var xp = document.getElementById('top-xp-chip');
   var st = document.getElementById('top-streak-chip');
   if (xp) xp.textContent = '\u26a1 ' + (state.xp || 0) + ' XP';
-  if (st) st.textContent = '\uD83D\uDD25 ' + (state.streak || 0);
+  if (st) st.textContent = '\uD83D\uDD25 ' + _streakVal();
 }
 
 function getLevelName(n) {
@@ -3636,7 +3636,7 @@ function updateLeftStats() {
   var lsBar = document.getElementById('ls-xp-bar');
   var lsProgress = document.getElementById('ls-progress');
   if (lsLevel) lsLevel.textContent = lvl.level + ' \u2014 ' + getLevelName(lvl.level);
-  if (lsStreak) lsStreak.textContent = '\uD83D\uDD25 ' + (state.streak || 0) + ' days';
+  if (lsStreak) lsStreak.textContent = '\uD83D\uDD25 ' + _streakVal() + ' days';
   if (lsBar && nextLvl) {
     var pct = Math.min(100, Math.round(((state.xp - lvl.xp) / (nextLvl.xp - lvl.xp)) * 100));
     lsBar.style.width = pct + '%';
@@ -4370,7 +4370,7 @@ function renderLearnHub() {
     '<div class="fc-stats" style="display:flex;width:100%;margin:0 auto 28px;padding:14px 0;">' +
       '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Unlocked</div></div>' +
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">XP Earned</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + (state.streak || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Day Streak</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + _streakVal() + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Day Streak</div></div>' +
       '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Complete</div></div>' +
     '</div>' +
     '<div class="fc-row" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;">' + cardsHtml + '</div>' +
@@ -6866,7 +6866,7 @@ function renderProfilePanel() {
 
     // Stats — streak / sections / focus
     '<div class="pf-stats-strip">' +
-      '<div class="pf-stat-cell"><div class="pf-stat-n">' + (state.streak || 0) + '</div><div class="pf-stat-k">DAY STREAK</div></div>' +
+      '<div class="pf-stat-cell"><div class="pf-stat-n">' + _streakVal() + '</div><div class="pf-stat-k">DAY STREAK</div></div>' +
       '<div class="pf-stat-div"></div>' +
       '<div class="pf-stat-cell"><div class="pf-stat-n">' + doneSecs + '</div><div class="pf-stat-k">SECTIONS</div></div>' +
       '<div class="pf-stat-div"></div>' +
@@ -7727,17 +7727,17 @@ var BADGES = [
   { id: 'bookworm',     emoji: '📚', name: 'Bookworm',     desc: 'Complete 5 sections',
     check: function() { return Object.keys(state.completed || {}).filter(function(k){ return state.completed[k]; }).length >= 5; } },
   { id: 'consistent',   emoji: '🔥', name: 'Consistent',   desc: '3-day learning streak',
-    check: function() { return (state.streak || 0) >= 3; } },
+    check: function() { return _streakVal() >= 3; } },
   { id: 'first-floor',  emoji: '🧱', name: 'First Floor',  desc: 'Complete Floor 1',
     check: function() { return isFloorComplete(0); } },
   { id: 'deep-learner', emoji: '💡', name: 'Deep Learner', desc: 'Complete 10 sections',
     check: function() { return Object.keys(state.completed || {}).filter(function(k){ return state.completed[k]; }).length >= 10; } },
   { id: 'on-fire',      emoji: '⚡', name: 'On Fire',      desc: '7-day streak',
-    check: function() { return (state.streak || 0) >= 7; } },
+    check: function() { return _streakVal() >= 7; } },
   { id: 'builder',      emoji: '🏗️', name: 'Builder',      desc: 'Complete Floor 2',
     check: function() { return isFloorComplete(1); } },
   { id: 'unstoppable',  emoji: '🏆', name: 'Unstoppable',  desc: '30-day streak',
-    check: function() { return (state.streak || 0) >= 30; } },
+    check: function() { return _streakVal() >= 30; } },
   { id: 'graduate',     emoji: '🎓', name: 'Graduate',     desc: 'Complete all floors',
     check: function() { return FLOORS.every(function(f, fi){ return isFloorComplete(fi); }); } },
   { id: 'floor-3',     emoji: '🔧', name: 'Floor 3',      desc: 'Complete Floor 3',
