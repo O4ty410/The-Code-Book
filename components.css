@@ -3847,7 +3847,7 @@ body.learn-mode #main-col {
   white-space: nowrap;
 }
 .fc-status-done   { background: #061206; color: #4cb84c; border: 1px solid #0c2a0c; }
-.fc-status-active { background: #06100a; color: #00d4aa; border: 1px solid #0a2818; }
+.fc-status-active { background: rgba(0,212,170,0.12); color: #00d4aa; border: 1px solid rgba(0,212,170,0.35); font-weight: 700; letter-spacing: 0.12em; box-shadow: 0 0 8px rgba(0,212,170,0.25); }
 .fc-status-open   { background: #04080e; color: #2a5080; border: 1px solid #081828; }
 .fc-status-locked { background: #040608; color: #182430; border: 1px solid #080c12; }
 
