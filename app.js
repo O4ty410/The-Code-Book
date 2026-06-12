@@ -4328,7 +4328,7 @@ function renderLearnHub() {
     '.fc-stat{flex:1!important;text-align:center!important;background:transparent!important;}' +
     '.fc-stat-val{font-size:26px!important;font-weight:800!important;color:#ffffff!important;text-shadow:0 0 18px rgba(100,200,255,0.55),0 2px 10px rgba(0,0,0,0.95)!important;}' +
     '.fc-stat-label{color:rgba(200,228,255,0.84)!important;font-size:9px!important;letter-spacing:0.14em!important;text-shadow:0 1px 6px rgba(0,0,0,0.94)!important;}' +
-    '.ch-overall-bar-wrap{margin:0 auto!important;width:100%!important;max-width:420px!important;}' +
+    '.ch-overall-bar-wrap{flex:1!important;}' +
     '.fc-row{justify-content:center!important;}' +
     '.fc-icon{font-size:0!important;line-height:0!important;display:flex!important;align-items:center!important;justify-content:center!important;height:52px!important;}' +
     '@keyframes holo-pulse{0%,100%{opacity:0.78;}50%{opacity:1;}}' +
@@ -4364,14 +4364,13 @@ function renderLearnHub() {
       '<div class="fc-header-label">Your Learning Path</div>' +
       '<div class="fc-header-title">Seven Floors.<br>One Goal.</div>' +
       '<div class="fc-header-sub">Work through each floor in order. Each one builds directly on the last.</div>' +
-      '<div style="margin-top:16px;">' + overallBar + '</div>' +
-      '<button class="hub-notes-btn" onclick="openNotesReview()">📝 Review your notes</button>' +
+      '<div class="hub-progress-row">' + overallBar + '<button class="hub-notes-btn" onclick="openNotesReview()">📝 Notes</button></div>' +
     '</div>' +
     '<div class="fc-stats" style="display:flex;width:100%;margin:0 auto 28px;padding:14px 0;">' +
-      '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Unlocked</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">XP Earned</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + _streakVal() + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Day Streak</div></div>' +
-      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:24px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.78);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;text-shadow:0 1px 6px rgba(0,0,0,0.8);">Floors Complete</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;"><div class="fc-stat-val" style="font-size:20px;font-weight:600;color:rgba(200,228,255,0.65);text-shadow:0 2px 8px rgba(0,0,0,0.9);">' + floorsUnlocked + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.50);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Unlocked</div></div>' +
+      '<div class="fc-stat" style="flex:1.3;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:32px;font-weight:800;color:#f5c842;text-shadow:0 0 20px rgba(245,200,66,0.5),0 2px 10px rgba(0,0,0,0.9);">' + (state.xp || 0) + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(245,200,66,0.75);text-transform:uppercase;letter-spacing:0.14em;margin-top:4px;font-weight:600;">XP Earned</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:22px;font-weight:700;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.9);">' + _streakVal() + ' 🔥</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.65);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Day Streak</div></div>' +
+      '<div class="fc-stat" style="flex:1;text-align:center;border-left:1px solid rgba(255,255,255,0.08);"><div class="fc-stat-val" style="font-size:20px;font-weight:600;color:rgba(200,228,255,0.65);text-shadow:0 2px 8px rgba(0,0,0,0.9);">' + floorsComplete + '</div><div class="fc-stat-label" style="font-size:10px;color:rgba(200,228,255,0.50);text-transform:uppercase;letter-spacing:0.12em;margin-top:4px;">Floors Complete</div></div>' +
     '</div>' +
     '<div class="fc-row" style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;">' + cardsHtml + '</div>' +
     (function() {
@@ -4393,8 +4392,8 @@ function renderLearnHub() {
       }).join('');
       return '<div class="hub-tracks-section">' +
         '<div class="hub-tracks-hdr">' +
-          '<div class="hub-tracks-title">// SPECIALISATION TRACKS</div>' +
-          '<div class="hub-tracks-sub">' + (unlocked ? 'Choose your path.' : 'Complete all 7 floors to unlock.') + '</div>' +
+          '<div class="hub-tracks-title">Specialisation Tracks</div>' +
+          '<div class="hub-tracks-sub">' + (unlocked ? 'Choose your path and go deep.' : '🔒 Complete all 7 floors to unlock — React, Python and JavaScript await.') + '</div>' +
         '</div>' +
         '<div class="hub-tracks-row">' + tracksHtml + '</div>' +
         '</div>';
