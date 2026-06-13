@@ -7441,6 +7441,15 @@ function deleteSavedCreation(idx) {
 }
 
 function _cheatSheetHtml() {
+  /* ── Curated palettes ── */
+  var palettes = [
+    { name: 'Ocean',         swatches: ['#00c8ff','#0066ff','#00e5b0'] },
+    { name: 'Ember',         swatches: ['#ff6b35','#ff4757','#ffa502'] },
+    { name: 'Neon Night',    swatches: ['#9b5de5','#f15bb5','#00bbf9'] },
+    { name: 'Gold Standard', swatches: ['#f5c842','#e8a000','#fff3b0'] },
+    { name: 'Void',          swatches: ['#ffffff','#94a3b8','#475569'] }
+  ];
+  /* ── Individual colours ── */
   var colours = [
     {name:'Mint',      hex:'#00ff88'},{name:'Sky Blue',  hex:'#7dd3fc'},
     {name:'Violet',    hex:'#a78bfa'},{name:'Amber',     hex:'#f59e0b'},
@@ -7452,15 +7461,86 @@ function _cheatSheetHtml() {
     {name:'Silver',    hex:'#94a3b8'},{name:'Dark Navy', hex:'#0f172a'}
   ];
   var rgbas = [
-    {name:'Faint white',    val:'rgba(255,255,255,0.1)'},
-    {name:'Light overlay',  val:'rgba(255,255,255,0.25)'},
-    {name:'Dark overlay',   val:'rgba(0,0,0,0.5)'},
-    {name:'Mint glow',      val:'rgba(0,255,136,0.4)'},
-    {name:'Red glow',       val:'rgba(255,48,80,0.5)'},
-    {name:'Sky glow',       val:'rgba(125,211,252,0.4)'},
-    {name:'Gold glow',      val:'rgba(251,191,36,0.45)'},
-    {name:'Purple glow',    val:'rgba(167,139,250,0.4)'}
+    {name:'Faint white',   val:'rgba(255,255,255,0.1)'},
+    {name:'Light overlay', val:'rgba(255,255,255,0.25)'},
+    {name:'Dark overlay',  val:'rgba(0,0,0,0.5)'},
+    {name:'Mint glow',     val:'rgba(0,255,136,0.4)'},
+    {name:'Red glow',      val:'rgba(255,48,80,0.5)'},
+    {name:'Sky glow',      val:'rgba(125,211,252,0.4)'},
+    {name:'Gold glow',     val:'rgba(251,191,36,0.45)'},
+    {name:'Purple glow',   val:'rgba(167,139,250,0.4)'}
   ];
+  /* ── Quick tweaks per template ── */
+  var groups = [
+    { label: 'Developer Portfolio', tweaks: [
+      { want: 'Change your name',       code: 'var NAME',        eg: '"Your Name"'           },
+      { want: 'Change your title',      code: 'var ROLE',        eg: '"Full-Stack Dev"'      },
+      { want: 'Change accent colour',   code: 'var ACCENT',      eg: '"#7dd3fc"'             },
+      { want: 'Edit skills list',       code: 'var SKILLS',      eg: '["HTML","CSS","JS"]'   },
+      { want: 'Change button text',     code: 'var CTA',         eg: '"See My Work →"'       }
+    ]},
+    { label: 'Product Launch Page', tweaks: [
+      { want: 'Change the headline',    code: 'var HEADLINE',    eg: '"Your Big Idea"'       },
+      { want: 'Change the subtitle',    code: 'var SUB',         eg: '"One clear sentence."' },
+      { want: 'Change button text',     code: 'var CTA_TEXT',    eg: '"Try It Free →"'       },
+      { want: 'Add a feature (4th)',    code: 'FEATURES array',  eg: '{ icon:"🚀", title:"...", desc:"..." }' }
+    ]},
+    { label: 'Particle Web', tweaks: [
+      { want: 'More particles',         code: 'var COUNT',       eg: '120  (range: 40–200)'  },
+      { want: 'Slower movement',        code: 'var SPEED',       eg: '0.3  (range: 0.3–1.5)'},
+      { want: 'Longer connections',     code: 'var CONNECT',     eg: '160  (range: 80–180)'  },
+      { want: 'Change colour',          code: 'var COLOR',       eg: '"#a78bfa"'             }
+    ]},
+    { label: 'Pomodoro Timer', tweaks: [
+      { want: 'Longer focus sessions',  code: 'var FOCUS_MINS',  eg: '45'                    },
+      { want: 'Shorter breaks',         code: 'var BREAK_MINS',  eg: '3'                     },
+      { want: 'Focus ring colour',      code: 'var FOCUS_COLOR', eg: '"#f59e0b"'             },
+      { want: 'Break ring colour',      code: 'var BREAK_COLOR', eg: '"#00e5b0"'             }
+    ]},
+    { label: 'Habit Tracker', tweaks: [
+      { want: 'Change habit name',      code: 'var HABIT',       eg: '"Morning Run"'         },
+      { want: 'Show more weeks',        code: 'var WEEKS',       eg: '8  (range: 4–8)'       },
+      { want: 'Change colour',          code: 'var COLOR',       eg: '"#f472b6"'             }
+    ]},
+    { label: 'Space Shooter', tweaks: [
+      { want: 'Faster bullets',         code: 'var BULLET_SPEED',eg: '12  (range: 6–14)'    },
+      { want: 'Tougher enemies',        code: 'var ENEMY_SPEED', eg: '3   (range: 1–4)'     },
+      { want: 'Change bullet colour',   code: 'var BULLET_COLOR',eg: '"#fbbf24"'             },
+      { want: 'Change enemy colour',    code: 'var ENEMY_COLOR', eg: '"#e879f9"'             }
+    ]},
+    { label: 'Dodge', tweaks: [
+      { want: 'Bigger player',          code: 'var PLAYER_SIZE', eg: '20  (range: 10–22)'   },
+      { want: 'Faster movement',        code: 'var PLAYER_SPEED',eg: '7   (range: 3–8)'     },
+      { want: 'Taller obstacles',       code: 'var OBSTACLE_H',  eg: '24  (range: 12–28)'   },
+      { want: 'Change player colour',   code: 'var PLAYER_COLOR',eg: '"#7dd3fc"'             },
+      { want: 'Change background',      code: 'var BG_COLOR',    eg: '"#000000"'             }
+    ]}
+  ];
+  /* ── Troubleshooting ── */
+  var fixes = [
+    { prob: 'Run fails straight away',     sol: 'Check for a missing comma inside an array or object' },
+    { prob: 'Nothing changes on screen',   sol: 'Make sure you\'re editing inside the EDIT HERE zone' },
+    { prob: 'Output looks broken',         sol: 'All text values must be inside quote marks ""'       },
+    { prob: 'Page goes blank',             sol: 'Undo your last change and try one edit at a time'    },
+    { prob: 'Bracket error in console',    sol: 'Every { needs a }   every [ needs a ]'               },
+    { prob: 'Colour not working',          sol: 'Hex codes must start with # — e.g. #00ff88'          }
+  ];
+
+  /* ── Build HTML blocks ── */
+  var palHtml = palettes.map(function(p) {
+    var dots = p.swatches.map(function(hex) {
+      var safe = hex.replace(/'/g,'\\\'');
+      return '<div class="st-cs-pal-item" onclick="copyCheatItem(\''+safe+'\',this)" title="Copy '+hex+'">' +
+        '<div class="st-cs-pal-dot" style="background:'+hex+'"></div>' +
+        '<span class="st-cs-pal-hex">'+hex+'</span>' +
+      '</div>';
+    }).join('');
+    return '<div class="st-cs-palette-wrap">' +
+      '<div class="st-cs-palette-label">'+p.name+'</div>' +
+      '<div class="st-cs-pal-swatches">'+dots+'</div>' +
+    '</div>';
+  }).join('');
+
   var cRows = colours.map(function(c) {
     return '<div class="st-cs-row">' +
       '<span class="st-cs-swatch" style="background:'+c.hex+'"></span>' +
@@ -7469,8 +7549,9 @@ function _cheatSheetHtml() {
       '<button class="st-cs-copy" onclick="copyCheatItem(\''+c.hex+'\',this)">⎘ Copy</button>' +
     '</div>';
   }).join('');
+
   var rRows = rgbas.map(function(r) {
-    var safe = r.val.replace(/'/g, '\\\'');
+    var safe = r.val.replace(/'/g,'\\\'');
     return '<div class="st-cs-row">' +
       '<span class="st-cs-swatch" style="background:'+r.val+';border:1px solid rgba(255,255,255,0.18)"></span>' +
       '<span class="st-cs-name">'+r.name+'</span>' +
@@ -7478,21 +7559,83 @@ function _cheatSheetHtml() {
       '<button class="st-cs-copy" onclick="copyCheatItem(\''+safe+'\',this)">⎘ Copy</button>' +
     '</div>';
   }).join('');
+
+  var tipHtml = [
+    'Put a comma after every item in an array — <strong>except the last one</strong>',
+    'Keep text values inside quote marks — <code>&quot;like this&quot;</code>',
+    'Don\'t delete the <code>var</code> keyword at the start of a line',
+    'Only change values <strong>inside</strong> the EDIT HERE zone',
+    'Numbers don\'t need quotes — <code>var COUNT = 80</code> not <code>&quot;80&quot;</code>',
+    'Colour codes must start with <code>#</code> — e.g. <code>#00ff88</code>'
+  ].map(function(t) {
+    return '<div class="st-cs-tip"><span style="font-size:13px;flex-shrink:0;padding-top:1px;">✅</span>' +
+      '<span class="st-cs-tip-text">'+t+'</span></div>';
+  }).join('');
+
+  var tweakHtml = groups.map(function(g) {
+    var rows = g.tweaks.map(function(t) {
+      return '<div class="st-cs-tweak-row">' +
+        '<div class="st-cs-tweak-if">If you want: '+t.want+'</div>' +
+        '<div class="st-cs-tweak-then">Change <code>'+t.code+'</code> to <code>'+t.eg+'</code></div>' +
+      '</div>';
+    }).join('');
+    return '<div><div class="st-cs-tweak-group-label">'+g.label+'</div>'+rows+'</div>';
+  }).join('');
+
+  var fixHtml = fixes.map(function(f) {
+    return '<div class="st-cs-fix-row">' +
+      '<span class="st-cs-fix-prob">✖ '+f.prob+'</span>' +
+      '<span class="st-cs-fix-arrow">→</span>' +
+      '<span class="st-cs-fix-sol">✔ '+f.sol+'</span>' +
+    '</div>';
+  }).join('');
+
   return '<div id="st-cheatsheet" class="st-cs-overlay" style="display:none" onclick="closeCheatSheet()">' +
     '<div class="st-cs-panel" onclick="event.stopPropagation()">' +
       '<div class="st-cs-header">' +
         '<span class="st-cs-title">📋 Cheat Sheet</span>' +
         '<button class="st-cs-close" onclick="closeCheatSheet()">✕</button>' +
       '</div>' +
+      '<div class="st-cs-tabs">' +
+        '<button class="st-cs-tab-btn st-cs-tab-active" onclick="_csTab(this,\'st-tab-colours\')">🎨 Colours</button>' +
+        '<button class="st-cs-tab-btn" onclick="_csTab(this,\'st-tab-tips\')">✅ Best Practices</button>' +
+        '<button class="st-cs-tab-btn" onclick="_csTab(this,\'st-tab-tweaks\')">⚡ Quick Tweaks</button>' +
+        '<button class="st-cs-tab-btn" onclick="_csTab(this,\'st-tab-fixes\')">🔧 Troubleshooting</button>' +
+      '</div>' +
       '<div class="st-cs-body">' +
-        '<p class="st-cs-desc">Copy any value and paste it into the editor.</p>' +
-        '<div class="st-cs-section">🎨 Colours</div>' +
-        cRows +
-        '<div class="st-cs-section">🌫️ Transparent &amp; Glow</div>' +
-        rRows +
+        '<div id="st-tab-colours" class="st-cs-tab-content" style="display:block">' +
+          '<p class="st-cs-desc">Click any swatch or Copy button to grab the value.</p>' +
+          '<div class="st-cs-section">🖌️ Curated Palettes — click any swatch to copy</div>' +
+          palHtml +
+          '<div class="st-cs-section">🎨 Individual Colours</div>' +
+          cRows +
+          '<div class="st-cs-section">🌫️ Transparent &amp; Glow</div>' +
+          rRows +
+        '</div>' +
+        '<div id="st-tab-tips" class="st-cs-tab-content" style="display:none">' +
+          '<p class="st-cs-desc">Follow these rules to keep your code running cleanly.</p>' +
+          tipHtml +
+        '</div>' +
+        '<div id="st-tab-tweaks" class="st-cs-tab-content" style="display:none">' +
+          '<p class="st-cs-desc">Find your template below for instant customisation tips.</p>' +
+          tweakHtml +
+        '</div>' +
+        '<div id="st-tab-fixes" class="st-cs-tab-content" style="display:none">' +
+          '<p class="st-cs-desc">Run button not working? Start here.</p>' +
+          fixHtml +
+        '</div>' +
       '</div>' +
     '</div>' +
   '</div>';
+}
+
+function _csTab(btn, tabId) {
+  var panel = btn.closest('.st-cs-panel');
+  panel.querySelectorAll('.st-cs-tab-content').forEach(function(t) { t.style.display = 'none'; });
+  panel.querySelectorAll('.st-cs-tab-btn').forEach(function(b) { b.classList.remove('st-cs-tab-active'); });
+  var tab = document.getElementById(tabId);
+  if (tab) tab.style.display = 'block';
+  btn.classList.add('st-cs-tab-active');
 }
 
 function openCheatSheet() {

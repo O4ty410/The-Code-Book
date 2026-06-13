@@ -8799,3 +8799,42 @@ body.learn-mode #main-col {
 .st-cs-copy { background: none; border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.5); border-radius: 5px; cursor: pointer; padding: 3px 9px; font-size: 12px; font-family: inherit; white-space: nowrap; transition: all .15s; flex-shrink: 0; }
 .st-cs-copy:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.3); }
 .st-cs-copied { background: rgba(0,255,136,0.15) !important; border-color: rgba(0,255,136,0.4) !important; color: #00ff88 !important; }
+
+/* ── Cheat sheet tabs ── */
+.st-cs-panel { max-height: 84vh !important; }
+.st-cs-tabs { display: flex; gap: 2px; padding: 8px 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); flex-shrink: 0; overflow-x: auto; }
+.st-cs-tab-btn { background: none; border: none; border-bottom: 2px solid transparent; color: rgba(255,255,255,0.38); font-size: 11px; font-family: inherit; cursor: pointer; padding: 6px 10px 8px; white-space: nowrap; transition: all .15s; }
+.st-cs-tab-btn:hover { color: rgba(255,255,255,0.7); }
+.st-cs-tab-active { color: #fff !important; border-bottom-color: #00e5b0 !important; }
+.st-cs-tab-content { display: none; }
+
+/* ── Best Practices ── */
+.st-cs-tip { display: flex; align-items: flex-start; gap: 10px; padding: 7px 6px; border-radius: 7px; }
+.st-cs-tip:hover { background: rgba(255,255,255,0.05); }
+.st-cs-tip-text { font-size: 12px; color: rgba(255,255,255,0.72); line-height: 1.55; }
+.st-cs-tip-text code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; background: rgba(255,255,255,0.08); padding: 1px 5px; border-radius: 3px; color: #00e5b0; }
+
+/* ── Colour Palettes ── */
+.st-cs-palette-wrap { padding: 6px; border-radius: 9px; margin-bottom: 2px; }
+.st-cs-palette-wrap:hover { background: rgba(255,255,255,0.04); }
+.st-cs-palette-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); margin-bottom: 6px; letter-spacing: .04em; }
+.st-cs-pal-swatches { display: flex; gap: 5px; flex-wrap: wrap; }
+.st-cs-pal-item { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 3px 6px; border-radius: 5px; transition: background .1s; }
+.st-cs-pal-item:hover { background: rgba(255,255,255,0.08); }
+.st-cs-pal-dot { width: 16px; height: 16px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.14); flex-shrink: 0; }
+.st-cs-pal-hex { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.42); }
+
+/* ── Quick Tweaks ── */
+.st-cs-tweak-group-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.28); padding: 10px 4px 4px; }
+.st-cs-tweak-row { padding: 5px 6px; border-radius: 6px; margin-bottom: 1px; }
+.st-cs-tweak-row:hover { background: rgba(255,255,255,0.05); }
+.st-cs-tweak-if { font-size: 11px; color: rgba(255,255,255,0.36); margin-bottom: 2px; }
+.st-cs-tweak-then { font-size: 12px; color: rgba(255,255,255,0.8); }
+.st-cs-tweak-then code { font-family: 'IBM Plex Mono', monospace; font-size: 10px; background: rgba(125,211,252,0.1); color: #7dd3fc; padding: 1px 5px; border-radius: 3px; }
+
+/* ── Troubleshooting ── */
+.st-cs-fix-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 6px; border-radius: 7px; margin-bottom: 2px; }
+.st-cs-fix-row:hover { background: rgba(255,255,255,0.05); }
+.st-cs-fix-prob { font-size: 12px; color: rgba(255,110,110,0.9); flex: 1; line-height: 1.45; }
+.st-cs-fix-arrow { color: rgba(255,255,255,0.22); font-size: 12px; flex-shrink: 0; padding-top: 1px; }
+.st-cs-fix-sol { font-size: 12px; color: rgba(0,225,136,0.85); flex: 1.2; line-height: 1.45; }
