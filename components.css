@@ -8838,3 +8838,23 @@ body.learn-mode #main-col {
 .st-cs-fix-prob { font-size: 12px; color: rgba(255,110,110,0.9); flex: 1; line-height: 1.45; }
 .st-cs-fix-arrow { color: rgba(255,255,255,0.22); font-size: 12px; flex-shrink: 0; padding-top: 1px; }
 .st-cs-fix-sol { font-size: 12px; color: rgba(0,225,136,0.85); flex: 1.2; line-height: 1.45; }
+
+/* ── Guest welcome modal ── */
+.gwm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 9998; backdrop-filter: blur(4px); opacity: 0; transition: opacity 0.3s ease; }
+.gwm-overlay.gwm-visible { opacity: 1; }
+.gwm-card { background: #111827; border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 36px 32px 28px; max-width: 420px; width: 90vw; box-shadow: 0 32px 80px rgba(0,0,0,0.75); transform: translateY(16px); transition: transform 0.3s ease; text-align: center; }
+.gwm-overlay.gwm-visible .gwm-card { transform: translateY(0); }
+.gwm-icon { font-size: 40px; margin-bottom: 14px; }
+.gwm-title { font-size: 22px; font-weight: 700; color: #fff; margin: 0 0 8px; font-family: 'Space Grotesk', sans-serif; }
+.gwm-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin: 0 0 20px; line-height: 1.5; }
+.gwm-divider { height: 1px; background: rgba(255,255,255,0.08); margin-bottom: 18px; }
+.gwm-access-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 10px; }
+.gwm-list { list-style: none; padding: 0; margin: 0 0 18px; text-align: left; }
+.gwm-list li { font-size: 13px; color: rgba(255,255,255,0.75); padding: 5px 0 5px 22px; position: relative; line-height: 1.5; }
+.gwm-list li::before { content: "✓"; position: absolute; left: 0; color: #00e5b0; font-weight: 700; }
+.gwm-note { font-size: 12px; color: rgba(255,255,255,0.32); margin: 0 0 24px; line-height: 1.5; font-style: italic; }
+.gwm-actions { display: flex; gap: 10px; }
+.gwm-btn-primary { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.75); border-radius: 9px; padding: 12px; font-size: 14px; font-family: inherit; cursor: pointer; transition: all .15s; }
+.gwm-btn-primary:hover { background: rgba(255,255,255,0.14); color: #fff; }
+.gwm-btn-signup { flex: 1.3; background: linear-gradient(135deg,#00e5b0,#00c89a); border: none; color: #02251c; border-radius: 9px; padding: 12px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all .15s; }
+.gwm-btn-signup:hover { filter: brightness(1.1); transform: translateY(-1px); }

@@ -852,8 +852,51 @@ function launchApp() {
     updateLeftStats();
     updateTopChips();
     if (!localStorage.getItem('codebook_tour_done')) setTimeout(showAppTour, 1200);
+    if (isGuest) setTimeout(showGuestWelcomeModal, 700);
   }, 80);
 }
+// --- GUEST WELCOME MODAL ---
+function showGuestWelcomeModal() {
+  if (sessionStorage.getItem('guest_welcome_shown')) return;
+  sessionStorage.setItem('guest_welcome_shown', '1');
+  var el = document.createElement('div');
+  el.id = 'guest-welcome-modal';
+  el.className = 'gwm-overlay';
+  el.innerHTML =
+    '<div class="gwm-card">' +
+      '<div class="gwm-icon">📖</div>' +
+      '<h2 class="gwm-title">Welcome to The Code Book</h2>' +
+      '<p class="gwm-sub">An interactive coding curriculum — seven floors, one goal.</p>' +
+      '<div class="gwm-divider"></div>' +
+      '<p class="gwm-access-label">As a guest you can explore:</p>' +
+      '<ul class="gwm-list">' +
+        '<li>Floor 1 lessons — free, no account needed</li>' +
+        '<li>The Studio arcade &amp; all templates</li>' +
+        '<li>Challenges and the leaderboard</li>' +
+      '</ul>' +
+      '<p class="gwm-note">Sign up free to save your progress and unlock all seven floors.</p>' +
+      '<div class="gwm-actions">' +
+        '<button class="gwm-btn-primary" onclick="closeGuestWelcomeModal()">Let\'s Go</button>' +
+        '<button class="gwm-btn-signup" onclick="closeGuestWelcomeModal(true)">Create Free Account</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(el);
+  setTimeout(function() { el.classList.add('gwm-visible'); }, 20);
+}
+
+function closeGuestWelcomeModal(goSignup) {
+  var el = document.getElementById('guest-welcome-modal');
+  if (!el) return;
+  el.classList.remove('gwm-visible');
+  setTimeout(function() { if (el.parentElement) el.remove(); }, 300);
+  if (goSignup) {
+    setTimeout(function() {
+      switchTab('signup');
+      document.getElementById('auth-screen').style.display = 'flex';
+    }, 200);
+  }
+}
+
 // --- ONBOARDING SYSTEM ---
 let onboardingData = { name: '', experience: '', time: '' };
 
