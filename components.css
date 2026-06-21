@@ -8858,3 +8858,15 @@ body.learn-mode #main-col {
 .gwm-btn-primary:hover { background: rgba(255,255,255,0.14); color: #fff; }
 .gwm-btn-signup { flex: 1.3; background: linear-gradient(135deg,#00e5b0,#00c89a); border: none; color: #02251c; border-radius: 9px; padding: 12px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all .15s; }
 .gwm-btn-signup:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+/* ── XP preview badge ── */
+.sec-xp-preview { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: rgba(245,200,66,0.82); background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.18); border-radius: 20px; padding: 4px 12px; margin: 0 0 18px; font-family: 'Space Mono', monospace; letter-spacing: .02em; }
+.sec-xp-preview strong { color: #f5c842; }
+
+/* ── Section reaction widget ── */
+.sec-reaction { margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.07); }
+.sec-reaction-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 10px; }
+.sec-reaction-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.sec-reaction-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); border-radius: 8px; padding: 7px 14px; font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; }
+.sec-reaction-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25); }
+.sec-reaction-active { background: rgba(0,229,176,0.12) !important; border-color: rgba(0,229,176,0.4) !important; color: #00e5b0 !important; }

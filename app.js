@@ -111,6 +111,7 @@ function loadState() {
       state.earnedBadges = s.earnedBadges || [];
       state.badgeFlags = s.badgeFlags || {};
       state.currentTrack = s.currentTrack || null;
+      state.reactions = s.reactions || {};
     }
   }  catch(e) {}
 }
@@ -148,7 +149,8 @@ function saveState() {
     revKnown: state.revKnown || {},
     srsData:  state.srsData  || {},
     earnedBadges: state.earnedBadges || [],
-    badgeFlags: state.badgeFlags || {}
+    badgeFlags: state.badgeFlags || {},
+    reactions: state.reactions || {}
   });
   try {
     localStorage.setItem('codebook_v1', payload);
@@ -2147,7 +2149,8 @@ if (!section) { return; }
     '</div>' +
     '<div class="floor-section-title">' + section.title + '</div>' +
     '</div>' +
-    '<div class="section-content">';
+    '<div class="section-content">' +
+    '<div class="sec-xp-preview">⚡ Complete this section to earn <strong>+' + getSectionXP(fi) + ' XP</strong></div>';
 
   var _tldr = sectionTldr(section);
   if (_tldr) {
@@ -2438,13 +2441,21 @@ if (!section) { return; }
     '</div>';
 
   // GATE
+  var _sr = (state.reactions || {})[section.id] || '';
+  var _rw = '<div class="sec-reaction">' +
+    '<div class="sec-reaction-label">How did you find this section?</div>' +
+    '<div class="sec-reaction-btns">' +
+    '<button class="sec-reaction-btn' + (_sr === 'lost' ? ' sec-reaction-active' : '') + '" onclick="rateSectionReaction(\'' + section.id + '\',\'lost\',this)">\ud83d\ude15 Lost</button>' +
+    '<button class="sec-reaction-btn' + (_sr === 'okay' ? ' sec-reaction-active' : '') + '" onclick="rateSectionReaction(\'' + section.id + '\',\'okay\',this)">\ud83d\ude10 Okay</button>' +
+    '<button class="sec-reaction-btn' + (_sr === 'got-it' ? ' sec-reaction-active' : '') + '" onclick="rateSectionReaction(\'' + section.id + '\',\'got-it\',this)">\ud83d\ude0a Got it</button>' +
+    '</div></div>';
   var g = '<div class="gate-box' + (isDone ? ' complete' : '') + '">' +
     '<div class="gate-label">' + (isDone ? '&#10003; SECTION COMPLETE' : 'TO COMPLETE THIS SECTION') + '</div>' +
     '<div class="gate-checks">' +
     '<div class="gate-check-row done" id="gate-read-' + section.id + '"><div class="gate-check-dot">&#10003;</div>Read the section</div>' +
     (showEditor ? '<div class="gate-check-row ' + (gate.code ? 'done' : '') + '" id="gate-code-' + section.id + '"><div class="gate-check-dot">' + (gate.code ? '&#10003;' : '') + '</div>Try the code editor</div>' : '') +
     (showQuiz ? '<div class="gate-check-row ' + (gate.quiz ? 'done' : '') + '" id="gate-quiz-' + section.id + '"><div class="gate-check-dot">' + (gate.quiz ? '&#10003;' : '') + '</div>' + (section.quiz ? 'Pass the knowledge check' : 'Complete the checklist') + '</div>' : '') +
-    '</div></div>';
+    '</div>' + _rw + '</div>';
 
   // NAV \u2014 for done sections show both buttons; for in-progress show only Previous (popup handles Next/Complete)
   var _isLastSec = fi === FLOORS.length - 1 && si === floor.sections.length - 1;
@@ -2909,7 +2920,8 @@ function loadTrackSection(trackId, si) {
     '</div>' +
     '<div class="floor-section-title">' + section.title + '</div>' +
     '</div>' +
-    '<div class="section-content">';
+    '<div class="section-content">' +
+    '<div class="sec-xp-preview">⚡ Complete this section to earn <strong>+120 XP</strong></div>';
 
   var _tldr = sectionTldr(section);
   if (_tldr) {
@@ -3032,13 +3044,21 @@ function loadTrackSection(trackId, si) {
     '<span class="notes-footer-hint">Auto-saved to your browser</span></div></div></div>';
 
   // GATE
+  var _sr2 = (state.reactions || {})[section.id] || '';
+  var _rw2 = '<div class="sec-reaction">' +
+    '<div class="sec-reaction-label">How did you find this section?</div>' +
+    '<div class="sec-reaction-btns">' +
+    '<button class="sec-reaction-btn' + (_sr2 === 'lost' ? ' sec-reaction-active' : '') + '" onclick="rateSectionReaction(\'' + section.id + '\',\'lost\',this)">😕 Lost</button>' +
+    '<button class="sec-reaction-btn' + (_sr2 === 'okay' ? ' sec-reaction-active' : '') + '" onclick="rateSectionReaction(\'' + section.id + '\',\'okay\',this)">😐 Okay</button>' +
+    '<button class="sec-reaction-btn' + (_sr2 === 'got-it' ? ' sec-reaction-active' : '') + '" onclick="rateSectionReaction(\'' + section.id + '\',\'got-it\',this)">😊 Got it</button>' +
+    '</div></div>';
   var g = '<div class="gate-box' + (isDone ? ' complete' : '') + '">' +
     '<div class="gate-label">' + (isDone ? '&#10003; SECTION COMPLETE' : 'TO COMPLETE THIS SECTION') + '</div>' +
     '<div class="gate-checks">' +
     '<div class="gate-check-row done" id="gate-read-' + section.id + '"><div class="gate-check-dot">&#10003;</div>Read the section</div>' +
     (showEditor ? '<div class="gate-check-row ' + (gate.code ? 'done' : '') + '" id="gate-code-' + section.id + '"><div class="gate-check-dot">' + (gate.code ? '&#10003;' : '') + '</div>Try the code editor</div>' : '') +
     (showQuiz ? '<div class="gate-check-row ' + (gate.quiz ? 'done' : '') + '" id="gate-quiz-' + section.id + '"><div class="gate-check-dot">' + (gate.quiz ? '&#10003;' : '') + '</div>' + (section.quiz ? 'Pass the knowledge check' : 'Complete the checklist') + '</div>' : '') +
-    '</div></div>';
+    '</div>' + _rw2 + '</div>';
 
   // NAV
   var nav = '<div class="section-nav">' +
@@ -4522,6 +4542,15 @@ function renderLearnHub() {
     });
   }
 }
+function rateSectionReaction(sectionId, rating, btn) {
+  if (!state.reactions) state.reactions = {};
+  state.reactions[sectionId] = rating;
+  saveState();
+  var btns = btn.closest('.sec-reaction-btns').querySelectorAll('.sec-reaction-btn');
+  btns.forEach(function(b) { b.classList.remove('sec-reaction-active'); });
+  btn.classList.add('sec-reaction-active');
+}
+
 function completeSection(sectionId, fi, si) {
   closeSectionCompletePopup();
   var gate = sectionGateState[sectionId] || {};
