@@ -8870,3 +8870,18 @@ body.learn-mode #main-col {
 .sec-reaction-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); border-radius: 8px; padding: 7px 14px; font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; }
 .sec-reaction-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25); }
 .sec-reaction-active { background: rgba(0,229,176,0.12) !important; border-color: rgba(0,229,176,0.4) !important; color: #00e5b0 !important; }
+
+/* ── Visual section icon header ── */
+.sec-visual-header { display: flex; flex-direction: column; align-items: center; padding: 24px 0 16px; margin-bottom: 4px; }
+.sec-visual-icon { font-size: 46px; margin-bottom: 8px; filter: drop-shadow(0 0 14px rgba(0,229,176,0.28)); }
+.sec-visual-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.28); font-family: 'Space Mono', monospace; }
+
+/* ── Sage mid-section comment ── */
+.sage-mid-comment { margin: 28px 0; padding: 14px 16px; background: rgba(0,229,176,0.05); border-left: 3px solid rgba(0,229,176,0.35); border-radius: 0 10px 10px 0; }
+
+/* ── Glossary term tooltips ── */
+.glossary-term { color: var(--accent, #00e5b0); border-bottom: 1px dashed currentColor; cursor: help; position: relative; display: inline; }
+.glossary-term::after { content: attr(data-def); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1a2433; border: 1px solid rgba(255,255,255,0.15); border-radius: 9px; padding: 9px 13px; font-size: 12px; color: rgba(255,255,255,0.85); white-space: normal; width: 230px; line-height: 1.5; box-shadow: 0 8px 28px rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; font-style: normal; font-weight: normal; border-bottom: none; }
+.glossary-term:hover::after { opacity: 1; }
+.glossary-term.tip-open::after { opacity: 1; }
+@media (max-width: 640px) { .glossary-term::after { width: 180px; font-size: 11px; } }

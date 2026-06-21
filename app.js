@@ -9,6 +9,70 @@ var sageBubbleTimeout = null;
 var sectionGateState = {};
 var matchSelected = {};
 
+/* ── Glossary of key terms shown as tooltips in section body ── */
+var GLOSSARY = {
+  'HTML':         'HyperText Markup Language — defines the structure and content of a webpage',
+  'CSS':          'Cascading Style Sheets — controls how elements look: colours, fonts, spacing',
+  'JavaScript':   'A programming language that makes webpages interactive and dynamic',
+  'browser':      'Software that retrieves and displays webpages (Chrome, Firefox, Safari)',
+  'server':       'A computer that stores files and sends them to browsers on request',
+  'function':     'A reusable block of code that performs a specific task when called',
+  'variable':     'A named container that stores a value you can use and change',
+  'array':        'An ordered list of values stored in a single variable',
+  'loop':         'Code that repeats a block of instructions multiple times',
+  'API':          'Application Programming Interface — a way for programs to talk to each other',
+  'DOM':          'Document Object Model — the browser\'s map of a webpage as editable objects',
+  'element':      'A single piece of HTML, like a heading, paragraph, or button',
+  'selector':     'A CSS pattern that targets which HTML elements to style',
+  'responsive':   'A design that adapts its layout to different screen sizes automatically',
+  'framework':    'A pre-built set of tools and conventions that speeds up development',
+  'debugging':    'The process of finding and fixing errors in code',
+  'syntax':       'The rules that define the correct structure of a programming language',
+  'console':      'A developer tool for viewing errors and testing JavaScript output',
+  'repository':   'A storage location for a project\'s code, usually hosted on GitHub',
+  'boolean':      'A value that is either true or false — the simplest data type in code'
+};
+
+/* ── Icon headers per section topic keyword ── */
+var SECTION_ICONS = {
+  'internet':   { icon: '🌐', label: 'How the Web Works' },
+  'html':       { icon: '📄', label: 'Structure & Content' },
+  'css':        { icon: '🎨', label: 'Style & Design' },
+  'javascript': { icon: '⚡', label: 'Behaviour & Logic' },
+  'function':   { icon: '🔧', label: 'Functions' },
+  'variable':   { icon: '📦', label: 'Variables & Data' },
+  'loop':       { icon: '🔄', label: 'Loops' },
+  'array':      { icon: '📋', label: 'Arrays' },
+  'debug':      { icon: '🐛', label: 'Debugging' },
+  'project':    { icon: '🏗️', label: 'Project' },
+  'api':        { icon: '🔌', label: 'APIs' },
+  'responsive': { icon: '📱', label: 'Responsive Design' },
+  'git':        { icon: '📂', label: 'Version Control' },
+  'deploy':     { icon: '🚀', label: 'Deployment' },
+  'database':   { icon: '🗄️', label: 'Databases' },
+  'react':      { icon: '⚛️', label: 'React' },
+  'python':     { icon: '🐍', label: 'Python' },
+  'model':      { icon: '🧠', label: 'Mental Models' },
+  'condition':  { icon: '🔀', label: 'Conditions & Logic' },
+  'event':      { icon: '🖱️', label: 'Events' },
+  'class':      { icon: '🏷️', label: 'Classes & Selectors' },
+  'layout':     { icon: '🔲', label: 'Layout' },
+  'flexbox':    { icon: '🔲', label: 'Flexbox' },
+  'grid':       { icon: '⊞',  label: 'CSS Grid' },
+  'form':       { icon: '📝', label: 'Forms' },
+  'object':     { icon: '🧩', label: 'Objects' }
+};
+
+/* ── Sage mid-section encouragement messages (rotate by section) ── */
+var SAGE_MID_MSGS = [
+  "You're halfway through. Let what you've read settle before you continue — don't rush this part.",
+  "Pause here for a moment. If the first half felt clear, the rest will click faster.",
+  "Good pace. The second half builds directly on what you've just read.",
+  "Take a breath. Understanding this deeply now saves you hours of confusion later.",
+  "You're doing well. The concepts ahead are clearer once the ones behind you have had time to sink in.",
+  "Halfway there. If anything above felt hazy, it's worth a quick re-read before moving on."
+];
+
 function matchClick(mid, side, idx) {
   if (side === 'left') {
     var el = document.getElementById('match-l-' + mid + '-' + idx);
@@ -2074,6 +2138,67 @@ function renderSectionStrip(fi, si) {
   return html;
 }
 
+/* ── Apply glossary tooltips to section body HTML ── */
+function applyGlossaryTooltips(html) {
+  var terms = Object.keys(GLOSSARY).sort(function(a, b) { return b.length - a.length; });
+  var marked = {};
+  return html.replace(/(<[^>]*>|[^<]+)/g, function(chunk) {
+    if (chunk[0] === '<') return chunk;
+    terms.forEach(function(term) {
+      if (marked[term.toLowerCase()]) return;
+      var def = GLOSSARY[term].replace(/'/g, '&#39;');
+      var esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var rx = new RegExp('\\b(' + esc + ')\\b', 'i');
+      if (rx.test(chunk)) {
+        marked[term.toLowerCase()] = true;
+        chunk = chunk.replace(rx, '<span class="glossary-term" data-def="' + def + '" onclick="_gtTap(this)">$1</span>');
+      }
+    });
+    return chunk;
+  });
+}
+
+/* ── Insert Sage mid-section comment for long sections ── */
+function insertSageMidComment(html, section) {
+  var wordCount = html.replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean).length;
+  if (wordCount < 160) return html;
+  var parts = html.split('<br><br>');
+  if (parts.length < 4) return html;
+  var mid = Math.floor(parts.length / 2);
+  var idx = (parseInt((section.id || '0').replace('-','')) || 0) % SAGE_MID_MSGS.length;
+  var msg = SAGE_MID_MSGS[idx];
+  var sageHtml = '<div class="sage-mid-comment"><div class="owl-wrap"><div class="owl-avatar">' +
+    sageOwlSVG(26, 28) + '</div><div class="owl-bubble"><div class="owl-name">SAGE</div>' +
+    '<div class="hint-text">' + msg + '</div></div></div></div>';
+  parts.splice(mid, 0, sageHtml);
+  return parts.join('<br><br>');
+}
+
+/* ── Resolve icon for section based on title keywords ── */
+function getSectionIcon(section) {
+  var t = (section.title || '').toLowerCase();
+  var keys = Object.keys(SECTION_ICONS);
+  for (var i = 0; i < keys.length; i++) {
+    if (t.indexOf(keys[i]) > -1) return SECTION_ICONS[keys[i]];
+  }
+  return null;
+}
+
+/* ── Tooltip tap toggle (mobile) ── */
+if (!window._gtListenerAdded) {
+  window._gtListenerAdded = true;
+  document.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('glossary-term')) {
+      document.querySelectorAll('.glossary-term.tip-open').forEach(function(t) { t.classList.remove('tip-open'); });
+    }
+  });
+}
+function _gtTap(el) {
+  var isOpen = el.classList.contains('tip-open');
+  document.querySelectorAll('.glossary-term.tip-open').forEach(function(t) { t.classList.remove('tip-open'); });
+  if (!isOpen) el.classList.add('tip-open');
+}
+
 function loadSection(f1, s1) {
 
 var floor = FLOORS[f1];
@@ -2151,7 +2276,10 @@ if (!section) { return; }
     '</div>' +
     '<div class="section-content">' +
     '<div class="sec-xp-preview">⚡ Complete this section to earn <strong>+' + getSectionXP(fi) + ' XP</strong></div>';
-
+  var _secIcon = getSectionIcon(section);
+  if (_secIcon) {
+    r += '<div class="sec-visual-header"><div class="sec-visual-icon">' + _secIcon.icon + '</div><div class="sec-visual-label">' + _secIcon.label + '</div></div>';
+  }
   var _tldr = sectionTldr(section);
   if (_tldr) {
     r += '<div class="tldr-box">' +
@@ -2172,7 +2300,8 @@ if (!section) { return; }
       '<div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div></div></div></div>';
   }
 
-  r += '<div class="section-body">' + section.body.replace(/\n/g, '<br><br>') + '</div>';
+  var _bodyHtml = applyGlossaryTooltips(insertSageMidComment(section.body.replace(/\n/g, '<br><br>'), section));
+  r += '<div class="section-body">' + _bodyHtml + '</div>';
 
   if (section.callout) {
     var cIcon = section.callout.type === 'focus' ? '🎯' : section.callout.type === 'warning' ? '⚠️' : '💡';
@@ -2922,7 +3051,10 @@ function loadTrackSection(trackId, si) {
     '</div>' +
     '<div class="section-content">' +
     '<div class="sec-xp-preview">⚡ Complete this section to earn <strong>+120 XP</strong></div>';
-
+  var _secIcon2 = getSectionIcon(section);
+  if (_secIcon2) {
+    r += '<div class="sec-visual-header"><div class="sec-visual-icon">' + _secIcon2.icon + '</div><div class="sec-visual-label">' + _secIcon2.label + '</div></div>';
+  }
   var _tldr = sectionTldr(section);
   if (_tldr) {
     r += '<div class="tldr-box"><div class="owl-wrap"><div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
@@ -2934,7 +3066,8 @@ function loadTrackSection(trackId, si) {
     r += '<div class="hint-box" id="hint-' + section.id + '"><div class="owl-wrap"><div class="owl-avatar">' + sageOwlSVG(30, 33) + '</div>' +
       '<div class="owl-bubble"><div class="owl-name">SAGE &mdash; YOUR GUIDE</div><div class="hint-text">' + section.hint.replace(/\n/g, '<br>') + '</div></div></div></div>';
   }
-  r += '<div class="section-body">' + section.body.replace(/\n/g, '<br><br>') + '</div>';
+  var _bodyHtml = applyGlossaryTooltips(insertSageMidComment(section.body.replace(/\n/g, '<br><br>'), section));
+  r += '<div class="section-body">' + _bodyHtml + '</div>';
   if (section.callout) {
     var cIcon = section.callout.type === 'focus' ? '&#127919;' : section.callout.type === 'warning' ? '&#9888;&#65039;' : '&#128161;';
     r += '<div class="callout ' + (section.callout.type || '') + '"><div class="callout-icon-row"><span class="callout-icon">' + cIcon + '</span><div class="callout-label">' + section.callout.label + '</div></div><div class="callout-text">' + section.callout.text.replace(/\n/g, '<br>') + '</div></div>';
