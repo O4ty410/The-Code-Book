@@ -6626,270 +6626,373 @@ function showLaunchCinematic(onComplete) {
     st.textContent =
       '#launch-cinematic{position:fixed;inset:0;z-index:9999;background:#000;overflow:hidden;}' +
       '.lc-bar{position:absolute;left:0;right:0;z-index:20;background:#000;}' +
-      '.lc-bt{top:0;height:12vh;}' +
-      '.lc-bb{bottom:0;height:12vh;}' +
-      '.lc-frame{position:absolute;top:12vh;bottom:12vh;left:0;right:0;overflow:hidden;}' +
+      '.lc-bt{top:0;height:13vh;}' +
+      '.lc-bb{bottom:0;height:13vh;}' +
+      '.lc-frame{position:absolute;top:13vh;bottom:13vh;left:0;right:0;overflow:hidden;}' +
       '.lc-scene{position:absolute;inset:0;opacity:0;transition:opacity 1s ease;}' +
       '.lc-scene.lc-on{opacity:1;}' +
       '.lc-scene.lc-cut{transition:none!important;}' +
       '.lc-cam{position:absolute;top:-8%;left:-8%;right:-8%;bottom:-8%;will-change:transform;}' +
-      '.lc-vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,0.72) 100%);pointer-events:none;z-index:8;}' +
-      '.lc-skip{position:absolute;top:calc(12vh + 10px);right:14px;z-index:25;background:rgba(0,0,0,0.55);border:1px solid rgba(200,169,80,0.3);color:rgba(200,169,80,0.55);font-family:"Space Mono",monospace;font-size:9px;letter-spacing:2px;padding:5px 12px;cursor:pointer;border-radius:2px;}' +
-      '.lc-skip:hover{color:#c8a96e;border-color:rgba(200,169,80,0.7);}' +
-      '.lc-prog{position:absolute;bottom:12vh;left:0;right:0;height:2px;z-index:21;background:rgba(255,255,255,0.06);}' +
-      '.lc-pf{height:2px;background:rgba(200,169,80,0.42);width:0%;transition:width 0.3s linear;}' +
-      '.lc-cap{position:absolute;bottom:calc(12vh + 12px);left:50%;transform:translateX(-50%);white-space:nowrap;font-family:"Space Mono",monospace;font-size:9px;letter-spacing:3px;color:rgba(180,210,255,0.48);z-index:22;opacity:0;transition:opacity 1.2s;}' +
+      '.lc-vig{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 36%,rgba(0,0,0,0.82) 100%);pointer-events:none;z-index:8;}' +
+      '.lc-skip{position:absolute;top:calc(13vh + 10px);right:14px;z-index:25;background:rgba(0,0,0,0.6);border:1px solid rgba(200,169,80,0.28);color:rgba(200,169,80,0.5);font-family:"Space Mono",monospace;font-size:9px;letter-spacing:2px;padding:5px 12px;cursor:pointer;border-radius:2px;}' +
+      '.lc-skip:hover{color:#c8a96e;border-color:rgba(200,169,80,0.65);}' +
+      '.lc-prog{position:absolute;bottom:13vh;left:0;right:0;height:2px;z-index:21;background:rgba(255,255,255,0.05);}' +
+      '.lc-pf{height:2px;background:linear-gradient(to right,rgba(200,169,80,0.3),rgba(200,169,80,0.55));width:0%;transition:width 0.3s linear;}' +
+      '.lc-cap{position:absolute;bottom:calc(13vh + 11px);left:50%;transform:translateX(-50%);white-space:nowrap;font-family:"Space Mono",monospace;font-size:8.5px;letter-spacing:3px;color:rgba(180,210,255,0.42);z-index:22;opacity:0;transition:opacity 1.3s;}' +
       '.lc-cap.lc-cap-on{opacity:1;}' +
-      '@keyframes lc-pan-r{from{transform:translateX(0)}to{transform:translateX(-7%)}}' +
-      '@keyframes lc-pan-l{from{transform:translateX(-4%)}to{transform:translateX(4%)}}' +
-      '@keyframes lc-zoom{from{transform:scale(1)}to{transform:scale(1.14)}}' +
-      '@keyframes lc-tilt{from{transform:translateY(5%)}to{transform:translateY(-4%)}}' +
+      '@keyframes lc-pan-r{from{transform:translateX(0)}to{transform:translateX(-6%)}}' +
+      '@keyframes lc-pan-l{from{transform:translateX(-3%)}to{transform:translateX(3%)}}' +
+      '@keyframes lc-zoom{from{transform:scale(1)}to{transform:scale(1.12)}}' +
+      '@keyframes lc-tilt{from{transform:translateY(4%)}to{transform:translateY(-4%)}}' +
       '@keyframes lc-zoom-big{from{transform:scale(1)}to{transform:scale(1.5)}}' +
-      '@keyframes lc-shake{0%,100%{transform:translate(0,0)}10%{transform:translate(-4px,3px)}20%{transform:translate(3px,-3px)}30%{transform:translate(-3px,4px)}40%{transform:translate(4px,-2px)}50%{transform:translate(-2px,3px)}60%{transform:translate(3px,4px)}70%{transform:translate(-4px,-3px)}80%{transform:translate(2px,4px)}90%{transform:translate(-3px,-2px)}}' +
-      '@keyframes lc-walk{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}' +
-      '@keyframes lc-flame{0%,100%{opacity:0.85;transform:scaleY(1) scaleX(1)}50%{opacity:1;transform:scaleY(1.25) scaleX(1.15)}}' +
-      '@keyframes lc-smoke{0%{opacity:0.7;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-70px) scale(2.5)}}' +
-      '@keyframes lc-warn{0%,100%{background:#0d0000}50%{background:#1c0000}}' +
-      '@keyframes lc-warn-i{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.45;transform:scale(0.88)}}' +
-      '@keyframes lc-cd{0%{opacity:0;transform:scale(0.55)}20%{opacity:1;transform:scale(1.08)}30%{transform:scale(1)}100%{opacity:1;transform:scale(1)}}' +
-      '@keyframes lc-blink{0%,100%{opacity:1}50%{opacity:0.25}}' +
-      '@keyframes lc-screen-on{0%{opacity:0}20%{opacity:0.4}25%{opacity:0.05}55%{opacity:0.85}60%{opacity:0.55}100%{opacity:1}}' +
-      '@keyframes lc-twinkle{0%,100%{opacity:0.8}50%{opacity:0.2}}';
+      '@keyframes lc-shake{0%,100%{transform:translate(0,0)}8%{transform:translate(-5px,3px)}16%{transform:translate(4px,-4px)}24%{transform:translate(-4px,5px)}32%{transform:translate(5px,-3px)}40%{transform:translate(-3px,4px)}48%{transform:translate(4px,5px)}56%{transform:translate(-5px,-4px)}64%{transform:translate(3px,5px)}72%{transform:translate(-4px,-3px)}88%{transform:translate(3px,-4px)}}' +
+      '@keyframes lc-walk{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}' +
+      '@keyframes lc-flame{0%,100%{opacity:0.88;transform:scaleY(1) scaleX(1)}50%{opacity:1;transform:scaleY(1.28) scaleX(1.18)}}' +
+      '@keyframes lc-smoke{0%{opacity:0.65;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(2.8)}}' +
+      '@keyframes lc-warn{0%,100%{background:#0b0000}50%{background:#1a0000}}' +
+      '@keyframes lc-warn-i{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.86)}}' +
+      '@keyframes lc-cd{0%{opacity:0;transform:scale(0.5)}18%{opacity:1;transform:scale(1.1)}28%{transform:scale(1)}100%{opacity:1;transform:scale(1)}}' +
+      '@keyframes lc-blink{0%,100%{opacity:1}50%{opacity:0.18}}' +
+      '@keyframes lc-screen-on{0%{opacity:0}18%{opacity:0.35}22%{opacity:0.04}52%{opacity:0.9}58%{opacity:0.5}100%{opacity:1}}' +
+      '@keyframes lc-twinkle{0%,100%{opacity:0.75}50%{opacity:0.15}}' +
+      '@keyframes lc-drift{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-55px);opacity:0}}' +
+      '@keyframes lc-pulse-r{0%{transform:translate(-50%,-50%) scale(0.4);opacity:0.9}100%{transform:translate(-50%,-50%) scale(3.2);opacity:0}}';
     document.head.appendChild(st);
   }
 
   function makeStars(n) {
     var out = '';
     for (var i = 0; i < n; i++) {
-      var x = (Math.random() * 100).toFixed(1), y = (Math.random() * 65).toFixed(1);
-      var sz = (Math.random() * 1.8 + 0.5).toFixed(1);
-      var op = (0.35 + Math.random() * 0.5).toFixed(2);
-      var spd = (2 + Math.random() * 3).toFixed(1), del = (Math.random() * 3).toFixed(1);
+      var x = (Math.random() * 100).toFixed(1), y = (Math.random() * 68).toFixed(1);
+      var sz = (Math.random() * 1.6 + 0.5).toFixed(1);
+      var op = (0.3 + Math.random() * 0.55).toFixed(2);
+      var spd = (2 + Math.random() * 3).toFixed(1), del = (Math.random() * 3.5).toFixed(1);
       out += '<div style="position:absolute;left:' + x + '%;top:' + y + '%;width:' + sz + 'px;height:' + sz + 'px;background:#fff;border-radius:50%;opacity:' + op + ';animation:lc-twinkle ' + spd + 's ease-in-out ' + del + 's infinite;"></div>';
     }
     return out;
   }
 
   var rkt =
-    '<svg viewBox="0 0 60 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">' +
-    '<defs>' +
-    '<linearGradient id="lcRg1" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#7080a0"/><stop offset="45%" stop-color="#b8c8d8"/><stop offset="100%" stop-color="#6070a0"/></linearGradient>' +
-    '<linearGradient id="lcRg2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#ccd8e8"/><stop offset="100%" stop-color="#90a0b8"/></linearGradient>' +
-    '</defs>' +
+    '<svg viewBox="0 0 60 170" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;filter:drop-shadow(0 0 10px rgba(180,210,255,0.18));">' +
+    '<defs><linearGradient id="lcRg1" x1="0" x2="1" y1="0" y2="0"><stop offset="0%" stop-color="#606898"/><stop offset="45%" stop-color="#b0bfd5"/><stop offset="100%" stop-color="#5868a0"/></linearGradient>' +
+    '<linearGradient id="lcRg2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#cad6e8"/><stop offset="100%" stop-color="#8898b5"/></linearGradient></defs>' +
     '<rect x="18" y="55" width="24" height="90" rx="2" fill="url(#lcRg1)"/>' +
     '<path d="M30 8 L44 55 L16 55 Z" fill="url(#lcRg2)"/>' +
-    '<path d="M30 8 L34 28 L26 28 Z" fill="#e5eef8"/>' +
-    '<circle cx="30" cy="80" r="9" fill="#030d24" stroke="#7890b0" stroke-width="1.5"/>' +
-    '<circle cx="30" cy="80" r="6" fill="#0a1858" opacity="0.9"/>' +
-    '<circle cx="27" cy="77" r="2" fill="rgba(160,210,255,0.35)"/>' +
+    '<path d="M30 8 L34 28 L26 28 Z" fill="#dce8f5"/>' +
+    '<circle cx="30" cy="80" r="9" fill="#020c22" stroke="#6878a8" stroke-width="1.5"/>' +
+    '<circle cx="30" cy="80" r="6" fill="#08185a" opacity="0.9"/>' +
+    '<circle cx="27" cy="77" r="2" fill="rgba(160,210,255,0.32)"/>' +
     '<rect x="22" y="100" width="16" height="10" rx="1" fill="#b22234"/>' +
-    '<rect x="22" y="100" width="16" height="3.3" fill="#fff"/><rect x="22" y="106.7" width="16" height="3.3" fill="#fff"/>' +
+    '<rect x="22" y="100" width="16" height="3.3" fill="#f0f0f0"/>' +
+    '<rect x="22" y="106.7" width="16" height="3.3" fill="#f0f0f0"/>' +
     '<rect x="22" y="100" width="7" height="7" fill="#3c3b6e"/>' +
-    '<path d="M18 120 L4 155 L18 140 Z" fill="#6878a0"/>' +
-    '<path d="M42 120 L56 155 L42 140 Z" fill="#6878a0"/>' +
-    '<path d="M20 140 L16 155 L44 155 L40 140 Z" fill="#505060"/>' +
-    '<ellipse cx="30" cy="155" rx="14" ry="3.5" fill="#40404e"/>' +
-    '<path d="M22 56 L25 140" stroke="rgba(255,255,255,0.13)" stroke-width="2.5" stroke-linecap="round"/>' +
+    '<path d="M18 120 L4 155 L18 140 Z" fill="#6070a0"/>' +
+    '<path d="M42 120 L56 155 L42 140 Z" fill="#6070a0"/>' +
+    '<path d="M20 140 L16 155 L44 155 L40 140 Z" fill="#484858"/>' +
+    '<ellipse cx="30" cy="155" rx="14" ry="3.5" fill="#383848"/>' +
+    '<path d="M22 58 L25 138" stroke="rgba(255,255,255,0.11)" stroke-width="2.5" stroke-linecap="round"/>' +
     '</svg>';
 
+  // Worker silhouette — lit from above by floodlights
+  var wrkr =
+    '<svg viewBox="0 0 28 52" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;" fill="rgba(80,108,158,0.82)">' +
+    '<ellipse cx="14" cy="5" rx="12" ry="4.5"/>' +
+    '<circle cx="14" cy="14" r="7"/>' +
+    '<rect x="6" y="21" width="16" height="18" rx="2"/>' +
+    '<rect x="0" y="22" width="7" height="3" rx="1.5"/><rect x="0" y="24" width="4" height="10" rx="2"/>' +
+    '<rect x="21" y="22" width="7" height="3" rx="1.5"/><rect x="24" y="22" width="4" height="10" rx="2"/>' +
+    '<rect x="7" y="39" width="5" height="13" rx="2.5"/><rect x="16" y="39" width="5" height="13" rx="2.5"/>' +
+    '</svg>';
+
+  // Astronaut silhouette — dark against warm dawn sky
+  var astro =
+    '<svg viewBox="0 0 30 56" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;" fill="rgba(6,10,20,0.95)">' +
+    '<circle cx="15" cy="11" r="10"/>' +
+    '<rect x="9" y="19" width="12" height="4" rx="2"/>' +
+    '<rect x="3" y="23" width="24" height="21" rx="4"/>' +
+    '<rect x="0" y="24" width="4" height="17" rx="2"/><rect x="26" y="24" width="4" height="17" rx="2"/>' +
+    '<rect x="4" y="43" width="9" height="13" rx="3"/><rect x="17" y="43" width="9" height="13" rx="3"/>' +
+    '</svg>';
+
+  // HUD corner brackets (shared across scenes)
+  var hud =
+    '<div style="position:absolute;inset:0;pointer-events:none;z-index:11;">' +
+    '<div style="position:absolute;top:6px;left:6px;width:20px;height:20px;border-top:1px solid rgba(200,169,80,0.38);border-left:1px solid rgba(200,169,80,0.38);"></div>' +
+    '<div style="position:absolute;top:6px;right:6px;width:20px;height:20px;border-top:1px solid rgba(200,169,80,0.38);border-right:1px solid rgba(200,169,80,0.38);"></div>' +
+    '<div style="position:absolute;bottom:6px;left:6px;width:20px;height:20px;border-bottom:1px solid rgba(200,169,80,0.38);border-left:1px solid rgba(200,169,80,0.38);"></div>' +
+    '<div style="position:absolute;bottom:6px;right:6px;width:20px;height:20px;border-bottom:1px solid rgba(200,169,80,0.38);border-right:1px solid rgba(200,169,80,0.38);"></div>' +
+    '</div>';
+
+  // Subtle scan lines overlay
+  var sl = '<div style="position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,0,0,0.062) 3px,rgba(0,0,0,0.062) 4px);pointer-events:none;z-index:9;"></div>';
+
+  // ── Scene 1: The Hangar ──────────────────────────────────────────────────
   var sc1 =
     '<div class="lc-scene" id="lcs-1">' +
     '<div class="lc-cam" style="animation:lc-pan-r 9s linear forwards;">' +
-    '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,#03070f 0%,#05091a 40%,#0c1225 100%);">' +
-    makeStars(35) +
-    '<div style="position:absolute;top:0;left:0;right:0;height:55%;background:linear-gradient(to bottom,rgba(8,14,28,0.88),transparent);"></div>' +
-    '<div style="position:absolute;bottom:0;left:0;right:0;height:28%;background:#0f1520;border-top:1px solid rgba(90,120,170,0.18);">' +
-    '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:repeating-linear-gradient(90deg,rgba(200,169,80,0.35) 0,rgba(200,169,80,0.35) 28px,transparent 28px,transparent 56px);"></div>' +
+    '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,#010207 0%,#020410 45%,#060b1e 100%);">' +
+    makeStars(38) +
+    // Floodlight beams from upper area converging on rocket
+    '<div style="position:absolute;top:0;left:22%;width:0;height:0;border-left:130px solid transparent;border-right:130px solid transparent;border-top:700px solid rgba(160,200,255,0.032);transform:translateX(-50%);pointer-events:none;"></div>' +
+    '<div style="position:absolute;top:0;right:8%;width:0;height:0;border-left:95px solid transparent;border-right:95px solid transparent;border-top:600px solid rgba(160,200,255,0.025);transform:translateX(50%);pointer-events:none;"></div>' +
+    // Floodlight source dots
+    '<div style="position:absolute;top:2%;left:22%;width:8px;height:8px;background:rgba(200,225,255,0.95);border-radius:50%;box-shadow:0 0 14px rgba(180,210,255,0.9),0 0 28px rgba(180,210,255,0.45);transform:translateX(-50%);"></div>' +
+    '<div style="position:absolute;top:2%;right:10%;width:6px;height:6px;background:rgba(200,225,255,0.85);border-radius:50%;box-shadow:0 0 10px rgba(180,210,255,0.75);"></div>' +
+    // Ground platform
+    '<div style="position:absolute;bottom:0;left:0;right:0;height:25%;background:linear-gradient(to bottom,#0b1220,#060d18);border-top:1px solid rgba(80,110,160,0.1);">' +
+    '<div style="position:absolute;top:0;left:0;right:0;height:2px;background:repeating-linear-gradient(90deg,rgba(200,169,80,0.26) 0,rgba(200,169,80,0.26) 24px,transparent 24px,transparent 52px);"></div>' +
     '</div>' +
-    '<div style="position:absolute;bottom:27%;right:28%;width:68px;height:182px;">' + rkt + '</div>' +
-    '<div style="position:absolute;bottom:27%;right:40%;width:28px;height:158px;">' +
-    '<div style="position:absolute;top:0;left:4px;width:2px;height:100%;background:rgba(90,110,150,0.4);"></div>' +
-    '<div style="position:absolute;top:0;right:4px;width:2px;height:100%;background:rgba(90,110,150,0.4);"></div>' +
-    '<div style="position:absolute;top:18%;left:0;right:0;height:2px;background:rgba(90,110,150,0.3);"></div>' +
-    '<div style="position:absolute;top:42%;left:0;right:0;height:2px;background:rgba(90,110,150,0.3);"></div>' +
-    '<div style="position:absolute;top:68%;left:0;right:0;height:2px;background:rgba(90,110,150,0.3);"></div>' +
+    // Launch tower (structural silhouette)
+    '<div style="position:absolute;bottom:24%;right:43%;width:8px;height:195px;background:rgba(35,48,72,0.85);">' +
+    '<div style="position:absolute;top:10%;left:-14px;width:36px;height:2px;background:rgba(35,48,72,0.8);"></div>' +
+    '<div style="position:absolute;top:30%;left:-10px;width:28px;height:2px;background:rgba(35,48,72,0.75);"></div>' +
+    '<div style="position:absolute;top:52%;left:-14px;width:36px;height:2px;background:rgba(35,48,72,0.8);"></div>' +
+    '<div style="position:absolute;top:74%;left:-10px;width:28px;height:2px;background:rgba(35,48,72,0.7);"></div>' +
     '</div>' +
-    '<div style="position:absolute;bottom:27%;right:18%;width:22px;height:118px;">' +
-    '<div style="position:absolute;top:0;left:3px;width:2px;height:100%;background:rgba(90,110,150,0.32);"></div>' +
-    '<div style="position:absolute;top:0;right:3px;width:2px;height:100%;background:rgba(90,110,150,0.32);"></div>' +
-    '<div style="position:absolute;top:32%;left:0;right:0;height:2px;background:rgba(90,110,150,0.25);"></div>' +
-    '<div style="position:absolute;top:66%;left:0;right:0;height:2px;background:rgba(90,110,150,0.25);"></div>' +
-    '</div>' +
-    '<span style="position:absolute;bottom:29%;right:50%;font-size:22px;animation:lc-walk 2.2s ease-in-out infinite;">&#128119;</span>' +
-    '<span style="position:absolute;bottom:28.5%;right:44%;font-size:20px;">&#128203;</span>' +
-    '<span style="position:absolute;bottom:29%;right:17%;font-size:22px;animation:lc-walk 2.6s ease-in-out 0.3s infinite;">&#128119;</span>' +
-    '<span style="position:absolute;bottom:28.5%;right:57%;font-size:18px;opacity:0.7;">&#128295;</span>' +
-    '<div style="position:absolute;top:11%;left:7%;font-family:\'Space Mono\',monospace;">' +
-    '<div style="font-size:9px;letter-spacing:4px;color:rgba(200,169,80,0.62);margin-bottom:9px;">MISSION LOG — PRE-LAUNCH</div>' +
-    '<div style="font-family:\'Orbitron\',sans-serif;font-size:20px;color:rgba(255,255,255,0.9);text-shadow:0 0 28px rgba(180,210,255,0.25);line-height:1.25;">THE FINAL<br>PREPARATION</div>' +
-    '</div>' +
+    // Tower beacon (blinking red)
+    '<div style="position:absolute;bottom:calc(24% + 197px);right:calc(43% - 1px);width:7px;height:7px;background:#ff2020;border-radius:50%;box-shadow:0 0 10px rgba(255,30,30,0.95);animation:lc-blink 1.3s ease-in-out infinite;"></div>' +
+    // Rocket
+    '<div style="position:absolute;bottom:24%;right:24%;width:78px;height:208px;">' + rkt + '</div>' +
+    // Ambient ground glow below rocket
+    '<div style="position:absolute;bottom:21%;right:16%;left:26%;height:5%;background:radial-gradient(ellipse at center,rgba(160,200,255,0.06),transparent);"></div>' +
+    // Worker silhouettes at base
+    '<div style="position:absolute;bottom:25%;right:51%;width:26px;height:50px;">' + wrkr + '</div>' +
+    '<div style="position:absolute;bottom:25%;right:44%;width:24px;height:46px;">' + wrkr + '</div>' +
+    '<div style="position:absolute;bottom:25%;right:14%;width:26px;height:50px;">' + wrkr + '</div>' +
+    // Welding sparks
+    '<div style="position:absolute;bottom:32%;right:47%;width:3px;height:3px;background:#ffcc22;border-radius:50%;animation:lc-drift 1.1s ease-out 0.2s infinite;"></div>' +
+    '<div style="position:absolute;bottom:31%;right:49%;width:2px;height:2px;background:#ffaa00;border-radius:50%;animation:lc-drift 0.9s ease-out 0.7s infinite;"></div>' +
+    '<div style="position:absolute;bottom:33%;right:46%;width:2px;height:2px;background:#ff8800;border-radius:50%;animation:lc-drift 1.3s ease-out 0.05s infinite;"></div>' +
     '</div></div>' +
     '<div class="lc-vig"></div>' +
+    sl +
+    // Text overlay OUTSIDE camera (never clips)
+    '<div style="position:absolute;bottom:28%;left:5%;z-index:10;pointer-events:none;">' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:5px;color:rgba(200,169,80,0.58);margin-bottom:10px;">MISSION LOG — PRE-LAUNCH</div>' +
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:20px;color:#fff;text-shadow:0 0 28px rgba(180,210,255,0.2),0 2px 6px rgba(0,0,0,0.85);line-height:1.2;letter-spacing:1px;">THE FINAL<br>PREPARATION</div>' +
+    '</div>' +
+    hud +
     '</div>';
+
+  // ── Scene 2: Control Room ─────────────────────────────────────────────────
+  var monData = [
+    { c: 'rgba(0,200,100,0.88)',  d: 'STATUS: GO\nFUEL: 100%\nVEL: 0.00',    delay: '0'   },
+    { c: 'rgba(80,180,255,0.82)', d: 'ORBIT: SET\nHDG: 245°\nALT: LAUNCH', delay: '0.2' },
+    { c: 'rgba(0,200,100,0.92)', d: 'CREW: OK\nO2: 100%\nPRESS: NOM',        delay: '0.4' },
+    { c: 'rgba(200,185,90,0.78)', d: 'COMMS: GO\nSIG: STRONG\nENCR: ON',     delay: '0.6' },
+    { c: 'rgba(60,220,180,0.8)',  d: 'THERM: OK\nRAD: LOW\nSYS: RDY',        delay: '0.8' }
+  ];
+  var monHtml = monData.map(function(m) {
+    return '<div style="flex:1;max-width:17%;background:#040c1a;border:1px solid rgba(50,85,145,0.28);border-radius:2px;overflow:hidden;animation:lc-screen-on 0.5s ease ' + m.delay + 's forwards;opacity:0;">' +
+      '<div style="padding:5% 8%;border-bottom:1px solid rgba(50,85,145,0.18);font-family:\'Space Mono\',monospace;font-size:5.5px;letter-spacing:2px;color:' + m.c + ';">NOMINAL</div>' +
+      '<div style="padding:8%;font-family:\'Space Mono\',monospace;font-size:6.5px;color:' + m.c + ';line-height:1.9;white-space:pre;">' + m.d + '</div>' +
+      '</div>';
+  }).join('');
 
   var sc2 =
     '<div class="lc-scene" id="lcs-2">' +
     '<div class="lc-cam" style="animation:lc-pan-l 8s ease forwards;">' +
-    '<div style="position:absolute;inset:0;background:#040810;">' +
-    '<div style="position:absolute;top:12%;left:3%;right:3%;display:flex;gap:2%;justify-content:center;">' +
-    [['rgba(0,210,100,0.85)','STATUS: GO\nFUEL: 100%\nVEL: 0.00'],['rgba(100,180,255,0.8)','ORBIT: SET\nHDG: 245\xb0\nALT: LAUNCH'],['rgba(0,210,100,0.9)','CREW: OK\nO2: 100%\nPRESS: NOM'],['rgba(210,185,100,0.75)','COMMS: GO\nSIG: STRONG\nENCR: ON'],['rgba(80,220,180,0.78)','THERM: OK\nRAD: LOW\nSYS: RDY']].map(function(cs, i) {
-      return '<div style="flex:1;max-width:16%;aspect-ratio:1.33;background:#060e1c;border:1px solid rgba(55,90,150,0.32);border-radius:2px;overflow:hidden;animation:lc-screen-on 0.5s ease ' + (i * 0.18) + 's forwards;opacity:0;">' +
-        '<div style="padding:8%;font-family:\'Space Mono\',monospace;font-size:6.5px;color:' + cs[0] + ';line-height:1.9;white-space:pre;">' + cs[1] + '</div></div>';
-    }).join('') +
+    '<div style="position:absolute;inset:0;background:#020508;">' +
+    '<div style="position:absolute;top:0;left:0;right:0;height:10%;background:linear-gradient(to bottom,rgba(0,70,160,0.07),transparent);"></div>' +
+    // Monitor bank
+    '<div style="position:absolute;top:8%;left:2%;right:2%;display:flex;gap:2%;justify-content:center;">' + monHtml + '</div>' +
+    // Console desk
+    '<div style="position:absolute;bottom:0;left:0;right:0;height:44%;background:#030810;border-top:1px solid rgba(45,75,125,0.18);">' +
+    // Operator silhouettes (rounded dark shapes, lit by screens)
+    '<div style="position:absolute;top:5%;left:6%;width:36px;height:50px;background:rgba(12,22,42,0.92);border-radius:18px 18px 4px 4px;box-shadow:0 0 14px rgba(0,160,100,0.1);"></div>' +
+    '<div style="position:absolute;top:5%;left:23%;width:36px;height:50px;background:rgba(12,22,42,0.92);border-radius:18px 18px 4px 4px;box-shadow:0 0 14px rgba(0,100,200,0.1);"></div>' +
+    '<div style="position:absolute;top:5%;left:40%;width:36px;height:50px;background:rgba(12,22,42,0.92);border-radius:18px 18px 4px 4px;box-shadow:0 0 14px rgba(0,160,100,0.08);"></div>' +
+    '<div style="position:absolute;top:5%;left:57%;width:36px;height:50px;background:rgba(12,22,42,0.92);border-radius:18px 18px 4px 4px;box-shadow:0 0 14px rgba(180,160,50,0.08);"></div>' +
+    '<div style="position:absolute;top:5%;left:74%;width:36px;height:50px;background:rgba(12,22,42,0.92);border-radius:18px 18px 4px 4px;box-shadow:0 0 14px rgba(0,180,150,0.08);"></div>' +
     '</div>' +
-    '<div style="position:absolute;bottom:0;left:0;right:0;height:42%;background:#060c18;border-top:1px solid rgba(70,90,140,0.18);">' +
-    '<span style="position:absolute;top:14%;left:10%;font-size:26px;">&#128105;&#8205;&#128187;</span>' +
-    '<span style="position:absolute;top:14%;left:25%;font-size:26px;">&#128104;&#8205;&#128187;</span>' +
-    '<span style="position:absolute;top:14%;left:40%;font-size:26px;">&#128105;&#8205;&#128187;</span>' +
-    '<span style="position:absolute;top:14%;left:55%;font-size:26px;">&#128104;&#8205;&#128187;</span>' +
-    '<span style="position:absolute;top:14%;left:70%;font-size:26px;">&#128105;&#8205;&#128187;</span>' +
-    '</div>' +
-    '<div style="position:absolute;top:60%;right:6%;font-family:\'Space Mono\',monospace;font-size:8.5px;text-align:right;line-height:2;">' +
-    '<div style="color:rgba(200,169,80,0.65);letter-spacing:2px;margin-bottom:4px;">GO / NO-GO POLL</div>' +
-    '<div style="color:rgba(0,220,100,0.8);">FLIGHT ............... GO &#10003;</div>' +
-    '<div style="color:rgba(0,220,100,0.8);">GUIDANCE ............. GO &#10003;</div>' +
-    '<div style="color:rgba(0,220,100,0.8);">PROPULSION ........... GO &#10003;</div>' +
-    '<div style="color:rgba(0,220,100,0.8);">CREW SURGEON ......... GO &#10003;</div>' +
-    '</div>' +
-    '<div style="position:absolute;top:10%;left:7%;font-family:\'Space Mono\',monospace;">' +
-    '<div style="font-size:8.5px;letter-spacing:3px;color:rgba(100,180,255,0.58);">MISSION CONTROL — HOUSTON, TX</div>' +
-    '<div style="font-family:\'Orbitron\',sans-serif;font-size:17px;color:#fff;margin-top:7px;line-height:1.25;">GO / NO-GO<br>EVALUATION</div>' +
+    // GO/NO-GO checklist
+    '<div style="position:absolute;top:58%;right:4%;font-family:\'Space Mono\',monospace;font-size:8px;text-align:right;line-height:2.1;">' +
+    '<div style="color:rgba(200,169,80,0.6);letter-spacing:2px;margin-bottom:5px;">GO / NO-GO POLL</div>' +
+    '<div style="color:rgba(0,220,100,0.82);">FLIGHT .................. GO ✓</div>' +
+    '<div style="color:rgba(0,220,100,0.82);">GUIDANCE ................ GO ✓</div>' +
+    '<div style="color:rgba(0,220,100,0.82);">PROPULSION .............. GO ✓</div>' +
+    '<div style="color:rgba(0,220,100,0.82);">CREW SURGEON ............ GO ✓</div>' +
     '</div>' +
     '</div></div>' +
     '<div class="lc-vig"></div>' +
+    sl +
+    '<div style="position:absolute;top:8%;left:5%;z-index:10;pointer-events:none;">' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:4px;color:rgba(80,165,255,0.52);margin-bottom:9px;">MISSION CONTROL — HOUSTON, TX</div>' +
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:19px;color:#fff;text-shadow:0 0 24px rgba(80,165,255,0.18),0 2px 6px rgba(0,0,0,0.9);line-height:1.25;">GO / NO-GO<br>EVALUATION</div>' +
+    '</div>' +
+    hud +
     '</div>';
+
+  // ── Scene 3: All Systems Go ───────────────────────────────────────────────
+  var dotHtml = ['FLT','GDN','PROP','CRYO','COMM','CREW'].map(function(lbl, i) {
+    return '<div style="font-family:\'Space Mono\',monospace;font-size:8.5px;color:rgba(0,220,100,0.75);display:flex;flex-direction:column;align-items:center;gap:5px;">' +
+      '<div style="width:7px;height:7px;background:#00e068;border-radius:50%;box-shadow:0 0 9px rgba(0,220,100,0.9);animation:lc-blink ' + (0.8 + i * 0.3).toFixed(1) + 's ease-in-out infinite;"></div>' + lbl + '</div>';
+  }).join('');
 
   var sc3 =
     '<div class="lc-scene" id="lcs-3">' +
     '<div class="lc-cam" style="animation:lc-zoom 6s ease forwards;">' +
-    '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#051218 0%,#020508 100%);">' +
+    '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#030e08 0%,#010503 100%);">' +
     '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">' +
-    '<div style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:#00dc64;text-shadow:0 0 40px rgba(0,220,100,0.85),0 0 90px rgba(0,220,100,0.4);letter-spacing:2px;line-height:1.05;">ALL<br>SYSTEMS<br>GO</div>' +
-    '<div style="margin-top:22px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">' +
-    ['FLT','GDN','PROP','CRYO','COMM','CREW'].map(function(label, i) {
-      return '<div style="font-family:\'Space Mono\',monospace;font-size:8.5px;color:rgba(0,220,100,0.78);display:flex;flex-direction:column;align-items:center;gap:5px;">' +
-        '<div style="width:7px;height:7px;background:#00dc64;border-radius:50%;box-shadow:0 0 8px rgba(0,220,100,0.85);animation:lc-blink ' + (1.4 + i * 0.15).toFixed(2) + 's ease-in-out infinite;"></div>' + label + '</div>';
-    }).join('') +
+    // Chromatic aberration on title
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:#00e068;text-shadow:-3px 0 rgba(255,0,80,0.42),3px 0 rgba(0,240,220,0.42),0 0 42px rgba(0,220,100,0.92),0 0 90px rgba(0,220,100,0.45);letter-spacing:2px;line-height:1.05;">ALL<br>SYSTEMS<br>GO</div>' +
+    '<div style="margin-top:5px;width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(0,220,100,0.45),transparent);"></div>' +
+    '<div style="margin-top:20px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">' + dotHtml + '</div>' +
     '</div>' +
-    '</div>' +
-    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:280px;height:280px;border:1px solid rgba(0,220,100,0.08);border-radius:50%;pointer-events:none;"></div>' +
-    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:400px;height:400px;border:1px solid rgba(0,220,100,0.04);border-radius:50%;pointer-events:none;"></div>' +
+    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:300px;border:1px solid rgba(0,220,100,0.07);border-radius:50%;pointer-events:none;"></div>' +
+    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:450px;height:450px;border:1px solid rgba(0,220,100,0.032);border-radius:50%;pointer-events:none;"></div>' +
     '</div></div>' +
+    sl +
+    hud +
     '</div>';
 
+  // ── Scene 4: Crew Walking ─────────────────────────────────────────────────
   var sc4 =
     '<div class="lc-scene" id="lcs-4">' +
     '<div class="lc-cam" style="animation:lc-tilt 8s ease forwards;">' +
-    '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,#09182a 0%,#18283e 45%,#0c1422 100%);">' +
-    makeStars(28) +
-    '<div style="position:absolute;bottom:30%;left:0;right:0;height:7%;background:radial-gradient(ellipse at center bottom,rgba(255,130,50,0.1),transparent);"></div>' +
-    '<div style="position:absolute;bottom:0;left:0;right:0;height:32%;background:#101820;border-top:1px solid rgba(75,100,140,0.22);">' +
-    '<div style="position:absolute;top:0;left:46%;width:8%;height:100%;background:repeating-linear-gradient(to bottom,transparent 0,transparent 10px,rgba(200,169,80,0.16) 10px,rgba(200,169,80,0.16) 14px);"></div>' +
+    '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,#05101e 0%,#0e1828 32%,#181f2e 58%,#1a1520 78%,#160c08 100%);">' +
+    makeStars(20) +
+    // Warm amber horizon glow
+    '<div style="position:absolute;bottom:28%;left:0;right:0;height:20%;background:radial-gradient(ellipse at center bottom,rgba(255,125,38,0.24) 0%,rgba(200,75,18,0.08) 55%,transparent 100%);"></div>' +
+    '<div style="position:absolute;bottom:29.5%;left:0;right:0;height:3%;background:linear-gradient(to top,rgba(255,155,55,0.18),transparent);"></div>' +
+    // Ground
+    '<div style="position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(to bottom,#0c0b12,#05040a);border-top:1px solid rgba(255,115,38,0.1);"></div>' +
+    // Walkway centre stripe
+    '<div style="position:absolute;bottom:28%;left:45%;width:10%;height:30%;background:repeating-linear-gradient(to bottom,transparent 0,transparent 8px,rgba(200,169,80,0.12) 8px,rgba(200,169,80,0.12) 12px);"></div>' +
+    // Distant tower silhouette (right side)
+    '<div style="position:absolute;bottom:29%;right:18%;width:5px;height:135px;background:rgba(6,8,16,0.78);">' +
+    '<div style="position:absolute;top:10%;left:-11px;width:27px;height:2px;background:rgba(6,8,16,0.7);"></div>' +
+    '<div style="position:absolute;top:36%;left:-8px;width:21px;height:2px;background:rgba(6,8,16,0.65);"></div>' +
+    '<div style="position:absolute;top:62%;left:-11px;width:27px;height:2px;background:rgba(6,8,16,0.7);"></div>' +
     '</div>' +
-    '<div style="position:absolute;bottom:30%;right:22%;width:38px;height:105px;opacity:0.4;">' + rkt + '</div>' +
-    '<div style="position:absolute;bottom:30%;right:30%;width:5px;height:125px;background:rgba(55,75,100,0.55);">' +
-    '<div style="position:absolute;top:10%;left:-7px;width:19px;height:2px;background:rgba(55,75,100,0.5);"></div>' +
-    '<div style="position:absolute;top:32%;left:-5px;width:15px;height:2px;background:rgba(55,75,100,0.45);"></div>' +
-    '<div style="position:absolute;top:57%;left:-8px;width:21px;height:2px;background:rgba(55,75,100,0.45);"></div>' +
-    '</div>' +
-    '<span style="position:absolute;bottom:32%;left:8%;font-size:38px;animation:lc-walk 0.58s ease-in-out infinite;">&#128104;&#8205;&#128640;</span>' +
-    '<span style="position:absolute;bottom:31.5%;left:23%;font-size:35px;animation:lc-walk 0.58s ease-in-out 0.18s infinite;">&#128104;&#8205;&#128640;</span>' +
-    '<span style="position:absolute;bottom:32%;left:37%;font-size:37px;animation:lc-walk 0.58s ease-in-out 0.09s infinite;">&#128105;&#8205;&#128640;</span>' +
-    '<div style="position:absolute;top:10%;right:8%;text-align:center;font-family:\'Space Mono\',monospace;">' +
-    '<div style="font-size:42px;margin-bottom:7px;">&#128640;</div>' +
-    '<div style="font-size:9px;letter-spacing:3px;color:rgba(200,169,80,0.68);">ARES-7 MISSION</div>' +
-    '<div style="font-size:8.5px;letter-spacing:2px;color:rgba(180,210,255,0.45);margin-top:4px;">CREW DEPARTURE</div>' +
-    '</div>' +
-    '<div style="position:absolute;top:10%;left:7%;font-family:\'Space Mono\',monospace;">' +
-    '<div style="font-size:9px;letter-spacing:3px;color:rgba(200,169,80,0.62);">T-MINUS 00:15:00</div>' +
-    '<div style="font-family:\'Orbitron\',sans-serif;font-size:18px;color:rgba(255,255,255,0.9);margin-top:7px;line-height:1.25;">CREW SUITED<br>AND READY</div>' +
-    '</div>' +
+    // Rocket silhouette (distant, backlit)
+    '<div style="position:absolute;bottom:29%;right:10%;width:32px;height:92px;opacity:0.62;">' + rkt + '</div>' +
+    // Astronaut silhouettes walking
+    '<div style="position:absolute;bottom:30%;left:4%;width:36px;height:56px;animation:lc-walk 0.55s ease-in-out infinite;">' + astro + '</div>' +
+    '<div style="position:absolute;bottom:29.5%;left:21%;width:33px;height:52px;animation:lc-walk 0.55s ease-in-out 0.18s infinite;">' + astro + '</div>' +
+    '<div style="position:absolute;bottom:30%;left:37%;width:34px;height:54px;animation:lc-walk 0.55s ease-in-out 0.09s infinite;">' + astro + '</div>' +
     '</div></div>' +
     '<div class="lc-vig"></div>' +
+    sl +
+    '<div style="position:absolute;top:8%;left:5%;z-index:10;pointer-events:none;">' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:4px;color:rgba(200,169,80,0.55);margin-bottom:9px;">T-MINUS 00:15:00</div>' +
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:19px;color:#fff;text-shadow:0 0 28px rgba(255,140,50,0.18),0 2px 6px rgba(0,0,0,0.9);line-height:1.25;">CREW SUITED<br>AND READY</div>' +
+    '</div>' +
+    '<div style="position:absolute;top:8%;right:5%;z-index:10;pointer-events:none;text-align:right;">' +
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:26px;color:rgba(200,169,80,0.65);text-shadow:0 0 16px rgba(200,169,80,0.38);">🚀</div>' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:3px;color:rgba(200,169,80,0.5);margin-top:4px;">ARES-7</div>' +
+    '</div>' +
+    hud +
     '</div>';
 
+  // ── Scene 5: Countdown ────────────────────────────────────────────────────
   var sc5 =
     '<div class="lc-scene" id="lcs-5">' +
     '<div class="lc-cam" id="lc-cam-5" style="animation:lc-zoom-big 12s ease forwards;">' +
-    '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#040810 0%,#010309 100%);">' +
+    '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#030608 0%,#010205 100%);">' +
     makeStars(55) +
-    '<div style="position:absolute;bottom:18%;right:34%;width:48px;height:135px;opacity:0.35;">' + rkt + '</div>' +
+    '<div style="position:absolute;bottom:15%;right:32%;width:46px;height:132px;opacity:0.3;">' + rkt + '</div>' +
     '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">' +
-    '<div style="font-family:\'Space Mono\',monospace;font-size:9.5px;letter-spacing:4px;color:rgba(200,169,80,0.68);margin-bottom:14px;">LAUNCH SEQUENCE INITIATED</div>' +
-    '<div id="lc-cd-num" style="font-family:\'Orbitron\',sans-serif;font-size:105px;font-weight:900;color:#fff;text-shadow:0 0 32px rgba(255,255,255,0.5),0 0 65px rgba(180,210,255,0.3);min-width:130px;display:inline-block;line-height:1;"></div>' +
-    '<div style="margin-top:10px;font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:3px;color:rgba(180,210,255,0.48);">T-MINUS</div>' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:8.5px;letter-spacing:5px;color:rgba(200,169,80,0.62);margin-bottom:16px;">LAUNCH SEQUENCE INITIATED</div>' +
+    '<div id="lc-cd-ring" style="position:absolute;top:50%;left:50%;width:130px;height:130px;border:1px solid rgba(255,255,255,0.35);border-radius:50%;pointer-events:none;"></div>' +
+    '<div id="lc-cd-num" style="position:relative;font-family:\'Orbitron\',sans-serif;font-size:110px;font-weight:900;color:#fff;text-shadow:0 0 38px rgba(255,255,255,0.62),0 0 72px rgba(180,210,255,0.32),-2px 0 rgba(255,50,100,0.28),2px 0 rgba(50,220,200,0.28);min-width:140px;display:inline-block;line-height:1;"></div>' +
+    '<div style="margin-top:12px;font-family:\'Space Mono\',monospace;font-size:8.5px;letter-spacing:4px;color:rgba(180,210,255,0.4);">T-MINUS</div>' +
     '</div>' +
-    '<div style="position:absolute;bottom:13%;left:50%;transform:translateX(-50%);display:flex;gap:18px;font-family:\'Space Mono\',monospace;font-size:8px;white-space:nowrap;">' +
-    '<span style="color:rgba(0,220,100,0.7);">IGNITION &#9632;</span>' +
-    '<span style="color:rgba(0,220,100,0.7);">THRUST &#9632;</span>' +
-    '<span style="color:rgba(0,220,100,0.7);">GUIDANCE &#9632;</span>' +
+    '<div style="position:absolute;bottom:10%;left:50%;transform:translateX(-50%);display:flex;gap:20px;font-family:\'Space Mono\',monospace;font-size:7.5px;white-space:nowrap;">' +
+    '<span style="color:rgba(0,220,100,0.7);">IGNITION ■</span>' +
+    '<span style="color:rgba(0,220,100,0.7);">THRUST ■</span>' +
+    '<span style="color:rgba(0,220,100,0.7);">GUIDANCE ■</span>' +
     '</div>' +
     '</div></div>' +
+    sl +
+    hud +
     '</div>';
 
+  // ── Scene 6: Ignition ─────────────────────────────────────────────────────
   var sc6 =
     '<div class="lc-scene" id="lcs-6">' +
     '<div class="lc-cam" id="lc-cam-6">' +
-    '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,#010309 0%,#05090f 45%,#080308 100%);">' +
-    makeStars(45) +
-    '<div id="lc-rkt-w" style="position:absolute;bottom:18%;left:50%;transform:translateX(-50%);width:68px;height:180px;">' + rkt + '</div>' +
-    '<div id="lc-flm-w" style="position:absolute;bottom:14%;left:50%;transform:translateX(-50%);width:70px;">' +
-    '<div style="width:60px;height:85px;background:linear-gradient(to bottom,rgba(255,140,0,0.92),rgba(255,50,0,0.55),transparent);animation:lc-flame 0.14s ease-in-out infinite;border-radius:0 0 30px 30px;margin:0 auto;"></div>' +
-    '<div style="position:absolute;top:8px;left:12px;width:38px;height:65px;background:linear-gradient(to bottom,rgba(255,220,50,0.95),rgba(255,140,0,0.6),transparent);animation:lc-flame 0.11s ease-in-out 0.04s infinite;border-radius:0 0 20px 20px;"></div>' +
-    '<div style="position:absolute;top:18px;left:22px;width:18px;height:45px;background:linear-gradient(to bottom,rgba(255,255,200,1),rgba(255,220,50,0.85),transparent);animation:lc-flame 0.09s ease-in-out 0.07s infinite;border-radius:0 0 9px 9px;"></div>' +
+    '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,#010205 0%,#040709 40%,#100a04 80%,#1c0e02 100%);">' +
+    makeStars(40) +
+    // Pre-ignition engine warmup glow
+    '<div id="lc-eng-glow" style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:220px;height:220px;background:radial-gradient(ellipse at center bottom,rgba(255,130,0,0.22) 0%,rgba(255,70,0,0.07) 45%,transparent 72%);"></div>' +
+    // Rocket (lit from below — clearly visible from scene start)
+    '<div id="lc-rkt-w" style="position:absolute;bottom:18%;left:50%;transform:translateX(-50%);width:78px;height:205px;filter:drop-shadow(0 0 10px rgba(255,120,0,0.28)) drop-shadow(0 0 3px rgba(180,210,255,0.15));">' + rkt + '</div>' +
+    // Launch platform base
+    '<div style="position:absolute;bottom:14%;left:28%;right:28%;height:5%;background:#0c0f14;border-top:1px solid rgba(100,95,70,0.18);"></div>' +
+    // Flame layers
+    '<div id="lc-flm-w" style="position:absolute;bottom:13%;left:50%;transform:translateX(-50%);width:82px;">' +
+    '<div style="width:72px;height:98px;background:linear-gradient(to bottom,rgba(255,148,0,0.96),rgba(255,58,0,0.68),transparent);animation:lc-flame 0.13s ease-in-out infinite;border-radius:0 0 36px 36px;margin:0 auto;"></div>' +
+    '<div style="position:absolute;top:10px;left:15px;width:44px;height:76px;background:linear-gradient(to bottom,rgba(255,232,50,0.98),rgba(255,148,0,0.72),transparent);animation:lc-flame 0.1s ease-in-out 0.04s infinite;border-radius:0 0 24px 24px;"></div>' +
+    '<div style="position:absolute;top:22px;left:26px;width:22px;height:54px;background:linear-gradient(to bottom,rgba(255,255,215,1),rgba(255,232,50,0.92),transparent);animation:lc-flame 0.08s ease-in-out 0.065s infinite;border-radius:0 0 12px 12px;"></div>' +
     '</div>' +
-    '<div style="position:absolute;bottom:10%;left:15%;width:85px;height:65px;background:radial-gradient(ellipse,rgba(145,140,130,0.6),transparent);animation:lc-smoke 2.1s ease-out infinite;"></div>' +
-    '<div style="position:absolute;bottom:8%;left:32%;width:105px;height:85px;background:radial-gradient(ellipse,rgba(125,125,115,0.5),transparent);animation:lc-smoke 2.6s ease-out 0.55s infinite;"></div>' +
-    '<div style="position:absolute;bottom:7%;right:22%;width:75px;height:60px;background:radial-gradient(ellipse,rgba(135,130,120,0.5),transparent);animation:lc-smoke 2.3s ease-out 0.9s infinite;"></div>' +
-    '<div style="position:absolute;bottom:0;left:0;right:0;height:20%;background:#080a0e;border-top:1px solid rgba(75,75,55,0.25);"></div>' +
+    // Smoke clouds
+    '<div style="position:absolute;bottom:9%;left:10%;width:95px;height:72px;background:radial-gradient(ellipse,rgba(138,132,122,0.65),transparent);animation:lc-smoke 2s ease-out infinite;"></div>' +
+    '<div style="position:absolute;bottom:7%;left:28%;width:118px;height:92px;background:radial-gradient(ellipse,rgba(118,115,108,0.55),transparent);animation:lc-smoke 2.5s ease-out 0.5s infinite;"></div>' +
+    '<div style="position:absolute;bottom:6%;right:16%;width:82px;height:67px;background:radial-gradient(ellipse,rgba(128,122,112,0.55),transparent);animation:lc-smoke 2.2s ease-out 0.85s infinite;"></div>' +
+    // Ground
+    '<div style="position:absolute;bottom:0;left:0;right:0;height:18%;background:#060808;border-top:1px solid rgba(80,72,52,0.18);"></div>' +
+    // Orange bloom on ground from fire
+    '<div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:320px;height:90px;background:radial-gradient(ellipse at center bottom,rgba(255,115,0,0.16),transparent);"></div>' +
+    // Flash overlay
     '<div id="lc-flash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;"></div>' +
-    '<div style="position:absolute;top:8%;left:50%;transform:translateX(-50%);text-align:center;">' +
-    '<div style="font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:4px;color:rgba(255,160,55,0.8);">MAIN ENGINE START</div>' +
-    '<div style="font-family:\'Orbitron\',sans-serif;font-size:24px;color:#fff;margin-top:8px;text-shadow:0 0 22px rgba(255,160,55,0.65);">IGNITION</div>' +
-    '</div>' +
     '</div></div>' +
+    sl +
+    '<div style="position:absolute;top:8%;left:50%;transform:translateX(-50%);z-index:10;pointer-events:none;text-align:center;white-space:nowrap;">' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:8.5px;letter-spacing:5px;color:rgba(255,152,48,0.84);">MAIN ENGINE START</div>' +
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:26px;color:#fff;margin-top:8px;text-shadow:0 0 30px rgba(255,145,48,0.72),-2px 0 rgba(255,0,50,0.32),2px 0 rgba(255,200,0,0.32);">IGNITION</div>' +
+    '</div>' +
+    hud +
     '</div>';
 
+  // ── Scene 7: Cut to Black ─────────────────────────────────────────────────
   var sc7 = '<div class="lc-scene lc-cut" id="lcs-7" style="background:#000;"></div>';
 
+  // ── Scene 8: Warning ──────────────────────────────────────────────────────
   var sc8 =
     '<div class="lc-scene lc-cut" id="lcs-8">' +
-    '<div style="position:absolute;inset:0;animation:lc-warn 1.15s ease-in-out infinite;">' +
-    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;padding:0 20px;">' +
-    '<div style="font-size:76px;animation:lc-warn-i 1.15s ease-in-out infinite;">&#9888;&#65039;</div>' +
-    '<div style="font-family:\'Orbitron\',sans-serif;font-size:26px;font-weight:900;color:#ff2a2a;text-shadow:0 0 22px rgba(255,42,42,0.85);margin:15px 0 7px;letter-spacing:3px;">LAUNCH FAILURE</div>' +
-    '<div style="font-family:\'Space Mono\',monospace;font-size:11px;color:rgba(255,90,90,0.8);letter-spacing:2px;margin-bottom:22px;">CRITICAL FAULT DETECTED</div>' +
-    '<div style="font-family:\'Space Mono\',monospace;font-size:9.5px;color:rgba(255,140,140,0.62);line-height:2;">' +
-    'NAVIGATION SYSTEMS ........... OFFLINE<br>' +
-    'GUIDANCE MODULE .............. CORRUPTED<br>' +
-    'ABORT SEQUENCE ............... INITIATED<br>' +
-    'MANUAL OVERRIDE .............. REQUIRED' +
+    '<div style="position:absolute;inset:0;animation:lc-warn 1.1s ease-in-out infinite;">' +
+    '<div style="position:absolute;inset:0;border:2px solid transparent;animation:lc-warn 1.1s ease-in-out infinite;"></div>' +
+    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;padding:0 16px;width:100%;">' +
+    '<div style="font-size:70px;line-height:1;animation:lc-warn-i 1.1s ease-in-out infinite;">⚠️</div>' +
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:24px;font-weight:900;color:#ff1e1e;text-shadow:0 0 26px rgba(255,28,28,0.92),-2px 0 rgba(255,0,0,0.48),2px 0 rgba(255,95,0,0.48);margin:14px 0 6px;letter-spacing:3px;">LAUNCH FAILURE</div>' +
+    '<div style="width:75%;height:1px;background:rgba(255,28,28,0.28);margin:0 auto 14px;"></div>' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:10px;color:rgba(255,75,75,0.8);letter-spacing:2px;margin-bottom:20px;">CRITICAL FAULT DETECTED</div>' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:9px;color:rgba(255,128,128,0.56);line-height:2.1;">' +
+    'NAVIGATION SYSTEMS .......... OFFLINE<br>' +
+    'GUIDANCE MODULE ............. CORRUPTED<br>' +
+    'ABORT SEQUENCE .............. INITIATED<br>' +
+    'MANUAL OVERRIDE ............. REQUIRED' +
     '</div>' +
-    '<div style="margin-top:22px;font-family:\'Space Mono\',monospace;font-size:8.5px;letter-spacing:3px;color:rgba(255,90,90,0.42);animation:lc-blink 1.6s ease-in-out infinite;">AWAITING TECHNICIAN RESPONSE...</div>' +
-    '</div>' +
-    '</div>' +
+    '<div style="margin-top:20px;font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:3px;color:rgba(255,75,75,0.36);animation:lc-blink 1.8s ease-in-out infinite;">AWAITING TECHNICIAN RESPONSE...</div>' +
+    '</div></div>' +
+    sl +
     '</div>';
 
+  // ── Scene 9: Mission Report ───────────────────────────────────────────────
   var sc9 =
     '<div class="lc-scene" id="lcs-9">' +
-    '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#060d1e 0%,#010408 100%);">' +
-    makeStars(22) +
-    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:88%;max-width:460px;">' +
-    '<div style="font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:4px;color:rgba(200,169,80,0.68);margin-bottom:14px;">ARES-7 // MISSION REPORT</div>' +
-    '<div style="width:100%;height:1px;background:rgba(200,169,80,0.22);margin-bottom:18px;"></div>' +
-    '<div style="font-family:\'Space Mono\',monospace;font-size:10.5px;color:rgba(175,210,255,0.78);line-height:1.95;margin-bottom:22px;">' +
+    '<div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,#050f1d 0%,#01040a 100%);">' +
+    makeStars(20) +
+    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:88%;max-width:445px;">' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:5px;color:rgba(200,169,80,0.62);margin-bottom:14px;">ARES-7 // MISSION REPORT</div>' +
+    '<div style="width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(200,169,80,0.32),transparent);margin-bottom:18px;"></div>' +
+    '<div style="font-family:\'Space Mono\',monospace;font-size:10px;color:rgba(175,210,255,0.74);line-height:2;margin-bottom:22px;">' +
     'The navigation module failed at ignition.<br>The rocket is secured on the launch pad.<br><br>' +
-    'The fault is buried in the guidance code &mdash;<br>a critical error that ground control cannot reach.<br><br>' +
-    '<span style="color:rgba(200,169,80,0.88);">You are the last option.</span><br>' +
+    'The fault is buried deep in the guidance code —<br>a critical error ground control cannot reach.<br><br>' +
+    '<span style="color:rgba(200,169,80,0.9);font-style:italic;">You are the last option.</span><br>' +
     'Find the fault. Debug the systems.<br>Complete the launch sequence manually.' +
     '</div>' +
-    '<div style="width:100%;height:1px;background:rgba(200,169,80,0.14);margin-bottom:22px;"></div>' +
-    '<button onclick="_lcBegin()" style="font-family:\'Orbitron\',sans-serif;font-size:11px;letter-spacing:3px;color:#c8a96e;background:transparent;border:1px solid rgba(200,169,80,0.48);padding:13px 34px;cursor:pointer;display:block;margin:0 auto;border-radius:2px;" onmouseover="this.style.background=\'rgba(200,169,80,0.1)\';this.style.borderColor=\'rgba(200,169,80,0.75)\'" onmouseout="this.style.background=\'transparent\';this.style.borderColor=\'rgba(200,169,80,0.48)\'">BEGIN MISSION</button>' +
+    '<div style="width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(200,169,80,0.2),transparent);margin-bottom:24px;"></div>' +
+    '<button onclick="_lcBegin()" style="font-family:\'Orbitron\',sans-serif;font-size:11px;letter-spacing:4px;color:#c8a96e;background:transparent;border:1px solid rgba(200,169,80,0.42);padding:14px 38px;cursor:pointer;display:block;margin:0 auto;border-radius:2px;" onmouseover="this.style.background=\'rgba(200,169,80,0.08)\';this.style.borderColor=\'rgba(200,169,80,0.7)\';this.style.boxShadow=\'0 0 22px rgba(200,169,80,0.18)\'" onmouseout="this.style.background=\'transparent\';this.style.borderColor=\'rgba(200,169,80,0.42)\';this.style.boxShadow=\'none\'">BEGIN MISSION</button>' +
     '</div>' +
     '</div>' +
     '<div class="lc-vig"></div>' +
+    sl +
+    hud +
     '</div>';
 
+  // ── Build overlay ─────────────────────────────────────────────────────────
   var wrap = document.createElement('div');
   wrap.id = 'launch-cinematic';
   wrap.innerHTML =
@@ -6898,7 +7001,7 @@ function showLaunchCinematic(onComplete) {
     '<div class="lc-frame">' + sc1 + sc2 + sc3 + sc4 + sc5 + sc6 + sc7 + sc8 + sc9 + '</div>' +
     '<div class="lc-prog"><div class="lc-pf" id="lc-pf"></div></div>' +
     '<div class="lc-cap" id="lc-cap"></div>' +
-    '<button class="lc-skip" id="lc-skip">SKIP &#9654;</button>';
+    '<button class="lc-skip" id="lc-skip">SKIP ►</button>';
   document.body.appendChild(wrap);
 
   var _timers = [], _intervals = [], _done = false;
@@ -6935,12 +7038,10 @@ function showLaunchCinematic(onComplete) {
     _timers.push(t);
   }
 
-  // Scene 1 on immediately
   var el1 = document.getElementById('lcs-1');
   if (el1) el1.classList.add('lc-on');
   showCap('LAUNCH COMPLEX 39A — T-MINUS 48 HOURS', 800);
 
-  // Progress bar
   var _total = 9000 + 8000 + 6000 + 8000 + 12000 + 7000 + 2000 + 7000;
   var _start = Date.now();
   var _pi = setInterval(function() {
@@ -6950,16 +7051,15 @@ function showLaunchCinematic(onComplete) {
   }, 200);
   _intervals.push(_pi);
 
-  // Timeline: [fromIdx, toIdx, triggerAt, isCut, camKey, caption]
   var tl = [
-    [1, 2, 9000,  false, '',         'MISSION CONTROL — HOUSTON, TEXAS'],
-    [2, 3, 17000, false, '',         ''],
-    [3, 4, 23000, false, '',         'CREW ACCESS ARM — T-MINUS 15 MINUTES'],
-    [4, 5, 31000, false, 'cd',       ''],
-    [5, 6, 43000, false, 'ign',      ''],
-    [6, 7, 50000, true,  '',         ''],
-    [7, 8, 52000, true,  '',         ''],
-    [8, 9, 59000, false, '',         ''],
+    [1, 2, 9000,  false, '',    'MISSION CONTROL — HOUSTON, TEXAS'],
+    [2, 3, 17000, false, '',    ''],
+    [3, 4, 23000, false, '',    'CREW ACCESS ARM — T-MINUS 15 MINUTES'],
+    [4, 5, 31000, false, 'cd',  ''],
+    [5, 6, 43000, false, 'ign', ''],
+    [6, 7, 50000, true,  '',    ''],
+    [7, 8, 52000, true,  '',    ''],
+    [8, 9, 59000, false, '',    ''],
   ];
 
   tl.forEach(function(entry) {
@@ -6985,6 +7085,7 @@ function showLaunchCinematic(onComplete) {
   function startCountdown() {
     var n = 10;
     var cdEl = document.getElementById('lc-cd-num');
+    var cdRing = document.getElementById('lc-cd-ring');
     if (!cdEl) return;
     function showN(num) {
       if (_done) return;
@@ -6992,6 +7093,11 @@ function showLaunchCinematic(onComplete) {
       void cdEl.offsetHeight;
       cdEl.style.animation = 'lc-cd 0.28s ease forwards';
       cdEl.textContent = num;
+      if (cdRing) {
+        cdRing.style.animation = 'none';
+        void cdRing.offsetHeight;
+        cdRing.style.animation = 'lc-pulse-r 0.9s ease-out forwards';
+      }
     }
     showN(n);
     var iv = setInterval(function() {
@@ -7006,28 +7112,35 @@ function showLaunchCinematic(onComplete) {
   function startIgnition() {
     var flash = document.getElementById('lc-flash');
     if (flash) {
-      flash.style.opacity = '0.78';
+      flash.style.opacity = '0.82';
       var tf = setTimeout(function() {
-        if (flash) { flash.style.transition = 'opacity 1.2s'; flash.style.opacity = '0'; }
+        if (flash) { flash.style.transition = 'opacity 1.4s'; flash.style.opacity = '0'; }
       }, 80);
       _timers.push(tf);
+    }
+    var engGlow = document.getElementById('lc-eng-glow');
+    if (engGlow) {
+      engGlow.style.transition = 'all 0.4s ease';
+      engGlow.style.width = '420px';
+      engGlow.style.height = '380px';
     }
     var rw = document.getElementById('lc-rkt-w');
     var fw = document.getElementById('lc-flm-w');
     var tr = setTimeout(function() {
       if (_done) return;
-      if (rw) { rw.style.transition = 'transform 5.5s cubic-bezier(0.08,0.28,0.18,1)'; rw.style.transform = 'translateX(-50%) translateY(-340px)'; }
-      if (fw) { fw.style.transition = 'transform 5.5s cubic-bezier(0.08,0.28,0.18,1)'; fw.style.transform = 'translateX(-50%) translateY(-340px)'; }
-    }, 320);
+      if (rw) { rw.style.transition = 'transform 5.5s cubic-bezier(0.06,0.25,0.15,1)'; rw.style.transform = 'translateX(-50%) translateY(-360px)'; }
+      if (fw) { fw.style.transition = 'transform 5.5s cubic-bezier(0.06,0.25,0.15,1)'; fw.style.transform = 'translateX(-50%) translateY(-360px)'; }
+    }, 300);
     _timers.push(tr);
     var cam6 = document.getElementById('lc-cam-6');
     if (cam6) {
       cam6.style.animation = 'lc-shake 0.28s ease-in-out infinite';
-      var ts = setTimeout(function() { if (cam6) cam6.style.animation = 'none'; }, 1800);
+      var ts = setTimeout(function() { if (cam6) cam6.style.animation = 'none'; }, 1900);
       _timers.push(ts);
     }
   }
 }
+
 
 function launchGame(gameId) {
   var panel = document.getElementById('panel-game');
