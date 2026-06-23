@@ -6296,24 +6296,31 @@ var PROF_THEMES = [
     glow: 'rgba(200,169,110,0.30)', border: 'rgba(200,169,110,0.50)', bg: 'rgba(200,160,80,0.10)' },
 ];
 
-// ── CHARACTER CREATOR ─────────────────────────────────────────────────────────
+// ── CHARACTER CREATOR V2 ──────────────────────────────────────────────────────
 
-var CC_SKIN_TONES = [
-  {id:'s1',name:'Porcelain',hex:'#FDEFD8',sh:'#D4B896'},
-  {id:'s2',name:'Ivory',    hex:'#F0C98A',sh:'#C89A58'},
-  {id:'s3',name:'Sand',     hex:'#D4956A',sh:'#A8663C'},
-  {id:'s4',name:'Honey',    hex:'#B87040',sh:'#8C4E1E'},
-  {id:'s5',name:'Walnut',   hex:'#8B5230',sh:'#5C3010'},
-  {id:'s6',name:'Ebony',    hex:'#4A2C12',sh:'#280E00'},
+var CC_SKINS = [
+  {id:'sk1',name:'Porcelain',hex:'#FDEFD4',sh:'#D9B88A'},
+  {id:'sk2',name:'Peach',    hex:'#F5C98A',sh:'#C8904A'},
+  {id:'sk3',name:'Sand',     hex:'#E09A6A',sh:'#B06030'},
+  {id:'sk4',name:'Honey',    hex:'#C07840',sh:'#8C4A18'},
+  {id:'sk5',name:'Walnut',   hex:'#8B5030',sh:'#5A2C10'},
+  {id:'sk6',name:'Ebony',    hex:'#4A2810',sh:'#250A00'},
 ];
-var CC_GENDERS = [{id:'male',name:'Male'},{id:'female',name:'Female'}];
-var CC_FACES = [
-  {id:'focused',    name:'Focused',    sub:'Locked in'},
-  {id:'happy',      name:'Happy',      sub:'Loving it'},
-  {id:'determined', name:'Determined', sub:'Ship it'},
-  {id:'smug',       name:'Smug',       sub:'I told you so'},
-  {id:'tired',      name:'Tired',      sub:'3am deploy'},
+
+var CC_EYE_COLORS = [
+  {id:'ec0',hex:'#1a1a2e'},{id:'ec1',hex:'#3b82f6'},{id:'ec2',hex:'#16a34a'},
+  {id:'ec3',hex:'#92400e'},{id:'ec4',hex:'#6b7280'},{id:'ec5',hex:'#7c3aed'},
+  {id:'ec6',hex:'#0e7490'},{id:'ec7',hex:'#b45309'},
 ];
+
+var CC_EXPRESSIONS = [
+  {id:'neutral',   name:'Neutral',    sub:'Calm'},
+  {id:'happy',     name:'Happy',      sub:'Loving it'},
+  {id:'focused',   name:'Focused',    sub:'Deep work'},
+  {id:'smug',      name:'Smug',       sub:'I told you so'},
+  {id:'tired',     name:'Tired',      sub:'3am deploy'},
+];
+
 var CC_HAIR_STYLES = [
   {id:'short',  name:'Fade Cut',  sub:'Clean'},
   {id:'messy',  name:'Messy Top', sub:'Dev classic'},
@@ -6323,43 +6330,85 @@ var CC_HAIR_STYLES = [
   {id:'bun',    name:'Top Bun',   sub:'Focus mode'},
   {id:'bald',   name:'Bald',      sub:'Optimised'},
 ];
+
 var CC_HAIR_COLORS = [
-  {id:'hc0',name:'Onyx',         hex:'#1A1A2E'},
-  {id:'hc1',name:'Chestnut',     hex:'#6B3A2A'},
-  {id:'hc2',name:'Blonde',       hex:'#D4A847'},
-  {id:'hc3',name:'Copper',       hex:'#B84C2A'},
-  {id:'hc4',name:'Silver',       hex:'#9CA3AF'},
-  {id:'hc5',name:'White',        hex:'#E8E8E8'},
-  {id:'hc6',name:'Code Blue',    hex:'#3B82F6'},
-  {id:'hc7',name:'Debug Purple', hex:'#A855F7'},
-  {id:'hc8',name:'Matrix Green', hex:'#22C55E'},
+  {id:'hc0',hex:'#111118'},{id:'hc1',hex:'#5c2e0e'},{id:'hc2',hex:'#c17428'},
+  {id:'hc3',hex:'#d4a83c'},{id:'hc4',hex:'#9ca3af'},{id:'hc5',hex:'#e8e8e8'},
+  {id:'hc6',hex:'#2563eb'},{id:'hc7',hex:'#9333ea'},{id:'hc8',hex:'#16a34a'},
 ];
+
 var CC_TOPS = [
-  {id:'hoodie-terminal',name:'Terminal Hoodie',sub:'> run ./life',    c1:'#1a1a2e',c2:'#2e2e50'},
-  {id:'hoodie-dark',    name:'Dark Mode Hoodie',sub:'#000000',        c1:'#111111',c2:'#222222'},
-  {id:'tshirt-hello',   name:'Hello World Tee', sub:'The original',   c1:'#1e3a5f',c2:'#264d7a'},
-  {id:'tshirt-python',  name:'Python Tee',      sub:'Snakes welcome', c1:'#1a3a1a',c2:'#254d25'},
-  {id:'flight-suit',    name:'Flight Suit',     sub:'Mission ready',  c1:'#1a2a3a',c2:'#2a3a4a'},
-  {id:'dev-jacket',     name:'Dev Jacket',      sub:'Patch collector',c1:'#1a1a2e',c2:'#282840'},
+  {id:'hoodie-t', name:'Terminal Hoodie', sub:'> run ./life'},
+  {id:'hoodie-p', name:'Plain Hoodie',    sub:'Low profile'},
+  {id:'tshirt-h', name:'Hello World',     sub:'The original'},
+  {id:'tshirt-py',name:'Python Tee',      sub:'import life'},
+  {id:'flight',   name:'Flight Suit',     sub:'Mission ready'},
+  {id:'jacket',   name:'Dev Jacket',      sub:'JS + TS patches'},
 ];
+
+var CC_TOP_COLORS = [
+  {id:'tc0',hex:'#1a1a2e'},{id:'tc1',hex:'#111111'},{id:'tc2',hex:'#1e3a5f'},
+  {id:'tc3',hex:'#1a3a1a'},{id:'tc4',hex:'#3b0a0a'},{id:'tc5',hex:'#2a1a3a'},
+  {id:'tc6',hex:'#1a2a3a'},{id:'tc7',hex:'#2d2d2d'},
+];
+
 var CC_HATS = [
-  {id:'none',    name:'None',          sub:''},
-  {id:'cap',     name:'</> Snapback',  sub:'Syntax cap'},
-  {id:'beanie-b',name:'{ } Beanie',   sub:'Curly vibes'},
-  {id:'nasa',    name:'NASA Cap',      sub:'Houston ready'},
-  {id:'beanie-p',name:'Stealth Beanie',sub:'Low profile'},
-  {id:'headset', name:'Dev Headset',  sub:'Always live'},
+  {id:'none',   name:'None',         sub:''},
+  {id:'cap',    name:'</> Snapback', sub:'Syntax'},
+  {id:'beanie-b',name:'{ } Beanie',  sub:'Curly'},
+  {id:'nasa',   name:'NASA Cap',     sub:'Houston'},
+  {id:'beanie-p',name:'Plain Beanie',sub:'Stealth'},
 ];
-var CC_ACCESSORIES = [
-  {id:'none',     name:'None',          sub:''},
-  {id:'glasses-r',name:'Round Specs',  sub:'Dev classic'},
-  {id:'glasses-s',name:'Square Frames',sub:'Sharp focus'},
-  {id:'headphones',name:'Headphones',  sub:'Lofi mode'},
-  {id:'coffee',   name:'Coffee',        sub:'Ship fuel'},
+
+var CC_HAT_COLORS = [
+  {id:'ht0',hex:'#1a1a2e'},{id:'ht1',hex:'#111111'},{id:'ht2',hex:'#1e3a5f'},
+  {id:'ht3',hex:'#1a3a1a'},{id:'ht4',hex:'#5c1a1a'},{id:'ht5',hex:'#3a1a5c'},
+  {id:'ht6',hex:'#c47a20'},{id:'ht7',hex:'#9ca3af'},
+];
+
+var CC_GLASSES = [
+  {id:'none',   name:'None',         sub:''},
+  {id:'round',  name:'Round Specs',  sub:'Dev classic'},
+  {id:'square', name:'Square Frames',sub:'Sharp'},
+  {id:'shades', name:'Shades',       sub:'Too cool'},
+];
+
+var CC_GLASSES_COLORS = [
+  {id:'gc0',hex:'#1a1a2e'},{id:'gc1',hex:'#c47a20'},{id:'gc2',hex:'#1e3a5f'},
+  {id:'gc3',hex:'#5c1a1a'},{id:'gc4',hex:'#9ca3af'},{id:'gc5',hex:'#16a34a'},
+];
+
+var CC_FACIAL_HAIR = [
+  {id:'none',     name:'None',       sub:''},
+  {id:'stubble',  name:'Stubble',    sub:'Busy coding'},
+  {id:'mustache', name:'Mustache',   sub:'Classic'},
+  {id:'beard',    name:'Full Beard', sub:'Senior dev'},
+  {id:'goatee',   name:'Goatee',     sub:'Focused'},
+];
+
+var CC_FH_COLORS = [
+  {id:'fh0',hex:'#111118'},{id:'fh1',hex:'#5c2e0e'},{id:'fh2',hex:'#c17428'},
+  {id:'fh3',hex:'#9ca3af'},{id:'fh4',hex:'#e8e8e8'},
+];
+
+var CC_BG_COLORS = [
+  {id:'bg0',hex:'#e8eaf0'},{id:'bg1',hex:'#d1d5db'},{id:'bg2',hex:'#111827'},
+  {id:'bg3',hex:'#dbeafe'},{id:'bg4',hex:'#1e3a5f'},{id:'bg5',hex:'#d1fae5'},
+  {id:'bg6',hex:'#1a3a1a'},{id:'bg7',hex:'#ede9fe'},{id:'bg8',hex:'#2d1a4a'},
+  {id:'bg9',hex:'#fef3c7'},{id:'bg10',hex:'#78350f'},{id:'bg11',hex:'#fce7f3'},
+  {id:'bg12',hex:'#7c1a3a'},{id:'bg13',hex:'#0c1a2e'},{id:'bg14',hex:'#1a2020'},{id:'bg15',hex:'#2a1a0a'},
 ];
 
 function ccDefaultConfig() {
-  return {skin:'s2',gender:'male',face:'focused',hairStyle:'short',hairColor:'hc0',top:'hoodie-terminal',hat:'none',acc:'none'};
+  return {
+    skin:'sk2', eyeColor:'ec0', expression:'neutral',
+    hairStyle:'short', hairColor:'hc0',
+    top:'hoodie-t', topColor:'tc0',
+    hat:'none', hatColor:'ht0',
+    glasses:'none', glassesColor:'gc0',
+    facialHair:'none', fhColor:'fh0',
+    bgColor:'bg0',
+  };
 }
 function getCharacterConfig() {
   var s = localStorage.getItem('codebook_character');
@@ -6370,514 +6419,543 @@ function saveCharacterConfig(cfg) {
   localStorage.setItem('codebook_character', JSON.stringify(cfg));
 }
 
-// ── SVG LAYERS ────────────────────────────────────────────────────────────────
+// ── SVG CHARACTER LAYERS ───────────────────────────────────────────────────────
+// All layers use viewBox 0 0 120 120
 
-function ccLayerClothing(topId, gender, c1, c2, skin) {
-  var isFem = gender === 'female';
-  var sw = isFem ? 'M24 64 Q20 67 18 80 L16 120 L84 120 L82 80 Q80 67 76 64 L64 57 Q58 66 50 67 Q42 66 36 57 Z'
-                 : 'M22 64 Q17 67 15 80 L13 120 L87 120 L85 80 Q83 67 78 64 L64 57 Q58 66 50 67 Q42 66 36 57 Z';
-  var sl = isFem ? 'M24 64 Q18 68 17 80 L15 105 L25 105 L26 80 Q30 68 36 64'
-                 : 'M22 64 Q16 68 15 80 L13 105 L23 105 L24 80 Q28 68 36 64';
-  var sr = isFem ? 'M76 64 Q82 68 83 80 L85 105 L75 105 L74 80 Q70 68 64 64'
-                 : 'M78 64 Q84 68 85 80 L87 105 L77 105 L76 80 Q72 68 64 64';
-  // collar
-  var collar = '<path d="M36 57 Q42 66 50 67 Q58 66 64 57 Q60 62 55 63 L50 65 L45 63 Q40 62 36 57 Z" fill="' + c2 + '" opacity="0.9"/>';
-  // logo / text detail per top
+function _ccHex(arr, id) {
+  var f = arr.find(function(x){return x.id===id;});
+  return f ? f.hex : (arr[0]||{hex:'#888'}).hex;
+}
+function _ccShade(skinId) {
+  var s = CC_SKINS.find(function(x){return x.id===skinId;})||CC_SKINS[1];
+  return {hex:s.hex, sh:s.sh};
+}
+
+function ccLayerBg(bgColor) {
+  return '<rect width="120" height="120" fill="' + bgColor + '"/>';
+}
+
+function ccLayerBody(topId, topColor) {
+  var c = topColor;
+  // Shoulder/torso shape
+  var body = '<path d="M0,120 L0,92 Q5,78 60,76 Q115,78 120,92 L120,120 Z" fill="' + c + '"/>';
+  // Collar / detail
   var detail = '';
-  if (topId === 'hoodie-terminal') {
-    detail = '<text x="50" y="98" text-anchor="middle" font-family="monospace" font-size="4.2" fill="rgba(180,220,255,0.65)" letter-spacing="0.5">&gt; run ./life</text>'
-           + '<rect x="33" y="88" width="34" height="15" rx="2" fill="rgba(0,0,0,0.25)"/>'
-           + '<text x="50" y="99" text-anchor="middle" font-family="monospace" font-size="4.2" fill="rgba(100,200,255,0.9)" letter-spacing="0.5">&gt; run ./life</text>';
-  } else if (topId === 'hoodie-dark') {
-    detail = '<text x="50" y="97" text-anchor="middle" font-family="monospace" font-size="5" fill="rgba(255,255,255,0.18)" letter-spacing="1">DARK MODE</text>';
-  } else if (topId === 'tshirt-hello') {
-    detail = '<text x="50" y="93" text-anchor="middle" font-family="monospace" font-size="4.5" fill="rgba(180,210,255,0.85)">Hello,</text>'
-           + '<text x="50" y="100" text-anchor="middle" font-family="monospace" font-size="4.5" fill="rgba(180,210,255,0.85)">World!</text>';
-  } else if (topId === 'tshirt-python') {
-    detail = '<text x="50" y="96" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="rgba(120,220,80,0.85)">&#x1F40D;</text>'
-           + '<text x="50" y="104" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(120,220,80,0.6)">python</text>';
-  } else if (topId === 'flight-suit') {
-    detail = '<rect x="40" y="85" width="20" height="12" rx="1.5" fill="rgba(255,255,255,0.08)" stroke="rgba(180,200,255,0.3)" stroke-width="0.5"/>'
-           + '<text x="50" y="94" text-anchor="middle" font-family="sans-serif" font-size="3.8" fill="rgba(200,220,255,0.7)">NASA</text>';
-  } else if (topId === 'dev-jacket') {
-    detail = '<circle cx="42" cy="88" r="4" fill="rgba(255,100,100,0.25)" stroke="rgba(255,100,100,0.5)" stroke-width="0.5"/>'
-           + '<text x="42" y="90" text-anchor="middle" font-family="monospace" font-size="3" fill="rgba(255,150,150,0.9)">JS</text>'
-           + '<circle cx="58" cy="88" r="4" fill="rgba(100,100,255,0.25)" stroke="rgba(100,150,255,0.5)" stroke-width="0.5"/>'
-           + '<text x="58" y="90" text-anchor="middle" font-family="monospace" font-size="3" fill="rgba(150,150,255,0.9)">TS</text>';
+  if (topId === 'hoodie-t' || topId === 'hoodie-p') {
+    // Hood back peek + kangaroo pocket suggestion
+    detail = '<path d="M38,76 Q60,82 82,76 Q60,88 38,76 Z" fill="' + _ccDarkenHex(c, 0.25) + '" opacity="0.7"/>';
+    if (topId === 'hoodie-t') {
+      // tiny terminal text on chest
+      detail += '<text x="60" y="108" text-anchor="middle" font-family="monospace" font-size="5" fill="rgba(180,220,255,0.7)">&gt; run</text>';
+    }
+  } else if (topId === 'tshirt-h') {
+    detail = '<text x="60" y="105" text-anchor="middle" font-family="monospace" font-size="4.5" fill="rgba(180,210,255,0.85)">Hello, World!</text>';
+  } else if (topId === 'tshirt-py') {
+    detail = '<text x="60" y="104" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(120,220,80,0.85)">&#x1F40D;</text>';
+  } else if (topId === 'flight') {
+    detail = '<rect x="47" y="93" width="26" height="14" rx="2" fill="rgba(255,255,255,0.07)" stroke="rgba(180,200,255,0.28)" stroke-width="0.8"/>'
+           + '<text x="60" y="103" text-anchor="middle" font-family="sans-serif" font-size="5" fill="rgba(200,220,255,0.7)" font-weight="bold">NASA</text>';
+  } else if (topId === 'jacket') {
+    detail = '<circle cx="48" cy="97" r="5.5" fill="rgba(255,180,60,0.18)" stroke="rgba(255,180,60,0.5)" stroke-width="0.7"/>'
+           + '<text x="48" y="99" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(255,200,80,0.9)">JS</text>'
+           + '<circle cx="72" cy="97" r="5.5" fill="rgba(80,130,255,0.18)" stroke="rgba(80,130,255,0.5)" stroke-width="0.7"/>'
+           + '<text x="72" y="99" text-anchor="middle" font-family="monospace" font-size="3.5" fill="rgba(140,170,255,0.9)">TS</text>';
   }
-  return '<g>'
-    + '<path d="' + sw + '" fill="' + c1 + '"/>'
-    + '<path d="' + sl + '" fill="' + c1 + '"/>'
-    + '<path d="' + sr + '" fill="' + c1 + '"/>'
-    + collar
-    // sleeve seam shadows
-    + '<path d="' + sl + '" fill="none" stroke="' + c2 + '" stroke-width="0.8" opacity="0.5"/>'
-    + '<path d="' + sr + '" fill="none" stroke="' + c2 + '" stroke-width="0.8" opacity="0.5"/>'
-    + detail
-    + '</g>';
+  return body + detail;
 }
 
-function ccLayerBody(skin, sh, gender) {
-  var isFem = gender === 'female';
-  return '<g>'
-    // Ears behind head
-    + '<ellipse cx="34.5" cy="28" rx="3.2" ry="5" fill="' + skin + '"/>'
-    + '<ellipse cx="34.5" cy="28" rx="1.8" ry="3" fill="' + sh + '" opacity="0.3"/>'
-    + '<ellipse cx="65.5" cy="28" rx="3.2" ry="5" fill="' + skin + '"/>'
-    + '<ellipse cx="65.5" cy="28" rx="1.8" ry="3" fill="' + sh + '" opacity="0.3"/>'
-    // Head
-    + '<ellipse cx="50" cy="28" rx="16" ry="19" fill="' + skin + '"/>'
-    // Subtle shading — bottom of face
-    + '<ellipse cx="50" cy="40" rx="11" ry="7" fill="' + sh + '" opacity="0.2"/>'
-    // Neck
-    + '<rect x="44" y="44" width="12" height="14" rx="4" fill="' + skin + '"/>'
-    + '<ellipse cx="50" cy="55" rx="9" ry="3" fill="' + sh + '" opacity="0.18"/>'
-    // Hands
-    + '<ellipse cx="' + (isFem?17:15) + '" cy="102" rx="5.5" ry="5" fill="' + skin + '"/>'
-    + '<ellipse cx="' + (isFem?83:85) + '" cy="102" rx="5.5" ry="5" fill="' + skin + '"/>'
-    + '<ellipse cx="' + (isFem?17:15) + '" cy="102" rx="5.5" ry="5" fill="' + sh + '" opacity="0.15"/>'
-    + '<ellipse cx="' + (isFem?83:85) + '" cy="102" rx="5.5" ry="5" fill="' + sh + '" opacity="0.15"/>'
-    + '</g>';
+function ccLayerHead(skin, sh) {
+  return '<ellipse cx="19" cy="47" rx="8.5" ry="13" fill="' + skin + '"/>'
+    + '<ellipse cx="101" cy="47" rx="8.5" ry="13" fill="' + skin + '"/>'
+    + '<rect x="23" y="14" width="74" height="70" rx="26" fill="' + skin + '"/>'
+    + '<rect x="45" y="70" width="30" height="16" rx="8" fill="' + skin + '"/>'
+    // subtle face shadow at bottom
+    + '<ellipse cx="60" cy="76" rx="22" ry="6" fill="' + sh + '" opacity="0.12"/>'
+    // ear inner shadow
+    + '<ellipse cx="19" cy="47" rx="5" ry="8" fill="' + sh + '" opacity="0.22"/>'
+    + '<ellipse cx="101" cy="47" rx="5" ry="8" fill="' + sh + '" opacity="0.22"/>';
 }
 
-function ccLayerFace(faceId, skin, sh) {
-  // eye whites + iris colors (dark iris for all skin tones — could parameterise later)
-  var iris = '#1a1a2e';
-  // brow positions vary by expression
-  var lbrow='', rbrow='', leye='', reye='', nose='', mouth='';
-  if (faceId === 'focused') {
-    lbrow = '<path d="M38 19 Q41 17.5 44 19" stroke="#' + _ccDarken(sh) + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-    rbrow = '<path d="M56 19 Q59 17.5 62 19" stroke="#' + _ccDarken(sh) + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-    leye  = '<ellipse cx="41" cy="24" rx="4" ry="3.2" fill="white"/><ellipse cx="41" cy="24" rx="2.5" ry="2.5" fill="' + iris + '"/><ellipse cx="41" cy="24" rx="1" ry="1" fill="#3b82f6"/><circle cx="42.2" cy="22.8" r="0.9" fill="white"/>';
-    reye  = '<ellipse cx="59" cy="24" rx="4" ry="3.2" fill="white"/><ellipse cx="59" cy="24" rx="2.5" ry="2.5" fill="' + iris + '"/><ellipse cx="59" cy="24" rx="1" ry="1" fill="#3b82f6"/><circle cx="60.2" cy="22.8" r="0.9" fill="white"/>';
-    nose  = '<path d="M49 31 Q50 33 51 31" stroke="' + sh + '" stroke-width="1" fill="none" stroke-linecap="round"/>';
-    mouth = '<path d="M44 37 Q50 38.5 56 37" stroke="' + sh + '" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-  } else if (faceId === 'happy') {
-    lbrow = '<path d="M38 18 Q41 16 44 18" stroke="#' + _ccDarken(sh) + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-    rbrow = '<path d="M56 18 Q59 16 62 18" stroke="#' + _ccDarken(sh) + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-    leye  = '<path d="M37 24 Q41 21 45 24" stroke="' + iris + '" stroke-width="2" fill="none" stroke-linecap="round"/>';
-    reye  = '<path d="M55 24 Q59 21 63 24" stroke="' + iris + '" stroke-width="2" fill="none" stroke-linecap="round"/>';
-    nose  = '<path d="M49 31 Q50 33 51 31" stroke="' + sh + '" stroke-width="1" fill="none" stroke-linecap="round"/>';
-    mouth = '<path d="M43 37 Q50 42 57 37" stroke="' + sh + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-  } else if (faceId === 'determined') {
-    lbrow = '<path d="M38 19 Q41 18 44 20" stroke="#' + _ccDarken(sh) + '" stroke-width="2" fill="none" stroke-linecap="round"/>';
-    rbrow = '<path d="M56 20 Q59 18 62 19" stroke="#' + _ccDarken(sh) + '" stroke-width="2" fill="none" stroke-linecap="round"/>';
-    leye  = '<ellipse cx="41" cy="24" rx="4" ry="3.5" fill="white"/><ellipse cx="41" cy="24" rx="2.8" ry="2.8" fill="' + iris + '"/><circle cx="42.2" cy="22.8" r="0.9" fill="white"/>';
-    reye  = '<ellipse cx="59" cy="24" rx="4" ry="3.5" fill="white"/><ellipse cx="59" cy="24" rx="2.8" ry="2.8" fill="' + iris + '"/><circle cx="60.2" cy="22.8" r="0.9" fill="white"/>';
-    nose  = '<path d="M49 31 Q50 33 51 31" stroke="' + sh + '" stroke-width="1" fill="none" stroke-linecap="round"/>';
-    mouth = '<path d="M44 37 Q50 37 56 37" stroke="' + sh + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-  } else if (faceId === 'smug') {
-    lbrow = '<path d="M38 19 Q41 17.5 44 19" stroke="#' + _ccDarken(sh) + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-    rbrow = '<path d="M56 17.5 Q59 17 62 18.5" stroke="#' + _ccDarken(sh) + '" stroke-width="1.6" fill="none" stroke-linecap="round"/>';
-    leye  = '<ellipse cx="41" cy="24.5" rx="4" ry="2.8" fill="white"/><ellipse cx="41" cy="24.5" rx="2.3" ry="2.3" fill="' + iris + '"/><circle cx="42" cy="23.5" r="0.8" fill="white"/>';
-    reye  = '<ellipse cx="59" cy="24" rx="4" ry="3.2" fill="white"/><ellipse cx="59" cy="24" rx="2.5" ry="2.5" fill="' + iris + '"/><circle cx="60.2" cy="22.8" r="0.8" fill="white"/>';
-    nose  = '<path d="M49 31 Q50 33 51 31" stroke="' + sh + '" stroke-width="1" fill="none" stroke-linecap="round"/>';
-    mouth = '<path d="M45 37.5 Q50 36.5 55 38.5" stroke="' + sh + '" stroke-width="1.4" fill="none" stroke-linecap="round"/>';
-  } else { // tired
-    lbrow = '<path d="M38 21 Q41 20 44 21" stroke="#' + _ccDarken(sh) + '" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.7"/>';
-    rbrow = '<path d="M56 21 Q59 20 62 21" stroke="#' + _ccDarken(sh) + '" stroke-width="1.4" fill="none" stroke-linecap="round" opacity="0.7"/>';
-    leye  = '<ellipse cx="41" cy="25" rx="4" ry="2.2" fill="white"/><ellipse cx="41" cy="25.5" rx="2.2" ry="1.8" fill="' + iris + '"/><path d="M37 24.5 Q41 27 45 24.5" stroke="rgba(0,0,0,0.25)" stroke-width="0.8" fill="none"/>';
-    reye  = '<ellipse cx="59" cy="25" rx="4" ry="2.2" fill="white"/><ellipse cx="59" cy="25.5" rx="2.2" ry="1.8" fill="' + iris + '"/><path d="M55 24.5 Q59 27 63 24.5" stroke="rgba(0,0,0,0.25)" stroke-width="0.8" fill="none"/>';
-    nose  = '<path d="M49 31 Q50 33 51 31" stroke="' + sh + '" stroke-width="1" fill="none" stroke-linecap="round"/>';
-    mouth = '<path d="M44 38 Q50 37 56 38" stroke="' + sh + '" stroke-width="1.3" fill="none" stroke-linecap="round"/>';
-    // bags under eyes
-    lbrow += '<path d="M37 27 Q41 28.5 45 27" stroke="' + sh + '" stroke-width="0.7" fill="none" opacity="0.4"/>';
-    rbrow += '<path d="M55 27 Q59 28.5 63 27" stroke="' + sh + '" stroke-width="0.7" fill="none" opacity="0.4"/>';
+function ccLayerExpression(expr, eyeColor, skin, sh) {
+  var lx = 43, rx = 77, ey = 46; // eye centers
+  var eyeBase = '', brows = '', nose = '', mouth = '';
+  var browColor = sh; // brows match shadow color (darker than skin)
+
+  if (expr === 'happy') {
+    // squinted happy eyes
+    eyeBase = '<ellipse cx="'+lx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="46" cy="43" r="2.5" fill="white"/>'
+      + '<path d="M30,'+ey+' Q'+lx+',36 56,'+ey+' Z" fill="'+skin+'"/>'  // top eyelid
+      + '<ellipse cx="'+rx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="80" cy="43" r="2.5" fill="white"/>'
+      + '<path d="M64,'+ey+' Q'+rx+',36 90,'+ey+' Z" fill="'+skin+'"/>';
+    brows = '<path d="M31,34 Q'+lx+',28 55,34" stroke="'+browColor+'" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M65,34 Q'+rx+',28 89,34" stroke="'+browColor+'" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    mouth = '<path d="M42,68 Q60,80 78,68 Q60,76 42,68 Z" fill="'+sh+'"/>'
+      + '<path d="M45,68 Q60,77 75,68 Q60,74 45,68 Z" fill="white"/>';
+    // cheek blush
+    mouth += '<ellipse cx="29" cy="60" rx="11" ry="7" fill="rgba(255,140,120,0.2)"/>'
+      + '<ellipse cx="91" cy="60" rx="11" ry="7" fill="rgba(255,140,120,0.2)"/>';
+  } else if (expr === 'focused') {
+    eyeBase = '<ellipse cx="'+lx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="46" cy="43" r="2.5" fill="white"/>'
+      + '<path d="M30,'+ey+' Q'+lx+','+ey+' 56,'+ey+' L56,'+(ey-11)+' Q'+lx+','+(ey-13)+' 30,'+(ey-11)+' Z" fill="'+skin+'" opacity="0.4"/>'
+      + '<ellipse cx="'+rx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="80" cy="43" r="2.5" fill="white"/>'
+      + '<path d="M64,'+ey+' Q'+rx+','+ey+' 90,'+ey+' L90,'+(ey-11)+' Q'+rx+','+(ey-13)+' 64,'+(ey-11)+' Z" fill="'+skin+'" opacity="0.4"/>';
+    brows = '<path d="M31,36 Q'+lx+',30 55,34" stroke="'+browColor+'" stroke-width="4.5" fill="none" stroke-linecap="round"/>'
+      + '<path d="M65,34 Q'+rx+',30 89,36" stroke="'+browColor+'" stroke-width="4.5" fill="none" stroke-linecap="round"/>';
+    mouth = '<path d="M46,71 Q60,74 74,71" stroke="'+sh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  } else if (expr === 'smug') {
+    eyeBase = '<ellipse cx="'+lx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="46" cy="43" r="2.5" fill="white"/>'
+      + '<rect x="30" y="38" width="26" height="9" fill="'+skin+'"/>'  // half-lidded left
+      + '<ellipse cx="'+rx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="80" cy="43" r="2.5" fill="white"/>'
+      + '<rect x="64" y="40" width="26" height="6" fill="'+skin+'"/>';  // slightly lidded right
+    brows = '<path d="M31,34 Q43,29 55,33" stroke="'+browColor+'" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M65,31 Q'+rx+',27 89,33" stroke="'+browColor+'" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    mouth = '<path d="M48,70 Q57,75 66,69" stroke="'+sh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  } else if (expr === 'tired') {
+    eyeBase = '<ellipse cx="'+lx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<rect x="30" y="38" width="26" height="13" fill="'+skin+'"/>'  // droopy eyelid
+      + '<ellipse cx="'+rx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<rect x="64" y="38" width="26" height="13" fill="'+skin+'"/>';
+    brows = '<path d="M31,38 Q43,36 55,38" stroke="'+browColor+'" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.7"/>'
+      + '<path d="M65,38 Q77,36 89,38" stroke="'+browColor+'" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.7"/>';
+    mouth = '<path d="M47,73 Q60,70 73,73" stroke="'+sh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    // under-eye bags
+    eyeBase += '<path d="M30,52 Q43,56 56,52" stroke="'+sh+'" stroke-width="1.2" fill="none" opacity="0.35"/>'
+      + '<path d="M64,52 Q77,56 90,52" stroke="'+sh+'" stroke-width="1.2" fill="none" opacity="0.35"/>';
+  } else {
+    // neutral
+    eyeBase = '<ellipse cx="'+lx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+lx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="46" cy="43" r="2.5" fill="white"/>'
+      + '<ellipse cx="'+rx+'" cy="'+ey+'" rx="13" ry="11" fill="white"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="7.5" fill="'+eyeColor+'"/>'
+      + '<circle cx="'+rx+'" cy="'+ey+'" r="4.5" fill="#0d0d0d"/>'
+      + '<circle cx="80" cy="43" r="2.5" fill="white"/>';
+    brows = '<path d="M31,34 Q'+lx+',28 55,34" stroke="'+browColor+'" stroke-width="4" fill="none" stroke-linecap="round"/>'
+      + '<path d="M65,34 Q'+rx+',28 89,34" stroke="'+browColor+'" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    mouth = '<path d="M47,70 Q60,76 73,70" stroke="'+sh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
   }
-  return '<g>' + lbrow + rbrow + leye + reye + nose + mouth + '</g>';
+
+  nose = '<ellipse cx="54" cy="61" rx="4" ry="3.5" fill="'+sh+'" opacity="0.3"/>'
+       + '<ellipse cx="66" cy="61" rx="4" ry="3.5" fill="'+sh+'" opacity="0.3"/>';
+
+  return '<g>' + brows + eyeBase + nose + mouth + '</g>';
 }
 
-function _ccDarken(hex) {
-  // Returns a slightly darkened version of hex color as hex string (no #)
-  // Used for eyebrows matching skin shadow
-  return hex.replace('#','');
-}
-
-function ccLayerHair(styleId, hairHex, gender) {
-  var h = hairHex;
-  var hd = _ccMix(h, '#000000', 0.35); // darker shade for depth
+function ccLayerHair(styleId, hairColor) {
   if (styleId === 'bald') return '';
-  var paths = '';
+  var h = hairColor, hd = _ccDarkenHex(h, 0.3);
   if (styleId === 'short') {
-    paths = '<path d="M34 22 Q34 5 50 5 Q66 5 66 22 Q62 11 50 10 Q38 11 34 22 Z" fill="' + h + '"/>'
-          + '<path d="M34 20 Q36 10 50 9 Q64 10 66 20 L66 16 Q62 6 50 6 Q38 6 34 16 Z" fill="' + hd + '" opacity="0.5"/>';
+    return '<path d="M23,30 Q23,8 60,8 Q97,8 97,30 Q90,14 60,13 Q30,14 23,30 Z" fill="'+h+'"/>'
+      + '<path d="M23,26 Q23,10 60,9 Q97,10 97,26 Q90,16 60,15 Q30,16 23,26 Z" fill="'+hd+'" opacity="0.35"/>';
   } else if (styleId === 'messy') {
-    paths = '<path d="M33 22 Q31 4 50 4 Q69 4 67 22 Q63 8 50 8 Q37 8 33 22 Z" fill="' + h + '"/>'
-          + '<path d="M35 10 Q38 4 50 4 Q62 4 65 10 Q58 7 50 7 Q42 7 35 10 Z" fill="' + hd + '" opacity="0.4"/>'
-          // messy spikes
-          + '<path d="M33 15 Q30 8 34 4" stroke="' + h + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
-          + '<path d="M40 8 Q41 2 46 4" stroke="' + h + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
-          + '<path d="M56 7 Q58 1 62 5" stroke="' + h + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
-          + '<path d="M65 13 Q69 7 67 3" stroke="' + h + '" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    return '<path d="M22,32 Q20,6 60,6 Q100,6 98,32 Q90,12 60,11 Q30,12 22,32 Z" fill="'+h+'"/>'
+      + '<path d="M23,18 Q26,6 38,8" stroke="'+h+'" stroke-width="6" fill="none" stroke-linecap="round"/>'
+      + '<path d="M40,10 Q44,4 52,7" stroke="'+h+'" stroke-width="5" fill="none" stroke-linecap="round"/>'
+      + '<path d="M68,8 Q74,2 80,6" stroke="'+h+'" stroke-width="5" fill="none" stroke-linecap="round"/>'
+      + '<path d="M85,12 Q92,6 97,14" stroke="'+h+'" stroke-width="6" fill="none" stroke-linecap="round"/>';
   } else if (styleId === 'long') {
-    paths = '<path d="M34 22 Q31 4 50 4 Q69 4 66 22 Q62 8 50 8 Q38 8 34 22 Z" fill="' + h + '"/>'
-          // long sides flowing down
-          + '<path d="M34 22 Q28 40 27 70 Q30 65 33 60 L34 30 Z" fill="' + h + '"/>'
-          + '<path d="M66 22 Q72 40 73 70 Q70 65 67 60 L66 30 Z" fill="' + h + '"/>'
-          + '<path d="M34 22 Q28 42 27 72" stroke="' + hd + '" stroke-width="1.2" fill="none" opacity="0.5"/>'
-          + '<path d="M66 22 Q72 42 73 72" stroke="' + hd + '" stroke-width="1.2" fill="none" opacity="0.5"/>';
+    return '<path d="M22,32 Q20,6 60,6 Q100,6 98,32 Q90,12 60,11 Q30,12 22,32 Z" fill="'+h+'"/>'
+      + '<path d="M22,32 Q14,60 16,95 Q20,88 24,80 L26,35 Z" fill="'+h+'"/>'
+      + '<path d="M98,32 Q106,60 104,95 Q100,88 96,80 L94,35 Z" fill="'+h+'"/>'
+      + '<path d="M22,35 Q14,62 16,96" stroke="'+hd+'" stroke-width="2" fill="none" opacity="0.4"/>'
+      + '<path d="M98,35 Q106,62 104,96" stroke="'+hd+'" stroke-width="2" fill="none" opacity="0.4"/>';
   } else if (styleId === 'afro') {
-    paths = '<ellipse cx="50" cy="15" rx="22" ry="20" fill="' + h + '"/>'
-          + '<ellipse cx="50" cy="15" rx="18" ry="16" fill="' + hd + '" opacity="0.3"/>'
-          + '<ellipse cx="50" cy="12" rx="14" ry="12" fill="' + h + '" opacity="0.6"/>';
+    return '<ellipse cx="60" cy="16" rx="30" ry="26" fill="'+h+'"/>'
+      + '<ellipse cx="60" cy="16" rx="22" ry="18" fill="'+hd+'" opacity="0.3"/>';
   } else if (styleId === 'braids') {
-    paths = '<path d="M34 22 Q31 4 50 4 Q69 4 66 22 Q62 8 50 8 Q38 8 34 22 Z" fill="' + h + '"/>'
-          // braid lines
-          + '<path d="M34 22 Q28 50 30 80" stroke="' + h + '" stroke-width="5" fill="none" stroke-linecap="round"/>'
-          + '<path d="M34 22 Q29 50 30 80" stroke="' + hd + '" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="3,3"/>'
-          + '<path d="M66 22 Q72 50 70 80" stroke="' + h + '" stroke-width="5" fill="none" stroke-linecap="round"/>'
-          + '<path d="M66 22 Q71 50 70 80" stroke="' + hd + '" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="3,3"/>';
+    return '<path d="M22,32 Q20,6 60,6 Q100,6 98,32 Q90,12 60,11 Q30,12 22,32 Z" fill="'+h+'"/>'
+      + '<path d="M22,34 Q14,65 16,100" stroke="'+h+'" stroke-width="8" fill="none" stroke-linecap="round"/>'
+      + '<path d="M22,34 Q14,65 16,100" stroke="'+hd+'" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.6"/>'
+      + '<path d="M98,34 Q106,65 104,100" stroke="'+h+'" stroke-width="8" fill="none" stroke-linecap="round"/>'
+      + '<path d="M98,34 Q106,65 104,100" stroke="'+hd+'" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.6"/>';
   } else if (styleId === 'bun') {
-    paths = '<path d="M34 22 Q34 10 50 9 Q66 10 66 22 Q62 12 50 12 Q38 12 34 22 Z" fill="' + h + '"/>'
-          + '<circle cx="50" cy="6" r="8" fill="' + h + '"/>'
-          + '<circle cx="50" cy="6" r="5" fill="' + hd + '" opacity="0.4"/>'
-          + '<circle cx="50" cy="6" r="8" fill="none" stroke="' + hd + '" stroke-width="1" opacity="0.5"/>';
+    return '<path d="M23,30 Q23,12 60,11 Q97,12 97,30 Q90,16 60,15 Q30,16 23,30 Z" fill="'+h+'"/>'
+      + '<circle cx="60" cy="7" r="11" fill="'+h+'"/>'
+      + '<circle cx="60" cy="7" r="7" fill="'+hd+'" opacity="0.35"/>';
   }
-  return '<g>' + paths + '</g>';
+  return '';
 }
 
-function ccLayerHat(hatId, hairHex) {
+function ccLayerHat(hatId, hatColor) {
   if (hatId === 'none') return '';
-  var hd = _ccMix(hairHex, '#000000', 0.3);
+  var c = hatColor, cd = _ccDarkenHex(c, 0.25);
   if (hatId === 'cap') {
-    return '<g>'
-      + '<ellipse cx="50" cy="14" rx="19" ry="8" fill="#1a1a2e"/>'
-      + '<path d="M31 14 Q50 7 69 14 L69 20 Q50 14 31 20 Z" fill="#252540"/>'
-      // brim
-      + '<path d="M28 18 Q50 22 66 18 L70 20 Q50 25 26 20 Z" fill="#111122"/>'
-      // </> logo
-      + '<text x="50" y="17" text-anchor="middle" font-family="monospace" font-size="6" fill="rgba(100,180,255,0.9)">&lt;/&gt;</text>'
-      + '</g>';
+    return '<path d="M23,28 Q23,8 60,7 Q97,8 97,28 L97,22 Q90,10 60,9 Q30,10 23,22 Z" fill="'+c+'"/>'
+      + '<path d="M14,24 Q23,20 97,20 L97,26 Q23,26 14,24 Z" fill="'+cd+'"/>'  // brim
+      + '<path d="M8,24 Q14,20 14,26 Z" fill="'+cd+'"/>'
+      + '<path d="M8,25 Q20,28 14,24" fill="'+cd+'"/>'
+      + '<text x="60" y="18" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.85)">&lt;/&gt;</text>';
   } else if (hatId === 'beanie-b') {
-    return '<g>'
-      + '<path d="M32 22 Q32 2 50 2 Q68 2 68 22 Q64 8 50 8 Q36 8 32 22 Z" fill="#2a2a4a"/>'
-      + '<rect x="31" y="19" width="38" height="7" rx="3" fill="#1a1a35"/>'
-      + '<text x="50" y="25" text-anchor="middle" font-family="monospace" font-size="5.5" fill="rgba(160,220,255,0.85)">&#123; &#125;</text>'
-      + '</g>';
+    return '<path d="M22,30 Q22,4 60,4 Q98,4 98,30 Q90,10 60,9 Q30,10 22,30 Z" fill="'+c+'"/>'
+      + '<rect x="21" y="26" width="78" height="9" rx="4" fill="'+cd+'"/>'
+      + '<text x="60" y="23" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(255,255,255,0.8)">&#123; &#125;</text>';
   } else if (hatId === 'nasa') {
-    return '<g>'
-      + '<ellipse cx="50" cy="14" rx="19" ry="8" fill="#1a2a3a"/>'
-      + '<path d="M31 14 Q50 7 69 14 L69 20 Q50 14 31 20 Z" fill="#1e3347"/>'
-      + '<path d="M28 18 Q50 22 66 18 L70 20 Q50 25 26 20 Z" fill="#0f1f2e"/>'
-      + '<text x="50" y="17" text-anchor="middle" font-family="sans-serif" font-size="4.5" fill="rgba(200,220,255,0.9)" font-weight="bold">NASA</text>'
-      + '</g>';
+    return '<path d="M23,28 Q23,8 60,7 Q97,8 97,28 L97,22 Q90,10 60,9 Q30,10 23,22 Z" fill="'+c+'"/>'
+      + '<path d="M14,24 Q23,20 97,20 L97,26 Q23,26 14,24 Z" fill="'+cd+'"/>'
+      + '<path d="M8,25 Q20,28 14,24" fill="'+cd+'"/>'
+      + '<text x="60" y="18" text-anchor="middle" font-family="sans-serif" font-size="7" fill="rgba(255,255,255,0.85)" font-weight="bold">NASA</text>';
   } else if (hatId === 'beanie-p') {
-    return '<g>'
-      + '<path d="M32 22 Q32 2 50 2 Q68 2 68 22 Q64 8 50 8 Q36 8 32 22 Z" fill="#1a1a1a"/>'
-      + '<rect x="31" y="19" width="38" height="7" rx="3" fill="#111111"/>'
+    return '<path d="M22,30 Q22,4 60,4 Q98,4 98,30 Q90,10 60,9 Q30,10 22,30 Z" fill="'+c+'"/>'
+      + '<rect x="21" y="26" width="78" height="9" rx="4" fill="'+cd+'"/>'
+      + '<circle cx="60" cy="6" r="5" fill="'+cd+'"/>';
+  }
+  return '';
+}
+
+function ccLayerGlasses(glassesId, glassesColor) {
+  if (glassesId === 'none') return '';
+  var c = glassesColor;
+  if (glassesId === 'round') {
+    return '<g opacity="0.93">'
+      + '<circle cx="43" cy="47" r="14" fill="rgba(30,60,90,0.1)" stroke="'+c+'" stroke-width="2.5"/>'
+      + '<circle cx="77" cy="47" r="14" fill="rgba(30,60,90,0.1)" stroke="'+c+'" stroke-width="2.5"/>'
+      + '<line x1="57" y1="47" x2="63" y2="47" stroke="'+c+'" stroke-width="2"/>'
+      + '<line x1="28" y1="46" x2="29" y2="46" stroke="'+c+'" stroke-width="2"/>'
+      + '<line x1="91" y1="46" x2="92" y2="46" stroke="'+c+'" stroke-width="2"/>'
       + '</g>';
-  } else if (hatId === 'headset') {
+  } else if (glassesId === 'square') {
+    return '<g opacity="0.93">'
+      + '<rect x="29" y="36" width="28" height="22" rx="3" fill="rgba(30,60,90,0.1)" stroke="'+c+'" stroke-width="2.5"/>'
+      + '<rect x="63" y="36" width="28" height="22" rx="3" fill="rgba(30,60,90,0.1)" stroke="'+c+'" stroke-width="2.5"/>'
+      + '<line x1="57" y1="47" x2="63" y2="47" stroke="'+c+'" stroke-width="2"/>'
+      + '<line x1="27" y1="46" x2="29" y2="46" stroke="'+c+'" stroke-width="2"/>'
+      + '<line x1="91" y1="46" x2="93" y2="46" stroke="'+c+'" stroke-width="2"/>'
+      + '</g>';
+  } else if (glassesId === 'shades') {
     return '<g>'
-      // headband
-      + '<path d="M34 22 Q34 4 50 4 Q66 4 66 22" fill="none" stroke="#2a2a2a" stroke-width="5" stroke-linecap="round"/>'
-      // ear cups
-      + '<rect x="28" y="20" width="10" height="14" rx="4" fill="#222222" stroke="#444" stroke-width="0.8"/>'
-      + '<rect x="62" y="20" width="10" height="14" rx="4" fill="#222222" stroke="#444" stroke-width="0.8"/>'
-      + '<rect x="29.5" y="21.5" width="7" height="11" rx="3" fill="#3b82f6" opacity="0.35"/>'
-      + '<rect x="63.5" y="21.5" width="7" height="11" rx="3" fill="#3b82f6" opacity="0.35"/>'
-      // mic boom
-      + '<path d="M28 30 Q22 34 22 40" fill="none" stroke="#333" stroke-width="1.5" stroke-linecap="round"/>'
-      + '<circle cx="22" cy="41" r="2" fill="#444"/>'
+      + '<rect x="27" y="36" width="34" height="18" rx="5" fill="'+c+'" opacity="0.85"/>'
+      + '<rect x="61" y="36" width="34" height="18" rx="5" fill="'+c+'" opacity="0.85"/>'
+      + '<line x1="57" y1="44" x2="63" y2="44" stroke="'+c+'" stroke-width="2.5"/>'
+      + '<line x1="25" y1="43" x2="27" y2="43" stroke="'+c+'" stroke-width="2"/>'
+      + '<line x1="93" y1="43" x2="95" y2="43" stroke="'+c+'" stroke-width="2"/>'
+      // glare
+      + '<path d="M31,38 L34,36 L37,38" fill="rgba(255,255,255,0.18)"/>'
+      + '<path d="M65,38 L68,36 L71,38" fill="rgba(255,255,255,0.18)"/>'
       + '</g>';
   }
   return '';
 }
 
-function ccLayerAccessory(accId, faceId) {
-  if (accId === 'none') return '';
-  if (accId === 'glasses-r') {
-    return '<g opacity="0.92">'
-      + '<circle cx="41" cy="24" r="6" fill="rgba(40,60,80,0.18)" stroke="rgba(180,200,220,0.7)" stroke-width="1.2"/>'
-      + '<circle cx="59" cy="24" r="6" fill="rgba(40,60,80,0.18)" stroke="rgba(180,200,220,0.7)" stroke-width="1.2"/>'
-      + '<line x1="47" y1="24" x2="53" y2="24" stroke="rgba(180,200,220,0.7)" stroke-width="1.2"/>'
-      + '<line x1="34" y1="24" x2="35" y2="24" stroke="rgba(180,200,220,0.7)" stroke-width="1.2"/>'
-      + '<line x1="65" y1="24" x2="66" y2="24" stroke="rgba(180,200,220,0.7)" stroke-width="1.2"/>'
-      + '</g>';
-  } else if (accId === 'glasses-s') {
-    return '<g opacity="0.92">'
-      + '<rect x="35" y="20" width="14" height="9" rx="1.5" fill="rgba(40,60,80,0.18)" stroke="rgba(180,200,220,0.75)" stroke-width="1.2"/>'
-      + '<rect x="51" y="20" width="14" height="9" rx="1.5" fill="rgba(40,60,80,0.18)" stroke="rgba(180,200,220,0.75)" stroke-width="1.2"/>'
-      + '<line x1="49" y1="24" x2="51" y2="24" stroke="rgba(180,200,220,0.75)" stroke-width="1.2"/>'
-      + '<line x1="33" y1="24" x2="35" y2="24" stroke="rgba(180,200,220,0.75)" stroke-width="1.2"/>'
-      + '<line x1="65" y1="24" x2="67" y2="24" stroke="rgba(180,200,220,0.75)" stroke-width="1.2"/>'
-      + '</g>';
-  } else if (accId === 'headphones') {
-    return '<g>'
-      + '<path d="M34 24 Q34 6 50 6 Q66 6 66 24" fill="none" stroke="#1a1a2e" stroke-width="4.5" stroke-linecap="round"/>'
-      + '<rect x="28" y="22" width="9" height="13" rx="4" fill="#1a1a2e" stroke="#3b82f6" stroke-width="0.8"/>'
-      + '<rect x="63" y="22" width="9" height="13" rx="4" fill="#1a1a2e" stroke="#3b82f6" stroke-width="0.8"/>'
-      + '<rect x="29.5" y="23.5" width="6" height="10" rx="3" fill="#3b82f6" opacity="0.3"/>'
-      + '<rect x="64.5" y="23.5" width="6" height="10" rx="3" fill="#3b82f6" opacity="0.3"/>'
-      + '</g>';
-  } else if (accId === 'coffee') {
-    return '<g transform="translate(75,88)">'
-      + '<rect x="0" y="0" width="12" height="14" rx="2" fill="#6b3a2a" stroke="rgba(255,180,80,0.5)" stroke-width="0.8"/>'
-      + '<rect x="1" y="1" width="10" height="5" rx="1" fill="rgba(40,20,10,0.6)"/>'
-      + '<rect x="1" y="1" width="10" height="2" rx="1" fill="rgba(255,180,80,0.3)"/>'
-      + '<path d="M12 4 Q16 4 16 7 Q16 10 12 10" fill="none" stroke="#6b3a2a" stroke-width="1.5" stroke-linecap="round"/>'
-      + '<text x="6" y="11" text-anchor="middle" font-family="monospace" font-size="3.5" fill="rgba(255,200,100,0.8)">//</text>'
-      + '</g>';
+function ccLayerFacialHair(fhId, fhColor, skin) {
+  if (fhId === 'none') return '';
+  var c = fhColor;
+  if (fhId === 'stubble') {
+    return '<rect x="40" y="64" width="40" height="14" rx="4" fill="' + c + '" opacity="0.2"/>';
+  } else if (fhId === 'mustache') {
+    return '<path d="M46,64 Q52,60 60,63 Q68,60 74,64 Q68,70 60,66 Q52,70 46,64 Z" fill="'+c+'"/>';
+  } else if (fhId === 'beard') {
+    return '<path d="M32,60 Q30,80 60,86 Q90,80 88,60 Q78,70 60,72 Q42,70 32,60 Z" fill="'+c+'"/>'
+      + '<ellipse cx="60" cy="68" rx="18" ry="8" fill="'+skin+'" opacity="0.3"/>';
+  } else if (fhId === 'goatee') {
+    return '<path d="M50,65 Q56,60 64,60 Q72,60 70,65" fill="'+c+'"/>'
+      + '<path d="M52,65 Q56,70 60,75 Q64,70 68,65 Q62,68 60,72 Q58,68 52,65 Z" fill="'+c+'"/>';
   }
   return '';
 }
 
-function _ccMix(hex, target, amount) {
-  // simple hex darkener — returns hex string with #
-  var parse = function(h) {
-    h = h.replace('#','');
-    return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
-  };
-  var a = parse(hex), b = parse(target);
-  var r = Math.round(a[0]+(b[0]-a[0])*amount);
-  var g = Math.round(a[1]+(b[1]-a[1])*amount);
-  var bl= Math.round(a[2]+(b[2]-a[2])*amount);
-  return '#'+[r,g,bl].map(function(v){return ('0'+Math.max(0,Math.min(255,v)).toString(16)).slice(-2);}).join('');
+function _ccDarkenHex(hex, amt) {
+  var h = hex.replace('#','');
+  var r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);
+  r=Math.max(0,Math.round(r*(1-amt))); g=Math.max(0,Math.round(g*(1-amt))); b=Math.max(0,Math.round(b*(1-amt)));
+  return '#'+[r,g,b].map(function(v){return ('0'+v.toString(16)).slice(-2);}).join('');
 }
 
 function buildCharacterSVG(cfg, w, h) {
-  var st = CC_SKIN_TONES.find(function(t){return t.id===cfg.skin;})||CC_SKIN_TONES[1];
-  var hc = CC_HAIR_COLORS.find(function(c){return c.id===cfg.hairColor;})||CC_HAIR_COLORS[0];
-  var td = CC_TOPS.find(function(t){return t.id===cfg.top;})||CC_TOPS[0];
-  var skin = st.hex, sh = st.sh, hair = hc.hex;
+  var sk  = CC_SKINS.find(function(x){return x.id===cfg.skin;})||CC_SKINS[1];
+  var ec  = _ccHex(CC_EYE_COLORS,  cfg.eyeColor);
+  var hc  = _ccHex(CC_HAIR_COLORS, cfg.hairColor);
+  var tc  = _ccHex(CC_TOP_COLORS,  cfg.topColor);
+  var htc = _ccHex(CC_HAT_COLORS,  cfg.hatColor);
+  var gc  = _ccHex(CC_GLASSES_COLORS, cfg.glassesColor);
+  var fhc = _ccHex(CC_FH_COLORS,   cfg.fhColor);
+  var bgc = _ccHex(CC_BG_COLORS,   cfg.bgColor);
 
-  return '<svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg"'
-    + ' width="'+(w||100)+'" height="'+(h||130)+'" style="display:block;">'
-    + '<defs>'
-    + '<radialGradient id="cc-bg-g" cx="50%" cy="60%" r="60%">'
-    + '<stop offset="0%" stop-color="rgba(40,50,80,0.0)"/>'
-    + '<stop offset="100%" stop-color="rgba(0,0,0,0.0)"/>'
-    + '</radialGradient>'
-    + '</defs>'
-    + ccLayerClothing(cfg.top, cfg.gender, td.c1, td.c2, skin)
-    + ccLayerBody(skin, sh, cfg.gender)
-    + ccLayerFace(cfg.face, skin, sh)
-    + ccLayerHair(cfg.hairStyle, hair, cfg.gender)
-    + ccLayerHat(cfg.hat, hair)
-    + ccLayerAccessory(cfg.acc, cfg.face)
+  return '<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"'
+    + ' width="'+(w||120)+'" height="'+(h||120)+'" style="display:block;border-radius:'+(w?Math.round(w*0.08):10)+'px;">'
+    + ccLayerBg(bgc)
+    + ccLayerBody(cfg.top, tc)
+    + ccLayerHead(sk.hex, sk.sh)
+    + ccLayerHair(cfg.hairStyle, hc)
+    + ccLayerExpression(cfg.expression, ec, sk.hex, sk.sh)
+    + ccLayerGlasses(cfg.glasses, gc)
+    + ccLayerFacialHair(cfg.facialHair, fhc, sk.hex)
+    + ccLayerHat(cfg.hat, htc)
     + '</svg>';
 }
 
-// ── CREATOR MODAL ──────────────────────────────────────────────────────────────
+// ── CREATOR UI ─────────────────────────────────────────────────────────────────
+
+var _CC_TABS = [
+  {id:'skin',  label:'Skin',    icon:'M60,20 Q80,20 85,40 Q85,65 60,70 Q35,65 35,40 Q40,20 60,20Z'},
+  {id:'expr',  label:'Eyes',    icon:'M30,48 Q43,38 56,48 M64,48 Q77,38 90,48 M36,54 a7,5 0 1,0 14,0 M66,54 a7,5 0 1,0 14,0'},
+  {id:'hair',  label:'Hair',    icon:'M25,35 Q25,10 60,10 Q95,10 95,35 Q90,15 60,15 Q30,15 25,35Z M20,38 Q22,32 25,35 M100,38 Q98,32 95,35'},
+  {id:'top',   label:'Outfit',  icon:'M30,75 Q35,55 60,52 Q85,55 90,75 L95,95 L70,95 L70,75 L50,75 L50,95 L25,95Z'},
+  {id:'hat',   label:'Hat',     icon:'M20,42 Q20,20 60,18 Q100,20 100,42 L98,46 Q60,44 22,46Z M15,44 Q22,40 22,48 M105,44 Q98,40 98,48'},
+  {id:'glasses',label:'Glasses',icon:'M29,44 a14,11 0 1,0 28,0 M63,44 a14,11 0 1,0 28,0 M57,44 L63,44 M27,43 L29,43 M91,43 L93,43'},
+  {id:'fh',    label:'Facial',  icon:'M44,64 Q52,58 60,61 Q68,58 76,64 Q68,72 60,68 Q52,72 44,64Z'},
+  {id:'bg',    label:'Scene',   icon:'M10,10 L110,10 L110,110 L10,110 Z M10,10 L40,10 L40,40 L10,40 M80,80 L110,80 L110,110 L80,110'},
+];
 
 function showCharacterCreator() {
   var existing = document.getElementById('cc-modal');
   if (existing) existing.remove();
 
-  if (!document.getElementById('cc-styles')) {
+  if (!document.getElementById('cc-styles-v2')) {
     var st = document.createElement('style');
-    st.id = 'cc-styles';
+    st.id = 'cc-styles-v2';
     st.textContent = [
-      '.cc-modal{position:fixed;inset:0;background:rgba(4,6,16,0.97);z-index:9000;display:flex;flex-direction:column;opacity:0;transition:opacity 0.35s ease;}',
-      '.cc-modal.open{opacity:1;}',
-      '.cc-inner{display:flex;flex-direction:column;height:100%;max-width:900px;margin:0 auto;width:100%;padding:0 0 env(safe-area-inset-bottom,0);}',
-      '.cc-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px 0;flex-shrink:0;}',
-      '.cc-title{font-family:"Orbitron",sans-serif;font-size:11px;letter-spacing:6px;color:rgba(200,169,80,0.7);}',
-      '.cc-close{background:none;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);font-size:14px;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}',
-      '.cc-close:hover{border-color:rgba(255,255,255,0.3);color:#fff;}',
-      '.cc-body{display:flex;flex:1;overflow:hidden;gap:0;min-height:0;}',
-      // Preview pane
-      '.cc-preview-pane{width:200px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 10px;border-right:1px solid rgba(255,255,255,0.05);position:relative;}',
-      '.cc-preview-wrap{position:relative;width:160px;height:208px;display:flex;align-items:center;justify-content:center;}',
-      '.cc-preview-glow{position:absolute;inset:-20px;background:radial-gradient(ellipse at center,rgba(59,130,246,0.12) 0%,transparent 70%);pointer-events:none;}',
-      '.cc-preview-char{position:relative;z-index:2;filter:drop-shadow(0 4px 24px rgba(59,130,246,0.18));}',
-      '.cc-preview-plate{margin-top:16px;text-align:center;}',
-      '.cc-preview-name{font-family:"Orbitron",sans-serif;font-size:9px;letter-spacing:3px;color:rgba(200,169,80,0.6);margin-bottom:4px;}',
-      '.cc-preview-sub{font-family:"Space Mono",monospace;font-size:8px;color:rgba(255,255,255,0.3);}',
-      // Config pane
-      '.cc-config-pane{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}',
-      '.cc-tabs{display:flex;gap:2px;padding:14px 16px 0;flex-shrink:0;overflow-x:auto;scrollbar-width:none;}',
-      '.cc-tabs::-webkit-scrollbar{display:none;}',
-      '.cc-tab{background:none;border:none;padding:7px 14px;font-family:"Space Mono",monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.35);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}',
-      '.cc-tab.active{color:#fff;border-bottom-color:rgba(200,169,80,0.7);}',
-      '.cc-tab:hover:not(.active){color:rgba(255,255,255,0.6);}',
-      '.cc-options-area{flex:1;overflow-y:auto;padding:16px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.1) transparent;}',
-      '.cc-options-area::-webkit-scrollbar{width:4px;}',
-      '.cc-options-area::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}',
-      // Skin tone row
-      '.cc-skin-row{display:flex;flex-wrap:wrap;gap:10px;padding:4px 0 16px;}',
-      '.cc-skin-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s;position:relative;}',
-      '.cc-skin-swatch.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(200,169,80,0.5);}',
-      '.cc-skin-swatch:hover{transform:scale(1.1);}',
-      // Gender row
-      '.cc-gender-row{display:flex;gap:10px;padding:4px 0 16px;}',
-      '.cc-gender-btn{flex:1;padding:12px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.5);font-family:"Space Mono",monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:all 0.2s;}',
-      '.cc-gender-btn.sel{border-color:rgba(200,169,80,0.6);background:rgba(200,169,80,0.08);color:rgba(200,169,80,0.9);}',
-      // Option grid
-      '.cc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;padding:4px 0;}',
-      '.cc-opt{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 6px 8px;cursor:pointer;transition:all 0.18s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;}',
-      '.cc-opt:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15);}',
-      '.cc-opt.sel{border-color:rgba(200,169,80,0.7);background:rgba(200,169,80,0.08);}',
-      '.cc-opt-icon{font-size:20px;line-height:1;height:26px;display:flex;align-items:center;justify-content:center;}',
-      '.cc-opt-name{font-family:"Orbitron",sans-serif;font-size:7px;letter-spacing:1.5px;color:rgba(255,255,255,0.8);}',
-      '.cc-opt.sel .cc-opt-name{color:rgba(200,169,80,0.9);}',
-      '.cc-opt-sub{font-family:"Space Mono",monospace;font-size:7px;color:rgba(255,255,255,0.3);}',
-      // Hair color row
-      '.cc-hair-color-row{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 16px;}',
-      '.cc-hc-swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s;}',
-      '.cc-hc-swatch.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(200,169,80,0.45);}',
-      '.cc-hc-swatch:hover{transform:scale(1.12);}',
-      '.cc-section-label{font-family:"Space Mono",monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-bottom:8px;margin-top:4px;}',
-      // Confirm button
-      '.cc-footer{padding:14px 20px;flex-shrink:0;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:flex-end;}',
-      '.cc-confirm-btn{background:linear-gradient(135deg,rgba(200,169,80,0.9),rgba(160,120,40,0.9));border:none;color:#000;font-family:"Orbitron",sans-serif;font-size:10px;letter-spacing:3px;padding:13px 32px;border-radius:6px;cursor:pointer;transition:all 0.2s;font-weight:700;}',
-      '.cc-confirm-btn:hover{filter:brightness(1.15);transform:translateY(-1px);}',
+      '.ccm{position:fixed;inset:0;z-index:9000;background:#0a0c14;display:flex;flex-direction:column;opacity:0;transition:opacity 0.3s;}',
+      '.ccm.open{opacity:1;}',
+      '.ccm-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,0.06);}',
+      '.ccm-bar-title{font-family:"Orbitron",sans-serif;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,0.5);}',
+      '.ccm-done{background:none;border:none;font-family:"Orbitron",sans-serif;font-size:10px;letter-spacing:3px;color:rgba(200,169,80,0.9);cursor:pointer;padding:8px 14px;}',
+      '.ccm-close{background:none;border:none;color:rgba(255,255,255,0.4);font-size:18px;cursor:pointer;padding:4px 10px;}',
+      // Preview
+      '.ccm-preview{flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#111520;padding:20px 0 16px;position:relative;}',
+      '.ccm-char-wrap{position:relative;}',
+      '.ccm-char-shadow{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);width:130px;height:16px;background:radial-gradient(ellipse,rgba(0,0,0,0.35) 0%,transparent 70%);border-radius:50%;}',
+      // Tabs
+      '.ccm-tabs{display:flex;background:#0d1018;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;overflow-x:auto;scrollbar-width:none;}',
+      '.ccm-tabs::-webkit-scrollbar{display:none;}',
+      '.ccm-tab{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:10px 14px 8px;cursor:pointer;border-bottom:2px solid transparent;gap:3px;transition:all 0.18s;}',
+      '.ccm-tab.act{border-bottom-color:rgba(200,169,80,0.8);}',
+      '.ccm-tab svg{transition:all 0.18s;}',
+      '.ccm-tab.act svg{filter:drop-shadow(0 0 3px rgba(200,169,80,0.5));}',
+      '.ccm-tab-label{font-family:"Space Mono",monospace;font-size:7px;letter-spacing:1px;color:rgba(255,255,255,0.35);}',
+      '.ccm-tab.act .ccm-tab-label{color:rgba(200,169,80,0.85);}',
+      // Options area
+      '.ccm-opts{flex:1;overflow-y:auto;padding:14px 12px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.08) transparent;}',
+      '.ccm-opts::-webkit-scrollbar{width:3px;}',
+      '.ccm-opts::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px;}',
+      '.ccm-section-title{font-family:"Space Mono",monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-bottom:10px;}',
+      // Skin swatches grid
+      '.ccm-skin-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:6px;}',
+      '.ccm-skin-sw{aspect-ratio:1;border-radius:10px;cursor:pointer;border:2.5px solid transparent;transition:all 0.15s;}',
+      '.ccm-skin-sw.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(200,169,80,0.5);}',
+      '.ccm-skin-sw:hover{transform:scale(1.08);}',
+      // Color swatches row
+      '.ccm-color-row{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;margin-bottom:2px;}',
+      '.ccm-color-row::-webkit-scrollbar{display:none;}',
+      '.ccm-csw{width:32px;height:32px;flex-shrink:0;border-radius:8px;cursor:pointer;border:2.5px solid transparent;transition:all 0.15s;}',
+      '.ccm-csw.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(200,169,80,0.45);}',
+      '.ccm-csw:hover{transform:scale(1.1);}',
+      // BG swatches grid
+      '.ccm-bg-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}',
+      '.ccm-bg-sw{aspect-ratio:1;border-radius:8px;cursor:pointer;border:2.5px solid rgba(255,255,255,0.08);transition:all 0.15s;}',
+      '.ccm-bg-sw.sel{border-color:#fff;box-shadow:0 0 0 3px rgba(200,169,80,0.45);}',
+      '.ccm-bg-sw:hover{transform:scale(1.06);}',
+      // Option thumbnail grid
+      '.ccm-opt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}',
+      '.ccm-opt-card{border-radius:12px;border:2.5px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);cursor:pointer;overflow:hidden;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;}',
+      '.ccm-opt-card.sel{border-color:rgba(200,169,80,0.8);background:rgba(200,169,80,0.08);}',
+      '.ccm-opt-card:hover{border-color:rgba(255,255,255,0.2);}',
+      '.ccm-opt-card svg{width:100%;height:auto;display:block;}',
+      '.ccm-opt-label{font-family:"Orbitron",sans-serif;font-size:6.5px;letter-spacing:1px;color:rgba(255,255,255,0.6);padding:5px 4px 6px;text-align:center;line-height:1.3;}',
+      '.ccm-opt-card.sel .ccm-opt-label{color:rgba(200,169,80,0.9);}',
+      // Footer
+      '.ccm-footer{padding:12px 16px;flex-shrink:0;border-top:1px solid rgba(255,255,255,0.06);}',
+      '.ccm-confirm-btn{width:100%;padding:14px;background:linear-gradient(135deg,rgba(200,169,80,0.9),rgba(150,110,30,0.9));border:none;border-radius:10px;font-family:"Orbitron",sans-serif;font-size:11px;letter-spacing:4px;color:#0a0a0a;font-weight:700;cursor:pointer;transition:all 0.2s;}',
+      '.ccm-confirm-btn:hover{filter:brightness(1.12);transform:translateY(-1px);}',
       // Cinematic overlay
-      '.cc-confirm-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(4,6,16,0.0);z-index:20;pointer-events:none;transition:background 0.4s;}',
-      '.cc-confirm-overlay.active{background:rgba(4,6,16,0.85);}',
-      '.cc-confirm-text{font-family:"Orbitron",sans-serif;font-size:15px;letter-spacing:8px;color:rgba(200,169,80,0.0);text-align:center;transform:translateY(20px);transition:all 0.5s;white-space:nowrap;}',
-      '.cc-confirm-text.show{color:rgba(200,169,80,1);transform:translateY(0);text-shadow:0 0 30px rgba(200,169,80,0.6),0 0 60px rgba(200,169,80,0.3);}',
-      '.cc-confirm-sub{font-family:"Space Mono",monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,0.0);margin-top:8px;transition:all 0.5s 0.2s;}',
-      '.cc-confirm-sub.show{color:rgba(255,255,255,0.4);}',
-      '.cc-scan-flash{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0,transparent 48%,rgba(200,169,80,0.08) 50%,transparent 52%,transparent 100%);opacity:0;transition:opacity 0.1s;}',
-      '.cc-scan-flash.flash{opacity:1;}',
-      // Particles
-      '@keyframes cc-particle{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--px),var(--py)) scale(0);opacity:0}}',
-      '.cc-particle{position:absolute;width:4px;height:4px;border-radius:50%;animation:cc-particle 1.2s ease-out forwards;pointer-events:none;}',
-      // Preview pulse
-      '@keyframes cc-pulse{0%{transform:scale(1)}30%{transform:scale(1.06)}60%{transform:scale(0.98)}100%{transform:scale(1)}}',
-      '.cc-preview-char.pulse{animation:cc-pulse 0.6s ease;}',
-      // Mobile
-      '@media(max-width:600px){',
-      '.cc-preview-pane{display:none;}',
-      '.cc-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));}',
-      '}',
+      '.ccm-cin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:5;}',
+      '.ccm-cin-text{font-family:"Orbitron",sans-serif;font-size:13px;letter-spacing:6px;color:rgba(200,169,80,0);text-align:center;transform:scale(0.85);transition:all 0.45s;line-height:1.4;}',
+      '.ccm-cin-text.show{color:rgba(200,169,80,1);transform:scale(1);text-shadow:0 0 24px rgba(200,169,80,0.6);}',
+      '.ccm-cin-sub{font-family:"Space Mono",monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,0);margin-top:6px;transition:all 0.4s 0.18s;}',
+      '.ccm-cin-sub.show{color:rgba(255,255,255,0.38);}',
+      '@keyframes cc2-pulse{0%{transform:scale(1)}25%{transform:scale(1.05)}60%{transform:scale(0.97)}100%{transform:scale(1)}}',
+      '.ccm-char-wrap.pulse{animation:cc2-pulse 0.55s ease;}',
+      '@keyframes cc2-particle{0%{transform:translate(0,0);opacity:1}100%{transform:translate(var(--px),var(--py));opacity:0}}',
+      '.cc2-pt{position:absolute;width:5px;height:5px;border-radius:50%;top:50%;left:50%;animation:cc2-particle 1.1s ease-out forwards;pointer-events:none;}',
     ].join('');
     document.head.appendChild(st);
   }
 
   var cfg = getCharacterConfig();
-  var tabs = ['BODY','FACE','HAIR','CLOTHING','HAT','EXTRAS'];
-  var el = document.createElement('div');
-  el.id = 'cc-modal';
-  el.className = 'cc-modal';
-  el.innerHTML =
-    '<div class="cc-inner">' +
-      '<div class="cc-topbar">' +
-        '<div class="cc-title">CHARACTER CREATOR</div>' +
-        '<button class="cc-close" onclick="hideCharacterCreator()">&#x2715;</button>' +
-      '</div>' +
-      '<div class="cc-body">' +
-        '<div class="cc-preview-pane">' +
-          '<div class="cc-preview-wrap" id="cc-preview-wrap">' +
-            '<div class="cc-preview-glow"></div>' +
-            '<div class="cc-preview-char" id="cc-preview-char"></div>' +
-            '<div class="cc-confirm-overlay" id="cc-co">' +
-              '<div class="cc-scan-flash" id="cc-sf"></div>' +
-              '<div class="cc-confirm-text" id="cc-ct">CHARACTER<br>CONFIRMED</div>' +
-              '<div class="cc-confirm-sub" id="cc-cs">IDENTITY LOCKED IN</div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="cc-preview-plate">' +
-            '<div class="cc-preview-name" id="cc-preview-name">—</div>' +
-            '<div class="cc-preview-sub" id="cc-preview-sub">SELECT OPTIONS</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="cc-config-pane">' +
-          '<div class="cc-tabs" id="cc-tabs">' +
-            tabs.map(function(t,i){return '<button class="cc-tab'+(i===0?' active':'')+'" onclick="ccSwitchTab('+i+')">'+t+'</button>';}).join('') +
-          '</div>' +
-          '<div class="cc-options-area" id="cc-options-area"></div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="cc-footer">' +
-        '<button class="cc-confirm-btn" onclick="ccConfirm()">CONFIRM CHARACTER</button>' +
-      '</div>' +
-    '</div>';
-  document.body.appendChild(el);
-  requestAnimationFrame(function(){ el.classList.add('open'); });
-
   window._ccCfg = JSON.parse(JSON.stringify(cfg));
   window._ccTab = 0;
+
+  var tabsHtml = _CC_TABS.map(function(t, i) {
+    var col = i === 0 ? 'rgba(200,169,80,0.85)' : 'rgba(255,255,255,0.28)';
+    return '<div class="ccm-tab'+(i===0?' act':'')+'" onclick="ccTab('+i+')" id="cct-'+i+'">'
+      + '<svg width="24" height="24" viewBox="0 0 120 120" fill="none" stroke="'+col+'" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="'+t.icon+'"/></svg>'
+      + '<div class="ccm-tab-label">'+t.label+'</div>'
+      + '</div>';
+  }).join('');
+
+  var el = document.createElement('div');
+  el.id = 'cc-modal';
+  el.className = 'ccm';
+  el.innerHTML =
+    '<div class="ccm-bar">'
+      + '<button class="ccm-close" onclick="hideCharacterCreator()">&#x2715;</button>'
+      + '<div class="ccm-bar-title">EDIT AVATAR</div>'
+      + '<button class="ccm-done" onclick="ccConfirm()">DONE</button>'
+    + '</div>'
+    + '<div class="ccm-preview">'
+      + '<div class="ccm-char-wrap" id="ccm-cw">'
+        + '<div id="ccm-char"></div>'
+        + '<div class="ccm-char-shadow"></div>'
+        + '<div class="ccm-cin" id="ccm-cin">'
+          + '<div class="ccm-cin-text" id="ccm-ct">SAVED</div>'
+          + '<div class="ccm-cin-sub" id="ccm-cs">IDENTITY LOCKED IN</div>'
+        + '</div>'
+      + '</div>'
+    + '</div>'
+    + '<div class="ccm-tabs" id="ccm-tabs">' + tabsHtml + '</div>'
+    + '<div class="ccm-opts" id="ccm-opts"></div>'
+    + '<div class="ccm-footer"><button class="ccm-confirm-btn" onclick="ccConfirm()">CONFIRM CHARACTER</button></div>';
+
+  document.body.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('open'); });
   ccRenderPreview();
-  ccRenderTab(0);
+  ccRenderTabContent(0);
 }
 
 function hideCharacterCreator() {
   var el = document.getElementById('cc-modal');
   if (!el) return;
   el.classList.remove('open');
-  setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 350);
+  setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 320);
 }
 
-function ccSwitchTab(i) {
+function ccTab(i) {
   window._ccTab = i;
-  var tabs = document.querySelectorAll('.cc-tab');
-  tabs.forEach(function(t,ti){ t.classList.toggle('active', ti===i); });
-  ccRenderTab(i);
+  document.querySelectorAll('.ccm-tab').forEach(function(t, ti) {
+    t.classList.toggle('act', ti === i);
+    var svg = t.querySelector('svg');
+    if (svg) svg.setAttribute('stroke', ti === i ? 'rgba(200,169,80,0.85)' : 'rgba(255,255,255,0.28)');
+  });
+  ccRenderTabContent(i);
 }
 
-function ccRenderTab(i) {
-  var area = document.getElementById('cc-options-area');
+function ccRenderTabContent(i) {
+  var area = document.getElementById('ccm-opts');
   if (!area) return;
   var cfg = window._ccCfg;
+  var tabId = _CC_TABS[i].id;
   var html = '';
 
-  if (i === 0) { // BODY
-    html += '<div class="cc-section-label">SKIN TONE</div>';
-    html += '<div class="cc-skin-row">' +
-      CC_SKIN_TONES.map(function(s){
-        return '<div class="cc-skin-swatch'+(cfg.skin===s.id?' sel':'')+'" style="background:'+s.hex+';box-shadow:inset 0 -3px 6px '+s.sh+';" title="'+s.name+'" onclick="ccSet(\'skin\',\''+s.id+'\')"></div>';
-      }).join('') + '</div>';
-    html += '<div class="cc-section-label">GENDER</div>';
-    html += '<div class="cc-gender-row">' +
-      CC_GENDERS.map(function(g){
-        return '<button class="cc-gender-btn'+(cfg.gender===g.id?' sel':'')+'" onclick="ccSet(\'gender\',\''+g.id+'\')">'+g.name+'</button>';
-      }).join('') + '</div>';
-  } else if (i === 1) { // FACE
-    html += '<div class="cc-section-label">EXPRESSION</div>';
-    html += '<div class="cc-grid">' +
-      CC_FACES.map(function(f){
-        var icons = {focused:'🎯',happy:'😄',determined:'💪',smug:'😏',tired:'😴'};
-        return '<div class="cc-opt'+(cfg.face===f.id?' sel':'')+'" onclick="ccSet(\'face\',\''+f.id+'\')">'+
-          '<div class="cc-opt-icon">'+icons[f.id]+'</div>'+
-          '<div class="cc-opt-name">'+f.name+'</div>'+
-          '<div class="cc-opt-sub">'+f.sub+'</div></div>';
-      }).join('') + '</div>';
-  } else if (i === 2) { // HAIR
-    html += '<div class="cc-section-label">STYLE</div>';
-    html += '<div class="cc-grid">' +
-      CC_HAIR_STYLES.map(function(s){
-        var icons = {short:'✂️',messy:'⚡',long:'🌊',afro:'☁️',braids:'🪢',bun:'🔵',bald:'💎'};
-        return '<div class="cc-opt'+(cfg.hairStyle===s.id?' sel':'')+'" onclick="ccSet(\'hairStyle\',\''+s.id+'\')">'+
-          '<div class="cc-opt-icon">'+icons[s.id]+'</div>'+
-          '<div class="cc-opt-name">'+s.name+'</div>'+
-          '<div class="cc-opt-sub">'+s.sub+'</div></div>';
-      }).join('') + '</div>';
-    html += '<div class="cc-section-label" style="margin-top:16px;">COLOUR</div>';
-    html += '<div class="cc-hair-color-row">' +
-      CC_HAIR_COLORS.map(function(c){
-        return '<div class="cc-hc-swatch'+(cfg.hairColor===c.id?' sel':'')+'" style="background:'+c.hex+';border-color:'+(cfg.hairColor===c.id?'#fff':'transparent')+';" title="'+c.name+'" onclick="ccSet(\'hairColor\',\''+c.id+'\')"></div>';
-      }).join('') + '</div>';
-  } else if (i === 3) { // CLOTHING
-    html += '<div class="cc-section-label">TOP</div>';
-    html += '<div class="cc-grid">' +
-      CC_TOPS.map(function(t){
-        return '<div class="cc-opt'+(cfg.top===t.id?' sel':'')+'" onclick="ccSet(\'top\',\''+t.id+'\')">'+
-          '<div class="cc-opt-icon" style="width:32px;height:32px;border-radius:4px;background:'+t.c1+';border:1px solid '+t.c2+';display:flex;align-items:center;justify-content:center;">'+
-            '<span style="font-family:monospace;font-size:6px;color:rgba(255,255,255,0.6);text-align:center;line-height:1.2;">'+t.sub.slice(0,10)+'</span></div>'+
-          '<div class="cc-opt-name">'+t.name+'</div>'+
-          '</div>';
-      }).join('') + '</div>';
-  } else if (i === 4) { // HAT
-    html += '<div class="cc-section-label">HEADWEAR</div>';
-    html += '<div class="cc-grid">' +
-      CC_HATS.map(function(h){
-        var icons = {'none':'—','cap':'🧢','beanie-b':'🔵','nasa':'🚀','beanie-p':'⚫','headset':'🎧'};
-        return '<div class="cc-opt'+(cfg.hat===h.id?' sel':'')+'" onclick="ccSet(\'hat\',\''+h.id+'\')">'+
-          '<div class="cc-opt-icon">'+icons[h.id]+'</div>'+
-          '<div class="cc-opt-name">'+h.name+'</div>'+
-          '<div class="cc-opt-sub">'+h.sub+'</div></div>';
-      }).join('') + '</div>';
-  } else if (i === 5) { // EXTRAS
-    html += '<div class="cc-section-label">ACCESSORIES</div>';
-    html += '<div class="cc-grid">' +
-      CC_ACCESSORIES.map(function(a){
-        var icons = {'none':'—','glasses-r':'👓','glasses-s':'🕶️','headphones':'🎧','coffee':'☕'};
-        return '<div class="cc-opt'+(cfg.acc===a.id?' sel':'')+'" onclick="ccSet(\'acc\',\''+a.id+'\')">'+
-          '<div class="cc-opt-icon">'+icons[a.id]+'</div>'+
-          '<div class="cc-opt-name">'+a.name+'</div>'+
-          '<div class="cc-opt-sub">'+a.sub+'</div></div>';
-      }).join('') + '</div>';
+  if (tabId === 'skin') {
+    html += '<div class="ccm-section-title">SKIN TONE</div>';
+    html += '<div class="ccm-skin-grid">'
+      + CC_SKINS.map(function(s) {
+          return '<div class="ccm-skin-sw'+(cfg.skin===s.id?' sel':'')+'" style="background:'+s.hex+';" title="'+s.name+'" onclick="ccSet(\'skin\',\''+s.id+'\')"></div>';
+        }).join('')
+      + '</div>';
+
+  } else if (tabId === 'expr') {
+    html += '<div class="ccm-section-title">EYE COLOUR</div>';
+    html += '<div class="ccm-color-row">'
+      + CC_EYE_COLORS.map(function(c) {
+          return '<div class="ccm-csw'+(cfg.eyeColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'eyeColor\',\''+c.id+'\')"></div>';
+        }).join('') + '</div>';
+    html += '<div class="ccm-section-title">EXPRESSION</div>';
+    html += '<div class="ccm-opt-grid">'
+      + CC_EXPRESSIONS.map(function(e) {
+          var tc = Object.assign({}, cfg, {expression: e.id});
+          return '<div class="ccm-opt-card'+(cfg.expression===e.id?' sel':'')+'" onclick="ccSet(\'expression\',\''+e.id+'\')">'+
+            buildCharacterSVG(tc, 120, 120)+'<div class="ccm-opt-label">'+e.name+'</div></div>';
+        }).join('') + '</div>';
+
+  } else if (tabId === 'hair') {
+    html += '<div class="ccm-section-title">HAIR COLOUR</div>';
+    html += '<div class="ccm-color-row">'
+      + CC_HAIR_COLORS.map(function(c) {
+          return '<div class="ccm-csw'+(cfg.hairColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'hairColor\',\''+c.id+'\')"></div>';
+        }).join('') + '</div>';
+    html += '<div class="ccm-section-title">HAIRSTYLE</div>';
+    html += '<div class="ccm-opt-grid">'
+      + CC_HAIR_STYLES.map(function(s) {
+          var tc = Object.assign({}, cfg, {hairStyle: s.id});
+          return '<div class="ccm-opt-card'+(cfg.hairStyle===s.id?' sel':'')+'" onclick="ccSet(\'hairStyle\',\''+s.id+'\')">'+
+            buildCharacterSVG(tc, 120, 120)+'<div class="ccm-opt-label">'+s.name+'</div></div>';
+        }).join('') + '</div>';
+
+  } else if (tabId === 'top') {
+    html += '<div class="ccm-section-title">OUTFIT COLOUR</div>';
+    html += '<div class="ccm-color-row">'
+      + CC_TOP_COLORS.map(function(c) {
+          return '<div class="ccm-csw'+(cfg.topColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'topColor\',\''+c.id+'\')"></div>';
+        }).join('') + '</div>';
+    html += '<div class="ccm-section-title">CLOTHING</div>';
+    html += '<div class="ccm-opt-grid">'
+      + CC_TOPS.map(function(t) {
+          var tc = Object.assign({}, cfg, {top: t.id});
+          return '<div class="ccm-opt-card'+(cfg.top===t.id?' sel':'')+'" onclick="ccSet(\'top\',\''+t.id+'\')">'+
+            buildCharacterSVG(tc, 120, 120)+'<div class="ccm-opt-label">'+t.name+'</div></div>';
+        }).join('') + '</div>';
+
+  } else if (tabId === 'hat') {
+    html += '<div class="ccm-section-title">HAT COLOUR</div>';
+    html += '<div class="ccm-color-row">'
+      + CC_HAT_COLORS.map(function(c) {
+          return '<div class="ccm-csw'+(cfg.hatColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'hatColor\',\''+c.id+'\')"></div>';
+        }).join('') + '</div>';
+    html += '<div class="ccm-section-title">HEADWEAR</div>';
+    html += '<div class="ccm-opt-grid">'
+      + CC_HATS.map(function(h) {
+          var tc = Object.assign({}, cfg, {hat: h.id});
+          return '<div class="ccm-opt-card'+(cfg.hat===h.id?' sel':'')+'" onclick="ccSet(\'hat\',\''+h.id+'\')">'+
+            buildCharacterSVG(tc, 120, 120)+'<div class="ccm-opt-label">'+h.name+'</div></div>';
+        }).join('') + '</div>';
+
+  } else if (tabId === 'glasses') {
+    html += '<div class="ccm-section-title">FRAME COLOUR</div>';
+    html += '<div class="ccm-color-row">'
+      + CC_GLASSES_COLORS.map(function(c) {
+          return '<div class="ccm-csw'+(cfg.glassesColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'glassesColor\',\''+c.id+'\')"></div>';
+        }).join('') + '</div>';
+    html += '<div class="ccm-section-title">GLASSES</div>';
+    html += '<div class="ccm-opt-grid">'
+      + CC_GLASSES.map(function(g) {
+          var tc = Object.assign({}, cfg, {glasses: g.id});
+          return '<div class="ccm-opt-card'+(cfg.glasses===g.id?' sel':'')+'" onclick="ccSet(\'glasses\',\''+g.id+'\')">'+
+            buildCharacterSVG(tc, 120, 120)+'<div class="ccm-opt-label">'+g.name+'</div></div>';
+        }).join('') + '</div>';
+
+  } else if (tabId === 'fh') {
+    html += '<div class="ccm-section-title">FACIAL HAIR COLOUR</div>';
+    html += '<div class="ccm-color-row">'
+      + CC_FH_COLORS.map(function(c) {
+          return '<div class="ccm-csw'+(cfg.fhColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'fhColor\',\''+c.id+'\')"></div>';
+        }).join('') + '</div>';
+    html += '<div class="ccm-section-title">FACIAL HAIR</div>';
+    html += '<div class="ccm-opt-grid">'
+      + CC_FACIAL_HAIR.map(function(f) {
+          var tc = Object.assign({}, cfg, {facialHair: f.id});
+          return '<div class="ccm-opt-card'+(cfg.facialHair===f.id?' sel':'')+'" onclick="ccSet(\'facialHair\',\''+f.id+'\')">'+
+            buildCharacterSVG(tc, 120, 120)+'<div class="ccm-opt-label">'+f.name+'</div></div>';
+        }).join('') + '</div>';
+
+  } else if (tabId === 'bg') {
+    html += '<div class="ccm-section-title">SCENE BACKGROUND</div>';
+    html += '<div class="ccm-bg-grid">'
+      + CC_BG_COLORS.map(function(b) {
+          return '<div class="ccm-bg-sw'+(cfg.bgColor===b.id?' sel':'')+'" style="background:'+b.hex+';" onclick="ccSet(\'bgColor\',\''+b.id+'\')"></div>';
+        }).join('') + '</div>';
   }
 
   area.innerHTML = html;
@@ -6886,72 +6964,61 @@ function ccRenderTab(i) {
 function ccSet(key, val) {
   window._ccCfg[key] = val;
   ccRenderPreview();
-  ccRenderTab(window._ccTab);
+  ccRenderTabContent(window._ccTab);
 }
 
 function ccRenderPreview() {
-  var cfg = window._ccCfg;
-  if (!cfg) return;
-  var charEl = document.getElementById('cc-preview-char');
-  if (charEl) charEl.innerHTML = buildCharacterSVG(cfg, 160, 208);
-
-  var faceObj = CC_FACES.find(function(f){return f.id===cfg.face;})||CC_FACES[0];
-  var topObj  = CC_TOPS.find(function(t){return t.id===cfg.top;})||CC_TOPS[0];
-  var nameEl = document.getElementById('cc-preview-name');
-  var subEl  = document.getElementById('cc-preview-sub');
-  if (nameEl) nameEl.textContent = faceObj.name.toUpperCase() + ' · ' + (cfg.gender==='female'?'F':'M');
-  if (subEl)  subEl.textContent  = topObj.sub;
+  var el = document.getElementById('ccm-char');
+  if (el && window._ccCfg) el.innerHTML = buildCharacterSVG(window._ccCfg, 180, 180);
 }
 
 function ccConfirm() {
   var cfg = window._ccCfg;
   saveCharacterConfig(cfg);
 
-  var charEl = document.getElementById('cc-preview-char');
-  var overlay = document.getElementById('cc-co');
-  var ct = document.getElementById('cc-ct');
-  var cs = document.getElementById('cc-cs');
-  var sf = document.getElementById('cc-sf');
-  var wrap = document.getElementById('cc-preview-wrap');
+  var cw = document.getElementById('ccm-cw');
+  var ct = document.getElementById('ccm-ct');
+  var cs = document.getElementById('ccm-cs');
 
-  if (charEl) { charEl.classList.add('pulse'); setTimeout(function(){ charEl.classList.remove('pulse'); }, 700); }
-
-  // spawn particles
-  if (wrap) {
-    var colors = ['rgba(200,169,80,0.9)','rgba(255,255,255,0.7)','rgba(100,180,255,0.8)'];
-    for (var p = 0; p < 12; p++) {
+  if (cw) {
+    cw.classList.add('pulse');
+    setTimeout(function(){ cw.classList.remove('pulse'); }, 600);
+    // particles
+    var cols = ['rgba(200,169,80,0.9)','rgba(255,255,255,0.7)','rgba(100,180,255,0.8)','rgba(255,200,80,0.7)'];
+    for (var p = 0; p < 14; p++) {
       (function(pi){
-        var pEl = document.createElement('div');
-        pEl.className = 'cc-particle';
-        var angle = (pi / 12) * Math.PI * 2;
-        var dist = 50 + Math.random() * 50;
-        pEl.style.cssText = 'left:50%;top:50%;background:'+colors[pi%3]+';'
-          + '--px:'+ Math.round(Math.cos(angle)*dist) +'px;'
-          + '--py:'+ Math.round(Math.sin(angle)*dist) +'px;'
-          + 'animation-delay:'+(pi*0.04)+'s;';
-        wrap.appendChild(pEl);
-        setTimeout(function(){ if(pEl.parentNode) pEl.parentNode.removeChild(pEl); }, 1400);
+        var pt = document.createElement('div');
+        pt.className = 'cc2-pt';
+        var a = (pi/14)*Math.PI*2;
+        var d = 50 + Math.random()*60;
+        pt.style.cssText = 'background:'+cols[pi%4]+';'
+          + '--px:'+Math.round(Math.cos(a)*d)+'px;'
+          + '--py:'+Math.round(Math.sin(a)*d)+'px;'
+          + 'animation-delay:'+(pi*0.03)+'s;width:'+(3+Math.random()*4)+'px;height:'+(3+Math.random()*4)+'px;';
+        cw.appendChild(pt);
+        setTimeout(function(){ if(pt.parentNode) pt.parentNode.removeChild(pt); }, 1300);
       })(p);
     }
   }
 
-  if (overlay) { overlay.classList.add('active'); }
   setTimeout(function(){
-    if (sf) { sf.classList.add('flash'); setTimeout(function(){ sf.classList.remove('flash'); }, 150); }
     if (ct) ct.classList.add('show');
     if (cs) cs.classList.add('show');
-  }, 200);
+  }, 120);
 
   setTimeout(function(){
     if (ct) ct.classList.remove('show');
     if (cs) cs.classList.remove('show');
-    if (overlay) overlay.classList.remove('active');
     setTimeout(function(){
       hideCharacterCreator();
       renderProfilePanel();
-    }, 400);
-  }, 2400);
+    }, 380);
+  }, 2000);
 }
+
+// Legacy shims
+function getSelectedAvatar() { return null; }
+var AVATARS = [];
 
 // Legacy shim — profile panel calls getSelectedAvatar() + AVATARS.find()
 // replaced by getCharacterConfig() + buildCharacterSVG()
