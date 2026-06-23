@@ -6958,6 +6958,61 @@ function ccConfirm() {
 function getSelectedAvatar() { return null; }
 var AVATARS = [];
 
+function getProfTheme() {
+  return localStorage.getItem('codebook_prof_theme') || 'cosmic-blue';
+}
+
+function getCoverTheme() {
+  return localStorage.getItem('codebook_cover_theme') || 'cosmic-blue';
+}
+
+function applyCoverTheme(id) {
+  var screen = document.getElementById('auth-screen');
+  if (!screen) return;
+  screen.className = screen.className.replace(/\bauth-theme-\S+/g, '').trim();
+  screen.classList.add('auth-theme-' + id);
+  document.querySelectorAll('.cover-orb').forEach(function(orb) {
+    orb.classList.toggle('active', orb.getAttribute('data-theme') === id);
+  });
+}
+
+function switchCoverTheme(id) {
+  localStorage.setItem('codebook_cover_theme', id);
+  applyCoverTheme(id);
+}
+
+function applyProfThemeToBody(id) {
+  document.body.className = document.body.className.replace(/\bprof-theme-\S+/g, '').trim();
+  document.body.classList.add('prof-theme-' + id);
+}
+
+function switchProfTheme(id) {
+  localStorage.setItem('codebook_prof_theme', id);
+  applyProfThemeToBody(id);
+  renderProfilePanel();
+}
+
+function setNarratorGender(gender) {
+  state.narratorGender = gender;
+  saveState();
+  renderProfilePanel();
+}
+
+function setAutoScroll(val) {
+  state.autoScroll = !!val;
+  saveState();
+  if (!val) stopAutoScroll();
+}
+
+function setCodeCanvasOpacity(val) {
+  var v = Math.max(0, Math.min(100, parseInt(val, 10)));
+  state.codeCanvasOpacity = v;
+  _hubCanvasOpacity = v / 100;
+  saveState();
+  var label = document.getElementById('canvas-opacity-val');
+  if (label) label.textContent = v + '%';
+}
+
 
 var _venusStopMusic = null;
 var _glitchStopMusic = null;
