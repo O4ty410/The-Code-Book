@@ -1583,3 +1583,101 @@
   color: var(--text-muted);
   cursor: pointer;
 }
+
+/* ── ONBOARDING STEP 6 — CHARACTER CREATION PROMPT ─────────────────────────── */
+.ob-char-headline {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.ob-char-body {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+.ob-skip-link {
+  display: block;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 1px;
+  text-decoration: underline;
+  padding: 8px;
+}
+.ob-skip-link:hover { color: var(--text-dim); }
+
+/* ── CHARACTER CELEBRATION OVERLAY ────────────────────────────────────────── */
+@keyframes celebEntry {
+  from { transform: scale(0.35) translateY(50px); opacity: 0; }
+  to   { transform: scale(1) translateY(0);        opacity: 1; }
+}
+@keyframes celebBob {
+  0%,100% { transform: translateY(0)   rotate(-2deg) scale(1);    }
+  50%      { transform: translateY(-18px) rotate(2deg) scale(1.03); }
+}
+@keyframes celebFadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(-40px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+@keyframes celebSparkle {
+  0%,100% { opacity: 0.15; transform: scale(0.7);  }
+  50%      { opacity: 1;    transform: scale(1.3);  }
+}
+@keyframes celebBtnFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.celeb-char-wrap  { margin-bottom: 28px; }
+.celeb-char       {
+  animation:
+    celebEntry 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both,
+    celebBob   2.6s ease-in-out 0.9s infinite;
+}
+.celeb-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  margin-bottom: 12px;
+  animation: celebFadeUp 0.5s ease 0.85s both;
+}
+.celeb-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(20px, 5vw, 28px);
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 12px;
+  animation: celebFadeUp 0.5s ease 1.05s both;
+}
+.celeb-msg {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.8;
+  margin-bottom: 32px;
+  animation: celebFadeUp 0.5s ease 1.25s both;
+}
+.celeb-enter-btn {
+  animation: celebBtnFadeIn 0.45s ease 2.4s both;
+}
+.celeb-confetti-piece {
+  position: absolute;
+  border-radius: 2px;
+  animation: confettiFall linear forwards;
+}
+.celeb-sparkle {
+  position: absolute;
+  pointer-events: none;
+  animation: celebSparkle ease-in-out infinite;
+  line-height: 1;
+}

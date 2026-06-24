@@ -31,7 +31,7 @@
   <link rel="stylesheet" href="cover.min.css?v=20260518s">
   <link rel="stylesheet" href="components.min.css?v=20260615b">
   <link rel="stylesheet" href="panels.min.css?v=20260612a">
-  <link rel="stylesheet" href="overlays.min.css?v=20260520e">
+  <link rel="stylesheet" href="overlays.min.css?v=20260624d">
   <link rel="stylesheet" href="mobile.min.css?v=20260611i">
   <link rel="stylesheet" href="glitch.min.css?v=20260524b">
 
@@ -459,9 +459,29 @@
       </div>
       <div class="onboarding-welcome-title" id="onboarding-welcome"></div>
       <div class="onboarding-welcome-msg" id="onboarding-message"></div>
-      <button class="auth-btn ob-enter-btn" onclick="finishOnboarding()">ENTER THE CODE BOOK</button>
+      <button class="auth-btn ob-enter-btn" onclick="showCharacterOnboardStep()">ENTER THE CODE BOOK</button>
+    </div>
+
+    <div id="onboarding-step-6" style="display:none;">
+      <div id="ob-char-preview" style="margin:0 auto 20px;line-height:0;"></div>
+      <div class="ob-char-headline">ONE LAST THING.</div>
+      <div class="ob-char-body">Every coder needs a look. Create your character — your visual identity in The Code Book. The first of many customisation options to come.</div>
+      <button class="auth-btn ob-enter-btn" onclick="startCharacterFromOnboarding()" style="margin-bottom:14px;">CREATE MY CHARACTER</button>
+      <button class="ob-skip-link" onclick="finishOnboarding()">Skip for now</button>
     </div>
   </div>
+</div>
+
+<!-- CHARACTER CELEBRATION OVERLAY -->
+<div id="char-celebration" style="display:none;position:fixed;inset:0;z-index:9997;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;overflow:hidden;">
+  <div id="celeb-confetti-container" style="position:fixed;inset:0;pointer-events:none;overflow:hidden;"></div>
+  <div class="celeb-char-wrap">
+    <div id="celeb-char" class="celeb-char"></div>
+  </div>
+  <div class="celeb-label">// CHARACTER CREATED</div>
+  <div class="celeb-title" id="celeb-title">YOUR CHARACTER IS READY.</div>
+  <div class="celeb-msg">The Code Book is growing. More outfits, accessories<br>and cosmetics are on their way — stay tuned.</div>
+  <button class="auth-btn ob-enter-btn celeb-enter-btn" id="celeb-enter-btn" onclick="celebEnter()">ENTER THE CODE BOOK</button>
 </div>
 
 <!-- END OF SESSION SCREEN -->

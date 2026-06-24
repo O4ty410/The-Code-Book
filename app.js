@@ -1039,12 +1039,100 @@ function finishOnboarding() {
   localStorage.setItem('codebook_player_name', onboardingData.name);
   state.playerName = onboardingData.name;
   document.getElementById('onboarding').style.display = 'none';
+  var celeb = document.getElementById('char-celebration');
+  if (celeb) celeb.style.display = 'none';
   if (localStorage.getItem('codebook_guest')) {
     startAsGuest();
     setTimeout(showAppTour, 800);
   } else {
     document.getElementById('auth-screen').style.display = 'flex';
     document.body.style.overflow = 'hidden';
+  }
+}
+
+function showCharacterOnboardStep() {
+  var s5 = document.getElementById('onboarding-step-5');
+  var s6 = document.getElementById('onboarding-step-6');
+  var prog = document.getElementById('ob-progress');
+  if (s5) s5.style.display = 'none';
+  if (prog) prog.style.display = 'none';
+  if (s6) s6.style.display = 'block';
+  var prev = document.getElementById('ob-char-preview');
+  if (prev && typeof buildCharacterSVG === 'function') {
+    prev.innerHTML = buildCharacterSVG({
+      skin:'#F5C98A', ec:'#3b82f6', hc:'#5c2e0e',
+      top:'hoodie-t', tc:'#1e3a5f', expr:'default',
+      hair:'medium', hat:'none', gl:'none', fh:'none'
+    }, 100, 100);
+  }
+}
+
+function startCharacterFromOnboarding() {
+  window._ccFromOnboarding = true;
+  document.getElementById('onboarding').style.display = 'none';
+  showCharacterCreator();
+}
+
+function celebEnter() {
+  var el = document.getElementById('char-celebration');
+  if (el) el.style.display = 'none';
+  finishOnboarding();
+}
+
+function showCharacterCelebration(cfg) {
+  var el = document.getElementById('char-celebration');
+  if (!el) return;
+  var charEl = document.getElementById('celeb-char');
+  if (charEl && typeof buildCharacterSVG === 'function') {
+    charEl.innerHTML = buildCharacterSVG(cfg, 220, 220);
+  }
+  var title = document.getElementById('celeb-title');
+  if (title && onboardingData.name) {
+    title.textContent = onboardingData.name.toUpperCase() + ', YOUR CHARACTER IS READY.';
+  }
+  el.style.display = 'flex';
+  // Confetti burst
+  var container = document.getElementById('celeb-confetti-container');
+  if (container) {
+    var cols = ['#c8a950','#00c8ff','#ff6b9d','#a855f7','#22c55e','#ffffff'];
+    for (var i = 0; i < 70; i++) {
+      (function(idx) {
+        setTimeout(function() {
+          var p = document.createElement('div');
+          p.className = 'celeb-confetti-piece';
+          var size = 6 + Math.random() * 8;
+          p.style.cssText = [
+            'left:' + (Math.random() * 100) + '%',
+            'top:0',
+            'width:' + size + 'px',
+            'height:' + size + 'px',
+            'background:' + cols[idx % cols.length],
+            'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
+            'animation-duration:' + (2.5 + Math.random() * 2.5) + 's',
+            'animation-delay:' + (Math.random() * 1.5) + 's'
+          ].join(';');
+          container.appendChild(p);
+          setTimeout(function() { if (p.parentNode) p.parentNode.removeChild(p); }, 5500);
+        }, idx * 35);
+      })(i);
+    }
+    // Sparkles
+    var sparks = [
+      {top:'14%',left:'18%'},{top:'8%',left:'55%'},{top:'18%',right:'16%'},
+      {top:'48%',left:'8%'},{top:'52%',right:'10%'},
+      {top:'32%',left:'28%'},{top:'38%',right:'26%'}
+    ];
+    sparks.forEach(function(pos, idx) {
+      var s = document.createElement('div');
+      s.className = 'celeb-sparkle';
+      var css = 'animation-duration:' + (1.1 + Math.random() * 0.9) + 's;animation-delay:' + (idx * 0.18) + 's;font-size:' + (14 + Math.random() * 10) + 'px;';
+      if (pos.top)   css += 'top:'   + pos.top   + ';';
+      if (pos.left)  css += 'left:'  + pos.left  + ';';
+      if (pos.right) css += 'right:' + pos.right + ';';
+      s.style.cssText = css;
+      s.textContent = ['✦','✧','✨','★','⭐'][idx % 5];
+      container.appendChild(s);
+    });
   }
 }
 
@@ -7024,6 +7112,8 @@ function ccRenderPreview(){var el=document.getElementById('ccm-char');if(el&&win
 
 function ccConfirm(){
   var cfg=window._ccCfg;saveCharacterConfig(cfg);
+  var fromOnboarding=!!window._ccFromOnboarding;
+  if(fromOnboarding)window._ccFromOnboarding=false;
   var cw=document.getElementById('ccm-cw'),ct=document.getElementById('ccm-ct'),cs=document.getElementById('ccm-cs');
   if(cw){
     cw.classList.add('pulse');setTimeout(function(){cw.classList.remove('pulse');},600);
@@ -7031,7 +7121,15 @@ function ccConfirm(){
     for(var p=0;p<14;p++){(function(pi){var pt=document.createElement('div');pt.className='cc2-pt';var a=(pi/14)*Math.PI*2,d=50+Math.random()*60;pt.style.cssText='background:'+cols[pi%4]+';--px:'+Math.round(Math.cos(a)*d)+'px;--py:'+Math.round(Math.sin(a)*d)+'px;animation-delay:'+(pi*0.03)+'s;width:'+(3+Math.random()*4)+'px;height:'+(3+Math.random()*4)+'px;';cw.appendChild(pt);setTimeout(function(){if(pt.parentNode)pt.parentNode.removeChild(pt);},1300);})(p);}
   }
   setTimeout(function(){if(ct)ct.classList.add('show');if(cs)cs.classList.add('show');},120);
-  setTimeout(function(){if(ct)ct.classList.remove('show');if(cs)cs.classList.remove('show');setTimeout(function(){hideCharacterCreator();renderProfilePanel();},380);},2000);
+  setTimeout(function(){
+    if(ct)ct.classList.remove('show');
+    if(cs)cs.classList.remove('show');
+    setTimeout(function(){
+      hideCharacterCreator();
+      if(fromOnboarding){showCharacterCelebration(cfg);}
+      else{renderProfilePanel();}
+    },380);
+  },2000);
 }
 
 // Legacy shims
