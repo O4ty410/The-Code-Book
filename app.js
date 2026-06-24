@@ -1059,11 +1059,7 @@ function showCharacterOnboardStep() {
   if (s6) s6.style.display = 'block';
   var prev = document.getElementById('ob-char-preview');
   if (prev && typeof buildCharacterSVG === 'function') {
-    prev.innerHTML = buildCharacterSVG({
-      skin:'#F5C98A', ec:'#3b82f6', hc:'#5c2e0e',
-      top:'hoodie-t', tc:'#1e3a5f', expr:'default',
-      hair:'medium', hat:'none', gl:'none', fh:'none'
-    }, 100, 100);
+    prev.innerHTML = buildCharacterSVG(ccDefaultConfig(), 100, 100);
   }
 }
 
