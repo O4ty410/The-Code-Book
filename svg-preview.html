@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SVG Character — Max Quality Preview</title>
+<style>
+  body { margin: 0; background: #0a0c14; display: flex; flex-wrap: wrap; gap: 24px; padding: 32px; justify-content: center; align-items: flex-start; font-family: sans-serif; }
+  .card { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .label { color: rgba(255,255,255,0.5); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+  h1 { width: 100%; text-align: center; color: rgba(200,169,80,0.9); font-size: 14px; letter-spacing: 4px; margin: 0 0 8px; }
+  p { width: 100%; text-align: center; color: rgba(255,255,255,0.3); font-size: 11px; margin: 0 0 24px; }
+</style>
+</head>
+<body>
+<h1>SVG MAXIMUM QUALITY — CURRENT CEILING</h1>
+<p>What SVG gradients + shading can achieve vs what Three.js 3D rendering looks like</p>
+
+<script>
+function darken(hex, amt) {
+  var h=hex.replace('#','');
+  var r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+  r=Math.max(0,Math.round(r*(1-amt)));g=Math.max(0,Math.round(g*(1-amt)));b=Math.max(0,Math.round(b*(1-amt)));
+  return '#'+[r,g,b].map(function(v){return('0'+v.toString(16)).slice(-2);}).join('');
+}
+function lighten(hex, amt) {
+  var h=hex.replace('#','');
+  var r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+  r=Math.min(255,Math.round(r+(255-r)*amt));g=Math.min(255,Math.round(g+(255-g)*amt));b=Math.min(255,Math.round(b+(255-b)*amt));
+  return '#'+[r,g,b].map(function(v){return('0'+v.toString(16)).slice(-2);}).join('');
+}
+
+var uid = 0;
+function makeChar(opts) {
+  var u = 'p'+(++uid);
+  var skin = opts.skin || '#F5C98A';
+  var sh   = opts.sh   || '#C8904A';
+  var hi   = lighten(skin, 0.48);
+  var ec   = opts.ec   || '#3b82f6';
+  var ecHi = lighten(ec, 0.55);
+  var ecDk = darken(ec, 0.5);
+  var hc   = opts.hc   || '#5c2e0e';
+  var hcHi = lighten(hc, 0.42);
+  var hcDk = darken(hc, 0.45);
+  var tc   = opts.tc   || '#1a1a2e';
+  var tcHi = lighten(tc, 0.28);
+  var tcDk = darken(tc, 0.25);
+  var w    = opts.w    || 280;
+
+  return `<svg viewBox="0 0 120 120" width="${w}" height="${w}" xmlns="http://www.w3.org/2000/svg" style="border-radius:${Math.round(w*0.08)}px;display:block;">
+  <defs>
+    <!-- Skin: strong radial with rim light on shadow side -->
+    <radialGradient id="sg${u}" cx="63%" cy="22%" r="70%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="${hi}"/>
+      <stop offset="45%" stop-color="${skin}"/>
+      <stop offset="100%" stop-color="${sh}"/>
+    </radialGradient>
+    <!-- Rim light (cool blue-ish bounce from opposite side) -->
+    <radialGradient id="rim${u}" cx="12%" cy="60%" r="55%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="rgba(180,210,255,0.18)"/>
+      <stop offset="100%" stop-color="rgba(180,210,255,0)"/>
+    </radialGradient>
+    <!-- Iris -->
+    <radialGradient id="ig${u}" cx="33%" cy="28%" r="55%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="${ecHi}"/>
+      <stop offset="50%" stop-color="${ec}"/>
+      <stop offset="100%" stop-color="${ecDk}"/>
+    </radialGradient>
+    <!-- Hair -->
+    <linearGradient id="hg${u}" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="${hcHi}"/>
+      <stop offset="40%" stop-color="${hc}"/>
+      <stop offset="100%" stop-color="${hcDk}"/>
+    </linearGradient>
+    <!-- Clothing -->
+    <linearGradient id="tg${u}" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="${tcHi}"/>
+      <stop offset="100%" stop-color="${tcDk}"/>
+    </linearGradient>
+    <!-- AO (ambient occlusion — darkens crevices) -->
+    <radialGradient id="ao${u}" cx="50%" cy="100%" r="50%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="rgba(0,0,0,0.25)"/>
+      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    </radialGradient>
+    <!-- Subsurface scatter on cheeks -->
+    <radialGradient id="sss${u}" cx="50%" cy="50%" r="50%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="rgba(255,160,120,0.22)"/>
+      <stop offset="100%" stop-color="rgba(255,140,100,0)"/>
+    </radialGradient>
+  </defs>
+
+  <!-- BG -->
+  <rect width="120" height="120" fill="${opts.bg || '#1a2030'}"/>
+  <ellipse cx="60" cy="110" rx="50" ry="18" fill="rgba(0,0,0,0.3)"/>
+
+  <!-- Hood (behind head) -->
+  ${opts.hood ? `<path d="M8,78 Q4,42 22,18 Q40,4 60,4 Q80,4 98,18 Q116,42 112,78 Q90,70 60,68 Q30,70 8,78 Z" fill="url(#tg${u})"/>
+  <path d="M12,76 Q9,46 25,22 Q42,8 60,8 Q78,8 95,22 Q111,46 108,76 Q88,69 60,67 Q32,69 12,76 Z" fill="${tcDk}" opacity="0.32"/>` : ''}
+
+  <!-- Body -->
+  <path d="M0,120 L0,88 Q6,72 34,67 Q46,72 60,73 Q74,72 86,67 Q114,72 120,88 L120,120 Z" fill="url(#tg${u})"/>
+  ${opts.hood ? `
+  <path d="M34,96 L34,115 Q60,120 86,115 L86,96 Q60,101 34,96 Z" fill="${tcDk}" opacity="0.38"/>
+  <path d="M34,96 Q60,101 86,96" stroke="${tcDk}" stroke-width="1.5" fill="none" opacity="0.52"/>
+  <line x1="55" y1="73" x2="49" y2="97" stroke="${tcHi}" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="65" y1="73" x2="71" y2="97" stroke="${tcHi}" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <ellipse cx="49" cy="99" rx="2.5" ry="3.5" fill="${tcDk}" opacity="0.65"/>
+  <ellipse cx="71" cy="99" rx="2.5" ry="3.5" fill="${tcDk}" opacity="0.65"/>` : ''}
+  <path d="M6,90 Q20,76 34,70" stroke="${tcHi}" stroke-width="2" fill="none" opacity="0.3" stroke-linecap="round"/>
+  <path d="M114,90 Q100,76 86,70" stroke="${tcHi}" stroke-width="2" fill="none" opacity="0.3" stroke-linecap="round"/>
+
+  <!-- Neck -->
+  <rect x="46" y="70" width="28" height="16" rx="7" fill="url(#sg${u})"/>
+  <ellipse cx="60" cy="82" rx="16" ry="5" fill="${sh}" opacity="0.35"/>
+
+  <!-- Ears -->
+  <ellipse cx="19" cy="47" rx="8.5" ry="13" fill="url(#sg${u})"/>
+  <ellipse cx="101" cy="47" rx="8.5" ry="13" fill="url(#sg${u})"/>
+  <ellipse cx="19" cy="47" rx="4.5" ry="8" fill="${sh}" opacity="0.28"/>
+  <ellipse cx="101" cy="47" rx="4.5" ry="8" fill="${sh}" opacity="0.28"/>
+
+  <!-- Head -->
+  <rect x="23" y="14" width="74" height="70" rx="26" fill="url(#sg${u})"/>
+  <!-- AO on jaw -->
+  <rect x="23" y="60" width="74" height="24" rx="16" fill="url(#ao${u})"/>
+  <!-- Rim light (cool blue on shadow side) -->
+  <rect x="23" y="14" width="74" height="70" rx="26" fill="url(#rim${u})"/>
+  <!-- Subsurface scatter cheeks -->
+  <ellipse cx="31" cy="57" rx="12" ry="10" fill="url(#sss${u})"/>
+  <ellipse cx="89" cy="57" rx="12" ry="10" fill="url(#sss${u})"/>
+  <!-- Strong forehead highlight -->
+  <ellipse cx="66" cy="20" rx="22" ry="12" fill="${hi}" opacity="0.28"/>
+  <!-- Nose tip -->
+  <ellipse cx="61" cy="59" rx="5" ry="3.5" fill="${hi}" opacity="0.22"/>
+
+  <!-- Hair -->
+  <path d="M23,30 Q23,8 60,8 Q97,8 97,30 Q90,13 60,12 Q30,13 23,30 Z" fill="url(#hg${u})"/>
+  <path d="M32,18 Q60,11 88,18" stroke="${hcHi}" stroke-width="3.5" fill="none" opacity="0.48" stroke-linecap="round"/>
+  <path d="M28,22 Q30,14 36,16" stroke="${hcHi}" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+
+  <!-- Eyebrows -->
+  <path d="M31,31 Q43,24 55,30" stroke="${darken(sh,0.08)}" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  <path d="M65,30 Q77,24 89,31" stroke="${darken(sh,0.08)}" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Eyes -->
+  <!-- Left eye -->
+  <ellipse cx="43" cy="46" rx="13" ry="11" fill="white"/>
+  <ellipse cx="43" cy="41" rx="13" ry="5.5" fill="rgba(0,0,0,0.07)"/>
+  <circle cx="43" cy="46" r="8" fill="url(#ig${u})"/>
+  <circle cx="43" cy="46" r="8" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.3"/>
+  <circle cx="43" cy="46" r="4" fill="#06060a"/>
+  <circle cx="40" cy="43" r="2.5" fill="white" opacity="0.96"/>
+  <circle cx="45" cy="49" r="1" fill="rgba(255,255,255,0.45)"/>
+  <!-- Right eye -->
+  <ellipse cx="77" cy="46" rx="13" ry="11" fill="white"/>
+  <ellipse cx="77" cy="41" rx="13" ry="5.5" fill="rgba(0,0,0,0.07)"/>
+  <circle cx="77" cy="46" r="8" fill="url(#ig${u})"/>
+  <circle cx="77" cy="46" r="8" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.3"/>
+  <circle cx="77" cy="46" r="4" fill="#06060a"/>
+  <circle cx="74" cy="43" r="2.5" fill="white" opacity="0.96"/>
+  <circle cx="79" cy="49" r="1" fill="rgba(255,255,255,0.45)"/>
+
+  <!-- Nose -->
+  <ellipse cx="55" cy="61" rx="3.5" ry="2.5" fill="${sh}" opacity="0.3"/>
+  <ellipse cx="65" cy="61" rx="3.5" ry="2.5" fill="${sh}" opacity="0.3"/>
+  <path d="M59,50 Q60,56 61,61" stroke="${hi}" stroke-width="1" fill="none" opacity="0.32"/>
+
+  <!-- Mouth -->
+  <path d="M47,69 Q60,76 73,69" stroke="${sh}" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- Chin shadow -->
+  <ellipse cx="60" cy="86" rx="22" ry="4" fill="${sh}" opacity="0.16"/>
+</svg>`;
+}
+
+var chars = [
+  { label: 'Peach skin · Blue eyes · Hoodie', skin:'#F5C98A', sh:'#C8904A', ec:'#3b82f6', hc:'#5c2e0e', tc:'#1e3a5f', bg:'#1a2a40', hood:true },
+  { label: 'Dark skin · Brown eyes · Dark hoodie', skin:'#8B5030', sh:'#5A2C10', ec:'#92400e', hc:'#111118', tc:'#1a1a2e', bg:'#0c1520', hood:true },
+  { label: 'Light skin · Green eyes · Forest', skin:'#FDEFD4', sh:'#D9B88A', ec:'#16a34a', hc:'#d4a83c', tc:'#1a3a1a', bg:'#0e1a0e', hood:false },
+  { label: 'Honey skin · Purple eyes', skin:'#C07840', sh:'#8C4A18', ec:'#7c3aed', hc:'#111118', tc:'#2a1a3a', bg:'#150d20', hood:true },
+];
+
+chars.forEach(function(c) {
+  var card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = makeChar(Object.assign({w:240}, c)) + '<div class="label">' + c.label + '</div>';
+  document.body.appendChild(card);
+});
+</script>
+</body>
+</html>
