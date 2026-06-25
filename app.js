@@ -6410,6 +6410,10 @@ var CC_HAIR_STYLES = [
   {id:'braids', name:'Braids',    sub:'Detailed'},
   {id:'bun',    name:'Top Bun',   sub:'Focus mode'},
   {id:'bald',   name:'Bald',      sub:'Optimised'},
+  {id:'ponytail',  name:'Ponytail',   sub:'High & clean'},
+  {id:'bob',       name:'Bob Cut',    sub:'Sharp & modern'},
+  {id:'pigtails',  name:'Twin Tails', sub:'Both sides'},
+  {id:'curly-long',name:'Curly Long', sub:'Big energy'},
 ];
 var CC_HAIR_COLORS = [
   {id:'hc0',hex:'#111118'},{id:'hc1',hex:'#5c2e0e'},{id:'hc2',hex:'#c17428'},
@@ -6476,6 +6480,7 @@ var CC_BG_COLORS = [
 
 function ccDefaultConfig() {
   return {
+    bodyType:'m',
     skin:'sk2', eyeColor:'ec0', expression:'neutral',
     hairStyle:'short', hairColor:'hc0',
     top:'hoodie-t', topColor:'tc0',
@@ -6520,7 +6525,7 @@ function ccLayerBg(bgc){
 }
 
 // ── BODY / CLOTHING ───────────────────────────────────────────────────────────
-function ccLayerBody(topId,tc,topGrad,topHi,topDk){
+function ccLayerBody(topId,tc,topGrad,topHi,topDk,bodyType){
   var fill=topGrad||tc;
   var ol=_ccDarkenHex(tc,0.55); // outline color
 
@@ -6532,7 +6537,9 @@ function ccLayerBody(topId,tc,topGrad,topHi,topDk){
       +'<path d="M6,80 Q13,74 22,70" stroke="'+ol+'" stroke-width="1" fill="none" opacity="0.5"/>'
       +'<path d="M114,80 Q107,74 98,70" stroke="'+ol+'" stroke-width="1" fill="none" opacity="0.5"/>'
       // Main torso
-      +'<path d="M0,120 L0,87 Q5,70 32,65 Q45,71 60,72 Q75,71 88,65 Q115,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +(bodyType==='f'
+        ?'<path d="M0,120 L0,87 Q5,70 36,65 Q47,71 60,72 Q73,71 84,65 Q115,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+        :'<path d="M0,120 L0,87 Q5,70 32,65 Q45,71 60,72 Q75,71 88,65 Q115,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>')
       // Kangaroo pocket
       +'<path d="M33,96 L33,116 Q60,121 87,116 L87,96 Q60,101 33,96 Z" fill="'+topDk+'" opacity="0.42" stroke="'+ol+'" stroke-width="1.2"/>'
       +'<path d="M33,96 Q60,101 87,96" stroke="'+ol+'" stroke-width="1.5" fill="none" opacity="0.55"/>'
@@ -6555,7 +6562,9 @@ function ccLayerBody(topId,tc,topGrad,topHi,topDk){
     else if(topId==='tshirt-bug') txt='<text x="60" y="90" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(180,210,255,0.82)">99 bugs in the code</text><text x="60" y="99" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(180,210,255,0.82)">you fix one...</text><text x="60" y="109" text-anchor="middle" font-family="monospace" font-size="4.5" fill="rgba(255,90,90,0.92)">127 bugs.</text>';
     else if(topId==='tshirt-404') txt='<text x="60" y="93" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(255,75,75,0.9)" font-weight="bold">404</text><text x="60" y="106" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(200,200,200,0.78)">Sleep Not Found</text>';
     else if(topId==='tshirt-py') txt='<text x="60" y="104" text-anchor="middle" font-size="14">&#x1F40D;</text>';
-    return '<path d="M0,120 L0,89 Q7,72 36,68 Q47,74 60,75 Q73,74 84,68 Q113,72 120,89 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+    return (bodyType==='f'
+      ?'<path d="M0,120 L0,89 Q7,72 38,68 Q48,74 60,75 Q72,74 82,68 Q113,72 120,89 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      :'<path d="M0,120 L0,89 Q7,72 36,68 Q47,74 60,75 Q73,74 84,68 Q113,72 120,89 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>')
       +'<path d="M43,75 Q51,82 60,82 Q69,82 77,75" stroke="'+ol+'" stroke-width="1.8" fill="none"/>'
       +'<path d="M5,91 Q16,77 36,70" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.28" stroke-linecap="round"/>'
       +'<path d="M115,91 Q104,77 84,70" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.28" stroke-linecap="round"/>'
@@ -6604,37 +6613,44 @@ function ccLayerBody(topId,tc,topGrad,topHi,topDk){
       +'<text x="78" y="97.5" text-anchor="middle" font-family="monospace" font-size="3.5" fill="rgba(140,170,255,0.95)">TS</text>';
   }
 
-  return '<path d="M0,120 L0,87 Q7,70 36,66 Q47,72 60,73 Q73,72 84,66 Q113,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>';
+  return (bodyType==='f'
+    ?'<path d="M0,120 L0,87 Q7,70 38,66 Q48,72 60,73 Q72,72 82,66 Q113,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+    :'<path d="M0,120 L0,87 Q7,70 36,66 Q47,72 60,73 Q73,72 84,66 Q113,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+  );
 }
 
 // ── HEAD ──────────────────────────────────────────────────────────────────────
-function ccLayerHead(skHex,skSh,skHi,u){
+function ccLayerHead(skHex,skSh,skHi,u,bodyType){
   var sg='url(#sg'+u+')', ol=_ccDarkenHex(skSh,0.35);
+  var isF=bodyType==='f';
+  var faceX=isF?22:20, faceW=isF?76:80, faceRx=isF?32:28;
+  var neckX=isF?46:44, neckW=isF?28:32;
+  var chinRx=isF?20:24;
   return (
     // Ears with outline
-    '<ellipse cx="18" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    +'<ellipse cx="102" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    +'<ellipse cx="18" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
-    +'<ellipse cx="102" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
+    '<ellipse cx="'+(faceX-2)+'" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
+    +'<ellipse cx="'+(faceX+faceW+2)+'" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
+    +'<ellipse cx="'+(faceX-2)+'" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
+    +'<ellipse cx="'+(faceX+faceW+2)+'" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
     // Head with outline
-    +'<rect x="20" y="12" width="80" height="72" rx="28" fill="'+sg+'" stroke="'+ol+'" stroke-width="2.2"/>'
+    +'<rect x="'+faceX+'" y="12" width="'+faceW+'" height="72" rx="'+faceRx+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="2.2"/>'
     // Neck
-    +'<rect x="44" y="70" width="32" height="18" rx="8" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    // Cel-shade shadow band (lower face in shadow)
-    +'<rect x="20" y="56" width="80" height="28" rx="18" fill="'+skSh+'" opacity="0.28"/>'
-    // Rim light (cool bounce on shadow/left side)
-    +'<ellipse cx="24" cy="48" rx="14" ry="26" fill="url(#rim'+u+')" opacity="0.9"/>'
+    +'<rect x="'+neckX+'" y="70" width="'+neckW+'" height="18" rx="8" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
+    // Cel-shade shadow band
+    +'<rect x="'+faceX+'" y="56" width="'+faceW+'" height="28" rx="18" fill="'+skSh+'" opacity="0.28"/>'
+    // Rim light
+    +'<ellipse cx="'+(faceX+4)+'" cy="48" rx="14" ry="26" fill="url(#rim'+u+')" opacity="0.9"/>'
     // Subsurface scatter cheeks
-    +'<ellipse cx="30" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
-    +'<ellipse cx="90" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
-    // Strong forehead specular
+    +'<ellipse cx="'+(faceX+10)+'" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
+    +'<ellipse cx="'+(faceX+faceW-10)+'" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
+    // Forehead specular
     +'<ellipse cx="67" cy="20" rx="22" ry="12" fill="'+skHi+'" opacity="0.32"/>'
     // Nose tip specular
     +'<ellipse cx="62" cy="59" rx="5" ry="3.5" fill="'+skHi+'" opacity="0.26"/>'
-    // Cheekbone specular (right/light side)
-    +'<ellipse cx="82" cy="51" rx="9" ry="7" fill="'+skHi+'" opacity="0.18"/>'
+    // Cheekbone specular
+    +'<ellipse cx="'+(faceX+faceW-8)+'" cy="51" rx="9" ry="7" fill="'+skHi+'" opacity="0.18"/>'
     // Chin shadow
-    +'<ellipse cx="60" cy="83" rx="24" ry="5" fill="'+skSh+'" opacity="0.28"/>'
+    +'<ellipse cx="60" cy="83" rx="'+chinRx+'" ry="5" fill="'+skSh+'" opacity="0.28"/>'
   );
 }
 
@@ -6764,6 +6780,43 @@ function ccLayerHair(styleId,hairColor,hairGrad,hcDk,hcHi){
       +'<circle cx="60" cy="7" r="9" fill="'+hcDk+'" opacity="0.35"/>'
       +'<ellipse cx="56" cy="1" rx="6" ry="5" fill="'+hcHi+'" opacity="0.35"/>'
       +'<ellipse cx="60" cy="14" rx="13" ry="3.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1" opacity="0.6"/>';
+  } else if(styleId==='ponytail'){
+    return '<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+ol+'" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.28"/>'
+      +'<path d="M96,20 Q109,42 105,72" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      +'<ellipse cx="96" cy="18" rx="6" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
+      +'<path d="M30,17 Q60,9 88,17" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.45" stroke-linecap="round"/>';
+  } else if(styleId==='bob'){
+    return '<path d="M20,32 Q20,6 60,6 Q100,6 100,32 Q95,10 60,9 Q25,10 20,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M20,32 L17,68 Q20,76 28,74 L31,38 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      +'<path d="M100,32 L103,68 Q100,76 92,74 L89,38 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      +'<path d="M28,74 Q60,79 92,74" stroke="'+ol+'" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+      +'<path d="M30,17 Q60,9 90,17" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.45" stroke-linecap="round"/>'
+      +'<path d="M19,36 Q17,52 18,68" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>'
+      +'<path d="M101,36 Q103,52 102,68" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>';
+  } else if(styleId==='pigtails'){
+    return '<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
+      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+ol+'" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.45"/>'
+      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
+      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+ol+'" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.45"/>'
+      +'<ellipse cx="22" cy="35" rx="6" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1"/>'
+      +'<ellipse cx="98" cy="35" rx="6" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1"/>'
+      +'<path d="M30,17 Q60,9 90,17" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.42" stroke-linecap="round"/>';
+  } else if(styleId==='curly-long'){
+    return '<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M14,52 Q9,58 15,62" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      +'<path d="M12,68 Q7,74 13,78" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M106,52 Q111,58 105,62" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      +'<path d="M108,68 Q113,74 107,78" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M28,16 Q60,9 92,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.4" stroke-linecap="round"/>';
   }
   return '';
 }
@@ -6878,6 +6931,7 @@ function ccLayerFacialHair(fhId,fhColor,fhGrad,skHex){
 // ── BUILD CHARACTER ───────────────────────────────────────────────────────────
 function buildCharacterSVG(cfg,w,h){
   var u='_'+(++_ccUid);
+  var bt=cfg.bodyType||'m';
   var sk=CC_SKINS.find(function(x){return x.id===cfg.skin;})||CC_SKINS[1];
   var skHex=sk.hex, skSh=sk.sh, skHi=_ccLightenHex(sk.hex,0.52);
 
@@ -6945,12 +6999,12 @@ function buildCharacterSVG(cfg,w,h){
     +' width="'+(w||120)+'" height="'+(h||120)+'" style="display:block;border-radius:'+br+'px;">'
     +defs
     +ccLayerBg(bgc)
-    +ccLayerBody(cfg.top,tc,'url(#tg'+u+')',tcHi,tcDk)
-    +ccLayerHead(skHex,skSh,skHi,u)
+    +ccLayerBody(cfg.top,tc,'url(#tg'+u+')',tcHi,tcDk,bt)
+    +ccLayerHead(skHex,skSh,skHi,u,bt)
     +ccLayerHair(cfg.hairStyle,hc,'url(#hg'+u+')',hcDk,hcHi)
     +ccLayerExpression(cfg.expression,ec,skHex,skSh,skHi,'url(#ig'+u+')',ecDk)
     +ccLayerGlasses(cfg.glasses,gc)
-    +ccLayerFacialHair(cfg.facialHair,fhc,'url(#fhg'+u+')',skHex)
+    +(bt==='f'?'':ccLayerFacialHair(cfg.facialHair,fhc,'url(#fhg'+u+')',skHex))
     +ccLayerHat(cfg.hat,htc,'url(#htg'+u+')',htcDk,htcHi)
     +'</svg>';
 }
@@ -6958,6 +7012,7 @@ function buildCharacterSVG(cfg,w,h){
 // ── CREATOR UI ────────────────────────────────────────────────────────────────
 
 var _CC_TABS=[
+  {id:'body',    label:'Body',    icon:'M60,5 Q74,5 74,20 Q74,35 60,35 Q46,35 46,20 Q46,5 60,5Z M42,38 Q44,32 60,30 Q76,32 78,38 L80,95 L40,95Z'},
   {id:'skin',   label:'Skin',    icon:'M60,20 Q80,20 85,40 Q85,65 60,70 Q35,65 35,40 Q40,20 60,20Z'},
   {id:'expr',   label:'Eyes',    icon:'M30,48 Q43,38 56,48 M64,48 Q77,38 90,48 M36,54 a7,5 0 1,0 14,0 M66,54 a7,5 0 1,0 14,0'},
   {id:'hair',   label:'Hair',    icon:'M25,35 Q25,10 60,10 Q95,10 95,35 Q90,15 60,15 Q30,15 25,35Z M20,38 Q22,32 25,35 M100,38 Q98,32 95,35'},
