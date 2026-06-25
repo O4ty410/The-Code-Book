@@ -7123,7 +7123,17 @@ function ccTab(i){
 function ccRenderTabContent(i){
   var area=document.getElementById('ccm-opts');if(!area)return;
   var cfg=window._ccCfg,tabId=_CC_TABS[i].id,html='';
-  if(tabId==='skin'){
+  if(tabId==='body'){
+    var btOpts=[{id:'m',label:'MALE'},{id:'f',label:'FEMALE'}];
+    html+='<div class="ccm-section-title">BODY TYPE</div><div class="ccm-opt-grid">';
+    btOpts.forEach(function(bt){
+      var tc2=Object.assign({},cfg,{bodyType:bt.id});
+      html+='<div class="ccm-opt-card'+(cfg.bodyType===bt.id?' sel':'')+'" onclick="ccSet(\'bodyType\',\''+bt.id+'\')">'
+        +buildCharacterSVG(tc2,120,120)
+        +'<div class="ccm-opt-label">'+bt.label+'</div></div>';
+    });
+    html+='</div>';
+  } else if(tabId==='skin'){
     html+='<div class="ccm-section-title">SKIN TONE</div><div class="ccm-skin-grid">'
       +CC_SKINS.map(function(s){return '<div class="ccm-skin-sw'+(cfg.skin===s.id?' sel':'')+'" style="background:'+s.hex+';" title="'+s.name+'" onclick="ccSet(\'skin\',\''+s.id+'\')"></div>';}).join('')+'</div>';
   }else if(tabId==='expr'){
@@ -7142,15 +7152,23 @@ function ccRenderTabContent(i){
     html+='<div class="ccm-section-title">FRAME COLOUR</div><div class="ccm-color-row">'+CC_GLASSES_COLORS.map(function(c){return '<div class="ccm-csw'+(cfg.glassesColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'glassesColor\',\''+c.id+'\')"></div>';}).join('')+'</div>';
     html+='<div class="ccm-section-title">GLASSES</div><div class="ccm-opt-grid">'+CC_GLASSES.map(function(g){var tc=Object.assign({},cfg,{glasses:g.id});return '<div class="ccm-opt-card'+(cfg.glasses===g.id?' sel':'')+'" onclick="ccSet(\'glasses\',\''+g.id+'\')">'+buildCharacterSVG(tc,120,120)+'<div class="ccm-opt-label">'+g.name+'</div></div>';}).join('')+'</div>';
   }else if(tabId==='fh'){
-    html+='<div class="ccm-section-title">FACIAL HAIR COLOUR</div><div class="ccm-color-row">'+CC_FH_COLORS.map(function(c){return '<div class="ccm-csw'+(cfg.fhColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'fhColor\',\''+c.id+'\')"></div>';}).join('')+'</div>';
-    html+='<div class="ccm-section-title">FACIAL HAIR</div><div class="ccm-opt-grid">'+CC_FACIAL_HAIR.map(function(f){var tc=Object.assign({},cfg,{facialHair:f.id});return '<div class="ccm-opt-card'+(cfg.facialHair===f.id?' sel':'')+'" onclick="ccSet(\'facialHair\',\''+f.id+'\')">'+buildCharacterSVG(tc,120,120)+'<div class="ccm-opt-label">'+f.name+'</div></div>';}).join('')+'</div>';
+    if(cfg.bodyType==='f'){
+      html+='<div style="padding:32px 16px;text-align:center;color:rgba(255,255,255,0.28);font-family:\'Space Mono\',monospace;font-size:9px;letter-spacing:2px;">NOT AVAILABLE<br><br>Switch to male body type<br>to access facial hair.</div>';
+    }else{
+      html+='<div class="ccm-section-title">FACIAL HAIR COLOUR</div><div class="ccm-color-row">'+CC_FH_COLORS.map(function(c){return '<div class="ccm-csw'+(cfg.fhColor===c.id?' sel':'')+'" style="background:'+c.hex+';" onclick="ccSet(\'fhColor\',\''+c.id+'\')"></div>';}).join('')+'</div>';
+      html+='<div class="ccm-section-title">FACIAL HAIR</div><div class="ccm-opt-grid">'+CC_FACIAL_HAIR.map(function(f){var tc=Object.assign({},cfg,{facialHair:f.id});return '<div class="ccm-opt-card'+(cfg.facialHair===f.id?' sel':'')+'" onclick="ccSet(\'facialHair\',\''+f.id+'\')">'+buildCharacterSVG(tc,120,120)+'<div class="ccm-opt-label">'+f.name+'</div></div>';}).join('')+'</div>';
+    }
   }else if(tabId==='bg'){
     html+='<div class="ccm-section-title">SCENE BACKGROUND</div><div class="ccm-bg-grid">'+CC_BG_COLORS.map(function(b){return '<div class="ccm-bg-sw'+(cfg.bgColor===b.id?' sel':'')+'" style="background:'+b.hex+';" onclick="ccSet(\'bgColor\',\''+b.id+'\')"></div>';}).join('')+'</div>';
   }
   area.innerHTML=html;
 }
 
-function ccSet(key,val){window._ccCfg[key]=val;ccRenderPreview();ccRenderTabContent(window._ccTab);}
+function ccSet(key,val){
+  window._ccCfg[key]=val;
+  if(key==='bodyType'&&val==='f'&&window._ccCfg.facialHair!=='none')window._ccCfg.facialHair='none';
+  ccRenderPreview();ccRenderTabContent(window._ccTab);
+}
 function ccRenderPreview(){var el=document.getElementById('ccm-char');if(el&&window._ccCfg)el.innerHTML=buildCharacterSVG(window._ccCfg,180,180);}
 
 function ccConfirm(){
