@@ -6621,36 +6621,40 @@ function ccLayerBody(topId,tc,topGrad,topHi,topDk,bodyType){
 
 // ── HEAD ──────────────────────────────────────────────────────────────────────
 function ccLayerHead(skHex,skSh,skHi,u,bodyType){
-  var sg='url(#sg'+u+')', ol=_ccDarkenHex(skSh,0.35);
+  var sg='url(#sg'+u+')', ol=_ccDarkenHex(skSh,0.44);
   var isF=bodyType==='f';
-  var faceX=isF?22:20, faceW=isF?76:80, faceRx=isF?32:28;
-  var neckX=isF?46:44, neckW=isF?28:32;
-  var chinRx=isF?20:24;
+  var fp=isF
+    ?'M27,38 Q25,15 60,13 Q95,15 93,38 Q97,56 91,68 Q80,84 60,87 Q40,84 29,68 Q23,56 27,38Z'
+    :'M24,38 Q22,13 60,11 Q98,13 96,38 Q100,57 94,69 Q82,87 60,90 Q38,87 26,69 Q20,57 24,38Z';
+  var sp=isF
+    ?'M74,18 Q93,36 91,68 Q80,84 60,87 L60,13 Q76,13 74,18Z'
+    :'M76,16 Q96,36 94,69 Q82,87 60,90 L60,11 Q78,11 76,16Z';
+  var np=isF
+    ?'M50,75 L50,92 Q60,96 70,92 L70,75 Q65,79 60,80 Q55,79 50,75Z'
+    :'M47,77 L47,94 Q60,98 73,94 L73,77 Q67,81 60,82 Q53,81 47,77Z';
   return (
-    // Ears with outline
-    '<ellipse cx="'+(faceX-2)+'" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    +'<ellipse cx="'+(faceX+faceW+2)+'" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    +'<ellipse cx="'+(faceX-2)+'" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
-    +'<ellipse cx="'+(faceX+faceW+2)+'" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
-    // Head with outline
-    +'<rect x="'+faceX+'" y="12" width="'+faceW+'" height="72" rx="'+faceRx+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="2.2"/>'
-    // Neck
-    +'<rect x="'+neckX+'" y="70" width="'+neckW+'" height="18" rx="8" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    // Cel-shade shadow band
-    +'<rect x="'+faceX+'" y="56" width="'+faceW+'" height="28" rx="18" fill="'+skSh+'" opacity="0.28"/>'
-    // Rim light
-    +'<ellipse cx="'+(faceX+4)+'" cy="48" rx="14" ry="26" fill="url(#rim'+u+')" opacity="0.9"/>'
-    // Subsurface scatter cheeks
-    +'<ellipse cx="'+(faceX+10)+'" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
-    +'<ellipse cx="'+(faceX+faceW-10)+'" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
-    // Forehead specular
-    +'<ellipse cx="67" cy="20" rx="22" ry="12" fill="'+skHi+'" opacity="0.32"/>'
-    // Nose tip specular
-    +'<ellipse cx="62" cy="59" rx="5" ry="3.5" fill="'+skHi+'" opacity="0.26"/>'
-    // Cheekbone specular
-    +'<ellipse cx="'+(faceX+faceW-8)+'" cy="51" rx="9" ry="7" fill="'+skHi+'" opacity="0.18"/>'
-    // Chin shadow
-    +'<ellipse cx="60" cy="83" rx="'+chinRx+'" ry="5" fill="'+skSh+'" opacity="0.28"/>'
+    '<path d="M27,44 Q18,41 17,51 Q17,62 27,61 L28,56 Q22,52 23,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
+    +'<path d="M22,47 Q19,52 21,57" stroke="'+skSh+'" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round"/>'
+    +(isF
+      ?'<path d="M93,44 Q102,41 103,51 Q103,62 93,61 L92,56 Q98,52 97,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
+      :'<path d="M93,44 Q103,41 104,51 Q104,62 93,61 L92,56 Q99,52 97,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>')
+    +'<ellipse cx="100" cy="53" rx="3" ry="4.5" fill="'+skHi+'" opacity="0.22"/>'
+    +'<path d="'+fp+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
+    +'<path d="'+sp+'" fill="'+skSh+'" opacity="0.11"/>'
+    +'<path d="'+np+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.5"/>'
+    +(isF
+      ?'<path d="M65,75 L65,92 Q70,90 70,75Z" fill="'+skSh+'" opacity="0.18"/>'
+       +'<path d="M55,75 L55,92 Q50,90 50,75Z" fill="'+skHi+'" opacity="0.20"/>'
+      :'<path d="M67,77 L67,94 Q73,92 73,77Z" fill="'+skSh+'" opacity="0.18"/>'
+       +'<path d="M53,77 L53,94 Q47,92 47,77Z" fill="'+skHi+'" opacity="0.20"/>')
+    +'<path d="M'+(isF?36:34)+',72 Q60,'+(isF?88:90)+' '+(isF?84:86)+',72" stroke="'+skSh+'" stroke-width="1" fill="none" opacity="0.18" stroke-linecap="round"/>'
+    +'<ellipse cx="34" cy="59" rx="13" ry="10" fill="url(#sss'+u+')" opacity="0.85"/>'
+    +'<ellipse cx="86" cy="59" rx="13" ry="10" fill="url(#sss'+u+')" opacity="0.85"/>'
+    +'<ellipse cx="'+(isF?27:25)+'" cy="50" rx="10" ry="24" fill="url(#rim'+u+')" opacity="0.9"/>'
+    +'<ellipse cx="43" cy="24" rx="18" ry="10" fill="'+skHi+'" opacity="0.26"/>'
+    +'<ellipse cx="'+(isF?42:40)+'" cy="54" rx="9" ry="7" fill="'+skHi+'" opacity="0.13"/>'
+    +'<ellipse cx="62" cy="61" rx="4" ry="3" fill="'+skHi+'" opacity="0.20"/>'
+    +'<ellipse cx="60" cy="'+(isF?85:87)+'" rx="'+(isF?18:20)+'" ry="4" fill="'+skSh+'" opacity="0.22"/>'
   );
 }
 
@@ -6669,6 +6673,7 @@ function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
       +'<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="#04040a"/>'
       +'<circle cx="'+sx+'" cy="'+sy+'" r="2.8" fill="white" opacity="0.97"/>'
       +'<circle cx="'+(cx+2.5)+'" cy="'+(cy+3.5)+'" r="1.2" fill="rgba(255,255,255,0.48)"/>'
+      +'<path d="M '+(cx-13.5)+' '+cy+' Q '+cx+' '+(cy-15)+' '+(cx+13.5)+' '+cy+'" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.58"/>'
     );
   }
 
