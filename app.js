@@ -6527,30 +6527,42 @@ function ccLayerBg(bgc){
 // ── BODY / CLOTHING ───────────────────────────────────────────────────────────
 function ccLayerBody(topId,tc,topGrad,topHi,topDk,bodyType){
   var fill=topGrad||tc;
-  var ol=_ccDarkenHex(tc,0.55); // outline color
+  var ol=_ccDarkenHex(tc,0.55);
+  var isF=bodyType==='f';
 
   if(topId==='hoodie-t'||topId==='hoodie-p'){
+    var torso=isF
+      ?'M0,120 L0,87 Q5,70 36,65 Q47,71 60,72 Q73,71 84,65 Q115,70 120,87 L120,120Z'
+      :'M0,120 L0,87 Q5,70 32,65 Q45,71 60,72 Q75,71 88,65 Q115,70 120,87 L120,120Z';
+    var lShoulder=isF?'M4,91 Q17,74 30,67':'M4,91 Q18,75 26,68';
+    var rShoulder=isF?'M116,91 Q103,74 90,67':'M116,91 Q102,75 94,68';
     return (
-      // Hood dome behind head
-      '<path d="M6,80 Q2,40 22,16 Q40,2 60,2 Q80,2 98,16 Q118,40 114,80 Q90,70 60,68 Q30,70 6,80 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2.2" stroke-linejoin="round"/>'
-      +'<path d="M10,78 Q8,44 25,20 Q42,7 60,7 Q78,7 95,20 Q112,44 110,78 Q88,69 60,67 Q32,69 10,78 Z" fill="'+topDk+'" opacity="0.28"/>'
+      '<path d="M6,80 Q2,40 22,16 Q40,2 60,2 Q80,2 98,16 Q118,40 114,80 Q90,70 60,68 Q30,70 6,80Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2.2" stroke-linejoin="round"/>'
+      +'<path d="M10,78 Q8,44 25,20 Q42,7 60,7 Q78,7 95,20 Q112,44 110,78 Q88,69 60,67 Q32,69 10,78Z" fill="'+topDk+'" opacity="0.25"/>'
+      // Hood right shadow
+      +'<path d="M60,2 Q80,2 98,16 Q118,40 114,80 Q90,70 60,68Z" fill="'+topDk+'" opacity="0.15"/>'
       +'<path d="M6,80 Q13,74 22,70" stroke="'+ol+'" stroke-width="1" fill="none" opacity="0.5"/>'
       +'<path d="M114,80 Q107,74 98,70" stroke="'+ol+'" stroke-width="1" fill="none" opacity="0.5"/>'
-      // Main torso
-      +(bodyType==='f'
-        ?'<path d="M0,120 L0,87 Q5,70 36,65 Q47,71 60,72 Q73,71 84,65 Q115,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-        :'<path d="M0,120 L0,87 Q5,70 32,65 Q45,71 60,72 Q75,71 88,65 Q115,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>')
+      +'<path d="'+torso+'" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Right shoulder shadow
+      +(isF
+        ?'<path d="M84,65 Q115,70 120,87 L120,120 L95,120 Q100,100 100,87 Q108,75 84,65Z" fill="'+topDk+'" opacity="0.18"/>'
+        :'<path d="M88,65 Q115,70 120,87 L120,120 L95,120 Q100,100 100,87 Q108,73 88,65Z" fill="'+topDk+'" opacity="0.18"/>')
       // Kangaroo pocket
-      +'<path d="M33,96 L33,116 Q60,121 87,116 L87,96 Q60,101 33,96 Z" fill="'+topDk+'" opacity="0.42" stroke="'+ol+'" stroke-width="1.2"/>'
+      +'<path d="M33,96 L33,116 Q60,121 87,116 L87,96 Q60,101 33,96Z" fill="'+topDk+'" opacity="0.42" stroke="'+ol+'" stroke-width="1.2"/>'
       +'<path d="M33,96 Q60,101 87,96" stroke="'+ol+'" stroke-width="1.5" fill="none" opacity="0.55"/>'
       // Drawstrings
       +'<line x1="55" y1="72" x2="48" y2="97" stroke="'+topHi+'" stroke-width="1.8" opacity="0.6" stroke-linecap="round"/>'
       +'<line x1="65" y1="72" x2="72" y2="97" stroke="'+topHi+'" stroke-width="1.8" opacity="0.6" stroke-linecap="round"/>'
       +'<ellipse cx="48" cy="99" rx="3" ry="4" fill="'+topDk+'" stroke="'+ol+'" stroke-width="0.8" opacity="0.75"/>'
       +'<ellipse cx="72" cy="99" rx="3" ry="4" fill="'+topDk+'" stroke="'+ol+'" stroke-width="0.8" opacity="0.75"/>'
-      // Shoulder highlights
-      +'<path d="M4,91 Q18,76 32,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.32" stroke-linecap="round"/>'
-      +'<path d="M116,91 Q102,76 88,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.32" stroke-linecap="round"/>'
+      // Fold creases
+      +'<path d="M22,86 Q26,96 22,108" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      +'<path d="M98,86 Q94,96 98,108" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      // Left shoulder edge highlight
+      +'<path d="'+lShoulder+'" stroke="'+topHi+'" stroke-width="2.8" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      // Right shoulder edge (darker — shadow side)
+      +'<path d="'+rShoulder+'" stroke="'+_ccDarkenHex(tc,0.15)+'" stroke-width="1.8" fill="none" opacity="0.28" stroke-linecap="round"/>'
       +(topId==='hoodie-t'?'<text x="60" y="90" text-anchor="middle" font-family="monospace" font-size="5" fill="rgba(180,220,255,0.65)">&gt; run ./life</text>':'')
     );
   }
@@ -6562,19 +6574,34 @@ function ccLayerBody(topId,tc,topGrad,topHi,topDk,bodyType){
     else if(topId==='tshirt-bug') txt='<text x="60" y="90" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(180,210,255,0.82)">99 bugs in the code</text><text x="60" y="99" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(180,210,255,0.82)">you fix one...</text><text x="60" y="109" text-anchor="middle" font-family="monospace" font-size="4.5" fill="rgba(255,90,90,0.92)">127 bugs.</text>';
     else if(topId==='tshirt-404') txt='<text x="60" y="93" text-anchor="middle" font-family="monospace" font-size="9" fill="rgba(255,75,75,0.9)" font-weight="bold">404</text><text x="60" y="106" text-anchor="middle" font-family="monospace" font-size="3.8" fill="rgba(200,200,200,0.78)">Sleep Not Found</text>';
     else if(topId==='tshirt-py') txt='<text x="60" y="104" text-anchor="middle" font-size="14">&#x1F40D;</text>';
-    return (bodyType==='f'
-      ?'<path d="M0,120 L0,89 Q7,72 38,68 Q48,74 60,75 Q72,74 82,68 Q113,72 120,89 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      :'<path d="M0,120 L0,89 Q7,72 36,68 Q47,74 60,75 Q73,74 84,68 Q113,72 120,89 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>')
+    var tTorso=isF
+      ?'M0,120 L0,89 Q7,72 38,68 Q48,74 60,75 Q72,74 82,68 Q113,72 120,89 L120,120Z'
+      :'M0,120 L0,89 Q7,72 36,68 Q47,74 60,75 Q73,74 84,68 Q113,72 120,89 L120,120Z';
+    return '<path d="'+tTorso+'" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
       +'<path d="M43,75 Q51,82 60,82 Q69,82 77,75" stroke="'+ol+'" stroke-width="1.8" fill="none"/>'
-      +'<path d="M5,91 Q16,77 36,70" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.28" stroke-linecap="round"/>'
-      +'<path d="M115,91 Q104,77 84,70" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.28" stroke-linecap="round"/>'
+      // Right shoulder shadow panel
+      +(isF
+        ?'<path d="M82,68 Q113,72 120,89 L120,120 L98,120 Q104,100 104,88 Q110,78 82,68Z" fill="'+topDk+'" opacity="0.18"/>'
+        :'<path d="M84,68 Q113,72 120,89 L120,120 L98,120 Q104,100 104,88 Q110,78 84,68Z" fill="'+topDk+'" opacity="0.18"/>')
+      // Fold lines
+      +'<path d="M20,86 Q24,97 20,110" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M100,86 Q96,97 100,110" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      // Left shoulder edge highlight
+      +(isF
+        ?'<path d="M5,91 Q16,77 38,70" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.32" stroke-linecap="round"/>'
+        :'<path d="M5,91 Q16,77 36,70" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.32" stroke-linecap="round"/>')
+      // Right shoulder darker edge
+      +(isF
+        ?'<path d="M115,91 Q104,77 82,70" stroke="'+_ccDarkenHex(tc,0.12)+'" stroke-width="1.8" fill="none" opacity="0.28" stroke-linecap="round"/>'
+        :'<path d="M115,91 Q104,77 84,70" stroke="'+_ccDarkenHex(tc,0.12)+'" stroke-width="1.8" fill="none" opacity="0.28" stroke-linecap="round"/>')
       +txt;
   }
 
   if(topId==='astronaut'){
     var sb='#d8e4f0',shi='#f0f6ff',sdk='#7a9ab0',smid='#aac0d4';
-    return '<path d="M0,120 L0,85 Q3,64 26,57 Q42,64 60,66 Q78,64 94,57 Q117,64 120,85 L120,120 Z" fill="'+sb+'" stroke="'+sdk+'" stroke-width="2.2" stroke-linejoin="round"/>'
-      +'<path d="M0,120 L0,103 Q20,90 60,88 Q100,90 120,103 L120,120 Z" fill="'+sdk+'" opacity="0.18"/>'
+    return '<path d="M0,120 L0,85 Q3,64 26,57 Q42,64 60,66 Q78,64 94,57 Q117,64 120,85 L120,120Z" fill="'+sb+'" stroke="'+sdk+'" stroke-width="2.2" stroke-linejoin="round"/>'
+      +'<path d="M60,66 Q78,64 94,57 Q117,64 120,85 L120,120 L90,120 Q95,100 95,85 Q108,72 94,57Z" fill="'+sdk+'" opacity="0.14"/>'
+      +'<path d="M0,120 L0,103 Q20,90 60,88 Q100,90 120,103 L120,120Z" fill="'+sdk+'" opacity="0.18"/>'
       +'<line x1="60" y1="66" x2="60" y2="120" stroke="'+sdk+'" stroke-width="1" opacity="0.35"/>'
       +'<path d="M12,86 Q60,83 108,86" stroke="'+sdk+'" stroke-width="0.8" fill="none" opacity="0.3"/>'
       +'<ellipse cx="26" cy="72" rx="22" ry="14" fill="'+smid+'" stroke="'+sdk+'" stroke-width="1.5"/>'
@@ -6594,63 +6621,80 @@ function ccLayerBody(topId,tc,topGrad,topHi,topDk,bodyType){
   }
 
   if(topId==='flight'){
-    return '<path d="M0,120 L0,87 Q7,70 33,65 Q46,71 60,72 Q74,71 87,65 Q113,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+    return '<path d="M0,120 L0,87 Q7,70 33,65 Q46,71 60,72 Q74,71 87,65 Q113,70 120,87 L120,120Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M87,65 Q113,70 120,87 L120,120 L96,120 Q102,100 102,87 Q108,74 87,65Z" fill="'+topDk+'" opacity="0.18"/>'
       +'<line x1="60" y1="73" x2="60" y2="120" stroke="'+topDk+'" stroke-width="1.2" opacity="0.45"/>'
       +'<rect x="44" y="87" width="32" height="18" rx="2" fill="rgba(0,0,0,0.28)" stroke="rgba(180,200,255,0.28)" stroke-width="0.8"/>'
       +'<text x="60" y="99" text-anchor="middle" font-family="sans-serif" font-size="5.5" fill="rgba(200,220,255,0.9)" font-weight="bold">NASA</text>'
-      +'<path d="M5,90 Q17,75 33,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.3" stroke-linecap="round"/>'
-      +'<path d="M115,90 Q103,75 87,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.3" stroke-linecap="round"/>';
+      +'<path d="M5,90 Q17,75 33,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M115,90 Q103,75 87,68" stroke="'+_ccDarkenHex(tc,0.12)+'" stroke-width="1.8" fill="none" opacity="0.28" stroke-linecap="round"/>'
+      +'<path d="M22,88 Q26,100 22,112" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M98,88 Q94,100 98,112" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.35" stroke-linecap="round"/>';
   }
 
   if(topId==='jacket'){
-    return '<path d="M0,120 L0,87 Q7,70 33,65 Q46,71 60,72 Q74,71 87,65 Q113,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+    return '<path d="M0,120 L0,87 Q7,70 33,65 Q46,71 60,72 Q74,71 87,65 Q113,70 120,87 L120,120Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M87,65 Q113,70 120,87 L120,120 L96,120 Q102,100 102,87 Q108,74 87,65Z" fill="'+topDk+'" opacity="0.18"/>'
       +'<path d="M50,73 L43,94 L60,83 L77,94 L70,73" fill="'+topDk+'" opacity="0.32"/>'
-      +'<path d="M5,90 Q17,75 33,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.3" stroke-linecap="round"/>'
-      +'<path d="M115,90 Q103,75 87,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.3" stroke-linecap="round"/>'
+      +'<path d="M5,90 Q17,75 33,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.32" stroke-linecap="round"/>'
+      +'<path d="M115,90 Q103,75 87,68" stroke="'+_ccDarkenHex(tc,0.12)+'" stroke-width="1.8" fill="none" opacity="0.28" stroke-linecap="round"/>'
+      +'<path d="M22,88 Q26,100 22,112" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M98,88 Q94,100 98,112" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.35" stroke-linecap="round"/>'
       +'<circle cx="40" cy="95" r="7" fill="rgba(255,180,60,0.15)" stroke="rgba(255,180,60,0.55)" stroke-width="1"/>'
       +'<text x="40" y="97.5" text-anchor="middle" font-family="monospace" font-size="4" fill="rgba(255,200,80,0.95)">JS</text>'
       +'<circle cx="78" cy="95" r="7" fill="rgba(80,130,255,0.15)" stroke="rgba(80,130,255,0.55)" stroke-width="1"/>'
       +'<text x="78" y="97.5" text-anchor="middle" font-family="monospace" font-size="3.5" fill="rgba(140,170,255,0.95)">TS</text>';
   }
 
-  return (bodyType==='f'
-    ?'<path d="M0,120 L0,87 Q7,70 38,66 Q48,72 60,73 Q72,72 82,66 Q113,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-    :'<path d="M0,120 L0,87 Q7,70 36,66 Q47,72 60,73 Q73,72 84,66 Q113,70 120,87 L120,120 Z" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-  );
+  var fallTorso=isF
+    ?'M0,120 L0,87 Q7,70 38,66 Q48,72 60,73 Q72,72 82,66 Q113,70 120,87 L120,120Z'
+    :'M0,120 L0,87 Q7,70 36,66 Q47,72 60,73 Q73,72 84,66 Q113,70 120,87 L120,120Z';
+  return '<path d="'+fallTorso+'" fill="'+fill+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+    +(isF
+      ?'<path d="M82,66 Q113,70 120,87 L120,120 L96,120 Q102,100 102,87 Q110,76 82,66Z" fill="'+topDk+'" opacity="0.16"/>'
+      :'<path d="M84,66 Q113,70 120,87 L120,120 L96,120 Q102,100 102,87 Q110,76 84,66Z" fill="'+topDk+'" opacity="0.16"/>')
+    +(isF
+      ?'<path d="M5,90 Q16,76 38,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.3" stroke-linecap="round"/>'
+      :'<path d="M5,90 Q16,76 36,68" stroke="'+topHi+'" stroke-width="2.5" fill="none" opacity="0.3" stroke-linecap="round"/>')
+    +'<path d="M22,88 Q26,100 22,112" stroke="'+topDk+'" stroke-width="1.2" fill="none" opacity="0.3" stroke-linecap="round"/>';
 }
 
 // ── HEAD ──────────────────────────────────────────────────────────────────────
 function ccLayerHead(skHex,skSh,skHi,u,bodyType){
-  var sg='url(#sg'+u+')', ol=_ccDarkenHex(skSh,0.35);
+  var sg='url(#sg'+u+')', ol=_ccDarkenHex(skSh,0.44);
   var isF=bodyType==='f';
-  var faceX=isF?22:20, faceW=isF?76:80, faceRx=isF?32:28;
-  var neckX=isF?46:44, neckW=isF?28:32;
-  var chinRx=isF?20:24;
+  var fp=isF
+    ?'M27,38 Q25,15 60,13 Q95,15 93,38 Q97,56 91,68 Q80,84 60,87 Q40,84 29,68 Q23,56 27,38Z'
+    :'M24,38 Q22,13 60,11 Q98,13 96,38 Q100,57 94,69 Q82,87 60,90 Q38,87 26,69 Q20,57 24,38Z';
+  var sp=isF
+    ?'M74,18 Q93,36 91,68 Q80,84 60,87 L60,13 Q76,13 74,18Z'
+    :'M76,16 Q96,36 94,69 Q82,87 60,90 L60,11 Q78,11 76,16Z';
+  var np=isF
+    ?'M50,75 L50,92 Q60,96 70,92 L70,75 Q65,79 60,80 Q55,79 50,75Z'
+    :'M47,77 L47,94 Q60,98 73,94 L73,77 Q67,81 60,82 Q53,81 47,77Z';
   return (
-    // Ears with outline
-    '<ellipse cx="'+(faceX-2)+'" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    +'<ellipse cx="'+(faceX+faceW+2)+'" cy="47" rx="9" ry="14" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    +'<ellipse cx="'+(faceX-2)+'" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
-    +'<ellipse cx="'+(faceX+faceW+2)+'" cy="47" rx="5" ry="9" fill="'+skSh+'" opacity="0.3"/>'
-    // Head with outline
-    +'<rect x="'+faceX+'" y="12" width="'+faceW+'" height="72" rx="'+faceRx+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="2.2"/>'
-    // Neck
-    +'<rect x="'+neckX+'" y="70" width="'+neckW+'" height="18" rx="8" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
-    // Cel-shade shadow band
-    +'<rect x="'+faceX+'" y="56" width="'+faceW+'" height="28" rx="18" fill="'+skSh+'" opacity="0.28"/>'
-    // Rim light
-    +'<ellipse cx="'+(faceX+4)+'" cy="48" rx="14" ry="26" fill="url(#rim'+u+')" opacity="0.9"/>'
-    // Subsurface scatter cheeks
-    +'<ellipse cx="'+(faceX+10)+'" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
-    +'<ellipse cx="'+(faceX+faceW-10)+'" cy="56" rx="15" ry="12" fill="url(#sss'+u+')" opacity="0.9"/>'
-    // Forehead specular
-    +'<ellipse cx="67" cy="20" rx="22" ry="12" fill="'+skHi+'" opacity="0.32"/>'
-    // Nose tip specular
-    +'<ellipse cx="62" cy="59" rx="5" ry="3.5" fill="'+skHi+'" opacity="0.26"/>'
-    // Cheekbone specular
-    +'<ellipse cx="'+(faceX+faceW-8)+'" cy="51" rx="9" ry="7" fill="'+skHi+'" opacity="0.18"/>'
-    // Chin shadow
-    +'<ellipse cx="60" cy="83" rx="'+chinRx+'" ry="5" fill="'+skSh+'" opacity="0.28"/>'
+    '<path d="M27,44 Q18,41 17,51 Q17,62 27,61 L28,56 Q22,52 23,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
+    +'<path d="M22,47 Q19,52 21,57" stroke="'+skSh+'" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round"/>'
+    +(isF
+      ?'<path d="M93,44 Q102,41 103,51 Q103,62 93,61 L92,56 Q98,52 97,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
+      :'<path d="M93,44 Q103,41 104,51 Q104,62 93,61 L92,56 Q99,52 97,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>')
+    +'<ellipse cx="100" cy="53" rx="3" ry="4.5" fill="'+skHi+'" opacity="0.22"/>'
+    +'<path d="'+fp+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
+    +'<path d="'+sp+'" fill="'+skSh+'" opacity="0.11"/>'
+    +'<path d="'+np+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.5"/>'
+    +(isF
+      ?'<path d="M65,75 L65,92 Q70,90 70,75Z" fill="'+skSh+'" opacity="0.18"/>'
+       +'<path d="M55,75 L55,92 Q50,90 50,75Z" fill="'+skHi+'" opacity="0.20"/>'
+      :'<path d="M67,77 L67,94 Q73,92 73,77Z" fill="'+skSh+'" opacity="0.18"/>'
+       +'<path d="M53,77 L53,94 Q47,92 47,77Z" fill="'+skHi+'" opacity="0.20"/>')
+    +'<path d="M'+(isF?36:34)+',72 Q60,'+(isF?88:90)+' '+(isF?84:86)+',72" stroke="'+skSh+'" stroke-width="1" fill="none" opacity="0.18" stroke-linecap="round"/>'
+    +'<ellipse cx="34" cy="59" rx="13" ry="10" fill="url(#sss'+u+')" opacity="0.85"/>'
+    +'<ellipse cx="86" cy="59" rx="13" ry="10" fill="url(#sss'+u+')" opacity="0.85"/>'
+    +'<ellipse cx="'+(isF?27:25)+'" cy="50" rx="10" ry="24" fill="url(#rim'+u+')" opacity="0.9"/>'
+    +'<ellipse cx="43" cy="24" rx="18" ry="10" fill="'+skHi+'" opacity="0.26"/>'
+    +'<ellipse cx="'+(isF?42:40)+'" cy="54" rx="9" ry="7" fill="'+skHi+'" opacity="0.13"/>'
+    +'<ellipse cx="62" cy="61" rx="4" ry="3" fill="'+skHi+'" opacity="0.20"/>'
+    +'<ellipse cx="60" cy="'+(isF?85:87)+'" rx="'+(isF?18:20)+'" ry="4" fill="'+skSh+'" opacity="0.22"/>'
   );
 }
 
@@ -6669,6 +6713,7 @@ function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
       +'<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="#04040a"/>'
       +'<circle cx="'+sx+'" cy="'+sy+'" r="2.8" fill="white" opacity="0.97"/>'
       +'<circle cx="'+(cx+2.5)+'" cy="'+(cy+3.5)+'" r="1.2" fill="rgba(255,255,255,0.48)"/>'
+      +'<path d="M '+(cx-13.5)+' '+cy+' Q '+cx+' '+(cy-15)+' '+(cx+13.5)+' '+cy+'" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.58"/>'
     );
   }
 
@@ -6719,96 +6764,262 @@ function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
 // ── HAIR ──────────────────────────────────────────────────────────────────────
 function ccLayerHair(styleId,hairColor,hairGrad,hcDk,hcHi){
   if(styleId==='bald') return '';
-  var h=hairGrad||hairColor, ol=_ccDarkenHex(hairColor,0.55);
+  var h=hairGrad||hairColor, ol=_ccDarkenHex(hairColor,0.58);
+  var drk=_ccDarkenHex(hairColor,0.32);
+
   if(styleId==='short'){
-    return '<path d="M20,32 Q20,6 60,6 Q100,6 100,32 Q92,11 60,10 Q28,11 20,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M20,32 L20,42 Q22,36 25,33 Z" fill="'+hairColor+'" opacity="0.65" stroke="'+ol+'" stroke-width="1"/>'
-      +'<path d="M100,32 L100,42 Q98,36 95,33 Z" fill="'+hairColor+'" opacity="0.65" stroke="'+ol+'" stroke-width="1"/>'
-      +'<path d="M30,17 Q60,9 90,17" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.48" stroke-linecap="round"/>'
-      +'<path d="M35,13 Q60,8 85,13" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.28" stroke-linecap="round"/>';
-  } else if(styleId==='messy'){
-    return '<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+    return (
+      // Drop shadow
+      '<path d="M18,34 Q18,4 60,4 Q102,4 102,34 Q94,9 60,8 Q26,9 18,34Z" fill="'+ol+'" opacity="0.28"/>'
+      // Base
+      +'<path d="M20,32 Q20,6 60,6 Q100,6 100,32 Q92,11 60,10 Q28,11 20,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Temple sideburns
+      +'<path d="M20,32 L20,42 Q22,36 25,33Z" fill="'+hairColor+'" opacity="0.65" stroke="'+ol+'" stroke-width="1"/>'
+      +'<path d="M100,32 L100,42 Q98,36 95,33Z" fill="'+hairColor+'" opacity="0.65" stroke="'+ol+'" stroke-width="1"/>'
+      // Right-side shadow (upper-left light)
+      +'<path d="M60,6 Q100,6 100,32 Q94,11 60,10Z" fill="'+drk+'" opacity="0.22"/>'
+      // Main highlight stroke (upper-left)
+      +'<path d="M26,18 Q50,8 76,14" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.50" stroke-linecap="round"/>'
+      +'<path d="M30,13 Q52,7 68,11" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.30" stroke-linecap="round"/>'
+      // Crown specular
+      +'<ellipse cx="46" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.42"/>'
+    );
+  }
+
+  if(styleId==='messy'){
+    return (
+      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.28"/>'
+      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Messy spike strands
       +'<path d="M21,21 Q24,5 37,8" stroke="'+hairColor+'" stroke-width="8" fill="none" stroke-linecap="round"/>'
-      +'<path d="M21,21 Q24,5 37,8" stroke="'+ol+'" stroke-width="9.5" fill="none" stroke-linecap="round" opacity="0.35"/>'
+      +'<path d="M21,21 Q24,5 37,8" stroke="'+ol+'" stroke-width="9.5" fill="none" stroke-linecap="round" opacity="0.32"/>'
       +'<path d="M38,9 Q43,1 53,6" stroke="'+hairColor+'" stroke-width="6.5" fill="none" stroke-linecap="round"/>'
-      +'<path d="M38,9 Q43,1 53,6" stroke="'+ol+'" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.35"/>'
+      +'<path d="M38,9 Q43,1 53,6" stroke="'+ol+'" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.32"/>'
       +'<path d="M67,6 Q74,0 80,5" stroke="'+hairColor+'" stroke-width="6.5" fill="none" stroke-linecap="round"/>'
-      +'<path d="M67,6 Q74,0 80,5" stroke="'+ol+'" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.35"/>'
+      +'<path d="M67,6 Q74,0 80,5" stroke="'+ol+'" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.32"/>'
       +'<path d="M84,9 Q93,3 99,13" stroke="'+hairColor+'" stroke-width="7.5" fill="none" stroke-linecap="round"/>'
-      +'<path d="M84,9 Q93,3 99,13" stroke="'+ol+'" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.35"/>'
-      +'<path d="M26,16 Q28,8 35,10" stroke="'+hcHi+'" stroke-width="2.5" fill="none" opacity="0.42" stroke-linecap="round"/>'
-      +'<path d="M70,7 Q75,2 78,6" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>';
-  } else if(styleId==='long'){
-    return '<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M20,34 Q10,64 12,102 Q16,92 20,84 L24,38 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
-      +'<path d="M100,34 Q110,64 108,102 Q104,92 100,84 L96,38 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
-      +'<path d="M20,38 Q11,67 13,102" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.3"/>'
-      +'<path d="M22,38 Q15,70 17,102" stroke="'+hcDk+'" stroke-width="1.2" fill="none" opacity="0.22"/>'
-      +'<path d="M100,38 Q109,67 107,102" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.3"/>'
-      +'<path d="M98,38 Q105,70 103,102" stroke="'+hcDk+'" stroke-width="1.2" fill="none" opacity="0.22"/>'
-      +'<path d="M28,16 Q60,9 92,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.42" stroke-linecap="round"/>';
-  } else if(styleId==='afro'){
-    return '<ellipse cx="60" cy="13" rx="35" ry="30" fill="'+h+'" stroke="'+ol+'" stroke-width="2.2"/>'
+      +'<path d="M84,9 Q93,3 99,13" stroke="'+ol+'" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.32"/>'
+      // Right side shadow
+      +'<path d="M60,5 Q102,5 100,34 Q94,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
+      // Highlight on left-facing spikes
+      +'<path d="M26,16 Q28,8 35,10" stroke="'+hcHi+'" stroke-width="2.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      +'<path d="M70,7 Q75,2 78,6" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.42" stroke-linecap="round"/>'
+      // Crown specular
+      +'<ellipse cx="44" cy="10" rx="12" ry="5" fill="'+hcHi+'" opacity="0.38"/>'
+    );
+  }
+
+  if(styleId==='long'){
+    return (
+      // Drop shadow behind
+      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.25"/>'
+      // Side panels shadow
+      +'<path d="M18,36 Q8,66 10,104" stroke="'+ol+'" stroke-width="15" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M102,36 Q112,66 110,104" stroke="'+ol+'" stroke-width="15" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      // Base crown
+      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Side panels base
+      +'<path d="M20,34 Q10,64 12,102 Q16,92 20,84 L24,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      +'<path d="M100,34 Q110,64 108,102 Q104,92 100,84 L96,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      // Right-side shadow
+      +'<path d="M60,5 Q102,5 100,34 L96,38 Q92,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
+      +'<path d="M100,38 Q108,64 106,96 L108,102 Q104,92 100,84Z" fill="'+drk+'" opacity="0.22"/>'
+      // Highlight strokes left panels
+      +'<path d="M20,38 Q11,67 13,102" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M22,38 Q15,70 17,102" stroke="'+hcHi+'" stroke-width="1.2" fill="none" opacity="0.22" stroke-linecap="round"/>'
+      // Crown highlight
+      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.40"/>'
+    );
+  }
+
+  if(styleId==='afro'){
+    return (
+      // Drop shadow
+      '<ellipse cx="62" cy="15" rx="37" ry="32" fill="'+ol+'" opacity="0.28"/>'
+      +'<ellipse cx="26" cy="30" rx="18" ry="22" fill="'+ol+'" opacity="0.22"/>'
+      +'<ellipse cx="94" cy="30" rx="18" ry="22" fill="'+ol+'" opacity="0.22"/>'
+      // Base puffs
+      +'<ellipse cx="60" cy="13" rx="35" ry="30" fill="'+h+'" stroke="'+ol+'" stroke-width="2.2"/>'
       +'<ellipse cx="24" cy="28" rx="16" ry="20" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8"/>'
       +'<ellipse cx="96" cy="28" rx="16" ry="20" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8"/>'
-      +'<ellipse cx="60" cy="20" rx="22" ry="18" fill="'+hcDk+'" opacity="0.28"/>'
-      +'<ellipse cx="48" cy="5" rx="14" ry="9" fill="'+hcHi+'" opacity="0.3"/>'
-      +'<ellipse cx="28" cy="20" rx="7" ry="8" fill="'+hcHi+'" opacity="0.2"/>';
-  } else if(styleId==='braids'){
-    return '<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+hairColor+'" stroke-width="11" fill="none" stroke-linecap="round"/>'
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+ol+'" stroke-width="12.5" fill="none" stroke-linecap="round" opacity="0.3"/>'
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+hcDk+'" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.55"/>'
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+hcHi+'" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="3,8" opacity="0.32"/>'
-      +'<path d="M100,36 Q110,68 108,106" stroke="'+hairColor+'" stroke-width="11" fill="none" stroke-linecap="round"/>'
-      +'<path d="M100,36 Q110,68 108,106" stroke="'+ol+'" stroke-width="12.5" fill="none" stroke-linecap="round" opacity="0.3"/>'
-      +'<path d="M100,36 Q110,68 108,106" stroke="'+hcDk+'" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.55"/>'
-      +'<path d="M100,36 Q110,68 108,106" stroke="'+hcHi+'" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="3,8" opacity="0.32"/>'
-      +'<path d="M28,16 Q60,9 92,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.4" stroke-linecap="round"/>';
-  } else if(styleId==='bun'){
-    return '<path d="M21,32 Q21,11 60,10 Q99,11 99,32 Q92,15 60,14 Q28,15 21,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<circle cx="60" cy="5" r="13" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="2"/>'
-      +'<circle cx="60" cy="7" r="9" fill="'+hcDk+'" opacity="0.35"/>'
-      +'<ellipse cx="56" cy="1" rx="6" ry="5" fill="'+hcHi+'" opacity="0.35"/>'
-      +'<ellipse cx="60" cy="14" rx="13" ry="3.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1" opacity="0.6"/>';
-  } else if(styleId==='ponytail'){
-    return '<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
-      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+ol+'" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.28"/>'
-      +'<path d="M96,20 Q109,42 105,72" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
-      +'<ellipse cx="96" cy="18" rx="6" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
-      +'<path d="M30,17 Q60,9 88,17" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.45" stroke-linecap="round"/>';
-  } else if(styleId==='bob'){
-    return '<path d="M20,32 Q20,6 60,6 Q100,6 100,32 Q95,10 60,9 Q25,10 20,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M20,32 L17,68 Q20,76 28,74 L31,38 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
-      +'<path d="M100,32 L103,68 Q100,76 92,74 L89,38 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
-      +'<path d="M28,74 Q60,79 92,74" stroke="'+ol+'" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
-      +'<path d="M30,17 Q60,9 90,17" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.45" stroke-linecap="round"/>'
-      +'<path d="M19,36 Q17,52 18,68" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>'
-      +'<path d="M101,36 Q103,52 102,68" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>';
-  } else if(styleId==='pigtails'){
-    return '<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
-      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+ol+'" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.45"/>'
-      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
-      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+ol+'" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.45"/>'
-      +'<ellipse cx="22" cy="35" rx="6" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1"/>'
-      +'<ellipse cx="98" cy="35" rx="6" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1"/>'
-      +'<path d="M30,17 Q60,9 90,17" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.42" stroke-linecap="round"/>';
-  } else if(styleId==='curly-long'){
-    return '<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34 Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
-      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
-      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M14,52 Q9,58 15,62" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
-      +'<path d="M12,68 Q7,74 13,78" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.35" stroke-linecap="round"/>'
-      +'<path d="M106,52 Q111,58 105,62" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
-      +'<path d="M108,68 Q113,74 107,78" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.35" stroke-linecap="round"/>'
-      +'<path d="M28,16 Q60,9 92,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.4" stroke-linecap="round"/>';
+      // Right-side shadow
+      +'<ellipse cx="72" cy="18" rx="22" ry="18" fill="'+drk+'" opacity="0.20"/>'
+      +'<ellipse cx="96" cy="30" rx="10" ry="14" fill="'+drk+'" opacity="0.18"/>'
+      // Crown and side highlights
+      +'<ellipse cx="44" cy="5" rx="14" ry="9" fill="'+hcHi+'" opacity="0.32"/>'
+      +'<ellipse cx="26" cy="20" rx="7" ry="8" fill="'+hcHi+'" opacity="0.24"/>'
+      // Surface texture dimples (small dark dots for the afro texture)
+      +'<circle cx="38" cy="8" r="2" fill="'+drk+'" opacity="0.18"/>'
+      +'<circle cx="52" cy="5" r="2" fill="'+drk+'" opacity="0.15"/>'
+      +'<circle cx="28" cy="18" r="1.5" fill="'+drk+'" opacity="0.15"/>'
+      +'<circle cx="70" cy="6" r="2" fill="'+drk+'" opacity="0.12"/>'
+    );
   }
+
+  if(styleId==='braids'){
+    return (
+      // Crown drop shadow
+      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.25"/>'
+      // Braid drop shadows
+      +'<path d="M18,38 Q8,70 10,108" stroke="'+ol+'" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.3"/>'
+      +'<path d="M102,38 Q112,70 110,108" stroke="'+ol+'" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.3"/>'
+      // Crown base
+      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Braid base
+      +'<path d="M20,36 Q10,68 12,106" stroke="'+hairColor+'" stroke-width="11" fill="none" stroke-linecap="round"/>'
+      +'<path d="M20,36 Q10,68 12,106" stroke="'+ol+'" stroke-width="12.5" fill="none" stroke-linecap="round" opacity="0.28"/>'
+      +'<path d="M100,36 Q110,68 108,106" stroke="'+hairColor+'" stroke-width="11" fill="none" stroke-linecap="round"/>'
+      +'<path d="M100,36 Q110,68 108,106" stroke="'+ol+'" stroke-width="12.5" fill="none" stroke-linecap="round" opacity="0.28"/>'
+      // Braid weave pattern
+      +'<path d="M20,36 Q10,68 12,106" stroke="'+hcDk+'" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.52"/>'
+      +'<path d="M100,36 Q110,68 108,106" stroke="'+hcDk+'" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.52"/>'
+      // Left braid highlight
+      +'<path d="M20,36 Q10,68 12,106" stroke="'+hcHi+'" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="3,8" opacity="0.35"/>'
+      // Crown right shadow
+      +'<path d="M60,5 Q102,5 100,34 Q94,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
+      // Crown highlight
+      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.45" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.40"/>'
+    );
+  }
+
+  if(styleId==='bun'){
+    return (
+      // Crown drop shadow
+      '<path d="M19,34 Q19,9 60,8 Q101,9 101,34 Q94,13 60,12 Q26,13 19,34Z" fill="'+ol+'" opacity="0.25"/>'
+      // Bun drop shadow
+      +'<circle cx="62" cy="7" r="14" fill="'+ol+'" opacity="0.28"/>'
+      // Crown base
+      +'<path d="M21,32 Q21,11 60,10 Q99,11 99,32 Q92,15 60,14 Q28,15 21,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Bun base
+      +'<circle cx="60" cy="5" r="13" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="2"/>'
+      // Bun right shadow
+      +'<path d="M60,5 Q72,-7 72,5 Q72,18 60,18Z" fill="'+drk+'" opacity="0.25"/>'
+      // Bun highlight
+      +'<ellipse cx="54" cy="0" rx="7" ry="5" fill="'+hcHi+'" opacity="0.40"/>'
+      +'<circle cx="56" cy="2" r="4" fill="'+hcHi+'" opacity="0.28"/>'
+      // Hair tie groove
+      +'<ellipse cx="60" cy="14" rx="13" ry="3.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1" opacity="0.6"/>'
+      // Crown highlight
+      +'<path d="M26,18 Q50,10 78,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.44" stroke-linecap="round"/>'
+    );
+  }
+
+  if(styleId==='ponytail'){
+    return (
+      // Crown drop shadow
+      '<path d="M20,34 Q20,6 60,5 Q100,6 100,34 Q92,11 60,10 Q28,11 20,34Z" fill="'+ol+'" opacity="0.25"/>'
+      // Ponytail drop shadow
+      +'<path d="M97,19 Q112,42 108,74 Q104,94 100,114" stroke="'+ol+'" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.28"/>'
+      // Crown base
+      +'<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Right crown shadow
+      +'<path d="M60,7 Q98,8 98,32 Q90,13 60,12Z" fill="'+drk+'" opacity="0.20"/>'
+      // Ponytail base
+      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      // Ponytail right shadow
+      +'<path d="M97,20 Q112,44 108,74 Q104,94 100,114" stroke="'+drk+'" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.30"/>'
+      // Ponytail highlight
+      +'<path d="M94,18 Q108,40 104,70" stroke="'+hcHi+'" stroke-width="2.2" fill="none" opacity="0.42" stroke-linecap="round"/>'
+      // Hair band
+      +'<ellipse cx="97" cy="18" rx="5.5" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
+      +'<path d="M93,16 Q97,13 101,16" stroke="'+hcHi+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      // Crown highlight
+      +'<path d="M28,18 Q50,9 80,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="12" rx="14" ry="6" fill="'+hcHi+'" opacity="0.42"/>'
+    );
+  }
+
+  if(styleId==='bob'){
+    return (
+      // Drop shadow
+      '<path d="M18,34 Q18,4 60,4 Q102,4 102,34 Q96,8 60,7 Q24,8 18,34Z" fill="'+ol+'" opacity="0.25"/>'
+      +'<path d="M16,70 Q14,56 18,34Z" fill="'+ol+'" opacity="0.20"/>'
+      +'<path d="M104,70 Q106,56 102,34Z" fill="'+ol+'" opacity="0.20"/>'
+      // Crown base
+      +'<path d="M20,32 Q20,6 60,6 Q100,6 100,32 Q95,10 60,9 Q25,10 20,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Side panels
+      +'<path d="M20,32 L17,68 Q20,76 28,74 L31,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      +'<path d="M100,32 L103,68 Q100,76 92,74 L89,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Bottom hem line
+      +'<path d="M28,74 Q60,79 92,74" stroke="'+ol+'" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+      // Right panel shadow
+      +'<path d="M60,6 Q100,6 100,32 L89,38 Q94,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
+      +'<path d="M100,36 L103,68 Q100,76 92,74 L98,68 Q101,60 100,36Z" fill="'+drk+'" opacity="0.18"/>'
+      // Left panel highlight
+      +'<path d="M19,36 Q17,52 18,68" stroke="'+hcHi+'" stroke-width="1.8" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      // Crown highlight
+      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.50" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.44"/>'
+    );
+  }
+
+  if(styleId==='pigtails'){
+    return (
+      // Crown drop shadow
+      '<path d="M20,34 Q20,6 60,5 Q100,6 100,34 Q92,11 60,10 Q28,11 20,34Z" fill="'+ol+'" opacity="0.25"/>'
+      // Pigtail drop shadows
+      +'<path d="M20,36 Q4,58 6,92 Q10,109 16,116" stroke="'+ol+'" stroke-width="13" fill="none" stroke-linecap="round" opacity="0.28"/>'
+      +'<path d="M100,36 Q116,58 114,92 Q110,109 104,116" stroke="'+ol+'" stroke-width="13" fill="none" stroke-linecap="round" opacity="0.28"/>'
+      // Crown base
+      +'<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Crown right shadow
+      +'<path d="M60,7 Q98,8 98,32 Q90,13 60,12Z" fill="'+drk+'" opacity="0.20"/>'
+      // Left pigtail
+      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
+      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+ol+'" stroke-width="11.8" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.42"/>'
+      // Left pigtail highlight
+      +'<path d="M21,36 Q5,58 7,88" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      // Right pigtail
+      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
+      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+ol+'" stroke-width="11.8" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.42"/>'
+      // Hair bands
+      +'<ellipse cx="22" cy="35" rx="6.5" ry="4.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
+      +'<path d="M18,33 Q22,30 26,33" stroke="'+hcHi+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      +'<ellipse cx="98" cy="35" rx="6.5" ry="4.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
+      +'<path d="M94,33 Q98,30 102,33" stroke="'+hcHi+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      // Crown highlight
+      +'<path d="M28,18 Q50,9 80,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="12" rx="14" ry="6" fill="'+hcHi+'" opacity="0.40"/>'
+    );
+  }
+
+  if(styleId==='curly-long'){
+    return (
+      // Drop shadow crown
+      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.25"/>'
+      // Curly side drop shadows
+      +'<path d="M18,36 Q3,64 8,94 Q4,105 11,114" stroke="'+ol+'" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      +'<path d="M102,36 Q117,64 112,94 Q116,105 109,114" stroke="'+ol+'" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.25"/>'
+      // Crown base
+      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Crown right shadow
+      +'<path d="M60,5 Q102,5 100,34 Q92,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
+      // Curly sides
+      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.22"/>'
+      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
+      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.22"/>'
+      // Right side shadow
+      +'<path d="M102,36 Q117,64 112,92 Q116,105 109,114" stroke="'+drk+'" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.28"/>'
+      // Curl detail texture
+      +'<path d="M14,52 Q9,58 15,62" stroke="'+hcHi+'" stroke-width="2.2" fill="none" opacity="0.42" stroke-linecap="round"/>'
+      +'<path d="M12,68 Q7,74 13,78" stroke="'+hcHi+'" stroke-width="2.2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      +'<path d="M11,84 Q6,90 12,94" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.34" stroke-linecap="round"/>'
+      +'<path d="M106,52 Q111,58 105,62" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.28" stroke-linecap="round"/>'
+      +'<path d="M108,68 Q113,74 107,78" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.25" stroke-linecap="round"/>'
+      // Left highlight
+      +'<path d="M19,36 Q4,64 8,94" stroke="'+hcHi+'" stroke-width="1.8" fill="none" opacity="0.32" stroke-linecap="round"/>'
+      // Crown highlight
+      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.42"/>'
+    );
+  }
+
   return '';
 }
 
