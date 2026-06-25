@@ -6663,57 +6663,72 @@ function ccLayerBody(topId,tc,topGrad,topHi,topDk,bodyType){
 function ccLayerHead(skHex,skSh,skHi,u,bodyType){
   var sg='url(#sg'+u+')', ol=_ccDarkenHex(skSh,0.44);
   var isF=bodyType==='f';
+  // Female: narrower oval with tapered chin, softer cheeks
+  // Male: broader with squarer jaw and defined jaw angle
   var fp=isF
-    ?'M27,38 Q25,15 60,13 Q95,15 93,38 Q97,56 91,68 Q80,84 60,87 Q40,84 29,68 Q23,56 27,38Z'
-    :'M24,38 Q22,13 60,11 Q98,13 96,38 Q100,57 94,69 Q82,87 60,90 Q38,87 26,69 Q20,57 24,38Z';
+    ?'M30,37 Q28,14 60,12 Q92,14 90,37 Q93,54 87,66 Q76,82 60,85 Q44,82 33,66 Q27,54 30,37Z'
+    :'M22,36 Q20,11 60,9 Q100,11 98,36 Q103,56 98,72 Q88,90 60,93 Q32,90 22,72 Q17,56 22,36Z';
   var sp=isF
-    ?'M74,18 Q93,36 91,68 Q80,84 60,87 L60,13 Q76,13 74,18Z'
-    :'M76,16 Q96,36 94,69 Q82,87 60,90 L60,11 Q78,11 76,16Z';
+    ?'M73,17 Q91,34 87,66 Q76,82 60,85 L60,12 Q75,12 73,17Z'
+    :'M76,14 Q98,35 96,72 Q86,90 60,93 L60,9 Q79,9 76,14Z';
   var np=isF
-    ?'M50,75 L50,92 Q60,96 70,92 L70,75 Q65,79 60,80 Q55,79 50,75Z'
-    :'M47,77 L47,94 Q60,98 73,94 L73,77 Q67,81 60,82 Q53,81 47,77Z';
+    ?'M52,73 L52,90 Q60,94 68,90 L68,73 Q64,77 60,78 Q56,77 52,73Z'
+    :'M45,76 L45,95 Q60,99 75,95 L75,76 Q68,80 60,81 Q52,80 45,76Z';
+  // Ear positions tuned to face width
+  var earL=isF
+    ?'M30,43 Q21,40 20,50 Q20,61 30,60 L31,55 Q25,51 26,48Z'
+    :'M22,43 Q13,40 12,51 Q12,62 22,61 L23,56 Q17,52 18,49Z';
+  var earR=isF
+    ?'M90,43 Q99,40 100,50 Q100,61 90,60 L89,55 Q95,51 94,48Z'
+    :'M98,43 Q107,40 108,51 Q108,62 98,61 L97,56 Q103,52 102,49Z';
   return (
-    '<path d="M27,44 Q18,41 17,51 Q17,62 27,61 L28,56 Q22,52 23,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
-    +'<path d="M22,47 Q19,52 21,57" stroke="'+skSh+'" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round"/>'
+    '<path d="'+earL+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
     +(isF
-      ?'<path d="M93,44 Q102,41 103,51 Q103,62 93,61 L92,56 Q98,52 97,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
-      :'<path d="M93,44 Q103,41 104,51 Q104,62 93,61 L92,56 Q99,52 97,49Z" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>')
-    +'<ellipse cx="100" cy="53" rx="3" ry="4.5" fill="'+skHi+'" opacity="0.22"/>'
+      ?'<path d="M23,47 Q21,52 22,57" stroke="'+skSh+'" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round"/>'
+      :'<path d="M16,47 Q14,52 15,57" stroke="'+skSh+'" stroke-width="1.2" fill="none" opacity="0.5" stroke-linecap="round"/>')
+    +'<path d="'+earR+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.4"/>'
+    +(isF
+      ?'<ellipse cx="97" cy="52" rx="3" ry="4.5" fill="'+skHi+'" opacity="0.22"/>'
+      :'<ellipse cx="105" cy="53" rx="3" ry="4.5" fill="'+skHi+'" opacity="0.22"/>')
     +'<path d="'+fp+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.8"/>'
     +'<path d="'+sp+'" fill="'+skSh+'" opacity="0.11"/>'
     +'<path d="'+np+'" fill="'+sg+'" stroke="'+ol+'" stroke-width="1.5"/>'
     +(isF
-      ?'<path d="M65,75 L65,92 Q70,90 70,75Z" fill="'+skSh+'" opacity="0.18"/>'
-       +'<path d="M55,75 L55,92 Q50,90 50,75Z" fill="'+skHi+'" opacity="0.20"/>'
-      :'<path d="M67,77 L67,94 Q73,92 73,77Z" fill="'+skSh+'" opacity="0.18"/>'
-       +'<path d="M53,77 L53,94 Q47,92 47,77Z" fill="'+skHi+'" opacity="0.20"/>')
-    +'<path d="M'+(isF?36:34)+',72 Q60,'+(isF?88:90)+' '+(isF?84:86)+',72" stroke="'+skSh+'" stroke-width="1" fill="none" opacity="0.18" stroke-linecap="round"/>'
-    +'<ellipse cx="34" cy="59" rx="13" ry="10" fill="url(#sss'+u+')" opacity="0.85"/>'
-    +'<ellipse cx="86" cy="59" rx="13" ry="10" fill="url(#sss'+u+')" opacity="0.85"/>'
-    +'<ellipse cx="'+(isF?27:25)+'" cy="50" rx="10" ry="24" fill="url(#rim'+u+')" opacity="0.9"/>'
-    +'<ellipse cx="43" cy="24" rx="18" ry="10" fill="'+skHi+'" opacity="0.26"/>'
-    +'<ellipse cx="'+(isF?42:40)+'" cy="54" rx="9" ry="7" fill="'+skHi+'" opacity="0.13"/>'
+      ?'<path d="M65,73 L65,90 Q68,88 68,73Z" fill="'+skSh+'" opacity="0.18"/>'
+       +'<path d="M55,73 L55,90 Q52,88 52,73Z" fill="'+skHi+'" opacity="0.20"/>'
+      :'<path d="M68,76 L68,95 Q75,93 75,76Z" fill="'+skSh+'" opacity="0.18"/>'
+       +'<path d="M52,76 L52,95 Q45,93 45,76Z" fill="'+skHi+'" opacity="0.20"/>')
+    // Jaw shadow line — female softer, male defined
+    +'<path d="M'+(isF?38:32)+','+(isF?70:73)+' Q60,'+(isF?86:91)+' '+(isF?82:88)+','+(isF?70:73)+'" stroke="'+skSh+'" stroke-width="1" fill="none" opacity="0.18" stroke-linecap="round"/>'
+    // Cheek glow + temple lighting
+    +(isF
+      ?'<ellipse cx="35" cy="56" rx="11" ry="9" fill="url(#sss'+u+')" opacity="0.8"/>'
+       +'<ellipse cx="85" cy="56" rx="11" ry="9" fill="url(#sss'+u+')" opacity="0.8"/>'
+      :'<ellipse cx="34" cy="60" rx="13" ry="11" fill="url(#sss'+u+')" opacity="0.85"/>'
+       +'<ellipse cx="86" cy="60" rx="13" ry="11" fill="url(#sss'+u+')" opacity="0.85"/>')
+    +'<ellipse cx="'+(isF?30:23)+'" cy="50" rx="9" ry="22" fill="url(#rim'+u+')" opacity="0.9"/>'
+    +'<ellipse cx="43" cy="24" rx="16" ry="9" fill="'+skHi+'" opacity="0.26"/>'
+    +'<ellipse cx="'+(isF?42:40)+'" cy="54" rx="8" ry="6" fill="'+skHi+'" opacity="0.13"/>'
     +'<ellipse cx="62" cy="61" rx="4" ry="3" fill="'+skHi+'" opacity="0.20"/>'
-    +'<ellipse cx="60" cy="'+(isF?85:87)+'" rx="'+(isF?18:20)+'" ry="4" fill="'+skSh+'" opacity="0.22"/>'
+    +'<ellipse cx="60" cy="'+(isF?83:90)+'" rx="'+(isF?16:22)+'" ry="4" fill="'+skSh+'" opacity="0.22"/>'
   );
 }
 
 // ── EXPRESSION / FACE DETAILS ─────────────────────────────────────────────────
 function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
-  var lx=42, rx=78, ey=46;
+  var lx=42, rx=78, ey=48;
   var browColor=_ccDarkenHex(skSh,0.15);
   var ol=_ccDarkenHex(skSh,0.42);
 
-  // Clean open eye — no eyelid overlays, no rectangles
   function eye(cx,cy,sx,sy){
     return (
-      '<ellipse cx="'+cx+'" cy="'+cy+'" rx="13.5" ry="11.5" fill="white" stroke="'+ol+'" stroke-width="1.8"/>'
-      +'<circle cx="'+cx+'" cy="'+cy+'" r="8.5" fill="'+irisGrad+'"/>'
-      +'<circle cx="'+cx+'" cy="'+cy+'" r="8.5" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>'
-      +'<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="#04040a"/>'
-      +'<circle cx="'+sx+'" cy="'+sy+'" r="2.8" fill="white" opacity="0.97"/>'
-      +'<circle cx="'+(cx+2.5)+'" cy="'+(cy+3.5)+'" r="1.2" fill="rgba(255,255,255,0.48)"/>'
-      +'<path d="M '+(cx-13.5)+' '+cy+' Q '+cx+' '+(cy-15)+' '+(cx+13.5)+' '+cy+'" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.58"/>'
+      '<ellipse cx="'+cx+'" cy="'+cy+'" rx="10.5" ry="8.5" fill="white" stroke="'+ol+'" stroke-width="1.8"/>'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="6.5" fill="'+irisGrad+'"/>'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="6.5" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="3.5" fill="#04040a"/>'
+      +'<circle cx="'+sx+'" cy="'+sy+'" r="2.0" fill="white" opacity="0.97"/>'
+      +'<circle cx="'+(cx+2.0)+'" cy="'+(cy+2.5)+'" r="1.0" fill="rgba(255,255,255,0.48)"/>'
+      +'<path d="M '+(cx-10.5)+' '+cy+' Q '+cx+' '+(cy-11)+' '+(cx+10.5)+' '+cy+'" stroke="'+ol+'" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.58"/>'
     );
   }
 
@@ -6722,41 +6737,36 @@ function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
           +'<path d="'+d+'" stroke="'+browColor+'" stroke-width="4.8" fill="none" stroke-linecap="round"/>';
   }
 
-  var eyeBase=eye(lx,ey,39,43)+eye(rx,ey,75,43);
+  var eyeBase=eye(lx,ey,39,45)+eye(rx,ey,75,45);
   var brows='',nose='',mouth='',extras='';
 
   if(expr==='happy'){
-    // Raised high arched brows
-    brows=brow('M28,24 Q'+lx+',16 56,22')+brow('M64,22 Q'+rx+',16 92,24');
+    brows=brow('M28,26 Q'+lx+',18 56,24')+brow('M64,24 Q'+rx+',18 92,26');
     mouth='<path d="M36,63 Q60,86 84,63 Q60,80 36,63 Z" fill="'+skSh+'" stroke="'+ol+'" stroke-width="1.4"/>'
          +'<path d="M40,64 Q60,80 80,64 Q60,76 40,64 Z" fill="white" opacity="0.88"/>';
     extras='<ellipse cx="26" cy="57" rx="14" ry="10" fill="rgba(255,110,85,0.28)"/>'
           +'<ellipse cx="94" cy="57" rx="14" ry="10" fill="rgba(255,110,85,0.28)"/>';
   } else if(expr==='focused'){
-    // Angled inward — outer high, inner low (furrowed V shape)
-    brows=brow('M28,24 Q36,29 56,34')+brow('M64,34 Q84,29 92,24');
+    brows=brow('M28,26 Q36,31 56,36')+brow('M64,36 Q84,31 92,26');
     mouth='<path d="M46,70 Q60,73 74,70" stroke="'+skSh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
-    extras='<path d="M55,26 Q60,23 65,26" stroke="'+ol+'" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.5"/>';
+    extras='<path d="M55,28 Q60,25 65,28" stroke="'+ol+'" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.5"/>';
   } else if(expr==='smug'){
-    // Left brow flat, right brow raised arch
-    brows=brow('M30,31 Q'+lx+',28 56,31')+brow('M64,22 Q'+rx+',16 92,24');
+    brows=brow('M30,33 Q'+lx+',30 56,33')+brow('M64,24 Q'+rx+',18 92,26');
     mouth='<path d="M45,70 Q56,75 72,66" stroke="'+skSh+'" stroke-width="3.2" fill="none" stroke-linecap="round"/>';
   } else if(expr==='tired'){
-    // Outer corners drooping down
-    brows=brow('M28,28 Q40,33 56,38')+brow('M64,38 Q80,33 92,28');
+    brows=brow('M28,30 Q40,35 56,40')+brow('M64,40 Q80,35 92,30');
     mouth='<path d="M46,73 Q60,69 74,73" stroke="'+skSh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
-    extras='<ellipse cx="42" cy="54" rx="11" ry="5" fill="rgba(140,130,170,0.2)"/>'
-          +'<ellipse cx="78" cy="54" rx="11" ry="5" fill="rgba(140,130,170,0.2)"/>';
+    extras='<ellipse cx="42" cy="55" rx="11" ry="5" fill="rgba(140,130,170,0.2)"/>'
+          +'<ellipse cx="78" cy="55" rx="11" ry="5" fill="rgba(140,130,170,0.2)"/>';
   } else {
-    // Neutral — gentle symmetric arch
-    brows=brow('M28,30 Q'+lx+',24 56,30')+brow('M64,30 Q'+rx+',24 92,30');
+    brows=brow('M28,32 Q'+lx+',26 56,32')+brow('M64,32 Q'+rx+',26 92,32');
     mouth='<path d="M46,69 Q60,76 74,69" stroke="'+skSh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
   }
 
-  nose='<ellipse cx="54" cy="61" rx="4" ry="3" fill="'+skSh+'" opacity="0.3"/>'
-      +'<ellipse cx="66" cy="61" rx="4" ry="3" fill="'+skSh+'" opacity="0.3"/>'
-      +'<path d="M58,49 Q60,55 62,61" stroke="'+skHi+'" stroke-width="1.2" fill="none" opacity="0.3"/>'
-      +'<ellipse cx="60" cy="60" rx="4" ry="2.8" fill="'+skHi+'" opacity="0.22"/>';
+  nose='<ellipse cx="54" cy="62" rx="4" ry="3" fill="'+skSh+'" opacity="0.3"/>'
+      +'<ellipse cx="66" cy="62" rx="4" ry="3" fill="'+skSh+'" opacity="0.3"/>'
+      +'<path d="M58,51 Q60,57 62,62" stroke="'+skHi+'" stroke-width="1.2" fill="none" opacity="0.3"/>'
+      +'<ellipse cx="60" cy="61" rx="4" ry="2.8" fill="'+skHi+'" opacity="0.22"/>';
 
   return '<g>'+brows+eyeBase+nose+mouth+extras+'</g>';
 }
@@ -6768,255 +6778,265 @@ function ccLayerHair(styleId,hairColor,hairGrad,hcDk,hcHi){
   var drk=_ccDarkenHex(hairColor,0.32);
 
   if(styleId==='short'){
+    // Tight fade cut — dome sits close to skull, clean fade strip at temples
     return (
-      // Drop shadow
-      '<path d="M18,34 Q18,4 60,4 Q102,4 102,34 Q94,9 60,8 Q26,9 18,34Z" fill="'+ol+'" opacity="0.28"/>'
-      // Base
-      +'<path d="M20,32 Q20,6 60,6 Q100,6 100,32 Q92,11 60,10 Q28,11 20,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Temple sideburns
-      +'<path d="M20,32 L20,42 Q22,36 25,33Z" fill="'+hairColor+'" opacity="0.65" stroke="'+ol+'" stroke-width="1"/>'
-      +'<path d="M100,32 L100,42 Q98,36 95,33Z" fill="'+hairColor+'" opacity="0.65" stroke="'+ol+'" stroke-width="1"/>'
-      // Right-side shadow (upper-left light)
-      +'<path d="M60,6 Q100,6 100,32 Q94,11 60,10Z" fill="'+drk+'" opacity="0.22"/>'
-      // Main highlight stroke (upper-left)
-      +'<path d="M26,18 Q50,8 76,14" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.50" stroke-linecap="round"/>'
-      +'<path d="M30,13 Q52,7 68,11" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.30" stroke-linecap="round"/>'
-      // Crown specular
-      +'<ellipse cx="46" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.42"/>'
+      '<path d="M19,35 Q19,6 60,5 Q101,6 101,35 Q93,10 60,9 Q27,10 19,35Z" fill="'+ol+'" opacity="0.22"/>'
+      +'<path d="M21,33 Q21,8 60,7 Q99,8 99,33 Q91,12 60,11 Q29,12 21,33Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Fade strip — darker band at temples
+      +'<path d="M21,33 Q21,38 24,42 Q28,38 29,33Z" fill="'+drk+'" opacity="0.45" stroke="'+ol+'" stroke-width="0.8"/>'
+      +'<path d="M99,33 Q99,38 96,42 Q92,38 91,33Z" fill="'+drk+'" opacity="0.45" stroke="'+ol+'" stroke-width="0.8"/>'
+      +'<path d="M60,7 Q99,8 99,33 Q91,12 60,11Z" fill="'+drk+'" opacity="0.18"/>'
+      +'<path d="M28,16 Q52,8 74,14" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.52" stroke-linecap="round"/>'
+      +'<ellipse cx="46" cy="11" rx="13" ry="5" fill="'+hcHi+'" opacity="0.40"/>'
     );
   }
 
   if(styleId==='messy'){
+    // Bedhead spikes — irregular spikes in multiple directions, clearly spiky silhouette
     return (
-      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.28"/>'
-      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Messy spike strands
-      +'<path d="M21,21 Q24,5 37,8" stroke="'+hairColor+'" stroke-width="8" fill="none" stroke-linecap="round"/>'
-      +'<path d="M21,21 Q24,5 37,8" stroke="'+ol+'" stroke-width="9.5" fill="none" stroke-linecap="round" opacity="0.32"/>'
-      +'<path d="M38,9 Q43,1 53,6" stroke="'+hairColor+'" stroke-width="6.5" fill="none" stroke-linecap="round"/>'
-      +'<path d="M38,9 Q43,1 53,6" stroke="'+ol+'" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.32"/>'
-      +'<path d="M67,6 Q74,0 80,5" stroke="'+hairColor+'" stroke-width="6.5" fill="none" stroke-linecap="round"/>'
-      +'<path d="M67,6 Q74,0 80,5" stroke="'+ol+'" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.32"/>'
-      +'<path d="M84,9 Q93,3 99,13" stroke="'+hairColor+'" stroke-width="7.5" fill="none" stroke-linecap="round"/>'
-      +'<path d="M84,9 Q93,3 99,13" stroke="'+ol+'" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.32"/>'
-      // Right side shadow
-      +'<path d="M60,5 Q102,5 100,34 Q94,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
-      // Highlight on left-facing spikes
-      +'<path d="M26,16 Q28,8 35,10" stroke="'+hcHi+'" stroke-width="2.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
-      +'<path d="M70,7 Q75,2 78,6" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.42" stroke-linecap="round"/>'
-      // Crown specular
-      +'<ellipse cx="44" cy="10" rx="12" ry="5" fill="'+hcHi+'" opacity="0.38"/>'
+      // Base crown
+      '<path d="M22,35 Q20,8 60,6 Q100,8 98,35 Q90,12 60,11 Q30,12 22,35Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Left-side spikes (paths as filled shapes for silhouette clarity)
+      +'<path d="M22,28 Q16,8 30,12 Q24,16 22,28Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      +'<path d="M32,14 Q36,-2 48,8 Q40,10 32,14Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      +'<path d="M50,8 Q56,-4 66,6 Q60,8 50,8Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      // Right-side spikes
+      +'<path d="M72,8 Q80,-2 86,9 Q79,9 72,8Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      +'<path d="M88,12 Q98,3 100,18 Q95,14 88,12Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      // Right shadow
+      +'<path d="M60,6 Q100,8 98,35 Q90,12 60,11Z" fill="'+drk+'" opacity="0.18"/>'
+      // Highlights on left-lit spikes
+      +'<path d="M17,10 Q23,6 27,14" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.44" stroke-linecap="round"/>'
+      +'<path d="M37,1 Q43,-3 46,8" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.40" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="9" rx="11" ry="5" fill="'+hcHi+'" opacity="0.32"/>'
     );
   }
 
   if(styleId==='long'){
+    // Flowing long hair — side panels with natural wavy/flowing edge
     return (
-      // Drop shadow behind
-      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.25"/>'
-      // Side panels shadow
-      +'<path d="M18,36 Q8,66 10,104" stroke="'+ol+'" stroke-width="15" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M102,36 Q112,66 110,104" stroke="'+ol+'" stroke-width="15" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      // Base crown
-      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Side panels base
-      +'<path d="M20,34 Q10,64 12,102 Q16,92 20,84 L24,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
-      +'<path d="M100,34 Q110,64 108,102 Q104,92 100,84 L96,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
-      // Right-side shadow
-      +'<path d="M60,5 Q102,5 100,34 L96,38 Q92,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
-      +'<path d="M100,38 Q108,64 106,96 L108,102 Q104,92 100,84Z" fill="'+drk+'" opacity="0.22"/>'
-      // Highlight strokes left panels
-      +'<path d="M20,38 Q11,67 13,102" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.35" stroke-linecap="round"/>'
-      +'<path d="M22,38 Q15,70 17,102" stroke="'+hcHi+'" stroke-width="1.2" fill="none" opacity="0.22" stroke-linecap="round"/>'
-      // Crown highlight
-      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      '<path d="M20,36 Q18,6 60,5 Q102,6 100,36 Q92,11 60,10 Q28,11 20,36Z" fill="'+ol+'" opacity="0.22"/>'
+      // Left side panel — flowing edge suggests wavy strands
+      +'<path d="M20,36 Q11,54 9,76 Q8,96 12,116 Q14,108 17,96 Q15,76 16,56 L22,40Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      +'<path d="M100,36 Q109,54 111,76 Q112,96 108,116 Q106,108 103,96 Q105,76 104,56 L98,40Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.5" stroke-linejoin="round"/>'
+      // Crown
+      +'<path d="M22,34 Q20,8 60,7 Q100,8 98,34 Q90,13 60,12 Q30,13 22,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Strand separation lines (flowing locks)
+      +'<path d="M14,52 Q13,74 14,96" stroke="'+ol+'" stroke-width="1.8" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      +'<path d="M10,58 Q10,80 11,106" stroke="'+ol+'" stroke-width="1.2" fill="none" opacity="0.22" stroke-linecap="round"/>'
+      +'<path d="M106,52 Q107,74 106,96" stroke="'+ol+'" stroke-width="1.8" fill="none" opacity="0.35" stroke-linecap="round"/>'
+      // Right shadow
+      +'<path d="M60,7 Q100,8 98,34 Q90,13 60,12Z" fill="'+drk+'" opacity="0.18"/>'
+      +'<path d="M100,38 Q109,58 110,88 L111,116 Q109,108 106,96 Q107,74 106,56Z" fill="'+drk+'" opacity="0.20"/>'
+      // Left highlights
+      +'<path d="M15,54 Q12,76 13,102" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      +'<path d="M28,18 Q52,9 78,15" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.50" stroke-linecap="round"/>'
       +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.40"/>'
     );
   }
 
   if(styleId==='afro'){
+    // Large bumpy puff — outer edge has visible bumps for unmistakable silhouette
     return (
-      // Drop shadow
-      '<ellipse cx="62" cy="15" rx="37" ry="32" fill="'+ol+'" opacity="0.28"/>'
-      +'<ellipse cx="26" cy="30" rx="18" ry="22" fill="'+ol+'" opacity="0.22"/>'
-      +'<ellipse cx="94" cy="30" rx="18" ry="22" fill="'+ol+'" opacity="0.22"/>'
-      // Base puffs
-      +'<ellipse cx="60" cy="13" rx="35" ry="30" fill="'+h+'" stroke="'+ol+'" stroke-width="2.2"/>'
-      +'<ellipse cx="24" cy="28" rx="16" ry="20" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8"/>'
-      +'<ellipse cx="96" cy="28" rx="16" ry="20" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8"/>'
-      // Right-side shadow
-      +'<ellipse cx="72" cy="18" rx="22" ry="18" fill="'+drk+'" opacity="0.20"/>'
-      +'<ellipse cx="96" cy="30" rx="10" ry="14" fill="'+drk+'" opacity="0.18"/>'
-      // Crown and side highlights
-      +'<ellipse cx="44" cy="5" rx="14" ry="9" fill="'+hcHi+'" opacity="0.32"/>'
-      +'<ellipse cx="26" cy="20" rx="7" ry="8" fill="'+hcHi+'" opacity="0.24"/>'
-      // Surface texture dimples (small dark dots for the afro texture)
-      +'<circle cx="38" cy="8" r="2" fill="'+drk+'" opacity="0.18"/>'
-      +'<circle cx="52" cy="5" r="2" fill="'+drk+'" opacity="0.15"/>'
-      +'<circle cx="28" cy="18" r="1.5" fill="'+drk+'" opacity="0.15"/>'
-      +'<circle cx="70" cy="6" r="2" fill="'+drk+'" opacity="0.12"/>'
+      // Outer shadow puff
+      '<path d="M26,38 Q18,14 30,1 Q18,6 12,24 Q6,42 14,56 Q10,44 16,36Z" fill="'+ol+'" opacity="0.22"/>'
+      +'<path d="M94,38 Q102,14 90,1 Q102,6 108,24 Q114,42 106,56 Q110,44 104,36Z" fill="'+ol+'" opacity="0.22"/>'
+      +'<ellipse cx="60" cy="16" rx="40" ry="34" fill="'+ol+'" opacity="0.20"/>'
+      // Base puff
+      +'<path d="M20,38 Q16,28 20,18 Q24,6 36,2 Q46,-4 58,2 Q64,-2 74,1 Q84,-2 92,6 Q100,14 102,26 Q104,36 100,42 Q96,34 90,30 Q86,18 76,12 Q66,4 60,8 Q54,4 44,10 Q34,16 30,28 Q26,36 30,44 Q26,42 20,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Side ear puffs
+      +'<ellipse cx="22" cy="30" rx="14" ry="18" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.6"/>'
+      +'<ellipse cx="98" cy="30" rx="14" ry="18" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.6"/>'
+      // Central top dome
+      +'<ellipse cx="60" cy="10" rx="30" ry="22" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8"/>'
+      // Bump texture on outer edge
+      +'<path d="M24,20 Q18,14 22,10" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>'
+      +'<path d="M38,4 Q34,-2 42,-2" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>'
+      +'<path d="M60,0 Q58,-5 64,-4" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>'
+      +'<path d="M78,4 Q80,-2 86,0" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>'
+      +'<path d="M96,20 Q102,14 98,10" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>'
+      // Right shadow
+      +'<ellipse cx="74" cy="14" rx="22" ry="16" fill="'+drk+'" opacity="0.18"/>'
+      +'<ellipse cx="98" cy="30" rx="9" ry="12" fill="'+drk+'" opacity="0.16"/>'
+      // Left highlights
+      +'<ellipse cx="44" cy="4" rx="14" ry="8" fill="'+hcHi+'" opacity="0.34"/>'
+      +'<ellipse cx="24" cy="22" rx="6" ry="7" fill="'+hcHi+'" opacity="0.26"/>'
     );
   }
 
   if(styleId==='braids'){
+    // Cornrow top flowing into side braids — braid geometry visible as segments
     return (
-      // Crown drop shadow
-      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.25"/>'
-      // Braid drop shadows
-      +'<path d="M18,38 Q8,70 10,108" stroke="'+ol+'" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.3"/>'
-      +'<path d="M102,38 Q112,70 110,108" stroke="'+ol+'" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.3"/>'
       // Crown base
-      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Braid base
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+hairColor+'" stroke-width="11" fill="none" stroke-linecap="round"/>'
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+ol+'" stroke-width="12.5" fill="none" stroke-linecap="round" opacity="0.28"/>'
-      +'<path d="M100,36 Q110,68 108,106" stroke="'+hairColor+'" stroke-width="11" fill="none" stroke-linecap="round"/>'
-      +'<path d="M100,36 Q110,68 108,106" stroke="'+ol+'" stroke-width="12.5" fill="none" stroke-linecap="round" opacity="0.28"/>'
-      // Braid weave pattern
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+hcDk+'" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.52"/>'
-      +'<path d="M100,36 Q110,68 108,106" stroke="'+hcDk+'" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.52"/>'
+      '<path d="M22,35 Q20,8 60,7 Q100,8 98,35 Q90,12 60,11 Q30,12 22,35Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Cornrow ridge lines on crown
+      +'<path d="M28,30 Q36,20 44,28 Q52,16 60,24 Q68,16 76,24 Q84,20 92,30" stroke="'+drk+'" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>'
+      +'<path d="M30,26 Q38,16 46,24 Q54,12 60,20 Q66,12 74,20 Q82,16 90,26" stroke="'+hcHi+'" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.32"/>'
+      // Braid tails — wider at top (band), tapered at tip, with segment marks
+      // Left braid
+      +'<path d="M20,36 Q8,64 11,96 Q13,108 17,118 Q14,106 14,90 Q12,62 22,40Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Left braid segment crossings
+      +'<path d="M21,42 Q12,43 14,48" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M20,52 Q11,53 13,58" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M19,62 Q10,63 12,68" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M17,72 Q9,73 11,78" stroke="'+hcDk+'" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.50"/>'
+      +'<path d="M16,82 Q9,83 11,88" stroke="'+hcDk+'" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>'
+      +'<path d="M15,92 Q9,93 11,98" stroke="'+hcDk+'" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.40"/>'
       // Left braid highlight
-      +'<path d="M20,36 Q10,68 12,106" stroke="'+hcHi+'" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="3,8" opacity="0.35"/>'
+      +'<path d="M20,38 Q10,66 12,96" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.32" stroke-linecap="round"/>'
+      // Right braid
+      +'<path d="M100,36 Q112,64 109,96 Q107,108 103,118 Q106,106 106,90 Q108,62 98,40Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Right braid segment crossings
+      +'<path d="M99,42 Q108,43 106,48" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M100,52 Q109,53 107,58" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M101,62 Q110,63 108,68" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M103,72 Q111,73 109,78" stroke="'+hcDk+'" stroke-width="2.2" fill="none" stroke-linecap="round" opacity="0.50"/>'
+      +'<path d="M104,82 Q111,83 109,88" stroke="'+hcDk+'" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.45"/>'
       // Crown right shadow
-      +'<path d="M60,5 Q102,5 100,34 Q94,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
+      +'<path d="M60,7 Q100,8 98,35 Q90,12 60,11Z" fill="'+drk+'" opacity="0.18"/>'
       // Crown highlight
-      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.45" stroke-linecap="round"/>'
-      +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.40"/>'
+      +'<path d="M28,18 Q52,9 80,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="11" rx="13" ry="5" fill="'+hcHi+'" opacity="0.38"/>'
     );
   }
 
   if(styleId==='bun'){
+    // Top bun — tight coil on crown, very recognisable silhouette
     return (
-      // Crown drop shadow
-      '<path d="M19,34 Q19,9 60,8 Q101,9 101,34 Q94,13 60,12 Q26,13 19,34Z" fill="'+ol+'" opacity="0.25"/>'
-      // Bun drop shadow
-      +'<circle cx="62" cy="7" r="14" fill="'+ol+'" opacity="0.28"/>'
-      // Crown base
-      +'<path d="M21,32 Q21,11 60,10 Q99,11 99,32 Q92,15 60,14 Q28,15 21,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Bun base
-      +'<circle cx="60" cy="5" r="13" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="2"/>'
+      '<path d="M22,34 Q22,10 60,9 Q98,10 98,34 Q90,14 60,13 Q30,14 22,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Bun base — larger flat disc shape that is clearly a bun
+      +'<ellipse cx="60" cy="6" rx="17" ry="12" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8"/>'
+      // Coil ring
+      +'<ellipse cx="60" cy="7" rx="12" ry="8" fill="'+drk+'" opacity="0.35" stroke="'+ol+'" stroke-width="1"/>'
+      +'<ellipse cx="60" cy="7" rx="7" ry="5" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1"/>'
+      // Wrap strand around bun
+      +'<path d="M43,8 Q46,0 60,0 Q74,0 77,8" stroke="'+hcDk+'" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>'
+      // Hair tie band at base
+      +'<ellipse cx="60" cy="15" rx="17" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2" opacity="0.7"/>'
+      +'<ellipse cx="60" cy="15" rx="17" ry="2" fill="'+hcHi+'" opacity="0.22"/>'
       // Bun right shadow
-      +'<path d="M60,5 Q72,-7 72,5 Q72,18 60,18Z" fill="'+drk+'" opacity="0.25"/>'
+      +'<path d="M65,2 Q78,2 77,10 Q77,18 65,18Z" fill="'+drk+'" opacity="0.28"/>'
       // Bun highlight
-      +'<ellipse cx="54" cy="0" rx="7" ry="5" fill="'+hcHi+'" opacity="0.40"/>'
-      +'<circle cx="56" cy="2" r="4" fill="'+hcHi+'" opacity="0.28"/>'
-      // Hair tie groove
-      +'<ellipse cx="60" cy="14" rx="13" ry="3.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1" opacity="0.6"/>'
-      // Crown highlight
-      +'<path d="M26,18 Q50,10 78,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.44" stroke-linecap="round"/>'
+      +'<ellipse cx="52" cy="3" rx="8" ry="5" fill="'+hcHi+'" opacity="0.42"/>'
+      // Crown right shadow
+      +'<path d="M60,9 Q98,10 98,34 Q90,14 60,13Z" fill="'+drk+'" opacity="0.18"/>'
+      +'<path d="M28,18 Q52,10 78,16" stroke="'+hcHi+'" stroke-width="4" fill="none" opacity="0.44" stroke-linecap="round"/>'
     );
   }
 
   if(styleId==='ponytail'){
+    // High ponytail — wide at crown, flows back and down in a tapered tail shape
     return (
-      // Crown drop shadow
-      '<path d="M20,34 Q20,6 60,5 Q100,6 100,34 Q92,11 60,10 Q28,11 20,34Z" fill="'+ol+'" opacity="0.25"/>'
-      // Ponytail drop shadow
-      +'<path d="M97,19 Q112,42 108,74 Q104,94 100,114" stroke="'+ol+'" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.28"/>'
-      // Crown base
-      +'<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Right crown shadow
-      +'<path d="M60,7 Q98,8 98,32 Q90,13 60,12Z" fill="'+drk+'" opacity="0.20"/>'
-      // Ponytail base
-      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
-      +'<path d="M95,17 Q110,40 106,72 Q102,92 98,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      // Ponytail right shadow
-      +'<path d="M97,20 Q112,44 108,74 Q104,94 100,114" stroke="'+drk+'" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.30"/>'
-      // Ponytail highlight
-      +'<path d="M94,18 Q108,40 104,70" stroke="'+hcHi+'" stroke-width="2.2" fill="none" opacity="0.42" stroke-linecap="round"/>'
-      // Hair band
-      +'<ellipse cx="97" cy="18" rx="5.5" ry="4" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
-      +'<path d="M93,16 Q97,13 101,16" stroke="'+hcHi+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      // Crown
+      '<path d="M22,34 Q22,8 60,7 Q98,8 98,34 Q90,13 60,12 Q30,13 22,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M60,7 Q98,8 98,34 Q90,13 60,12Z" fill="'+drk+'" opacity="0.18"/>'
+      // Tail base — gather of hair going over the top-right
+      +'<path d="M80,12 Q96,10 98,22 Q108,18 112,28 Q118,42 116,60 Q112,80 108,100 Q104,114 100,120 Q98,110 96,98 Q100,80 102,60 Q104,42 100,28 Q96,18 88,16Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Strand separation lines — suggest flowing locks
+      +'<path d="M100,30 Q104,54 102,80 Q100,100 98,116" stroke="'+ol+'" stroke-width="1.2" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      +'<path d="M106,32 Q110,56 108,82" stroke="'+ol+'" stroke-width="1" fill="none" opacity="0.28" stroke-linecap="round"/>'
+      // Tail right shadow
+      +'<path d="M106,28 Q114,46 112,70 Q110,90 106,108 Q110,80 108,50 Q106,36 100,28Z" fill="'+drk+'" opacity="0.22"/>'
+      // Tail highlight
+      +'<path d="M97,24 Q100,48 99,76 Q98,98 97,114" stroke="'+hcHi+'" stroke-width="2.5" fill="none" opacity="0.44" stroke-linecap="round"/>'
+      // Hair band — coloured circle at gather point
+      +'<ellipse cx="91" cy="16" rx="7" ry="5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.5"/>'
+      +'<path d="M86,13 Q91,10 96,13" stroke="'+hcHi+'" stroke-width="1.2" fill="none" opacity="0.42" stroke-linecap="round"/>'
       // Crown highlight
-      +'<path d="M28,18 Q50,9 80,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
-      +'<ellipse cx="44" cy="12" rx="14" ry="6" fill="'+hcHi+'" opacity="0.42"/>'
+      +'<path d="M28,18 Q52,9 80,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="12" rx="13" ry="5" fill="'+hcHi+'" opacity="0.40"/>'
     );
   }
 
   if(styleId==='bob'){
+    // Geometric chin-length bob — sharply cut flat bottom, clear angular silhouette
     return (
-      // Drop shadow
-      '<path d="M18,34 Q18,4 60,4 Q102,4 102,34 Q96,8 60,7 Q24,8 18,34Z" fill="'+ol+'" opacity="0.25"/>'
-      +'<path d="M16,70 Q14,56 18,34Z" fill="'+ol+'" opacity="0.20"/>'
-      +'<path d="M104,70 Q106,56 102,34Z" fill="'+ol+'" opacity="0.20"/>'
-      // Crown base
-      +'<path d="M20,32 Q20,6 60,6 Q100,6 100,32 Q95,10 60,9 Q25,10 20,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Side panels
-      +'<path d="M20,32 L17,68 Q20,76 28,74 L31,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
-      +'<path d="M100,32 L103,68 Q100,76 92,74 L89,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
-      // Bottom hem line
-      +'<path d="M28,74 Q60,79 92,74" stroke="'+ol+'" stroke-width="1.8" fill="none" stroke-linecap="round"/>'
+      // Crown shadow
+      '<path d="M18,34 Q18,5 60,4 Q102,5 102,34 Q95,9 60,8 Q25,9 18,34Z" fill="'+ol+'" opacity="0.22"/>'
+      // Side panels — flat bottom creates the geometric bob look
+      +'<path d="M18,34 L15,72 Q18,80 26,80 Q30,76 30,70 L28,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      +'<path d="M102,34 L105,72 Q102,80 94,80 Q90,76 90,70 L92,38Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Crown
+      +'<path d="M20,32 Q20,7 60,6 Q100,7 100,32 Q93,11 60,10 Q27,11 20,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Blunt bottom hem line — defines the bob shape
+      +'<path d="M26,80 Q60,84 94,80" stroke="'+ol+'" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
+      // Part line down center
+      +'<path d="M60,6 L60,32" stroke="'+ol+'" stroke-width="1.2" fill="none" opacity="0.35"/>'
       // Right panel shadow
-      +'<path d="M60,6 Q100,6 100,32 L89,38 Q94,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
-      +'<path d="M100,36 L103,68 Q100,76 92,74 L98,68 Q101,60 100,36Z" fill="'+drk+'" opacity="0.18"/>'
+      +'<path d="M60,6 Q100,7 100,32 L92,38 Q93,11 60,10Z" fill="'+drk+'" opacity="0.18"/>'
+      +'<path d="M100,34 L105,72 Q102,80 94,80 Q100,72 103,54Z" fill="'+drk+'" opacity="0.16"/>'
+      // Inward tuck at jaw — characteristic bob feature
+      +'<path d="M25,78 Q26,82 26,80" stroke="'+hcDk+'" stroke-width="1.5" fill="none" opacity="0.55" stroke-linecap="round"/>'
+      +'<path d="M95,78 Q94,82 94,80" stroke="'+hcDk+'" stroke-width="1.5" fill="none" opacity="0.55" stroke-linecap="round"/>'
       // Left panel highlight
-      +'<path d="M19,36 Q17,52 18,68" stroke="'+hcHi+'" stroke-width="1.8" fill="none" opacity="0.35" stroke-linecap="round"/>'
-      // Crown highlight
-      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.50" stroke-linecap="round"/>'
-      +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.44"/>'
+      +'<path d="M17,38 Q16,56 17,72" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.38" stroke-linecap="round"/>'
+      +'<path d="M28,18 Q52,8 80,15" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.52" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="11" rx="13" ry="5" fill="'+hcHi+'" opacity="0.44"/>'
     );
   }
 
   if(styleId==='pigtails'){
+    // Twin pigtails — teardrop/tapered tail shapes on each side, hair bands visible
     return (
-      // Crown drop shadow
-      '<path d="M20,34 Q20,6 60,5 Q100,6 100,34 Q92,11 60,10 Q28,11 20,34Z" fill="'+ol+'" opacity="0.25"/>'
-      // Pigtail drop shadows
-      +'<path d="M20,36 Q4,58 6,92 Q10,109 16,116" stroke="'+ol+'" stroke-width="13" fill="none" stroke-linecap="round" opacity="0.28"/>'
-      +'<path d="M100,36 Q116,58 114,92 Q110,109 104,116" stroke="'+ol+'" stroke-width="13" fill="none" stroke-linecap="round" opacity="0.28"/>'
-      // Crown base
-      +'<path d="M22,32 Q22,8 60,7 Q98,8 98,32 Q90,13 60,12 Q30,13 22,32Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
-      // Crown right shadow
-      +'<path d="M60,7 Q98,8 98,32 Q90,13 60,12Z" fill="'+drk+'" opacity="0.20"/>'
-      // Left pigtail
-      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
-      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+ol+'" stroke-width="11.8" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M22,34 Q6,56 8,90 Q12,107 18,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.42"/>'
-      // Left pigtail highlight
-      +'<path d="M21,36 Q5,58 7,88" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.38" stroke-linecap="round"/>'
-      // Right pigtail
-      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hairColor+'" stroke-width="10" fill="none" stroke-linecap="round"/>'
-      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+ol+'" stroke-width="11.8" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M98,34 Q114,56 112,90 Q108,107 102,114" stroke="'+hcDk+'" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="4,5" opacity="0.42"/>'
-      // Hair bands
-      +'<ellipse cx="22" cy="35" rx="6.5" ry="4.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
-      +'<path d="M18,33 Q22,30 26,33" stroke="'+hcHi+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
-      +'<ellipse cx="98" cy="35" rx="6.5" ry="4.5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.2"/>'
-      +'<path d="M94,33 Q98,30 102,33" stroke="'+hcHi+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      // Crown
+      '<path d="M24,34 Q24,8 60,7 Q96,8 96,34 Q89,13 60,12 Q31,13 24,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      +'<path d="M60,7 Q96,8 96,34 Q89,13 60,12Z" fill="'+drk+'" opacity="0.18"/>'
+      // Left tail — teardrop shape, wide near band, tapering to tip
+      +'<path d="M24,36 Q10,52 9,78 Q9,96 14,112 Q12,94 13,76 Q14,56 20,42Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Left strand lines
+      +'<path d="M18,50 Q15,72 16,96" stroke="'+ol+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      // Left tail shadow
+      +'<path d="M20,44 Q16,62 17,86 Q16,100 14,112 Q18,96 20,76 Q22,58 22,40Z" fill="'+drk+'" opacity="0.20"/>'
+      // Left tail highlight
+      +'<path d="M23,38 Q12,56 12,82" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.40" stroke-linecap="round"/>'
+      // Left hair band
+      +'<ellipse cx="23" cy="37" rx="7" ry="5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.4"/>'
+      +'<path d="M19,35 Q23,32 27,35" stroke="'+hcHi+'" stroke-width="1.2" fill="none" opacity="0.44" stroke-linecap="round"/>'
+      // Right tail
+      +'<path d="M96,36 Q110,52 111,78 Q111,96 106,112 Q108,94 107,76 Q106,56 100,42Z" fill="'+h+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Right strand lines
+      +'<path d="M102,50 Q105,72 104,96" stroke="'+ol+'" stroke-width="1" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      // Right tail shadow
+      +'<path d="M104,44 Q108,60 108,84 Q109,100 106,112 Q110,98 110,80 Q110,62 106,46Z" fill="'+drk+'" opacity="0.20"/>'
+      // Right hair band
+      +'<ellipse cx="97" cy="37" rx="7" ry="5" fill="'+hcDk+'" stroke="'+ol+'" stroke-width="1.4"/>'
+      +'<path d="M93,35 Q97,32 101,35" stroke="'+hcHi+'" stroke-width="1.2" fill="none" opacity="0.44" stroke-linecap="round"/>'
       // Crown highlight
-      +'<path d="M28,18 Q50,9 80,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
-      +'<ellipse cx="44" cy="12" rx="14" ry="6" fill="'+hcHi+'" opacity="0.40"/>'
+      +'<path d="M30,18 Q52,9 80,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.50" stroke-linecap="round"/>'
+      +'<ellipse cx="46" cy="12" rx="13" ry="5" fill="'+hcHi+'" opacity="0.40"/>'
     );
   }
 
   if(styleId==='curly-long'){
+    // Big curly hair — voluminous bumpy side masses with distinct curl ends
     return (
-      // Drop shadow crown
-      '<path d="M18,36 Q16,3 60,3 Q104,3 102,36 Q94,8 60,7 Q26,8 18,36Z" fill="'+ol+'" opacity="0.25"/>'
-      // Curly side drop shadows
-      +'<path d="M18,36 Q3,64 8,94 Q4,105 11,114" stroke="'+ol+'" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      +'<path d="M102,36 Q117,64 112,94 Q116,105 109,114" stroke="'+ol+'" stroke-width="11" fill="none" stroke-linecap="round" opacity="0.25"/>'
-      // Crown base
-      +'<path d="M20,34 Q18,5 60,5 Q102,5 100,34 Q92,10 60,9 Q28,10 20,34Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Outer shadow masses
+      '<path d="M16,38 Q4,60 8,88 Q6,102 12,116" stroke="'+ol+'" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.22"/>'
+      +'<path d="M104,38 Q116,60 112,88 Q114,102 108,116" stroke="'+ol+'" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.22"/>'
+      +'<ellipse cx="60" cy="8" rx="44" ry="22" fill="'+ol+'" opacity="0.18"/>'
+      // Crown
+      +'<path d="M20,36 Q18,6 60,5 Q102,6 100,36 Q92,11 60,10 Q28,11 20,36Z" fill="'+h+'" stroke="'+ol+'" stroke-width="2" stroke-linejoin="round"/>'
+      // Left curly mass — bumpy filled shape
+      +'<path d="M20,36 Q6,52 7,72 Q5,82 8,92 Q10,104 14,114 Q12,100 12,84 Q10,68 10,52 Q10,44 16,40Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Left curl bumps (C-shapes)
+      +'<path d="M9,52 Q3,58 7,64" stroke="'+ol+'" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M8,66 Q2,72 6,78" stroke="'+ol+'" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M8,80 Q3,86 7,92" stroke="'+ol+'" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.50"/>'
+      +'<path d="M10,92 Q5,98 9,104" stroke="'+ol+'" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.45"/>'
+      // Right curly mass
+      +'<path d="M100,36 Q114,52 113,72 Q115,82 112,92 Q110,104 106,114 Q108,100 108,84 Q110,68 110,52 Q110,44 104,40Z" fill="'+hairColor+'" stroke="'+ol+'" stroke-width="1.8" stroke-linejoin="round"/>'
+      // Right curl bumps
+      +'<path d="M111,52 Q117,58 113,64" stroke="'+ol+'" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M112,66 Q118,72 114,78" stroke="'+ol+'" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.55"/>'
+      +'<path d="M112,80 Q117,86 113,92" stroke="'+ol+'" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.50"/>'
       // Crown right shadow
-      +'<path d="M60,5 Q102,5 100,34 Q92,10 60,9Z" fill="'+drk+'" opacity="0.20"/>'
-      // Curly sides
-      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
-      +'<path d="M20,34 Q5,62 10,92 Q6,103 13,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.22"/>'
-      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+hairColor+'" stroke-width="9" fill="none" stroke-linecap="round"/>'
-      +'<path d="M100,34 Q115,62 110,92 Q114,103 107,112" stroke="'+ol+'" stroke-width="10.5" fill="none" stroke-linecap="round" opacity="0.22"/>'
-      // Right side shadow
-      +'<path d="M102,36 Q117,64 112,92 Q116,105 109,114" stroke="'+drk+'" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.28"/>'
-      // Curl detail texture
-      +'<path d="M14,52 Q9,58 15,62" stroke="'+hcHi+'" stroke-width="2.2" fill="none" opacity="0.42" stroke-linecap="round"/>'
-      +'<path d="M12,68 Q7,74 13,78" stroke="'+hcHi+'" stroke-width="2.2" fill="none" opacity="0.38" stroke-linecap="round"/>'
-      +'<path d="M11,84 Q6,90 12,94" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.34" stroke-linecap="round"/>'
-      +'<path d="M106,52 Q111,58 105,62" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.28" stroke-linecap="round"/>'
-      +'<path d="M108,68 Q113,74 107,78" stroke="'+hcHi+'" stroke-width="1.5" fill="none" opacity="0.25" stroke-linecap="round"/>'
-      // Left highlight
-      +'<path d="M19,36 Q4,64 8,94" stroke="'+hcHi+'" stroke-width="1.8" fill="none" opacity="0.32" stroke-linecap="round"/>'
-      // Crown highlight
-      +'<path d="M26,18 Q50,8 78,16" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.48" stroke-linecap="round"/>'
-      +'<ellipse cx="44" cy="11" rx="14" ry="6" fill="'+hcHi+'" opacity="0.42"/>'
+      +'<path d="M60,5 Q102,6 100,36 Q92,11 60,10Z" fill="'+drk+'" opacity="0.18"/>'
+      // Right mass shadow
+      +'<path d="M104,42 Q114,60 112,84 Q114,102 108,116 Q110,100 112,82 Q112,60 108,44Z" fill="'+drk+'" opacity="0.18"/>'
+      // Left highlights
+      +'<path d="M10,54 Q6,72 8,94" stroke="'+hcHi+'" stroke-width="2" fill="none" opacity="0.36" stroke-linecap="round"/>'
+      +'<path d="M28,18 Q52,8 78,15" stroke="'+hcHi+'" stroke-width="4.5" fill="none" opacity="0.50" stroke-linecap="round"/>'
+      +'<ellipse cx="44" cy="11" rx="13" ry="6" fill="'+hcHi+'" opacity="0.40"/>'
     );
   }
 
