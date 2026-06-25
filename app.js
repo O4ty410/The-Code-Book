@@ -6659,26 +6659,16 @@ function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
   var lx=42, rx=78, ey=46;
   var browColor=_ccDarkenHex(skSh,0.15);
   var ol=_ccDarkenHex(skSh,0.42);
-  var sk=skHex;
 
-  // uc = upper eyelid control Y (lower value = lid drops and covers more iris from top)
-  // lc = lower eyelid control Y (higher value = lid rises and covers more iris from below)
-  // Fully open eye: uc = ey-12, lc = ey+10
-  function eye(cx,cy,uc,lc,sx,sy){
-    var above=cy-18, below=cy+16;
+  // Clean open eye — no eyelid overlays, no rectangles
+  function eye(cx,cy,sx,sy){
     return (
-      '<ellipse cx="'+cx+'" cy="'+cy+'" rx="13.5" ry="11.5" fill="white"/>'
+      '<ellipse cx="'+cx+'" cy="'+cy+'" rx="13.5" ry="11.5" fill="white" stroke="'+ol+'" stroke-width="1.8"/>'
       +'<circle cx="'+cx+'" cy="'+cy+'" r="8.5" fill="'+irisGrad+'"/>'
-      +'<circle cx="'+cx+'" cy="'+cy+'" r="8.5" fill="none" stroke="rgba(0,0,0,0.28)" stroke-width="1.4"/>'
+      +'<circle cx="'+cx+'" cy="'+cy+'" r="8.5" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>'
       +'<circle cx="'+cx+'" cy="'+cy+'" r="4.5" fill="#04040a"/>'
       +'<circle cx="'+sx+'" cy="'+sy+'" r="2.8" fill="white" opacity="0.97"/>'
       +'<circle cx="'+(cx+2.5)+'" cy="'+(cy+3.5)+'" r="1.2" fill="rgba(255,255,255,0.48)"/>'
-      // upper eyelid skin (smooth arc, no flat line)
-      +'<path d="M '+(cx-13.5)+' '+cy+' Q '+cx+' '+uc+' '+(cx+13.5)+' '+cy+' L '+(cx+13.5)+' '+above+' L '+(cx-13.5)+' '+above+' Z" fill="'+sk+'"/>'
-      +'<path d="M '+(cx-13.5)+' '+cy+' Q '+cx+' '+uc+' '+(cx+13.5)+' '+cy+'" stroke="'+ol+'" stroke-width="2.2" fill="none" stroke-linecap="round"/>'
-      // lower eyelid skin (smooth arc)
-      +'<path d="M '+(cx-13.5)+' '+cy+' Q '+cx+' '+lc+' '+(cx+13.5)+' '+cy+' L '+(cx+13.5)+' '+below+' L '+(cx-13.5)+' '+below+' Z" fill="'+sk+'"/>'
-      +'<path d="M '+(cx-13.5)+' '+cy+' Q '+cx+' '+lc+' '+(cx+13.5)+' '+cy+'" stroke="'+ol+'" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.4"/>'
     );
   }
 
@@ -6687,33 +6677,34 @@ function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
           +'<path d="'+d+'" stroke="'+browColor+'" stroke-width="4.8" fill="none" stroke-linecap="round"/>';
   }
 
-  var eyeBase='',brows='',nose='',mouth='',extras='';
+  var eyeBase=eye(lx,ey,39,43)+eye(rx,ey,75,43);
+  var brows='',nose='',mouth='',extras='';
 
   if(expr==='happy'){
-    eyeBase=eye(lx,ey,ey-12,ey+4,39,43)+eye(rx,ey,ey-12,ey+4,75,43);
-    brows=brow('M30,28 Q'+lx+',21 56,26')+brow('M64,26 Q'+rx+',21 90,28');
+    // Raised high arched brows
+    brows=brow('M28,24 Q'+lx+',16 56,22')+brow('M64,22 Q'+rx+',16 92,24');
     mouth='<path d="M36,63 Q60,86 84,63 Q60,80 36,63 Z" fill="'+skSh+'" stroke="'+ol+'" stroke-width="1.4"/>'
          +'<path d="M40,64 Q60,80 80,64 Q60,76 40,64 Z" fill="white" opacity="0.88"/>';
     extras='<ellipse cx="26" cy="57" rx="14" ry="10" fill="rgba(255,110,85,0.28)"/>'
           +'<ellipse cx="94" cy="57" rx="14" ry="10" fill="rgba(255,110,85,0.28)"/>';
   } else if(expr==='focused'){
-    eyeBase=eye(lx,ey,ey-7,ey+10,39,43)+eye(rx,ey,ey-7,ey+10,75,43);
-    brows=brow('M28,28 Q37,19 56,26')+brow('M64,26 Q83,19 92,28');
+    // Angled inward — outer high, inner low (furrowed V shape)
+    brows=brow('M28,24 Q36,29 56,34')+brow('M64,34 Q84,29 92,24');
     mouth='<path d="M46,70 Q60,73 74,70" stroke="'+skSh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
     extras='<path d="M55,26 Q60,23 65,26" stroke="'+ol+'" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.5"/>';
   } else if(expr==='smug'){
-    eyeBase=eye(lx,ey,ey-12,ey+10,39,43)+eye(rx,ey,ey-4,ey+10,75,43);
-    brows=brow('M30,30 Q43,25 56,29')+brow('M64,24 Q77,19 90,26');
+    // Left brow flat, right brow raised arch
+    brows=brow('M30,31 Q'+lx+',28 56,31')+brow('M64,22 Q'+rx+',16 92,24');
     mouth='<path d="M45,70 Q56,75 72,66" stroke="'+skSh+'" stroke-width="3.2" fill="none" stroke-linecap="round"/>';
   } else if(expr==='tired'){
-    eyeBase=eye(lx,ey,ey-2,ey+10,39,43)+eye(rx,ey,ey-2,ey+10,75,43);
-    brows=brow('M30,37 Q43,35 56,37')+brow('M64,37 Q77,35 90,37');
+    // Outer corners drooping down
+    brows=brow('M28,28 Q40,33 56,38')+brow('M64,38 Q80,33 92,28');
     mouth='<path d="M46,73 Q60,69 74,73" stroke="'+skSh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
     extras='<ellipse cx="42" cy="54" rx="11" ry="5" fill="rgba(140,130,170,0.2)"/>'
           +'<ellipse cx="78" cy="54" rx="11" ry="5" fill="rgba(140,130,170,0.2)"/>';
   } else {
-    eyeBase=eye(lx,ey,ey-12,ey+10,39,43)+eye(rx,ey,ey-12,ey+10,75,43);
-    brows=brow('M30,30 Q'+lx+',24 56,30')+brow('M64,30 Q'+rx+',24 90,30');
+    // Neutral — gentle symmetric arch
+    brows=brow('M28,30 Q'+lx+',24 56,30')+brow('M64,30 Q'+rx+',24 92,30');
     mouth='<path d="M46,69 Q60,76 74,69" stroke="'+skSh+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
   }
 
