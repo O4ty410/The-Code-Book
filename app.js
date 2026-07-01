@@ -6653,44 +6653,45 @@ function ccLayerHead(skHex,skSh,skHi,u,bodyType){
   var isF=bodyType==='f';
   var ol=_ccDarkenHex(skSh,0.38);
 
-  // Female: rounder oval, softer chin. Male: slightly wider, stronger jaw.
+  // Female: 44×49px near-circular oval. Male: 48×56px slightly wider jaw.
+  // Aspect ratios: female 0.90, male 0.86 — matches reference flat-style proportions.
   var fp=isF
-    ?'M39,34 Q39,11 60,11 Q81,11 81,34 Q81,49 74,59 Q68,64 60,64 Q52,64 46,59 Q39,49 39,34Z'
-    :'M38,33 Q38,9 60,9 Q82,9 82,33 Q84,49 76,61 Q70,66 60,66 Q50,66 44,61 Q36,49 38,33Z';
-  // Right-side shadow plane (upper-left light source)
+    ?'M38,35 Q38,13 60,13 Q82,13 82,35 Q82,50 74,59 Q68,62 60,62 Q52,62 46,59 Q38,50 38,35Z'
+    :'M36,34 Q36,11 60,11 Q84,11 84,34 Q86,50 76,62 Q70,67 60,67 Q50,67 44,62 Q34,50 36,34Z';
   var sp=isF
-    ?'M62,11 Q81,11 81,34 Q81,49 74,59 Q68,64 60,64 L60,11Z'
-    :'M62,9 Q82,9 82,33 Q84,49 76,61 Q70,66 60,66 L60,9Z';
-  // Neck — female narrower, male broader
+    ?'M62,13 Q82,13 82,35 Q82,50 74,59 Q68,62 60,62 L60,13Z'
+    :'M62,11 Q84,11 84,34 Q86,50 76,62 Q70,67 60,67 L60,11Z';
+  // Neck: female narrower (53–67px), male broader (50–70px)
   var np=isF
-    ?'M53,62 L51,77 Q60,81 69,77 L67,62 Q63,65 60,66 Q57,65 53,62Z'
-    :'M50,64 L48,77 Q60,81 72,77 L70,64 Q65,68 60,69 Q55,68 50,64Z';
+    ?'M53,60 L51,76 Q60,80 69,76 L67,60 Q63,63 60,62 Q57,63 53,60Z'
+    :'M50,65 L48,78 Q60,82 72,78 L70,65 Q65,69 60,70 Q55,69 50,65Z';
   var earL=isF
-    ?'M39,34 Q33,32 32,38 Q32,44 39,43Z'
-    :'M38,33 Q32,31 31,37 Q31,44 38,42Z';
+    ?'M38,35 Q32,33 31,39 Q31,45 38,43Z'
+    :'M36,34 Q30,32 29,38 Q29,44 36,42Z';
   var earR=isF
-    ?'M81,34 Q87,32 88,38 Q88,44 81,43Z'
-    :'M82,33 Q88,31 89,37 Q89,44 82,42Z';
+    ?'M82,35 Q88,33 89,39 Q89,45 82,43Z'
+    :'M84,34 Q90,32 91,38 Q91,44 84,42Z';
 
   return (
     '<path d="'+earL+'" fill="'+skHex+'" stroke="'+ol+'" stroke-width="1.4"/>'
     +'<path d="'+earR+'" fill="'+skHex+'" stroke="'+ol+'" stroke-width="1.4"/>'
     +(isF
-      ?'<path d="M35,36 Q33,40 35,44" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>'
-       +'<path d="M85,36 Q87,40 85,44" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>'
-      :'<path d="M34,35 Q32,39 34,43" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>'
-       +'<path d="M86,35 Q88,39 86,43" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>')
+      ?'<path d="M35,37 Q33,41 35,45" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>'
+       +'<path d="M85,37 Q87,41 85,45" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>'
+      :'<path d="M33,36 Q31,40 33,44" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>'
+       +'<path d="M87,36 Q89,40 87,44" stroke="'+skSh+'" stroke-width="1.5" fill="none" opacity="0.4" stroke-linecap="round"/>')
     +'<path d="'+fp+'" fill="'+skHex+'" stroke="'+ol+'" stroke-width="1.6"/>'
     +'<path d="'+sp+'" fill="'+skSh+'" opacity="0.08"/>'
     +(isF
-      ?'<circle cx="37" cy="49" r="9" fill="rgba(255,120,100,0.22)"/>'
-       +'<circle cx="83" cy="49" r="9" fill="rgba(255,120,100,0.22)"/>'
+      // Blush circles INSIDE the face: cx=46/74 (face x=38–82), cy=48
+      ?'<circle cx="46" cy="48" r="6" fill="rgba(255,120,100,0.22)"/>'
+       +'<circle cx="74" cy="48" r="6" fill="rgba(255,120,100,0.22)"/>'
       :'')
     +'<path d="'+np+'" fill="'+skHex+'" stroke="'+ol+'" stroke-width="1.5"/>'
     +(isF
-      ?'<path d="M63,62 L67,62 L69,77 Q64,79 60,81Z" fill="'+skSh+'" opacity="0.10"/>'
-      :'<path d="M63,64 L70,64 L72,77 Q65,80 60,81Z" fill="'+skSh+'" opacity="0.10"/>')
-    +'<ellipse cx="'+(isF?49:48)+'" cy="'+(isF?21:19)+'" rx="12" ry="7" fill="'+skHi+'" opacity="0.20"/>'
+      ?'<path d="M63,60 L67,60 L69,76 Q64,78 60,80Z" fill="'+skSh+'" opacity="0.10"/>'
+      :'<path d="M63,65 L70,65 L72,78 Q65,81 60,82Z" fill="'+skSh+'" opacity="0.10"/>')
+    +'<ellipse cx="'+(isF?49:48)+'" cy="'+(isF?21:18)+'" rx="11" ry="6" fill="'+skHi+'" opacity="0.20"/>'
   );
 }
 
@@ -6719,10 +6720,12 @@ function ccLayerExpression(expr,eyeColor,skHex,skSh,skHi,irisGrad,ecDk){
 
   if(expr==='happy'){
     brows=brow('M37,28 Q'+lx+',22 57,27')+brow('M63,27 Q'+rx+',22 83,28');
-    mouth='<path d="M44,53 Q60,66 76,53 Q60,62 44,53Z" fill="'+skSh+'" stroke="'+ol+'" stroke-width="1.2"/>'
-         +'<path d="M47,54 Q60,63 73,54 Q60,60 47,54Z" fill="white" opacity="0.9"/>';
-    extras='<circle cx="35" cy="46" r="8" fill="rgba(255,110,80,0.25)"/>'
-          +'<circle cx="85" cy="46" r="8" fill="rgba(255,110,80,0.25)"/>';
+    // Mouth peaks at y=59 — stays inside both female chin (y=62) and male (y=67)
+    mouth='<path d="M46,52 Q60,59 74,52 Q60,57 46,52Z" fill="'+skSh+'" stroke="'+ol+'" stroke-width="1.2"/>'
+         +'<path d="M49,53 Q60,57 71,53 Q60,56 49,53Z" fill="white" opacity="0.9"/>';
+    // Cheek circles INSIDE face (face x=38–82): cx=44/76
+    extras='<circle cx="44" cy="48" r="7" fill="rgba(255,110,80,0.25)"/>'
+          +'<circle cx="76" cy="48" r="7" fill="rgba(255,110,80,0.25)"/>';
   } else if(expr==='focused'){
     brows=brow('M37,27 Q41,31 57,34')+brow('M63,34 Q79,31 83,27');
     mouth='<path d="M47,55 Q60,57 73,55" stroke="'+skSh+'" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
@@ -6751,9 +6754,9 @@ function ccLayerHair(styleId,hairColor,hairGrad,hcDk,hcHi){
   if(styleId==='bald') return '';
   var h=hairGrad||hairColor, ol=_ccDarkenHex(hairColor,0.55);
   var drk=_ccDarkenHex(hairColor,0.28);
-  // Crown fits new head: x=38-82, top y=9. Hair slightly wider: x=36-84.
-  var crown='M36,32 Q36,7 60,7 Q84,7 84,32 Q79,12 60,11 Q41,12 36,32Z';
-  var crownShadow='M60,7 Q84,7 84,32 Q79,12 60,11Z';
+  // Crown: outer bottom y=35 (inside new faces at y=35), inner edge y=13 (female face top)
+  var crown='M36,35 Q36,7 60,7 Q84,7 84,35 Q79,13 60,12 Q41,13 36,35Z';
+  var crownShadow='M60,7 Q84,7 84,35 Q79,13 60,12Z';
 
   if(styleId==='short'){
     return (
